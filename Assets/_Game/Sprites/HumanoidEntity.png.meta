@@ -291,6 +291,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: HumanoidEntity_1
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 6
+        width: 8
+        height: 115
+      alignment: 9
+      pivot: {x: 0.51911616, y: 0.30052978}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd09da4973f4aed48b44779f8f195156
+      internalID: 1496440014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -306,6 +328,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       HumanoidEntity_0: -1663444524
+      HumanoidEntity_1: 1496440014
       HumanoidEntity_Body: -1938846929
       HumanoidEntity_FootLeft: -6236035144032904546
       HumanoidEntity_FootRight: -6579165489411396765

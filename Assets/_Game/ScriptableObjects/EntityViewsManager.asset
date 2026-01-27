@@ -17,9 +17,16 @@ MonoBehaviour:
     <Animator>k__BackingField: {fileID: 9100000, guid: 242721b66f8d00e479c9986cc578b1d0, type: 2}
     <Units>k__BackingField:
     - <Path>k__BackingField: Head
+      <OrderInLayer>k__BackingField: 20
     - <Path>k__BackingField: Body
+      <OrderInLayer>k__BackingField: 10
     - <Path>k__BackingField: HandLeft
+      <OrderInLayer>k__BackingField: 5
     - <Path>k__BackingField: HandRight
+      <OrderInLayer>k__BackingField: 25
     - <Path>k__BackingField: FootLeft
+      <OrderInLayer>k__BackingField: 5
     - <Path>k__BackingField: FootRight
+      <OrderInLayer>k__BackingField: 21
     - <Path>k__BackingField: HandRight/Sword
+      <OrderInLayer>k__BackingField: 24

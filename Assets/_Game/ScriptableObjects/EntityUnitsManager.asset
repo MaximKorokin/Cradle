@@ -41,3 +41,7 @@ MonoBehaviour:
     <Variants>k__BackingField:
     - <Name>k__BackingField: 
       <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+  - <Name>k__BackingField: Spear
+    <Variants>k__BackingField:
+    - <Name>k__BackingField: 
+      <Sprite>k__BackingField: {fileID: 1496440014, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
