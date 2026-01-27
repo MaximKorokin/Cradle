@@ -28,5 +28,5 @@ MonoBehaviour:
       <OrderInLayer>k__BackingField: 5
     - <Path>k__BackingField: FootRight
       <OrderInLayer>k__BackingField: 21
-    - <Path>k__BackingField: HandRight/Sword
+    - <Path>k__BackingField: HandRight/Spear
       <OrderInLayer>k__BackingField: 24
