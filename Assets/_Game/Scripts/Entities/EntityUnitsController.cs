@@ -1,5 +1,5 @@
-﻿using Assets._Game.Scripts.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
@@ -9,20 +9,33 @@ namespace Assets._Game.Scripts.Entities
         private readonly Dictionary<string, EntityUnit> _units = new();
 
         private readonly GameObject _unitsRoot;
-        private readonly Animator _animator;
 
         public EntityUnitsController(Animator animator)
         {
-            _animator = animator;
-            _unitsRoot = _animator.gameObject;
+            AnimatorController = new(animator);
+            _unitsRoot = animator.gameObject;
         }
+
+        public EntityUnitsAnimator AnimatorController { get; private set; }
 
         public void AddUnit(EntityUnit entityUnit)
         {
-            _unitsRoot.transform.AddChild(entityUnit.GameObject.transform, entityUnit.Path);
+            Transform parentTransform;
+            if (_units.TryGetValue(Path.GetDirectoryName(entityUnit.Path), out var parentUnit))
+            {
+                parentUnit.AddChild(entityUnit);
+                parentTransform = parentUnit.GameObject.transform;
+            }
+            else
+            {
+                parentTransform = _unitsRoot.transform;
+            }
+            entityUnit.GameObject.transform.parent = parentTransform;
+
+            entityUnit.GameObject.transform.localPosition = Vector3.zero;
             _units.Add(entityUnit.Path, entityUnit);
-            _animator.Rebind();
-            _animator.Update(0f);
+
+            AnimatorController.Rebind();
         }
 
         public EntityUnit GetUnit(string path)
@@ -30,9 +43,13 @@ namespace Assets._Game.Scripts.Entities
             return _units[path];
         }
 
-        public void PlayAnimationByTrigger(string trigger)
+        public void UpdateOrderInLayer()
         {
-            _animator.SetTrigger(trigger);
+            var pivotOrderInLayer = -(int)(_unitsRoot.transform.position.y * 100);
+            foreach (var unit in _units.Values)
+            {
+                unit.UpdateOrderInLayer(pivotOrderInLayer);
+            }
         }
 
         public void SetDirection(bool right)

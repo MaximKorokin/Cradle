@@ -14,19 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Views>k__BackingField:
   - <Name>k__BackingField: Humanoid
-    <Animator>k__BackingField: {fileID: 9100000, guid: 242721b66f8d00e479c9986cc578b1d0, type: 2}
+    <Variant>k__BackingField: Human
+    <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
     <Units>k__BackingField:
     - <Path>k__BackingField: Head
-      <OrderInLayer>k__BackingField: 20
+      <RelativeOrderInLayer>k__BackingField: 20
     - <Path>k__BackingField: Body
-      <OrderInLayer>k__BackingField: 10
+      <RelativeOrderInLayer>k__BackingField: 10
     - <Path>k__BackingField: HandLeft
-      <OrderInLayer>k__BackingField: 5
+      <RelativeOrderInLayer>k__BackingField: 5
     - <Path>k__BackingField: HandRight
-      <OrderInLayer>k__BackingField: 25
+      <RelativeOrderInLayer>k__BackingField: 25
     - <Path>k__BackingField: FootLeft
-      <OrderInLayer>k__BackingField: 5
+      <RelativeOrderInLayer>k__BackingField: 5
     - <Path>k__BackingField: FootRight
-      <OrderInLayer>k__BackingField: 21
-    - <Path>k__BackingField: HandRight/Spear
-      <OrderInLayer>k__BackingField: 24
+      <RelativeOrderInLayer>k__BackingField: 21
+    - <Path>k__BackingField: HandRight/Sword
+      <RelativeOrderInLayer>k__BackingField: 24
+  - <Name>k__BackingField: Quadruped
+    <Variant>k__BackingField: Quadruped
+    <Animator>k__BackingField: {fileID: 22100000, guid: 96ad2e14e0944f943af4f9ba299469bb, type: 2}
+    <Units>k__BackingField:
+    - <Path>k__BackingField: Head
+      <RelativeOrderInLayer>k__BackingField: 20
+    - <Path>k__BackingField: Body
+      <RelativeOrderInLayer>k__BackingField: 10
+    - <Path>k__BackingField: FootFrontLeft
+      <RelativeOrderInLayer>k__BackingField: 5
+    - <Path>k__BackingField: FootFrontRight
+      <RelativeOrderInLayer>k__BackingField: 15
+    - <Path>k__BackingField: FootBackLeft
+      <RelativeOrderInLayer>k__BackingField: 5
+    - <Path>k__BackingField: FootBackRight
+      <RelativeOrderInLayer>k__BackingField: 15

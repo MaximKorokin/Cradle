@@ -7,12 +7,14 @@ namespace Assets._Game.Scripts.Entities
     {
         private readonly SpriteRenderer _spriteRenderer;
         private readonly List<EntityUnit> _childrenUnits = new();
+        private readonly int _relativeOrderInLayer;
 
-        public EntityUnit(GameObject gameObject, string path)
+        public EntityUnit(GameObject gameObject, string path, int relativeOrderInLayer)
         {
             GameObject = gameObject;
             Path = path;
             _spriteRenderer = GameObject.GetComponent<SpriteRenderer>();
+            _relativeOrderInLayer = relativeOrderInLayer;
         }
 
         public GameObject GameObject { get; private set; }
@@ -22,6 +24,11 @@ namespace Assets._Game.Scripts.Entities
         public void Set(Sprite sprite)
         {
             _spriteRenderer.sprite = sprite;
+        }
+
+        public void UpdateOrderInLayer(int pivotOrder)
+        {
+            _spriteRenderer.sortingOrder = pivotOrder + _relativeOrderInLayer;
         }
 
         public void AddChild(EntityUnit entityUnit)

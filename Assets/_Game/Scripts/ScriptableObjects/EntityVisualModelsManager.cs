@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.ScriptableObjects
@@ -17,7 +16,9 @@ namespace Assets._Game.Scripts.ScriptableObjects
         [field: SerializeField]
         public string Name { get; private set; }
         [field: SerializeField]
-        public AnimatorController Animator { get; private set; }
+        public string Variant { get; private set; }
+        [field: SerializeField]
+        public AnimatorOverrideController Animator { get; private set; }
         [field: SerializeField]
         public EntityUnitVisualModel[] Units { get; private set; }
     }
@@ -28,6 +29,6 @@ namespace Assets._Game.Scripts.ScriptableObjects
         [field: SerializeField]
         public string Path { get; private set; }
         [field: SerializeField]
-        public int OrderInLayer { get; private set; }
+        public int RelativeOrderInLayer { get; private set; }
     }
 }

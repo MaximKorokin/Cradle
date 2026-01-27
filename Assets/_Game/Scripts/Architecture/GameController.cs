@@ -3,7 +3,7 @@ using System.Globalization;
 using UnityEngine;
 using VContainer.Unity;
 
-public class GameController : IStartable
+public class GameController : IStartable, ITickable
 {
     private EntityBuilder _entityBuilder;
 
@@ -17,7 +17,19 @@ public class GameController : IStartable
         CultureInfo.CurrentCulture = new CultureInfo("en-US");
         Application.targetFrameRate = 60;
 
-        var entity = _entityBuilder.Build("Humanoid");
-        entity.UnitsController.PlayAnimationByTrigger("ToIdle");
+        entity1 = _entityBuilder.Build("Humanoid");
+        entity2 = _entityBuilder.Build("Quadruped");
+
+        //entity.UnitsController.AnimatorController.SetAnimation(EntityAnimationClipName.ActionHands, new());
+    }
+
+    Entity entity1;
+    Entity entity2;
+    public void Tick()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            entity1.UnitsController.UpdateOrderInLayer();
+        }
     }
 }

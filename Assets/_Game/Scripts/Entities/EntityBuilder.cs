@@ -31,21 +31,23 @@ namespace Assets._Game.Scripts.Entities
             var entityGameObject = new GameObject($"{entityName} ({++_entitiesCounter})");
             var entityUnitsRoot = new GameObject("Units");
             entityUnitsRoot.transform.parent = entityGameObject.transform;
+
             var animator = entityUnitsRoot.AddComponent<Animator>();
             animator.runtimeAnimatorController = entityVisualModel.Animator;
-
             var unitsController = new EntityUnitsController(animator);
             var entity = new Entity(unitsController);
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
-                entity.UnitsController.AddUnit(BuildUnit(unitVisualModel));
+                entity.UnitsController.AddUnit(BuildUnit(unitVisualModel, entityVisualModel.Variant));
             }
+
+            entity.UnitsController.UpdateOrderInLayer();
 
             return entity;
         }
 
-        private EntityUnit BuildUnit(EntityUnitVisualModel entityUnitVisualModel)
+        private EntityUnit BuildUnit(EntityUnitVisualModel entityUnitVisualModel, string variantName)
         {
             var unitName = Path.GetFileName(entityUnitVisualModel.Path);
             var unitVariants = _entityUnitsManager.GetUnit(unitName);
@@ -55,18 +57,16 @@ namespace Assets._Game.Scripts.Entities
                 return null;
             }
 
-            var unitVariantName = "";
-            var unitVariant = unitVariants.GetVariant(unitVariantName);
+            var unitVariant = unitVariants.GetVariant(variantName);
             if (unitVariant == null)
             {
-                SLog.Error($"Cannot find unit variant by name: {unitVariantName}");
+                SLog.Error($"Cannot find unit variant by name: {variantName}");
                 return null;
             }
 
             var entityUnitGameObject = new GameObject(unitName);
             var spriteRenderer = entityUnitGameObject.AddComponent<SpriteRenderer>();
-            spriteRenderer.sortingOrder = entityUnitVisualModel.OrderInLayer;
-            var entityUnit = new EntityUnit(entityUnitGameObject, entityUnitVisualModel.Path);
+            var entityUnit = new EntityUnit(entityUnitGameObject, entityUnitVisualModel.Path, entityUnitVisualModel.RelativeOrderInLayer);
 
             entityUnit.Set(unitVariant.Sprite);
 
