@@ -17,6 +17,8 @@ namespace Assets._Game.Scripts.Entities.Items
         public Sprite Sprite { get; set; }
         [field: SerializeField]
         public int MaxAmount { get; set; }
+        [field: SerializeField]
+        public int Weight { get; set; }
         [field: SerializeReference]
         public ItemTraitBase[] Traits { get; set; }
 

@@ -43,7 +43,7 @@ public class ItemTableEditor : EditorWindow
     const float OpenColWidth = 52f;
     const float TraitsColWidth = 260f;
 
-    [MenuItem("Tools/Items/Table Editor (Traits Summary)")]
+    [MenuItem("Tools/Items/Table Editor")]
     static void Open() => GetWindow<ItemTableEditor>("Items (Table)");
 
     void OnEnable() => Undo.undoRedoPerformed += Repaint;

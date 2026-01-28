@@ -1,8 +1,8 @@
-﻿namespace Assets._Game.Scripts.Entities.Items
+﻿namespace Assets._Game.Scripts.Entities.Items.Inventory
 {
-    public class Equipment : IItemContainer
+    public class InventoryModel : IItemContainer
     {
-        public int SlotCount => 11;
+        public int SlotCount => throw new System.NotImplementedException();
 
         public bool CanPut(int slot, ItemStack stack)
         {

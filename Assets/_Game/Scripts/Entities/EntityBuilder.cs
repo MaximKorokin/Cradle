@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Controllers;
 using Assets._Game.Scripts.Entities.Items;
+using Assets._Game.Scripts.Entities.Items.Inventory;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.ScriptableObjectManagers;
 using Assets.CoreScripts;
@@ -40,8 +41,8 @@ namespace Assets._Game.Scripts.Entities
             var unitsController = new UnitsController(animator);
             var behaviourController = new BehaviourController();
             var attributes = new Attributes();
-            var inventory = new Inventory();
-            var entity = new Entity(unitsController, behaviourController, attributes, inventory);
+            var containersController = new ItemContainersController(new(), new());
+            var entity = new Entity(unitsController, behaviourController, attributes, containersController);
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
