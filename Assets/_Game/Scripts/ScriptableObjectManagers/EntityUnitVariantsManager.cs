@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.ScriptableObjects
+namespace Assets._Game.Scripts.ScriptableObjectManagers
 {
     [CreateAssetMenu(fileName = "EntityUnitsManager", menuName = "ScriptableObjects/EntityUnitsManager")]
     public class EntityUnitVariantsManager : ScriptableObject

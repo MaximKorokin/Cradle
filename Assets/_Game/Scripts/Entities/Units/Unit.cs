@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities
+namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityUnit
+    public class Unit
     {
         private readonly SpriteRenderer _spriteRenderer;
-        private readonly List<EntityUnit> _childrenUnits = new();
+        private readonly List<Unit> _childrenUnits = new();
         private readonly int _relativeOrderInLayer;
 
-        public EntityUnit(GameObject gameObject, string path, int relativeOrderInLayer)
+        public Unit(GameObject gameObject, string path, int relativeOrderInLayer)
         {
             GameObject = gameObject;
             Path = path;
@@ -31,7 +31,7 @@ namespace Assets._Game.Scripts.Entities
             _spriteRenderer.sortingOrder = pivotOrder + _relativeOrderInLayer;
         }
 
-        public void AddChild(EntityUnit entityUnit)
+        public void AddChild(Unit entityUnit)
         {
             _childrenUnits.Add(entityUnit);
             entityUnit.GameObject.transform.parent = GameObject.transform;

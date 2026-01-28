@@ -1,5 +1,5 @@
 using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.ScriptableObjects;
+using Assets._Game.Scripts.ScriptableObjectManagers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

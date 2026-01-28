@@ -1,4 +1,7 @@
-﻿using Assets._Game.Scripts.ScriptableObjects;
+﻿using Assets._Game.Scripts.Entities.Controllers;
+using Assets._Game.Scripts.Entities.Items;
+using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.ScriptableObjectManagers;
 using Assets.CoreScripts;
 using System.IO;
 using System.Linq;
@@ -34,8 +37,11 @@ namespace Assets._Game.Scripts.Entities
 
             var animator = entityUnitsRoot.AddComponent<Animator>();
             animator.runtimeAnimatorController = entityVisualModel.Animator;
-            var unitsController = new EntityUnitsController(animator);
-            var entity = new Entity(unitsController);
+            var unitsController = new UnitsController(animator);
+            var behaviourController = new BehaviourController();
+            var attributes = new Attributes();
+            var inventory = new Inventory();
+            var entity = new Entity(unitsController, behaviourController, attributes, inventory);
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
@@ -47,7 +53,7 @@ namespace Assets._Game.Scripts.Entities
             return entity;
         }
 
-        private EntityUnit BuildUnit(EntityUnitVisualModel entityUnitVisualModel, string variantName)
+        private Unit BuildUnit(EntityUnitVisualModel entityUnitVisualModel, string variantName)
         {
             var unitName = Path.GetFileName(entityUnitVisualModel.Path);
             var unitVariants = _entityUnitsManager.GetUnit(unitName);
@@ -66,7 +72,7 @@ namespace Assets._Game.Scripts.Entities
 
             var entityUnitGameObject = new GameObject(unitName);
             var spriteRenderer = entityUnitGameObject.AddComponent<SpriteRenderer>();
-            var entityUnit = new EntityUnit(entityUnitGameObject, entityUnitVisualModel.Path, entityUnitVisualModel.RelativeOrderInLayer);
+            var entityUnit = new Unit(entityUnitGameObject, entityUnitVisualModel.Path, entityUnitVisualModel.RelativeOrderInLayer);
 
             entityUnit.Set(unitVariant.Sprite);
 

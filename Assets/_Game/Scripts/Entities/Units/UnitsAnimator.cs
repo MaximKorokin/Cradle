@@ -2,13 +2,13 @@
 using Assets.CoreScripts;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities
+namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityUnitsAnimator
+    public class UnitsAnimator
     {
         private readonly Animator _animator;
 
-        public EntityUnitsAnimator(Animator animator)
+        public UnitsAnimator(Animator animator)
         {
             _animator = animator;
         }

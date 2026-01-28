@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.ScriptableObjects
+namespace Assets._Game.Scripts.ScriptableObjectManagers
 {
     [CreateAssetMenu(fileName = "Entities", menuName = "ScriptableObjects/Entities")]
     public class EntityVisualModelsManager : ScriptableObject
