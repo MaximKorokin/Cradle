@@ -17,4 +17,13 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 3537499059100430296, guid: c74c90811d22fb444943251606ff5755, type: 3}
   <Sprite>k__BackingField: {fileID: 3537499059100430296, guid: c74c90811d22fb444943251606ff5755, type: 3}
   <MaxAmount>k__BackingField: 64
-  <Type>k__BackingField: 30
+  <Weight>k__BackingField: 3
+  <Traits>k__BackingField:
+  - rid: 2859158591362039993
+  references:
+    version: 2
+    RefIds:
+    - rid: 2859158591362039993
+      type: {class: HealTrait, ns: Assets._Game.Scripts.Entities.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <HealAmount>k__BackingField: 3

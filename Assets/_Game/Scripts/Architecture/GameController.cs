@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Entities;
 using System.Globalization;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer.Unity;
 
 public class GameController : IStartable, ITickable
@@ -20,7 +21,7 @@ public class GameController : IStartable, ITickable
         entity1 = _entityBuilder.Build("Humanoid");
         entity2 = _entityBuilder.Build("Quadruped");
 
-        //entity.UnitsController.AnimatorController.SetAnimation(EntityAnimationClipName.ActionHands, new());
+        SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
     }
 
     Entity entity1;

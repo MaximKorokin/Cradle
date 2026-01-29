@@ -17,4 +17,14 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   <MaxAmount>k__BackingField: 1
-  <Type>k__BackingField: 10
+  <Weight>k__BackingField: 80
+  <Traits>k__BackingField:
+  - rid: 2859158591362039985
+  references:
+    version: 2
+    RefIds:
+    - rid: 2859158591362039985
+      type: {class: MeleeTrait, ns: Assets._Game.Scripts.Entities.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Damage>k__BackingField: 5
+        <AttackSpeed>k__BackingField: 1.5

@@ -1,4 +1,6 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Items.Equipment;
+using Assets._Game.Scripts.Entities.Items.Inventory;
 using Assets._Game.Scripts.ScriptableObjectManagers;
 using UnityEngine;
 using VContainer;
@@ -19,5 +21,14 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterInstance(_entityVisualModelsManager);
 
         builder.Register<EntityBuilder>(Lifetime.Scoped);
+
+        RegisterInventoryFeature(builder);
+    }
+
+    private void RegisterInventoryFeature(IContainerBuilder builder)
+    {
+        builder.Register<InventoryModel>(Lifetime.Scoped);
+        builder.Register<InventoryController>(Lifetime.Scoped);
+        builder.Register<EquipmentModel>(Lifetime.Scoped);
     }
 }
