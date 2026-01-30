@@ -1,6 +1,6 @@
 using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Entities.Items.Equipment;
-using Assets._Game.Scripts.Entities.Items.Inventory;
+using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.ScriptableObjectManagers;
 using UnityEngine;
 using VContainer;

@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities.Items;
+﻿using Assets._Game.Scripts.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;

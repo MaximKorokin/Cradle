@@ -1,6 +1,6 @@
-﻿using Assets._Game.Scripts.Entities.Items;
-using Assets._Game.Scripts.Entities.Items.Equipment;
-using Assets._Game.Scripts.Entities.Items.Traits;
+﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Traits;
 using Assets.CoreScripts;
 using System;
 

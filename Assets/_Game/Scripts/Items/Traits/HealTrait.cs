@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Items.Traits
+namespace Assets._Game.Scripts.Items.Traits
 {
     [Serializable]
     public class HealTrait : ItemTraitBase

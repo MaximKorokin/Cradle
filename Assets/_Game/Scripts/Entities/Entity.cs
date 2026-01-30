@@ -1,5 +1,5 @@
 using Assets._Game.Scripts.Entities.Controllers;
-using Assets._Game.Scripts.Entities.Items;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Entities.Units;
 
 namespace Assets._Game.Scripts.Entities

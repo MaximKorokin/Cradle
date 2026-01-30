@@ -1,10 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Items.Traits
+namespace Assets._Game.Scripts.Items.Traits
 {
-    [Serializable]
-    public class RangedTrait : ItemTraitBase
+    public class MeleeTrait : ItemTraitBase
     {
         [field: SerializeField]
         public float Damage { get; set; }

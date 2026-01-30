@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities.Items.Inventory;
+﻿using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.Windows;
 using VContainer.Unity;
 

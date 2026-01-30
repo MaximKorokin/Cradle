@@ -3,7 +3,7 @@ using Assets.CoreScripts;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Assets._Game.Scripts.Entities.Items.Equipment
+namespace Assets._Game.Scripts.Items.Equipment
 {
     public class EquipmentModel : IItemContainer<EquipmentSlotType>
     {

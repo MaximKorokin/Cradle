@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Controllers;
-using Assets._Game.Scripts.Entities.Items;
-using Assets._Game.Scripts.Entities.Items.Inventory;
+using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.ScriptableObjectManagers;
 using Assets.CoreScripts;

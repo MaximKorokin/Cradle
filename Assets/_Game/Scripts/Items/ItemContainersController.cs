@@ -1,6 +1,6 @@
-﻿using Assets._Game.Scripts.Entities.Items.Equipment;
+﻿using Assets._Game.Scripts.Items.Equipment;
 
-namespace Assets._Game.Scripts.Entities.Items
+namespace Assets._Game.Scripts.Items
 {
     public class ItemContainersController
     {

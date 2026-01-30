@@ -1,4 +1,4 @@
-﻿namespace Assets._Game.Scripts.Entities.Items.Equipment
+﻿namespace Assets._Game.Scripts.Items.Equipment
 {
     public class EquipmentSlot
     {

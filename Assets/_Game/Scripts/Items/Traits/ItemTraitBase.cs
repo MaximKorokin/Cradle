@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets._Game.Scripts.Entities.Items
+namespace Assets._Game.Scripts.Items
 {
     public interface IItemTrait { }
 
