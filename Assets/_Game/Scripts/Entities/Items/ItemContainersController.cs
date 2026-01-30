@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities.Items.Equipment;
-using Assets._Game.Scripts.Entities.Items.Inventory;
 
 namespace Assets._Game.Scripts.Entities.Items
 {
@@ -24,7 +23,7 @@ namespace Assets._Game.Scripts.Entities.Items
             return false;
         }
 
-        public bool Move(IItemContainer fromContainer, int fromSlot, IItemContainer toContainer, int toSlot)
+        public bool Move<T1, T2>(IItemContainer<T1> fromContainer, T1 fromSlot, IItemContainer<T2> toContainer, T2 toSlot)
         {
             return false;
         }

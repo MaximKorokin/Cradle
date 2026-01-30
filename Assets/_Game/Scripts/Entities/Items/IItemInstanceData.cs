@@ -4,4 +4,9 @@
     {
 
     }
+
+    public interface IImmutableInstanceData : IItemInstanceData
+    {
+        int GetStackKey();
+    }
 }

@@ -5,13 +5,13 @@ namespace Assets._Game.Scripts.Entities.Items
     public class ItemsMoveService : MonoBehaviour
     {
         // ai generated; seems cursed
-        public bool Move(IItemContainer sourceContainer, int sourceSlot, IItemContainer targetContainer, int targetSlot, int amount)
+        public bool Move<T1, T2>(IItemContainer<T1> sourceContainer, T1 sourceSlot, IItemContainer<T2> targetContainer, T2 targetSlot, int amount)
         {
             var sourceItem = sourceContainer.Get(sourceSlot);
             if (sourceItem.Definition == null || amount <= 0 || sourceItem.Amount < amount)
                 return false;
 
-            var part = new ItemStack(sourceItem.Definition, sourceItem.InstanceData, amount);
+            var part = new ItemStack(sourceItem.Definition, sourceItem.Instance, amount);
 
             if (!targetContainer.CanPut(targetSlot, part))
                 return false;
@@ -34,11 +34,11 @@ namespace Assets._Game.Scripts.Entities.Items
                 return false;
             }
 
-            sourceContainer.Take(sourceSlot, amount);
+            sourceContainer.Take(sourceSlot, ref amount);
             return true;
         }
 
-        public bool Swap(IItemContainer firstContainer, int firstSlot, IItemContainer secondContainer, int secondSlot)
+        public bool Swap<T1, T2>(IItemContainer<T1> firstContainer, T1 firstSlot, IItemContainer<T2> secondContainer, T2 secondSlot)
         {
             var firstItem = firstContainer.Get(firstSlot);
             var secondItem = secondContainer.Get(secondSlot);

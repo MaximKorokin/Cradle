@@ -1,0 +1,76 @@
+﻿using Assets._Game.Scripts.Entities.Items;
+using Assets._Game.Scripts.Entities.Items.Equipment;
+using Assets._Game.Scripts.Entities.Items.Traits;
+using Assets.CoreScripts;
+using System;
+
+namespace Assets._Game.Scripts.Shared.Extensions
+{
+    public static class ItemStackExtensions
+    {
+        public static bool CanAddTo(this ItemStack source, ItemStack target)
+        {
+            return source.Definition.Id == target.Definition.Id
+                && source.Instance is IImmutableInstanceData sourceImmutableInstanceData
+                && target.Instance is IImmutableInstanceData targetImmutableInstanceData
+                && sourceImmutableInstanceData.GetStackKey() == targetImmutableInstanceData.GetStackKey()
+                && target.Amount < target.Definition.MaxAmount;
+        }
+
+        public static bool CanAddToCompletely(this ItemStack source, ItemStack target)
+        {
+            return CanAddTo(source, target) && source.Amount + target.Amount <= target.Definition.MaxAmount;
+        }
+
+        public static void AddTo(this ItemStack source, ItemStack target)
+        {
+            var remaining = target.Definition.MaxAmount - target.Amount;
+            // No space left
+            if (remaining == 0) return;
+
+            // Can't stack
+            if (!CanAddTo(source, target))
+            {
+                SLog.Error($"Tried to add incompatible ItemStacks: {source.Definition.Id} and {target.Definition.Id}");
+                return;
+            }
+
+            // Can fit all
+            if (source.Amount <= remaining)
+            {
+                target.Amount += source.Amount;
+                source.Amount = 0;
+            }
+            // Can fit some
+            else
+            {
+                target.Amount += remaining;
+                source.Amount -= remaining;
+            }
+        }
+
+        public static void RemoveFrom(this ItemStack target, ref int amount)
+        {
+            if (amount <= 0) return;
+
+            var toRemove = Math.Min(target.Amount, amount);
+            target.Amount -= toRemove;
+            amount -= toRemove;
+        }
+
+        public static bool IsEquippable(this ItemStack itemStack)
+        {
+            return itemStack.Instance is EquippableTrait trait && trait.Slot != Entities.Items.Equipment.EquipmentSlotType.None;
+        }
+
+        public static EquipmentSlotType GetEquipmentSlotType(this ItemStack itemStack)
+        {
+            return itemStack.Instance is EquippableTrait trait ? trait.Slot : EquipmentSlotType.None;
+        }
+
+        public static bool HasId(this ItemStack item, string id)
+        {
+            return string.Equals(item.Definition.Id, id, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+}

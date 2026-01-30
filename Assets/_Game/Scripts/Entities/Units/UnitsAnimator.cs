@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Utils;
+﻿using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
 using UnityEngine;
 

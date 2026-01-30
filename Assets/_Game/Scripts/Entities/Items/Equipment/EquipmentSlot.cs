@@ -8,9 +8,12 @@
 
     public enum EquipmentSlotType
     {
-        Weapon,
-        Head,
-        Body,
-        Ring,
+        None = 0,
+        Weapon = 10,
+        Head = 20,
+        Body = 30,
+        Gloves = 40,
+        Boots = 50,
+        Ring = 60,
     }
 }

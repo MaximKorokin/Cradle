@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.Entities
             var unitsController = new UnitsController(animator);
             var behaviourController = new BehaviourController();
             var attributes = new Attributes();
-            var containersController = new ItemContainersController(new(), new());
+            var containersController = new ItemContainersController(new(1), new(null));
             var entity = new Entity(unitsController, behaviourController, attributes, containersController);
 
             foreach (var unitVisualModel in entityVisualModel.Units)

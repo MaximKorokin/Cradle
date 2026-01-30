@@ -1,11 +1,20 @@
 ﻿namespace Assets._Game.Scripts.Entities.Items
 {
-    public interface IItemContainer
+    public interface IItemContainer<T>
     {
         int SlotCount { get; }
-        ItemStack Get(int slot);
-        bool CanPut(int slot, ItemStack stack);
-        void Put(int slot, ItemStack stack);
-        ItemStack Take(int slot, int amount);
+
+        ItemStack Get(T index);
+
+        bool Contains(string id, int amount);
+
+        void Take(T index, ref int amount);
+        void Take(string id, ref int amount);
+
+        bool CanPut(T index, ItemStack item);
+        bool CanPut(ItemStack item);
+
+        void Put(T index, ItemStack item);
+        void Put(ItemStack item);
     }
 }

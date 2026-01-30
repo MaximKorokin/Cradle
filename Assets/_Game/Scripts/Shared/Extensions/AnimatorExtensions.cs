@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Utils
+namespace Assets._Game.Scripts.Shared.Extensions
 {
     public static class AnimatorExtensions
     {

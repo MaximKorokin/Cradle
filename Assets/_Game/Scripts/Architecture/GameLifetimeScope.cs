@@ -28,7 +28,7 @@ public class GameLifetimeScope : LifetimeScope
     private void RegisterInventoryFeature(IContainerBuilder builder)
     {
         builder.Register<InventoryModel>(Lifetime.Scoped);
-        builder.Register<InventoryController>(Lifetime.Scoped);
+
         builder.Register<EquipmentModel>(Lifetime.Scoped);
     }
 }

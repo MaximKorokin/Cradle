@@ -5,12 +5,12 @@
         public ItemStack(ItemDefinition definition, IItemInstanceData instanceData, int amount)
         {
             Definition = definition;
-            InstanceData = instanceData;
+            Instance = instanceData;
             Amount = amount;
         }
 
         public ItemDefinition Definition { get; set; }
-        public IItemInstanceData InstanceData { get; set; }
+        public IItemInstanceData Instance { get; set; }
         public int Amount { get; set; }
     }
 }
