@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Items.Inventory;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Windows;
 using VContainer.Unity;
 
@@ -8,19 +8,19 @@ namespace Assets._Game.Scripts.UI.Core
     {
         readonly WindowManager _windows;
         readonly InventoryWindow _inventoryPrefab;
-        readonly InventoryController _inventory;
+        readonly InventoryEquipmentController _inventoryController;
 
-        public UIBootstrap(WindowManager windows, InventoryWindow inventoryPrefab, InventoryController inventory)
+        public UIBootstrap(WindowManager windows, InventoryWindow inventoryPrefab, InventoryEquipmentController inventory)
         {
             _windows = windows;
             _inventoryPrefab = inventoryPrefab;
-            _inventory = inventory;
+            _inventoryController = inventory;
         }
 
         public void Start()
         {
             var w = _windows.Show(_inventoryPrefab);
-            w.Init(_inventory);
+            w.Init(_inventoryController);
         }
     }
 }

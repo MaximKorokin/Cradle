@@ -19,11 +19,11 @@ MonoBehaviour:
   <MaxAmount>k__BackingField: 64
   <Weight>k__BackingField: 3
   <Traits>k__BackingField:
-  - rid: 2859158591362039993
+  - rid: 2859158637052690512
   references:
     version: 2
     RefIds:
-    - rid: 2859158591362039993
-      type: {class: HealTrait, ns: Assets._Game.Scripts.Entities.Items.Traits, asm: Assembly-CSharp}
+    - rid: 2859158637052690512
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <HealAmount>k__BackingField: 3
+        <Slot>k__BackingField: 0

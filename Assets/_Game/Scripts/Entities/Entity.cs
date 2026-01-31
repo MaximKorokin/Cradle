@@ -10,7 +10,7 @@ namespace Assets._Game.Scripts.Entities
             UnitsController unitsController,
             BehaviourController behaviourController,
             Attributes attributes,
-            ItemContainersController containersController)
+            InventoryEquipmentController containersController)
         {
             UnitsController = unitsController;
             BehaviourController = behaviourController;
@@ -19,6 +19,6 @@ namespace Assets._Game.Scripts.Entities
 
         public UnitsController UnitsController { get; private set; }
         public BehaviourController BehaviourController { get; private set; }
-        public ItemContainersController ContainersController { get; private set; }
+        public InventoryEquipmentController ContainersController { get; private set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Items
+namespace Assets._Game.Scripts.Items
 {
     [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/ItemDefinition")]
     public class ItemDefinition : ScriptableObject

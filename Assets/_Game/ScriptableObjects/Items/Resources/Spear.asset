@@ -19,12 +19,11 @@ MonoBehaviour:
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 100
   <Traits>k__BackingField:
-  - rid: 2859158591362039994
+  - rid: 2859158637052690514
   references:
     version: 2
     RefIds:
-    - rid: 2859158591362039994
-      type: {class: MeleeTrait, ns: Assets._Game.Scripts.Entities.Items.Traits, asm: Assembly-CSharp}
+    - rid: 2859158637052690514
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Damage>k__BackingField: 4
-        <AttackSpeed>k__BackingField: 1
+        <Slot>k__BackingField: 0

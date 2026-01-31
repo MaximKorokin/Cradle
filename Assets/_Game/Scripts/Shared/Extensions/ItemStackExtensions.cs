@@ -60,7 +60,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
 
         public static bool IsEquippable(this ItemStack itemStack)
         {
-            return itemStack.Instance is EquippableTrait trait && trait.Slot != Entities.Items.Equipment.EquipmentSlotType.None;
+            return itemStack.Instance is EquippableTrait trait && trait.Slot != EquipmentSlotType.None;
         }
 
         public static EquipmentSlotType GetEquipmentSlotType(this ItemStack itemStack)

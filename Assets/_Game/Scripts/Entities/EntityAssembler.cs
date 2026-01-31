@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Controllers;
-using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.ScriptableObjectManagers;
 using Assets.CoreScripts;
 using System.IO;
@@ -10,20 +9,20 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
 {
-    public class EntityBuilder
+    public class EntityAssembler
     {
         private static int _entitiesCounter = 0;
 
         private readonly EntityUnitVariantsManager _entityUnitsManager;
         private readonly EntityVisualModelsManager _entityVisualModelsManager;
 
-        public EntityBuilder(EntityUnitVariantsManager entityUnitsManager, EntityVisualModelsManager entityVisualModelsManager)
+        public EntityAssembler(EntityUnitVariantsManager entityUnitsManager, EntityVisualModelsManager entityVisualModelsManager)
         {
             _entityUnitsManager = entityUnitsManager;
             _entityVisualModelsManager = entityVisualModelsManager;
         }
 
-        public Entity Build(string entityName)
+        public Entity Assemble(string entityName)
         {
             var entityVisualModel = _entityVisualModelsManager.Views.FirstOrDefault(x => x.Name == entityName);
             if (entityVisualModel == null)
@@ -41,7 +40,7 @@ namespace Assets._Game.Scripts.Entities
             var unitsController = new UnitsController(animator);
             var behaviourController = new BehaviourController();
             var attributes = new Attributes();
-            var containersController = new ItemContainersController(new(1), new(null));
+            var containersController = new InventoryEquipmentController(new(), new(null));
             var entity = new Entity(unitsController, behaviourController, attributes, containersController);
 
             foreach (var unitVisualModel in entityVisualModel.Units)

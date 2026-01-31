@@ -1,12 +1,12 @@
-﻿using Assets._Game.Scripts.Items.Inventory;
+﻿using Assets._Game.Scripts.Items;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
     public class InventoryWindow : UIWindow
     {
-        InventoryController _controller;
+        InventoryEquipmentController _controller;
 
-        public void Init(InventoryController controller)
+        public void Init(InventoryEquipmentController controller)
         {
             _controller = controller;
         }

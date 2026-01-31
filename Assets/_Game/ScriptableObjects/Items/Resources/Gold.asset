@@ -18,7 +18,12 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   <MaxAmount>k__BackingField: 2147483647
   <Weight>k__BackingField: 0
-  <Traits>k__BackingField: []
+  <Traits>k__BackingField:
+  - rid: 2859158637052690513
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2859158637052690513
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 0
