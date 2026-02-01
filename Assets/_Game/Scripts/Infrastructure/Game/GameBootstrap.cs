@@ -13,17 +13,20 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         private readonly GameSaveRepository _repository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly EntityDefinitionCatalog _entityDefinitionCatalog;
+        private readonly GameContext _gameContext;
 
         public GameBootstrap(
             EntityAssembler entityAssembler,
             GameSaveRepository repository,
             NewGameDefinition newGameDefinition,
-            EntityDefinitionCatalog entityDefinitionCatalog)
+            EntityDefinitionCatalog entityDefinitionCatalog,
+            GameContext gameContext)
         {
             _entityBuilder = entityAssembler;
             _repository = repository;
             _newGameDefinition = newGameDefinition;
             _entityDefinitionCatalog = entityDefinitionCatalog;
+            _gameContext = gameContext;
         }
 
         public void Start()
@@ -40,6 +43,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             {
                 humanoid = _entityBuilder.Create(_newGameDefinition.PlayerEntityDefinition);
             }
+            _gameContext.SetPlayer(humanoid);
+            _gameContext.SetIEController(humanoid.ContainersController);
 
             quadruped = _entityBuilder.Create(_entityDefinitionCatalog.GetEntityDefinition("851ea68f-b985-4565-bbc0-816f9eb5ee8b"));
 

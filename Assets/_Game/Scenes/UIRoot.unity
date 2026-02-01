@@ -582,7 +582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: GameLifetimeScope
+    TypeName: Assets._Game.Scripts.Infrastructure.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
   _inventoryWindow: {fileID: -1430181448580419976, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}

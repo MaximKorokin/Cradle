@@ -12,8 +12,6 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public InventoryModel(int slotCount)
         {
-            if (slotCount <= 0) throw new ArgumentOutOfRangeException(nameof(slotCount));
-
             _slots = new ItemStack[slotCount];
         }
 
