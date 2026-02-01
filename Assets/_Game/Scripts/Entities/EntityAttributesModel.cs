@@ -1,6 +1,6 @@
 ﻿namespace Assets._Game.Scripts.Entities
 {
-    public class Attributes
+    public class EntityAttributesModel
     {
 
     }

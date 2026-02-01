@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
 {
-    public class ItemCatalog
+    public class ItemDefinitionCatalog
     {
         private readonly Dictionary<string, ItemDefinition> _items;
 
-        public ItemCatalog()
+        public ItemDefinitionCatalog()
         {
             SLog.Log("Loading Item Catalog...");
             _items = Resources.LoadAll<ItemDefinition>("").ToDictionary(x => x.Id, x => x);

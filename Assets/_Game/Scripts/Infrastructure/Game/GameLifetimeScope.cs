@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
@@ -16,6 +17,8 @@ namespace Assets._Game.Scripts.Infrastructure
         private EntityUnitVariantsManager _entityUnitsManager;
         [SerializeField]
         private EntityVisualModelsManager _entityVisualModelsManager;
+        [SerializeField]
+        private NewGameDefinition _newGameDefinition;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -23,12 +26,14 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.RegisterInstance(_entityUnitsManager);
             builder.RegisterInstance(_entityVisualModelsManager);
+            builder.RegisterInstance(_newGameDefinition);
 
-            builder.Register<EntityAssembler>(Lifetime.Scoped);
+            builder.Register<GameSaveRepository>(Lifetime.Scoped);
 
             RegisterSavesFeature(builder);
-            RegisterItemsFeature(builder);
+            RegisterEntityFeature(builder);
             RegisterInventoryFeature(builder);
+            RegisterItemFeature(builder);
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -37,18 +42,26 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<JsonSaveSerializer>(Lifetime.Scoped);
         }
 
-        private void RegisterItemsFeature(IContainerBuilder builder)
+        private void RegisterEntityFeature(IContainerBuilder builder)
         {
-            builder.Register<ItemCatalog>(Lifetime.Scoped);
+            builder.Register<EntityRepository>(Lifetime.Scoped);
+            builder.Register<EntityAssembler>(Lifetime.Scoped);
         }
 
         private void RegisterInventoryFeature(IContainerBuilder builder)
         {
             builder.Register<InventoryModel>(Lifetime.Scoped);
+            builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
             builder.Register<EquipmentModel>(Lifetime.Scoped);
+            builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
             builder.Register<InventoryEquipmentController>(Lifetime.Scoped);
+            builder.Register<InventoryEquipmentControllerAssembler>(Lifetime.Scoped);
+        }
 
-            builder.Register<ItemContainerSaveRepository>(Lifetime.Scoped);
+        private void RegisterItemFeature(IContainerBuilder builder)
+        {
+            builder.Register<ItemStackAssembler>(Lifetime.Scoped);
+            builder.Register<ItemDefinitionCatalog>(Lifetime.Scoped);
         }
     }
 }

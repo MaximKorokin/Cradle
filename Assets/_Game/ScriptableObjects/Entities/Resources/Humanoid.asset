@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
+  m_Name: Humanoid
+  m_EditorClassIdentifier: 
+  <Id>k__BackingField: 0e223672-e36b-497a-84b3-d50d96d89540
+  <EntityId>k__BackingField: Humanoid
+  <Prefab>k__BackingField: {fileID: 7953236500662839127, guid: 7d2994d3b6286fb48bf66a2473ecbe6c, type: 3}
+  <InventorySlotsAmount>k__BackingField: 50
+  <EquipmentSlots>k__BackingField: 0a000000140000001e00000028000000320000003c0000003c00000000000000

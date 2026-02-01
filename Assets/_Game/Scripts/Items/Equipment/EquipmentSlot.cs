@@ -4,6 +4,12 @@
     {
         public EquipmentSlotType SlotType;
         public ItemStack Item;
+
+        public EquipmentSlot(EquipmentSlotType slotType)
+        {
+            SlotType = slotType;
+            Item = null;
+        }
     }
 
     public enum EquipmentSlotType

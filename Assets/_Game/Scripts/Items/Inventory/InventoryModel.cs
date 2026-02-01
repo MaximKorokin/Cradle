@@ -10,9 +10,8 @@ namespace Assets._Game.Scripts.Items.Inventory
     {
         private readonly ItemStack[] _slots;
 
-        public InventoryModel()
+        public InventoryModel(int slotCount)
         {
-            int slotCount = 50;
             if (slotCount <= 0) throw new ArgumentOutOfRangeException(nameof(slotCount));
 
             _slots = new ItemStack[slotCount];
