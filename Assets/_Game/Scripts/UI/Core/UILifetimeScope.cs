@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.UI.Core
     {
         [Header("Prefabs")]
         [SerializeField]
-        private InventoryWindow _inventoryWindow;
+        private InventoryEquipmentWindow _inventoryWindow;
         [Space]
         [Header("MonoBehaviours")]
         [SerializeField]

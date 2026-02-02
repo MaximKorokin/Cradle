@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Items.Equipment;
 using System;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace Assets._Game.Scripts.Entities
         [field: SerializeField]
         public EquipmentSlotType[] EquipmentSlots { get; set; }
         [field: SerializeField]
-        public EntityAttributesModel Attributes { get; set; }
+        public EntityAttributesModule Attributes { get; set; }
 
         private void OnValidate()
         {

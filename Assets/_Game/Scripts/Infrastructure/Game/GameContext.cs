@@ -1,21 +1,21 @@
 ﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Entities.Modules;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
     public sealed class GameContext
     {
         public Entity Player { get; private set; }
-        public InventoryEquipmentController IEController { get; private set; }
+        public EntityInventoryEquipmentModule IEModule { get; private set; }
 
         public void SetPlayer(Entity player)
         {
             Player = player;
         }
 
-        public void SetIEController(InventoryEquipmentController controller)
+        public void SetIEModule(EntityInventoryEquipmentModule controller)
         {
-            IEController = controller;
+            IEModule = controller;
         }
     }
 }

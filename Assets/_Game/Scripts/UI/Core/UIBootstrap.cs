@@ -7,12 +7,12 @@ namespace Assets._Game.Scripts.UI.Core
     public sealed class UIBootstrap : IStartable
     {
         readonly WindowManager _windows;
-        readonly InventoryWindow _inventoryPrefab;
+        readonly InventoryEquipmentWindow _inventoryPrefab;
         readonly GameContext _gameContext;
 
         public UIBootstrap(
             WindowManager windows,
-            InventoryWindow inventoryPrefab,
+            InventoryEquipmentWindow inventoryPrefab,
             GameContext gameContext)
         {
             _windows = windows;
@@ -22,8 +22,7 @@ namespace Assets._Game.Scripts.UI.Core
 
         public void Start()
         {
-            var w = _windows.Show(_inventoryPrefab);
-            w.Init(_gameContext.IEController);
+            var w = _windows.ShowInventoryEquipmentWindow(_inventoryPrefab, _gameContext.IEModule.Inventory, _gameContext.IEModule.Equipment, new());
         }
     }
 }

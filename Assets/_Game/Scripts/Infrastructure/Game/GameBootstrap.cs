@@ -1,4 +1,6 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using System.Globalization;
 using UnityEngine;
@@ -44,7 +46,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
                 humanoid = _entityBuilder.Create(_newGameDefinition.PlayerEntityDefinition);
             }
             _gameContext.SetPlayer(humanoid);
-            _gameContext.SetIEController(humanoid.ContainersController);
+            if (humanoid.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
+                _gameContext.SetIEModule(inventoryEquipmentModule);
 
             quadruped = _entityBuilder.Create(_entityDefinitionCatalog.GetEntityDefinition("851ea68f-b985-4565-bbc0-816f9eb5ee8b"));
 
@@ -55,9 +58,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         Entity quadruped;
         public void Tick()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<UnitsController>(out var unitsController))
             {
-                humanoid.UnitsController.UpdateOrderInLayer();
+                unitsController.UpdateOrderInLayer();
             }
         }
     }

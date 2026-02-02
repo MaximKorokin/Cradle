@@ -1,11 +1,11 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 
-namespace Assets._Game.Scripts.Items
+namespace Assets._Game.Scripts.Entities.Modules
 {
-    public class InventoryEquipmentController
+    public class EntityInventoryEquipmentModule : IEntityModule
     {
-        public InventoryEquipmentController(InventoryModel inventory, EquipmentModel equipment)
+        public EntityInventoryEquipmentModule(InventoryModel inventory, EquipmentModel equipment)
         {
             Inventory = inventory;
             Equipment = equipment;

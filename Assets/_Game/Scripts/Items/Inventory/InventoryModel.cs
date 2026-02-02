@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Items.Inventory
     {
         private readonly ItemStack[] _slots;
 
+        public event Action Changed;
+
         public InventoryModel(int slotCount)
         {
             _slots = new ItemStack[slotCount];
@@ -63,6 +65,8 @@ namespace Assets._Game.Scripts.Items.Inventory
             {
                 _slots[index] = null;
             }
+
+            Changed?.Invoke();
         }
 
         public void Take(string id, ref int amount)
@@ -84,6 +88,8 @@ namespace Assets._Game.Scripts.Items.Inventory
                     break;
                 }
             }
+
+            Changed?.Invoke();
         }
 
         public bool CanPut(int index, ItemStack item)
@@ -131,6 +137,8 @@ namespace Assets._Game.Scripts.Items.Inventory
             {
                 SLog.Error($"Cannot put item {item.Definition.Id} into slot {index}.");
             }
+
+            Changed?.Invoke();
         }
 
         public void Put(ItemStack item)
@@ -149,6 +157,8 @@ namespace Assets._Game.Scripts.Items.Inventory
                 _slots[indexOfEmpty] = new ItemStack(item.Definition, item.Instance, item.Amount);
                 item.Amount = 0;
             }
+
+            Changed?.Invoke();
         }
 
         private bool IsValidIndex(int index)

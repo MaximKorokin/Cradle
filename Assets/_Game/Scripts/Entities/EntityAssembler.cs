@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Controllers;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items;
@@ -32,32 +33,16 @@ namespace Assets._Game.Scripts.Entities
 
         public Entity Assemble(EntityDefinition entityDefinition, EntitySave save)
         {
-            var entityVisualModel = _entityVisualModelsManager.Views.FirstOrDefault(x => x.Name == save.EntityId);
-            if (entityVisualModel == null)
+            var entity = Create(entityDefinition);
+            if (entity == null)
             {
-                SLog.Error($"Cannot find entity visual model with name: {save.EntityId}");
+                SLog.Error($"Cannot create entity with id: {entityDefinition.EntityId}");
                 return null;
             }
-
-            var entityGameObject = new GameObject($"{save.EntityId} ({++_entitiesCounter})");
-            var entityUnitsRoot = new GameObject("Units");
-            entityUnitsRoot.transform.parent = entityGameObject.transform;
-
-            var animator = entityUnitsRoot.AddComponent<Animator>();
-            animator.runtimeAnimatorController = entityVisualModel.Animator;
-            var unitsController = new UnitsController(animator);
-            var behaviourController = new BehaviourController();
-            var attributes = new EntityAttributesModel();
-            var containersController = _inventoryEquipmentControllerAssembler.Assemble(entityDefinition, save);
-            var entity = new Entity("", null, unitsController, behaviourController, containersController);
-
-            foreach (var unitVisualModel in entityVisualModel.Units)
+            if (entity.TryGetModule<EntityInventoryEquipmentModule>(out var containersController))
             {
-                entity.UnitsController.AddUnit(CreateUnit(unitVisualModel, entityVisualModel.Variant));
+                _inventoryEquipmentControllerAssembler.Apply(containersController, save);
             }
-
-            entity.UnitsController.UpdateOrderInLayer();
-
             return entity;
         }
 
@@ -78,16 +63,20 @@ namespace Assets._Game.Scripts.Entities
             animator.runtimeAnimatorController = entityVisualModel.Animator;
             var unitsController = new UnitsController(animator);
             var behaviourController = new BehaviourController();
-            var attributes = new EntityAttributesModel();
+            var attributes = new EntityAttributesModule();
             var containersController = _inventoryEquipmentControllerAssembler.Create(entityDefinition);
-            var entity = new Entity("", null, unitsController, behaviourController, containersController);
+            var entity = new Entity("");
+            entity.AddModule(attributes);
+            entity.AddModule(unitsController);
+            entity.AddModule(behaviourController);
+            entity.AddModule(containersController);
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
-                entity.UnitsController.AddUnit(CreateUnit(unitVisualModel, entityVisualModel.Variant));
+                unitsController.AddUnit(CreateUnit(unitVisualModel, entityVisualModel.Variant));
             }
 
-            entity.UnitsController.UpdateOrderInLayer();
+            unitsController.UpdateOrderInLayer();
 
             return entity;
         }

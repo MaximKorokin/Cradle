@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Assets._Game.Scripts.Entities.Units
     /// <summary>
     /// In other words - EntityVisual
     /// </summary>
-    public class UnitsController
+    public class UnitsController : IEntityModule
     {
         private readonly Dictionary<string, Unit> _units = new();
 

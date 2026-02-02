@@ -16,10 +16,11 @@
     {
         None = 0,
         Weapon = 10,
-        Head = 20,
-        Body = 30,
+        Helmet = 20,
+        Armor = 30,
         Gloves = 40,
         Boots = 50,
         Ring = 60,
+        Consumable = 1000,
     }
 }

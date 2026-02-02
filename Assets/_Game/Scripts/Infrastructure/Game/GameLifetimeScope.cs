@@ -52,11 +52,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterInventoryFeature(IContainerBuilder builder)
         {
-            builder.Register<InventoryModel>(Lifetime.Scoped);
             builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
-            builder.Register<EquipmentModel>(Lifetime.Scoped);
             builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
-            builder.Register<InventoryEquipmentController>(Lifetime.Scoped);
             builder.Register<InventoryEquipmentControllerAssembler>(Lifetime.Scoped);
         }
 

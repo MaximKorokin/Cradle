@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,8 @@ namespace Assets._Game.Scripts.Items.Equipment
         }
 
         public int SlotCount => _slots.Length;
+
+        public event Action Changed;
 
         public bool CanPut(EquipmentSlotType index, ItemStack item)
         {
@@ -34,6 +37,14 @@ namespace Assets._Game.Scripts.Items.Equipment
         public bool Contains(string id, int amount)
         {
             return _slots.Where(s => s.Item.HasId(id)).Sum(s => s.Item.Amount) >= amount;
+        }
+
+        public IEnumerable<(EquipmentSlotType index, ItemStack stack)> Enumerate()
+        {
+            foreach (var slot in _slots)
+            {
+                yield return (slot.SlotType, slot.Item);
+            }
         }
 
         public ItemStack Get(EquipmentSlotType index)
@@ -63,6 +74,8 @@ namespace Assets._Game.Scripts.Items.Equipment
                 emptySlot.Item = new ItemStack(item.Definition, item.Instance, item.Amount);
                 item.Amount = 0;
             }
+
+            Changed?.Invoke();
         }
 
         public void Put(ItemStack item)
@@ -80,6 +93,8 @@ namespace Assets._Game.Scripts.Items.Equipment
                 // Clean up empty slots
                 if (slot.Item.Amount <= 0) slot.Item = null;
             }
+
+            Changed?.Invoke();
         }
 
         public void Take(string id, ref int amount)
@@ -92,6 +107,8 @@ namespace Assets._Game.Scripts.Items.Equipment
                 // Clean up empty slots
                 if (slot.Item.Amount <= 0) slot.Item = null;
             }
+
+            Changed?.Invoke();
         }
 
         private IEnumerable<EquipmentSlot> GetSlots(EquipmentSlotType slotType)

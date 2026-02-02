@@ -1,42 +1,43 @@
-﻿using Assets._Game.Scripts.UI.Core;
+﻿using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.UI.Core;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
     public class WindowManager
     {
         private readonly RectTransform _windowsRoot;
-        private readonly Stack<UIWindow> _stack = new();
+        private readonly Stack<(UIWindow Window, IDisposable Controller)> _stack = new();
+        private readonly IObjectResolver _resolver;
 
-        public WindowManager(UIRootReferences rootReferences)
+        public WindowManager(UIRootReferences rootReferences, IObjectResolver resolver)
         {
             _windowsRoot = rootReferences.WindowsRoot;
-            UpdateBlocker();
+            _resolver = resolver;
         }
 
-        public T Show<T>(T prefab) where T : UIWindow
+        public InventoryEquipmentWindow ShowInventoryEquipmentWindow(InventoryEquipmentWindow prefab, InventoryModel inventoryModel, EquipmentModel equipmentModel, ItemCommandHandler handler)
         {
-            var w = Object.Instantiate(prefab, _windowsRoot);
-            _stack.Push(w);
-            w.OnShow();
-            UpdateBlocker();
-            return w;
+            var window = _resolver.Instantiate(prefab, _windowsRoot);
+            var controller = new InventoryEquipmentWindowController(window, inventoryModel, equipmentModel, handler);
+            _stack.Push((window, controller));
+            window.OnShow();
+            return window;
         }
 
         public void CloseTop()
         {
             if (_stack.Count == 0) return;
-
-            var w = _stack.Pop();
-            w.OnHide();
-            Object.Destroy(w.gameObject);
-            UpdateBlocker();
-        }
-
-        void UpdateBlocker()
-        {
-            var modal = _stack.Count > 0 && _stack.Peek().IsModal;
+            var (window, controller) = _stack.Pop();
+            window.OnHide();
+            UnityEngine.Object.Destroy(window.gameObject);
+            controller.Dispose();
         }
     }
 }
