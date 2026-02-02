@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.UI.Views
     public sealed class EquipmentSlotView : MonoBehaviour
     {
         [SerializeField]
-        private Image _itemImage;
+        private InventorySlotView _inventorySlotView;
         [SerializeField]
         private Image _placeholderImage;
 
@@ -24,13 +24,8 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Render(ItemStack itemStack)
         {
-            if (itemStack == null)
-            {
-                _itemImage.enabled = false;
-                return;
-            }
-            _itemImage.enabled = true;
-            _itemImage.sprite = itemStack.Definition.Icon;
+            _inventorySlotView.Render(itemStack);
+            _placeholderImage.enabled = itemStack == null;
         }
     }
 }

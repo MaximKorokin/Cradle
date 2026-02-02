@@ -21,6 +21,7 @@
         Gloves = 40,
         Boots = 50,
         Ring = 60,
+        Necklace = 70,
         Consumable = 1000,
     }
 }

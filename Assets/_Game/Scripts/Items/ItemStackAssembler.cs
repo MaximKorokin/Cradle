@@ -11,10 +11,19 @@ namespace Assets._Game.Scripts.Items
             _itemCatalog = itemCatalog;
         }
 
-        public ItemStack Assemble(ItemStackSave save)
+        public ItemStack Apply(ItemStack itemStack, ItemStackSave save)
         {
-            var definition = _itemCatalog.GetItemDefinition(save.Id);
-            return new ItemStack(definition, save.InstanceData, save.Amount);
+            var definition = _itemCatalog.GetItemDefinition(save.ItemDefinitionId);
+            itemStack.Definition = definition;
+            itemStack.Amount = save.Amount;
+            itemStack.Instance = save.InstanceData;
+            return itemStack;
+        }
+
+        public ItemStack Create(string definitionId, int amount)
+        {
+            var definition = _itemCatalog.GetItemDefinition(definitionId);
+            return new ItemStack(definition, new EmptyInstanceData(), amount);
         }
     }
 }

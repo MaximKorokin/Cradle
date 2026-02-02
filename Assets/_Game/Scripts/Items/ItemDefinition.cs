@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.Items
         [field: SerializeField]
         public int Weight { get; set; }
         [field: SerializeReference]
-        public ItemTraitBase[] Traits { get; set; }
+        public ItemTraitBase[] Traits { get; set; } = Array.Empty<ItemTraitBase>();
 
         private void OnValidate()
         {

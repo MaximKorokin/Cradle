@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
     public class ItemStackSave
     {
-        public string Id;
+        public string ItemDefinitionId;
         public int Amount;
         public IItemInstanceData InstanceData;
     }

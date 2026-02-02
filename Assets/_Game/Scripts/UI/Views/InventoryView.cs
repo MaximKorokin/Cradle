@@ -12,9 +12,10 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Render(InventoryModel inventoryModel)
         {
-            _inventorySlotTemplate.gameObject.SetActive(false);
+            Clear();
 
-            foreach (var (index, stack) in inventoryModel.Enumerate())
+            _inventorySlotTemplate.gameObject.SetActive(false);
+            foreach (var (_, stack) in inventoryModel.Enumerate())
             {
                 var slotView = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
                 slotView.gameObject.SetActive(true);
@@ -22,6 +23,16 @@ namespace Assets._Game.Scripts.UI.Views
                 {
                     slotView.Render(stack);
                 }
+            }
+        }
+
+        public void Clear()
+        {
+            foreach (Transform child in _inventorySlotsParent)
+            {
+                if (child.gameObject == _inventorySlotTemplate.gameObject)
+                    continue;
+                Destroy(child.gameObject);
             }
         }
     }

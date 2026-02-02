@@ -11,7 +11,6 @@ namespace Assets._Game.Scripts.Entities
 
         public EntityDefinitionCatalog()
         {
-            SLog.Log("Loading Entities Catalog...");
             _entityDefinitions = Resources.LoadAll<EntityDefinition>("").ToDictionary(x => x.Id, x => x);
         }
 

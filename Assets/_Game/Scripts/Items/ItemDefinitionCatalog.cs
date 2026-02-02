@@ -11,7 +11,6 @@ namespace Assets._Game.Scripts.Items
 
         public ItemDefinitionCatalog()
         {
-            SLog.Log("Loading Item Catalog...");
             _items = Resources.LoadAll<ItemDefinition>("").ToDictionary(x => x.Id, x => x);
         }
 

@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Equipment
@@ -19,7 +20,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             {
                 foreach (var (index, itemStackSave) in save.Items)
                 {
-                    var itemStack = _itemStackAssembler.Assemble(itemStackSave);
+                    var itemStack = _itemStackAssembler.CreateAndApply(itemStackSave.ItemDefinitionId, itemStackSave);
                     model.Put(index, itemStack);
                 }
             }
@@ -29,7 +30,10 @@ namespace Assets._Game.Scripts.Items.Equipment
 
         public EquipmentModel Create(EntityDefinition entityDefinition)
         {
-            var slots = entityDefinition.EquipmentSlots.Select(slotType => new EquipmentSlot(slotType)).ToArray();
+            if (!entityDefinition.TryGetModule<EquipmentDefinitionModule>(out var equipmentDefinitionModule))
+                return null;
+
+            var slots = equipmentDefinitionModule.EquipmentSlots.Select(slotType => new EquipmentSlot(slotType)).ToArray();
             return new EquipmentModel(slots);
         }
     }

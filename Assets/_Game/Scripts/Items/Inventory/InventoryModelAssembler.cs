@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Shared.Extensions;
 
 namespace Assets._Game.Scripts.Items.Inventory
 {
@@ -18,7 +19,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             {
                 foreach (var (index, itemStackSave) in save.Items)
                 {
-                    var itemStack = _itemStackAssembler.Assemble(itemStackSave);
+                    var itemStack = _itemStackAssembler.CreateAndApply(itemStackSave.ItemDefinitionId, itemStackSave);
                     model.Put(index, itemStack);
                 }
             }
@@ -28,7 +29,10 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public InventoryModel Create(EntityDefinition entityDefinition)
         {
-            return new InventoryModel(entityDefinition.InventorySlotsAmount);
+            if (!entityDefinition.TryGetModule<InventoryDefinitionModule>(out var inventoryDefinitionModule)) 
+                return null;
+
+            return new InventoryModel(inventoryDefinitionModule.SlotsAmount);
         }
     }
 }
