@@ -1,20 +1,14 @@
 ﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Equipment;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
-namespace Assets._Game.Scripts.UI.Windows
+namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentSlotView : MonoBehaviour
+    public sealed class InventorySlotView : MonoBehaviour
     {
         [SerializeField]
         private Image _itemImage;
-        [SerializeField]
-        private Image _placeholderImage;
-
-        [field: SerializeField]
-        public EquipmentSlotType SlotType { get; private set; }
 
         [Inject]
         public void Construct()

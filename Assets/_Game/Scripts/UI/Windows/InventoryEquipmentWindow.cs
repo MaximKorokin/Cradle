@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.UI.Views;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
@@ -7,15 +8,12 @@ namespace Assets._Game.Scripts.UI.Windows
     public class InventoryEquipmentWindow : UIWindow
     {
         [SerializeField]
-        private EquipmentSlotView[] _slots;
+        private InventoryView _inventoryView;
         [SerializeField]
-        private RectTransform _inventorySlotsParent;
-        [SerializeField]
-        private InventorySlotView _inventorySlotTemplate;
+        private EquipmentView _equipmentView;
 
         public override void OnShow()
         {
-            _inventorySlotTemplate.gameObject.SetActive(false);
             // _controller events +
         }
 
@@ -24,28 +22,12 @@ namespace Assets._Game.Scripts.UI.Windows
             // _controller events -
         }
 
-        public virtual void Render(InventoryModel inventory, EquipmentModel equipmentModel)
+        public virtual void Render(InventoryModel inventoryModel, EquipmentModel equipmentModel)
         {
             base.Render();
 
-            foreach (var slot in equipmentModel.Enumerate())
-            {
-                var slotView = System.Array.Find(_slots, s => s.SlotType == slot.index);
-                if (slotView != null)
-                {
-                    slotView.Render(slot.stack);
-                }
-            }
-
-            foreach (var (index, stack) in inventory.Enumerate())
-            {
-                var slotView = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                slotView.gameObject.SetActive(true);
-                if (slotView != null)
-                {
-                    slotView.Render(stack);
-                }
-            }
+            _inventoryView.Render(inventoryModel);
+            _equipmentView.Render(equipmentModel);
         }
     }
 }

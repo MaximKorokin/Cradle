@@ -1,5 +1,5 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.Items.Inventory;
+﻿using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.UI.Views;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
@@ -7,9 +7,9 @@ namespace Assets._Game.Scripts.UI.Windows
     public class InventoryInventoryWindow : UIWindow
     {
         [SerializeField]
-        private RectTransform _firstInventorySlotsParent;
+        private InventoryView _firstInventoryView;
         [SerializeField]
-        private RectTransform _secondInventorySlotsParent;
+        private InventoryView _secondInventoryView;
         [SerializeField]
         private InventorySlotView _inventorySlotTemplate;
 
@@ -28,25 +28,8 @@ namespace Assets._Game.Scripts.UI.Windows
         {
             base.Render();
 
-            foreach (var (_, stack) in firstInventory.Enumerate())
-            {
-                var slotView = Instantiate(_inventorySlotTemplate, _firstInventorySlotsParent);
-                slotView.gameObject.SetActive(true);
-                if (slotView != null)
-                {
-                    slotView.Render(stack);
-                }
-            }
-
-            foreach (var (_, stack) in secondInventory.Enumerate())
-            {
-                var slotView = Instantiate(_inventorySlotTemplate, _secondInventorySlotsParent);
-                slotView.gameObject.SetActive(true);
-                if (slotView != null)
-                {
-                    slotView.Render(stack);
-                }
-            }
+            _firstInventoryView.Render(firstInventory);
+            _secondInventoryView.Render(secondInventory);
         }
     }
 }
