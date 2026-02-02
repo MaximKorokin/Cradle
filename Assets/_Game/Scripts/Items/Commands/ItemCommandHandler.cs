@@ -12,6 +12,7 @@ namespace Assets._Game.Scripts.Items.Commands
             {
                 PickupLootCommand c => HandlePickup(c),
                 MoveItemCommand c => HandleMove(c),
+                MoveItemToSlotCommand c => HandleMoveToSlot(c),
                 EquipFromInventoryCommand c => HandleEquip(c),
                 UnequipToInventoryCommand c => HandleUnequip(c),
                 _ => throw new NotSupportedException(cmd.GetType().Name),
@@ -24,6 +25,11 @@ namespace Assets._Game.Scripts.Items.Commands
         }
 
         private bool HandleMove(MoveItemCommand c)
+        {
+            return ItemContainerUtils.TryMove(c.From, c.FromSlot, c.To, ref c.Amount);
+        }
+
+        private bool HandleMoveToSlot(MoveItemToSlotCommand c)
         {
             return ItemContainerUtils.TryMove(c.From, c.FromSlot, c.To, c.ToSlot, ref c.Amount);
         }

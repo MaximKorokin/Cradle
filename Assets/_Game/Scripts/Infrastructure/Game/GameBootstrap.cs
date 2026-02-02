@@ -36,6 +36,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             Application.targetFrameRate = 60;
 
+            _gameContext.SetStash(new(13));
+
             var gameSave = _repository.Load("Humanoid");
             if (gameSave != null)
             {

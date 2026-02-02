@@ -585,7 +585,8 @@ MonoBehaviour:
     TypeName: Assets._Game.Scripts.Infrastructure.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
-  _inventoryWindow: {fileID: -1430181448580419976, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
+  _inventoryEquipmentWindow: {fileID: -1430181448580419976, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
+  _inventoryInventoryWindow: {fileID: 3432427399423377628, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
   _rootReferences: {fileID: 1058341463}
 --- !u!4 &1058341465
 Transform:

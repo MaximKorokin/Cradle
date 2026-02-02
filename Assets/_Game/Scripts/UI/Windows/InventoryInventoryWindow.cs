@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public class InventoryEquipmentWindow : UIWindow
+    public class InventoryInventoryWindow : UIWindow
     {
         [SerializeField]
-        private EquipmentSlotView[] _slots;
+        private RectTransform _firstInventorySlotsParent;
         [SerializeField]
-        private RectTransform _inventorySlotsParent;
+        private RectTransform _secondInventorySlotsParent;
         [SerializeField]
         private InventorySlotView _inventorySlotTemplate;
 
@@ -24,22 +24,23 @@ namespace Assets._Game.Scripts.UI.Windows
             // _controller events -
         }
 
-        public virtual void Render(InventoryModel inventory, EquipmentModel equipmentModel)
+        public virtual void Render(InventoryModel firstInventory, InventoryModel secondInventory)
         {
             base.Render();
 
-            foreach (var slot in equipmentModel.Enumerate())
+            foreach (var (_, stack) in firstInventory.Enumerate())
             {
-                var slotView = System.Array.Find(_slots, s => s.SlotType == slot.index);
+                var slotView = Instantiate(_inventorySlotTemplate, _firstInventorySlotsParent);
+                slotView.gameObject.SetActive(true);
                 if (slotView != null)
                 {
-                    slotView.Render(slot.stack);
+                    slotView.Render(stack);
                 }
             }
 
-            foreach (var (index, stack) in inventory.Enumerate())
+            foreach (var (_, stack) in secondInventory.Enumerate())
             {
-                var slotView = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
+                var slotView = Instantiate(_inventorySlotTemplate, _secondInventorySlotsParent);
                 slotView.gameObject.SetActive(true);
                 if (slotView != null)
                 {

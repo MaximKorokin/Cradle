@@ -6,5 +6,6 @@ namespace Assets._Game.Scripts.UI.Windows
     {
         public virtual void OnShow() { }
         public virtual void OnHide() { }
+        public virtual void Render() { }
     }
 }

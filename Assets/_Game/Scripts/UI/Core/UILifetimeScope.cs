@@ -7,9 +7,11 @@ namespace Assets._Game.Scripts.UI.Core
 {
     public class UILifetimeScope : LifetimeScope
     {
-        [Header("Prefabs")]
+        [Header("Windows")]
         [SerializeField]
-        private InventoryEquipmentWindow _inventoryWindow;
+        private InventoryEquipmentWindow _inventoryEquipmentWindow;
+        [SerializeField]
+        private InventoryInventoryWindow _inventoryInventoryWindow;
         [Space]
         [Header("MonoBehaviours")]
         [SerializeField]
@@ -17,7 +19,8 @@ namespace Assets._Game.Scripts.UI.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_inventoryWindow);
+            builder.RegisterInstance(_inventoryEquipmentWindow);
+            builder.RegisterInstance(_inventoryInventoryWindow);
             builder.RegisterInstance(_rootReferences);
 
             builder.Register<WindowManager>(Lifetime.Scoped);
