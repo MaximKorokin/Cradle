@@ -6,7 +6,6 @@ using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
-using Assets._Game.Scripts.ScriptableObjectManagers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -16,18 +15,12 @@ namespace Assets._Game.Scripts.Infrastructure
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField]
-        private EntityUnitVariantsManager _entityUnitsManager;
-        [SerializeField]
-        private EntityVisualModelsManager _entityVisualModelsManager;
-        [SerializeField]
         private NewGameDefinition _newGameDefinition;
 
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<GameBootstrap>();
 
-            builder.RegisterInstance(_entityUnitsManager);
-            builder.RegisterInstance(_entityVisualModelsManager);
             builder.RegisterInstance(_newGameDefinition);
 
             builder.Register<GameContext>(Lifetime.Singleton);
@@ -51,10 +44,13 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityFeature(IContainerBuilder builder)
         {
+            builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
-            builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
+
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
+            builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
+            builder.Register<EntityUnitVariantsCatalog>(Lifetime.Scoped);
         }
 
         private void RegisterInventoryFeature(IContainerBuilder builder)

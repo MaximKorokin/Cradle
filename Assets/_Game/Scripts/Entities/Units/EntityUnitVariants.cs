@@ -2,25 +2,13 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.ScriptableObjectManagers
+namespace Assets._Game.Scripts.Entities.Units
 {
-    [CreateAssetMenu(fileName = "EntityUnitsManager", menuName = "ScriptableObjects/EntityUnitsManager")]
-    public class EntityUnitVariantsManager : ScriptableObject
+    [CreateAssetMenu(fileName = "UnitVariants", menuName = "ScriptableObjects/EntityUnitVariants")]
+    public class EntityUnitVariants : ScriptableObject
     {
         [field: SerializeField]
-        public EntityUnitVariants[] Units { get; private set; }
-
-        public EntityUnitVariants GetUnit(string name)
-        {
-            return Units.FirstOrDefault(v => v.Name == name);
-        }
-    }
-
-    [Serializable]
-    public class EntityUnitVariants
-    {
-        [field: SerializeField]
-        public string Name { get; private set; }
+        public EntityVisualModelUnitPath Path { get; private set; }
         [field: SerializeField]
         public EntityUnitVariant[] Variants { get; private set; }
 

@@ -1,30 +1,27 @@
-﻿using Assets._Game.Scripts.ScriptableObjectManagers;
-using Assets.CoreScripts;
-using System.IO;
-using System.Linq;
+﻿using Assets.CoreScripts;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
     public sealed class UnitsControllerFactory
     {
-        private readonly EntityUnitVariantsManager _entityUnitsManager;
-        private readonly EntityVisualModelsManager _entityVisualModelsManager;
+        private readonly EntityUnitVariantsCatalog _entityUnitsManager;
+        private readonly EntityVisualModelCatalog _entityVisualModelsManager;
 
         public UnitsControllerFactory(
-            EntityUnitVariantsManager entityUnitsManager,
-            EntityVisualModelsManager entityVisualModelsManager)
+            EntityUnitVariantsCatalog entityUnitsManager,
+            EntityVisualModelCatalog entityVisualModelsManager)
         {
             _entityUnitsManager = entityUnitsManager;
             _entityVisualModelsManager = entityVisualModelsManager;
         }
 
-        public UnitsController Create(GameObject parentGameObject, string entityName)
+        public UnitsController Create(GameObject parentGameObject, string entityVisualModelName, string variantName)
         {
-            var entityVisualModel = _entityVisualModelsManager.Views.FirstOrDefault(x => x.Name == entityName);
+            var entityVisualModel = _entityVisualModelsManager.GetEntityVisualModel(entityVisualModelName);
             if (entityVisualModel == null)
             {
-                SLog.Error($"Cannot find entity visual model with name: {entityName}");
+                SLog.Error($"Cannot find entity visual model with name: {entityVisualModelName}");
                 return null;
             }
 
@@ -37,7 +34,7 @@ namespace Assets._Game.Scripts.Entities.Units
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
-                unitsController.AddUnit(CreateUnit(unitVisualModel, entityVisualModel.Variant));
+                unitsController.AddUnit(CreateUnit(unitVisualModel, variantName));
             }
 
             // todo: maybe don't need this here
@@ -48,11 +45,10 @@ namespace Assets._Game.Scripts.Entities.Units
 
         private Unit CreateUnit(EntityUnitVisualModel entityUnitVisualModel, string variantName)
         {
-            var unitName = Path.GetFileName(entityUnitVisualModel.Path);
-            var unitVariants = _entityUnitsManager.GetUnit(unitName);
+            var unitVariants = _entityUnitsManager.GetUnit(entityUnitVisualModel.Path);
             if (unitVariants == null)
             {
-                SLog.Error($"Cannot find unit variants by name: {unitName}");
+                SLog.Error($"Cannot find unit variants by path: {entityUnitVisualModel.Path}");
                 return null;
             }
 
@@ -63,9 +59,9 @@ namespace Assets._Game.Scripts.Entities.Units
                 return null;
             }
 
-            var entityUnitGameObject = new GameObject(unitName);
-            var spriteRenderer = entityUnitGameObject.AddComponent<SpriteRenderer>();
-            var entityUnit = new Unit(entityUnitGameObject, entityUnitVisualModel.Path, entityUnitVisualModel.RelativeOrderInLayer);
+            var entityUnitGameObject = new GameObject(entityUnitVisualModel.Path.ToString());
+            entityUnitGameObject.AddComponent<SpriteRenderer>();
+            var entityUnit = new Unit(entityUnitGameObject, entityUnitVisualModel.Path.ToString(), entityUnitVisualModel.RelativeOrderInLayer);
 
             entityUnit.Set(unitVariant.Sprite);
 

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
-  m_Name: Quadruped
+  m_Name: Dog
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 851ea68f-b985-4565-bbc0-816f9eb5ee8b
-  <EntityId>k__BackingField: Quadruped
-  <Prefab>k__BackingField: {fileID: 4656754924588564353, guid: cc796c5c222feeb4da27db43d9d6b9ba, type: 3}
+  <EntityVisualModelName>k__BackingField: Quadruped
+  <VariantName>k__BackingField: Dog
   _modules:
   - rid: 1349792420369268905
   - rid: 1349792420369268908

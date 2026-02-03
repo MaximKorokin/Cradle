@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.Entities
             var entity = Create(entityDefinition);
             if (entity == null)
             {
-                SLog.Error($"Cannot create entity with id: {entityDefinition.EntityId}");
+                SLog.Error($"Cannot create entity with id: {entityDefinition.EntityVisualModelName}");
                 return null;
             }
             if (entity.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
@@ -40,11 +40,11 @@ namespace Assets._Game.Scripts.Entities
 
         public Entity Create(EntityDefinition entityDefinition)
         {
-            var entityGameObject = new GameObject($"{entityDefinition.EntityId} ({++_entitiesCounter})");
+            var entityGameObject = new GameObject($"{entityDefinition.EntityVisualModelName} ({++_entitiesCounter})");
 
             var entity = new Entity("");
             entity.AddModule(new EntityAttributesModule());
-            entity.AddModule(_unitsControllerFactory.Create(entityGameObject, entityDefinition.EntityId));
+            entity.AddModule(_unitsControllerFactory.Create(entityGameObject, entityDefinition.EntityVisualModelName, entityDefinition.VariantName));
             entity.AddModule(new BehaviourController());
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 

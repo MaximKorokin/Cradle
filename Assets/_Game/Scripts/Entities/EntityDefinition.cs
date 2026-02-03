@@ -14,9 +14,9 @@ namespace Assets._Game.Scripts.Entities
         public string Id { get; set; }
 
         [field: SerializeField]
-        public string EntityId { get; set; }
+        public string EntityVisualModelName { get; set; }
         [field: SerializeField]
-        public GameObject Prefab { get; set; }
+        public string VariantName { get; set; }
 
         [SerializeReference]
         [SerializeField]
