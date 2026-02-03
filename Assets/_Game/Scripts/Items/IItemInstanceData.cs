@@ -20,4 +20,11 @@ namespace Assets._Game.Scripts.Items
             return 0;
         }
     }
+
+    [Serializable]
+    public class DurabilityInstanceData : IItemInstanceData
+    {
+        public int Current;
+        public int Max;
+    }
 }

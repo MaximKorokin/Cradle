@@ -19,14 +19,14 @@ namespace Assets._Game.Scripts.UI.Core
 
         public void Start()
         {
-            _windows.ShowInventoryEquipmentWindow(
-                _gameContext.IEModule.Inventory,
-                _gameContext.IEModule.Equipment,
-                new());
-            //_windows.ShowInventoryInventoryWindow(
+            //_windows.ShowInventoryEquipmentWindow(
             //    _gameContext.IEModule.Inventory,
-            //    _gameContext.StashInventory,
+            //    _gameContext.IEModule.Equipment,
             //    new());
+            _windows.ShowInventoryInventoryWindow(
+                _gameContext.IEModule.Inventory,
+                _gameContext.StashInventory,
+                new());
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Assets._Game.Scripts.Items
     {
         event System.Action Changed;
 
-        IEnumerable<(T index, ItemStack stack)> Enumerate();
+        IEnumerable<(T Index, ItemStack Stack)> Enumerate();
 
         ItemStack Get(T index);
         void Take(T index, ref int amount);

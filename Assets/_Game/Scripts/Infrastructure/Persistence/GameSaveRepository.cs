@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Items.Equipment;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
@@ -20,6 +19,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
     public class GameSave
     {
+        public int Version;
+        public long SavedAtUtc;
         public EntitySave PlayerSave;
     }
 
@@ -31,20 +32,38 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public EquipmentSave EquipmentSave;
     }
 
-    public class InventorySave
+    public sealed class InventorySlotSave
     {
-        public (int, ItemStackSave)[] Items;
+        public int Slot;
+        public ItemStackSave Stack;
     }
 
-    public class EquipmentSave
+    public sealed class EquipmentSlotSave
     {
-        public (EquipmentSlotType, ItemStackSave)[] Items;
+        public EquipmentSlotType Slot;
+        public ItemStackSave Stack;
+    }
+
+    public sealed class InventorySave
+    {
+        public InventorySlotSave[] Items;
+    }
+
+    public sealed class EquipmentSave
+    {
+        public EquipmentSlotSave[] Items;
     }
 
     public class ItemStackSave
     {
         public string ItemDefinitionId;
         public int Amount;
-        public IItemInstanceData InstanceData;
+        public EncodedSaveData InstanceData;
+    }
+
+    public class EncodedSaveData
+    {
+        public string Type;
+        public string Json;
     }
 }

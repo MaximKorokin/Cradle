@@ -30,5 +30,12 @@ namespace Assets._Game.Scripts.Items
             var equipmentModel = _equipmentModelAssembler.Create(entityDefinition);
             return new EntityInventoryEquipmentModule(inventoryModel, equipmentModel);
         }
+
+        public (InventorySave InventorySave, EquipmentSave EquipmentSave) Save(EntityInventoryEquipmentModule entityInventoryEquipmentModule)
+        {
+            var inventorySave = _inventoryModelAssembler.Save(entityInventoryEquipmentModule.Inventory);
+            var equipmentSave = _equipmentModelAssembler.Save(entityInventoryEquipmentModule.Equipment);
+            return (inventorySave, equipmentSave);
+        }
     }
 }

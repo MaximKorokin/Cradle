@@ -13,7 +13,5 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public InventoryModel Inventory { get; private set; }
         public EquipmentModel Equipment { get; private set; }
-
-
     }
 }

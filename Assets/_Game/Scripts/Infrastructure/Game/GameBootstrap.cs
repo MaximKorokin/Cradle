@@ -13,8 +13,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     public class GameBootstrap : IStartable, ITickable
     {
         private readonly ItemStackAssembler _itemStackAssembler;
-        private readonly EntityAssembler _entityBuilder;
-        private readonly GameSaveRepository _repository;
+        private readonly EntityAssembler _entityAssembler;
+        private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly EntityDefinitionCatalog _entityDefinitionCatalog;
         private readonly GameContext _gameContext;
@@ -28,8 +28,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             GameContext gameContext)
         {
             _itemStackAssembler = itemStackAssembler;
-            _entityBuilder = entityAssembler;
-            _repository = repository;
+            _entityAssembler = entityAssembler;
+            _gameSaveRepository = repository;
             _newGameDefinition = newGameDefinition;
             _entityDefinitionCatalog = entityDefinitionCatalog;
             _gameContext = gameContext;
@@ -42,20 +42,20 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
             _gameContext.SetStash(new(13));
 
-            var gameSave = _repository.Load("Humanoid");
+            var gameSave = _gameSaveRepository.Load("Player");
             if (gameSave != null)
             {
-                humanoid = _entityBuilder.Assemble(_newGameDefinition.PlayerEntityDefinition, gameSave.PlayerSave);
+                humanoid = _entityAssembler.Assemble(_newGameDefinition.PlayerEntityDefinition, gameSave.PlayerSave);
             }
             else
             {
-                humanoid = _entityBuilder.Create(_newGameDefinition.PlayerEntityDefinition);
+                humanoid = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
             }
             _gameContext.SetPlayer(humanoid);
             if (humanoid.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
                 _gameContext.SetIEModule(inventoryEquipmentModule);
 
-            quadruped = _entityBuilder.Create(_entityDefinitionCatalog.GetEntityDefinition("851ea68f-b985-4565-bbc0-816f9eb5ee8b"));
+            quadruped = _entityAssembler.Create(_entityDefinitionCatalog.GetEntityDefinition("851ea68f-b985-4565-bbc0-816f9eb5ee8b"));
 
             SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
         }
@@ -68,10 +68,18 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             {
                 unitsController.UpdateOrderInLayer();
 
-                _gameContext.StashInventory.Put(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52d", 1));
+                _gameContext.IEModule.Inventory.Put(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52d", 1));
                 _gameContext.StashInventory.Put(_itemStackAssembler.Create("bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338", 1));
                 _gameContext.StashInventory.Put(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52f", 1));
                 _gameContext.StashInventory.Put(_itemStackAssembler.Create("780db064-ca6a-4b9d-bc23-64e34a86403a", 1));
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                var save = new GameSave();
+                save.PlayerSave = _entityAssembler.Save(_gameContext.Player);
+                save.Version = 1;
+                save.SavedAtUtc = System.DateTime.UtcNow.Ticks;
+                _gameSaveRepository.Save("Player", save);
             }
         }
     }

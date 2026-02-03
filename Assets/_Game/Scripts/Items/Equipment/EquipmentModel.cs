@@ -39,7 +39,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             return _slots.Where(s => s.Item.HasId(id)).Sum(s => s.Item.Amount) >= amount;
         }
 
-        public IEnumerable<(EquipmentSlotType index, ItemStack stack)> Enumerate()
+        public IEnumerable<(EquipmentSlotType Index, ItemStack Stack)> Enumerate()
         {
             foreach (var slot in _slots)
             {

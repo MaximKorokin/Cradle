@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public int SlotCount => _slots.Length;
 
-        public IEnumerable<(int index, ItemStack stack)> Enumerate()
+        public IEnumerable<(int Index, ItemStack Stack)> Enumerate()
         {
             for (int i = 0; i < _slots.Length; i++)
             {

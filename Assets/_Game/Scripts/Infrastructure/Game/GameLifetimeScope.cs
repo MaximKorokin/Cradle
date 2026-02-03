@@ -1,6 +1,8 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
@@ -41,6 +43,10 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<GameSaveRepository>(Lifetime.Scoped);
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Scoped);
             builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Scoped);
+
+            builder.Register<IDataCodec, DurabilityCodec>(Lifetime.Scoped);
+            builder.Register<IDataCodec, EmptyCodec>(Lifetime.Scoped);
+            builder.Register<CodecRegistry>(Lifetime.Scoped);
         }
 
         private void RegisterEntityFeature(IContainerBuilder builder)
@@ -48,6 +54,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
+            builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
         }
 
         private void RegisterInventoryFeature(IContainerBuilder builder)
