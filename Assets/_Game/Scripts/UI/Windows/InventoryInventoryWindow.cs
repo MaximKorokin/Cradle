@@ -19,6 +19,8 @@ namespace Assets._Game.Scripts.UI.Windows
         public event Action<int> SecondInventorySlotPointerDown;
         public event Action<int> SecondInventorySlotPointerUp;
 
+        public override bool IsModal => true;
+
         public override void OnShow()
         {
             _inventorySlotTemplate.gameObject.SetActive(false);

@@ -1,3 +1,4 @@
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System.Collections.Generic;
@@ -21,6 +22,9 @@ namespace Assets._Game.Scripts.UI.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterComponentInHierarchy<HudView>();
+            builder.Register<HudViewController>(Lifetime.Scoped);
+
             builder.RegisterInstance((IEnumerable<UIWindow>)_windowPrefabs);
             builder.RegisterInstance(_modalWrapperPrefab);
             builder.RegisterInstance(_rootReferences);

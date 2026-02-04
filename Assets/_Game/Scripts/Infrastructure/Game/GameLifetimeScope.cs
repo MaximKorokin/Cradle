@@ -23,7 +23,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.RegisterInstance(_newGameDefinition);
 
-            builder.Register<GameContext>(Lifetime.Singleton);
+            builder.Register<PlayerContext>(Lifetime.Singleton);
 
             RegisterSavesFeature(builder);
             RegisterEntityFeature(builder);
@@ -33,6 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterSavesFeature(IContainerBuilder builder)
         {
+            builder.Register<SaveService>(Lifetime.Scoped);
             builder.Register<GameSaveRepository>(Lifetime.Scoped);
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Scoped);
             builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Scoped);

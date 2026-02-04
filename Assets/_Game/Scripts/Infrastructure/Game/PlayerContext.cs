@@ -4,7 +4,7 @@ using Assets._Game.Scripts.Items.Inventory;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    public sealed class GameContext
+    public sealed class PlayerContext
     {
         public Entity Player { get; private set; }
         public EntityInventoryEquipmentModule IEModule { get; private set; }
@@ -13,11 +13,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         public void SetPlayer(Entity player)
         {
             Player = player;
-        }
-
-        public void SetIEModule(EntityInventoryEquipmentModule controller)
-        {
-            IEModule = controller;
+            if (Player.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
+            {
+                IEModule = inventoryEquipmentModule;
+            }
         }
 
         public void SetStash(InventoryModel inventoryModel)

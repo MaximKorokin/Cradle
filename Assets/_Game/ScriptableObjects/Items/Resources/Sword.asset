@@ -26,4 +26,4 @@ MonoBehaviour:
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Slot>k__BackingField: 0
+        <Slot>k__BackingField: 10

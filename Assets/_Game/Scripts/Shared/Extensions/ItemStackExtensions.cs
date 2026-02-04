@@ -11,7 +11,9 @@ namespace Assets._Game.Scripts.Shared.Extensions
     {
         public static bool CanAddTo(this ItemStack source, ItemStack target)
         {
-            return source.Definition.Id == target.Definition.Id
+            return source != null
+                && target != null
+                && source.Definition.Id == target.Definition.Id
                 && source.Instance is IImmutableInstanceData sourceImmutableInstanceData
                 && target.Instance is IImmutableInstanceData targetImmutableInstanceData
                 && sourceImmutableInstanceData.GetStackKey() == targetImmutableInstanceData.GetStackKey()

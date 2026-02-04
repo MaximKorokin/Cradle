@@ -1049,8 +1049,7 @@ MonoBehaviour:
   parentReference:
     TypeName: Assets._Game.Scripts.Infrastructure.GameLifetimeScope
   autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 831708779}
+  autoInjectGameObjects: []
   _windowPrefabs:
   - {fileID: -1430181448580419976, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
   - {fileID: 3432427399423377628, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
@@ -1905,6 +1904,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d98e56714b15945ad59197a6600ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inventoryButton: {fileID: 1815853047}
+  _stashButton: {fileID: 214706337}
 --- !u!1 &1815853045
 GameObject:
   m_ObjectHideFlags: 0
