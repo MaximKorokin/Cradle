@@ -15,6 +15,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 MoveItemToSlotCommand c => HandleMoveToSlot(c),
                 EquipFromInventoryCommand c => HandleEquip(c),
                 UnequipToInventoryCommand c => HandleUnequip(c),
+                DropItemCommand c => HandleDrop(c),
                 _ => throw new NotSupportedException(cmd.GetType().Name),
             };
         }
@@ -26,12 +27,14 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleMove(MoveItemCommand c)
         {
-            return ItemContainerUtils.TryMove(c.FromItem, c.ToContainer, ref c.Amount);
+            var amount = c.Amount;
+            return ItemContainerUtils.TryMove(c.FromItem, c.ToContainer, ref amount);
         }
 
         private bool HandleMoveToSlot(MoveItemToSlotCommand c)
         {
-            return ItemContainerUtils.TryMove(c.From, c.FromSlot, c.To, c.ToSlot, ref c.Amount);
+            var amount = c.Amount;
+            return ItemContainerUtils.TryMove(c.From, c.FromSlot, c.To, c.ToSlot, ref amount);
         }
 
         private bool HandleEquip(EquipFromInventoryCommand c)
@@ -44,6 +47,12 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             var itemAmount = c.EquipmentModel.Get(c.SlotType).Amount;
             return ItemContainerUtils.TryMove(c.EquipmentModel, c.SlotType, c.InventoryModel, ref itemAmount);
+        }
+
+        private bool HandleDrop(DropItemCommand c)
+        {
+            var amount = c.Amount;
+            return ItemContainerUtils.TryRemove(c.FromContainer, c.Item, ref amount);
         }
     }
 }

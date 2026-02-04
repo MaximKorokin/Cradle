@@ -1,21 +1,33 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Views;
+using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
     public sealed class ItemStacksPreviewWindow : UIWindow
     {
         [SerializeField]
-        private ItemPreviewView _primaryItemPreviewView;
+        private ItemStacksPreviewView _primaryItemPreviewView;
         [SerializeField]
-        private ItemPreviewView _secondaryItemPreviewView;
+        private ItemStacksPreviewView _secondaryItemPreviewView;
+        [SerializeField]
+        private RectTransform _actionButtonParent;
+        [SerializeField]
+        private Button _actionButtonTemplate;
+
+        private readonly List<Button> _actionButtons = new();
+
+        public event Action<ItemStackActionType> ActionButtonClicked;
 
         public override bool IsModal => true;
 
         public override void OnShow()
         {
-
+            _actionButtonTemplate.gameObject.SetActive(false);
         }
 
         public override void OnHide()
@@ -23,18 +35,41 @@ namespace Assets._Game.Scripts.UI.Windows
 
         }
 
-        public void Render(ItemStack firstItem, ItemStack secondStack)
+        public void Render(ItemStack primaryItemStack, ItemStack secondaryItemStack, IEnumerable<ItemStackAction> actions)
+        {
+            Clear();
+            if (primaryItemStack != null)
+            {
+                _primaryItemPreviewView.Render(primaryItemStack);
+            }
+            if (secondaryItemStack != null)
+            {
+                _secondaryItemPreviewView.Render(secondaryItemStack);
+            }
+
+            foreach (var action in actions)
+            {
+                var button = Instantiate(_actionButtonTemplate, _actionButtonParent);
+                button.gameObject.SetActive(true);
+                button.GetComponentInChildren<TMP_Text>().text = action.Title;
+                button.onClick.AddListener(() =>
+                {
+                    ActionButtonClicked?.Invoke(action.Type);
+                });
+                _actionButtons.Add(button);
+            }
+        }
+
+        public void Clear()
         {
             _primaryItemPreviewView.Clear();
             _secondaryItemPreviewView.Clear();
-            if (firstItem != null)
+
+            foreach (var button in _actionButtons)
             {
-                _primaryItemPreviewView.Render(firstItem);
+                Destroy(button.gameObject);
             }
-            if (secondStack != null)
-            {
-                _secondaryItemPreviewView.Render(secondStack);
-            }
+            _actionButtons.Clear();
         }
     }
 }

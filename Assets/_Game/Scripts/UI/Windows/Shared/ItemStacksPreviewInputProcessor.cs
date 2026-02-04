@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Shared.Extensions;
 
 namespace Assets._Game.Scripts.UI.Windows.Shared
 {
@@ -44,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             _windowManager.ShowItemStackPreviewWindow(
                 _equipmentModel,
                 primaryItem,
-                null,
+                GetItemToCompare(primaryItem),
                 _firstItemContainer,
                 _secondItemContainer,
                 _handler);
@@ -65,10 +66,17 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             _windowManager.ShowItemStackPreviewWindow(
                 _equipmentModel,
                 primaryItem,
-                null,
-                _firstItemContainer,
+                GetItemToCompare(primaryItem),
                 _secondItemContainer,
+                _firstItemContainer,
                 _handler);
+        }
+
+        private ItemStack GetItemToCompare(ItemStack primaryItem)
+        {
+            var equipmentSlotType = primaryItem.GetEquipmentSlotType();
+            if (equipmentSlotType == EquipmentSlotType.None) return null;
+            return _equipmentModel.Get(equipmentSlotType);
         }
     }
 }

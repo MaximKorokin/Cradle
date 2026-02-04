@@ -124,6 +124,8 @@ namespace Assets._Game.Scripts.Items.Equipment
                 return;
             }
             _slots[itemIndex] = null;
+
+            Changed?.Invoke();
         }
 
         private IEnumerable<EquipmentSlot> GetSlots(EquipmentSlotType slotType)

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class ItemPreviewView : MonoBehaviour
+    public sealed class ItemStacksPreviewView : MonoBehaviour
     {
         [SerializeField]
         private TMP_Text _title;

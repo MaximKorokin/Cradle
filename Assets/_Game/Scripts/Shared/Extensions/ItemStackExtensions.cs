@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets.CoreScripts;
 using System;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Shared.Extensions
 {
@@ -60,12 +61,13 @@ namespace Assets._Game.Scripts.Shared.Extensions
 
         public static bool IsEquippable(this ItemStack itemStack)
         {
-            return itemStack.Instance is EquippableTrait trait && trait.Slot != EquipmentSlotType.None;
+            return GetEquipmentSlotType(itemStack) != EquipmentSlotType.None;
         }
 
         public static EquipmentSlotType GetEquipmentSlotType(this ItemStack itemStack)
         {
-            return itemStack.Instance is EquippableTrait trait ? trait.Slot : EquipmentSlotType.None;
+            var equippableTrait = itemStack.Definition.Traits.FirstOrDefault(x => x is EquippableTrait trait) as EquippableTrait;
+            return equippableTrait != null ? equippableTrait.Slot : EquipmentSlotType.None;
         }
 
         public static bool HasId(this ItemStack item, string id)

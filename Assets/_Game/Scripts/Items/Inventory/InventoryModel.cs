@@ -106,6 +106,8 @@ namespace Assets._Game.Scripts.Items.Inventory
                 return;
             }
             _slots[itemIndex] = null;
+
+            Changed?.Invoke();
         }
 
         public bool CanPut(int index, ItemStack item)

@@ -89,5 +89,16 @@ namespace Assets._Game.Scripts.Shared.Utils
             }
             return false;
         }
+
+        public static bool TryRemove(IItemContainer container, ItemStack itemStack, ref int amount)
+        {
+            if (container.Contains(itemStack) && amount > 0)
+            {
+                container.Take(itemStack);
+                amount = 0;
+                return true;
+            }
+            return false;
+        }
     }
 }
