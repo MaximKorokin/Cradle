@@ -35,6 +35,20 @@ namespace Assets._Game.Scripts.Shared.Utils
             return false;
         }
 
+        public static bool TryMove(ItemStack sourceItem, IItemContainer targetContainer, ref int amount)
+        {
+            if (sourceItem == null || amount <= 0)
+                return false;
+
+            if (targetContainer.CanPut(sourceItem))
+            {
+                targetContainer.Put(sourceItem);
+                return true;
+            } 
+
+            return false;
+        }
+
         public static bool TrySwap<T1, T2>(IItemContainer<T1> firstContainer, T1 firstSlot, IItemContainer<T2> secondContainer, T2 secondSlot)
         {
             var firstItem = firstContainer.Get(firstSlot);
@@ -45,6 +59,24 @@ namespace Assets._Game.Scripts.Shared.Utils
 
             firstContainer.Put(firstSlot, secondItem);
             secondContainer.Put(secondSlot, firstItem);
+            return true;
+        }
+
+        public static bool TrySwap(IItemContainer firstContainer, ItemStack firstItem, IItemContainer secondContainer, ItemStack secondItem)
+        {
+            if (!firstContainer.Contains(firstItem) || secondContainer.Contains(secondItem)) return false;
+
+            firstContainer.Take(firstItem);
+            secondContainer.Take(secondItem);
+            if (!firstContainer.CanPut(secondItem) || !secondContainer.CanPut(firstItem))
+            {
+                firstContainer.Put(firstItem);
+                secondContainer.Put(secondItem);
+                return false;
+            }
+
+            firstContainer.Put(secondItem);
+            secondContainer.Put(firstItem);
             return true;
         }
 

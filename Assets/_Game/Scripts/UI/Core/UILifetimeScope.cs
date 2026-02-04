@@ -1,4 +1,6 @@
 using Assets._Game.Scripts.UI.Windows;
+using Assets._Game.Scripts.UI.Windows.Modal;
+using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -9,9 +11,9 @@ namespace Assets._Game.Scripts.UI.Core
     {
         [Header("Windows")]
         [SerializeField]
-        private InventoryEquipmentWindow _inventoryEquipmentWindow;
+        private UIWindow[] _windowPrefabs;
         [SerializeField]
-        private InventoryInventoryWindow _inventoryInventoryWindow;
+        private ModalWrapper _modalWrapperPrefab;
         [Space]
         [Header("MonoBehaviours")]
         [SerializeField]
@@ -19,8 +21,8 @@ namespace Assets._Game.Scripts.UI.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_inventoryEquipmentWindow);
-            builder.RegisterInstance(_inventoryInventoryWindow);
+            builder.RegisterInstance((IEnumerable<UIWindow>)_windowPrefabs);
+            builder.RegisterInstance(_modalWrapperPrefab);
             builder.RegisterInstance(_rootReferences);
 
             builder.Register<WindowManager>(Lifetime.Scoped);

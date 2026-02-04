@@ -1,4 +1,6 @@
-﻿namespace Assets._Game.Scripts.Items
+﻿using System;
+
+namespace Assets._Game.Scripts.Items
 {
     public class ItemStack
     {
@@ -9,8 +11,45 @@
             Amount = amount;
         }
 
-        public ItemDefinition Definition { get; set; }
-        public IItemInstanceData Instance { get; set; }
-        public int Amount { get; set; }
+        private ItemDefinition _definition;
+        public ItemDefinition Definition
+        {
+            get => _definition; set
+            {
+                if (_definition != value)
+                {
+                    _definition = value;
+                    Changed?.Invoke();
+                }
+            }
+        }
+
+        private IItemInstanceData _instance;
+        public IItemInstanceData Instance
+        {
+            get => _instance; set
+            {
+                if (_instance != value)
+                {
+                    _instance = value;
+                    Changed?.Invoke();
+                }
+            }
+        }
+
+        private int _amount;
+        public int Amount
+        {
+            get => _amount; set
+            {
+                if (_amount != value)
+                {
+                    _amount = value;
+                    Changed?.Invoke();
+                }
+            }
+        }
+
+        public event Action Changed;
     }
 }

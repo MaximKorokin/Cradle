@@ -6,7 +6,7 @@ using VContainer;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentSlotView : MonoBehaviour
+    public sealed class EquipmentSlotView : ContainerSlotView<EquipmentSlotType>
     {
         [SerializeField]
         private InventorySlotView _inventorySlotView;

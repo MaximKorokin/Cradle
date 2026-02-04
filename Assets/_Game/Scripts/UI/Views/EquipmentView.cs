@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
 using Assets.CoreScripts;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,21 @@ namespace Assets._Game.Scripts.UI.Views
     {
         [SerializeField]
         private EquipmentSlotView[] _slots;
+
+        public event Action<EquipmentSlotType> SlotPointerDown;
+        public event Action<EquipmentSlotType> SlotPointerUp;
+
+        public void Bind()
+        {
+            foreach (var slot in _slots)
+            {
+                slot.Bind(slot.SlotType);
+                slot.PointerDown -= OnSlotPointerDown;
+                slot.PointerDown += OnSlotPointerDown;
+                slot.PointerUp -= OnSlotPointerUp;
+                slot.PointerUp += OnSlotPointerUp;
+            }
+        }
 
         public void Render(EquipmentModel equipmentModel)
         {
@@ -40,6 +56,16 @@ namespace Assets._Game.Scripts.UI.Views
                 view.Render(stack);
                 view.gameObject.SetActive(true);
             }
+        }
+
+        private void OnSlotPointerDown(EquipmentSlotType slotType)
+        {
+            SlotPointerDown?.Invoke(slotType);
+        }
+
+        private void OnSlotPointerUp(EquipmentSlotType slotType)
+        {
+            SlotPointerUp?.Invoke(slotType);
         }
     }
 }

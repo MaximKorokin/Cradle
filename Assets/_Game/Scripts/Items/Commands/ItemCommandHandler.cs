@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleMove(MoveItemCommand c)
         {
-            return ItemContainerUtils.TryMove(c.From, c.FromSlot, c.To, ref c.Amount);
+            return ItemContainerUtils.TryMove(c.FromItem, c.ToContainer, ref c.Amount);
         }
 
         private bool HandleMoveToSlot(MoveItemToSlotCommand c)

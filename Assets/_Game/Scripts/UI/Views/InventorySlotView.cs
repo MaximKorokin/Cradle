@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class InventorySlotView : MonoBehaviour
+    public sealed class InventorySlotView : ContainerSlotView<int>
     {
         [SerializeField]
         private Image _itemImage;

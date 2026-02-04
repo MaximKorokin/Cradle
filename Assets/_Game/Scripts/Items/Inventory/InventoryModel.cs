@@ -43,6 +43,11 @@ namespace Assets._Game.Scripts.Items.Inventory
             return _slots.Where(s => s.HasId(id)).Sum(s => s.Amount) >= amount;
         }
 
+        public bool Contains(ItemStack item)
+        {
+            return _slots.Any(s => s == item);
+        }
+
         public void Take(int index, ref int amount)
         {
             if (!IsValidIndex(index))
@@ -90,6 +95,17 @@ namespace Assets._Game.Scripts.Items.Inventory
             }
 
             Changed?.Invoke();
+        }
+
+        public void Take(ItemStack item)
+        {
+            var itemIndex = Array.IndexOf(_slots, item);
+            if (itemIndex == -1)
+            {
+                SLog.Error($"Item {item.Definition.Name} not found in inventory.");
+                return;
+            }
+            _slots[itemIndex] = null;
         }
 
         public bool CanPut(int index, ItemStack item)
@@ -154,8 +170,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             var indexOfEmpty = Array.IndexOf(_slots, null);
             if (indexOfEmpty >= 0)
             {
-                _slots[indexOfEmpty] = new ItemStack(item.Definition, item.Instance, item.Amount);
-                item.Amount = 0;
+                _slots[indexOfEmpty] = item;
             }
 
             Changed?.Invoke();

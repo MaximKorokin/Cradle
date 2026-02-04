@@ -6,5 +6,7 @@ namespace Assets._Game.Scripts.UI.Core
     {
         [field: SerializeField]
         public RectTransform WindowsRoot { get; private set; }
+        [field: SerializeField]
+        public RectTransform ModalsRoot { get; private set; }
     }
 }

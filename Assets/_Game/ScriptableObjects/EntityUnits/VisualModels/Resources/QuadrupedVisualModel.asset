@@ -14,4 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Quadruped
   <Animator>k__BackingField: {fileID: 22100000, guid: 96ad2e14e0944f943af4f9ba299469bb, type: 2}
-  <Units>k__BackingField: []
+  <Units>k__BackingField:
+  - <Path>k__BackingField: 300
+    <RelativeOrderInLayer>k__BackingField: 0
+  - <Path>k__BackingField: 200
+    <RelativeOrderInLayer>k__BackingField: 0
+  - <Path>k__BackingField: 1500
+    <RelativeOrderInLayer>k__BackingField: 0
+  - <Path>k__BackingField: 1520
+    <RelativeOrderInLayer>k__BackingField: 0
+  - <Path>k__BackingField: 1540
+    <RelativeOrderInLayer>k__BackingField: 0
+  - <Path>k__BackingField: 1560
+    <RelativeOrderInLayer>k__BackingField: 0

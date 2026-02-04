@@ -39,6 +39,11 @@ namespace Assets._Game.Scripts.Items.Equipment
             return _slots.Where(s => s.Item.HasId(id)).Sum(s => s.Item.Amount) >= amount;
         }
 
+        public bool Contains(ItemStack item)
+        {
+            return _slots.Any(s => s.Item == item);
+        }
+
         public IEnumerable<(EquipmentSlotType Index, ItemStack Stack)> Enumerate()
         {
             foreach (var slot in _slots)
@@ -71,8 +76,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             var emptySlot = GetSlots(index).FirstOrDefault(slot => slot.Item == null);
             if (emptySlot != null)
             {
-                emptySlot.Item = new ItemStack(item.Definition, item.Instance, item.Amount);
-                item.Amount = 0;
+                emptySlot.Item = item;
             }
 
             Changed?.Invoke();
@@ -109,6 +113,17 @@ namespace Assets._Game.Scripts.Items.Equipment
             }
 
             Changed?.Invoke();
+        }
+
+        public void Take(ItemStack item)
+        {
+            var itemIndex = Array.IndexOf(_slots, item);
+            if (itemIndex == -1)
+            {
+                SLog.Error($"Item {item.Definition.Name} not found in inventory.");
+                return;
+            }
+            _slots[itemIndex] = null;
         }
 
         private IEnumerable<EquipmentSlot> GetSlots(EquipmentSlotType slotType)
