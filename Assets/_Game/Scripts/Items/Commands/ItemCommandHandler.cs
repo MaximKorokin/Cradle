@@ -35,7 +35,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // --- 1) Fast path: try to equip directly into the requested equipment slot (no swap).
-            if (c.EquipmentModel.PreviewAddToSlot(c.EquipmentSlot, fromItem) >= 1)
+            if (c.EquipmentModel.PreviewAddToSlot(c.EquipmentSlot, fromItem) == fromItem.Amount)
             {
                 // Remove from source first.
                 if (c.FromContainer.RemoveFromSlot(c.FromSlot, fromItem.Amount) == 0)

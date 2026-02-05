@@ -256,5 +256,15 @@ namespace Assets._Game.Scripts.Items.Equipment
             int space = Math.Max(0, existing.Definition.MaxAmount - existing.Amount);
             return Math.Min(space, snapshot.Amount);
         }
+
+        /// <summary>
+        /// Ignores if there is anything in the slot
+        /// </summary>
+        public bool CanEquip(ItemStackSnapshot snapshot)
+        {
+            if (snapshot.Definition == null) return false;
+
+            return _rules.CanEquip(snapshot);
+        }
     }
 }

@@ -82,7 +82,7 @@ namespace Assets._Game.Scripts.Items.Inventory
                     if (_slots[i] is not null) continue;
 
                     int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
-                    _slots[i] = new ItemStack(snapshot);
+                    _slots[i] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
                     remaining -= put;
                     added += put;
                     SlotChanged?.Invoke(i);
@@ -105,7 +105,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             if (s is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
-                _slots[slot] = new ItemStack(snapshot);
+                _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
                 return put;

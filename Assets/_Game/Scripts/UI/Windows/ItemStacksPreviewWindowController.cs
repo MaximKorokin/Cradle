@@ -135,11 +135,13 @@ namespace Assets._Game.Scripts.UI.Windows
                     actions.Add(new ItemStackAction(ItemStackActionType.TransferAll, "Transfer"));
                 }
             }
-            if (_equipmentModel.Has(primaryItem.Key, 1))
+            if ((_primaryItemContainer is EquipmentModel equipmentModel) &&
+                equipmentModel == _equipmentModel &&
+                _equipmentModel.Has(primaryItem.Key, 1))
             {
                 actions.Add(new ItemStackAction(ItemStackActionType.Unequip, "Unequip"));
             }
-            else if (_equipmentModel.PreviewAdd(primaryItem) > 1)
+            else if (_equipmentModel.CanEquip(primaryItem))
             {
                 actions.Add(new ItemStackAction(ItemStackActionType.Equip, "Equip"));
             }
