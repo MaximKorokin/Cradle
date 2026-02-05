@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,14 @@ namespace Assets._Game.Scripts.UI.Views
             else
             {
                 _amountText.enabled = false;
+            }
+        }
+
+        public void SetRaycastTarget(bool isTarget)
+        {
+            foreach (var graphic in GetComponents<Graphic>().Union(GetComponentsInChildren<Graphic>()))
+            {
+                graphic.raycastTarget = isTarget;
             }
         }
     }

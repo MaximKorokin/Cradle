@@ -13,6 +13,7 @@ namespace Assets._Game.Scripts.Shared.Utils
 
             if (targetContainer.CanPut(targetSlot, sourceItem))
             {
+                sourceContainer.Take(sourceItem);
                 targetContainer.Put(targetSlot, sourceItem);
                 return true;
             } 
@@ -28,6 +29,7 @@ namespace Assets._Game.Scripts.Shared.Utils
 
             if (targetContainer.CanPut(sourceItem))
             {
+                sourceContainer.Take(sourceItem);
                 targetContainer.Put(sourceItem);
                 return true;
             } 
@@ -35,13 +37,14 @@ namespace Assets._Game.Scripts.Shared.Utils
             return false;
         }
 
-        public static bool TryMove(ItemStack sourceItem, IItemContainer targetContainer, ref int amount)
+        public static bool TryMove(IItemContainer sourceContainer, ItemStack sourceItem, IItemContainer targetContainer, ref int amount)
         {
-            if (sourceItem == null || amount <= 0)
+            if (sourceItem == null || amount <= 0 || !sourceContainer.Contains(sourceItem))
                 return false;
 
             if (targetContainer.CanPut(sourceItem))
             {
+                sourceContainer.Take(sourceItem);
                 targetContainer.Put(sourceItem);
                 return true;
             } 
@@ -49,34 +52,46 @@ namespace Assets._Game.Scripts.Shared.Utils
             return false;
         }
 
+        // todo: move to slots
         public static bool TrySwap<T1, T2>(IItemContainer<T1> firstContainer, T1 firstSlot, IItemContainer<T2> secondContainer, T2 secondSlot)
         {
             var firstItem = firstContainer.Get(firstSlot);
             var secondItem = secondContainer.Get(secondSlot);
+            return TrySwap(firstContainer, firstItem, secondContainer, secondItem);
+        }
 
-            if (!firstContainer.CanPut(firstSlot, secondItem) || !secondContainer.CanPut(secondSlot, firstItem))
-                return false;
-
-            firstContainer.Put(firstSlot, secondItem);
-            secondContainer.Put(secondSlot, firstItem);
-            return true;
+        // todo: move to slot
+        public static bool TrySwap<T>(IItemContainer<T> firstContainer, T firstSlot, IItemContainer secondContainer, ItemStack secondItem)
+        {
+            var firstItem = firstContainer.Get(firstSlot);
+            return TrySwap(firstContainer, firstItem, secondContainer, secondItem);
         }
 
         public static bool TrySwap(IItemContainer firstContainer, ItemStack firstItem, IItemContainer secondContainer, ItemStack secondItem)
         {
-            if (!firstContainer.Contains(firstItem) || secondContainer.Contains(secondItem)) return false;
+            // No reason to swap empty slots
+            if (firstItem == null && secondItem == null) return false;
 
-            firstContainer.Take(firstItem);
-            secondContainer.Take(secondItem);
-            if (!firstContainer.CanPut(secondItem) || !secondContainer.CanPut(firstItem))
+            // Invalid state: one of items doesn't belong to their container
+            if ((firstItem != null && !firstContainer.Contains(firstItem)) || 
+                (secondItem != null && !secondContainer.Contains(secondItem))) return false;
+
+            // Take items out of thier containers
+            if (firstItem != null) firstContainer.Take(firstItem);
+            if (secondItem != null) secondContainer.Take(secondItem);
+
+            // Put items back if con't swap
+            if ((secondItem != null && !firstContainer.CanPut(secondItem)) ||
+                (firstItem != null && !secondContainer.CanPut(firstItem)))
             {
-                firstContainer.Put(firstItem);
-                secondContainer.Put(secondItem);
+                if (firstItem != null) firstContainer.Put(firstItem);
+                if (secondItem != null) secondContainer.Put(secondItem);
                 return false;
             }
 
-            firstContainer.Put(secondItem);
-            secondContainer.Put(firstItem);
+            // Put each item to the opposite container
+            if (secondItem != null) firstContainer.Put(secondItem);
+            if (firstItem != null) secondContainer.Put(firstItem);
             return true;
         }
 

@@ -10,25 +10,19 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             return cmd switch
             {
-                PickupLootCommand c => HandlePickup(c),
                 MoveItemCommand c => HandleMove(c),
                 MoveItemToSlotCommand c => HandleMoveToSlot(c),
-                EquipFromInventoryCommand c => HandleEquip(c),
-                UnequipToInventoryCommand c => HandleUnequip(c),
+                EquipFromContainerCommand c => HandleEquip(c),
+                UnequipToContainerCommand c => HandleUnequip(c),
                 DropItemCommand c => HandleDrop(c),
                 _ => throw new NotSupportedException(cmd.GetType().Name),
             };
         }
 
-        private bool HandlePickup(PickupLootCommand c)
-        {
-            return ItemContainerUtils.TryPut(c.InventoryModel, c.ItemStack);
-        }
-
         private bool HandleMove(MoveItemCommand c)
         {
             var amount = c.Amount;
-            return ItemContainerUtils.TryMove(c.FromItem, c.ToContainer, ref amount);
+            return ItemContainerUtils.TryMove(c.FromContainer, c.FromItem, c.ToContainer, ref amount);
         }
 
         private bool HandleMoveToSlot(MoveItemToSlotCommand c)
@@ -37,16 +31,22 @@ namespace Assets._Game.Scripts.Items.Commands
             return ItemContainerUtils.TryMove(c.From, c.FromSlot, c.To, c.ToSlot, ref amount);
         }
 
-        private bool HandleEquip(EquipFromInventoryCommand c)
+        private bool HandleEquip(EquipFromContainerCommand c)
         {
-            var item = c.InventoryModel.Get(c.InventorySlot);
-            return ItemContainerUtils.TrySwap(c.EquipmentModel, item.GetEquipmentSlotType(), c.InventoryModel, c.InventorySlot);
+            var slotType = c.ItemStack.GetEquipmentSlotType();
+            // Try to find empty slot
+            if (!c.EquipmentModel.TryGetSlot(slotType, item => item == null, out var key))
+            {
+                // No empty slots found in equipment, will try to swap the first one
+                key = new(slotType, 0);
+            }
+            return ItemContainerUtils.TrySwap(c.EquipmentModel, key, c.FromContainer, c.ItemStack);
         }
 
-        private bool HandleUnequip(UnequipToInventoryCommand c)
+        private bool HandleUnequip(UnequipToContainerCommand c)
         {
-            var itemAmount = c.EquipmentModel.Get(c.SlotType).Amount;
-            return ItemContainerUtils.TryMove(c.EquipmentModel, c.SlotType, c.InventoryModel, ref itemAmount);
+            var itemAmount = c.EquipmentModel.Get(c.SlotKey).Amount;
+            return ItemContainerUtils.TryMove(c.EquipmentModel, c.SlotKey, c.ToContainer, ref itemAmount);
         }
 
         private bool HandleDrop(DropItemCommand c)

@@ -74,9 +74,13 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
 
         private ItemStack GetItemToCompare(ItemStack primaryItem)
         {
+            // The item is equipped, no need to compare
+            if (_equipmentModel.Contains(primaryItem)) return null;
+
             var equipmentSlotType = primaryItem.GetEquipmentSlotType();
-            if (equipmentSlotType == EquipmentSlotType.None) return null;
-            return _equipmentModel.Get(equipmentSlotType);
+            if (equipmentSlotType == EquipmentSlotType.None || !_equipmentModel.TryGetSlot(equipmentSlotType, item => item != null, out var key))
+                return null;
+            return _equipmentModel.Get(key);
         }
     }
 }

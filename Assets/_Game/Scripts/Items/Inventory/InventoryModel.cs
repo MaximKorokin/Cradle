@@ -45,7 +45,8 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public bool Contains(ItemStack item)
         {
-            return _slots.Any(s => s == item);
+            // can't contain null
+            return item != null && _slots.Any(s => s == item);
         }
 
         public void Take(int index, ref int amount)
@@ -128,8 +129,9 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public bool CanPut(ItemStack item)
         {
+            // Can't put null
             // Empty or compatible slot found
-            return _slots.Any(slot => slot == null || item.CanAddTo(slot));
+            return item != null && _slots.Any(slot => slot == null || item.CanAddTo(slot));
         }
 
         public void Put(int index, ItemStack item)

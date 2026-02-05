@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                 foreach (var item in save.Items)
                 {
                     var itemStack = _itemStackAssembler.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
-                    model.Put(item.Slot, itemStack);
+                    model.Put(new(item.Type, item.Index), itemStack);
                 }
             }
 
@@ -33,7 +33,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             if (!entityDefinition.TryGetModule<EquipmentDefinitionModule>(out var equipmentDefinitionModule))
                 return null;
 
-            var slots = equipmentDefinitionModule.EquipmentSlots.Select(slotType => new EquipmentSlot(slotType)).ToArray();
+            var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
             return new EquipmentModel(slots);
         }
 
@@ -44,7 +44,8 @@ namespace Assets._Game.Scripts.Items.Equipment
                 .Where(slot => slot.Stack != null)
                 .Select(slot => new EquipmentSlotSave
                 {
-                    Slot = slot.Index,
+                    Type = slot.Index.SlotType,
+                    Index = slot.Index.Index,
                     Stack = _itemStackAssembler.Save(slot.Stack)
                 })
                 .ToArray();

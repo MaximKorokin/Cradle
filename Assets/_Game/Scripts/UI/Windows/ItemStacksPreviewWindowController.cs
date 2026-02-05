@@ -69,34 +69,38 @@ namespace Assets._Game.Scripts.UI.Windows
             });
         }
 
-        private void OnTransferClicked(ItemStack item, IItemContainer toContainer, int amount)
+        private void OnTransferClicked(IItemContainer fromContainer, ItemStack item, IItemContainer toContainer, int amount)
         {
             _handler.Handle(new MoveItemCommand()
             {
+                FromContainer = fromContainer,
                 FromItem = item,
                 ToContainer = toContainer,
                 Amount = amount
             });
         }
 
-        private void OnEquipClicked(ItemStack item, IItemContainer toContainer)
+        private void OnEquipClicked(IItemContainer fromContainer, ItemStack item, EquipmentModel equipmentModel)
         {
-            _handler.Handle(new MoveItemCommand()
+            _handler.Handle(new EquipFromContainerCommand()
             {
-                FromItem = item,
-                ToContainer = toContainer,
-                Amount = item.Amount
+                EquipmentModel = equipmentModel,
+                FromContainer = fromContainer,
+                ItemStack = item,
             });
         }
 
-        private void OnUnequipClicked(ItemStack item, IItemContainer toContainer)
+        private void OnUnequipClicked(IItemContainer toContainer, ItemStack item, EquipmentModel equipmentModel)
         {
-            _handler.Handle(new MoveItemCommand()
+            if (equipmentModel.TryGetSlot(item.GetEquipmentSlotType(), s => s == item, out var key))
             {
-                FromItem = item,
-                ToContainer = toContainer,
-                Amount = item.Amount
-            });
+                _handler.Handle(new UnequipToContainerCommand()
+                {
+                    EquipmentModel = equipmentModel,
+                    ToContainer = toContainer,
+                    SlotKey = key
+                });
+            }
         }
 
         private IEnumerable<ItemStackAction> GetActions()
@@ -107,58 +111,52 @@ namespace Assets._Game.Scripts.UI.Windows
                 Type = ItemStackActionType.Drop,
                 Title = "Drop"
             });
-            if (_primaryItemStack.GetEquipmentSlotType() == EquipmentSlotType.None)
+            if (_primaryItemContainer is InventoryModel &&
+                _secondaryItemContainer is InventoryModel &&
+                _secondaryItemContainer.CanPut(_primaryItemStack))
             {
-                if (_primaryItemContainer is InventoryModel &&
-                    _secondaryItemContainer is InventoryModel &&
-                    _primaryItemContainer.CanPut(_primaryItemStack))
+                if (_primaryItemStack.Amount > 1)
                 {
-                    if (_primaryItemStack.Amount > 1)
+                    actions.Add(new ItemStackAction()
                     {
-                        actions.Add(new ItemStackAction()
-                        {
-                            Type = ItemStackActionType.TransferOne,
-                            Title = "Transfer One"
-                        });
-                        actions.Add(new ItemStackAction()
-                        {
-                            Type = ItemStackActionType.TransferHalf,
-                            Title = "Transfer Half"
-                        });
-                        actions.Add(new ItemStackAction()
-                        {
-                            Type = ItemStackActionType.TransferAll,
-                            Title = "Transfer All"
-                        });
-                    }
-                    else
+                        Type = ItemStackActionType.TransferOne,
+                        Title = "Transfer One"
+                    });
+                    actions.Add(new ItemStackAction()
                     {
-                        actions.Add(new ItemStackAction()
-                        {
-                            Type = ItemStackActionType.TransferAll,
-                            Title = "Transfer"
-                        });
-                    }
+                        Type = ItemStackActionType.TransferHalf,
+                        Title = "Transfer Half"
+                    });
+                    actions.Add(new ItemStackAction()
+                    {
+                        Type = ItemStackActionType.TransferAll,
+                        Title = "Transfer All"
+                    });
+                }
+                else
+                {
+                    actions.Add(new ItemStackAction()
+                    {
+                        Type = ItemStackActionType.TransferAll,
+                        Title = "Transfer"
+                    });
                 }
             }
-            else
+            if (_equipmentModel.Contains(_primaryItemStack))
             {
-                if (_equipmentModel.Contains(_primaryItemStack))
+                actions.Add(new ItemStackAction()
                 {
-                    actions.Add(new ItemStackAction()
-                    {
-                        Type = ItemStackActionType.Unequip,
-                        Title = "Unequip"
-                    });
-                }
-                else if (_equipmentModel.CanPut(_primaryItemStack))
+                    Type = ItemStackActionType.Unequip,
+                    Title = "Unequip"
+                });
+            }
+            else if (_equipmentModel.CanPut(_primaryItemStack, true))
+            {
+                actions.Add(new ItemStackAction()
                 {
-                    actions.Add(new ItemStackAction()
-                    {
-                        Type = ItemStackActionType.Equip,
-                        Title = "Equip"
-                    });
-                }
+                    Type = ItemStackActionType.Equip,
+                    Title = "Equip"
+                });
             }
             return actions;
         }
@@ -171,20 +169,20 @@ namespace Assets._Game.Scripts.UI.Windows
                     OnDropClicked(_primaryItemStack, _primaryItemContainer, _primaryItemStack.Amount);
                     break;
                 case ItemStackActionType.TransferOne:
-                    OnTransferClicked(_primaryItemStack, _secondaryItemContainer, 1);
+                    OnTransferClicked(_primaryItemContainer, _primaryItemStack, _secondaryItemContainer, 1);
                     break;
                 case ItemStackActionType.TransferHalf:
                     var halfAmount = (int)Math.Ceiling(_primaryItemStack.Amount / 2f);
-                    OnTransferClicked(_primaryItemStack, _secondaryItemContainer, halfAmount);
+                    OnTransferClicked(_primaryItemContainer, _primaryItemStack, _secondaryItemContainer, halfAmount);
                     break;
                 case ItemStackActionType.TransferAll:
-                    OnTransferClicked(_primaryItemStack, _secondaryItemContainer, _primaryItemStack.Amount);
+                    OnTransferClicked(_primaryItemContainer, _primaryItemStack, _secondaryItemContainer, _primaryItemStack.Amount);
                     break;
                 case ItemStackActionType.Equip:
-                    OnEquipClicked(_primaryItemStack, _equipmentModel);
+                    OnEquipClicked(_primaryItemContainer, _primaryItemStack, _equipmentModel);
                     break;
                 case ItemStackActionType.Unequip:
-                    OnUnequipClicked(_primaryItemStack, _equipmentModel);
+                    OnUnequipClicked(_secondaryItemContainer, _primaryItemStack, _equipmentModel);
                     break;
             }
 

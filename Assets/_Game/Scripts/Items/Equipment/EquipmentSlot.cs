@@ -1,17 +1,5 @@
 ﻿namespace Assets._Game.Scripts.Items.Equipment
 {
-    public class EquipmentSlot
-    {
-        public EquipmentSlotType SlotType;
-        public ItemStack Item;
-
-        public EquipmentSlot(EquipmentSlotType slotType)
-        {
-            SlotType = slotType;
-            Item = null;
-        }
-    }
-
     public enum EquipmentSlotType
     {
         None = 0,
@@ -23,5 +11,16 @@
         Ring = 60,
         Necklace = 70,
         Consumable = 1000,
+    }
+
+    public struct EquipmentSlotKey
+    {
+        public EquipmentSlotType SlotType;
+        public int Index;
+        public EquipmentSlotKey(EquipmentSlotType slotType, int index)
+        {
+            SlotType = slotType;
+            Index = index;
+        }
     }
 }

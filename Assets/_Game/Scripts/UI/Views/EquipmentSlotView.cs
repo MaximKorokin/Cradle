@@ -6,7 +6,7 @@ using VContainer;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentSlotView : ContainerSlotView<EquipmentSlotType>
+    public sealed class EquipmentSlotView : ContainerSlotView<EquipmentSlotKey>
     {
         [SerializeField]
         private InventorySlotView _inventorySlotView;
@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.Views
         [Inject]
         public void Construct()
         {
-            // default slot icons
+            _inventorySlotView.SetRaycastTarget(false);
         }
 
         public void Render(ItemStack itemStack)

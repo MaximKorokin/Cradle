@@ -15,8 +15,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public event Action<int> InventorySlotPointerDown;
         public event Action<int> InventorySlotPointerUp;
-        public event Action<EquipmentSlotType> EquipmentSlotPointerDown;
-        public event Action<EquipmentSlotType> EquipmentSlotPointerUp;
+        public event Action<EquipmentSlotKey> EquipmentSlotPointerDown;
+        public event Action<EquipmentSlotKey> EquipmentSlotPointerUp;
 
         public override bool IsModal => true;
 
@@ -54,14 +54,14 @@ namespace Assets._Game.Scripts.UI.Windows
             InventorySlotPointerUp?.Invoke(slotIndex);
         }
 
-        private void OnEquipmentSlotPointerDown(EquipmentSlotType slotType)
+        private void OnEquipmentSlotPointerDown(EquipmentSlotKey slot)
         {
-            EquipmentSlotPointerDown?.Invoke(slotType);
+            EquipmentSlotPointerDown?.Invoke(slot);
         }
 
-        private void OnEquipmentSlotPointerUp(EquipmentSlotType slotType)
+        private void OnEquipmentSlotPointerUp(EquipmentSlotKey slot)
         {
-            EquipmentSlotPointerUp?.Invoke(slotType);
+            EquipmentSlotPointerUp?.Invoke(slot);
         }
     }
 }

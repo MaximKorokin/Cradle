@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.UI.Windows
         private readonly InventoryModel _inventoryModel;
         private readonly EquipmentModel _equipmentModel;
 
-        private readonly ItemStacksPreviewInputProcessor<int, EquipmentSlotType> _previewProcessor;
+        private readonly ItemStacksPreviewInputProcessor<int, EquipmentSlotKey> _previewProcessor;
 
         public InventoryEquipmentWindowController(
             WindowManager windowManager,

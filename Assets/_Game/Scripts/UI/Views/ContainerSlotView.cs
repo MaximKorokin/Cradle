@@ -6,24 +6,24 @@ namespace Assets._Game.Scripts.UI.Views
 {
     public abstract class ContainerSlotView<T> : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        private T _slotIndex;
+        public T SlotIndex { get; private set; }
 
         public event Action<T> PointerDown;
         public event Action<T> PointerUp;
 
-        public void OnPointerDown(PointerEventData eventData)
+        public virtual void OnPointerDown(PointerEventData eventData)
         {
-            PointerDown?.Invoke(_slotIndex);
+            PointerDown?.Invoke(SlotIndex);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public virtual void OnPointerUp(PointerEventData eventData)
         {
-            PointerUp?.Invoke(_slotIndex);
+            PointerUp?.Invoke(SlotIndex);
         }
 
-        public void Bind(T slotIndex)
+        public virtual void Bind(T slotIndex)
         {
-            _slotIndex = slotIndex;
+            SlotIndex = slotIndex;
         }
     }
 }

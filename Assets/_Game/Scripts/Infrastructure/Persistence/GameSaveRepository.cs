@@ -40,7 +40,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
     public sealed class EquipmentSlotSave
     {
-        public EquipmentSlotType Slot;
+        public EquipmentSlotType Type;
+        public int Index;
         public ItemStackSave Stack;
     }
 
