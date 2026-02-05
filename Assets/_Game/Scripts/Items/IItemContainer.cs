@@ -1,27 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Items
 {
-    public interface IItemContainer<T> : IItemContainer
+    public interface IItemContainer<TSlot> : IItemContainer where TSlot : notnull
     {
-        IEnumerable<(T Index, ItemStack Stack)> Enumerate();
+        event Action<TSlot> SlotChanged;
 
-        ItemStack Get(T index);
-        void Take(T index, ref int amount);
-        bool CanPut(T index, ItemStack item);
-        void Put(T index, ItemStack item);
+        ItemStackSnapshot? Get(TSlot slot);
+        IEnumerable<(TSlot Slot, ItemStackSnapshot? Snapshot)> Enumerate();
+
+        int AddToSlot(TSlot slot, ItemStackSnapshot snapshot);
+        int RemoveFromSlot(TSlot slot, int amount);
+
+        bool IsValidSlot(TSlot slot);
+
+        int PreviewAddToSlot(TSlot slot, ItemStackSnapshot snapshot);
     }
 
     public interface IItemContainer
     {
-        event System.Action Changed;
+        event Action Changed;
 
-        int SlotCount { get; }
-        bool Contains(string id, int amount);
-        bool Contains(ItemStack item);
-        void Take(string id, ref int amount);
-        void Take(ItemStack item);
-        bool CanPut(ItemStack item);
-        void Put(ItemStack item);
+        int Count(ItemKey key);
+
+        int Add(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty);
+        int Remove(ItemKey key, int amount);
+        int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty);
+    }
+
+    public enum AddPolicy
+    {
+        /// <summary>Try to stack into existing compatible stacks first, then into empty slots.</summary>
+        StackThenEmpty,
+
+        /// <summary>Only stack into existing compatible stacks (no placing into empty slots).</summary>
+        StackOnly,
+
+        /// <summary>Only place into empty slots (do not stack).</summary>
+        EmptyOnly
     }
 }

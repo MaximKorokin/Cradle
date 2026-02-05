@@ -2,38 +2,40 @@
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
-using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.Shared.Utils;
+using Assets.CoreScripts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public sealed class ItemStacksPreviewWindowController : IDisposable
+    public sealed class ItemStacksPreviewWindowController<T1, T2> : IDisposable
     {
         private readonly WindowManager _windowManager;
         private readonly ItemStacksPreviewWindow _window;
         private readonly ItemCommandHandler _handler;
         private readonly EquipmentModel _equipmentModel;
-        private readonly ItemStack _primaryItemStack;
-        private readonly ItemStack _secondaryItemStack;
-        private readonly IItemContainer _primaryItemContainer;
-        private readonly IItemContainer _secondaryItemContainer;
+        private readonly EquipmentSlotKey? _equipmentSlot;
+        private readonly T1 _primaryContainerSlot;
+        private readonly IItemContainer<T1> _primaryItemContainer;
+        private readonly IItemContainer<T2> _secondaryItemContainer;
 
         public ItemStacksPreviewWindowController(
             WindowManager windowManager,
             ItemStacksPreviewWindow window,
             EquipmentModel equipmentModel,
-            ItemStack primaryItemStack,
-            ItemStack secondaryItemStack,
-            IItemContainer primaryItemContainer,
-            IItemContainer secondaryItemContainer,
+            EquipmentSlotKey? equipmentSlot,
+            T1 primaryContainerSlot,
+            IItemContainer<T1> primaryItemContainer,
+            IItemContainer<T2> secondaryItemContainer,
             ItemCommandHandler handler)
         {
             _windowManager = windowManager;
             _window = window;
             _equipmentModel = equipmentModel;
-            _primaryItemStack = primaryItemStack;
-            _secondaryItemStack = secondaryItemStack;
+            _primaryContainerSlot = primaryContainerSlot;
+            _equipmentSlot = equipmentSlot;
             _primaryItemContainer = primaryItemContainer;
             _secondaryItemContainer = secondaryItemContainer;
             _handler = handler;
@@ -56,137 +58,132 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private void Redraw()
         {
-            _window.Render(_primaryItemStack, _secondaryItemStack, GetActions());
+            var primaryItem = _primaryItemContainer.Get(_primaryContainerSlot);
+            var equipmentItem = _equipmentSlot != null ? _equipmentModel.Get(_equipmentSlot.Value) : null;
+            _window.Render(primaryItem, equipmentItem, GetActions());
         }
 
-        private void OnDropClicked(ItemStack item, IItemContainer fromContainer, int amount)
+        private void OnDropClicked<T>(IItemContainer<T> fromContainer, T slot, int amount)
         {
-            _handler.Handle(new DropItemCommand()
+            _handler.Handle<T>(new DropItemCommand<T>()
             {
-                Item = item,
                 FromContainer = fromContainer,
+                FromSlot = slot,
                 Amount = amount
             });
         }
 
-        private void OnTransferClicked(IItemContainer fromContainer, ItemStack item, IItemContainer toContainer, int amount)
+        private void OnTransferClicked<T>(IItemContainer<T> fromContainer, T slot, IItemContainer toContainer, int amount)
         {
-            _handler.Handle(new MoveItemCommand()
+            _handler.Handle<T>(new MoveItemCommand<T>()
             {
                 FromContainer = fromContainer,
-                FromItem = item,
+                FromSlot = slot,
                 ToContainer = toContainer,
                 Amount = amount
             });
         }
 
-        private void OnEquipClicked(IItemContainer fromContainer, ItemStack item, EquipmentModel equipmentModel)
+        private void OnEquipClicked<T>(IItemContainer<T> fromContainer, T slot, EquipmentModel equipmentModel, EquipmentSlotKey equipmentSlot)
         {
-            _handler.Handle(new EquipFromContainerCommand()
+            _handler.Handle<T>(new EquipFromContainerCommand<T>()
             {
                 EquipmentModel = equipmentModel,
+                EquipmentSlot = equipmentSlot,
                 FromContainer = fromContainer,
-                ItemStack = item,
+                FromSlot = slot,
             });
         }
 
-        private void OnUnequipClicked(IItemContainer toContainer, ItemStack item, EquipmentModel equipmentModel)
+        private void OnUnequipClicked<T>(IItemContainer<T> toContainer, EquipmentSlotKey slot, EquipmentModel equipmentModel)
         {
-            if (equipmentModel.TryGetSlot(item.GetEquipmentSlotType(), s => s == item, out var key))
+            _handler.Handle<T>(new UnequipToContainerCommand()
             {
-                _handler.Handle(new UnequipToContainerCommand()
-                {
-                    EquipmentModel = equipmentModel,
-                    ToContainer = toContainer,
-                    SlotKey = key
-                });
-            }
+                EquipmentModel = equipmentModel,
+                ToContainer = toContainer,
+                SlotKey = slot
+            });
         }
 
         private IEnumerable<ItemStackAction> GetActions()
         {
-            var actions = new List<ItemStackAction>();
-            actions.Add(new ItemStackAction()
+            var primaryItemNullable = _primaryItemContainer.Get(_primaryContainerSlot);
+            if (primaryItemNullable == null)
             {
-                Type = ItemStackActionType.Drop,
-                Title = "Drop"
-            });
+                SLog.Error($"Trying to get actions for item that is not found in {_primaryItemContainer} in slot {_primaryContainerSlot}");
+                return Enumerable.Empty<ItemStackAction>();
+            }
+
+            var primaryItem = primaryItemNullable.Value;
+            var actions = new List<ItemStackAction>
+            {
+                new(ItemStackActionType.Drop, "Drop")
+            };
+
             if (_primaryItemContainer is InventoryModel &&
                 _secondaryItemContainer is InventoryModel &&
-                _secondaryItemContainer.CanPut(_primaryItemStack))
+                _secondaryItemContainer.PreviewAdd(primaryItem) > 0)
             {
-                if (_primaryItemStack.Amount > 1)
+                if (primaryItem.Amount > 1)
                 {
-                    actions.Add(new ItemStackAction()
-                    {
-                        Type = ItemStackActionType.TransferOne,
-                        Title = "Transfer One"
-                    });
-                    actions.Add(new ItemStackAction()
-                    {
-                        Type = ItemStackActionType.TransferHalf,
-                        Title = "Transfer Half"
-                    });
-                    actions.Add(new ItemStackAction()
-                    {
-                        Type = ItemStackActionType.TransferAll,
-                        Title = "Transfer All"
-                    });
+                    actions.Add(new ItemStackAction(ItemStackActionType.TransferOne, "Transfer One"));
+                    actions.Add(new ItemStackAction(ItemStackActionType.TransferHalf, "Transfer Half"));
+                    actions.Add(new ItemStackAction(ItemStackActionType.TransferAll, "Transfer All"));
                 }
                 else
                 {
-                    actions.Add(new ItemStackAction()
-                    {
-                        Type = ItemStackActionType.TransferAll,
-                        Title = "Transfer"
-                    });
+                    actions.Add(new ItemStackAction(ItemStackActionType.TransferAll, "Transfer"));
                 }
             }
-            if (_equipmentModel.Contains(_primaryItemStack))
+            if (_equipmentModel.Has(primaryItem.Key, 1))
             {
-                actions.Add(new ItemStackAction()
-                {
-                    Type = ItemStackActionType.Unequip,
-                    Title = "Unequip"
-                });
+                actions.Add(new ItemStackAction(ItemStackActionType.Unequip, "Unequip"));
             }
-            else if (_equipmentModel.CanPut(_primaryItemStack, true))
+            else if (_equipmentModel.PreviewAdd(primaryItem) > 1)
             {
-                actions.Add(new ItemStackAction()
-                {
-                    Type = ItemStackActionType.Equip,
-                    Title = "Equip"
-                });
+                actions.Add(new ItemStackAction(ItemStackActionType.Equip, "Equip"));
             }
             return actions;
         }
 
         private void ProcessAction(ItemStackActionType actionType)
         {
+            _windowManager.CloseTop();
+            var item = _primaryItemContainer.Get(_primaryContainerSlot);
             switch (actionType)
             {
                 case ItemStackActionType.Drop:
-                    OnDropClicked(_primaryItemStack, _primaryItemContainer, _primaryItemStack.Amount);
+                    if (item != null)
+                    {
+                        OnDropClicked(_primaryItemContainer, _primaryContainerSlot, item.Value.Amount);
+                    }
                     break;
                 case ItemStackActionType.TransferOne:
-                    OnTransferClicked(_primaryItemContainer, _primaryItemStack, _secondaryItemContainer, 1);
+                    OnTransferClicked(_primaryItemContainer, _primaryContainerSlot, _secondaryItemContainer, 1);
                     break;
                 case ItemStackActionType.TransferHalf:
-                    var halfAmount = (int)Math.Ceiling(_primaryItemStack.Amount / 2f);
-                    OnTransferClicked(_primaryItemContainer, _primaryItemStack, _secondaryItemContainer, halfAmount);
+                    if (item != null)
+                    {
+                        var halfAmount = (int)Math.Ceiling(item.Value.Amount / 2f);
+                        OnTransferClicked(_primaryItemContainer, _primaryContainerSlot, _secondaryItemContainer, halfAmount);
+                    }
                     break;
                 case ItemStackActionType.TransferAll:
-                    OnTransferClicked(_primaryItemContainer, _primaryItemStack, _secondaryItemContainer, _primaryItemStack.Amount);
+                    if (item != null)
+                    {
+                        OnTransferClicked(_primaryItemContainer, _primaryContainerSlot, _secondaryItemContainer, item.Value.Amount);
+                    }
                     break;
                 case ItemStackActionType.Equip:
-                    OnEquipClicked(_primaryItemContainer, _primaryItemStack, _equipmentModel);
+                    OnEquipClicked(_primaryItemContainer, _primaryContainerSlot, _equipmentModel, _equipmentSlot.Value);
                     break;
                 case ItemStackActionType.Unequip:
-                    OnUnequipClicked(_secondaryItemContainer, _primaryItemStack, _equipmentModel);
+                    if (_primaryContainerSlot is EquipmentSlotKey key)
+                    {
+                        OnUnequipClicked(_secondaryItemContainer, key, _equipmentModel);
+                    }
                     break;
             }
-
-            _windowManager.CloseTop();
         }
     }
 
@@ -194,6 +191,12 @@ namespace Assets._Game.Scripts.UI.Windows
     {
         public ItemStackActionType Type;
         public string Title;
+
+        public ItemStackAction(ItemStackActionType type, string title)
+        {
+            Type = type;
+            Title = title;
+        }
     }
 
     public enum ItemStackActionType

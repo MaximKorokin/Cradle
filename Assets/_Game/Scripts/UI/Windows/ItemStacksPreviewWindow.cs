@@ -35,16 +35,16 @@ namespace Assets._Game.Scripts.UI.Windows
 
         }
 
-        public void Render(ItemStack primaryItemStack, ItemStack secondaryItemStack, IEnumerable<ItemStackAction> actions)
+        public void Render(ItemStackSnapshot? primaryItemStack, ItemStackSnapshot? secondaryItemStack, IEnumerable<ItemStackAction> actions)
         {
             Clear();
             if (primaryItemStack != null)
             {
-                _primaryItemPreviewView.Render(primaryItemStack);
+                _primaryItemPreviewView.Render(primaryItemStack.Value);
             }
             if (secondaryItemStack != null)
             {
-                _secondaryItemPreviewView.Render(secondaryItemStack);
+                _secondaryItemPreviewView.Render(secondaryItemStack.Value);
             }
 
             foreach (var action in actions)

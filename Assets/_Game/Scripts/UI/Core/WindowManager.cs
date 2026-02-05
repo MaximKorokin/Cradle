@@ -66,10 +66,10 @@ namespace Assets._Game.Scripts.UI.Windows
             return window;
         }
 
-        public ItemStacksPreviewWindow ShowItemStackPreviewWindow(EquipmentModel equipmentModel, ItemStack primaryItemStack, ItemStack secondaryItemStack, IItemContainer firstItemContainer, IItemContainer secondItemContainer, ItemCommandHandler handler)
+        public ItemStacksPreviewWindow ShowItemStackPreviewWindow<T1, T2>(EquipmentModel equipmentModel, EquipmentSlotKey? equipmentSlot, T1 primarySlot, IItemContainer<T1> primaryItemContainer, IItemContainer<T2> secondaryItemContainer, ItemCommandHandler handler)
         {
             var window = InstantiateWindow<ItemStacksPreviewWindow>();
-            var controller = new ItemStacksPreviewWindowController(this, window, equipmentModel, primaryItemStack, secondaryItemStack, firstItemContainer, secondItemContainer, handler);
+            var controller = new ItemStacksPreviewWindowController<T1, T2>(this, window, equipmentModel, equipmentSlot, primarySlot, primaryItemContainer, secondaryItemContainer, handler);
             PushToStack(window, controller);
             window.OnShow();
             return window;

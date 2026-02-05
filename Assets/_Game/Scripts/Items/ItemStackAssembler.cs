@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Items
             var definition = _itemCatalog.GetItemDefinition(save.ItemDefinitionId);
             itemStack.Definition = definition;
             itemStack.Amount = save.Amount;
-            itemStack.Instance = _codecRegistry.DecodeOrNull(save.InstanceData) as IItemInstanceData;
+            itemStack.InstanceData = _codecRegistry.DecodeOrNull(save.InstanceData) as IItemInstanceData;
             return itemStack;
         }
 
@@ -29,13 +29,13 @@ namespace Assets._Game.Scripts.Items
             return new ItemStack(definition, new EmptyInstanceData(), amount);
         }
 
-        public ItemStackSave Save(ItemStack itemStack)
+        public ItemStackSave Save(ItemStackSnapshot itemStack)
         {
             return new ItemStackSave
             {
                 ItemDefinitionId = itemStack.Definition.Id,
                 Amount = itemStack.Amount,
-                InstanceData = _codecRegistry.EncodeOrNull(itemStack.Instance)
+                InstanceData = _codecRegistry.EncodeOrNull(itemStack.InstanceData)
             };
         }
     }

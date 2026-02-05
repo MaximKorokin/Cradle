@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Views
             _inventorySlotView.SetRaycastTarget(false);
         }
 
-        public void Render(ItemStack itemStack)
+        public void Render(ItemStackSnapshot? itemStack)
         {
             _inventorySlotView.Render(itemStack);
             _placeholderImage.enabled = itemStack == null;

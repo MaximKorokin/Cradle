@@ -1,9 +1,9 @@
 ﻿namespace Assets._Game.Scripts.Items.Commands
 {
-    public sealed class DropItemCommand : IItemCommand
+    public sealed class DropItemCommand<T> : IItemCommand
     {
-        public ItemStack Item;
-        public IItemContainer FromContainer;
+        public IItemContainer<T> FromContainer;
+        public T FromSlot;
         public int Amount;
     }
 }

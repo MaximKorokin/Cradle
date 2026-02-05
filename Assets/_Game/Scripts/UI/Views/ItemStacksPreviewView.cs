@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private Image _iconView;
 
-        public void Render(ItemStack itemStack)
+        public void Render(ItemStackSnapshot itemStack)
         {
             _title.text = itemStack.Definition.Name;
             _iconView.sprite = itemStack.Definition.Icon;

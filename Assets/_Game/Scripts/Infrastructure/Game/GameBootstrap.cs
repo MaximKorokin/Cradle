@@ -69,10 +69,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             {
                 unitsController.UpdateOrderInLayer();
 
-                _playerContext.IEModule.Inventory.Put(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52d", 1));
-                _playerContext.StashInventory.Put(_itemStackAssembler.Create("bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338", 1));
-                _playerContext.StashInventory.Put(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52f", 1));
-                _playerContext.StashInventory.Put(_itemStackAssembler.Create("780db064-ca6a-4b9d-bc23-64e34a86403a", 1));
+                _playerContext.IEModule.Inventory.Add(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52d", 1).Snapshot);
+                _playerContext.StashInventory.Add(_itemStackAssembler.Create("bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338", 1).Snapshot);
+                _playerContext.StashInventory.Add(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52f", 1).Snapshot);
+                _playerContext.StashInventory.Add(_itemStackAssembler.Create("780db064-ca6a-4b9d-bc23-64e34a86403a", 1).Snapshot);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {

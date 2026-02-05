@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared.Extensions;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Shared
 {
@@ -9,7 +10,7 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
     {
         private readonly WindowManager _windowManager;
         private readonly EquipmentModel _equipmentModel;
-        private readonly IItemContainer<T1> _firstItemContainer;
+        private readonly IItemContainer<T1> _firtsItemContainer;
         private readonly IItemContainer<T2> _secondItemContainer;
         private readonly ItemCommandHandler _handler;
 
@@ -19,14 +20,14 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
         public ItemStacksPreviewInputProcessor(
             WindowManager windowManager,
             EquipmentModel equipmentModel,
-            IItemContainer<T1> firstItemContainer,
-            IItemContainer<T2> secondItemContainer,
+            IItemContainer<T1> primaryItemContainer,
+            IItemContainer<T2> secondaryItemContainer,
             ItemCommandHandler handler)
         {
             _windowManager = windowManager;
             _equipmentModel = equipmentModel;
-            _firstItemContainer = firstItemContainer;
-            _secondItemContainer = secondItemContainer;
+            _firtsItemContainer = primaryItemContainer;
+            _secondItemContainer = secondaryItemContainer;
             _handler = handler;
         }
 
@@ -38,15 +39,14 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
         public void OnFirstItemContainerSlotPointerUp(T1 slotIndex)
         {
             if (!_firstPointerDownSlotIndex.Equals(slotIndex)) return;
-
-            var primaryItem = _firstItemContainer.Get(slotIndex);
+            var primaryItem = _firtsItemContainer.Get(slotIndex);
             if (primaryItem == null) return;
 
             _windowManager.ShowItemStackPreviewWindow(
                 _equipmentModel,
-                primaryItem,
-                GetItemToCompare(primaryItem),
-                _firstItemContainer,
+                GetEquipmentSlotToCompare(primaryItem.Value, _firtsItemContainer),
+                _firstPointerDownSlotIndex,
+                _firtsItemContainer,
                 _secondItemContainer,
                 _handler);
         }
@@ -59,28 +59,28 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
         public void OnSecondItemContainerSlotPointerUp(T2 slotIndex)
         {
             if (!_secondPointerDownSlotIndex.Equals(slotIndex)) return;
-
             var primaryItem = _secondItemContainer.Get(slotIndex);
             if (primaryItem == null) return;
 
             _windowManager.ShowItemStackPreviewWindow(
                 _equipmentModel,
-                primaryItem,
-                GetItemToCompare(primaryItem),
+                GetEquipmentSlotToCompare(primaryItem.Value, _secondItemContainer),
+                _secondPointerDownSlotIndex,
                 _secondItemContainer,
-                _firstItemContainer,
+                _firtsItemContainer,
                 _handler);
         }
 
-        private ItemStack GetItemToCompare(ItemStack primaryItem)
+        private EquipmentSlotKey? GetEquipmentSlotToCompare(ItemStackSnapshot primaryItem, IItemContainer containerToExcept)
         {
             // The item is equipped, no need to compare
-            if (_equipmentModel.Contains(primaryItem)) return null;
+            if ((containerToExcept is EquipmentModel equipmentModel) && equipmentModel == _equipmentModel) return null;
 
             var equipmentSlotType = primaryItem.GetEquipmentSlotType();
-            if (equipmentSlotType == EquipmentSlotType.None || !_equipmentModel.TryGetSlot(equipmentSlotType, item => item != null, out var key))
+            if (equipmentSlotType == EquipmentSlotType.None)
                 return null;
-            return _equipmentModel.Get(key);
+            var itemSlotToCompare = _equipmentModel.Enumerate().FirstOrDefault(x => x.Slot.SlotType == equipmentSlotType && x.Snapshot != null).Slot;
+            return itemSlotToCompare;
         }
     }
 }

@@ -1,17 +1,20 @@
-﻿using Assets._Game.Scripts.Shared.Extensions;
-using Assets.CoreScripts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Equipment
 {
-    public class EquipmentModel : IItemContainer<EquipmentSlotKey>
+    public sealed class EquipmentModel : IItemContainer<EquipmentSlotKey>
     {
         private readonly Dictionary<EquipmentSlotKey, ItemStack> _slots;
+        private readonly IEquipmentRules _rules;
 
-        public EquipmentModel(EquipmentSlotType[] slots)
+        public event Action<EquipmentSlotKey> SlotChanged;
+        public event Action Changed;
+
+        public EquipmentModel(EquipmentSlotType[] slots, IEquipmentRules rules)
         {
+            _rules = rules;
             _slots = new();
             var slotTypeCounts = new Dictionary<EquipmentSlotType, int>();
             foreach (var slotType in slots)
@@ -24,159 +27,234 @@ namespace Assets._Game.Scripts.Items.Equipment
             }
         }
 
-        public int SlotCount => _slots.Count;
+        public bool IsValidSlot(EquipmentSlotKey slot)
+            => _slots.ContainsKey(slot);
 
-        public event Action Changed;
-
-        public bool CanPut(EquipmentSlotKey key, ItemStack item) => CanPut(key, item, false);
-        public bool CanPut(EquipmentSlotKey key, ItemStack item, bool ignoreItemInSlot)
+        public ItemStackSnapshot? Get(EquipmentSlotKey slot)
         {
-            // todo: lvl, stats etc. requirements
-
-            if (!IsValidKey(key) || key.SlotType != item.GetEquipmentSlotType()) return false;
-
-            if (ignoreItemInSlot) return true;
-
-            // slot is empty or can stack
-            var toItem = _slots[key];
-            return toItem == null || item.CanAddTo(toItem);
+            if (!_slots.TryGetValue(slot, out var s) || s is null) return null;
+            return s.Snapshot;
         }
 
-        public bool CanPut(ItemStack item) => CanPut(item, false);
-        public bool CanPut(ItemStack item, bool ignoreItemInSlot)
+        public IEnumerable<(EquipmentSlotKey Slot, ItemStackSnapshot? Snapshot)> Enumerate()
         {
-            // can't put null
-            return item != null && _slots.Any(s => CanPut(s.Key, item, ignoreItemInSlot));
+            foreach (var kv in _slots)
+                yield return (kv.Key, kv.Value?.Snapshot);
         }
 
-        public bool Contains(string id, int amount)
+        public int Count(ItemKey key)
         {
-            return _slots.Values.Where(item => item.HasId(id)).Sum(item => item.Amount) >= amount;
+            int total = 0;
+            foreach (var (_, snapshot) in Enumerate())
+                if (snapshot != null && snapshot.Value.Key.Equals(key))
+                    total += snapshot.Value.Amount;
+            return total;
         }
 
-        public bool Contains(ItemStack item)
+        public int Add(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty)
         {
-            // can't contain null
-            return item != null && _slots.Values.Any(equipmentItem => equipmentItem == item);
-        }
+            // For equipment: by default we try to place into ANY valid empty slot.
+            // Stacking doesn't make sense here usually, but we support MaxStack > 1 if you want "ammo pouch" etc.
+            if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
+            if (snapshot.Amount <= 0) return 0;
 
-        public IEnumerable<(EquipmentSlotKey Index, ItemStack Stack)> Enumerate()
-        {
-            foreach (var slot in _slots)
+            int remaining = snapshot.Amount;
+            int added = 0;
+
+            // If stacking is allowed, stack into existing matching stacks first:
+            if (policy is AddPolicy.StackThenEmpty or AddPolicy.StackOnly)
             {
-                yield return (slot.Key, slot.Value);
-            }
-        }
-
-        public ItemStack Get(EquipmentSlotKey slot)
-        {
-            return IsValidKey(slot) && _slots.TryGetValue(slot, out var item) ? item : null;
-        }
-
-        public void Put(EquipmentSlotKey slot, ItemStack item)
-        {
-            if (!CanPut(slot, item))
-            {
-                SLog.Error($"Cannot put item {item.Definition.Id} into equipment slot {slot}");
-                return;
-            }
-
-            var toItem = _slots[slot];
-            if (toItem == null)
-            {
-                // Empty slot, just put it in
-                _slots[slot] = item;
-            }
-            else
-            {
-                // Stack items
-                item.AddTo(toItem);
-            }
-
-            Changed?.Invoke();
-        }
-
-        public void Put(ItemStack item)
-        {
-            var putSome = false;
-            var slotType = item.GetEquipmentSlotType();
-            foreach (var slot in _slots.Where(s => s.Key.SlotType == slotType))
-            {
-                if (CanPut(slot.Key, item))
+                var key = ItemKey.From(snapshot.Definition, snapshot.InstanceData);
+                foreach (var slot in _slots.Keys.ToArray())
                 {
-                    putSome = true;
-                    var toItem = _slots[slot.Key];
-                    if (toItem == null)
+                    if (remaining <= 0) break;
+                    var s = _slots[slot];
+                    if (s is null) continue;
+                    if (!_rules.CanPlace(slot, snapshot)) continue;
+                    if (!s.CanStackWith(key)) continue;
+
+                    int a = s.AddUpTo(remaining);
+                    if (a > 0)
                     {
-                        // Empty slot, just put it in
-                        _slots[slot.Key] = item;
-                        break;
+                        remaining -= a;
+                        added += a;
+                        SlotChanged?.Invoke(slot);
+                        Changed?.Invoke();
                     }
-                    else
-                    {
-                        // Stack items
-                        item.AddTo(toItem);
-                    }
-                    // Item amount exhausted
-                    if (item.Amount <= 0) break;
                 }
             }
 
-            if (!putSome) SLog.Error($"Cannot put item {item.Definition.Id} into equipment");
-            else Changed?.Invoke();
-        }
+            if (policy is AddPolicy.StackOnly) return added;
 
-        public void Take(EquipmentSlotKey slot, ref int amount)
-        {
-            if (!IsValidKey(slot) || _slots[slot] == null)
+            // Place into empty slots
+            foreach (var slot in _slots.Keys.ToArray())
             {
-                SLog.Error($"Cannot take from slot {slot}");
-                return;
+                if (remaining <= 0) break;
+                if (_slots[slot] is not null) continue;
+                if (!_rules.CanPlace(slot, snapshot)) continue;
+
+                int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
+                _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                remaining -= put;
+                added += put;
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
             }
 
-            var fromItem = _slots[slot];
-            fromItem.RemoveFrom(ref amount);
-            if (fromItem.Amount <= 0) _slots[slot] = null;
-
-            Changed?.Invoke();
+            return added;
         }
 
-        public void Take(string id, ref int amount)
+        public int AddToSlot(EquipmentSlotKey slot, ItemStackSnapshot snapshot)
         {
-            // Remove from slots until amount is satisfied
-            foreach (var slot in _slots.Where(slot => slot.Value.HasId(id)))
+            if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
+            if (snapshot.Amount <= 0) return 0;
+            if (!IsValidSlot(slot)) return 0;
+            if (!_rules.CanPlace(slot, snapshot)) return 0;
+
+            var existing = _slots[slot];
+            var key = ItemKey.From(snapshot.Definition, snapshot.InstanceData);
+
+            if (existing is null)
             {
-                if (amount <= 0) break;
-                slot.Value.RemoveFrom(ref amount);
-                // Clean up empty slots
-                if (slot.Value.Amount <= 0) _slots[slot.Key] = null;
+                int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
+                _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
+                return put;
             }
 
-            Changed?.Invoke();
-        }
-
-        public void Take(ItemStack item)
-        {
-            var slot = _slots.FirstOrDefault(s => s.Value == item);
-            if (slot.Value == null)
+            // Only stacking into same item
+            if (!existing.CanStackWith(key)) return 0;
+            int added = existing.AddUpTo(snapshot.Amount);
+            if (added > 0)
             {
-                SLog.Error($"Item {item.Definition.Name} not found in equipment.");
-                return;
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
             }
-            _slots[slot.Key] = null;
-
-            Changed?.Invoke();
+            return added;
         }
 
-        public bool TryGetSlot(EquipmentSlotType slotType, Func<ItemStack, bool> predicate, out EquipmentSlotKey key)
+        public int Remove(ItemKey key, int amount)
         {
-            key = _slots.FirstOrDefault(s => s.Key.SlotType == slotType && predicate(s.Value)).Key;
-            return !key.Equals(default(EquipmentSlotKey));
+            if (amount <= 0) return 0;
+
+            int remaining = amount;
+            int removed = 0;
+
+            foreach (var slot in _slots.Keys.ToArray())
+            {
+                if (remaining <= 0) break;
+                var s = _slots[slot];
+                if (s is null) continue;
+                if (!s.Key.Equals(key)) continue;
+
+                int r = s.RemoveUpTo(remaining);
+                if (r > 0)
+                {
+                    remaining -= r;
+                    removed += r;
+
+                    if (s.Amount == 0) _slots[slot] = null;
+                    SlotChanged?.Invoke(slot);
+                    Changed?.Invoke();
+                }
+            }
+
+            return removed;
         }
 
-        private bool IsValidKey(EquipmentSlotKey key)
+        public int RemoveFromSlot(EquipmentSlotKey slot, int amount)
         {
-            return _slots.ContainsKey(key);
+            if (amount <= 0) return 0;
+            if (!IsValidSlot(slot)) return 0;
+
+            var s = _slots[slot];
+            if (s is null) return 0;
+
+            int removed = s.RemoveUpTo(amount);
+            if (removed > 0)
+            {
+                if (s.Amount == 0) _slots[slot] = null;
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
+            }
+            return removed;
+        }
+
+        public int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty)
+        {
+            if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
+            if (snapshot.Amount <= 0) return 0;
+
+            var key = ItemKey.From(snapshot.Definition, snapshot.InstanceData);
+            int remaining = snapshot.Amount;
+            int canAdd = 0;
+
+            // 1) Stack into existing stacks (if allowed by policy + rules)
+            if (policy is AddPolicy.StackThenEmpty or AddPolicy.StackOnly)
+            {
+                foreach (var slot in _slots.Keys) // safe: no mutation
+                {
+                    if (remaining <= 0) break;
+
+                    var s = _slots[slot];
+                    if (s is null) continue;
+
+                    // Must be allowed in this equipment slot (rule may depend on slot/type)
+                    if (!_rules.CanPlace(slot, snapshot)) continue;
+
+                    // Must be same stack key
+                    if (!s.CanStackWith(key)) continue;
+
+                    int space = Math.Max(0, s.Definition.MaxAmount - s.Amount);
+                    if (space <= 0) continue;
+
+                    int take = Math.Min(space, remaining);
+                    remaining -= take;
+                    canAdd += take;
+                }
+            }
+
+            if (policy is AddPolicy.StackOnly)
+                return canAdd;
+
+            // 2) Place into empty slots that accept the item (rules)
+            if (policy is AddPolicy.EmptyOnly or AddPolicy.StackThenEmpty)
+            {
+                foreach (var slot in _slots.Keys)
+                {
+                    if (remaining <= 0) break;
+
+                    if (_slots[slot] is not null) continue;
+
+                    if (!_rules.CanPlace(slot, snapshot)) continue;
+
+                    int take = Math.Min(snapshot.Definition.MaxAmount, remaining);
+                    remaining -= take;
+                    canAdd += take;
+                }
+            }
+
+            return canAdd;
+        }
+
+        // Optional: preview for a specific equipment slot (drag onto exact slot)
+        public int PreviewAddToSlot(EquipmentSlotKey slot, ItemStackSnapshot snapshot)
+        {
+            if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
+            if (snapshot.Amount <= 0) return 0;
+            if (!IsValidSlot(slot)) return 0;
+            if (!_rules.CanPlace(slot, snapshot)) return 0;
+
+            var existing = _slots[slot];
+            if (existing is null)
+                return Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
+
+            var key = ItemKey.From(snapshot.Definition, snapshot.InstanceData);
+            if (!existing.CanStackWith(key)) return 0;
+
+            int space = Math.Max(0, existing.Definition.MaxAmount - existing.Amount);
+            return Math.Min(space, snapshot.Amount);
         }
     }
 }

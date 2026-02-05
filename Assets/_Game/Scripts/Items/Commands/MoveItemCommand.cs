@@ -1,9 +1,9 @@
 ﻿namespace Assets._Game.Scripts.Items.Commands
 {
-    public sealed class MoveItemCommand : IItemCommand
+    public sealed class MoveItemCommand<T> : IItemCommand
     {
-        public IItemContainer FromContainer;
-        public ItemStack FromItem;
+        public IItemContainer<T> FromContainer;
+        public T FromSlot;
         public IItemContainer ToContainer;
         public int Amount;
     }

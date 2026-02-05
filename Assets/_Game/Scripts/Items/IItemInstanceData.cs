@@ -7,17 +7,17 @@ namespace Assets._Game.Scripts.Items
 
     }
 
-    public interface IImmutableInstanceData : IItemInstanceData
+    public interface IImmutableItemInstanceData : IItemInstanceData
     {
-        int GetStackKey();
+        string GetStackingKey();
     }
 
     [Serializable]
-    public class EmptyInstanceData : IImmutableInstanceData
+    public class EmptyInstanceData : IImmutableItemInstanceData
     {
-        public int GetStackKey()
+        public string GetStackingKey()
         {
-            return 0;
+            return "";
         }
     }
 

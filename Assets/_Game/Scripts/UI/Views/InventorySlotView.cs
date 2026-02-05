@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _amountText;
 
-        public void Render(ItemStack itemStack)
+        public void Render(ItemStackSnapshot? itemStack)
         {
             if (itemStack == null)
             {
@@ -23,11 +23,11 @@ namespace Assets._Game.Scripts.UI.Views
             }
 
             _itemImage.enabled = true;
-            _itemImage.sprite = itemStack.Definition.Icon;
+            _itemImage.sprite = itemStack.Value.Definition.Icon;
 
-            if (itemStack.Definition.MaxAmount > 1)
+            if (itemStack.Value.Definition.MaxAmount > 1)
             {
-                _amountText.text = itemStack.Amount.ToString();
+                _amountText.text = itemStack.Value.Amount.ToString();
                 _amountText.enabled = true;
             }
             else

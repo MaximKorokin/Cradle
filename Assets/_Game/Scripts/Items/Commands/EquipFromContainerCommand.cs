@@ -2,10 +2,11 @@
 
 namespace Assets._Game.Scripts.Items.Commands
 {
-    public class EquipFromContainerCommand : IItemCommand
+    public class EquipFromContainerCommand<T> : IItemCommand
     {
-        public IItemContainer FromContainer;
-        public ItemStack ItemStack;
+        public IItemContainer<T> FromContainer;
+        public T FromSlot;
         public EquipmentModel EquipmentModel;
+        public EquipmentSlotKey EquipmentSlot;
     }
 }

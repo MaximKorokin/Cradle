@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Items.Inventory
                 foreach (var item in save.Items)
                 {
                     var itemStack = _itemStackAssembler.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
-                    model.Put(item.Slot, itemStack);
+                    model.AddToSlot(item.Slot, itemStack.Snapshot);
                 }
             }
 
@@ -38,15 +38,17 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public InventorySave Save(InventoryModel model)
         {
-            var save = new InventorySave();
-            save.Items = model.Enumerate()
-                .Where(slot => slot.Stack != null)
-                .Select(slot => new InventorySlotSave
-                {
-                    Slot = slot.Index,
-                    Stack = _itemStackAssembler.Save(slot.Stack)
-                })
-                .ToArray();
+            var save = new InventorySave
+            {
+                Items = model.Enumerate()
+                    .Where(slot => slot.Snapshot != null)
+                    .Select(slot => new InventorySlotSave
+                    {
+                        Slot = slot.Slot,
+                        Stack = _itemStackAssembler.Save(slot.Snapshot.Value)
+                    })
+                    .ToArray()
+            };
             return save;
         }
     }
