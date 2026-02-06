@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Human
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 0e223672-e36b-497a-84b3-d50d96d89540
-  <EntityVisualModelName>k__BackingField: Humanoid
+  <VisualModel>k__BackingField: {fileID: 11400000, guid: 098d7829eff45b848b13a6b29dd7e48b, type: 2}
   <VariantName>k__BackingField: Human
-  <Prefab>k__BackingField: {fileID: 7953236500662839127, guid: 7d2994d3b6286fb48bf66a2473ecbe6c, type: 3}
   _modules:
   - rid: 1349792420369268909
   - rid: 1349792420369268910

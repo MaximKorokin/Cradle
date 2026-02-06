@@ -7,8 +7,12 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(ItemDefinition))]
-public class ItemDefinitionEditor : Editor
+public sealed class ItemDefinitionEditor : Editor
 {
+    // Id (auto-property backing field)
+    SerializedProperty _idProp;
+
+    // Traits (SerializeReference array)
     SerializedProperty _traitsProp;
 
     List<Type> _traitTypes = new();
@@ -17,6 +21,7 @@ public class ItemDefinitionEditor : Editor
 
     void OnEnable()
     {
+        _idProp = serializedObject.FindProperty("<Id>k__BackingField");
         _traitsProp = FindManagedReferenceArrayProperty(serializedObject);
         BuildTraitTypeCache();
     }
@@ -25,8 +30,11 @@ public class ItemDefinitionEditor : Editor
     {
         serializedObject.Update();
 
-        // Рисуем все свойства кроме m_Script и Traits (Traits — отдельным блоком)
-        DrawAllPropertiesExceptTraits();
+        DrawIdBlock();
+        EditorGUILayout.Space(8);
+
+        // Рисуем все свойства кроме m_Script, Id и Traits (Traits — отдельным блоком)
+        DrawAllPropertiesExceptIdAndTraits();
 
         EditorGUILayout.Space(8);
 
@@ -39,7 +47,45 @@ public class ItemDefinitionEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    void DrawAllPropertiesExceptTraits()
+    void DrawIdBlock()
+    {
+        using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+        {
+            EditorGUILayout.LabelField("Identity", EditorStyles.boldLabel);
+
+            if (_idProp != null)
+            {
+                using (new EditorGUI.DisabledScope(true))
+                    EditorGUILayout.PropertyField(_idProp, new GUIContent("Id"));
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("Id backing field not found. Убедись, что Id — auto-property с [field: SerializeField].", MessageType.Warning);
+            }
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.FlexibleSpace();
+
+                using (new EditorGUI.DisabledScope(Application.isPlaying))
+                {
+                    if (GUILayout.Button("Regenerate Id", GUILayout.Width(130)))
+                    {
+                        var def = (ItemDefinition)target;
+
+                        Undo.RecordObject(def, "Regenerate ItemDefinition Id");
+                        def.Id = GUID.Generate().ToString();
+                        EditorUtility.SetDirty(def);
+
+                        // обновим инспектор
+                        serializedObject.Update();
+                    }
+                }
+            }
+        }
+    }
+
+    void DrawAllPropertiesExceptIdAndTraits()
     {
         using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
         {
@@ -58,6 +104,9 @@ public class ItemDefinitionEditor : Editor
                         EditorGUILayout.PropertyField(it);
                     continue;
                 }
+
+                if (_idProp != null && it.propertyPath == _idProp.propertyPath)
+                    continue;
 
                 if (_traitsProp != null && it.propertyPath == _traitsProp.propertyPath)
                     continue;
@@ -119,7 +168,7 @@ public class ItemDefinitionEditor : Editor
                 var el = _traitsProp.GetArrayElementAtIndex(idx);
                 el.managedReferenceValue = Activator.CreateInstance(_traitTypes[_addTypeIndex]);
 
-                // важно: закрепляем managed reference в объекте
+                // зафиксировать ссылку в ассете
                 serializedObject.ApplyModifiedProperties();
                 EditorUtility.SetDirty(target);
             }
@@ -171,7 +220,6 @@ public class ItemDefinitionEditor : Editor
 
     void DrawTraitBody(SerializedProperty element)
     {
-        // Рисуем все поля managed reference объекта
         var copy = element.Copy();
         var end = copy.GetEndProperty();
 
@@ -180,7 +228,6 @@ public class ItemDefinitionEditor : Editor
         {
             enterChildren = false;
 
-            // Unity внутренности иногда всплывают — пропускаем
             if (copy.propertyPath.EndsWith(".managedReferenceId", StringComparison.OrdinalIgnoreCase))
                 continue;
 
@@ -191,7 +238,6 @@ public class ItemDefinitionEditor : Editor
     static SerializedProperty FindManagedReferenceArrayProperty(SerializedObject so)
     {
         // Находим первое свойство: isArray && element.propertyType == ManagedReference
-        // (если у тебя несколько таких массивов — можно расширить до выбора)
         var it = so.GetIterator();
         bool enterChildren = true;
 
@@ -200,13 +246,11 @@ public class ItemDefinitionEditor : Editor
             enterChildren = false;
 
             if (!it.isArray) continue;
-            if (it.propertyType == SerializedPropertyType.String) continue; // строки тоже "array-like"
+            if (it.propertyType == SerializedPropertyType.String) continue;
 
             if (it.arraySize == 0)
             {
-                // если пусто — попробуем по типу элемента через временную вставку не лезем.
-                // В этом случае надежнее ориентироваться по названию, но ты просил без хардкода.
-                // Поэтому пустой массив не опознаём на 100% — оставим как null.
+                // пустой массив надёжно определить без хардкода/рефлексии невозможно
                 continue;
             }
 
@@ -215,15 +259,11 @@ public class ItemDefinitionEditor : Editor
                 return so.FindProperty(it.propertyPath);
         }
 
-        // Фолбэк: если массив Traits пустой, а ты всё равно хочешь его найти,
-        // то самый безопасный НЕ-хардкодный способ без рефлексии по backing field невозможен.
-        // Поэтому: если хочешь поддержку пустого Traits — просто положи 1 trait один раз, потом можно удалять.
         return null;
     }
 
     static string GetManagedTypeShortName(SerializedProperty p)
     {
-        // "AssemblyName Full.Type.Name"
         var full = p.managedReferenceFullTypename;
         if (string.IsNullOrEmpty(full)) return "(null)";
 

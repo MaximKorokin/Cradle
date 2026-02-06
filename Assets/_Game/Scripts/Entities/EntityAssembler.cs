@@ -4,7 +4,8 @@ using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items;
 using Assets.CoreScripts;
-using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Assets._Game.Scripts.Entities
 {
@@ -12,15 +13,18 @@ namespace Assets._Game.Scripts.Entities
     {
         private static int _entitiesCounter = 0;
 
+        private readonly IObjectResolver _resolver;
         private readonly InventoryEquipmentControllerAssembler _inventoryEquipmentControllerAssembler;
-        private readonly UnitsControllerFactory _unitsControllerFactory;
+        private readonly AppearanceModuleFactory _appearanceModuleFactory;
 
         public EntityAssembler(
+            IObjectResolver resolver,
             InventoryEquipmentControllerAssembler inventoryEquipmentControllerAssembler,
-            UnitsControllerFactory unitsControllerFactory)
+            AppearanceModuleFactory appearanceModuleFactory)
         {
+            _resolver = resolver;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
-            _unitsControllerFactory = unitsControllerFactory;
+            _appearanceModuleFactory = appearanceModuleFactory;
         }
 
         public Entity Assemble(EntityDefinition entityDefinition, EntitySave save)
@@ -28,7 +32,7 @@ namespace Assets._Game.Scripts.Entities
             var entity = Create(entityDefinition);
             if (entity == null)
             {
-                SLog.Error($"Cannot create entity with id: {entityDefinition.EntityVisualModelName}");
+                SLog.Error($"Cannot create entity with id: {entityDefinition.VisualModel}");
                 return null;
             }
             if (entity.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
@@ -40,11 +44,13 @@ namespace Assets._Game.Scripts.Entities
 
         public Entity Create(EntityDefinition entityDefinition)
         {
-            var entityGameObject = new GameObject($"{entityDefinition.EntityVisualModelName} ({++_entitiesCounter})");
+            var entityView = _resolver.Instantiate(entityDefinition.VisualModel.BasePrefab);
+            entityView.name = $"{entityDefinition.VisualModel} ({++_entitiesCounter})";
+            entityView.UnitsAnimator.runtimeAnimatorController = entityDefinition.VisualModel.Animator;
 
             var entity = new Entity("");
             entity.AddModule(new EntityAttributesModule());
-            entity.AddModule(new AppearanceModule(_unitsControllerFactory.Create(entityGameObject, entityDefinition.EntityVisualModelName, entityDefinition.VariantName)));
+            entity.AddModule(_appearanceModuleFactory.Create(entityView, entityDefinition));
             entity.AddModule(new BehaviourController());
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 

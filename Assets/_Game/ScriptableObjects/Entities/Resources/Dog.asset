@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dog
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 851ea68f-b985-4565-bbc0-816f9eb5ee8b
-  <EntityVisualModelName>k__BackingField: Quadruped
+  <VisualModel>k__BackingField: {fileID: 11400000, guid: 58de46050ff02bb4fad6d51101aaa25f, type: 2}
   <VariantName>k__BackingField: Dog
   _modules:
   - rid: 1349792420369268905

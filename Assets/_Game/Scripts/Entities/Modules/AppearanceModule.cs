@@ -1,17 +1,23 @@
-﻿using Assets._Game.Scripts.Entities.Units;
+﻿using System.Linq;
+using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.Items.Equipment;
 using Assets.CoreScripts;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class AppearanceModule : EntityModuleBase
     {
-        public UnitsController Units { get; }
+        private readonly EntityUnitFactory _entityUnitFactory;
+        private readonly EntityVisualModel _entityVisualModel;
 
-        public AppearanceModule(UnitsController units)
+        public AppearanceModule(EntityVisualModel entityVisualModel, EntityUnitsController units, EntityUnitFactory entityUnitFactory)
         {
             Units = units;
+            _entityVisualModel = entityVisualModel;
+            _entityUnitFactory = entityUnitFactory;
         }
+
+        public EntityUnitsController Units { get; }
 
         protected override void OnAttach()
         {
@@ -32,15 +38,29 @@ namespace Assets._Game.Scripts.Entities.Modules
 
             if (ieModule.Equipment == null) return;
 
-            // todo:  use entity visual model
-            // todo:  use entity unit factory
             // todo:  set animations
-            // todo:  remove unequipped item units
-            var obj = new GameObject("Sword");
-            var spriteRenderer = obj.AddComponent<SpriteRenderer>();
-            var item = ieModule.Equipment.Get(e.Slot);
-            spriteRenderer.sprite = item?.Definition.Sprite;
-            Units.AddUnit(new(obj, $"HandRight/Sword", 1));
+
+            foreach (var entityUnitVisualModel in _entityVisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
+            {
+                var path = $"{entityUnitVisualModel.Path}/{e.Slot.SlotType}";
+                var item = ieModule.Equipment.Get(e.Slot);
+                // item equipped
+                if (item != null)
+                {
+                    // todo: check that unit exists
+                    var relativeOrderInLayer = e.Slot.SlotType == EquipmentSlotType.Weapon ? -1 : 1;
+                    var unit = _entityUnitFactory.Create(path, item.Value.Definition.Sprite, relativeOrderInLayer);
+                    Units.AddUnit(unit);
+                }
+                // item unequipped
+                else
+                {
+                    Units.RemoveUnit(path);
+                }
+            }
+
+            Units.UpdateOrderInLayer();
+
             // read equipment module, update visuals via Units (set sprites, enable/disable units, etc.)
         }
 

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Assets._Game.Scripts.Entities
         public string Id { get; set; }
 
         [field: SerializeField]
-        public string EntityVisualModelName { get; set; }
+        public EntityVisualModel VisualModel { get; set; }
         [field: SerializeField]
         public string VariantName { get; set; }
 

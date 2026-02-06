@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class UnitsAnimator
+    public class EntityUnitsAnimator
     {
         private readonly Animator _animator;
 
-        public UnitsAnimator(Animator animator)
+        public EntityUnitsAnimator(Animator animator)
         {
             _animator = animator;
         }

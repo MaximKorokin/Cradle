@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Entities.Units
         [field: SerializeField]
         public string Name { get; private set; }
         [field: SerializeField]
+        public EntityView BasePrefab { get; private set; }
+        [field: SerializeField]
         public AnimatorOverrideController Animator { get; private set; }
         [field: SerializeField]
         public EntityUnitVisualModel[] Units { get; private set; }

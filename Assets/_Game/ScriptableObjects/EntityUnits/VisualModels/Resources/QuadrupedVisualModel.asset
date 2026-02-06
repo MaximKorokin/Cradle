@@ -13,17 +13,24 @@ MonoBehaviour:
   m_Name: QuadrupedVisualModel
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Quadruped
+  <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 96ad2e14e0944f943af4f9ba299469bb, type: 2}
   <Units>k__BackingField:
   - <Path>k__BackingField: 300
-    <RelativeOrderInLayer>k__BackingField: 0
+    <EquipmentSlots>k__BackingField: 
+    <RelativeOrderInLayer>k__BackingField: 5
   - <Path>k__BackingField: 200
+    <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 1500
-    <RelativeOrderInLayer>k__BackingField: 0
+    <EquipmentSlots>k__BackingField: 
+    <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 1520
-    <RelativeOrderInLayer>k__BackingField: 0
+    <EquipmentSlots>k__BackingField: 
+    <RelativeOrderInLayer>k__BackingField: 10
   - <Path>k__BackingField: 1540
-    <RelativeOrderInLayer>k__BackingField: 0
+    <EquipmentSlots>k__BackingField: 
+    <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 1560
-    <RelativeOrderInLayer>k__BackingField: 0
+    <EquipmentSlots>k__BackingField: 
+    <RelativeOrderInLayer>k__BackingField: 10
