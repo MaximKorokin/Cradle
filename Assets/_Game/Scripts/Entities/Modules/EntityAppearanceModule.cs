@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Traits;
 using Assets.CoreScripts;
 
 namespace Assets._Game.Scripts.Entities.Modules
@@ -30,38 +31,30 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnEquipmentChanged(EquipmentChanged e)
         {
-            if (!Entity.TryGetModule<EntityInventoryEquipmentModule>(out var ieModule))
-            {
-                SLog.Warn($"{nameof(EquipmentChanged)} event triggered but no {nameof(EntityInventoryEquipmentModule)} is attached");
-                return;
-            }
-
-            if (ieModule.Equipment == null) return;
-
-            // todo:  set animations
-
+            // Change units
             foreach (var entityUnitVisualModel in _entityVisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
             {
                 var path = $"{entityUnitVisualModel.Path}/{e.Slot.SlotType}";
-                var item = ieModule.Equipment.Get(e.Slot);
-                // item equipped
-                if (item != null)
+                if (e.Kind == EquipmentChangeKind.Equipped)
                 {
                     // todo: check that unit exists
                     var relativeOrderInLayer = e.Slot.SlotType == EquipmentSlotType.Weapon ? -1 : 1;
-                    var unit = _entityUnitFactory.Create(path, item.Value.Definition.Sprite, relativeOrderInLayer);
+                    var unit = _entityUnitFactory.Create(path, e.Item.Value.Definition.Sprite, relativeOrderInLayer);
                     Units.AddUnit(unit);
                 }
-                // item unequipped
-                else
+                else if (e.Kind == EquipmentChangeKind.Unequipped)
                 {
                     Units.RemoveUnit(path);
                 }
             }
-
             Units.UpdateOrderInLayer();
 
-            // read equipment module, update visuals via Units (set sprites, enable/disable units, etc.)
+            // Change animations
+            foreach (var animationTrait in e.Item.Value.Definition.Traits.Select(t => t as AnimationOverrideTrait).Where(t => t != null))
+            {
+                var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationTrait.AnimationClip;
+                Units.AnimatorController.SetAnimation(animationTrait.AnimationKey, animationClip);
+            }
         }
 
         //private void OnDirectionChanged(DirectionChanged e)

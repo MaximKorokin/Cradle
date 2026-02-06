@@ -1,5 +1,7 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
@@ -7,9 +9,14 @@ namespace Assets._Game.Scripts.Entities.Units
     public class EntityUnitsAnimator
     {
         private readonly Animator _animator;
+        private readonly List<KeyValuePair<AnimationClip, AnimationClip>> _animatorOverrides = new();
 
-        public EntityUnitsAnimator(Animator animator)
+        public EntityUnitsAnimator(Animator animator, AnimatorOverrideController animatorController)
         {
+            animatorController.GetOverrides(_animatorOverrides);
+            var wrapper = new AnimatorOverrideController(animatorController);
+            wrapper.ApplyOverrides(_animatorOverrides);
+            animator.runtimeAnimatorController = wrapper;
             _animator = animator;
         }
 
@@ -24,11 +31,19 @@ namespace Assets._Game.Scripts.Entities.Units
             _animator.SetAnimatorValue(key.ToString(), value);
         }
 
+        /// <summary>
+        /// Overrides an animation. If clip is null will return to default clip
+        /// </summary>
         public void SetAnimation(EntityAnimationClipName key, AnimationClip animation)
         {
+            var overrideAnimation = animation;
+            if (animation == null)
+            {
+                overrideAnimation = _animatorOverrides.FirstOrDefault(x => x.Key.name == key.ToString()).Value;
+            }
             if (_animator.runtimeAnimatorController is AnimatorOverrideController overrideController)
             {
-                overrideController[key.ToString()] = animation;
+                overrideController[key.ToString()] = overrideAnimation;
             }
             else
             {

@@ -9,6 +9,7 @@ namespace Assets._Game.Scripts.Items.Equipment
         private readonly Dictionary<EquipmentSlotKey, ItemStack> _slots;
         private readonly IEquipmentRules _rules;
 
+        public event Action<EquipmentChange> EquipmentChanged;
         public event Action<EquipmentSlotKey> SlotChanged;
         public event Action Changed;
 
@@ -78,6 +79,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                     {
                         remaining -= a;
                         added += a;
+                        EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Updated, s.Snapshot));
                         SlotChanged?.Invoke(slot);
                         Changed?.Invoke();
                     }
@@ -97,6 +99,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                 _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
                 remaining -= put;
                 added += put;
+                EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Equipped, _slots[slot].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
             }
@@ -118,6 +121,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
                 _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Equipped, _slots[slot].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
                 return put;
@@ -128,6 +132,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             int added = existing.AddUpTo(snapshot.Amount);
             if (added > 0)
             {
+                EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Updated, existing.Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
             }
@@ -154,7 +159,15 @@ namespace Assets._Game.Scripts.Items.Equipment
                     remaining -= r;
                     removed += r;
 
-                    if (s.Amount == 0) _slots[slot] = null;
+                    if (s.Amount == 0)
+                    {
+                        _slots[slot] = null;
+                        EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Unequipped, s.Snapshot));
+                    }
+                    else
+                    {
+                        EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Updated, s.Snapshot));
+                    }
                     SlotChanged?.Invoke(slot);
                     Changed?.Invoke();
                 }
@@ -174,7 +187,15 @@ namespace Assets._Game.Scripts.Items.Equipment
             int removed = s.RemoveUpTo(amount);
             if (removed > 0)
             {
-                if (s.Amount == 0) _slots[slot] = null;
+                if (s.Amount == 0)
+                {
+                    _slots[slot] = null;
+                    EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Unequipped, s.Snapshot));
+                }
+                else
+                {
+                    EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Updated, s.Snapshot));
+                }
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
             }
@@ -266,5 +287,30 @@ namespace Assets._Game.Scripts.Items.Equipment
 
             return _rules.CanEquip(snapshot);
         }
+    }
+
+    public readonly struct EquipmentChange
+    {
+        public readonly EquipmentSlotKey Slot;
+        public readonly EquipmentChangeKind Kind;
+        public readonly ItemStackSnapshot? Item;
+
+        public EquipmentChange(
+            EquipmentSlotKey slot,
+            EquipmentChangeKind kind,
+            ItemStackSnapshot? item)
+        {
+            Slot = slot;
+            Kind = kind;
+            Item = item;
+        }
+    }
+
+    public enum EquipmentChangeKind
+    {
+        Equipped,
+        Unequipped,
+        Replaced,
+        Updated
     }
 }

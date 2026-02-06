@@ -11,7 +11,7 @@
 
         public EntityUnitsController Create(EntityView entityView, EntityVisualModel entityVisualModel, string variantName)
         {
-            var unitsController = new EntityUnitsController(entityView.UnitsRoot, entityView.UnitsAnimator);
+            var unitsController = new EntityUnitsController(entityView.UnitsRoot, entityView.UnitsAnimator, entityVisualModel.Animator);
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {

@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items;
 using Assets.CoreScripts;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -46,7 +47,6 @@ namespace Assets._Game.Scripts.Entities
         {
             var entityView = _resolver.Instantiate(entityDefinition.VisualModel.BasePrefab);
             entityView.name = $"{entityDefinition.VisualModel} ({++_entitiesCounter})";
-            entityView.UnitsAnimator.runtimeAnimatorController = entityDefinition.VisualModel.Animator;
 
             var entity = new Entity("");
             entity.AddModule(new EntityAttributesModule());

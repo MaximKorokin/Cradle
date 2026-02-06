@@ -20,9 +20,21 @@ MonoBehaviour:
   <Weight>k__BackingField: 100
   <Traits>k__BackingField:
   - rid: 2859158637052690514
+  - rid: 1349792509003825561
+  - rid: 1349792509003825566
   references:
     version: 2
     RefIds:
+    - rid: 1349792509003825561
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <AnimationKey>k__BackingField: 31
+        <AnimationClip>k__BackingField: {fileID: 7400000, guid: 418be04cfd5272b4a83ebb01604c7df7, type: 2}
+    - rid: 1349792509003825566
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <AnimationKey>k__BackingField: 11
+        <AnimationClip>k__BackingField: {fileID: 7400000, guid: 31d3fd30132a40345b52da7a354ee862, type: 2}
     - rid: 2859158637052690514
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

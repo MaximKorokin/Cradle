@@ -1,7 +1,4 @@
-﻿using Assets.CoreScripts;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
@@ -11,11 +8,11 @@ namespace Assets._Game.Scripts.Entities.Units
 
         private readonly Transform _unitsRoot;
 
-        public EntityUnitsController(Transform unitsRoot, Animator animator)
+        public EntityUnitsController(Transform unitsRoot, Animator animator, AnimatorOverrideController animatorController)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot);
-            AnimatorController = new(animator);
+            AnimatorController = new(animator, animatorController);
         }
 
         public EntityUnitsAnimator AnimatorController { get; private set; }
