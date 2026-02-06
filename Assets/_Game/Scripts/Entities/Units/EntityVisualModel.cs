@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Items.Equipment;
+using System;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
@@ -19,6 +20,8 @@ namespace Assets._Game.Scripts.Entities.Units
     {
         [field: SerializeField]
         public EntityVisualModelUnitPath Path { get; private set; }
+        [field: SerializeField]
+        public EquipmentSlotType[] EquipmentSlots { get; private set; }
         [field: SerializeField]
         public int RelativeOrderInLayer { get; private set; }
     }

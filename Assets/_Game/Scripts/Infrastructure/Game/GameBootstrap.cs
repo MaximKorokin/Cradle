@@ -65,9 +65,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         Entity quadruped;
         public void Tick()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<UnitsController>(out var unitsController))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<AppearanceModule>(out var appearanceModule))
             {
-                unitsController.UpdateOrderInLayer();
+                appearanceModule.Units.UpdateOrderInLayer();
 
                 _playerContext.IEModule.Inventory.Add(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52d", 11).Snapshot);
                 _playerContext.StashInventory.Add(_itemStackAssembler.Create("bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338", 1).Snapshot);

@@ -16,14 +16,20 @@ MonoBehaviour:
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
   <Units>k__BackingField:
   - <Path>k__BackingField: 300
+    <EquipmentSlots>k__BackingField: 14000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 200
+    <EquipmentSlots>k__BackingField: 1e000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 400
+    <EquipmentSlots>k__BackingField: 28000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 450
+    <EquipmentSlots>k__BackingField: 280000000a000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 500
+    <EquipmentSlots>k__BackingField: 32000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 550
+    <EquipmentSlots>k__BackingField: 32000000
     <RelativeOrderInLayer>k__BackingField: 0

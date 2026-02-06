@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.Entities
 
             var entity = new Entity("");
             entity.AddModule(new EntityAttributesModule());
-            entity.AddModule(_unitsControllerFactory.Create(entityGameObject, entityDefinition.EntityVisualModelName, entityDefinition.VariantName));
+            entity.AddModule(new AppearanceModule(_unitsControllerFactory.Create(entityGameObject, entityDefinition.EntityVisualModelName, entityDefinition.VariantName)));
             entity.AddModule(new BehaviourController());
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 

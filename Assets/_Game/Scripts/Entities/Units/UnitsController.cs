@@ -8,7 +8,7 @@ namespace Assets._Game.Scripts.Entities.Units
     /// <summary>
     /// In other words - EntityVisual
     /// </summary>
-    public class UnitsController : IEntityModule
+    public class UnitsController
     {
         private readonly Dictionary<string, Unit> _units = new();
 

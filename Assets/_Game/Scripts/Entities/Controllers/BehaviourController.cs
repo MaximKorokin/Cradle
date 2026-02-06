@@ -2,7 +2,7 @@
 
 namespace Assets._Game.Scripts.Entities.Controllers
 {
-    public class BehaviourController : IEntityModule
+    public class BehaviourController : EntityModuleBase
     {
 
     }
