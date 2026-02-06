@@ -14,13 +14,13 @@ namespace Assets._Game.Scripts.Entities
         private static int _entitiesCounter = 0;
 
         private readonly IObjectResolver _resolver;
-        private readonly InventoryEquipmentControllerAssembler _inventoryEquipmentControllerAssembler;
-        private readonly AppearanceModuleFactory _appearanceModuleFactory;
+        private readonly EntityInventoryEquipmentModuleAssembler _inventoryEquipmentControllerAssembler;
+        private readonly EntityAppearanceModuleFactory _appearanceModuleFactory;
 
         public EntityAssembler(
             IObjectResolver resolver,
-            InventoryEquipmentControllerAssembler inventoryEquipmentControllerAssembler,
-            AppearanceModuleFactory appearanceModuleFactory)
+            EntityInventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
+            EntityAppearanceModuleFactory appearanceModuleFactory)
         {
             _resolver = resolver;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;

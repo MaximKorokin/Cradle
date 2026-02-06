@@ -1,17 +1,15 @@
-﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Persistence;
+﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 
-namespace Assets._Game.Scripts.Items
+namespace Assets._Game.Scripts.Entities.Modules
 {
-    public class InventoryEquipmentControllerAssembler
+    public class EntityInventoryEquipmentModuleAssembler
     {
         private readonly InventoryModelAssembler _inventoryModelAssembler;
         private readonly EquipmentModelAssembler _equipmentModelAssembler;
 
-        public InventoryEquipmentControllerAssembler(InventoryModelAssembler inventoryModelAssembler, EquipmentModelAssembler equipmentModelAssembler)
+        public EntityInventoryEquipmentModuleAssembler(InventoryModelAssembler inventoryModelAssembler, EquipmentModelAssembler equipmentModelAssembler)
         {
             _inventoryModelAssembler = inventoryModelAssembler;
             _equipmentModelAssembler = equipmentModelAssembler;

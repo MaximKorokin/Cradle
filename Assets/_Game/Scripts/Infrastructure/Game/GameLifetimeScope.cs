@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
@@ -49,7 +50,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
 
-            builder.Register<AppearanceModuleFactory>(Lifetime.Scoped);
+            builder.Register<EntityAppearanceModuleFactory>(Lifetime.Scoped);
             builder.Register<EntityUnitFactory>(Lifetime.Scoped);
             builder.Register<EntityUnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
@@ -60,7 +61,7 @@ namespace Assets._Game.Scripts.Infrastructure
         {
             builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
             builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
-            builder.Register<InventoryEquipmentControllerAssembler>(Lifetime.Scoped);
+            builder.Register<EntityInventoryEquipmentModuleAssembler>(Lifetime.Scoped);
         }
 
         private void RegisterItemFeature(IContainerBuilder builder)

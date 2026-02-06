@@ -5,12 +5,12 @@ using Assets.CoreScripts;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class AppearanceModule : EntityModuleBase
+    public sealed class EntityAppearanceModule : EntityModuleBase
     {
         private readonly EntityUnitFactory _entityUnitFactory;
         private readonly EntityVisualModel _entityVisualModel;
 
-        public AppearanceModule(EntityVisualModel entityVisualModel, EntityUnitsController units, EntityUnitFactory entityUnitFactory)
+        public EntityAppearanceModule(EntityVisualModel entityVisualModel, EntityUnitsController units, EntityUnitFactory entityUnitFactory)
         {
             Units = units;
             _entityVisualModel = entityVisualModel;

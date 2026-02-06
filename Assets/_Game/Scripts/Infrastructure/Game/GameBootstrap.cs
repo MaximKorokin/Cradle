@@ -64,7 +64,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         Entity quadruped;
         public void Tick()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<AppearanceModule>(out var appearanceModule))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<EntityAppearanceModule>(out var appearanceModule))
             {
                 appearanceModule.Units.UpdateOrderInLayer();
 
