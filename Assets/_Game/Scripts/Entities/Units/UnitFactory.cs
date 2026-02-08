@@ -3,23 +3,23 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public sealed class EntityUnitFactory
+    public sealed class UnitFactory
     {
-        private readonly EntityUnitVariantsCatalog _entityUnitVariantsCatalog;
+        private readonly UnitVariantsCatalog _entityUnitVariantsCatalog;
 
-        public EntityUnitFactory(EntityUnitVariantsCatalog entityUnitVariantsCatalog)
+        public UnitFactory(UnitVariantsCatalog entityUnitVariantsCatalog)
         {
             _entityUnitVariantsCatalog = entityUnitVariantsCatalog;
         }
 
-        public EntityUnit Create(string path, int relativeOrderInLayer)
+        public Unit Create(string path, int relativeOrderInLayer)
         {
             var entityUnitGameObject = CreateUnit(path);
-            var entityUnit = new EntityUnit(entityUnitGameObject, path, relativeOrderInLayer);
+            var entityUnit = new Unit(entityUnitGameObject, path, relativeOrderInLayer);
             return entityUnit;
         }
 
-        public EntityUnit Create(EntityUnitVisualModel entityUnitVisualModel, string variantName)
+        public Unit Create(EntityUnitVisualModel entityUnitVisualModel, string variantName)
         {
             var unitVariants = _entityUnitVariantsCatalog.GetUnit(entityUnitVisualModel.Path);
             if (unitVariants == null)
@@ -36,7 +36,7 @@ namespace Assets._Game.Scripts.Entities.Units
             }
 
             var entityUnitGameObject = CreateUnit(entityUnitVisualModel.Path.ToString());
-            var entityUnit = new EntityUnit(entityUnitGameObject, entityUnitVisualModel.Path.ToString(), entityUnitVisualModel.RelativeOrderInLayer);
+            var entityUnit = new Unit(entityUnitGameObject, entityUnitVisualModel.Path.ToString(), entityUnitVisualModel.RelativeOrderInLayer);
 
             entityUnit.SetSprite(unitVariant.Sprite);
 

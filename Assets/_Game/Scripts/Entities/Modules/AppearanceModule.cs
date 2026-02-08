@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class EntityAppearanceModule : EntityModuleBase
+    public sealed class AppearanceModule : EntityModuleBase
     {
-        private readonly EntityUnitsController _units;
-        private readonly EntityUnitFactory _entityUnitFactory;
+        private readonly UnitsController _units;
+        private readonly UnitFactory _entityUnitFactory;
 
-        public EntityAppearanceModule(EntityUnitsController units, EntityUnitFactory entityUnitFactory)
+        public AppearanceModule(UnitsController units, UnitFactory entityUnitFactory)
         {
             _units = units;
             _entityUnitFactory = entityUnitFactory;
         }
 
-        public EntityUnit EnsureUnit(string path, int relativeOrderInLayer)
+        public Unit EnsureUnit(string path, int relativeOrderInLayer)
         {
             var unit = _units.GetUnit(path);
             if (unit != null)

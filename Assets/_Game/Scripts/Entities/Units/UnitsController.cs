@@ -2,29 +2,29 @@
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityUnitsController
+    public class UnitsController
     {
-        private readonly EntityUnitTree _tree;
+        private readonly UnitTree _tree;
 
         private readonly Transform _unitsRoot;
 
-        public EntityUnitsController(Transform unitsRoot, Animator animator, AnimatorOverrideController animatorController)
+        public UnitsController(Transform unitsRoot, Animator animator, AnimatorOverrideController animatorController)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot);
             AnimatorController = new(animator, animatorController);
         }
 
-        public EntityUnitsAnimator AnimatorController { get; private set; }
+        public UnitsAnimator AnimatorController { get; private set; }
 
-        public void AddUnit(EntityUnit entityUnit)
+        public void AddUnit(Unit entityUnit)
         {
             _tree.Add(entityUnit);
 
             AnimatorController.Rebind();
         }
 
-        public EntityUnit GetUnit(string path)
+        public Unit GetUnit(string path)
         {
             return _tree.TryGet(path, out var unit) ? unit : null;
         }

@@ -7,13 +7,13 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     public sealed class PlayerContext
     {
         public Entity Player { get; private set; }
-        public EntityInventoryEquipmentModule IEModule { get; private set; }
+        public InventoryEquipmentModule IEModule { get; private set; }
         public InventoryModel StashInventory { get; private set; }
 
         public void SetPlayer(Entity player)
         {
             Player = player;
-            if (Player.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
+            if (Player.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
             {
                 IEModule = inventoryEquipmentModule;
             }

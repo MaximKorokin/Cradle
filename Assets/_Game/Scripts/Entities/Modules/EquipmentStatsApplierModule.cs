@@ -8,9 +8,9 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class EquipmentStatsApplierModule : EntityModuleBase
     {
-        private readonly EntityStatsModule _stats;
+        private readonly StatsModule _stats;
 
-        public EquipmentStatsApplierModule(EntityStatsModule stats)
+        public EquipmentStatsApplierModule(StatsModule stats)
         {
             _stats = stats;
         }

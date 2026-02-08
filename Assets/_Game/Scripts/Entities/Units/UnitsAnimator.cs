@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityUnitsAnimator
+    public class UnitsAnimator
     {
         private readonly Animator _animator;
         private readonly List<KeyValuePair<AnimationClip, AnimationClip>> _animatorOverrides = new();
 
-        public EntityUnitsAnimator(Animator animator, AnimatorOverrideController animatorController)
+        public UnitsAnimator(Animator animator, AnimatorOverrideController animatorController)
         {
             animatorController.GetOverrides(_animatorOverrides);
             var wrapper = new AnimatorOverrideController(animatorController);

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets._Game.Scripts.Entities.Units
 {
     [CreateAssetMenu(fileName = "UnitVariants", menuName = "ScriptableObjects/EntityUnitVariants")]
-    public class EntityUnitVariants : ScriptableObject
+    public class UnitVariants : ScriptableObject
     {
         [field: SerializeField]
         public EntityVisualModelUnitPath Path { get; private set; }

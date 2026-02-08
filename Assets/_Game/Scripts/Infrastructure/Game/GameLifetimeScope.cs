@@ -54,18 +54,18 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<StatsModuleAssembler>(Lifetime.Scoped);
             builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
 
-            builder.Register<EntityAppearanceModuleFactory>(Lifetime.Scoped);
-            builder.Register<EntityUnitFactory>(Lifetime.Scoped);
-            builder.Register<EntityUnitsControllerFactory>(Lifetime.Scoped);
+            builder.Register<AppearanceModuleFactory>(Lifetime.Scoped);
+            builder.Register<UnitFactory>(Lifetime.Scoped);
+            builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
-            builder.Register<EntityUnitVariantsCatalog>(Lifetime.Scoped);
+            builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
         }
 
         private void RegisterInventoryFeature(IContainerBuilder builder)
         {
             builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
             builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
-            builder.Register<EntityInventoryEquipmentModuleAssembler>(Lifetime.Scoped);
+            builder.Register<InventoryEquipmentModuleAssembler>(Lifetime.Scoped);
         }
 
         private void RegisterItemFeature(IContainerBuilder builder)

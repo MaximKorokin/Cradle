@@ -12,14 +12,14 @@ namespace Assets._Game.Scripts.Entities
         private static int _entitiesCounter = 0;
 
         private readonly IObjectResolver _resolver;
-        private readonly EntityInventoryEquipmentModuleAssembler _inventoryEquipmentControllerAssembler;
-        private readonly EntityAppearanceModuleFactory _appearanceModuleFactory;
+        private readonly InventoryEquipmentModuleAssembler _inventoryEquipmentControllerAssembler;
+        private readonly AppearanceModuleFactory _appearanceModuleFactory;
         private readonly StatsModuleAssembler _statsModuleAssembler;
 
         public EntityAssembler(
             IObjectResolver resolver,
-            EntityInventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
-            EntityAppearanceModuleFactory appearanceModuleFactory,
+            InventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
+            AppearanceModuleFactory appearanceModuleFactory,
             StatsModuleAssembler statsModuleAssembler)
         {
             _resolver = resolver;
@@ -36,7 +36,7 @@ namespace Assets._Game.Scripts.Entities
                 SLog.Error($"Cannot create entity with id: {entityDefinition.VisualModel}");
                 return null;
             }
-            if (entity.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
+            if (entity.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
             {
                 _inventoryEquipmentControllerAssembler.Apply(inventoryEquipmentModule, save);
             }
@@ -65,7 +65,7 @@ namespace Assets._Game.Scripts.Entities
         public EntitySave Save(Entity entity)
         {
             var save = new EntitySave();
-            if (entity.TryGetModule<EntityInventoryEquipmentModule>(out var inventoryEquipmentModule))
+            if (entity.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
             {
                 var inventoryEquipmentSave = _inventoryEquipmentControllerAssembler.Save(inventoryEquipmentModule);
                 save.InventorySave = inventoryEquipmentSave.InventorySave;

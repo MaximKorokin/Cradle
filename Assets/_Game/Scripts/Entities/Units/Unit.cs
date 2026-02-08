@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityUnit
+    public class Unit
     {
         public string Path { get; }
         public GameObject GameObject { get; }
@@ -11,10 +11,10 @@ namespace Assets._Game.Scripts.Entities.Units
 
         public int RelativeOrderInLayer { get; set; }
 
-        public EntityUnit Parent { get; internal set; }
-        public List<EntityUnit> Children { get; } = new();
+        public Unit Parent { get; internal set; }
+        public List<Unit> Children { get; } = new();
 
-        public EntityUnit(GameObject gameObject, string path, int relativeOrderInLayer)
+        public Unit(GameObject gameObject, string path, int relativeOrderInLayer)
         {
             GameObject = gameObject;
             Path = path;

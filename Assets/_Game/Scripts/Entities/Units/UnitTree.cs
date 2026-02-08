@@ -5,24 +5,24 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public sealed class EntityUnitTree
+    public sealed class UnitTree
     {
         private readonly Transform _unitsRoot;
 
-        private readonly Dictionary<string, EntityUnit> _byPath = new();
-        private readonly HashSet<EntityUnit> _roots = new();
-        private readonly Dictionary<string, List<EntityUnit>> _pendingByParentPath = new();
+        private readonly Dictionary<string, Unit> _byPath = new();
+        private readonly HashSet<Unit> _roots = new();
+        private readonly Dictionary<string, List<Unit>> _pendingByParentPath = new();
 
-        public IReadOnlyCollection<EntityUnit> Roots => _roots;
+        public IReadOnlyCollection<Unit> Roots => _roots;
 
-        public EntityUnitTree(Transform unitsRoot)
+        public UnitTree(Transform unitsRoot)
         {
             _unitsRoot = unitsRoot ? unitsRoot : throw new ArgumentNullException(nameof(unitsRoot));
         }
 
-        public bool TryGet(string path, out EntityUnit unit) => _byPath.TryGetValue(path, out unit);
+        public bool TryGet(string path, out Unit unit) => _byPath.TryGetValue(path, out unit);
 
-        public void Add(EntityUnit unit)
+        public void Add(Unit unit)
         {
             if (unit == null) throw new ArgumentNullException(nameof(unit));
             if (_byPath.ContainsKey(unit.Path))
@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.Entities.Units
                 return false;
 
             // Collect subtree (post-order or pre-order doesn't matter for Destroy, but we need a stable list)
-            var toRemove = new List<EntityUnit>();
+            var toRemove = new List<Unit>();
             ExecuteDepthFirst(root, u => toRemove.Add(u));
 
             // Detach subtree root from parent (or roots set)
@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.Entities.Units
             return true;
         }
 
-        public void ExecuteAllDepthFirst(Action<EntityUnit> action)
+        public void ExecuteAllDepthFirst(Action<Unit> action)
         {
             foreach (var r in _roots)
                 ExecuteDepthFirst(r, action);
@@ -98,14 +98,14 @@ namespace Assets._Game.Scripts.Entities.Units
 
         // ---------------- internals ----------------
 
-        private static void ExecuteDepthFirst(EntityUnit root, Action<EntityUnit> action)
+        private static void ExecuteDepthFirst(Unit root, Action<Unit> action)
         {
             action(root);
             for (int i = 0; i < root.Children.Count; i++)
                 ExecuteDepthFirst(root.Children[i], action);
         }
 
-        private void AttachChild(EntityUnit parent, EntityUnit child)
+        private void AttachChild(Unit parent, Unit child)
         {
             _roots.Remove(child);
 
@@ -119,7 +119,7 @@ namespace Assets._Game.Scripts.Entities.Units
             child.GameObject.transform.localPosition = Vector3.zero;
         }
 
-        private void MakeRoot(EntityUnit unit)
+        private void MakeRoot(Unit unit)
         {
             unit.Parent = null;
             _roots.Add(unit);
@@ -128,7 +128,7 @@ namespace Assets._Game.Scripts.Entities.Units
             unit.GameObject.transform.localPosition = Vector3.zero;
         }
 
-        private void DetachFromParentOrRoots(EntityUnit unit)
+        private void DetachFromParentOrRoots(Unit unit)
         {
             if (unit.Parent != null)
             {
@@ -141,16 +141,16 @@ namespace Assets._Game.Scripts.Entities.Units
             }
         }
 
-        private void AddPending(string parentPath, EntityUnit child)
+        private void AddPending(string parentPath, Unit child)
         {
             if (!_pendingByParentPath.TryGetValue(parentPath, out var list))
-                _pendingByParentPath[parentPath] = list = new List<EntityUnit>();
+                _pendingByParentPath[parentPath] = list = new List<Unit>();
 
             if (!list.Contains(child))
                 list.Add(child);
         }
 
-        private void AttachPendingChildren(EntityUnit newParent)
+        private void AttachPendingChildren(Unit newParent)
         {
             if (!_pendingByParentPath.TryGetValue(newParent.Path, out var list) || list.Count == 0)
                 return;
@@ -174,7 +174,7 @@ namespace Assets._Game.Scripts.Entities.Units
             return string.IsNullOrEmpty(parent) ? null : parent;
         }
 
-        private static void ApplyOrderRecursive(EntityUnit unit, int parentOrder)
+        private static void ApplyOrderRecursive(Unit unit, int parentOrder)
         {
             // Order is relative to the immediate parent
             int myOrder = parentOrder + unit.RelativeOrderInLayer;

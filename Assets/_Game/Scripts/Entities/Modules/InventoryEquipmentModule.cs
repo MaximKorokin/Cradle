@@ -4,9 +4,9 @@ using Assets._Game.Scripts.Items.Inventory;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public class EntityInventoryEquipmentModule : EntityModuleBase
+    public class InventoryEquipmentModule : EntityModuleBase
     {
-        public EntityInventoryEquipmentModule(InventoryModel inventory, EquipmentModel equipment)
+        public InventoryEquipmentModule(InventoryModel inventory, EquipmentModel equipment)
         {
             Inventory = inventory;
             Equipment = equipment;

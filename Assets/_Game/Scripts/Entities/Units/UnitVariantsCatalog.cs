@@ -5,23 +5,23 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityUnitVariantsCatalog
+    public class UnitVariantsCatalog
     {
-        private readonly Dictionary<EntityVisualModelUnitPath, EntityUnitVariants> _variants;
+        private readonly Dictionary<EntityVisualModelUnitPath, UnitVariants> _variants;
 
-        public EntityUnitVariantsCatalog()
+        public UnitVariantsCatalog()
         {
-            _variants = Resources.LoadAll<EntityUnitVariants>("").ToDictionary(x => x.Path, x => x);
+            _variants = Resources.LoadAll<UnitVariants>("").ToDictionary(x => x.Path, x => x);
         }
 
-        public EntityUnitVariants GetUnit(EntityVisualModelUnitPath path)
+        public UnitVariants GetUnit(EntityVisualModelUnitPath path)
         {
             if (_variants.TryGetValue(path, out var itemDefinition))
             {
                 return itemDefinition;
             }
 
-            SLog.Error($"{nameof(EntityUnitVariants)} with {nameof(EntityUnitVariants.Path)} '{path}' not found in catalog.");
+            SLog.Error($"{nameof(UnitVariants)} with {nameof(UnitVariants.Path)} '{path}' not found in catalog.");
             return null;
         }
 

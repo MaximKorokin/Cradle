@@ -11,7 +11,7 @@ namespace Assets._Game.Scripts.Entities.Stats
 
     public class StatsController : IStatsReadOnly
     {
-        private readonly Dictionary<StatId, EntityStat> _stats = new();
+        private readonly Dictionary<StatId, Stat> _stats = new();
 
         public event Action<StatId> StatChanged;
         public event Action Changed;
@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         public StatsController(IEnumerable<(StatId Id, float BaseValue)> initial)
         {
             foreach (var (id, baseValue) in initial)
-                _stats[id] = new EntityStat(baseValue);
+                _stats[id] = new Stat(baseValue);
         }
 
         public bool Has(StatId id) => _stats.ContainsKey(id);
@@ -69,10 +69,10 @@ namespace Assets._Game.Scripts.Entities.Stats
             }
         }
 
-        private EntityStat GetOrCreate(StatId id)
+        private Stat GetOrCreate(StatId id)
         {
             if (_stats.TryGetValue(id, out var s)) return s;
-            s = new EntityStat(0);
+            s = new Stat(0);
             _stats[id] = s;
             return s;
         }

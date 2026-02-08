@@ -8,10 +8,10 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class EquipmentAppearanceApplierModule : EntityModuleBase
     {
-        private readonly EntityAppearanceModule _appearance;
+        private readonly AppearanceModule _appearance;
         private readonly EntityVisualModel _entityVisualModel;
 
-        public EquipmentAppearanceApplierModule(EntityAppearanceModule appearance, EntityVisualModel entityVisualModel)
+        public EquipmentAppearanceApplierModule(AppearanceModule appearance, EntityVisualModel entityVisualModel)
         {
             _appearance = appearance;
             _entityVisualModel = entityVisualModel;

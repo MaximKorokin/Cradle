@@ -4,32 +4,32 @@ using Assets._Game.Scripts.Items.Inventory;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public class EntityInventoryEquipmentModuleAssembler
+    public class InventoryEquipmentModuleAssembler
     {
         private readonly InventoryModelAssembler _inventoryModelAssembler;
         private readonly EquipmentModelAssembler _equipmentModelAssembler;
 
-        public EntityInventoryEquipmentModuleAssembler(InventoryModelAssembler inventoryModelAssembler, EquipmentModelAssembler equipmentModelAssembler)
+        public InventoryEquipmentModuleAssembler(InventoryModelAssembler inventoryModelAssembler, EquipmentModelAssembler equipmentModelAssembler)
         {
             _inventoryModelAssembler = inventoryModelAssembler;
             _equipmentModelAssembler = equipmentModelAssembler;
         }
 
-        public EntityInventoryEquipmentModule Apply(EntityInventoryEquipmentModule entityInventoryEquipmentModule, EntitySave entitySave)
+        public InventoryEquipmentModule Apply(InventoryEquipmentModule entityInventoryEquipmentModule, EntitySave entitySave)
         {
             _inventoryModelAssembler.Apply(entityInventoryEquipmentModule.Inventory, entitySave.InventorySave);
             _equipmentModelAssembler.Apply(entityInventoryEquipmentModule.Equipment, entitySave.EquipmentSave);
             return entityInventoryEquipmentModule;
         }
 
-        public EntityInventoryEquipmentModule Create(EntityDefinition entityDefinition)
+        public InventoryEquipmentModule Create(EntityDefinition entityDefinition)
         {
             var inventoryModel = _inventoryModelAssembler.Create(entityDefinition);
             var equipmentModel = _equipmentModelAssembler.Create(entityDefinition);
-            return new EntityInventoryEquipmentModule(inventoryModel, equipmentModel);
+            return new InventoryEquipmentModule(inventoryModel, equipmentModel);
         }
 
-        public (InventorySave InventorySave, EquipmentSave EquipmentSave) Save(EntityInventoryEquipmentModule entityInventoryEquipmentModule)
+        public (InventorySave InventorySave, EquipmentSave EquipmentSave) Save(InventoryEquipmentModule entityInventoryEquipmentModule)
         {
             var inventorySave = _inventoryModelAssembler.Save(entityInventoryEquipmentModule.Inventory);
             var equipmentSave = _equipmentModelAssembler.Save(entityInventoryEquipmentModule.Equipment);

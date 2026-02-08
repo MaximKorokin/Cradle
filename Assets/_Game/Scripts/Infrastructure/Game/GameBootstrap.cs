@@ -64,7 +64,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         Entity quadruped;
         public void Tick()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<EntityAppearanceModule>(out var appearanceModule))
+            if (Input.GetKeyDown(KeyCode.Alpha1) && humanoid.TryGetModule<AppearanceModule>(out var appearanceModule))
             {
                 _playerContext.IEModule.Inventory.Add(_itemStackAssembler.Create("e734e88a-6451-49f7-9777-bc1f36caa52d", 11).Snapshot);
                 _playerContext.IEModule.Inventory.Add(_itemStackAssembler.Create("780db064-ca6a-4b9d-bc23-64e34a86403e", 2).Snapshot);

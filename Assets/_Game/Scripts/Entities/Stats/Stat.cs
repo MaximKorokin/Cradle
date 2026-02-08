@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Stats
 {
-    public sealed class EntityStat
+    public sealed class Stat
     {
         private const float MinMultiplier = 0.05f;
         private const float MaxMultiplier = 10f;
 
         private readonly List<(object Source, StatModifier Modifier)> _modifiers = new();
 
-        public EntityStat(float baseValue)
+        public Stat(float baseValue)
         {
             BaseValue = baseValue;
         }
