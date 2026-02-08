@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
@@ -49,6 +50,9 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
+
+            builder.Register<StatsModuleAssembler>(Lifetime.Scoped);
+            builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
 
             builder.Register<EntityAppearanceModuleFactory>(Lifetime.Scoped);
             builder.Register<EntityUnitFactory>(Lifetime.Scoped);

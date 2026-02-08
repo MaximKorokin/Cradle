@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnEquipmentSlotChanged(EquipmentChange equipmentChange)
         {
-            Publish(new EquipmentChanged(equipmentChange));
+            Publish(new EquipmentChangedEvent(equipmentChange));
         }
 
         public override void Dispose()
@@ -29,20 +29,20 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public readonly struct EquipmentChanged : IEntityEvent
+    public readonly struct EquipmentChangedEvent : IEntityEvent
     {
         public readonly EquipmentSlotKey Slot;
         public readonly ItemStackSnapshot? Item;
         public readonly EquipmentChangeKind Kind;
 
-        public EquipmentChanged(EquipmentSlotKey slot, ItemStackSnapshot? item, EquipmentChangeKind kind)
+        public EquipmentChangedEvent(EquipmentSlotKey slot, ItemStackSnapshot? item, EquipmentChangeKind kind)
         {
             Slot = slot;
             Item = item;
             Kind = kind;
         }
 
-        public EquipmentChanged(EquipmentChange equipmentChange)
+        public EquipmentChangedEvent(EquipmentChange equipmentChange)
         {
             Slot = equipmentChange.Slot;
             Item = equipmentChange.Item;

@@ -17,7 +17,6 @@ MonoBehaviour:
   <VariantName>k__BackingField: Human
   _modules:
   - rid: 1349792420369268909
-  - rid: 1349792420369268910
   - rid: 1349792420369268911
   - rid: 1349792420369268912
   references:
@@ -28,10 +27,6 @@ MonoBehaviour:
       data:
         Enabled: 1
         BehaviorTreeId: 
-    - rid: 1349792420369268910
-      type: {class: AttributesDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
     - rid: 1349792420369268911
       type: {class: EquipmentDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

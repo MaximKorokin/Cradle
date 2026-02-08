@@ -12,11 +12,10 @@ namespace Assets._Game.Scripts.Entities.Units
             _entityUnitVariantsCatalog = entityUnitVariantsCatalog;
         }
 
-        public EntityUnit Create(string path, Sprite sprite, int relativeOrderInLayer)
+        public EntityUnit Create(string path, int relativeOrderInLayer)
         {
             var entityUnitGameObject = CreateUnit(path);
             var entityUnit = new EntityUnit(entityUnitGameObject, path, relativeOrderInLayer);
-            entityUnit.Set(sprite);
             return entityUnit;
         }
 
@@ -39,7 +38,7 @@ namespace Assets._Game.Scripts.Entities.Units
             var entityUnitGameObject = CreateUnit(entityUnitVisualModel.Path.ToString());
             var entityUnit = new EntityUnit(entityUnitGameObject, entityUnitVisualModel.Path.ToString(), entityUnitVisualModel.RelativeOrderInLayer);
 
-            entityUnit.Set(unitVariant.Sprite);
+            entityUnit.SetSprite(unitVariant.Sprite);
 
             return entityUnit;
         }

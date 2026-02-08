@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.Entities.Units
             RelativeOrderInLayer = relativeOrderInLayer;
         }
 
-        public void Set(Sprite sprite)
+        public void SetSprite(Sprite sprite)
         {
             SpriteRenderer.sprite = sprite;
         }

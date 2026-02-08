@@ -2,27 +2,17 @@
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Shared.Extensions
 {
     public static class ItemStackExtensions
     {
-        //public static bool CanAddTo(this ItemStackSnapshot source, ItemStackSnapshot target)
-        //{
-        //    return source != default(ItemStackSnapshot)
-        //        && target != default
-        //        && source.Definition.Id == target.Definition.Id
-        //        && source.InstanceData is IImmutableItemInstanceData sourceImmutableInstanceData
-        //        && target.InstanceData is IImmutableItemInstanceData targetImmutableInstanceData
-        //        && sourceImmutableInstanceData.GetStackingKey() == targetImmutableInstanceData.GetStackingKey()
-        //        && target.Amount < target.Definition.MaxAmount;
-        //}
-
-        //public static bool CanAddToCompletely(this ItemStack source, ItemStack target)
-        //{
-        //    return CanAddTo(source, target) && source.Amount + target.Amount <= target.Definition.MaxAmount;
-        //}
+        public static IEnumerable<T> GetTraits<T>(this ItemStackSnapshot itemStack)
+        {
+            return itemStack.Definition.Traits.Where(t => t is T).Cast<T>();
+        }
 
         public static EquippableTrait GetEquippableTrait(this ItemStackSnapshot itemStack)
         {

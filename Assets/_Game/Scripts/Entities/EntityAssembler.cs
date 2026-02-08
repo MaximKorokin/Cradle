@@ -1,10 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Controllers;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Persistence;
-using Assets._Game.Scripts.Items;
 using Assets.CoreScripts;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -17,15 +14,18 @@ namespace Assets._Game.Scripts.Entities
         private readonly IObjectResolver _resolver;
         private readonly EntityInventoryEquipmentModuleAssembler _inventoryEquipmentControllerAssembler;
         private readonly EntityAppearanceModuleFactory _appearanceModuleFactory;
+        private readonly StatsModuleAssembler _statsModuleAssembler;
 
         public EntityAssembler(
             IObjectResolver resolver,
             EntityInventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
-            EntityAppearanceModuleFactory appearanceModuleFactory)
+            EntityAppearanceModuleFactory appearanceModuleFactory,
+            StatsModuleAssembler statsModuleAssembler)
         {
             _resolver = resolver;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
             _appearanceModuleFactory = appearanceModuleFactory;
+            _statsModuleAssembler = statsModuleAssembler;
         }
 
         public Entity Assemble(EntityDefinition entityDefinition, EntitySave save)
@@ -49,8 +49,13 @@ namespace Assets._Game.Scripts.Entities
             entityView.name = $"{entityDefinition.VisualModel} ({++_entitiesCounter})";
 
             var entity = new Entity("");
-            entity.AddModule(new EntityAttributesModule());
-            entity.AddModule(_appearanceModuleFactory.Create(entityView, entityDefinition));
+
+            entity.AddModule(_statsModuleAssembler.Create());
+
+            var appearanceModule = _appearanceModuleFactory.Create(entityView, entityDefinition);
+            entity.AddModule(appearanceModule);
+            entity.AddModule(new EquipmentAppearanceApplierModule(appearanceModule, entityDefinition.VisualModel));
+
             entity.AddModule(new BehaviourController());
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 

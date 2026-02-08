@@ -16,17 +16,11 @@ MonoBehaviour:
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 58de46050ff02bb4fad6d51101aaa25f, type: 2}
   <VariantName>k__BackingField: Dog
   _modules:
-  - rid: 1349792420369268905
-  - rid: 1349792420369268908
+  - rid: 1349792557472153683
   references:
     version: 2
     RefIds:
-    - rid: 1349792420369268905
-      type: {class: AttributesDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+    - rid: 1349792557472153683
+      type: {class: StatsDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-    - rid: 1349792420369268908
-      type: {class: AiDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        BehaviorTreeId: 

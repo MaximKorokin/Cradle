@@ -20,9 +20,29 @@ MonoBehaviour:
   <Weight>k__BackingField: 80
   <Traits>k__BackingField:
   - rid: 2859158637052690515
+  - rid: 1349792551833698424
   references:
     version: 2
     RefIds:
+    - rid: 1349792551833698424
+      type: {class: StatModifiersTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Modifiers>k__BackingField:
+        - <Stat>k__BackingField: 310
+          <Stage>k__BackingField: 20
+          <Operation>k__BackingField: 10
+          <Value>k__BackingField: 2
+          <Priority>k__BackingField: 1
+        - <Stat>k__BackingField: 300
+          <Stage>k__BackingField: 50
+          <Operation>k__BackingField: 30
+          <Value>k__BackingField: 0.1
+          <Priority>k__BackingField: 1
+        - <Stat>k__BackingField: 300
+          <Stage>k__BackingField: 60
+          <Operation>k__BackingField: 40
+          <Value>k__BackingField: 0.1
+          <Priority>k__BackingField: 1
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

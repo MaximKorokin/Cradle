@@ -1,4 +1,6 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Items.Equipment;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
@@ -17,19 +19,31 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public GameSave Load(string key) => _serializer.Deserialize<GameSave>(_storage.LoadText(key));
     }
 
-    public class GameSave
+    public sealed class GameSave
     {
         public int Version;
         public long SavedAtUtc;
         public EntitySave PlayerSave;
     }
 
-    public class EntitySave
+    public sealed class EntitySave
     {
         public string EntityId;
         public string DefinitionId;
         public InventorySave InventorySave;
         public EquipmentSave EquipmentSave;
+        public StatsSave StatsSave;
+    }
+
+    public sealed class StatsSave
+    {
+        public List<StatBaseSave> BaseValues = new();
+    }
+
+    public sealed class StatBaseSave
+    {
+        public StatId Id;
+        public float Value;
     }
 
     public sealed class InventorySlotSave

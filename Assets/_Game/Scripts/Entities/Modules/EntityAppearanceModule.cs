@@ -1,65 +1,60 @@
-﻿using System.Linq;
-using Assets._Game.Scripts.Entities.Units;
-using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.Items.Traits;
-using Assets.CoreScripts;
+﻿using Assets._Game.Scripts.Entities.Units;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class EntityAppearanceModule : EntityModuleBase
     {
+        private readonly EntityUnitsController _units;
         private readonly EntityUnitFactory _entityUnitFactory;
-        private readonly EntityVisualModel _entityVisualModel;
 
-        public EntityAppearanceModule(EntityVisualModel entityVisualModel, EntityUnitsController units, EntityUnitFactory entityUnitFactory)
+        public EntityAppearanceModule(EntityUnitsController units, EntityUnitFactory entityUnitFactory)
         {
-            Units = units;
-            _entityVisualModel = entityVisualModel;
+            _units = units;
             _entityUnitFactory = entityUnitFactory;
         }
 
-        public EntityUnitsController Units { get; }
-
-        protected override void OnAttach()
+        public EntityUnit EnsureUnit(string path, int relativeOrderInLayer)
         {
-            base.OnAttach();
+            var unit = _units.GetUnit(path);
+            if (unit != null)
+            {
+                unit.RelativeOrderInLayer = relativeOrderInLayer;
+                return unit;
+            }
 
-            Subscribe<EquipmentChanged>(OnEquipmentChanged);
-            //Subscribe<DirectionChanged>(OnDirectionChanged);
-            //Subscribe<PositionChanged>(...) UpdateOrderInLayer
+            unit = _entityUnitFactory.Create(path, relativeOrderInLayer);
+            _units.AddUnit(unit);
+            return unit;
         }
 
-        private void OnEquipmentChanged(EquipmentChanged e)
+        public void SetUnitSprite(string path, Sprite sprite)
         {
-            // Change units
-            foreach (var entityUnitVisualModel in _entityVisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
+            var unit = _units.GetUnit(path);
+            if (unit != null)
             {
-                var path = $"{entityUnitVisualModel.Path}/{e.Slot.SlotType}";
-                if (e.Kind == EquipmentChangeKind.Equipped)
-                {
-                    // todo: check that unit exists
-                    var relativeOrderInLayer = e.Slot.SlotType == EquipmentSlotType.Weapon ? -1 : 1;
-                    var unit = _entityUnitFactory.Create(path, e.Item.Value.Definition.Sprite, relativeOrderInLayer);
-                    Units.AddUnit(unit);
-                }
-                else if (e.Kind == EquipmentChangeKind.Unequipped)
-                {
-                    Units.RemoveUnit(path);
-                }
-            }
-            Units.UpdateOrderInLayer();
-
-            // Change animations
-            foreach (var animationTrait in e.Item.Value.Definition.Traits.Select(t => t as AnimationOverrideTrait).Where(t => t != null))
-            {
-                var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationTrait.AnimationClip;
-                Units.AnimatorController.SetAnimation(animationTrait.AnimationKey, animationClip);
+                unit.SpriteRenderer.sprite = sprite;
             }
         }
 
-        //private void OnDirectionChanged(DirectionChanged e)
-        //{
-        //    Units.SetDirection(e.Right);
-        //}
+        public void RemoveUnit(string path)
+        {
+            _units.RemoveUnit(path);
+        }
+
+        public void SetAnimation(EntityAnimationClipName clipName, AnimationClip clip)
+        {
+            _units.AnimatorController.SetAnimation(clipName, clip);
+        }
+
+        public void UpdateOrderInLayer()
+        {
+            _units.UpdateOrderInLayer();
+        }
+
+        public void SetDirection(bool right)
+        {
+            _units.SetDirection(right);
+        }
     }
 }

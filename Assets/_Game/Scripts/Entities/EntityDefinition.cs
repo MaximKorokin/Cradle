@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
@@ -56,9 +57,9 @@ namespace Assets._Game.Scripts.Entities
         public EquipmentSlotType[] EquipmentSlots;
     }
 
-    public class AttributesDefinitionModule : EntityModuleDefinition
+    public class StatsDefinitionModule : EntityModuleDefinition
     {
-        public EntityAttributesModule Attributes;
+        public StatsDefinition Stats;
     }
 
     public class AiDefinitionModule : EntityModuleDefinition

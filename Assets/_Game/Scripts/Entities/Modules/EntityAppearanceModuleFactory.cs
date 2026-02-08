@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         public EntityAppearanceModule Create(EntityView entityView, EntityDefinition entityDefinition)
         {
             var unitsController = _unitsControllerFactory.Create(entityView, entityDefinition.VisualModel, entityDefinition.VariantName);
-            var appearanceModel = new EntityAppearanceModule(entityDefinition.VisualModel, unitsController, _entityUnitFactory);
+            var appearanceModel = new EntityAppearanceModule(unitsController, _entityUnitFactory);
             return appearanceModel;
         }
     }
