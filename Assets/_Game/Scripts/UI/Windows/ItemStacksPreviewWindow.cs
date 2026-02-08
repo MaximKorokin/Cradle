@@ -23,8 +23,6 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public event Action<ItemStackActionType> ActionButtonClicked;
 
-        public override bool IsModal => true;
-
         public override void OnShow()
         {
             _actionButtonTemplate.gameObject.SetActive(false);

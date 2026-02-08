@@ -7,6 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     public sealed class PlayerContext
     {
         public Entity Player { get; private set; }
+        public StatsModule StatsModule { get; private set; }
         public InventoryEquipmentModule IEModule { get; private set; }
         public InventoryModel StashInventory { get; private set; }
 
@@ -16,6 +17,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             if (Player.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
             {
                 IEModule = inventoryEquipmentModule;
+            }
+            if (Player.TryGetModule<StatsModule>(out var statsModule))
+            {
+                StatsModule = statsModule;
             }
         }
 

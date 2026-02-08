@@ -7,19 +7,17 @@ namespace Assets._Game.Scripts.Entities.Stats
 {
     public sealed class StatsControllerAssembler
     {
-        public StatsController Create()
+        public StatsController Create(StatsDefinition statsDefinition)
         {
-            return new(new List<(StatId, float)>());
+            return new(statsDefinition.Stats.Select(s => (s.Id, s.DefaultBase)));
         }
 
-        public StatsController Apply(StatsController statsController, StatsSave save)
+        public void Apply(StatsController statsController, StatsSave save)
         {
-            var stats = Create();
             foreach (var statSave in save.BaseValues)
             {
-                stats.SetBase(statSave.Id, statSave.Value);
+                statsController.SetBase(statSave.Id, statSave.Value);
             }
-            return stats;
         }
 
         public StatsSave Save(StatsController statsController)

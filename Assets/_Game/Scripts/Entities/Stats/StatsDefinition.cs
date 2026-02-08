@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Entities.Stats
     public sealed class StatsDefinition : ScriptableObject
     {
         [field: SerializeField]
-        public StatDefinition[] Stats {  get; private set; }
+        public StatDefinition[] Stats { get; private set; }
     }
 
     [Serializable]

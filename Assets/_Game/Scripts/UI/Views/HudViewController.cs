@@ -21,12 +21,14 @@ namespace Assets._Game.Scripts.UI.Views
 
             _hudView.InventoryButtonClicked += OnInventoryButtonClicked;
             _hudView.StashButtonClicked += OnStashButtonClicked;
+            _hudView.StatsButtonClicked += OnStatsButtonClicked;
         }
 
         public void Dispose()
         {
             _hudView.InventoryButtonClicked -= OnInventoryButtonClicked;
             _hudView.StashButtonClicked -= OnStashButtonClicked;
+            _hudView.StatsButtonClicked -= OnStatsButtonClicked;
         }
 
         private void OnInventoryButtonClicked()
@@ -44,6 +46,11 @@ namespace Assets._Game.Scripts.UI.Views
                 _playerContext.IEModule.Inventory,
                 _playerContext.StashInventory,
                 new());
+        }
+
+        private void OnStatsButtonClicked()
+        {
+            _windowManager.ShowStatsWindow(_playerContext.StatsModule);
         }
     }
 }

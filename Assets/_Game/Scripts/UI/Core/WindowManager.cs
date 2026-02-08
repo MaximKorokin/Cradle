@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
@@ -70,6 +71,15 @@ namespace Assets._Game.Scripts.UI.Windows
         {
             var window = InstantiateWindow<ItemStacksPreviewWindow>();
             var controller = new ItemStacksPreviewWindowController<T1, T2>(this, window, equipmentModel, equipmentSlot, primarySlot, primaryItemContainer, secondaryItemContainer, handler);
+            PushToStack(window, controller);
+            window.OnShow();
+            return window;
+        }
+
+        public StatsWindow ShowStatsWindow(StatsModule statsModule)
+        {
+            var window = InstantiateWindow<StatsWindow>();
+            var controller = new StatsWindowController(window, statsModule);
             PushToStack(window, controller);
             window.OnShow();
             return window;

@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             _stats.RemoveModifiers(slotSource);
 
             // Apply new modifiers if something is equipped now
-            if (e.Item != null)
+            if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
             {
                 var modifiers = ExtractModifiers(e.Item.Value);
                 if (modifiers.Count > 0)

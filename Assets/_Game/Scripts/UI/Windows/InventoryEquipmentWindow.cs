@@ -18,8 +18,6 @@ namespace Assets._Game.Scripts.UI.Windows
         public event Action<EquipmentSlotKey> EquipmentSlotPointerDown;
         public event Action<EquipmentSlotKey> EquipmentSlotPointerUp;
 
-        public override bool IsModal => true;
-
         public override void OnShow()
         {
             _inventoryView.SlotPointerDown += OnInventorySlotPointerDown;

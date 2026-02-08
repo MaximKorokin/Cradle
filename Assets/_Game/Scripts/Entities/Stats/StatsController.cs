@@ -5,6 +5,11 @@ namespace Assets._Game.Scripts.Entities.Stats
 {
     public interface IStatsReadOnly
     {
+        event Action<StatId> StatChanged;
+        event Action Changed;
+
+        IEnumerable<(StatId Id, float Base, float Final)> Enumerate();
+        bool Has(StatId id);
         float Get(StatId id);
         float GetBase(StatId id);
     }
@@ -20,6 +25,12 @@ namespace Assets._Game.Scripts.Entities.Stats
         {
             foreach (var (id, baseValue) in initial)
                 _stats[id] = new Stat(baseValue);
+        }
+
+        public IEnumerable<(StatId Id, float Base, float Final)> Enumerate()
+        {
+            foreach (var (id, stat) in _stats)
+                yield return (id, stat.BaseValue, stat.Calculate());
         }
 
         public bool Has(StatId id) => _stats.ContainsKey(id);

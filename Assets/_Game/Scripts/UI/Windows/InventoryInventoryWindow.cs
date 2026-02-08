@@ -11,20 +11,14 @@ namespace Assets._Game.Scripts.UI.Windows
         private InventoryView _firstInventoryView;
         [SerializeField]
         private InventoryView _secondInventoryView;
-        [SerializeField]
-        private InventorySlotView _inventorySlotTemplate;
 
         public event Action<int> FirstInventorySlotPointerDown;
         public event Action<int> FirstInventorySlotPointerUp;
         public event Action<int> SecondInventorySlotPointerDown;
         public event Action<int> SecondInventorySlotPointerUp;
 
-        public override bool IsModal => true;
-
         public override void OnShow()
         {
-            _inventorySlotTemplate.gameObject.SetActive(false);
-
             _firstInventoryView.SlotPointerDown += OnFirstInventorySlotPointerDown;
             _firstInventoryView.SlotPointerUp += OnFirstInventorySlotPointerUp;
             _secondInventoryView.SlotPointerDown += OnSecondInventorySlotPointerDown;

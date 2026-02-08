@@ -24,3 +24,4 @@ MonoBehaviour:
       type: {class: StatsDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
+        Stats: {fileID: 11400000, guid: b3fba593a273813468f5678debc9389b, type: 2}

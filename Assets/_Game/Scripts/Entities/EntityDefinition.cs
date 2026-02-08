@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Stats;
+﻿using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Items.Equipment;
 using System;

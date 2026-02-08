@@ -11,15 +11,19 @@ namespace Assets._Game.Scripts.UI.Views
         private Button _inventoryButton;
         [SerializeField]
         private Button _stashButton;
+        [SerializeField]
+        private Button _statsButton;
 
         public event Action InventoryButtonClicked;
         public event Action StashButtonClicked;
+        public event Action StatsButtonClicked;
 
         [Inject]
         private void Construct()
         {
             _inventoryButton.onClick.AddListener(OnInventoryButtonClicked);
             _stashButton.onClick.AddListener(OnStashButtonClicked);
+            _statsButton.onClick.AddListener(OnStatsButtonClicked);
         }
 
         private void OnStashButtonClicked()
@@ -30,6 +34,11 @@ namespace Assets._Game.Scripts.UI.Views
         private void OnInventoryButtonClicked()
         {
             InventoryButtonClicked?.Invoke();
+        }
+
+        private void OnStatsButtonClicked()
+        {
+            StatsButtonClicked?.Invoke();
         }
     }
 }

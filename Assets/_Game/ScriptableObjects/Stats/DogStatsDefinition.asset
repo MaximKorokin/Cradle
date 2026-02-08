@@ -12,4 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc06abe581b1bbd4ba4b607379168d28, type: 3}
   m_Name: DogStatsDefinition
   m_EditorClassIdentifier: 
-  <Stats>k__BackingField: []
+  <Stats>k__BackingField:
+  - <Id>k__BackingField: 100
+    <DefaultBase>k__BackingField: 1
+  - <Id>k__BackingField: 110
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 200
+    <DefaultBase>k__BackingField: 10
+  - <Id>k__BackingField: 210
+    <DefaultBase>k__BackingField: 10
+  - <Id>k__BackingField: 300
+    <DefaultBase>k__BackingField: 5
+  - <Id>k__BackingField: 310
+    <DefaultBase>k__BackingField: 1
+  - <Id>k__BackingField: 320
+    <DefaultBase>k__BackingField: 1
+  - <Id>k__BackingField: 400
+    <DefaultBase>k__BackingField: 3
+  - <Id>k__BackingField: 410
+    <DefaultBase>k__BackingField: 3
+  - <Id>k__BackingField: 500
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 510
+    <DefaultBase>k__BackingField: 0
