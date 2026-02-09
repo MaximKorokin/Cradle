@@ -1,11 +1,12 @@
 ﻿using Assets.CoreScripts;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
 {
-    public class ItemDefinitionCatalog
+    public class ItemDefinitionCatalog : IEnumerable<ItemDefinition>
     {
         private readonly Dictionary<string, ItemDefinition> _items;
 
@@ -23,6 +24,16 @@ namespace Assets._Game.Scripts.Items
 
             SLog.Error($"Item with id '{id}' not found in catalog.");
             return null;
+        }
+
+        public IEnumerator<ItemDefinition> GetEnumerator()
+        {
+            return _items.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

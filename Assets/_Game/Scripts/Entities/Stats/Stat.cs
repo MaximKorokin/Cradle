@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Entities.Stats
 {
     public sealed class Stat
     {
-        private const float MinMultiplier = 0.05f;
+        private const float MinMultiplier = 0f;
         private const float MaxMultiplier = 10f;
 
         private readonly List<(object Source, StatModifier Modifier)> _modifiers = new();
@@ -88,7 +88,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             // Apply pipeline
             value += addAccumulated;
             var multiplier = 1f + multiplyAccumulated;
-            value *= Mathf.Clamp(multiplier, MinMultiplier, MaxMultiplier); ;
+            value *= Mathf.Clamp(multiplier, MinMultiplier, MaxMultiplier);
             value *= (1f + postMultiplyAccumulated);
 
             if (overrideValue.HasValue)

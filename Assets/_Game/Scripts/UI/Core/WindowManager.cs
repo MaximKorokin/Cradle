@@ -1,9 +1,11 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.Core;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System;
 using System.Collections.Generic;
@@ -49,45 +51,41 @@ namespace Assets._Game.Scripts.UI.Windows
             return window;
         }
 
-        public InventoryEquipmentWindow ShowInventoryEquipmentWindow(InventoryModel inventoryModel, EquipmentModel equipmentModel, ItemCommandHandler handler)
+        private T ShowWindow<T, K>(Func<T, K> controllerFactory) where T : UIWindow where K : IDisposable
         {
-            var window = InstantiateWindow<InventoryEquipmentWindow>();
-            var controller = new InventoryEquipmentWindowController(this, window, inventoryModel, equipmentModel, handler);
-            PushToStack(window, controller);
+            var window = InstantiateWindow<T>();
+            var controller = controllerFactory(window);
+            _windowStack.Push((window, controller));
             window.OnShow();
             return window;
+        }
+
+        public InventoryEquipmentWindow ShowInventoryEquipmentWindow(InventoryModel inventoryModel, EquipmentModel equipmentModel, ItemCommandHandler handler)
+        {
+            return ShowWindow<InventoryEquipmentWindow, InventoryEquipmentWindowController>(
+                w => new InventoryEquipmentWindowController(this, w, inventoryModel, equipmentModel, handler));
         }
 
         public InventoryInventoryWindow ShowInventoryInventoryWindow(EquipmentModel equipmentModel, InventoryModel firstInventoryModel, InventoryModel secondInentoryModel, ItemCommandHandler handler)
         {
-            var window = InstantiateWindow<InventoryInventoryWindow>();
-            var controller = new InventoryInventoryWindowController(this, window, equipmentModel, firstInventoryModel, secondInentoryModel, handler);
-            PushToStack(window, controller);
-            window.OnShow();
-            return window;
+            return ShowWindow<InventoryInventoryWindow, InventoryInventoryWindowController>(
+                w => new InventoryInventoryWindowController(this, w, equipmentModel, firstInventoryModel, secondInentoryModel, handler));
         }
 
         public ItemStacksPreviewWindow ShowItemStackPreviewWindow<T1, T2>(EquipmentModel equipmentModel, EquipmentSlotKey? equipmentSlot, T1 primarySlot, IItemContainer<T1> primaryItemContainer, IItemContainer<T2> secondaryItemContainer, ItemCommandHandler handler)
         {
-            var window = InstantiateWindow<ItemStacksPreviewWindow>();
-            var controller = new ItemStacksPreviewWindowController<T1, T2>(this, window, equipmentModel, equipmentSlot, primarySlot, primaryItemContainer, secondaryItemContainer, handler);
-            PushToStack(window, controller);
-            window.OnShow();
-            return window;
+            return ShowWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowController<T1, T2>>(
+                w => new ItemStacksPreviewWindowController<T1, T2>(this, w, equipmentModel, equipmentSlot, primarySlot, primaryItemContainer, secondaryItemContainer, handler));
         }
 
         public StatsWindow ShowStatsWindow(StatsModule statsModule)
         {
-            var window = InstantiateWindow<StatsWindow>();
-            var controller = new StatsWindowController(window, statsModule);
-            PushToStack(window, controller);
-            window.OnShow();
-            return window;
+            return ShowWindow<StatsWindow, StatsWindowController>(w => new StatsWindowController(w, statsModule));
         }
 
-        private void PushToStack(UIWindow window, IDisposable controller)
+        public CheatsWindow ShowCheatsWindow(ItemDefinitionCatalog itemDefinitionCatalog, ItemStackAssembler itemStackAssembler, PlayerContext playerContext)
         {
-            _windowStack.Push((window, controller));
+            return ShowWindow<CheatsWindow, CheatsWindowController>(w => new CheatsWindowController(w, itemDefinitionCatalog, itemStackAssembler, playerContext));
         }
 
         public void CloseTop()

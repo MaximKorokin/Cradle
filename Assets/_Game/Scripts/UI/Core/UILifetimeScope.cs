@@ -24,6 +24,7 @@ namespace Assets._Game.Scripts.UI.Core
         {
             builder.RegisterComponentInHierarchy<HudView>();
             builder.Register<HudViewController>(Lifetime.Scoped);
+            builder.Register<CheatsWindowController>(Lifetime.Scoped);
 
             builder.RegisterInstance((IEnumerable<UIWindow>)_windowPrefabs);
             builder.RegisterInstance(_modalWrapperPrefab);

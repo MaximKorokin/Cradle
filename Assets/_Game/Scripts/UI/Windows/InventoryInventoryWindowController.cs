@@ -46,11 +46,6 @@ namespace Assets._Game.Scripts.UI.Windows
             _window.Render(_firstInventoryModel, _secondInventoryModel);
         }
 
-        private void OnCloseClicked()
-        {
-            _windowManager.CloseTop();
-        }
-
         public void Dispose()
         {
             _firstInventoryModel.Changed -= Redraw;

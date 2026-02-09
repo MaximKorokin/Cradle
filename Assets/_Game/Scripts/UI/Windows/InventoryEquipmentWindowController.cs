@@ -55,10 +55,5 @@ namespace Assets._Game.Scripts.UI.Windows
             _window.EquipmentSlotPointerDown -= _previewProcessor.OnSecondItemContainerSlotPointerDown;
             _window.EquipmentSlotPointerUp -= _previewProcessor.OnSecondItemContainerSlotPointerUp;
         }
-
-        private void OnCloseClicked()
-        {
-            _windowManager.CloseTop();
-        }
     }
 }

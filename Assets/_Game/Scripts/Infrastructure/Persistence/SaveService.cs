@@ -21,10 +21,12 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
         public void SaveGame()
         {
-            var save = new GameSave();
-            save.PlayerSave = _entityAssembler.Save(_playerContext.Player);
-            save.Version = 1;
-            save.SavedAtUtc = System.DateTime.UtcNow.Ticks;
+            var save = new GameSave
+            {
+                PlayerSave = _entityAssembler.Save(_playerContext.Player),
+                Version = 1,
+                SavedAtUtc = System.DateTime.UtcNow.Ticks
+            };
             _gameSaveRepository.Save("Player", save);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Windows;
 using System;
 
@@ -9,19 +10,26 @@ namespace Assets._Game.Scripts.UI.Views
         private readonly HudView _hudView;
         private readonly WindowManager _windowManager;
         private readonly PlayerContext _playerContext;
+        private readonly ItemDefinitionCatalog _itemDefinitionCatalog;
+        private readonly ItemStackAssembler _itemStackAssembler;
 
         public HudViewController(
             HudView hudView,
             WindowManager windowManager,
+            ItemDefinitionCatalog itemDefinitionCatalog,
+            ItemStackAssembler itemStackAssembler,
             PlayerContext playerContext)
         {
+            _hudView = hudView;
             _windowManager = windowManager;
             _playerContext = playerContext;
-            _hudView = hudView;
+            _itemDefinitionCatalog = itemDefinitionCatalog;
+            _itemStackAssembler = itemStackAssembler;
 
             _hudView.InventoryButtonClicked += OnInventoryButtonClicked;
             _hudView.StashButtonClicked += OnStashButtonClicked;
             _hudView.StatsButtonClicked += OnStatsButtonClicked;
+            _hudView.CheatsButtonClicked += OnCheatsButtonClicked;
         }
 
         public void Dispose()
@@ -29,6 +37,7 @@ namespace Assets._Game.Scripts.UI.Views
             _hudView.InventoryButtonClicked -= OnInventoryButtonClicked;
             _hudView.StashButtonClicked -= OnStashButtonClicked;
             _hudView.StatsButtonClicked -= OnStatsButtonClicked;
+            _hudView.CheatsButtonClicked -= OnCheatsButtonClicked;
         }
 
         private void OnInventoryButtonClicked()
@@ -46,6 +55,11 @@ namespace Assets._Game.Scripts.UI.Views
                 _playerContext.IEModule.Inventory,
                 _playerContext.StashInventory,
                 new());
+        }
+
+        private void OnCheatsButtonClicked()
+        {
+            _windowManager.ShowCheatsWindow(_itemDefinitionCatalog, _itemStackAssembler, _playerContext);
         }
 
         private void OnStatsButtonClicked()
