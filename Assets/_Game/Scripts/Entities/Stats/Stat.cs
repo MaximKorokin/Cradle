@@ -117,7 +117,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         Agility = 410,
 
         CarryWeight = 500,
-        CarryCapacity = 510,
+        CarryWeightMax = 510,
     }
 
     public enum StatStage

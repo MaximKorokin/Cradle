@@ -54,6 +54,7 @@ namespace Assets._Game.Scripts.Entities
             entity.AddModule(statsModule);
             entity.AddModule(new DerivedStatsApplierModule(statsModule));
             entity.AddModule(new EquipmentStatsApplierModule(statsModule));
+            entity.AddModule(new InventoryStatsApplierModule(statsModule));
 
             var appearanceModule = _appearanceModuleFactory.Create(entityView, entityDefinition);
             entity.AddModule(appearanceModule);

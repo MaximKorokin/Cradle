@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
+using Assets.CoreScripts;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules
@@ -31,15 +32,21 @@ namespace Assets._Game.Scripts.Entities.Modules
             // Apply new modifiers if something is equipped now
             if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
             {
-                var modifiers = ExtractModifiers(e.Item.Value);
+                var modifiers = ExtractStatModifiers(e.Item.Value);
                 if (modifiers.Count > 0)
                 {
                     _stats.AddModifiers(slotSource, modifiers);
                 }
             }
+
+            // Change weight
+            if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
+            {
+                _stats.AddModifiers(slotSource, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, e.Item.Value.Definition.Weight).Yield());
+            }
         }
 
-        private static List<StatModifier> ExtractModifiers(ItemStackSnapshot item)
+        private static List<StatModifier> ExtractStatModifiers(ItemStackSnapshot item)
         {
             var result = new List<StatModifier>();
 

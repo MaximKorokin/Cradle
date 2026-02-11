@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Items.Inventory;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
@@ -11,6 +12,10 @@ namespace Assets._Game.Scripts.UI.Views
         private RectTransform _inventorySlotsParent;
         [SerializeField]
         private InventorySlotView _inventorySlotTemplate;
+        [SerializeField]
+        private TMP_Text _weightText;
+        [SerializeField]
+        private TMP_Text _goldText;
 
         private readonly List<(int Index, InventorySlotView Slot)> _slots = new();
 
@@ -29,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
-        public void Render(InventoryModel inventoryModel)
+        public void Render(InventoryModel inventoryModel/*, float currentWeight, float maxWeight, int goldAmount*/)
         {
             Clear();
 
@@ -44,6 +49,9 @@ namespace Assets._Game.Scripts.UI.Views
                     slotView.Render(stack);
                 }
             }
+
+            //_weightText.text = $"{currentWeight}kg / {maxWeight}kg";
+            //_goldText.text = $"{goldAmount} gold";
         }
 
         public void Clear()

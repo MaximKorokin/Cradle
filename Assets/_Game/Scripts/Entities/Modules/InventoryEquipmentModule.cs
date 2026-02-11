@@ -12,6 +12,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             Equipment = equipment;
 
             if (Equipment != null) Equipment.EquipmentChanged += OnEquipmentSlotChanged;
+            if (Inventory != null) Inventory.InventoryChanged += OnInventorySlotChanged;
         }
 
         public InventoryModel Inventory { get; private set; }
@@ -22,10 +23,16 @@ namespace Assets._Game.Scripts.Entities.Modules
             Publish(new EquipmentChangedEvent(equipmentChange));
         }
 
+        private void OnInventorySlotChanged(InventoryChange equipmentChange)
+        {
+            Publish(new InventoryChangedEvent(equipmentChange));
+        }
+
         public override void Dispose()
         {
             base.Dispose();
             if (Equipment != null) Equipment.EquipmentChanged -= OnEquipmentSlotChanged;
+            if (Inventory != null) Inventory.InventoryChanged -= OnInventorySlotChanged;
         }
     }
 
@@ -47,6 +54,27 @@ namespace Assets._Game.Scripts.Entities.Modules
             Slot = equipmentChange.Slot;
             Item = equipmentChange.Item;
             Kind = equipmentChange.Kind;
+        }
+    }
+
+    public readonly struct InventoryChangedEvent : IEntityEvent
+    {
+        public readonly int Slot;
+        public readonly ItemStackSnapshot? Item;
+        public readonly InventoryChangeKind Kind;
+
+        public InventoryChangedEvent(int slot, ItemStackSnapshot? item, InventoryChangeKind kind)
+        {
+            Slot = slot;
+            Item = item;
+            Kind = kind;
+        }
+
+        public InventoryChangedEvent(InventoryChange inventoryChange)
+        {
+            Slot = inventoryChange.Slot;
+            Item = inventoryChange.Item;
+            Kind = inventoryChange.Kind;
         }
     }
 }
