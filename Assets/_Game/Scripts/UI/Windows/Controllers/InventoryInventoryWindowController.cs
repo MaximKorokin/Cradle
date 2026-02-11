@@ -3,7 +3,7 @@ using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
-namespace Assets._Game.Scripts.UI.Windows
+namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, EmptyWindowControllerArguments>
     {

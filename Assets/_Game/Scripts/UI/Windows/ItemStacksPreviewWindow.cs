@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Windows.Controllers;
 using System;
 using System.Collections.Generic;
 using TMPro;

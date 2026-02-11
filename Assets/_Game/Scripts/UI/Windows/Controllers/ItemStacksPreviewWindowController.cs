@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Assets._Game.Scripts.UI.Windows
+namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ItemStacksPreviewWindowController<T1, T2> : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T1, T2>>
     {

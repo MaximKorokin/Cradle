@@ -4,7 +4,7 @@ using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
-namespace Assets._Game.Scripts.UI.Windows
+namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public class InventoryEquipmentWindowController : WindowControllerBase<InventoryEquipmentWindow, EmptyWindowControllerArguments>
     {

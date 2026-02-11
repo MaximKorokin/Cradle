@@ -2,7 +2,7 @@
 using Assets._Game.Scripts.Infrastructure.Game;
 using System.Linq;
 
-namespace Assets._Game.Scripts.UI.Windows
+namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class StatsWindowController : WindowControllerBase<StatsWindow, EmptyWindowControllerArguments>
     {

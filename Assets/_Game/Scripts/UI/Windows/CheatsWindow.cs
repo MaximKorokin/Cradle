@@ -1,12 +1,11 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Common;
-using Assets._Game.Scripts.UI.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Windows
 {
     public sealed class CheatsWindow : UIWindowBase
     {

@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
+using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System.Collections.Generic;
 using UnityEngine;

@@ -3,7 +3,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Windows;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class CheatsWindowController : WindowControllerBase<CheatsWindow, EmptyWindowControllerArguments>
     {
