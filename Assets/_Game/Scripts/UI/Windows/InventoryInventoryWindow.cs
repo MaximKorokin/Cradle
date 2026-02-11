@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public class InventoryInventoryWindow : UIWindow
+    public class InventoryInventoryWindow : UIWindowBase
     {
         [SerializeField]
         private InventoryView _firstInventoryView;

@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.UI.Windows.Modal
             _overlay.PointerDown += Close;
         }
 
-        public void SetWindow(UIWindow window)
+        public void SetWindow(UIWindowBase window)
         {
             window.transform.SetParent(_windowParent, false);
         }

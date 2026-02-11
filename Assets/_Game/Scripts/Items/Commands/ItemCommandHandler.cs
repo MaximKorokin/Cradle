@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Shared.Extensions;
-using Assets._Game.Scripts.Shared.Utils;
+﻿using Assets._Game.Scripts.Shared.Utils;
 using System;
 
 namespace Assets._Game.Scripts.Items.Commands

@@ -6,6 +6,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using UnityEngine;
@@ -29,7 +30,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
             RegisterSavesFeature(builder);
             RegisterEntityFeature(builder);
-            RegisterInventoryFeature(builder);
             RegisterItemFeature(builder);
         }
 
@@ -61,17 +61,15 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
         }
 
-        private void RegisterInventoryFeature(IContainerBuilder builder)
-        {
-            builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
-            builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
-            builder.Register<InventoryEquipmentModuleAssembler>(Lifetime.Scoped);
-        }
-
         private void RegisterItemFeature(IContainerBuilder builder)
         {
             builder.Register<ItemStackAssembler>(Lifetime.Scoped);
             builder.Register<ItemDefinitionCatalog>(Lifetime.Scoped);
+            builder.Register<ItemCommandHandler>(Lifetime.Scoped);
+
+            builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
+            builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
+            builder.Register<InventoryEquipmentModuleAssembler>(Lifetime.Scoped);
         }
     }
 }

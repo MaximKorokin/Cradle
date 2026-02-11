@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public sealed class StatsWindow : UIWindow
+    public sealed class StatsWindow : UIWindowBase
     {
         [SerializeField]
         private StatsView _statsView;

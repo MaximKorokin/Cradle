@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class CheatsWindow : UIWindow
+    public sealed class CheatsWindow : UIWindowBase
     {
         [SerializeField]
         private SimpleListView _itemsListView;

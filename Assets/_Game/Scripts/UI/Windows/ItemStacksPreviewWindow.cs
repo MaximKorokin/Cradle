@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public sealed class ItemStacksPreviewWindow : UIWindow
+    public sealed class ItemStacksPreviewWindow : UIWindowBase
     {
         [SerializeField]
         private ItemStacksPreviewView _primaryItemPreviewView;

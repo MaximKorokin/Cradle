@@ -10,7 +10,7 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
     {
         private readonly WindowManager _windowManager;
         private readonly EquipmentModel _equipmentModel;
-        private readonly IItemContainer<T1> _firtsItemContainer;
+        private readonly IItemContainer<T1> _firstItemContainer;
         private readonly IItemContainer<T2> _secondItemContainer;
         private readonly ItemCommandHandler _handler;
 
@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
         {
             _windowManager = windowManager;
             _equipmentModel = equipmentModel;
-            _firtsItemContainer = primaryItemContainer;
+            _firstItemContainer = primaryItemContainer;
             _secondItemContainer = secondaryItemContainer;
             _handler = handler;
         }
@@ -36,24 +36,26 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             _firstPointerDownSlotIndex = slotIndex;
         }
 
-        public void OnFirstItemContainerSlotPointerUp(T1 slotIndex)
-        {
-            if (!_firstPointerDownSlotIndex.Equals(slotIndex)) return;
-            var primaryItem = _firtsItemContainer.Get(slotIndex);
-            if (primaryItem == null) return;
-
-            _windowManager.ShowItemStackPreviewWindow(
-                _equipmentModel,
-                GetEquipmentSlotToCompare(primaryItem.Value, _firtsItemContainer),
-                _firstPointerDownSlotIndex,
-                _firtsItemContainer,
-                _secondItemContainer,
-                _handler);
-        }
-
         public void OnSecondItemContainerSlotPointerDown(T2 slotIndex)
         {
             _secondPointerDownSlotIndex = slotIndex;
+        }
+
+        public void OnFirstItemContainerSlotPointerUp(T1 slotIndex)
+        {
+            if (!_firstPointerDownSlotIndex.Equals(slotIndex)) return;
+            var primaryItem = _firstItemContainer.Get(slotIndex);
+            if (primaryItem == null) return;
+
+            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T1, T2>>(
+                new(
+                    _equipmentModel,
+                    GetEquipmentSlotToCompare(primaryItem.Value, _firstItemContainer),
+                    _firstItemContainer,
+                    _firstPointerDownSlotIndex,
+                    _secondItemContainer),
+                typeof(T1),
+                typeof(T2));
         }
 
         public void OnSecondItemContainerSlotPointerUp(T2 slotIndex)
@@ -62,13 +64,15 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             var primaryItem = _secondItemContainer.Get(slotIndex);
             if (primaryItem == null) return;
 
-            _windowManager.ShowItemStackPreviewWindow(
-                _equipmentModel,
-                GetEquipmentSlotToCompare(primaryItem.Value, _secondItemContainer),
-                _secondPointerDownSlotIndex,
-                _secondItemContainer,
-                _firtsItemContainer,
-                _handler);
+            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T2, T1>>(
+                new(
+                    _equipmentModel,
+                    GetEquipmentSlotToCompare(primaryItem.Value, _secondItemContainer),
+                    _secondItemContainer,
+                    _secondPointerDownSlotIndex,
+                    _firstItemContainer),
+                typeof(T2),
+                typeof(T1));
         }
 
         private EquipmentSlotKey? GetEquipmentSlotToCompare(ItemStackSnapshot primaryItem, IItemContainer containerToExcept)

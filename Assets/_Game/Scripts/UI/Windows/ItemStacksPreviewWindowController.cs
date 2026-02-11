@@ -10,45 +10,50 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public sealed class ItemStacksPreviewWindowController<T1, T2> : IDisposable
+    public sealed class ItemStacksPreviewWindowController<T1, T2> : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T1, T2>>
     {
         private readonly WindowManager _windowManager;
-        private readonly ItemStacksPreviewWindow _window;
         private readonly ItemCommandHandler _handler;
-        private readonly EquipmentModel _equipmentModel;
-        private readonly EquipmentSlotKey? _equipmentSlot;
-        private readonly T1 _primaryContainerSlot;
-        private readonly IItemContainer<T1> _primaryItemContainer;
-        private readonly IItemContainer<T2> _secondaryItemContainer;
+
+        private ItemStacksPreviewWindow _window;
+        private EquipmentModel _equipmentModel;
+        private EquipmentSlotKey? _equipmentSlot;
+        private IItemContainer<T1> _primaryItemContainer;
+        private T1 _primaryContainerSlot;
+        private IItemContainer<T2> _secondaryItemContainer;
 
         public ItemStacksPreviewWindowController(
             WindowManager windowManager,
-            ItemStacksPreviewWindow window,
-            EquipmentModel equipmentModel,
-            EquipmentSlotKey? equipmentSlot,
-            T1 primaryContainerSlot,
-            IItemContainer<T1> primaryItemContainer,
-            IItemContainer<T2> secondaryItemContainer,
             ItemCommandHandler handler)
         {
             _windowManager = windowManager;
-            _window = window;
-            _equipmentModel = equipmentModel;
-            _primaryContainerSlot = primaryContainerSlot;
-            _equipmentSlot = equipmentSlot;
-            _primaryItemContainer = primaryItemContainer;
-            _secondaryItemContainer = secondaryItemContainer;
             _handler = handler;
+        }
+
+        public override void Bind(ItemStacksPreviewWindow window)
+        {
+            _window = window;
+
+            _window.ActionButtonClicked += ProcessAction;
+        }
+
+        public override void Initialize(ItemStacksPreviewWindowControllerArguments<T1, T2> arguments)
+        {
+            base.Initialize(arguments);
+
+            _equipmentModel = arguments.EquipmentModel;
+            _equipmentSlot = arguments.EquipmentSlot;
+            _primaryItemContainer = arguments.PrimaryItemContainer;
+            _primaryContainerSlot = arguments.PrimaryContainerSlot;
+            _secondaryItemContainer = arguments.SecondaryItemContainer;
 
             _primaryItemContainer.Changed += Redraw;
             _secondaryItemContainer.Changed += Redraw;
 
-            _window.ActionButtonClicked += ProcessAction;
-
             Redraw();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _primaryItemContainer.Changed -= Redraw;
             _secondaryItemContainer.Changed -= Redraw;

@@ -1,15 +1,13 @@
-﻿using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.Windows.Shared;
-using System;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
-    public class InventoryInventoryWindowController : IDisposable
+    public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, EmptyWindowControllerArguments>
     {
-        private readonly WindowManager _windowManager;
-        private readonly InventoryInventoryWindow _window;
+        private InventoryInventoryWindow _window;
         private readonly InventoryModel _firstInventoryModel;
         private readonly InventoryModel _secondInventoryModel;
 
@@ -17,21 +15,21 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public InventoryInventoryWindowController(
             WindowManager windowManager,
-            InventoryInventoryWindow window,
-            EquipmentModel equipmentModel,
-            InventoryModel firstInventoryModel,
-            InventoryModel secondInventoryModel,
+            PlayerContext playerContext,
             ItemCommandHandler handler)
         {
-            _windowManager = windowManager;
-            _window = window;
-            _firstInventoryModel = firstInventoryModel;
-            _secondInventoryModel = secondInventoryModel;
+            _firstInventoryModel = playerContext.IEModule.Inventory;
+            _secondInventoryModel = playerContext.StashInventory;
 
             _firstInventoryModel.Changed += Redraw;
             _secondInventoryModel.Changed += Redraw;
 
-            _previewProcessor = new(windowManager, equipmentModel, firstInventoryModel, secondInventoryModel, handler);
+            _previewProcessor = new(windowManager, playerContext.IEModule.Equipment, _firstInventoryModel, _secondInventoryModel, handler);
+        }
+
+        public override void Bind(InventoryInventoryWindow window)
+        {
+            _window = window;
 
             _window.FirstInventorySlotPointerDown += _previewProcessor.OnFirstItemContainerSlotPointerDown;
             _window.FirstInventorySlotPointerUp += _previewProcessor.OnFirstItemContainerSlotPointerUp;
@@ -41,15 +39,20 @@ namespace Assets._Game.Scripts.UI.Windows
             Redraw();
         }
 
-        private void Redraw()
-        {
-            _window.Render(_firstInventoryModel, _secondInventoryModel);
-        }
-
-        public void Dispose()
+        public override void Dispose()
         {
             _firstInventoryModel.Changed -= Redraw;
             _secondInventoryModel.Changed -= Redraw;
+
+            _window.FirstInventorySlotPointerDown -= _previewProcessor.OnFirstItemContainerSlotPointerDown;
+            _window.FirstInventorySlotPointerUp -= _previewProcessor.OnFirstItemContainerSlotPointerUp;
+            _window.SecondInventorySlotPointerDown -= _previewProcessor.OnSecondItemContainerSlotPointerDown;
+            _window.SecondInventorySlotPointerUp -= _previewProcessor.OnSecondItemContainerSlotPointerUp;
+        }
+
+        private void Redraw()
+        {
+            _window.Render(_firstInventoryModel, _secondInventoryModel);
         }
     }
 }

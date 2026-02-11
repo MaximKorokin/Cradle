@@ -1,3 +1,4 @@
+using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Modal;
@@ -12,7 +13,7 @@ namespace Assets._Game.Scripts.UI.Core
     {
         [Header("Windows")]
         [SerializeField]
-        private UIWindow[] _windowPrefabs;
+        private UIWindowBase[] _windowPrefabs;
         [SerializeField]
         private ModalWrapper _modalWrapperPrefab;
         [Space]
@@ -24,15 +25,37 @@ namespace Assets._Game.Scripts.UI.Core
         {
             builder.RegisterComponentInHierarchy<HudView>();
             builder.Register<HudViewController>(Lifetime.Scoped);
-            builder.Register<CheatsWindowController>(Lifetime.Scoped);
-
-            builder.RegisterInstance((IEnumerable<UIWindow>)_windowPrefabs);
-            builder.RegisterInstance(_modalWrapperPrefab);
             builder.RegisterInstance(_rootReferences);
 
-            builder.Register<WindowManager>(Lifetime.Scoped);
-
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
+
+            RegisterWindows(builder);
+        }
+
+        private void RegisterWindows(IContainerBuilder builder)
+        {
+            builder.Register<WindowManager>(Lifetime.Scoped);
+            builder.RegisterInstance(_modalWrapperPrefab);
+            builder.RegisterComponentInHierarchy<WindowOpenTrigger>();
+
+            var windows = new WindowDefinition[]
+            {
+                new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController)),
+                new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
+                new(WindowId.InventoryInventory, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
+                new(WindowId.InvestoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
+                new(WindowId.Pause, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
+
+                new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<, >)),
+            };
+
+            foreach (var windowDefinition in windows)
+            {
+                builder.Register(windowDefinition.GetControllerType(), Lifetime.Transient);
+            }
+
+            builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);
+            builder.RegisterInstance((IEnumerable<WindowDefinition>)windows);
         }
     }
 }
