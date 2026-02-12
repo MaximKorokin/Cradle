@@ -417,6 +417,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventorySlotsParent: {fileID: 6099912138367748295}
   _inventorySlotTemplate: {fileID: 8303514060987266979}
+  _weightText: {fileID: 2741803189995133390}
+  _goldText: {fileID: 8258046584640950528}
 --- !u!1 &4488153924184546358
 GameObject:
   m_ObjectHideFlags: 0

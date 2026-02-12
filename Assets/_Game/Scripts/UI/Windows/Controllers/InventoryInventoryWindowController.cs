@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
@@ -8,23 +8,22 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, EmptyWindowControllerArguments>
     {
         private InventoryInventoryWindow _window;
-        private readonly InventoryModel _firstInventoryModel;
-        private readonly InventoryModel _secondInventoryModel;
+        private readonly InventoryHudData _inventoryStashData;
+        private readonly StashHudData _stashHudData;
 
         private readonly ItemStacksPreviewInputProcessor<int, int> _previewProcessor;
 
         public InventoryInventoryWindowController(
+            InventoryHudData inventoryHudData,
+            StashHudData stashHudData,
+            EquipmentHudData equipmentHudData,
             WindowManager windowManager,
-            PlayerContext playerContext,
             ItemCommandHandler handler)
         {
-            _firstInventoryModel = playerContext.IEModule.Inventory;
-            _secondInventoryModel = playerContext.StashInventory;
+            _inventoryStashData = inventoryHudData;
+            _stashHudData = stashHudData;
 
-            _firstInventoryModel.Changed += Redraw;
-            _secondInventoryModel.Changed += Redraw;
-
-            _previewProcessor = new(windowManager, playerContext.IEModule.Equipment, _firstInventoryModel, _secondInventoryModel, handler);
+            _previewProcessor = new(windowManager, equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, stashHudData.InventoryModel, handler);
         }
 
         public override void Bind(InventoryInventoryWindow window)
@@ -41,9 +40,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public override void Dispose()
         {
-            _firstInventoryModel.Changed -= Redraw;
-            _secondInventoryModel.Changed -= Redraw;
-
             _window.FirstInventorySlotPointerDown -= _previewProcessor.OnFirstItemContainerSlotPointerDown;
             _window.FirstInventorySlotPointerUp -= _previewProcessor.OnFirstItemContainerSlotPointerUp;
             _window.SecondInventorySlotPointerDown -= _previewProcessor.OnSecondItemContainerSlotPointerDown;
@@ -52,7 +48,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void Redraw()
         {
-            _window.Render(_firstInventoryModel, _secondInventoryModel);
+            _window.Render(_inventoryStashData, _stashHudData);
         }
     }
 }

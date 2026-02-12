@@ -9,7 +9,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     public interface IInventoryHudData : IDisposable
     {
         InventoryModel InventoryModel { get; }
+
+        bool ViewGold { get; }
         int Gold { get; }
+
+        bool ViewWeight { get; }
         float WeightCurrent { get; }
         float WeightMax { get; }
 
@@ -29,36 +33,89 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _itemsConfig = itemsConfig;
 
             _inventoryModel.Changed += OnInventoryChanged;
-        }
+            _statsController.StatChanged += OnStatsChanged;
 
-        private void OnInventoryChanged()
-        {
-            Gold = 0;
-            foreach (var (_, snapshot) in InventoryModel.Enumerate())
-            {
-                if (snapshot == null) continue;
-
-                var itemSnapshot = snapshot.Value;
-                var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
-                if (snapshot != null && itemSnapshot.Definition.Id == goldDefinition.Id)
-                {
-                    Gold += itemSnapshot.Amount;
-                }
-            }
-
-            Changed?.Invoke();
+            OnInventoryChanged();
+            OnStatsChanged(StatId.CarryWeight);
         }
 
         public InventoryModel InventoryModel => _inventoryModel;
 
+        public bool ViewGold => true;
         public int Gold { get; private set; }
 
+        public bool ViewWeight => true;
         public float WeightCurrent { get; private set; }
-
         public float WeightMax { get; private set; }
 
         public event Action Changed;
 
+        private void OnInventoryChanged()
+        {
+            var newGold = 0;
+
+            var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
+            if (goldDefinition == null) return;
+
+            foreach (var (_, snapshot) in _inventoryModel.Enumerate())
+            {
+                if (snapshot == null) continue;
+
+                var itemSnapshot = snapshot.Value;
+                if (itemSnapshot.Definition.Id == goldDefinition.Id)
+                {
+                    newGold += itemSnapshot.Amount;
+                }
+            }
+
+            if (newGold != Gold)
+            {
+                Gold = newGold;
+                Changed?.Invoke();
+            }
+        }
+
+        private void OnStatsChanged(StatId statId)
+        {
+            if (statId == StatId.CarryWeight || statId == StatId.CarryWeightMax)
+            {
+                WeightCurrent = _statsController.Get(StatId.CarryWeight);
+                WeightMax = _statsController.Get(StatId.CarryWeightMax);
+                Changed?.Invoke();
+            }
+        }
+
+        public void Dispose()
+        {
+            _inventoryModel.Changed -= OnInventoryChanged;
+        }
+    }
+
+    public class StashHudData : IInventoryHudData
+    {
+        private readonly InventoryModel _inventoryModel;
+
+        public StashHudData(PlayerContext playerContext)
+        {
+            _inventoryModel = playerContext.StashInventory;
+            _inventoryModel.Changed += OnInventoryChanged;
+        }
+
+        public InventoryModel InventoryModel => _inventoryModel;
+
+        public bool ViewGold => true;
+        public int Gold => 0;
+
+        public bool ViewWeight => false;
+        public float WeightCurrent => 0;
+        public float WeightMax => 0;
+
+        public event Action Changed;
+
+        private void OnInventoryChanged()
+        {
+            Changed?.Invoke();
+        }
         public void Dispose()
         {
             _inventoryModel.Changed -= OnInventoryChanged;

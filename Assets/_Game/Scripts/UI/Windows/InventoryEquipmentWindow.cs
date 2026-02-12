@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using System;
 using UnityEngine;
@@ -28,17 +28,19 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public override void OnHide()
         {
+            _inventoryView.Unbind();
+            _equipmentView.Unbind();
+
             _inventoryView.SlotPointerDown -= OnInventorySlotPointerDown;
             _inventoryView.SlotPointerUp -= OnInventorySlotPointerUp;
             _equipmentView.SlotPointerDown -= OnEquipmentSlotPointerDown;
             _equipmentView.SlotPointerUp -= OnEquipmentSlotPointerUp;
         }
 
-        public void Render(InventoryModel inventoryModel, EquipmentModel equipmentModel)
+        public void Render(IInventoryHudData inventoryHudData, IEquipmentHudData equipmentHudData)
         {
-            _inventoryView.Render(inventoryModel);
-            _inventoryView.Bind();
-            _equipmentView.Render(equipmentModel);
+            _inventoryView.Render(inventoryHudData);
+            _equipmentView.Render(equipmentHudData);
             _equipmentView.Bind();
         }
 

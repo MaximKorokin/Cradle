@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
-using Assets.CoreScripts;
+using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +11,8 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private EquipmentSlotView[] _slots;
 
+        private IEquipmentHudData _equipmentHudData;
+
         public event Action<EquipmentSlotKey> SlotPointerDown;
         public event Action<EquipmentSlotKey> SlotPointerUp;
 
@@ -18,14 +20,19 @@ namespace Assets._Game.Scripts.UI.Views
         {
             foreach (var slot in _slots)
             {
-                slot.PointerDown -= OnSlotPointerDown;
                 slot.PointerDown += OnSlotPointerDown;
-                slot.PointerUp -= OnSlotPointerUp;
                 slot.PointerUp += OnSlotPointerUp;
             }
         }
 
-        public void Render(EquipmentModel equipmentModel)
+        public void Render(IEquipmentHudData equipmentHudData)
+        {
+            _equipmentHudData = equipmentHudData;
+            _equipmentHudData.Changed += OnEquipmentHudDataChanged;
+            OnEquipmentHudDataChanged();
+        }
+
+        private void OnEquipmentHudDataChanged()
         {
             var slotTypeCounts = new Dictionary<EquipmentSlotType, int>();
             foreach (var slot in _slots)
@@ -34,10 +41,25 @@ namespace Assets._Game.Scripts.UI.Views
                 if (slotTypeCounts.TryGetValue(slot.SlotType, out var slotTypeCount))
                     count = slotTypeCount;
                 var slotKey = new EquipmentSlotKey(slot.SlotType, count);
-                var itemStack = equipmentModel.Get(slotKey);
+                var itemStack = _equipmentHudData.EquipmentModel.Get(slotKey);
                 slot.Render(itemStack);
                 slot.Bind(slotKey);
                 slotTypeCounts[slot.SlotType] = count + 1;
+            }
+        }
+
+        public void Unbind()
+        {
+            foreach (var slot in _slots)
+            {
+                slot.PointerDown -= OnSlotPointerDown;
+                slot.PointerUp -= OnSlotPointerUp;
+            }
+
+            if (_equipmentHudData != null)
+            {
+                _equipmentHudData.Changed -= OnEquipmentHudDataChanged;
+                _equipmentHudData = null;
             }
         }
 

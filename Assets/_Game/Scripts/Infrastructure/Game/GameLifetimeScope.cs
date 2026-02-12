@@ -19,6 +19,8 @@ namespace Assets._Game.Scripts.Infrastructure
     {
         [SerializeField]
         private NewGameDefinition _newGameDefinition;
+        [SerializeField]
+        private ItemsConfig _itemsConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -63,6 +65,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterItemFeature(IContainerBuilder builder)
         {
+            builder.RegisterInstance(_itemsConfig);
+
             builder.Register<ItemStackAssembler>(Lifetime.Scoped);
             builder.Register<ItemDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<ItemCommandHandler>(Lifetime.Scoped);

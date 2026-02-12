@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Entities.Controllers;
-using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets.CoreScripts;
 using VContainer;
@@ -60,7 +59,7 @@ namespace Assets._Game.Scripts.Entities
             entity.AddModule(appearanceModule);
             entity.AddModule(new EquipmentAppearanceApplierModule(appearanceModule, entityDefinition.VisualModel));
 
-            entity.AddModule(new BehaviourController());
+            //entity.AddModule(new BehaviourController());
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 
             return entity;

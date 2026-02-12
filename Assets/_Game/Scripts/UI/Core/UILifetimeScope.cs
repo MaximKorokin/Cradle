@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.UI.Common;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
@@ -29,6 +30,10 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterInstance(_rootReferences);
 
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
+
+            builder.Register<EquipmentHudData>(Lifetime.Transient);
+            builder.Register<InventoryHudData>(Lifetime.Transient);
+            builder.Register<StashHudData>(Lifetime.Transient);
 
             RegisterWindows(builder);
         }

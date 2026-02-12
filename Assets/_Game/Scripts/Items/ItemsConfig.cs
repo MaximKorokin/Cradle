@@ -1,5 +1,6 @@
 ﻿using Assets.CoreScripts;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
@@ -12,13 +13,13 @@ namespace Assets._Game.Scripts.Items
 
         public ItemDefinition GetSpecialItemDefinition(SpecialItemId specialItemId)
         {
-            var index = Array.IndexOf(_specialItems, specialItemId);
-            if (index == -1)
+            var itemDefinition = _specialItems.FirstOrDefault(s => s.SpecialItemId == specialItemId).ItemDefinition;
+            if (itemDefinition == null)
             {
                 SLog.Error($"Special item with id {specialItemId} is not registered.");
                 return null;
             }
-            return _specialItems[index].ItemDefinition;
+            return itemDefinition;
         }
     }
 
