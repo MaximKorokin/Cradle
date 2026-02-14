@@ -14,7 +14,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public StatsModule Create(EntityDefinition entityDefinition)
         {
-            if (entityDefinition.TryGetModule<StatsDefinitionModule>(out var statsDefinitionModule))
+            if (entityDefinition.TryGetModule<StatsModuleDefinition>(out var statsDefinitionModule))
                 return new(_statsControllerAssembler.Create(statsDefinitionModule.Stats));
             return null;
         }

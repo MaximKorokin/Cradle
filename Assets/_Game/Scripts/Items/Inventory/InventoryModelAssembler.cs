@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public InventoryModel Create(EntityDefinition entityDefinition)
         {
-            if (!entityDefinition.TryGetModule<InventoryDefinitionModule>(out var inventoryDefinitionModule)) 
+            if (!entityDefinition.TryGetModule<InventoryModuleDefinition>(out var inventoryDefinitionModule)) 
                 return null;
 
             return new InventoryModel(inventoryDefinitionModule.SlotsAmount);

@@ -46,22 +46,22 @@ namespace Assets._Game.Scripts.Entities
         public bool Enabled = true;
     }
 
-    public class InventoryDefinitionModule : EntityModuleDefinition
+    public class InventoryModuleDefinition : EntityModuleDefinition
     {
         public int SlotsAmount;
     }
 
-    public class EquipmentDefinitionModule : EntityModuleDefinition
+    public class EquipmentModuleDefinition : EntityModuleDefinition
     {
         public EquipmentSlotType[] EquipmentSlots;
     }
 
-    public class StatsDefinitionModule : EntityModuleDefinition
+    public class StatsModuleDefinition : EntityModuleDefinition
     {
         public StatsDefinition Stats;
     }
 
-    public class AiDefinitionModule : EntityModuleDefinition
+    public class AiModuleDefinition : EntityModuleDefinition
     {
         public string BehaviorTreeId;
     }

@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Items.Equipment
 
         public EquipmentModel Create(EntityDefinition entityDefinition)
         {
-            if (!entityDefinition.TryGetModule<EquipmentDefinitionModule>(out var equipmentDefinitionModule))
+            if (!entityDefinition.TryGetModule<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
                 return null;
 
             var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
