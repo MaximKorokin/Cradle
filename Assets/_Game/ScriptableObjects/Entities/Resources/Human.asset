@@ -16,24 +16,24 @@ MonoBehaviour:
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 098d7829eff45b848b13a6b29dd7e48b, type: 2}
   <VariantName>k__BackingField: Human
   _modules:
-  - rid: 1349792420369268911
-  - rid: 1349792557472153698
-  - rid: 1349792557472153699
+  - rid: 1349792692413661261
+  - rid: 1349792692413661262
+  - rid: 1349792692413661263
   references:
     version: 2
     RefIds:
-    - rid: 1349792420369268911
-      type: {class: EquipmentDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        EquipmentSlots: 0a000000140000001e00000028000000320000003c0000003c00000046000000e8030000e8030000e8030000e8030000
-    - rid: 1349792557472153698
-      type: {class: InventoryDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        SlotsAmount: 40
-    - rid: 1349792557472153699
-      type: {class: StatsDefinitionModule, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+    - rid: 1349792692413661261
+      type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
         Stats: {fileID: 11400000, guid: b8a8a141d45d51245aa7b12b01635bc3, type: 2}
+    - rid: 1349792692413661262
+      type: {class: InventoryModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        SlotsAmount: 40
+    - rid: 1349792692413661263
+      type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        EquipmentSlots: 0a000000140000001e00000028000000320000003c0000003c00000046000000e8030000e8030000e8030000e8030000

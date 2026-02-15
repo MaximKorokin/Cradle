@@ -14,17 +14,20 @@ namespace Assets._Game.Scripts.Entities
         private readonly InventoryEquipmentModuleAssembler _inventoryEquipmentControllerAssembler;
         private readonly AppearanceModuleFactory _appearanceModuleFactory;
         private readonly StatsModuleAssembler _statsModuleAssembler;
+        private readonly StatusEffectModuleAssembler _statusEffectModuleAssembler;
 
         public EntityAssembler(
             IObjectResolver resolver,
             InventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
             AppearanceModuleFactory appearanceModuleFactory,
-            StatsModuleAssembler statsModuleAssembler)
+            StatsModuleAssembler statsModuleAssembler,
+            StatusEffectModuleAssembler statusEffectModuleAssembler)
         {
             _resolver = resolver;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
             _appearanceModuleFactory = appearanceModuleFactory;
             _statsModuleAssembler = statsModuleAssembler;
+            _statusEffectModuleAssembler = statusEffectModuleAssembler;
         }
 
         public Entity Assemble(EntityDefinition entityDefinition, EntitySave save)
@@ -54,6 +57,9 @@ namespace Assets._Game.Scripts.Entities
             entity.AddModule(new DerivedStatsApplierModule(statsModule));
             entity.AddModule(new EquipmentStatsApplierModule(statsModule));
             entity.AddModule(new InventoryStatsApplierModule(statsModule));
+            entity.AddModule(new StatusEffectsStatsApplierModule(statsModule));
+
+            entity.AddModule(_statusEffectModuleAssembler.Assemble());
 
             var appearanceModule = _appearanceModuleFactory.Create(entityView, entityDefinition);
             entity.AddModule(appearanceModule);

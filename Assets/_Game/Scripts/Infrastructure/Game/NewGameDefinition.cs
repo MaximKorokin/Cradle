@@ -7,6 +7,6 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     public class NewGameDefinition : ScriptableObject
     {
         [field: SerializeField]
-        public EntityDefinition PlayerEntityDefinition { get; set; }
+        public EntityDefinition PlayerEntityDefinition { get; private set; }
     }
 }

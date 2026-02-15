@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
@@ -21,10 +22,13 @@ namespace Assets._Game.Scripts.Infrastructure
         private NewGameDefinition _newGameDefinition;
         [SerializeField]
         private ItemsConfig _itemsConfig;
+        [SerializeField]
+        private StatusEffectsConfig _statusEffectsConfig;
 
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<GameBootstrap>();
+            builder.Register<Dispatcher>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.RegisterInstance(_newGameDefinition);
 
@@ -33,6 +37,7 @@ namespace Assets._Game.Scripts.Infrastructure
             RegisterSavesFeature(builder);
             RegisterEntityFeature(builder);
             RegisterItemFeature(builder);
+            RegisterStatusEffectFeature(builder);
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -74,6 +79,16 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
             builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
             builder.Register<InventoryEquipmentModuleAssembler>(Lifetime.Scoped);
+        }
+
+        private void RegisterStatusEffectFeature(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_statusEffectsConfig);
+
+            builder.Register<StatusEffectSystem>(Lifetime.Singleton);
+            builder.Register<StatusEffectModuleAssembler>(Lifetime.Singleton);
+            builder.Register<StatusEffectAssembler>(Lifetime.Singleton);
+            builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.UI.Common
 
         private readonly List<SimpleListItemView> _items = new();
 
-        public event Action<object> ItemClicked;
+        public event Action<object> ElementClicked;
 
         private void Awake()
         {
@@ -48,7 +48,7 @@ namespace Assets._Game.Scripts.UI.Common
 
         private void OnItemClicked(object obj)
         {
-            ItemClicked?.Invoke(obj);
+            ElementClicked?.Invoke(obj);
         }
     }
 }

@@ -30,7 +30,6 @@ public sealed class ItemDefinitionEditor : Editor
     {
         serializedObject.Update();
 
-        DrawIdBlock();
         EditorGUILayout.Space(8);
 
         // Рисуем все свойства кроме m_Script, Id и Traits (Traits — отдельным блоком)
@@ -45,44 +44,6 @@ public sealed class ItemDefinitionEditor : Editor
             EditorGUILayout.HelpBox("Не найден массив [SerializeReference] traits (managed reference array).", MessageType.Info);
 
         serializedObject.ApplyModifiedProperties();
-    }
-
-    void DrawIdBlock()
-    {
-        using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            EditorGUILayout.LabelField("Identity", EditorStyles.boldLabel);
-
-            if (_idProp != null)
-            {
-                using (new EditorGUI.DisabledScope(true))
-                    EditorGUILayout.PropertyField(_idProp, new GUIContent("Id"));
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("Id backing field not found. Убедись, что Id — auto-property с [field: SerializeField].", MessageType.Warning);
-            }
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.FlexibleSpace();
-
-                using (new EditorGUI.DisabledScope(Application.isPlaying))
-                {
-                    if (GUILayout.Button("Regenerate Id", GUILayout.Width(130)))
-                    {
-                        var def = (ItemDefinition)target;
-
-                        Undo.RecordObject(def, "Regenerate ItemDefinition Id");
-                        def.Id = GUID.Generate().ToString();
-                        EditorUtility.SetDirty(def);
-
-                        // обновим инспектор
-                        serializedObject.Update();
-                    }
-                }
-            }
-        }
     }
 
     void DrawAllPropertiesExceptIdAndTraits()

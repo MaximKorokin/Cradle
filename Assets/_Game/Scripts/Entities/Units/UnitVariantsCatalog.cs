@@ -1,20 +1,21 @@
-﻿using Assets.CoreScripts;
+﻿using Assets._Game.Scripts.Infrastructure.Definitions;
+using Assets.CoreScripts;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class UnitVariantsCatalog
+    public class UnitVariantsCatalog : DefinitionCatalogBase<UnitVariants>
     {
-        private readonly Dictionary<EntityVisualModelUnitPath, UnitVariants> _variants;
+        private Dictionary<EntityVisualModelUnitPath, UnitVariants> _variants;
 
-        public UnitVariantsCatalog()
+        protected override void OnDefinitionsLoaded(IEnumerable<UnitVariants> definitions)
         {
-            _variants = Resources.LoadAll<UnitVariants>("").ToDictionary(x => x.Path, x => x);
+            base.OnDefinitionsLoaded(definitions);
+            _variants = definitions.ToDictionary(x => x.Path);
         }
 
-        public UnitVariants GetUnit(EntityVisualModelUnitPath path)
+        public UnitVariants GetByPath(EntityVisualModelUnitPath path)
         {
             if (_variants.TryGetValue(path, out var itemDefinition))
             {
@@ -25,9 +26,9 @@ namespace Assets._Game.Scripts.Entities.Units
             return null;
         }
 
-        public EntityUnitVariant GetUnitVariant(EntityVisualModelUnitPath path, string variantName)
+        public EntityUnitVariant GetVariant(EntityVisualModelUnitPath path, string variantName)
         {
-            var unit = GetUnit(path);
+            var unit = GetByPath(path);
             if (unit == null) return null;
 
             var vartiant = unit.GetVariant(variantName);

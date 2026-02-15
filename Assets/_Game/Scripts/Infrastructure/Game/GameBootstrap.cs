@@ -10,30 +10,24 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 {
     public class GameBootstrap : IStartable
     {
-        private readonly ItemStackAssembler _itemStackAssembler;
         private readonly EntityAssembler _entityAssembler;
         private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly EntityDefinitionCatalog _entityDefinitionCatalog;
         private readonly PlayerContext _playerContext;
-        private readonly SaveService _saveService;
 
         public GameBootstrap(
-            ItemStackAssembler itemStackAssembler,
             EntityAssembler entityAssembler,
             GameSaveRepository repository,
             NewGameDefinition newGameDefinition,
             EntityDefinitionCatalog entityDefinitionCatalog,
-            PlayerContext playerContext,
-            SaveService saveService)
+            PlayerContext playerContext)
         {
-            _itemStackAssembler = itemStackAssembler;
             _entityAssembler = entityAssembler;
             _gameSaveRepository = repository;
             _newGameDefinition = newGameDefinition;
             _entityDefinitionCatalog = entityDefinitionCatalog;
             _playerContext = playerContext;
-            _saveService = saveService;
         }
 
         public void Start()
@@ -55,7 +49,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
             _playerContext.SetPlayer(humanoid);
 
-            var quadruped = _entityAssembler.Create(_entityDefinitionCatalog.GetEntityDefinition("851ea68f-b985-4565-bbc0-816f9eb5ee8b"));
+            var quadruped = _entityAssembler.Create(_entityDefinitionCatalog.Get("d5855ca383df4ddd8c615e51609dc812"));
 
             SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
         }

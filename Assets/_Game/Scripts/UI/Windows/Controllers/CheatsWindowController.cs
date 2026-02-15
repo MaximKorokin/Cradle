@@ -1,7 +1,8 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.UI.Windows;
+using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -9,30 +10,42 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private CheatsWindow _window;
 
-        private readonly ItemDefinitionCatalog _itemDefinitionCatalog;
-        private readonly ItemStackAssembler _itemStackAssembler;
+        private readonly CheatsHudData _cheatsHudData;
         private readonly PlayerContext _playerContext;
+        private readonly ItemStackAssembler _itemStackAssembler;
+        private readonly StatusEffectAssembler _statusEffectAssembler;
 
         public CheatsWindowController(
-            ItemDefinitionCatalog itemDefinitionCatalog,
+            CheatsHudData cheatsHudData,
+            PlayerContext playerContext,
             ItemStackAssembler itemStackAssembler,
-            PlayerContext playerContext)
+            StatusEffectAssembler statusEffectAssembler)
         {
-            _itemDefinitionCatalog = itemDefinitionCatalog;
-            _itemStackAssembler = itemStackAssembler;
+            _cheatsHudData = cheatsHudData;
             _playerContext = playerContext;
+            _itemStackAssembler = itemStackAssembler;
+            _statusEffectAssembler = statusEffectAssembler;
         }
 
         public override void Bind(CheatsWindow window)
         {
             _window = window;
             window.ItemDefinitionClicked += OnItemDefinitionClicked;
-            _window.Render(_itemDefinitionCatalog);
+            window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
+            _window.Render(_cheatsHudData);
         }
 
         public override void Dispose()
         {
             _window.ItemDefinitionClicked -= OnItemDefinitionClicked;
+        }
+
+        private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
+        {
+            if (_playerContext.Player.TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            {
+                _statusEffectAssembler.Assemble(statusEffectDefinition, statusEffectModule.StatusEffectsController);
+            }
         }
 
         private void OnItemDefinitionClicked(ItemDefinition itemDefinition)

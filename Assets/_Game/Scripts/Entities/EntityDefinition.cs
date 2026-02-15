@@ -8,30 +8,18 @@ using UnityEngine;
 namespace Assets._Game.Scripts.Entities
 {
     [CreateAssetMenu(fileName = "Entity", menuName = "ScriptableObjects/EntityDefinition")]
-    public class EntityDefinition : ScriptableObject
+    public class EntityDefinition : GuidScriptableObject
     {
-        [field: HideInInspector]
         [field: SerializeField]
-        public string Id { get; set; }
-
+        public EntityVisualModel VisualModel { get; private set; }
         [field: SerializeField]
-        public EntityVisualModel VisualModel { get; set; }
-        [field: SerializeField]
-        public string VariantName { get; set; }
+        public string VariantName { get; private set; }
 
         [SerializeReference]
         [SerializeField]
         private EntityModuleDefinition[] _modules = Array.Empty<EntityModuleDefinition>();
 
         public EntityModuleDefinition[] Modules => _modules;
-
-        private void OnValidate()
-        {
-            if (string.IsNullOrWhiteSpace(Id))
-            {
-                Id = Guid.NewGuid().ToString();
-            }
-        }
 
         public bool TryGetModule<T>(out T module) where T : EntityModuleDefinition
         {
@@ -64,5 +52,10 @@ namespace Assets._Game.Scripts.Entities
     public class AiModuleDefinition : EntityModuleDefinition
     {
         public string BehaviorTreeId;
+    }
+
+    public class StatusEffectModuleDefinition : EntityModuleDefinition
+    {
+
     }
 }

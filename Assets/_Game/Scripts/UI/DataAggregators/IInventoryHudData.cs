@@ -88,6 +88,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public void Dispose()
         {
             _inventoryModel.Changed -= OnInventoryChanged;
+            _statsController.StatChanged -= OnStatsChanged;
         }
     }
 

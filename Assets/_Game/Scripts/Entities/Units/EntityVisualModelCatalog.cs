@@ -1,22 +1,23 @@
-﻿using Assets.CoreScripts;
+﻿using Assets._Game.Scripts.Infrastructure.Definitions;
+using Assets.CoreScripts;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public class EntityVisualModelCatalog
+    public class EntityVisualModelCatalog : DefinitionCatalogBase<EntityVisualModel>
     {
-        private readonly Dictionary<string, EntityVisualModel> _views;
+        private Dictionary<string, EntityVisualModel> _visualModels;
 
-        public EntityVisualModelCatalog()
+        protected override void OnDefinitionsLoaded(IEnumerable<EntityVisualModel> definitions)
         {
-            _views = Resources.LoadAll<EntityVisualModel>("").ToDictionary(x => x.Name, x => x);
+            base.OnDefinitionsLoaded(definitions);
+            _visualModels = definitions.ToDictionary(x => x.Name);
         }
 
-        public EntityVisualModel GetEntityVisualModel(string name)
+        public EntityVisualModel GetByName(string name)
         {
-            if (_views.TryGetValue(name, out var itemDefinition))
+            if (_visualModels.TryGetValue(name, out var itemDefinition))
             {
                 return itemDefinition;
             }

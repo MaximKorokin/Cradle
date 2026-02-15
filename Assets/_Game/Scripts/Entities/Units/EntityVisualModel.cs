@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets._Game.Scripts.Entities.Units
 {
     [CreateAssetMenu(fileName = "VisualModel", menuName = "ScriptableObjects/EntityVisualModel")]
-    public class EntityVisualModel : ScriptableObject
+    public class EntityVisualModel : GuidScriptableObject
     {
         [field: SerializeField]
         public string Name { get; private set; }

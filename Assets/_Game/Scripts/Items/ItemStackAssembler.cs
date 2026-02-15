@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.Items
 
         public ItemStack Apply(ItemStack itemStack, ItemStackSave save)
         {
-            var definition = _itemCatalog.GetItemDefinition(save.ItemDefinitionId);
+            var definition = _itemCatalog.Get(save.ItemDefinitionId);
             itemStack.Definition = definition;
             itemStack.Amount = save.Amount;
             itemStack.InstanceData = _codecRegistry.DecodeOrNull(save.InstanceData) as IItemInstanceData;
@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Items
 
         public ItemStack Create(string definitionId, int amount)
         {
-            var definition = _itemCatalog.GetItemDefinition(definitionId);
+            var definition = _itemCatalog.Get(definitionId);
             return new ItemStack(definition, new EmptyInstanceData(), amount);
         }
 

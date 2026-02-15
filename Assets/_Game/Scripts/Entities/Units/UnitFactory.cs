@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Entities.Units
 
         public Unit Create(EntityUnitVisualModel entityUnitVisualModel, string variantName)
         {
-            var unitVariants = _entityUnitVariantsCatalog.GetUnit(entityUnitVisualModel.Path);
+            var unitVariants = _entityUnitVariantsCatalog.GetByPath(entityUnitVisualModel.Path);
             if (unitVariants == null)
             {
                 SLog.Error($"Cannot find unit variants by path: {entityUnitVisualModel.Path}");

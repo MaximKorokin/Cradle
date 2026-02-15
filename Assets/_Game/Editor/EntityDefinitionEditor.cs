@@ -26,8 +26,6 @@ public sealed class EntityDefinitionEditor : Editor
     {
         serializedObject.Update();
 
-        DrawIdBlock();
-
         EditorGUILayout.Space(8);
 
         DrawAllPropertiesExceptIdScriptAndModules();
@@ -40,40 +38,6 @@ public sealed class EntityDefinitionEditor : Editor
             EditorGUILayout.HelpBox("Не найдено поле '_modules'. Проверь имя поля в EntityDefinition.", MessageType.Error);
 
         serializedObject.ApplyModifiedProperties();
-    }
-
-    void DrawIdBlock()
-    {
-        using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
-        {
-            EditorGUILayout.LabelField("Identity", EditorStyles.boldLabel);
-
-            if (_idProp != null)
-            {
-                using (new EditorGUI.DisabledScope(true))
-                    EditorGUILayout.PropertyField(_idProp, new GUIContent("Id"));
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("Id property not found (backing field).", MessageType.Warning);
-            }
-
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button("Regenerate Id", GUILayout.Width(120)))
-                {
-                    Undo.RecordObject(target, "Regenerate EntityDefinition Id");
-
-                    var def = (EntityDefinition)target;
-                    def.Id = Guid.NewGuid().ToString();
-
-                    EditorUtility.SetDirty(def);
-                    GUIUtility.ExitGUI();
-                }
-            }
-        }
     }
 
     void DrawAllPropertiesExceptIdScriptAndModules()

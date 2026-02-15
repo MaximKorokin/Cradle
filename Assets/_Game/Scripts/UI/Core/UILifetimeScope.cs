@@ -34,6 +34,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<EquipmentHudData>(Lifetime.Transient);
             builder.Register<InventoryHudData>(Lifetime.Transient);
             builder.Register<StashHudData>(Lifetime.Transient);
+            builder.Register<CheatsHudData>(Lifetime.Transient);
 
             RegisterWindows(builder);
         }

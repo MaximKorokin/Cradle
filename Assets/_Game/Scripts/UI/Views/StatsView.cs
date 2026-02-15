@@ -12,9 +12,14 @@ namespace Assets._Game.Scripts.UI.Views
 
         private readonly List<StatView> _statViews = new();
 
-        public void Render(IEnumerable<(string, string)> stats)
+        private void Awake()
         {
             _statTemplate.gameObject.SetActive(false);
+        }
+
+        public void Render(IEnumerable<(string, string)> stats)
+        {
+            Clear();
 
             foreach (var (stat, value) in stats)
             {
@@ -28,7 +33,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             foreach (var statView in _statViews)
             {
-                Destroy(statView);
+                Destroy(statView.gameObject);
             }
             _statViews.Clear();
         }
