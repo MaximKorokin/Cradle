@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
   m_Name: Human
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 0e223672-e36b-497a-84b3-d50d96d89540
+  id: 241a9cdbe7634e67941e4e55a53b0ff8
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 098d7829eff45b848b13a6b29dd7e48b, type: 2}
   <VariantName>k__BackingField: Human
   _modules:
   - rid: 1349792692413661261
   - rid: 1349792692413661262
   - rid: 1349792692413661263
+  - rid: 1349792714110271692
   references:
     version: 2
     RefIds:
@@ -37,3 +38,7 @@ MonoBehaviour:
       data:
         Enabled: 1
         EquipmentSlots: 0a000000140000001e00000028000000320000003c0000003c00000046000000e8030000e8030000e8030000e8030000
+    - rid: 1349792714110271692
+      type: {class: StatusEffectModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1

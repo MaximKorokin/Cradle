@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a519071aec560bc4da3a481c3550ea32, type: 3}
   m_Name: StatusEffectsConfig
   m_EditorClassIdentifier: 
+  <TickRate>k__BackingField: 4
   <MaxBuffsAmount>k__BackingField: 5
   <MaxDebuffsAmount>k__BackingField: 3

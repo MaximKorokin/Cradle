@@ -25,8 +25,6 @@ namespace Assets._Game.Scripts.UI.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<HudView>();
-            builder.Register<HudViewController>(Lifetime.Scoped);
             builder.RegisterInstance(_rootReferences);
 
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
@@ -37,13 +35,13 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<CheatsHudData>(Lifetime.Transient);
 
             RegisterWindows(builder);
+            RegisterHud(builder);
         }
 
         private void RegisterWindows(IContainerBuilder builder)
         {
             builder.Register<WindowManager>(Lifetime.Scoped);
             builder.RegisterInstance(_modalWrapperPrefab);
-            builder.RegisterComponentInHierarchy<WindowOpenTrigger>();
 
             var windows = new WindowDefinition[]
             {
@@ -63,6 +61,16 @@ namespace Assets._Game.Scripts.UI.Core
 
             builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);
             builder.RegisterInstance((IEnumerable<WindowDefinition>)windows);
+        }
+
+        private void RegisterHud(IContainerBuilder builder)
+        {
+            builder.RegisterComponentInHierarchy<HudView>();
+            builder.Register<HudViewController>(Lifetime.Scoped);
+
+            builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
+            builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
+            builder.Register<PlayerStateViewData>(Lifetime.Transient);
         }
     }
 }

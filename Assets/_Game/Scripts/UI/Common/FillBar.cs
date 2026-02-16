@@ -6,26 +6,30 @@ namespace Assets._Game.Scripts.UI.Common
     public class FillBar : MonoBehaviour
     {
         [field: SerializeField]
-        public Image BackgroundImage { get; set; }
+        public Image BackgroundImage { get; private set; }
         [field: SerializeField]
-        public Image ForegroundImage { get; set; }
+        public Image ForegroundImage { get; private set; }
         [field: SerializeField]
-        public Image BarImage { get; set; }
+        public Image Fill { get; private set; }
+        [field: SerializeField]
+        public Image FillImage { get; private set; }
         [field: Header("Smooth")]
         [field: SerializeField]
-        public Image SmoothBarImage { get; set; }
+        public Image SmoothFill { get; private set; }
         [field: SerializeField]
-        public float SmoothSpeed { get; set; }
+        public Image SmoothFillImage { get; private set; }
+        [field: SerializeField]
+        public float SmoothSpeed { get; private set; }
         [field: Header("Gradient")]
         [field: SerializeField]
-        public bool UseGradient { get; set; }
+        public bool UseGradient { get; private set; }
         [field: SerializeField]
-        public Gradient Gradient { get; set; }
+        public Gradient Gradient { get; private set; }
         [field: Header("Fade")]
         [field: SerializeField]
-        public float TimeToStartFade { get; set; }
+        public float TimeToStartFade { get; private set; }
         [field: SerializeField]
-        public float TimeToFade { get; set; }
+        public float TimeToFade { get; private set; }
 
         private const float DefaultAlphaValue = 1;
 
@@ -34,7 +38,7 @@ namespace Assets._Game.Scripts.UI.Common
 
         public void SetFillRatio(float value)
         {
-            if (BarImage == null || value < 0 || value > 1 || value is float.NaN)
+            if (FillImage == null || value < 0 || value > 1 || value is float.NaN)
             {
                 return;
             }
@@ -45,10 +49,10 @@ namespace Assets._Game.Scripts.UI.Common
             }
 
             CurrentFillRatio = value;
-            BarImage.fillAmount = CurrentFillRatio;
+            Fill.fillAmount = CurrentFillRatio;
             if (UseGradient)
             {
-                BarImage.color = Gradient.Evaluate(CurrentFillRatio);
+                FillImage.color = Gradient.Evaluate(CurrentFillRatio);
             }
         }
 
@@ -60,21 +64,21 @@ namespace Assets._Game.Scripts.UI.Common
 
         private void SetSmoothBar()
         {
-            if (SmoothBarImage == null)
+            if (SmoothFillImage == null)
             {
                 return;
             }
-            var fillDifference = CurrentFillRatio - SmoothBarImage.fillAmount;
+            var fillDifference = CurrentFillRatio - SmoothFill.fillAmount;
             if (fillDifference != 0)
             {
                 var fillStep = (fillDifference > 0 ? 1 : -1) * SmoothSpeed * Time.deltaTime;
                 if (Mathf.Abs(fillDifference) - Mathf.Abs(fillStep) > 0)
                 {
-                    SmoothBarImage.fillAmount += fillStep;
+                    SmoothFill.fillAmount += fillStep;
                 }
                 else
                 {
-                    SmoothBarImage.fillAmount = CurrentFillRatio;
+                    SmoothFill.fillAmount = CurrentFillRatio;
                 }
             }
         }
@@ -100,13 +104,13 @@ namespace Assets._Game.Scripts.UI.Common
             {
                 SetAlpha(ForegroundImage, newAlpha);
             }
-            if (BarImage != null)
+            if (FillImage != null)
             {
-                SetAlpha(BarImage, newAlpha);
+                SetAlpha(FillImage, newAlpha);
             }
-            if (SmoothBarImage != null)
+            if (SmoothFillImage != null)
             {
-                SetAlpha(SmoothBarImage, newAlpha);
+                SetAlpha(SmoothFillImage, newAlpha);
             }
         }
 

@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
@@ -28,9 +29,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public float Level => _statsModule.Stats.Get(StatId.Level);
         public float Experience => _statsModule.Stats.Get(StatId.Experience);
 
-        public IEnumerable<StatusEffect> Buffs => _statusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Buff);
+        public IEnumerable<StatusEffectSnapshot> Buffs => 
+            _statusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
 
-        public IEnumerable<StatusEffect> Debuffs => _statusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Debuff);
+        public IEnumerable<StatusEffectSnapshot> Debuffs => 
+            _statusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
 
         private void OnStatChanged(StatId statId)
         {

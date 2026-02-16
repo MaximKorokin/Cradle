@@ -13,6 +13,7 @@ namespace Assets._Game.Scripts.UI.Views
             PlayerStateViewData playerStateViewData)
         {
             _compactPlayerStateView = compactPlayerStateView;
+            _playerStateViewData = playerStateViewData;
         }
 
         public void Render()

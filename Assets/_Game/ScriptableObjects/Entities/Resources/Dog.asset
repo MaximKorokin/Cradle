@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
   m_Name: Dog
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 851ea68f-b985-4565-bbc0-816f9eb5ee8b
+  id: d5855ca383df4ddd8c615e51609dc812
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 58de46050ff02bb4fad6d51101aaa25f, type: 2}
   <VariantName>k__BackingField: Dog
   _modules:
   - rid: 1349792692413661260
+  - rid: 1349792714110271691
   references:
     version: 2
     RefIds:
@@ -25,3 +26,7 @@ MonoBehaviour:
       data:
         Enabled: 1
         Stats: {fileID: 11400000, guid: b3fba593a273813468f5678debc9389b, type: 2}
+    - rid: 1349792714110271691
+      type: {class: StatusEffectModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1

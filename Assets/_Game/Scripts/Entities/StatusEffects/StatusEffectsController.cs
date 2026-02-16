@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
 {
@@ -61,9 +62,9 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         {
             if (_statusEffects.TryGetValue(category, out var stack))
             {
-                return stack.ToArray();
+                return stack;
             }
-            return null;
+            return Enumerable.Empty<StatusEffect>();
         }
     }
 
