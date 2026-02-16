@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public class StatsModule : EntityModuleBase
+    public class StatModule : EntityModuleBase
     {
         private readonly StatsController _stats;
 
-        public StatsModule(StatsController stats)
+        public StatModule(StatsController stats)
         {
             _stats = stats;
             _stats.StatChanged += OnStatChanged;

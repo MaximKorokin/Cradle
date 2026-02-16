@@ -11,7 +11,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         event Action Changed;
     }
 
-    public class EquipmentHudData : IEquipmentHudData, IDisposable
+    public class EquipmentHudData : DataAggregatorBase, IEquipmentHudData
     {
         private readonly EquipmentModel _equipmentModel;
 
@@ -31,8 +31,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             Changed?.Invoke();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _equipmentModel.Changed -= OnEquipmentChanged;
         }
     }

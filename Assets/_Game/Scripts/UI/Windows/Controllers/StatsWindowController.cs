@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class StatsWindowController : WindowControllerBase<StatsWindow, EmptyWindowControllerArguments>
     {
         private StatsWindow _window;
-        private readonly StatsModule _statsModule;
+        private readonly StatModule _statsModule;
 
         public StatsWindowController(
             PlayerContext playerContext)

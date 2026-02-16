@@ -12,14 +12,14 @@ namespace Assets._Game.Scripts.Entities.Modules
             _statsControllerAssembler = statsControllerAssembler;
         }
 
-        public StatsModule Create(EntityDefinition entityDefinition)
+        public StatModule Create(EntityDefinition entityDefinition)
         {
             if (entityDefinition.TryGetModule<StatsModuleDefinition>(out var statsDefinitionModule))
                 return new(_statsControllerAssembler.Create(statsDefinitionModule.Stats));
             return null;
         }
 
-        public void Apply(StatsModule statsModule, StatsSave statsSave)
+        public void Apply(StatModule statsModule, StatsSave statsSave)
         {
             _statsControllerAssembler.Apply(statsModule.Stats as StatsController, statsSave);
         }

@@ -6,9 +6,9 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class InventoryStatsApplierModule : EntityModuleBase
     {
-        private readonly StatsModule _stats;
+        private readonly StatModule _stats;
 
-        public InventoryStatsApplierModule(StatsModule stats)
+        public InventoryStatsApplierModule(StatModule stats)
         {
             _stats = stats;
         }

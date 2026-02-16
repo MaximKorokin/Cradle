@@ -4,9 +4,9 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class StatusEffectsStatsApplierModule : EntityModuleBase
     {
-        private readonly StatsModule _statsModule;
+        private readonly StatModule _statsModule;
 
-        public StatusEffectsStatsApplierModule(StatsModule statsModule)
+        public StatusEffectsStatsApplierModule(StatModule statsModule)
         {
             _statsModule = statsModule;
         }

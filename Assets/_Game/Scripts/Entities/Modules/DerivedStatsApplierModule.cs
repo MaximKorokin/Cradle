@@ -6,9 +6,9 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private static readonly object Source = new();
 
-        private readonly StatsModule _statsModule;
+        private readonly StatModule _statsModule;
 
-        public DerivedStatsApplierModule(StatsModule statsModule)
+        public DerivedStatsApplierModule(StatModule statsModule)
         {
             _statsModule = statsModule;
         }

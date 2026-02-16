@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         event Action Changed;
     }
 
-    public class InventoryHudData : IInventoryHudData
+    public class InventoryHudData : DataAggregatorBase, IInventoryHudData
     {
         private readonly InventoryModel _inventoryModel;
         private readonly IStatsReadOnly _statsController;
@@ -85,14 +85,15 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _inventoryModel.Changed -= OnInventoryChanged;
             _statsController.StatChanged -= OnStatsChanged;
         }
     }
 
-    public class StashHudData : IInventoryHudData
+    public class StashHudData : DataAggregatorBase, IInventoryHudData
     {
         private readonly InventoryModel _inventoryModel;
 
@@ -117,8 +118,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             Changed?.Invoke();
         }
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _inventoryModel.Changed -= OnInventoryChanged;
         }
     }

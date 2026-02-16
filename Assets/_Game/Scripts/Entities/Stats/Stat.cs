@@ -104,7 +104,7 @@ namespace Assets._Game.Scripts.Entities.Stats
     public enum StatId
     {
         Level = 100,
-        Exp = 110,
+        Experience = 110,
 
         HpMax = 200,
         HpCurrent = 210,

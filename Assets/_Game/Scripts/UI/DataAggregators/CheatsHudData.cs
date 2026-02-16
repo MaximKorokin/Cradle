@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CheatsHudData
+    public sealed class CheatsHudData : DataAggregatorBase
     {
         private readonly ItemDefinitionCatalog _itemDefinitionCatalog;
         private readonly StatusEffectDefinitionCatalog _statusEffectDefinitionCatalog;

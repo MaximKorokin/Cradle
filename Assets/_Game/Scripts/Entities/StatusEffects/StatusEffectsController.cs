@@ -8,7 +8,8 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         private readonly Dictionary<StatusEffectCategory, List<StatusEffect>> _statusEffects = new();
         private readonly StatusEffectsConfig _config;
 
-        public Action<StatusEffectChange> StatusEffectChanged;
+        public event Action<StatusEffectChange> StatusEffectChanged;
+        public event Action Changed;
 
         public StatusEffectsController(StatusEffectsConfig config)
         {
@@ -37,6 +38,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 StatusEffect = statusEffect,
                 Kind = StatusEffectChangeKind.Added
             });
+            Changed?.Invoke();
             return true;
         }
 
@@ -51,15 +53,17 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                     StatusEffect = statusEffect,
                     Kind = StatusEffectChangeKind.Removed
                 });
+                Changed?.Invoke();
             }
         }
 
-        public void GetStatusEffectsForCategory(StatusEffectCategory category, List<StatusEffect> result)
+        public IEnumerable<StatusEffect> GetStatusEffectsForCategory(StatusEffectCategory category)
         {
             if (_statusEffects.TryGetValue(category, out var stack))
             {
-                result.AddRange(stack);
+                return stack.ToArray();
             }
+            return null;
         }
     }
 
