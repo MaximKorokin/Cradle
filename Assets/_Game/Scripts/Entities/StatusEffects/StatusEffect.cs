@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     public sealed class StatusEffect
     {
         public StatusEffectDefinition Definition { get; }
-        public float RemainingDuration => _cooldownCounter.Cooldown - _cooldownCounter.TimeSinceReset;
+        public float RemainingDuration => Definition.IsEndless ? Definition.Duration : _cooldownCounter.Cooldown - _cooldownCounter.TimeSinceReset;
         public StatusEffectSnapshot Snapshot => new(this);
 
         private readonly CooldownCounter _cooldownCounter;
@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
         public void OnTick()
         {
-            if (_cooldownCounter.IsOver())
+            if (!Definition.IsEndless && _cooldownCounter.IsOver())
             {
                 Expired?.Invoke();
             }
@@ -38,6 +38,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         public readonly Sprite Icon;
         public readonly float Duration;
         public readonly float RemainingDuration;
+        public readonly bool IsEndless;
 
         public StatusEffectSnapshot(StatusEffect statusEffect)
         {
@@ -45,6 +46,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             Icon = statusEffect.Definition.Icon;
             Duration = statusEffect.Definition.Duration;
             RemainingDuration = statusEffect.RemainingDuration;
+            IsEndless = statusEffect.Definition.IsEndless;
         }
     }
 }

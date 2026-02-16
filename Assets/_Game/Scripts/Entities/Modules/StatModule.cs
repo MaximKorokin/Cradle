@@ -5,25 +5,35 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public class StatModule : EntityModuleBase
     {
-        private readonly StatsController _stats;
+        private readonly StatsController _statsController;
+        private readonly StatsTickController _statsTickController;
 
-        public StatModule(StatsController stats)
+        public StatModule(StatsController stats, StatsTickController statsTickController)
         {
-            _stats = stats;
-            _stats.StatChanged += OnStatChanged;
-            _stats.Changed += OnStatsChanged;
+            _statsController = stats;
+            _statsTickController = statsTickController;
+
+            _statsController.StatChanged += OnStatChanged;
+            _statsController.Changed += OnStatsChanged;
         }
 
-        public IStatsReadOnly Stats => _stats;
+        public IStatsReadOnly Stats => _statsController;
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _statsTickController.Dispose();
+        }
 
         public void AddModifiers(object source, IEnumerable<StatModifier> modifiers)
         {
-            _stats.AddModifiers(source, modifiers);
+            _statsController.AddModifiers(source, modifiers);
         }
 
         public void RemoveModifiers(object source)
         {
-            _stats.RemoveModifiers(source);
+            _statsController.RemoveModifiers(source);
         }
 
         private void OnStatChanged(StatId id)

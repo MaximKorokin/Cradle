@@ -17,6 +17,8 @@ namespace Assets._Game.Scripts.Entities.Stats
             BaseValue = baseValue;
         }
 
+        public IEnumerable<StatModifier> Modifiers => _modifiers.Select(m => m.Modifier);
+
         public float BaseValue { get; private set; }
 
         public void SetBase(float value) => BaseValue = value;
@@ -103,17 +105,29 @@ namespace Assets._Game.Scripts.Entities.Stats
 
     public enum StatId
     {
+        [StatRestriction(StatRestrictionType.NonNegative)]
         Level = 100,
+        [StatRestriction(StatRestrictionType.NonNegative)]
         Experience = 110,
 
+        [StatRestriction(StatRestrictionType.NonNegative)]
         HpMax = 200,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        [StatRestriction(StatRestrictionType.ForbidModifiers)]
+        [StatRestriction(StatRestrictionType.NotBiggerThan, StatId.HpMax)]
         HpCurrent = 210,
+        HpRegeneration = 220,
 
+        [StatRestriction(StatRestrictionType.NonNegative)]
         Damage = 300,
+        [StatRestriction(StatRestrictionType.NonNegative)]
         MoveSpeed = 310,
+        [StatRestriction(StatRestrictionType.NonNegative)]
         AttackSpeed = 320,
 
+        [StatRestriction(StatRestrictionType.NonNegative)]
         Strength = 400,
+        [StatRestriction(StatRestrictionType.NonNegative)]
         Agility = 410,
 
         CarryWeight = 500,
@@ -162,5 +176,26 @@ namespace Assets._Game.Scripts.Entities.Stats
             Value = value;
             Priority = priority;
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+    public class StatRestrictionAttribute : Attribute
+    {
+        public StatRestrictionAttribute(StatRestrictionType restriction, object parameter = null)
+        {
+            Restriction = restriction;
+            Parameter = parameter;
+        }
+
+        public StatRestrictionType Restriction { get; }
+        public object Parameter { get; }
+    }
+
+    public enum StatRestrictionType
+    {
+        None = 0,
+        NonNegative = 10,
+        ForbidModifiers = 20,
+        NotBiggerThan = 30,
     }
 }

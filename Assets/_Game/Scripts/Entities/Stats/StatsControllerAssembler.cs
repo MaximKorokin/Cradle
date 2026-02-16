@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.Entities.Stats
     {
         public StatsController Create(StatsDefinition statsDefinition)
         {
-            return new(statsDefinition.Stats.Select(s => (s.Id, s.DefaultBase)));
+            return new(statsDefinition.Stats.Select(s => (s.Id, s.DefaultBase)), new());
         }
 
         public void Apply(StatsController statsController, StatsSave save)

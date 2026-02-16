@@ -23,6 +23,8 @@ namespace Assets._Game.Scripts.Infrastructure
         [SerializeField]
         private ItemsConfig _itemsConfig;
         [SerializeField]
+        private StatsConfig _statsConfig;
+        [SerializeField]
         private StatusEffectsConfig _statusEffectsConfig;
 
         protected override void Configure(IContainerBuilder builder)
@@ -58,6 +60,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
 
+            builder.RegisterInstance(_statsConfig);
             builder.Register<StatsModuleAssembler>(Lifetime.Scoped);
             builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
 

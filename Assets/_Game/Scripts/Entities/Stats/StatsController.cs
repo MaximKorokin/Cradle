@@ -17,14 +17,17 @@ namespace Assets._Game.Scripts.Entities.Stats
     public class StatsController : IStatsReadOnly
     {
         private readonly Dictionary<StatId, Stat> _stats = new();
+        private readonly StatRegulator _statRegulator;
 
         public event Action<StatId> StatChanged;
         public event Action Changed;
 
-        public StatsController(IEnumerable<(StatId Id, float BaseValue)> initial)
+        public StatsController(IEnumerable<(StatId Id, float BaseValue)> initial, StatRegulator statRegulator)
         {
             foreach (var (id, baseValue) in initial)
                 _stats[id] = new Stat(baseValue);
+
+            _statRegulator = statRegulator;
         }
 
         public IEnumerable<(StatId Id, float Base, float Final)> Enumerate()
@@ -54,7 +57,12 @@ namespace Assets._Game.Scripts.Entities.Stats
             var s = GetOrCreate(id);
             if (Math.Abs(s.BaseValue - value) < 0.0001f) return;
 
+            _statRegulator.RegulateBeforeChange(this, id, ref value);
+
             s.SetBase(value);
+
+            _statRegulator.RegulateAfterChange(this, id);
+
             RaiseChanged(id);
         }
 
@@ -62,8 +70,13 @@ namespace Assets._Game.Scripts.Entities.Stats
         {
             foreach (var m in modifiers)
             {
+                _statRegulator.RegulateModifier(this, m.Stat, m);
+
                 var stat = GetOrCreate(m.Stat);
                 stat.AddModifier(source, m);
+
+                _statRegulator.RegulateAfterChange(this, m.Stat);
+
                 RaiseChanged(m.Stat);
             }
         }
@@ -75,6 +88,7 @@ namespace Assets._Game.Scripts.Entities.Stats
                 int removed = kv.Value.RemoveBySource(source);
                 if (removed > 0)
                 {
+                    _statRegulator.RegulateAfterChange(this, kv.Key);
                     RaiseChanged(kv.Key);
                 }
             }

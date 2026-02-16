@@ -46,6 +46,9 @@ namespace Assets._Game.Scripts.UI.Views
             for (int i = 0; i < _activeStatusEffects.Count; i++)
             {
                 var (fillBar, snapshot, remainingDuration) = _activeStatusEffects[i];
+
+                if (snapshot.IsEndless) continue;
+
                 remainingDuration -= Time.deltaTime;
                 _activeStatusEffects[i] = (fillBar, snapshot, remainingDuration);
                 fillBar.SetFillRatio(remainingDuration / snapshot.Duration);
