@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: StatusEffectsConfig
   m_EditorClassIdentifier: 
   <TickRate>k__BackingField: 4
-  <MaxBuffsAmount>k__BackingField: 5
-  <MaxDebuffsAmount>k__BackingField: 3
+  <Categories>k__BackingField:
+  - StatusEffectCategory: 0
+    MaxAmount: 5
+  - StatusEffectCategory: 1
+    MaxAmount: 3
