@@ -88,9 +88,7 @@ namespace Assets._Game.Scripts.Infrastructure
         {
             builder.RegisterInstance(_statusEffectsConfig);
 
-            builder.Register<StatusEffectSystem>(Lifetime.Singleton);
             builder.Register<StatusEffectModuleAssembler>(Lifetime.Singleton);
-            builder.Register<StatusEffectAssembler>(Lifetime.Singleton);
             builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
         }
     }

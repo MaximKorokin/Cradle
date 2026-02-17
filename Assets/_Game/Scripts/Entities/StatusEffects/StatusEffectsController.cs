@@ -23,6 +23,8 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             var maxAmount = _config.GetMaxAmountForCategory(category);
             if (maxAmount == 0) return false;
 
+            statusEffect.Expired += OnStatusEffectExpired;
+
             if (!_statusEffects.TryGetValue(category, out var stack))
             {
                 _statusEffects[category] = stack = new List<StatusEffect>();
@@ -65,6 +67,12 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 return stack;
             }
             return Enumerable.Empty<StatusEffect>();
+        }
+
+        private void OnStatusEffectExpired(StatusEffect statusEffect)
+        {
+            statusEffect.Expired -= OnStatusEffectExpired;
+            RemoveStatusEffect(statusEffect);
         }
     }
 

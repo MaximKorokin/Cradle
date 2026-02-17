@@ -13,18 +13,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly CheatsHudData _cheatsHudData;
         private readonly PlayerContext _playerContext;
         private readonly ItemStackAssembler _itemStackAssembler;
-        private readonly StatusEffectAssembler _statusEffectAssembler;
 
         public CheatsWindowController(
             CheatsHudData cheatsHudData,
             PlayerContext playerContext,
-            ItemStackAssembler itemStackAssembler,
-            StatusEffectAssembler statusEffectAssembler)
+            ItemStackAssembler itemStackAssembler)
         {
             _cheatsHudData = cheatsHudData;
             _playerContext = playerContext;
             _itemStackAssembler = itemStackAssembler;
-            _statusEffectAssembler = statusEffectAssembler;
         }
 
         public override void Bind(CheatsWindow window)
@@ -44,7 +41,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             if (_playerContext.Player.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
-                _statusEffectAssembler.Assemble(statusEffectDefinition, statusEffectModule.StatusEffectsController);
+                var statusEffect = new StatusEffect(statusEffectDefinition);
+                statusEffectModule.StatusEffectsController.AddStatusEffect(statusEffect);
             }
         }
 
