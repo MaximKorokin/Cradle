@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
@@ -12,16 +14,13 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         [field: SerializeField]
         public float TickRate { get; private set; }
         [field: SerializeField]
-        public int MaxBuffsAmount { get; private set; }
-        [field: SerializeField]
-        public int MaxDebuffsAmount { get; private set; }
+        public StatusEffectCategoryConfig[] Categories { get; private set; }
 
-        private readonly Dictionary<StatusEffectCategory, int> _maxAmountPerCategory = new();
+        private Dictionary<StatusEffectCategory, int> _maxAmountPerCategory = new();
 
         private void OnEnable()
         {
-            _maxAmountPerCategory[StatusEffectCategory.Buff] = MaxBuffsAmount;
-            _maxAmountPerCategory[StatusEffectCategory.Debuff] = MaxDebuffsAmount;
+            if (Categories != null) _maxAmountPerCategory = Categories.ToDictionary(c => c.StatusEffectCategory, c => c.MaxAmount);
         }
 
         public int GetMaxAmountForCategory(StatusEffectCategory category)
@@ -30,7 +29,14 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             {
                 return amount;
             }
-            return MaxBuffsAmount;
+            return 0;
         }
+    }
+
+    [Serializable]
+    public struct StatusEffectCategoryConfig
+    {
+        public StatusEffectCategory StatusEffectCategory;
+        public int MaxAmount;
     }
 }

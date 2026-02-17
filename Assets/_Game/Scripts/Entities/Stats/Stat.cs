@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             BaseValue = baseValue;
         }
 
-        public IEnumerable<StatModifier> Modifiers => _modifiers.Select(m => m.Modifier);
+        public IEnumerable<(object Source, StatModifier Modifier)> Modifiers => _modifiers;
 
         public float BaseValue { get; private set; }
 

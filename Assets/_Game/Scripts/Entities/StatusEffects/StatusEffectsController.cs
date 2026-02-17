@@ -30,7 +30,13 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 _statusEffects[category] = stack = new List<StatusEffect>();
             }
 
-            if (stack.Count > _config.GetMaxAmountForCategory(category))
+            var activeStatusEffect = stack.FirstOrDefault(s => s.Definition.Id == statusEffect.Definition.Id);
+            if (activeStatusEffect != null)
+            {
+                RemoveStatusEffect(activeStatusEffect);
+            }
+
+            if (stack.Count >= maxAmount)
             {
                 RemoveStatusEffect(stack[0]);
             }
@@ -41,12 +47,15 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 StatusEffect = statusEffect,
                 Kind = StatusEffectChangeKind.Added
             });
+
             Changed?.Invoke();
             return true;
         }
 
         public void RemoveStatusEffect(StatusEffect statusEffect)
         {
+            statusEffect.Expired -= OnStatusEffectExpired;
+
             var category = statusEffect.Definition.Category;
             if (_statusEffects.TryGetValue(category, out var stack))
             {
@@ -71,7 +80,6 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
         private void OnStatusEffectExpired(StatusEffect statusEffect)
         {
-            statusEffect.Expired -= OnStatusEffectExpired;
             RemoveStatusEffect(statusEffect);
         }
     }

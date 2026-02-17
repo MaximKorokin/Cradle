@@ -25,11 +25,11 @@ namespace Assets._Game.Scripts.Entities.Modules
             {
                 if (e.Kind == StatusEffectChangeKind.Added)
                 {
-                    _statsModule.AddModifiers(e.StatusEffect, new[] { modifier });
+                    _statsModule.AddModifiers(e.StatusEffect.Definition.Id, new[] { modifier });
                 }
                 else if (e.Kind == StatusEffectChangeKind.Removed)
                 {
-                    _statsModule.RemoveModifiers(e.StatusEffect);
+                    _statsModule.RemoveModifiers(e.StatusEffect.Definition.Id);
                 }
             }
         }

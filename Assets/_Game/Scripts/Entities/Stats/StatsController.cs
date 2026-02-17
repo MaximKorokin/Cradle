@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Stats
 {
@@ -92,6 +93,12 @@ namespace Assets._Game.Scripts.Entities.Stats
                     RaiseChanged(kv.Key);
                 }
             }
+        }
+
+        public bool ContainsModifier(object source, StatModifier statModifier)
+        {
+            var stat = GetOrCreate(statModifier.Stat);
+            return stat.Modifiers.Contains((source, statModifier));
         }
 
         private Stat GetOrCreate(StatId id)
