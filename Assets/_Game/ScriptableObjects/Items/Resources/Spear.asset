@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338
   <Name>k__BackingField: Spear
-  <Icon>k__BackingField: {fileID: 1496440014, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+  <Icon>k__BackingField: {fileID: -2773593466412431158, guid: bf3d8dc71955519468ccbb3420936ef3, type: 3}
   <Sprite>k__BackingField: {fileID: 1496440014, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 100

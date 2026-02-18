@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: fb4abe57743a458da92c16b2202c9955
   <Name>k__BackingField: Bread
-  <Icon>k__BackingField: {fileID: 3537499059100430296, guid: c74c90811d22fb444943251606ff5755, type: 3}
-  <Sprite>k__BackingField: {fileID: 3537499059100430296, guid: c74c90811d22fb444943251606ff5755, type: 3}
+  <Icon>k__BackingField: {fileID: -5466532590776826969, guid: ed713d30f4f74334f9d82998deefde0e, type: 3}
+  <Sprite>k__BackingField: {fileID: -5466532590776826969, guid: ed713d30f4f74334f9d82998deefde0e, type: 3}
   <MaxAmount>k__BackingField: 64
   <Weight>k__BackingField: 3
   <Traits>k__BackingField:

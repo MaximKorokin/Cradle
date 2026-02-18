@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 780db064-ca6a-4b9d-bc23-64e34a86403e
   <Name>k__BackingField: Gloves
-  <Icon>k__BackingField: {fileID: 2324362101258219691, guid: 40bf3482d4206a143b91eb6942393747, type: 3}
+  <Icon>k__BackingField: {fileID: -2893533784517347133, guid: bf75d70a4e4459c478ff44bced8a7968, type: 3}
   <Sprite>k__BackingField: {fileID: 3052204324842648624, guid: c74c90811d22fb444943251606ff5755, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 80
