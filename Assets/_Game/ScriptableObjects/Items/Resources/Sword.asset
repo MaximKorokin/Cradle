@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 780db064-ca6a-4b9d-bc23-64e34a86403a
+  _id: 780db064-ca6a-4b9d-bc23-64e34a86403a
   <Name>k__BackingField: Sword
   <Icon>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}

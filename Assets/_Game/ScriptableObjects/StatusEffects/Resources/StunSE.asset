@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79116d10ba7a0044980441119a7c653d, type: 3}
   m_Name: StunSE
   m_EditorClassIdentifier: 
-  id: e88cf093fa074d44835f8db657458271
+  _id: 9e0ac9f77eb74fd4a272d91ed9edc6e4
   <Name>k__BackingField: Stun
   <Icon>k__BackingField: {fileID: -513304570566796799, guid: 11d7ac98c3818fe4aaab9dda70f2a784, type: 3}
   <Category>k__BackingField: 1

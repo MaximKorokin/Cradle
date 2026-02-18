@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
   m_Name: QuadrupedVisualModel
   m_EditorClassIdentifier: 
+  _id: 3c43adddbc6c476e8f583cba3e0fd303
   <Name>k__BackingField: Quadruped
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 96ad2e14e0944f943af4f9ba299469bb, type: 2}

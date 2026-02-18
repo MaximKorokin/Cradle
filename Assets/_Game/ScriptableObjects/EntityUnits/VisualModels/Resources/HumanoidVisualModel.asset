@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
   m_Name: HumanoidVisualModel
   m_EditorClassIdentifier: 
-  id: 7746a4ea05b243b08a62134eba95b4da
+  _id: 3aef2ec1f26b4e6687888ec7ae33028c
   <Name>k__BackingField: Humanoid
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94cb2f8ac88bedc4cad7b289089cd6f3, type: 3}
   m_Name: HandLeftUnitVariants
   m_EditorClassIdentifier: 
+  _id: 8bdb39380ad6413fb7e3d58e0ff04de9
   <Path>k__BackingField: 400
   <Variants>k__BackingField:
   - <Name>k__BackingField: Human

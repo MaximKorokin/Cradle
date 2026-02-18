@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
   m_Name: RingOfKnowledge
   m_EditorClassIdentifier: 
-  id: 4ec0fa8f5453421da0386d57085dda90
+  _id: 4ec0fa8f5453421da0386d57085dda90
   <Name>k__BackingField: Ring of Knowledge
   <Icon>k__BackingField: {fileID: 8197046753176521706, guid: 847058546f2eb7641ae4766529c8b0db, type: 3}
   <Sprite>k__BackingField: {fileID: 8197046753176521706, guid: 847058546f2eb7641ae4766529c8b0db, type: 3}

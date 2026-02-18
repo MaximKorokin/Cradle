@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94cb2f8ac88bedc4cad7b289089cd6f3, type: 3}
   m_Name: FootFrontRightUnitVariants
   m_EditorClassIdentifier: 
+  _id: 8c9ae0260065497aa2ca5b0bf5d3fa50
   <Path>k__BackingField: 1520
   <Variants>k__BackingField:
   - <Name>k__BackingField: Dog

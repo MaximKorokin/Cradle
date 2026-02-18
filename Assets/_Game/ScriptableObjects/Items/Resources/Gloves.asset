@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
   m_Name: Gloves
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 780db064-ca6a-4b9d-bc23-64e34a86403e
+  _id: 780db064-ca6a-4b9d-bc23-64e34a86403e
   <Name>k__BackingField: Gloves
   <Icon>k__BackingField: {fileID: 2324362101258219691, guid: 40bf3482d4206a143b91eb6942393747, type: 3}
   <Sprite>k__BackingField: {fileID: 3052204324842648624, guid: c74c90811d22fb444943251606ff5755, type: 3}

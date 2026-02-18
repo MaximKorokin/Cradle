@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79116d10ba7a0044980441119a7c653d, type: 3}
   m_Name: BlessedBodySE
   m_EditorClassIdentifier: 
-  id: 6d37127d375a4b15ad8a7da46dd7e572
+  _id: f55f225dd77c450fb3d952823ee3567e
   <Name>k__BackingField: Blessed Body
   <Icon>k__BackingField: {fileID: 8730139348721419665, guid: f154b29ca6193de47ab36cb3897e39aa, type: 3}
   <Category>k__BackingField: 0

@@ -15,8 +15,17 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             _serializer = serializer;
         }
 
-        public void Save(string key, GameSave save) => _storage.SaveText(key, _serializer.Serialize(save));
-        public GameSave Load(string key) => _serializer.Deserialize<GameSave>(_storage.LoadText(key));
+        public void Save(string key, GameSave save)
+        {
+            var json = _serializer.Serialize(save);
+            _storage.SaveText(key, json);
+        }
+
+        public GameSave Load(string key)
+        {
+            var json = _storage.LoadText(key);
+            return _serializer.Deserialize<GameSave>(json);
+        }
     }
 
     public sealed class GameSave

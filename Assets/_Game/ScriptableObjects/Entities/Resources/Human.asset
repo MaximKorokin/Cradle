@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
   m_Name: Human
   m_EditorClassIdentifier: 
-  id: 241a9cdbe7634e67941e4e55a53b0ff8
+  _id: edc70223a05e4ce9b82c63d025372dd8
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 098d7829eff45b848b13a6b29dd7e48b, type: 2}
   <VariantName>k__BackingField: Human
   _modules:

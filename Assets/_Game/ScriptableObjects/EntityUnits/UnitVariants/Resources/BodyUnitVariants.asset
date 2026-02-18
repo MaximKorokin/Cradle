@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94cb2f8ac88bedc4cad7b289089cd6f3, type: 3}
   m_Name: BodyUnitVariants
   m_EditorClassIdentifier: Assembly-CSharp:Assets._Game.Scripts.ScriptableObjectManagers:EntityUnitVariants
+  _id: d094409c8d8b4a688753dd510e5f56bf
   <Path>k__BackingField: 200
   <Variants>k__BackingField:
   - <Name>k__BackingField: Human

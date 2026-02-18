@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
   m_Name: Gold
   m_EditorClassIdentifier: 
-  id: 60214d38ab194b60b1e3ba0d521ba1b3
+  _id: 60214d38ab194b60b1e3ba0d521ba1b3
   <Name>k__BackingField: Gold
   <Icon>k__BackingField: {fileID: 2101020862250108484, guid: 906f871905777b5458b6e65874b97458, type: 3}
   <Sprite>k__BackingField: {fileID: 2101020862250108484, guid: 906f871905777b5458b6e65874b97458, type: 3}

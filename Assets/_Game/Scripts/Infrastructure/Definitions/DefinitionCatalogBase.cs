@@ -14,8 +14,8 @@ namespace Assets._Game.Scripts.Infrastructure.Definitions
         public DefinitionCatalogBase()
         {
             var definitions = Resources.LoadAll<T>("").ToList();
-            OnDefinitionsLoaded(definitions);
             Definitions = definitions.ToDictionary(x => x.Id, x => x);
+            OnDefinitionsLoaded(definitions);
         }
 
         protected virtual void OnDefinitionsLoaded(IEnumerable<T> definitions)
