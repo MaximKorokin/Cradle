@@ -10,9 +10,11 @@ namespace Assets._Game.Scripts.Items.Equipment
 
     public sealed class DefaultEquipmentRules : IEquipmentRules
     {
-        public bool CanEquip(ItemStackSnapshot snapshot)
+        public bool CanEquip(ItemStackSnapshot item)
         {
-            return snapshot.GetEquippableTrait() != null;
+            var slotType = item.GetEquipmentSlotType();
+
+            return slotType != EquipmentSlotType.None;
         }
 
         public bool CanPlace(EquipmentSlotKey slot, ItemStackSnapshot item)

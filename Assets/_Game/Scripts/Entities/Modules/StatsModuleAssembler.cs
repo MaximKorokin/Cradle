@@ -8,9 +8,9 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private readonly StatsControllerAssembler _statsControllerAssembler;
         private readonly StatsConfig _statsConfig;
-        private readonly Dispatcher _dispatcher;
+        private readonly DispatcherService _dispatcher;
 
-        public StatsModuleAssembler(StatsControllerAssembler statsControllerAssembler, StatsConfig statsConfig, Dispatcher dispatcher)
+        public StatsModuleAssembler(StatsControllerAssembler statsControllerAssembler, StatsConfig statsConfig, DispatcherService dispatcher)
         {
             _statsControllerAssembler = statsControllerAssembler;
             _statsConfig = statsConfig;

@@ -266,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 551049542}
   - component: {fileID: 551049543}
+  - component: {fileID: 551049544}
   m_Layer: 0
   m_Name: GameLifetimeScope
   m_TagString: Untagged
@@ -305,9 +306,22 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _newGameDefinition: {fileID: 11400000, guid: 46c0fe08b4fc5424180cb73dc2408f79, type: 2}
+  _saveConfig: {fileID: 11400000, guid: 6c49e312684f4b841b10dfd6e75e2082, type: 2}
   _itemsConfig: {fileID: 11400000, guid: 5d949efdf99c17c4697df6b59e537bbb, type: 2}
   _statsConfig: {fileID: 11400000, guid: 8255ace4ade20fc4b8629b0e4d714bd1, type: 2}
   _statusEffectsConfig: {fileID: 11400000, guid: 2112acdf0bdc6014284ad1242b1c1a76, type: 2}
+--- !u!114 &551049544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 551049541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb601b2af64c09b4eb497983ac74ed16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

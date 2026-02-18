@@ -17,14 +17,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public InventoryEquipmentWindowController(
             InventoryHudData inventoryHudData,
             EquipmentHudData equipmentHudData,
-            WindowManager windowManager,
-            ItemCommandHandler handler)
+            WindowManager windowManager)
         {
             _inventoryHudData = inventoryHudData;
 
             _equipmentHudData = equipmentHudData;
 
-            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel, handler);
+            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel);
         }
 
         public override void Bind(InventoryEquipmentWindow window)

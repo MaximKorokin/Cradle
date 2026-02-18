@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -24,8 +25,19 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public InventoryEquipmentModule Create(EntityDefinition entityDefinition)
         {
-            var inventoryModel = _inventoryModelAssembler.Create(entityDefinition);
-            var equipmentModel = _equipmentModelAssembler.Create(entityDefinition);
+            InventoryModel inventoryModel = null;
+            if (entityDefinition.TryGetModule<InventoryModuleDefinition>(out var inventoryDefinitionModule))
+            {
+                inventoryModel = _inventoryModelAssembler.Create(inventoryDefinitionModule.SlotsAmount);
+            }
+
+            EquipmentModel equipmentModel = null;
+            if (entityDefinition.TryGetModule<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
+            {
+                var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
+                equipmentModel = _equipmentModelAssembler.Create(slots);
+            }
+
             return new InventoryEquipmentModule(inventoryModel, equipmentModel);
         }
 

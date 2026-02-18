@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.Infrastructure.Definitions;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 using System.Linq;

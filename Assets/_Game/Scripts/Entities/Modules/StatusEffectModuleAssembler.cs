@@ -6,9 +6,9 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class StatusEffectModuleAssembler
     {
         private readonly StatusEffectsConfig _config;
-        private readonly Dispatcher _dispatcher;
+        private readonly DispatcherService _dispatcher;
 
-        public StatusEffectModuleAssembler(StatusEffectsConfig config, Dispatcher dispatcher)
+        public StatusEffectModuleAssembler(StatusEffectsConfig config, DispatcherService dispatcher)
         {
             _config = config;
             _dispatcher = dispatcher;

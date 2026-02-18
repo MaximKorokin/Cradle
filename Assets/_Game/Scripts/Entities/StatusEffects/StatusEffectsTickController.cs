@@ -8,11 +8,11 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     public sealed class StatusEffectsTickController
     {
         private readonly StatusEffectsController _statusEffectsController;
-        private readonly Dispatcher _dispatcher;
+        private readonly DispatcherService _dispatcher;
 
         private readonly CooldownCounter _cooldownCounter;
 
-        public StatusEffectsTickController(StatusEffectsController statusEffectsController, StatusEffectsConfig statusEffectsConfig, Dispatcher dispatcher)
+        public StatusEffectsTickController(StatusEffectsController statusEffectsController, StatusEffectsConfig statusEffectsConfig, DispatcherService dispatcher)
         {
             _statusEffectsController = statusEffectsController;
             _dispatcher = dispatcher;

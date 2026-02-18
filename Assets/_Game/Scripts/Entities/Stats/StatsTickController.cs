@@ -7,11 +7,11 @@ namespace Assets._Game.Scripts.Entities.Stats
     public sealed class StatsTickController : IDisposable
     {
         private readonly StatsController _statsController;
-        private readonly Dispatcher _dispatcher;
+        private readonly DispatcherService _dispatcher;
 
         private readonly CooldownCounter _cooldownCounter;
 
-        public StatsTickController(StatsController statsController, StatsConfig statsConfig, Dispatcher dispatcher)
+        public StatsTickController(StatsController statsController, StatsConfig statsConfig, DispatcherService dispatcher)
         {
             _statsController = statsController;
             _dispatcher = dispatcher;

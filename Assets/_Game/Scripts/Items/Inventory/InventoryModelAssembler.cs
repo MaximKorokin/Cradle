@@ -21,19 +21,16 @@ namespace Assets._Game.Scripts.Items.Inventory
                 foreach (var item in save.Items)
                 {
                     var itemStack = _itemStackAssembler.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
-                    model.AddToSlot(item.Slot, itemStack.Snapshot);
+                    if (itemStack != null) model.AddToSlot(item.Slot, itemStack.Snapshot);
                 }
             }
 
             return model;
         }
 
-        public InventoryModel Create(EntityDefinition entityDefinition)
+        public InventoryModel Create(int slotsAmount)
         {
-            if (!entityDefinition.TryGetModule<InventoryModuleDefinition>(out var inventoryDefinitionModule)) 
-                return null;
-
-            return new InventoryModel(inventoryDefinitionModule.SlotsAmount);
+            return new InventoryModel(slotsAmount);
         }
 
         public InventorySave Save(InventoryModel model)

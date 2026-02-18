@@ -21,6 +21,8 @@ namespace Assets._Game.Scripts.Infrastructure
         [SerializeField]
         private NewGameDefinition _newGameDefinition;
         [SerializeField]
+        private SaveConfig _saveConfig;
+        [SerializeField]
         private ItemsConfig _itemsConfig;
         [SerializeField]
         private StatsConfig _statsConfig;
@@ -30,7 +32,11 @@ namespace Assets._Game.Scripts.Infrastructure
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<GameBootstrap>();
-            builder.Register<Dispatcher>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.RegisterComponentInHierarchy<AppLifecycleBridge>();
+            builder.Register<IAppLifecycleHandler, AppLifecycleHandler>(Lifetime.Transient);
+
+            builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.RegisterInstance(_newGameDefinition);
 
@@ -44,6 +50,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterSavesFeature(IContainerBuilder builder)
         {
+            builder.RegisterInstance(_saveConfig);
+
             builder.Register<SaveService>(Lifetime.Scoped);
             builder.Register<GameSaveRepository>(Lifetime.Scoped);
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Scoped);

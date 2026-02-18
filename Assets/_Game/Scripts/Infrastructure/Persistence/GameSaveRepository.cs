@@ -24,6 +24,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public int Version;
         public long SavedAtUtc;
         public EntitySave PlayerSave;
+        public InventorySave StashSave;
     }
 
     public sealed class EntitySave

@@ -50,7 +50,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             if (_playerContext.Player.TryGetModule<InventoryEquipmentModule>(out var ieModule))
             {
-                ieModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, itemDefinition.MaxAmount).Snapshot);
+                ieModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, 1).Snapshot);
             }
         }
     }

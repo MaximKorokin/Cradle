@@ -28,12 +28,8 @@ namespace Assets._Game.Scripts.Items.Equipment
             return model;
         }
 
-        public EquipmentModel Create(EntityDefinition entityDefinition)
+        public EquipmentModel Create(EquipmentSlotType[] slots)
         {
-            if (!entityDefinition.TryGetModule<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
-                return null;
-
-            var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
             return new EquipmentModel(slots, new DefaultEquipmentRules());
         }
 

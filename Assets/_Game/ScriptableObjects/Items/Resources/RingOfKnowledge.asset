@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: RingOfGnosis
+  m_Name: RingOfKnowledge
   m_EditorClassIdentifier: 
-  <Id>k__BackingField: 5bf9a4060aafed14c8e991daff204d1a
-  <Name>k__BackingField: Ring of Gnosis
-  <Icon>k__BackingField: {fileID: -2413806693520163455, guid: 800a80fc382c68f43aa8b3aee08f7cdc, type: 3}
-  <Sprite>k__BackingField: {fileID: -2413806693520163455, guid: 800a80fc382c68f43aa8b3aee08f7cdc, type: 3}
+  id: 4ec0fa8f5453421da0386d57085dda90
+  <Name>k__BackingField: Ring of Knowledge
+  <Icon>k__BackingField: {fileID: 8197046753176521706, guid: 847058546f2eb7641ae4766529c8b0db, type: 3}
+  <Sprite>k__BackingField: {fileID: 8197046753176521706, guid: 847058546f2eb7641ae4766529c8b0db, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 80
   <Traits>k__BackingField:

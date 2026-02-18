@@ -12,18 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
   m_Name: Gold
   m_EditorClassIdentifier: 
-  id: cb90aa2ff43440bca95eae7ba2e23a02
+  id: 60214d38ab194b60b1e3ba0d521ba1b3
   <Name>k__BackingField: Gold
-  <Icon>k__BackingField: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  <Sprite>k__BackingField: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  <Icon>k__BackingField: {fileID: 2101020862250108484, guid: 906f871905777b5458b6e65874b97458, type: 3}
+  <Sprite>k__BackingField: {fileID: 2101020862250108484, guid: 906f871905777b5458b6e65874b97458, type: 3}
   <MaxAmount>k__BackingField: 2147483647
   <Weight>k__BackingField: 0
-  <Traits>k__BackingField:
-  - rid: 2859158637052690513
+  <Traits>k__BackingField: []
   references:
     version: 2
-    RefIds:
-    - rid: 2859158637052690513
-      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
-      data:
-        <Slot>k__BackingField: 0
+    RefIds: []

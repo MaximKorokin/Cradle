@@ -12,7 +12,6 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
         private readonly EquipmentModel _equipmentModel;
         private readonly IItemContainer<T1> _firstItemContainer;
         private readonly IItemContainer<T2> _secondItemContainer;
-        private readonly ItemCommandHandler _handler;
 
         private T1 _firstPointerDownSlotIndex;
         private T2 _secondPointerDownSlotIndex;
@@ -21,14 +20,12 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             WindowManager windowManager,
             EquipmentModel equipmentModel,
             IItemContainer<T1> primaryItemContainer,
-            IItemContainer<T2> secondaryItemContainer,
-            ItemCommandHandler handler)
+            IItemContainer<T2> secondaryItemContainer)
         {
             _windowManager = windowManager;
             _equipmentModel = equipmentModel;
             _firstItemContainer = primaryItemContainer;
             _secondItemContainer = secondaryItemContainer;
-            _handler = handler;
         }
 
         public void OnFirstItemContainerSlotPointerDown(T1 slotIndex)
