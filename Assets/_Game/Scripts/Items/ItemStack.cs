@@ -4,9 +4,9 @@ namespace Assets._Game.Scripts.Items
 {
     public class ItemStack
     {
-        public ItemDefinition Definition;
-        public IItemInstanceData InstanceData;
-        public int Amount;
+        public ItemDefinition Definition { get; set; }
+        public IItemInstanceData InstanceData { get; set; }
+        public int Amount { get; set; }
 
         public ItemKey Key => ItemKey.From(Definition, InstanceData);
 

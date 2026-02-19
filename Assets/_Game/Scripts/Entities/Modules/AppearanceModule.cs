@@ -1,60 +1,54 @@
 ﻿using Assets._Game.Scripts.Entities.Units;
+using System;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class AppearanceModule : EntityModuleBase
     {
-        private readonly UnitsController _units;
-        private readonly UnitFactory _entityUnitFactory;
+        public event Action<string, int> EnsureUnitRequested;
+        public event Action<string, Sprite> SetUnitSpriteRequested;
+        public event Action<string> RemoveUnitRequested;
 
-        public AppearanceModule(UnitsController units, UnitFactory entityUnitFactory)
+        public event Action<EntityAnimationClipName, AnimationClip> SetAnimationRequested;
+        public event Action<bool> SetDirectionRequested;
+        public event Action UpdateOrderInLayerRequested;
+
+        public EntityVisualModel EntityVisualModel { get; private set; }
+
+        public AppearanceModule(EntityVisualModel entityVisualModel)
         {
-            _units = units;
-            _entityUnitFactory = entityUnitFactory;
+            EntityVisualModel = entityVisualModel;
         }
 
-        public Unit EnsureUnit(string path, int relativeOrderInLayer)
+        public void RequestEnsureUnit(string path, int relativeOrderInLayer)
         {
-            var unit = _units.GetUnit(path);
-            if (unit != null)
-            {
-                unit.RelativeOrderInLayer = relativeOrderInLayer;
-                return unit;
-            }
-
-            unit = _entityUnitFactory.Create(path, relativeOrderInLayer);
-            _units.AddUnit(unit);
-            return unit;
+            EnsureUnitRequested?.Invoke(path, relativeOrderInLayer);
         }
 
-        public void SetUnitSprite(string path, Sprite sprite)
+        public void RequestSetUnitSprite(string path, Sprite sprite)
         {
-            var unit = _units.GetUnit(path);
-            if (unit != null)
-            {
-                unit.SpriteRenderer.sprite = sprite;
-            }
+            SetUnitSpriteRequested?.Invoke(path, sprite);
         }
 
-        public void RemoveUnit(string path)
+        public void RequestRemoveUnit(string path)
         {
-            _units.RemoveUnit(path);
+            RemoveUnitRequested?.Invoke(path);
         }
 
-        public void SetAnimation(EntityAnimationClipName clipName, AnimationClip clip)
+        public void RequestSetAnimation(EntityAnimationClipName clipName, AnimationClip clip)
         {
-            _units.AnimatorController.SetAnimation(clipName, clip);
+            SetAnimationRequested?.Invoke(clipName, clip);
         }
 
-        public void UpdateOrderInLayer()
+        public void RequestUpdateOrderInLayer()
         {
-            _units.UpdateOrderInLayer();
+            UpdateOrderInLayerRequested?.Invoke();
         }
 
-        public void SetDirection(bool right)
+        public void RequestSetDirection(bool right)
         {
-            _units.SetDirection(right);
+            SetDirectionRequested?.Invoke(right);
         }
     }
 }

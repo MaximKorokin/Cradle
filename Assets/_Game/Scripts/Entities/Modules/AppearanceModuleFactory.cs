@@ -4,19 +4,9 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class AppearanceModuleFactory
     {
-        private readonly UnitsControllerFactory _unitsControllerFactory;
-        private readonly UnitFactory _entityUnitFactory;
-
-        public AppearanceModuleFactory(UnitsControllerFactory unitsControllerFactory, UnitFactory entityUnitFactory)
+        public AppearanceModule Create(EntityVisualModel visualModel)
         {
-            _unitsControllerFactory = unitsControllerFactory;
-            _entityUnitFactory = entityUnitFactory;
-        }
-
-        public AppearanceModule Create(EntityView entityView, EntityDefinition entityDefinition)
-        {
-            var unitsController = _unitsControllerFactory.Create(entityView, entityDefinition.VisualModel, entityDefinition.VariantName);
-            var appearanceModel = new AppearanceModule(unitsController, _entityUnitFactory);
+            var appearanceModel = new AppearanceModule(visualModel);
             return appearanceModel;
         }
     }

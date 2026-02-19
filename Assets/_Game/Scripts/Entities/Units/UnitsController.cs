@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
@@ -7,21 +8,44 @@ namespace Assets._Game.Scripts.Entities.Units
         private readonly UnitTree _tree;
 
         private readonly Transform _unitsRoot;
+        private readonly UnitFactory _unitFactory;
 
-        public UnitsController(Transform unitsRoot, Animator animator, AnimatorOverrideController animatorController)
+        public event Action Changed;
+
+        public UnitsController(Transform unitsRoot, UnitFactory unitFactory)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot);
-            AnimatorController = new(animator, animatorController);
+            _unitFactory = unitFactory;
         }
 
-        public UnitsAnimator AnimatorController { get; private set; }
+        public void EnsureUnit(string path, int relativeOrderInLayer)
+        {
+            var unit = GetUnit(path);
+            if (unit != null)
+            {
+                unit.RelativeOrderInLayer = relativeOrderInLayer;
+                return;
+            }
+
+            unit = _unitFactory.Create(path, relativeOrderInLayer);
+            AddUnit(unit);
+        }
+
+        public void SetUnitSprite(string path, Sprite sprite)
+        {
+            var unit = GetUnit(path);
+            if (unit != null)
+            {
+                unit.SpriteRenderer.sprite = sprite;
+            }
+        }
 
         public void AddUnit(Unit entityUnit)
         {
             _tree.Add(entityUnit);
 
-            AnimatorController.Rebind();
+            Changed?.Invoke();
         }
 
         public Unit GetUnit(string path)
@@ -32,17 +56,19 @@ namespace Assets._Game.Scripts.Entities.Units
         public void RemoveUnit(string path)
         {
             _tree.RemoveRecursive(path);
+            Changed?.Invoke();
         }
 
         public void UpdateOrderInLayer()
         {
             var pivotOrderInLayer = -(int)(_unitsRoot.position.y * 100);
             _tree.UpdateOrderInLayer(pivotOrderInLayer);
+            Changed?.Invoke();
         }
 
-        public void SetDirection(bool right)
+        public void SetDirection(bool toRight)
         {
-            _unitsRoot.localScale = new(right ? 1 : -1, 1, 1);
+            _unitsRoot.localScale = new(toRight ? 1 : -1, 1, 1);
         }
     }
 }

@@ -1,21 +1,24 @@
-﻿namespace Assets._Game.Scripts.Entities.Units
+﻿using UnityEngine;
+
+namespace Assets._Game.Scripts.Entities.Units
 {
     public sealed class UnitsControllerFactory
     {
-        private readonly UnitFactory _entityUnitFactory;
+        private readonly UnitFactory _unitFactory;
 
         public UnitsControllerFactory(UnitFactory entityUnitFactory)
         {
-            _entityUnitFactory = entityUnitFactory;
+            _unitFactory = entityUnitFactory;
         }
 
-        public UnitsController Create(EntityView entityView, EntityVisualModel entityVisualModel, string variantName)
+        public UnitsController Create(Transform unitsRoot, EntityVisualModel entityVisualModel, string variantName)
         {
-            var unitsController = new UnitsController(entityView.UnitsRoot, entityView.UnitsAnimator, entityVisualModel.Animator);
+            var unitsController = new UnitsController(unitsRoot, _unitFactory);
 
+            // todo: don't use factory; use controller's methods instead
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
-                unitsController.AddUnit(_entityUnitFactory.Create(unitVisualModel, variantName));
+                unitsController.AddUnit(_unitFactory.Create(unitVisualModel, variantName));
             }
 
             unitsController.UpdateOrderInLayer();

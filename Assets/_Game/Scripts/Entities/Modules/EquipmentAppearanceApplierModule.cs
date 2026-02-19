@@ -31,21 +31,21 @@ namespace Assets._Game.Scripts.Entities.Modules
                 if (e.Kind == EquipmentChangeKind.Equipped)
                 {
                     var relativeOrderInLayer = e.Slot.SlotType == EquipmentSlotType.Weapon ? -1 : 1;
-                    _appearance.EnsureUnit(path, relativeOrderInLayer);
-                    _appearance.SetUnitSprite(path, e.Item.Value.Definition.Sprite);
+                    _appearance.RequestEnsureUnit(path, relativeOrderInLayer);
+                    _appearance.RequestSetUnitSprite(path, e.Item.Value.Definition.Sprite);
                 }
                 else if (e.Kind == EquipmentChangeKind.Unequipped)
                 {
-                    _appearance.RemoveUnit(path);
+                    _appearance.RequestRemoveUnit(path);
                 }
             }
-            _appearance.UpdateOrderInLayer();
+            _appearance.RequestUpdateOrderInLayer();
 
             // Change animations
             foreach (var animationTrait in e.Item.Value.GetTraits<AnimationOverrideTrait>())
             {
                 var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationTrait.AnimationClip;
-                _appearance.SetAnimation(animationTrait.AnimationKey, animationClip);
+                _appearance.RequestSetAnimation(animationTrait.AnimationKey, animationClip);
             }
         }
     }
