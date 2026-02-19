@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Infrastructure.Definitions
+namespace Assets._Game.Scripts.Infrastructure.Storage
 {
     public abstract class DefinitionCatalogBase<T> : IEnumerable<T>
         where T : GuidScriptableObject

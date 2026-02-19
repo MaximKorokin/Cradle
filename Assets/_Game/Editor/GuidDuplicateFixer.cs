@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using Assets._Game.Scripts.Infrastructure.Definitions;
+using Assets._Game.Scripts.Infrastructure.Storage;
 using System.IO;
 using System.Linq;
 using UnityEditor;

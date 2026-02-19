@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
-using Assets._Game.Scripts.Infrastructure.Definitions;
+using Assets._Game.Scripts.Infrastructure.Storage;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects

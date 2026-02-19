@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Infrastructure.Definitions
+namespace Assets._Game.Scripts.Infrastructure.Storage
 {
     public abstract class GuidScriptableObject : ScriptableObject
     {

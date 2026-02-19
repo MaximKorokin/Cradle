@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 4214577027583294905}
   - component: {fileID: 9119207556145364085}
   m_Layer: 0
-  m_Name: EmptyEntity
+  m_Name: CreatureEntity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
