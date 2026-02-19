@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.Entities
 
         public Entity Create(EntityDefinition entityDefinition)
         {
-            var entity = new Entity();
+            var entity = new Entity(entityDefinition);
             _entityRepository.Add(entity);
 
             var statsModule = _statsModuleAssembler.Create(entityDefinition);
@@ -55,7 +55,7 @@ namespace Assets._Game.Scripts.Entities
 
             entity.AddModule(_statusEffectModuleAssembler.Assemble());
 
-            var appearanceModule = _appearanceModuleFactory.Create();
+            var appearanceModule = _appearanceModuleFactory.Create(entityDefinition.VisualModel);
             entity.AddModule(appearanceModule);
             entity.AddModule(new EquipmentAppearanceApplierModule(appearanceModule, entityDefinition.VisualModel));
 

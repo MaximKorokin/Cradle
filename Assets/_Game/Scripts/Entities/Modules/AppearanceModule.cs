@@ -14,32 +14,39 @@ namespace Assets._Game.Scripts.Entities.Modules
         public event Action<bool> SetDirectionRequested;
         public event Action UpdateOrderInLayerRequested;
 
-        public void EnsureUnit(string path, int relativeOrderInLayer)
+        public EntityVisualModel EntityVisualModel { get; private set; }
+
+        public AppearanceModule(EntityVisualModel entityVisualModel)
+        {
+            EntityVisualModel = entityVisualModel;
+        }
+
+        public void RequestEnsureUnit(string path, int relativeOrderInLayer)
         {
             EnsureUnitRequested?.Invoke(path, relativeOrderInLayer);
         }
 
-        public void SetUnitSprite(string path, Sprite sprite)
+        public void RequestSetUnitSprite(string path, Sprite sprite)
         {
             SetUnitSpriteRequested?.Invoke(path, sprite);
         }
 
-        public void RemoveUnit(string path)
+        public void RequestRemoveUnit(string path)
         {
             RemoveUnitRequested?.Invoke(path);
         }
 
-        public void SetAnimation(EntityAnimationClipName clipName, AnimationClip clip)
+        public void RequestSetAnimation(EntityAnimationClipName clipName, AnimationClip clip)
         {
             SetAnimationRequested?.Invoke(clipName, clip);
         }
 
-        public void UpdateOrderInLayer()
+        public void RequestUpdateOrderInLayer()
         {
             UpdateOrderInLayerRequested?.Invoke();
         }
 
-        public void SetDirection(bool right)
+        public void RequestSetDirection(bool right)
         {
             SetDirectionRequested?.Invoke(right);
         }

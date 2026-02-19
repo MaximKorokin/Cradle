@@ -8,6 +8,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     {
         private const string SaveKey = "Player";
 
+        private readonly IGlobalEventBus _eventBus;
         private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
@@ -15,12 +16,14 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private readonly InventoryModelAssembler _inventoryModelAssembler;
 
         public SaveService(
+            IGlobalEventBus eventBus,
             GameSaveRepository gameSaveRepository,
             NewGameDefinition newGameDefinition,
             PlayerContext playerContext,
             EntityAssembler entityAssembler,
             InventoryModelAssembler inventoryModelAssembler)
         {
+            _eventBus = eventBus;
             _gameSaveRepository = gameSaveRepository;
             _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
@@ -60,6 +63,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
                 humanoid = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
             }
             _playerContext.SetPlayer(humanoid);
+
+            _eventBus.Publish(new SpawnEntityEvent(humanoid, UnityEngine.Vector2.one));
         }
 
         public void ResetSave()

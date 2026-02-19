@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
@@ -9,15 +10,14 @@ namespace Assets._Game.Scripts.Entities.Units
         private readonly Transform _unitsRoot;
         private readonly UnitFactory _unitFactory;
 
-        public UnitsController(Transform unitsRoot, Animator animator, UnitFactory unitFactory, AnimatorOverrideController animatorController)
+        public event Action Changed;
+
+        public UnitsController(Transform unitsRoot, UnitFactory unitFactory)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot);
             _unitFactory = unitFactory;
-            AnimatorController = new(animator, animatorController);
         }
-
-        public UnitsAnimator AnimatorController { get; private set; }
 
         public void EnsureUnit(string path, int relativeOrderInLayer)
         {
@@ -45,7 +45,7 @@ namespace Assets._Game.Scripts.Entities.Units
         {
             _tree.Add(entityUnit);
 
-            AnimatorController.Rebind();
+            Changed?.Invoke();
         }
 
         public Unit GetUnit(string path)
@@ -56,12 +56,14 @@ namespace Assets._Game.Scripts.Entities.Units
         public void RemoveUnit(string path)
         {
             _tree.RemoveRecursive(path);
+            Changed?.Invoke();
         }
 
         public void UpdateOrderInLayer()
         {
             var pivotOrderInLayer = -(int)(_unitsRoot.position.y * 100);
             _tree.UpdateOrderInLayer(pivotOrderInLayer);
+            Changed?.Invoke();
         }
 
         public void SetDirection(bool toRight)

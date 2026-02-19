@@ -11,10 +11,11 @@ namespace Assets._Game.Scripts.Entities.Units
             _unitFactory = entityUnitFactory;
         }
 
-        public UnitsController Create(Transform unitsRoot, Animator unitsAnimator, EntityVisualModel entityVisualModel, string variantName)
+        public UnitsController Create(Transform unitsRoot, EntityVisualModel entityVisualModel, string variantName)
         {
-            var unitsController = new UnitsController(unitsRoot, unitsAnimator, _unitFactory, entityVisualModel.Animator);
+            var unitsController = new UnitsController(unitsRoot, _unitFactory);
 
+            // todo: don't use factory; use controller's methods instead
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
                 unitsController.AddUnit(_unitFactory.Create(unitVisualModel, variantName));

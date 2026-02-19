@@ -14,37 +14,55 @@ namespace Assets._Game.Scripts.Entities
         [field: SerializeField]
         public Animator UnitsAnimator { get; private set; }
 
-        public UnitsController UnitsController { get; set; }
+        public UnitsController UnitsController { get; private set; }
+        public UnitsAnimator AnimatorController { get; private set; }
 
         private AppearanceModule _appearance;
 
+        public void Initialize(UnitsController unitsController)
+        {
+            UnitsController = unitsController;
+            UnitsController.Changed += OnUnitsControllerChanged;
+        }
+
+        private void OnUnitsControllerChanged()
+        {
+            AnimatorController?.Rebind();
+        }
+
         public void Bind(AppearanceModule appearance)
         {
+            AnimatorController = new(UnitsAnimator, appearance.EntityVisualModel.Animator);
+            AnimatorController.Rebind();
+
+            if (_appearance != null) Unbind();
             _appearance = appearance;
 
             _appearance.EnsureUnitRequested += UnitsController.EnsureUnit;
             _appearance.SetUnitSpriteRequested += UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested += UnitsController.RemoveUnit;
-            
-            _appearance.SetAnimationRequested += UnitsController.AnimatorController.SetAnimation;
             _appearance.SetDirectionRequested += UnitsController.SetDirection;
             _appearance.UpdateOrderInLayerRequested += UnitsController.UpdateOrderInLayer;
+
+            _appearance.SetAnimationRequested += AnimatorController.SetAnimation;
         }
 
         public void Unbind()
         {
-            _appearance.EnsureUnitRequested += UnitsController.EnsureUnit;
-            _appearance.SetUnitSpriteRequested += UnitsController.SetUnitSprite;
-            _appearance.RemoveUnitRequested += UnitsController.RemoveUnit;
+            if (_appearance == null) return;
 
-            _appearance.SetAnimationRequested += UnitsController.AnimatorController.SetAnimation;
-            _appearance.SetDirectionRequested += UnitsController.SetDirection;
-            _appearance.UpdateOrderInLayerRequested += UnitsController.UpdateOrderInLayer;
+            _appearance.EnsureUnitRequested -= UnitsController.EnsureUnit;
+            _appearance.SetUnitSpriteRequested -= UnitsController.SetUnitSprite;
+            _appearance.RemoveUnitRequested -= UnitsController.RemoveUnit;
+            _appearance.SetDirectionRequested -= UnitsController.SetDirection;
+            _appearance.UpdateOrderInLayerRequested -= UnitsController.UpdateOrderInLayer;
+
+            _appearance.SetAnimationRequested -= AnimatorController.SetAnimation;
 
             _appearance = null;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (_appearance != null)
             {

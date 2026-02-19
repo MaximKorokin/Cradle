@@ -35,6 +35,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.RegisterComponentInHierarchy<AppLifecycleBridge>();
             builder.Register<IAppLifecycleHandler, AppLifecycleHandler>(Lifetime.Transient);
+            builder.Register<IGlobalEventBus, GlobalEventBus>(Lifetime.Singleton);
 
             builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
@@ -64,6 +65,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityFeature(IContainerBuilder builder)
         {
+            builder.RegisterEntryPoint<EntitySpawner>();
+
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
@@ -73,6 +76,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
 
             builder.Register<AppearanceModuleFactory>(Lifetime.Scoped);
+            builder.Register<EntityViewFactory>(Lifetime.Scoped);
             builder.Register<UnitFactory>(Lifetime.Scoped);
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);

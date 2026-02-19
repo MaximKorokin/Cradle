@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Units;
+﻿using Assets._Game.Scripts.Entities.Units;
 using VContainer;
 using VContainer.Unity;
 
@@ -25,11 +24,9 @@ namespace Assets._Game.Scripts.Entities
             var entityView = _resolver.Instantiate(entityDefinition.VisualModel.BasePrefab);
             entityView.name = $"{entityDefinition.VisualModel} ({++_entitiesCounter})";
 
-            entityView.UnitsController = _unitsControllerFactory.Create(
-                entityView.UnitsRoot,
-                entityView.UnitsAnimator,
-                entityDefinition.VisualModel,
-                entityDefinition.VariantName);
+            var unitsController = _unitsControllerFactory.Create(entityView.UnitsRoot, entityDefinition.VisualModel, entityDefinition.VariantName);
+
+            entityView.Initialize(unitsController);
 
             return entityView;
         }
