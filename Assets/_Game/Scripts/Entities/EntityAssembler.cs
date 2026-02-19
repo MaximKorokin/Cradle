@@ -26,21 +26,6 @@ namespace Assets._Game.Scripts.Entities
             _statusEffectModuleAssembler = statusEffectModuleAssembler;
         }
 
-        public Entity Assemble(EntityDefinition entityDefinition, EntitySave save)
-        {
-            var entity = Create(entityDefinition);
-            if (entity == null)
-            {
-                SLog.Error($"Cannot create entity with id: {entityDefinition.VisualModel}");
-                return null;
-            }
-            if (entity.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
-            {
-                _inventoryEquipmentControllerAssembler.Apply(inventoryEquipmentModule, save);
-            }
-            return entity;
-        }
-
         public Entity Create(EntityDefinition entityDefinition)
         {
             var entity = new Entity(entityDefinition);
@@ -63,6 +48,14 @@ namespace Assets._Game.Scripts.Entities
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 
             return entity;
+        }
+
+        public void Apply(Entity entity, EntitySave save)
+        {
+            if (entity.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
+            {
+                _inventoryEquipmentControllerAssembler.Apply(inventoryEquipmentModule, save);
+            }
         }
 
         public EntitySave Save(Entity entity)
