@@ -1,20 +1,16 @@
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Storage;
 using System;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities
 {
-    public class Entity : IDisposable
+    public class Entity : IEntry, IDisposable
     {
+        string IEntry.Id { get; set; }
+
         private readonly Dictionary<Type, IEntityModule> _modules = new();
         private readonly Dictionary<Type, List<Delegate>> _handlers = new();
-
-        public Entity(string id)
-        {
-            Id = id;
-        }
-
-        public string Id { get; private set; }
 
         public void AddModule<T>(T module) where T : class, IEntityModule
         {

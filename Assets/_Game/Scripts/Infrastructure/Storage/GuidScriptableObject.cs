@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Shared.Attributes;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
 
         public void RegenerateId()
         {
-            _id = System.Guid.NewGuid().ToString("N");
+            _id = Guid.NewGuid().ToString("N");
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
 

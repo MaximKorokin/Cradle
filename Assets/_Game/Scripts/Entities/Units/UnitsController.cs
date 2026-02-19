@@ -7,15 +7,39 @@ namespace Assets._Game.Scripts.Entities.Units
         private readonly UnitTree _tree;
 
         private readonly Transform _unitsRoot;
+        private readonly UnitFactory _unitFactory;
 
-        public UnitsController(Transform unitsRoot, Animator animator, AnimatorOverrideController animatorController)
+        public UnitsController(Transform unitsRoot, Animator animator, UnitFactory unitFactory, AnimatorOverrideController animatorController)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot);
+            _unitFactory = unitFactory;
             AnimatorController = new(animator, animatorController);
         }
 
         public UnitsAnimator AnimatorController { get; private set; }
+
+        public void EnsureUnit(string path, int relativeOrderInLayer)
+        {
+            var unit = GetUnit(path);
+            if (unit != null)
+            {
+                unit.RelativeOrderInLayer = relativeOrderInLayer;
+                return;
+            }
+
+            unit = _unitFactory.Create(path, relativeOrderInLayer);
+            AddUnit(unit);
+        }
+
+        public void SetUnitSprite(string path, Sprite sprite)
+        {
+            var unit = GetUnit(path);
+            if (unit != null)
+            {
+                unit.SpriteRenderer.sprite = sprite;
+            }
+        }
 
         public void AddUnit(Unit entityUnit)
         {
@@ -40,9 +64,9 @@ namespace Assets._Game.Scripts.Entities.Units
             _tree.UpdateOrderInLayer(pivotOrderInLayer);
         }
 
-        public void SetDirection(bool right)
+        public void SetDirection(bool toRight)
         {
-            _unitsRoot.localScale = new(right ? 1 : -1, 1, 1);
+            _unitsRoot.localScale = new(toRight ? 1 : -1, 1, 1);
         }
     }
 }
