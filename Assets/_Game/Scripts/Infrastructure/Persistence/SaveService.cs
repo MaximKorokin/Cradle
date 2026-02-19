@@ -53,18 +53,14 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             if (gameSave?.StashSave != null) _inventoryModelAssembler.Apply(stash, gameSave.StashSave);
             _playerContext.SetStash(stash);
 
-            Entity humanoid;
+            var humanoid = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
+            _eventBus.Publish(new SpawnEntityEvent(humanoid, UnityEngine.Vector2.one));
+
             if (gameSave?.PlayerSave != null)
             {
-                humanoid = _entityAssembler.Assemble(_newGameDefinition.PlayerEntityDefinition, gameSave.PlayerSave);
-            }
-            else
-            {
-                humanoid = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
+                _entityAssembler.Apply(humanoid, gameSave.PlayerSave);
             }
             _playerContext.SetPlayer(humanoid);
-
-            _eventBus.Publish(new SpawnEntityEvent(humanoid, UnityEngine.Vector2.one));
         }
 
         public void ResetSave()
