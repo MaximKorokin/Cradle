@@ -10,7 +10,7 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
 
         public void Add(T e)
         {
-            if (string.IsNullOrWhiteSpace(e. Id))
+            if (string.IsNullOrWhiteSpace(e.Id))
                 e.GenerateId();
             _byId.Add(e.Id, e);
         }

@@ -61,8 +61,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
                 _entityAssembler.Apply(humanoid, gameSave.PlayerSave);
             }
             _playerContext.SetPlayer(humanoid);
-
-            _eventBus.Publish(new SpawnEntityEvent(humanoid, UnityEngine.Vector2.one));
         }
 
         public void ResetSave()

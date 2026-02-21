@@ -28,6 +28,8 @@ namespace Assets._Game.Scripts.Infrastructure
         private StatsConfig _statsConfig;
         [SerializeField]
         private StatusEffectsConfig _statusEffectsConfig;
+        [SerializeField]
+        private DefaultPrefabReferences _defaultPrefabReferences;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -36,6 +38,9 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterComponentInHierarchy<AppLifecycleBridge>();
             builder.Register<IAppLifecycleHandler, AppLifecycleHandler>(Lifetime.Transient);
             builder.Register<IGlobalEventBus, GlobalEventBus>(Lifetime.Singleton);
+
+            builder.Register<PoolService>(Lifetime.Scoped);
+            builder.RegisterInstance(_defaultPrefabReferences);
 
             builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 

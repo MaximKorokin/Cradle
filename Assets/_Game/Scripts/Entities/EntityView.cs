@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
 {
-    public sealed class EntityView : MonoBehaviour, IEntry
+    public sealed class EntityView : MonoBehaviour, IEntry, IPoolable
     {
         string IEntry.Id { get; set; }
+        Component IPoolable.Prefab { get; set; }
 
         [field: SerializeField]
         public Transform UnitsRoot { get; private set; }
@@ -68,6 +69,16 @@ namespace Assets._Game.Scripts.Entities
             {
                 Unbind();
             }
+        }
+
+        public void OnTake()
+        {
+
+        }
+
+        public void OnReturn()
+        {
+
         }
     }
 }

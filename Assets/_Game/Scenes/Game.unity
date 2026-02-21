@@ -310,6 +310,7 @@ MonoBehaviour:
   _itemsConfig: {fileID: 11400000, guid: 5d949efdf99c17c4697df6b59e537bbb, type: 2}
   _statsConfig: {fileID: 11400000, guid: 8255ace4ade20fc4b8629b0e4d714bd1, type: 2}
   _statusEffectsConfig: {fileID: 11400000, guid: 2112acdf0bdc6014284ad1242b1c1a76, type: 2}
+  _defaultPrefabReferences: {fileID: 11400000, guid: 454b4801d101cf9448825aecb183176e, type: 2}
 --- !u!114 &551049544
 MonoBehaviour:
   m_ObjectHideFlags: 0

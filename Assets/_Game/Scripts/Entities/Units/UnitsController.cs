@@ -41,14 +41,14 @@ namespace Assets._Game.Scripts.Entities.Units
             }
         }
 
-        public void AddUnit(Unit entityUnit)
+        public void AddUnit(UnitView entityUnit)
         {
             _tree.Add(entityUnit);
 
             Changed?.Invoke();
         }
 
-        public Unit GetUnit(string path)
+        public UnitView GetUnit(string path)
         {
             return _tree.TryGet(path, out var unit) ? unit : null;
         }

@@ -9,20 +9,20 @@ namespace Assets._Game.Scripts.Entities.Units
     {
         private readonly Transform _unitsRoot;
 
-        private readonly Dictionary<string, Unit> _byPath = new();
-        private readonly HashSet<Unit> _roots = new();
-        private readonly Dictionary<string, List<Unit>> _pendingByParentPath = new();
+        private readonly Dictionary<string, UnitView> _byPath = new();
+        private readonly HashSet<UnitView> _roots = new();
+        private readonly Dictionary<string, List<UnitView>> _pendingByParentPath = new();
 
-        public IReadOnlyCollection<Unit> Roots => _roots;
+        public IReadOnlyCollection<UnitView> Roots => _roots;
 
         public UnitTree(Transform unitsRoot)
         {
             _unitsRoot = unitsRoot ? unitsRoot : throw new ArgumentNullException(nameof(unitsRoot));
         }
 
-        public bool TryGet(string path, out Unit unit) => _byPath.TryGetValue(path, out unit);
+        public bool TryGet(string path, out UnitView unit) => _byPath.TryGetValue(path, out unit);
 
-        public void Add(Unit unit)
+        public void Add(UnitView unit)
         {
             if (unit == null) throw new ArgumentNullException(nameof(unit));
             if (_byPath.ContainsKey(unit.Path))
@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.Entities.Units
                 return false;
 
             // Collect subtree (post-order or pre-order doesn't matter for Destroy, but we need a stable list)
-            var toRemove = new List<Unit>();
+            var toRemove = new List<UnitView>();
             ExecuteDepthFirst(root, u => toRemove.Add(u));
 
             // Detach subtree root from parent (or roots set)
@@ -73,18 +73,18 @@ namespace Assets._Game.Scripts.Entities.Units
                 u.Children.Clear();
 
                 // Break transform hierarchy
-                if (u.GameObject != null)
-                    u.GameObject.transform.SetParent(null, worldPositionStays: false);
+                if (u.gameObject != null)
+                    u.gameObject.transform.SetParent(null, worldPositionStays: false);
 
                 // Remove GameObject from scene hierarchy
-                if (destroyGameObjects && u.GameObject != null)
-                    UnityEngine.Object.Destroy(u.GameObject);
+                if (destroyGameObjects && u.gameObject != null)
+                    UnityEngine.Object.Destroy(u.gameObject);
             }
 
             return true;
         }
 
-        public void ExecuteAllDepthFirst(Action<Unit> action)
+        public void ExecuteAllDepthFirst(Action<UnitView> action)
         {
             foreach (var r in _roots)
                 ExecuteDepthFirst(r, action);
@@ -98,14 +98,14 @@ namespace Assets._Game.Scripts.Entities.Units
 
         // ---------------- internals ----------------
 
-        private static void ExecuteDepthFirst(Unit root, Action<Unit> action)
+        private static void ExecuteDepthFirst(UnitView root, Action<UnitView> action)
         {
             action(root);
             for (int i = 0; i < root.Children.Count; i++)
                 ExecuteDepthFirst(root.Children[i], action);
         }
 
-        private void AttachChild(Unit parent, Unit child)
+        private void AttachChild(UnitView parent, UnitView child)
         {
             _roots.Remove(child);
 
@@ -115,20 +115,20 @@ namespace Assets._Game.Scripts.Entities.Units
             child.Parent = parent;
             parent.Children.Add(child);
 
-            child.GameObject.transform.SetParent(parent.GameObject.transform, worldPositionStays: false);
-            child.GameObject.transform.localPosition = Vector3.zero;
+            child.gameObject.transform.SetParent(parent.gameObject.transform, worldPositionStays: false);
+            child.gameObject.transform.localPosition = Vector3.zero;
         }
 
-        private void MakeRoot(Unit unit)
+        private void MakeRoot(UnitView unit)
         {
             unit.Parent = null;
             _roots.Add(unit);
 
-            unit.GameObject.transform.SetParent(_unitsRoot, worldPositionStays: false);
-            unit.GameObject.transform.localPosition = Vector3.zero;
+            unit.gameObject.transform.SetParent(_unitsRoot, worldPositionStays: false);
+            unit.gameObject.transform.localPosition = Vector3.zero;
         }
 
-        private void DetachFromParentOrRoots(Unit unit)
+        private void DetachFromParentOrRoots(UnitView unit)
         {
             if (unit.Parent != null)
             {
@@ -141,16 +141,16 @@ namespace Assets._Game.Scripts.Entities.Units
             }
         }
 
-        private void AddPending(string parentPath, Unit child)
+        private void AddPending(string parentPath, UnitView child)
         {
             if (!_pendingByParentPath.TryGetValue(parentPath, out var list))
-                _pendingByParentPath[parentPath] = list = new List<Unit>();
+                _pendingByParentPath[parentPath] = list = new List<UnitView>();
 
             if (!list.Contains(child))
                 list.Add(child);
         }
 
-        private void AttachPendingChildren(Unit newParent)
+        private void AttachPendingChildren(UnitView newParent)
         {
             if (!_pendingByParentPath.TryGetValue(newParent.Path, out var list) || list.Count == 0)
                 return;
@@ -174,7 +174,7 @@ namespace Assets._Game.Scripts.Entities.Units
             return string.IsNullOrEmpty(parent) ? null : parent;
         }
 
-        private static void ApplyOrderRecursive(Unit unit, int parentOrder)
+        private static void ApplyOrderRecursive(UnitView unit, int parentOrder)
         {
             // Order is relative to the immediate parent
             int myOrder = parentOrder + unit.RelativeOrderInLayer;

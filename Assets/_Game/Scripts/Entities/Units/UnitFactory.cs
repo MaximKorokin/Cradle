@@ -1,25 +1,31 @@
-﻿using Assets.CoreScripts;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets.CoreScripts;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
     public sealed class UnitFactory
     {
+        private readonly PoolService _poolService;
         private readonly UnitVariantsCatalog _entityUnitVariantsCatalog;
+        private readonly DefaultPrefabReferences _defaultPrefabReferences;
 
-        public UnitFactory(UnitVariantsCatalog entityUnitVariantsCatalog)
+        public UnitFactory(PoolService poolService, UnitVariantsCatalog entityUnitVariantsCatalog, DefaultPrefabReferences defaultPrefabReferences)
         {
+            _poolService = poolService;
             _entityUnitVariantsCatalog = entityUnitVariantsCatalog;
+            _defaultPrefabReferences = defaultPrefabReferences;
         }
 
-        public Unit Create(string path, int relativeOrderInLayer)
+        public UnitView Create(string path, int relativeOrderInLayer)
         {
-            var entityUnitGameObject = CreateUnit(path);
-            var entityUnit = new Unit(entityUnitGameObject, path, relativeOrderInLayer);
-            return entityUnit;
+            var unitView = CreateUnit(path);
+            unitView.Path = path;
+            unitView.RelativeOrderInLayer = relativeOrderInLayer;
+            return unitView;
         }
 
-        public Unit Create(EntityUnitVisualModel entityUnitVisualModel, string variantName)
+        public UnitView Create(EntityUnitVisualModel entityUnitVisualModel, string variantName)
         {
             var unitVariants = _entityUnitVariantsCatalog.GetByPath(entityUnitVisualModel.Path);
             if (unitVariants == null)
@@ -35,19 +41,20 @@ namespace Assets._Game.Scripts.Entities.Units
                 return null;
             }
 
-            var entityUnitGameObject = CreateUnit(entityUnitVisualModel.Path.ToString());
-            var entityUnit = new Unit(entityUnitGameObject, entityUnitVisualModel.Path.ToString(), entityUnitVisualModel.RelativeOrderInLayer);
+            var unitView = CreateUnit(entityUnitVisualModel.Path.ToString());
+            unitView.Path = entityUnitVisualModel.Path.ToString();
+            unitView.RelativeOrderInLayer = entityUnitVisualModel.RelativeOrderInLayer;
 
-            entityUnit.SetSprite(unitVariant.Sprite);
+            unitView.SpriteRenderer.sprite = unitVariant.Sprite;
 
-            return entityUnit;
+            return unitView;
         }
 
-        private GameObject CreateUnit(string name)
+        private UnitView CreateUnit(string name)
         {
-            var entityUnitGameObject = new GameObject(name);
-            entityUnitGameObject.AddComponent<SpriteRenderer>();
-            return entityUnitGameObject;
+            var unitView = _poolService.Take(_defaultPrefabReferences.UnitView, Vector3.zero, Quaternion.identity);
+            unitView.gameObject.name = name;
+            return unitView;
         }
     }
 }

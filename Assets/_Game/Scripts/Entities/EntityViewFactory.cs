@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Units;
-using VContainer;
-using VContainer.Unity;
+using Assets._Game.Scripts.Infrastructure.Game;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
 {
@@ -8,20 +8,26 @@ namespace Assets._Game.Scripts.Entities
     {
         private static int _entitiesCounter = 0;
 
-        private readonly IObjectResolver _resolver;
+        private readonly PoolService _poolService;
+        private readonly DefaultPrefabReferences _defaultPrefabReferences;
         private readonly UnitsControllerFactory _unitsControllerFactory;
 
         public EntityViewFactory(
-            IObjectResolver resolver,
+            PoolService poolService,
+            DefaultPrefabReferences defaultPrefabReferences,
             UnitsControllerFactory unitsControllerFactory)
         {
-            _resolver = resolver;
+            _poolService = poolService;
+            _defaultPrefabReferences = defaultPrefabReferences;
             _unitsControllerFactory = unitsControllerFactory;
         }
 
         public EntityView Create(EntityDefinition entityDefinition)
         {
-            var entityView = _resolver.Instantiate(entityDefinition.VisualModel.BasePrefab);
+            var prefab = entityDefinition.VisualModel.BasePrefab != null
+                ? entityDefinition.VisualModel.BasePrefab
+                : _defaultPrefabReferences.EntityView;
+            var entityView = _poolService.Take(prefab, Vector3.zero, Quaternion.identity);
             entityView.name = $"{entityDefinition.VisualModel} ({++_entitiesCounter})";
 
             var unitsController = _unitsControllerFactory.Create(entityView.UnitsRoot, entityDefinition.VisualModel, entityDefinition.VariantName);
