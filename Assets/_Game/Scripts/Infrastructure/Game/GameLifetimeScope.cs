@@ -1,6 +1,6 @@
 using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Entities.Interaction;
-using Assets._Game.Scripts.Entities.Interaction.Calculators;
+using Assets._Game.Scripts.Entities.Interactions;
+using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;

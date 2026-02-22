@@ -5,7 +5,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Assets._Game.Scripts.Entities.Interaction
+namespace Assets._Game.Scripts.Entities.Interactions
 {
     public sealed class InteractionSystem : IDisposable, IStartable
     {

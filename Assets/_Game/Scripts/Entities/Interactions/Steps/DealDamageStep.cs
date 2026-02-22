@@ -1,8 +1,8 @@
-﻿using Assets._Game.Scripts.Entities.Interaction.Calculators;
+﻿using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 
-namespace Assets._Game.Scripts.Entities.Interaction.Steps
+namespace Assets._Game.Scripts.Entities.Interactions.Steps
 {
     public sealed class DealDamageStep : IInteractionStep
     {

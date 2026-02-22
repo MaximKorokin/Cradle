@@ -1,4 +1,4 @@
-﻿namespace Assets._Game.Scripts.Entities.Interaction.Steps
+﻿namespace Assets._Game.Scripts.Entities.Interactions.Steps
 {
     public sealed class ParallelStep : IInteractionStep
     {

@@ -1,6 +1,6 @@
-﻿using Assets._Game.Scripts.Entities.Interaction.Steps;
+﻿using Assets._Game.Scripts.Entities.Interactions.Steps;
 
-namespace Assets._Game.Scripts.Entities.Interaction
+namespace Assets._Game.Scripts.Entities.Interactions
 {
     public sealed class InteractionInstance
     {

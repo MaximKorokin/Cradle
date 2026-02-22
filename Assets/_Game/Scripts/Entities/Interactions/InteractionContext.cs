@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Interaction
+namespace Assets._Game.Scripts.Entities.Interactions
 {
     public readonly struct InteractionContext
     {

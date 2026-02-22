@@ -1,11 +1,11 @@
-﻿using Assets._Game.Scripts.Entities.Interaction.Calculators;
-using Assets._Game.Scripts.Entities.Interaction.Steps;
+﻿using Assets._Game.Scripts.Entities.Interactions.Calculators;
+using Assets._Game.Scripts.Entities.Interactions.Steps;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
-namespace Assets._Game.Scripts.Entities.Interaction
+namespace Assets._Game.Scripts.Entities.Interactions
 {
     [CreateAssetMenu(fileName = "Interaction", menuName = "ScriptableObjects/InteractionDefinition")]
     public class InteractionDefinition : ScriptableObject
