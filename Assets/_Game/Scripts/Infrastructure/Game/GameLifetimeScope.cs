@@ -1,4 +1,6 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Interaction;
+using Assets._Game.Scripts.Entities.Interaction.Calculators;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
@@ -86,6 +88,13 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
             builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
+        }
+
+        private void RegisterInteractionFeature(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<InteractionSystem>();
+
+            builder.Register<IDamageCalculator, DamageCalculator>(Lifetime.Scoped);
         }
 
         private void RegisterItemFeature(IContainerBuilder builder)

@@ -26,6 +26,11 @@ namespace Assets._Game.Scripts.Entities.Modules
             _statsTickController.Dispose();
         }
 
+        public void SetBase(StatId statId, float value)
+        {
+            _statsController.SetBase(statId, value);
+        }
+
         public void AddModifiers(object source, IEnumerable<StatModifier> modifiers)
         {
             _statsController.AddModifiers(source, modifiers);

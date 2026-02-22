@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             _dispatcher.OnTick += OnTick;
         }
 
-        private void OnTick()
+        private void OnTick(float delta)
         {
             if (_cooldownCounter.TryReset())
             {

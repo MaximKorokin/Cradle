@@ -36,8 +36,8 @@ namespace Assets._Game.Scripts.Entities.Modules
             // todo: list formulas at least in an array
             _statsModule.AddModifiers(Source, new[]
             {
-                new StatModifier(StatId.Damage, StatStage.PreAdd, StatOperation.Add, strength * 2f),
-                new StatModifier(StatId.AttackSpeed, StatStage.PreAdd, StatOperation.Add, agility * 0.01f),
+                new StatModifier(StatId.PhysicalAttack, StatStage.PreAdd, StatOperation.Add, strength * 2f),
+                new StatModifier(StatId.PhysicalAttackSpeed, StatStage.PreAdd, StatOperation.Add, agility * 0.01f),
             });
         }
     }

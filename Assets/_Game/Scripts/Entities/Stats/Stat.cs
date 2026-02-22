@@ -119,11 +119,16 @@ namespace Assets._Game.Scripts.Entities.Stats
         HpRegeneration = 220,
 
         [StatRestriction(StatRestrictionType.NonNegative)]
-        Damage = 300,
+        MoveSpeed = 300,
         [StatRestriction(StatRestrictionType.NonNegative)]
-        MoveSpeed = 310,
+        PhysicalAttack = 310,
         [StatRestriction(StatRestrictionType.NonNegative)]
-        AttackSpeed = 320,
+        PhysicalCritChance = 315,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        PhysicalCritMultiplier = 316,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        PhysicalAttackSpeed = 320,
+        PhysicalArmor = 330,
 
         [StatRestriction(StatRestrictionType.NonNegative)]
         Strength = 400,

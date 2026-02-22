@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             _dispatcher.OnTick += OnTick;
         }
 
-        private void OnTick()
+        private void OnTick(float delta)
         {
             // HP regeneration
             if (_cooldownCounter.TryReset() &&
