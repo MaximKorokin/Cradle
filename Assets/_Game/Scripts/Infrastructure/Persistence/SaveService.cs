@@ -54,7 +54,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             _playerContext.SetStash(stash);
 
             var humanoid = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
-            _eventBus.Publish(new SpawnEntityEvent(humanoid, UnityEngine.Vector2.one));
+            _eventBus.Publish(new SpawnEntityRequestEvent(humanoid, UnityEngine.Vector2.one));
 
             if (gameSave?.PlayerSave != null)
             {

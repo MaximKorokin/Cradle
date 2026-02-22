@@ -1,6 +1,6 @@
 ﻿namespace Assets._Game.Editor
 {
-    using Assets._Game.Scripts.Entities.Interaction;
+    using Assets._Game.Scripts.Entities.Interactions;
     using System;
     using System.Collections.Generic;
     using System.Linq;

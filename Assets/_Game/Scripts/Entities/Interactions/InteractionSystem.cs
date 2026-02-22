@@ -22,11 +22,11 @@ namespace Assets._Game.Scripts.Entities.Interactions
             _dispatcher = dispatcher;
             _resolver = resolver;
 
-            _subscription = _globalBus.Subscribe<InteractionRequestedEvent>(OnRequested);
+            _subscription = _globalBus.Subscribe<InteractionRequestEvent>(OnRequested);
             _dispatcher.OnTick += Tick;
         }
 
-        private void OnRequested(InteractionRequestedEvent e)
+        private void OnRequested(InteractionRequestEvent e)
         {
             var root = e.Definition.BuildRuntime(_resolver);
 
@@ -60,14 +60,14 @@ namespace Assets._Game.Scripts.Entities.Interactions
         }
     }
 
-    public readonly struct InteractionRequestedEvent : IGlobalEvent
+    public readonly struct InteractionRequestEvent : IGlobalEvent
     {
         public readonly InteractionDefinition Definition;
         public readonly Entity Source;
         public readonly Entity Target;
         public readonly Vector2 Point;
 
-        public InteractionRequestedEvent(
+        public InteractionRequestEvent(
             InteractionDefinition definition,
             Entity source,
             Entity target,

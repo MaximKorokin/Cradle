@@ -36,7 +36,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
             var dogDefinition = _entityDefinitionCatalog.Get("d5855ca383df4ddd8c615e51609dc812");
             var dogEntity = _entityAssembler.Create(dogDefinition);
-            _eventBus.Publish(new SpawnEntityEvent(dogEntity, Vector2.zero));
+            _eventBus.Publish(new SpawnEntityRequestEvent(dogEntity, Vector2.zero));
 
             SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
         }

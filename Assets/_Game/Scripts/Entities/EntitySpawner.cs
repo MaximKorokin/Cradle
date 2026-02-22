@@ -15,12 +15,12 @@ namespace Assets._Game.Scripts.Entities
             _bus = bus;
             _entityViewFactory = entityViewFactory;
 
-            _bus.Subscribe<SpawnEntityEvent>(OnSpawn);
+            _bus.Subscribe<SpawnEntityRequestEvent>(OnSpawn);
         }
 
         public void Start() { }
 
-        private void OnSpawn(SpawnEntityEvent e)
+        private void OnSpawn(SpawnEntityRequestEvent e)
         {
             if (!e.Entity.TryGetModule<AppearanceModule>(out var module))
             {
@@ -34,12 +34,12 @@ namespace Assets._Game.Scripts.Entities
         }
     }
 
-    public readonly struct SpawnEntityEvent : IGlobalEvent
+    public readonly struct SpawnEntityRequestEvent : IGlobalEvent
     {
         public readonly Entity Entity;
         public readonly Vector2 Position;
 
-        public SpawnEntityEvent(Entity entity, Vector2 position)
+        public SpawnEntityRequestEvent(Entity entity, Vector2 position)
         {
             Entity = entity;
             Position = position;
