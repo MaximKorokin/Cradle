@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Interactions.Calculators;
+﻿using Assets._Game.Scripts.Entities.Control;
+using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Interactions.Steps;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,16 @@ namespace Assets._Game.Scripts.Entities.Interactions
         {
             public string VfxId = "HitSpark";
             public override IInteractionStep Build(IObjectResolver resolver) => new SpawnVfxStep(VfxId);
+        }
+
+        [Serializable]
+        public sealed class OverrideControlStepData : StepData
+        {
+            [SerializeReference]
+            public ControlProviderData ControlProvider;
+
+            public override IInteractionStep Build(IObjectResolver resolver)
+                => new OverrideControlStep(ControlProvider.CreateInstance());
         }
     }
 }

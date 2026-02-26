@@ -22,7 +22,7 @@ public sealed class Entity : IEntry, IDisposable
 
     public void AddModule<T>(T module) where T : class, IEntityModule
     {
-        _modules[typeof(T)] = module;
+        _modules[module.GetType()] = module;
         module.Attach(this);
     }
 

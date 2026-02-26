@@ -1,6 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Infrastructure;
-using System;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules
@@ -24,7 +23,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnOverrideControlRequested(OverrideControlRequestEvent overrideControlEvent)
         {
-
+            AddProvider(overrideControlEvent.ControlProvider);
         }
 
         public void AddProvider(IControlProvider p)
@@ -39,23 +38,43 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public void Tick(float delta)
         {
-            IControlProvider topPriorityProvider = null;
-            var topPriority = int.MinValue;
+            for (int i = 0; i < _providers.Count; i++)
+            {
+                if (!_providers[i].IsActive)
+                {
+                    _providers.RemoveAt(i);
+                }
+            }
+
+            var moveProvider = SelectBest(ControlMask.Move);
+            var aimProvider = SelectBest(ControlMask.Aim);
+            var interactProvider = SelectBest(ControlMask.Interact);
+
+            moveProvider?.Tick(Entity, delta);
+            aimProvider?.Tick(Entity, delta);
+            interactProvider?.Tick(Entity, delta);
+        }
+
+        private IControlProvider SelectBest(ControlMask channel)
+        {
+            IControlProvider best = null;
+            int bestPriority = int.MinValue;
 
             for (int i = 0; i < _providers.Count; i++)
             {
                 var provider = _providers[i];
                 if (!provider.IsActive) continue;
+                if ((provider.Mask & channel) == 0) continue;
 
                 var priority = (int)provider.Priority;
-                if (priority > topPriority)
+                if (priority > bestPriority || priority == bestPriority)
                 {
-                    topPriority = priority; 
-                    topPriorityProvider = provider;
+                    best = provider;
+                    bestPriority = priority;
                 }
             }
 
-            topPriorityProvider?.Tick(Entity, delta);
+            return best;
         }
 
         public override void Dispose()
@@ -68,15 +87,11 @@ namespace Assets._Game.Scripts.Entities.Modules
 
     public readonly struct OverrideControlRequestEvent : IEntityEvent
     {
-        public readonly Entity Source;
-        public readonly Entity Target;
-        public readonly float Duration;
+        public readonly IControlProvider ControlProvider;
 
-        public OverrideControlRequestEvent(Entity source, Entity target, float duration)
+        public OverrideControlRequestEvent(IControlProvider controlProvider)
         {
-            Source = source;
-            Target = target;
-            Duration = duration;
+            ControlProvider = controlProvider;
         }
     }
 }

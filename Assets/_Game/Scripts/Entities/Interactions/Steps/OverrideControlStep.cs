@@ -1,15 +1,16 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Control;
+using Assets._Game.Scripts.Entities.Modules;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Steps
 {
     public sealed class OverrideControlStep : IInteractionStep
     {
-        private readonly float _duration;
+        private readonly IControlProvider _controlProvider;
         private bool _done;
 
-        public OverrideControlStep(float duration)
+        public OverrideControlStep(IControlProvider controlProvider)
         {
-            _duration = duration;
+            _controlProvider = controlProvider;
         }
 
         public void Start(in InteractionContext ctx) => _done = false;
@@ -17,7 +18,9 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         public StepStatus Tick(in InteractionContext context, float delta)
         {
             if (_done) return StepStatus.Completed;
-            context.Target.Publish(new OverrideControlRequestEvent(context.Source, context.Target, _duration));
+
+            context.Target.Publish(new OverrideControlRequestEvent(_controlProvider));
+
             _done = true;
             return StepStatus.Completed;
         }

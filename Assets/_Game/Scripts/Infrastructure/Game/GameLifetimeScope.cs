@@ -1,7 +1,9 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Interactions;
 using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Modules.Positioning;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Entities.Units;
@@ -48,6 +50,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.RegisterInstance(_newGameDefinition);
 
+            builder.RegisterComponentInHierarchy<PlayerClickInputReader>();
+            builder.Register<PlayerControlProvider>(Lifetime.Scoped);
             builder.Register<PlayerContext>(Lifetime.Singleton);
 
             RegisterSavesFeature(builder);
@@ -88,6 +92,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
             builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
+
+            builder.Register<EntityPositioningFactory>(Lifetime.Scoped);
         }
 
         private void RegisterInteractionFeature(IContainerBuilder builder)

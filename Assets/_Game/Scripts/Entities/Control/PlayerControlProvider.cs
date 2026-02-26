@@ -6,6 +6,7 @@ namespace Assets._Game.Scripts.Entities.Control
     public sealed class PlayerControlProvider : IControlProvider
     {
         public ControlPriority Priority => ControlPriority.BasePlayer;
+        public ControlMask Mask => ControlMask.All;
         public bool IsActive => true;
 
         private Vector2 _move;

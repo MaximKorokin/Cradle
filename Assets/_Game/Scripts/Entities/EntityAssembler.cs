@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Modules.Positioning;
 using Assets._Game.Scripts.Infrastructure.Persistence;
-using Assets.CoreScripts;
 
 namespace Assets._Game.Scripts.Entities
 {
@@ -11,19 +11,22 @@ namespace Assets._Game.Scripts.Entities
         private readonly AppearanceModuleFactory _appearanceModuleFactory;
         private readonly StatsModuleAssembler _statsModuleAssembler;
         private readonly StatusEffectModuleAssembler _statusEffectModuleAssembler;
+        private readonly EntityPositioningFactory _entityPositioningFactory;
 
         public EntityAssembler(
             EntityRepository entityRepository,
             InventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
             AppearanceModuleFactory appearanceModuleFactory,
             StatsModuleAssembler statsModuleAssembler,
-            StatusEffectModuleAssembler statusEffectModuleAssembler)
+            StatusEffectModuleAssembler statusEffectModuleAssembler,
+            EntityPositioningFactory entityPositioningFactory)
         {
             _entityRepository = entityRepository;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
             _appearanceModuleFactory = appearanceModuleFactory;
             _statsModuleAssembler = statsModuleAssembler;
             _statusEffectModuleAssembler = statusEffectModuleAssembler;
+            _entityPositioningFactory = entityPositioningFactory;
         }
 
         public Entity Create(EntityDefinition entityDefinition)
@@ -46,6 +49,11 @@ namespace Assets._Game.Scripts.Entities
 
             //entity.AddModule(new BehaviourController());
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
+
+            foreach (var module in _entityPositioningFactory.Create(entityDefinition))
+            {
+                entity.AddModule(module);
+            }
 
             return entity;
         }

@@ -1,5 +1,15 @@
-﻿namespace Assets._Game.Scripts.Entities.Control
+﻿using System;
+
+namespace Assets._Game.Scripts.Entities.Control
 {
+    public interface IControlProvider
+    {
+        ControlPriority Priority { get; }
+        ControlMask Mask { get; }
+        bool IsActive { get; }
+        void Tick(Entity entity, float delta);
+    }
+
     public enum ControlPriority
     {
         BaseAI = 0,
@@ -11,10 +21,19 @@
         System = 1000,      // used for things like cutscenes, where we want to be sure that no other control provider can override it
     }
 
-    public interface IControlProvider
+    [Flags]
+    public enum ControlMask
     {
-        ControlPriority Priority { get; }
-        bool IsActive { get; }
-        void Tick(Entity entity, float delta);
+        None = 0,
+        Move = 1 << 0,
+        Aim = 1 << 1,
+        Interact = 1 << 2,
+        All = Move | Aim | Interact
+    }
+
+    [Serializable]
+    public abstract class ControlProviderData
+    {
+        public abstract IControlProvider CreateInstance();
     }
 }

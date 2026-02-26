@@ -26,13 +26,13 @@ namespace Assets._Game.Scripts.Entities.Modules
         public InventoryEquipmentModule Create(EntityDefinition entityDefinition)
         {
             InventoryModel inventoryModel = null;
-            if (entityDefinition.TryGetModule<InventoryModuleDefinition>(out var inventoryDefinitionModule))
+            if (entityDefinition.TryGetModuleDefinition<InventoryModuleDefinition>(out var inventoryDefinitionModule))
             {
                 inventoryModel = _inventoryModelAssembler.Create(inventoryDefinitionModule.SlotsAmount);
             }
 
             EquipmentModel equipmentModel = null;
-            if (entityDefinition.TryGetModule<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
+            if (entityDefinition.TryGetModuleDefinition<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
             {
                 var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
                 equipmentModel = _equipmentModelAssembler.Create(slots);

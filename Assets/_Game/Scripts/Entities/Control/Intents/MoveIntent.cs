@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Control
+namespace Assets._Game.Scripts.Entities.Control.Intents
 {
     public readonly struct MoveIntent
     {
@@ -13,6 +13,6 @@ namespace Assets._Game.Scripts.Entities.Control
             SpeedMultiplier = speedMultiplier;
         }
 
-        public static MoveIntent Stopping() => new MoveIntent(default) { };
+        public static MoveIntent None() => default;
     }
 }

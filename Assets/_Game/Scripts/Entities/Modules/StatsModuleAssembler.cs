@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public StatModule Create(EntityDefinition entityDefinition)
         {
-            if (entityDefinition.TryGetModule<StatsModuleDefinition>(out var statsDefinitionModule))
+            if (entityDefinition.TryGetModuleDefinition<StatsModuleDefinition>(out var statsDefinitionModule))
             {
                 var statsController = _statsControllerAssembler.Create(statsDefinitionModule.Stats);
                 var statsTickController = new StatsTickController(statsController, _statsConfig, _dispatcher);

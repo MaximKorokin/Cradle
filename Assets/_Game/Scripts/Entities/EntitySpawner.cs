@@ -22,15 +22,9 @@ namespace Assets._Game.Scripts.Entities
 
         private void OnSpawn(SpawnEntityRequestEvent e)
         {
-            if (!e.Entity.TryGetModule<AppearanceModule>(out var module))
-            {
-                SLog.Error($"Entity has no {nameof(AppearanceModule)} attached.");
-                return;
-            }
-
             var view = _entityViewFactory.Create(e.Entity.Definition);
             view.transform.position = e.Position;
-            view.Bind(module);
+            view.Bind(e.Entity);
         }
     }
 

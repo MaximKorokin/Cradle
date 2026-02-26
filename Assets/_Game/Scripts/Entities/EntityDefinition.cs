@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Stats;
+﻿using Assets._Game.Scripts.Entities.Control;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
 using Assets._Game.Scripts.Items.Equipment;
@@ -22,7 +23,7 @@ namespace Assets._Game.Scripts.Entities
 
         public EntityModuleDefinition[] Modules => _modules;
 
-        public bool TryGetModule<T>(out T module) where T : EntityModuleDefinition
+        public bool TryGetModuleDefinition<T>(out T module) where T : EntityModuleDefinition
         {
             module = _modules.FirstOrDefault(m => m is T) as T;
             return module != null;
@@ -50,13 +51,14 @@ namespace Assets._Game.Scripts.Entities
         public StatsDefinition Stats;
     }
 
-    public class AiModuleDefinition : EntityModuleDefinition
-    {
-        public string BehaviorTreeId;
-    }
-
     public class StatusEffectModuleDefinition : EntityModuleDefinition
     {
 
+    }
+
+    public class ControlModuleDefinition : EntityModuleDefinition
+    {
+        [SerializeReference]
+        public ControlProviderData ControlProvider;
     }
 }

@@ -23,5 +23,5 @@ MonoBehaviour:
         Spec:
           Type: 0
           Flat: 0
-          AttackScale: 0
-          CanCrit: 0
+          AttackScale: 1
+          CanCrit: 1

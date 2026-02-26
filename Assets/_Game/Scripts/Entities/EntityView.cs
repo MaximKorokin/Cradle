@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets.CoreScripts;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
@@ -14,6 +15,11 @@ namespace Assets._Game.Scripts.Entities
         public Transform UnitsRoot { get; private set; }
         [field: SerializeField]
         public Animator UnitsAnimator { get; private set; }
+
+        [SerializeField]
+        private MonoBehaviour[] _entityBindables;
+
+        public Entity Entity { get; private set; }
 
         public UnitsController UnitsController { get; private set; }
         public UnitsAnimator AnimatorController { get; private set; }
@@ -31,11 +37,24 @@ namespace Assets._Game.Scripts.Entities
             AnimatorController?.Rebind();
         }
 
-        public void Bind(AppearanceModule appearance)
+        public void Bind(Entity entity)
         {
+            Entity = entity;
+
+            for (int i = 0; i < _entityBindables.Length; i++)
+            {
+                ((IEntityBindable)_entityBindables[i]).Bind(entity);
+            }
+
+            if (!entity.TryGetModule<AppearanceModule>(out var appearance))
+            {
+                SLog.Error($"Entity {entity.Definition.Id} has no {nameof(AppearanceModule)} attached.");
+            }
+
             AnimatorController = new(UnitsAnimator, appearance.EntityVisualModel.Animator);
             AnimatorController.Rebind();
 
+            // Unbind previous if exists
             if (_appearance != null) Unbind();
             _appearance = appearance;
 
@@ -50,6 +69,11 @@ namespace Assets._Game.Scripts.Entities
 
         public void Unbind()
         {
+            for (int i = 0; i < _entityBindables.Length; i++)
+            {
+                ((IEntityBindable)_entityBindables[i]).Unbind();
+            }
+
             if (_appearance == null) return;
 
             _appearance.EnsureUnitRequested -= UnitsController.EnsureUnit;
@@ -61,11 +85,12 @@ namespace Assets._Game.Scripts.Entities
             _appearance.SetAnimationRequested -= AnimatorController.SetAnimation;
 
             _appearance = null;
+            Entity = null;
         }
 
         private void OnDisable()
         {
-            if (_appearance != null)
+            if (Entity != null)
             {
                 Unbind();
             }
@@ -80,5 +105,11 @@ namespace Assets._Game.Scripts.Entities
         {
 
         }
+    }
+
+    public interface IEntityBindable
+    {
+        void Bind(Entity entity);
+        void Unbind();
     }
 }
