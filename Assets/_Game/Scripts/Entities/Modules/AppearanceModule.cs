@@ -10,8 +10,9 @@ namespace Assets._Game.Scripts.Entities.Modules
         public event Action<string, Sprite> SetUnitSpriteRequested;
         public event Action<string> RemoveUnitRequested;
 
+        public event Action<EntityAnimatorParameterName, ValueType> SetAnimatorValueRequested;
         public event Action<EntityAnimationClipName, AnimationClip> SetAnimationRequested;
-        public event Action<bool> SetDirectionRequested;
+        public event Action<TurnDirection> SetTurnDirectionRequested;
         public event Action UpdateOrderInLayerRequested;
 
         public EntityVisualModel EntityVisualModel { get; private set; }
@@ -36,6 +37,11 @@ namespace Assets._Game.Scripts.Entities.Modules
             RemoveUnitRequested?.Invoke(path);
         }
 
+        public void RequestSetAnimatorValue(EntityAnimatorParameterName key, ValueType value)
+        {
+            SetAnimatorValueRequested?.Invoke(key, value);
+        }
+
         public void RequestSetAnimation(EntityAnimationClipName clipName, AnimationClip clip)
         {
             SetAnimationRequested?.Invoke(clipName, clip);
@@ -46,9 +52,9 @@ namespace Assets._Game.Scripts.Entities.Modules
             UpdateOrderInLayerRequested?.Invoke();
         }
 
-        public void RequestSetDirection(bool right)
+        public void RequestSetTurnDirection(TurnDirection turnDirection)
         {
-            SetDirectionRequested?.Invoke(right);
+            SetTurnDirectionRequested?.Invoke(turnDirection);
         }
     }
 }

@@ -66,9 +66,15 @@ namespace Assets._Game.Scripts.Entities.Units
             Changed?.Invoke();
         }
 
-        public void SetDirection(bool toRight)
+        public void SetTurnDirection(TurnDirection turnDirection)
         {
-            _unitsRoot.localScale = new(toRight ? 1 : -1, 1, 1);
+            _unitsRoot.localScale = new(turnDirection == TurnDirection.Right ? 1 : -1, 1, 1);
         }
+    }
+
+    public enum TurnDirection
+    {
+        Left,
+        Right
     }
 }

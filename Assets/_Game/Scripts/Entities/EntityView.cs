@@ -39,6 +39,9 @@ namespace Assets._Game.Scripts.Entities
 
         public void Bind(Entity entity)
         {
+            // Unbind previous if exists
+            Unbind();
+
             Entity = entity;
 
             for (int i = 0; i < _entityBindables.Length; i++)
@@ -54,17 +57,16 @@ namespace Assets._Game.Scripts.Entities
             AnimatorController = new(UnitsAnimator, appearance.EntityVisualModel.Animator);
             AnimatorController.Rebind();
 
-            // Unbind previous if exists
-            if (_appearance != null) Unbind();
             _appearance = appearance;
 
             _appearance.EnsureUnitRequested += UnitsController.EnsureUnit;
             _appearance.SetUnitSpriteRequested += UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested += UnitsController.RemoveUnit;
-            _appearance.SetDirectionRequested += UnitsController.SetDirection;
+            _appearance.SetTurnDirectionRequested += UnitsController.SetTurnDirection;
             _appearance.UpdateOrderInLayerRequested += UnitsController.UpdateOrderInLayer;
 
             _appearance.SetAnimationRequested += AnimatorController.SetAnimation;
+            _appearance.SetAnimatorValueRequested += AnimatorController.SetValue;
         }
 
         public void Unbind()
@@ -79,10 +81,11 @@ namespace Assets._Game.Scripts.Entities
             _appearance.EnsureUnitRequested -= UnitsController.EnsureUnit;
             _appearance.SetUnitSpriteRequested -= UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested -= UnitsController.RemoveUnit;
-            _appearance.SetDirectionRequested -= UnitsController.SetDirection;
+            _appearance.SetTurnDirectionRequested -= UnitsController.SetTurnDirection;
             _appearance.UpdateOrderInLayerRequested -= UnitsController.UpdateOrderInLayer;
 
             _appearance.SetAnimationRequested -= AnimatorController.SetAnimation;
+            _appearance.SetAnimatorValueRequested -= AnimatorController.SetValue;
 
             _appearance = null;
             Entity = null;

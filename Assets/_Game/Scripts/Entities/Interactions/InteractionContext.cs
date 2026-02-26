@@ -7,6 +7,7 @@ namespace Assets._Game.Scripts.Entities.Interactions
         public readonly Entity Source;
         public readonly Entity Target;
         public readonly Vector2 Point;
+        // todo: is this really needed?
         public readonly IGlobalEventBus GlobalBus;
 
         public InteractionContext(Entity source, Entity target, Vector2 point, IGlobalEventBus globalBus)

@@ -75,6 +75,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityFeature(IContainerBuilder builder)
         {
+            builder.RegisterEntryPoint<LocomotionSystem>();
+
             builder.RegisterEntryPoint<EntitySpawner>();
 
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);

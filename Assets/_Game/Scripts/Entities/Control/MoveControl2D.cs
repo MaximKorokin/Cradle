@@ -24,7 +24,6 @@ namespace Assets._Game.Scripts.Entities.Control
         private void FixedUpdate()
         {
             if (_entity == null) return;
-            SynchronizeSpatial();
 
             if (!_entity.TryGetModule(out IntentModule intent)) return;
             if (!_entity.TryGetModule(out StatModule stats)) return;
@@ -34,15 +33,6 @@ namespace Assets._Game.Scripts.Entities.Control
             var multiplier = intent.Move.SpeedMultiplier;
 
             _rigidbody.linearVelocity = moveSpeed * multiplier * direction;
-        }
-
-        private void SynchronizeSpatial()
-        {
-            if (_entity.TryGetModule(out SpatialModule spatial))
-                spatial.SetPosition(transform.position);
-
-            if (_entity.TryGetModule(out KinematicsModule kin))
-                kin.SetVelocity(_rigidbody.linearVelocity);
         }
     }
 }

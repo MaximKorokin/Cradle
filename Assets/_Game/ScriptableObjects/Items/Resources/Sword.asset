@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 780db064-ca6a-4b9d-bc23-64e34a86403a
   <Name>k__BackingField: Sword
-  <Icon>k__BackingField: {fileID: 5244855310505208311, guid: 8180f0c5e6afc58409a2794f8e812634, type: 3}
+  <Icon>k__BackingField: {fileID: -7727811773610990791, guid: b304dad9fbacac44ebf4fdab2513e341, type: 3}
   <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 80
@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 2859158637052690515
   - rid: 1349792509003825562
   - rid: 1349792509003825567
+  - rid: 1349792966677627044
   references:
     version: 2
     RefIds:
@@ -35,6 +36,11 @@ MonoBehaviour:
       data:
         <AnimationKey>k__BackingField: 11
         <AnimationClip>k__BackingField: {fileID: 7400000, guid: 43c1bf33b5433c64b8baa06fccf6af7a, type: 2}
+    - rid: 1349792966677627044
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <AnimationKey>k__BackingField: 21
+        <AnimationClip>k__BackingField: {fileID: 7400000, guid: 6d25c1f7b03a38a4a8eb15e78e86b5cb, type: 2}
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

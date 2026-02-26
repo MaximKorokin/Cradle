@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace Assets._Game.Scripts.Entities.Units
             _animator.Update(0f);
         }
 
-        public void SetValue<T>(EntityAnimatorParameterName key, T value = default) where T : struct
+        public void SetValue(EntityAnimatorParameterName key, ValueType value = default)
         {
             _animator.SetAnimatorValue(key.ToString(), value);
         }

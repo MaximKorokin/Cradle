@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 2859158637052690514
   - rid: 1349792509003825561
   - rid: 1349792509003825566
+  - rid: 1349792966677627043
   references:
     version: 2
     RefIds:
@@ -35,6 +36,11 @@ MonoBehaviour:
       data:
         <AnimationKey>k__BackingField: 11
         <AnimationClip>k__BackingField: {fileID: 7400000, guid: 31d3fd30132a40345b52da7a354ee862, type: 2}
+    - rid: 1349792966677627043
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <AnimationKey>k__BackingField: 21
+        <AnimationClip>k__BackingField: {fileID: 7400000, guid: 768c67e2058e98f4b90b5a01cdde2bf0, type: 2}
     - rid: 2859158637052690514
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

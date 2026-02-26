@@ -5,7 +5,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
 {
     public static class AnimatorExtensions
     {
-        public static void SetAnimatorValue<T>(this Animator animator, string key, T value = default) where T : struct
+        public static void SetAnimatorValue(this Animator animator, string key, ValueType value = default)
         {
             if (animator == null || animator.runtimeAnimatorController == null)
             {
