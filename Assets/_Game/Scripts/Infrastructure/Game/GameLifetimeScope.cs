@@ -50,8 +50,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.RegisterInstance(_newGameDefinition);
 
-            builder.RegisterComponentInHierarchy<PlayerClickInputReader>();
-            builder.Register<PlayerControlProvider>(Lifetime.Scoped);
+            builder.Register<PlayerControlProvider>(Lifetime.Singleton);
             builder.Register<PlayerContext>(Lifetime.Singleton);
 
             RegisterSavesFeature(builder);

@@ -1,6 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Entities.Control;
-using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items.Inventory;
 
@@ -14,7 +12,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
-        private readonly PlayerControlProvider _playerControlProvider;
         private readonly EntityAssembler _entityAssembler;
         private readonly InventoryModelAssembler _inventoryModelAssembler;
 
@@ -23,7 +20,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             GameSaveRepository gameSaveRepository,
             NewGameDefinition newGameDefinition,
             PlayerContext playerContext,
-            PlayerControlProvider playerControlProvider,
             EntityAssembler entityAssembler,
             InventoryModelAssembler inventoryModelAssembler)
         {
@@ -31,7 +27,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             _gameSaveRepository = gameSaveRepository;
             _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
-            _playerControlProvider = playerControlProvider;
             _entityAssembler = entityAssembler;
             _inventoryModelAssembler = inventoryModelAssembler;
         }
@@ -66,8 +61,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
                 _entityAssembler.Apply(humanoid, gameSave.PlayerSave);
             }
             _playerContext.SetPlayer(humanoid);
-            humanoid.TryGetModule<ControlModule>(out var controlModule);
-            controlModule.AddProvider(_playerControlProvider);
         }
 
         public void ResetSave()

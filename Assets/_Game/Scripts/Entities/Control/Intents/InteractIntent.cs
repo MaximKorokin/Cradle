@@ -13,6 +13,8 @@ namespace Assets._Game.Scripts.Entities.Control.Intents
         public readonly Vector2 Point;
         public readonly bool HasPoint;
 
+        public static InteractIntent None { get; } = default;
+
         public InteractIntent(InteractionDefinition interactionDefinition, UseKind kind, Entity target, Vector2 point, bool hasPoint)
         {
             InteractionDefinition = interactionDefinition;
@@ -21,8 +23,6 @@ namespace Assets._Game.Scripts.Entities.Control.Intents
             Point = point;
             HasPoint = hasPoint;
         }
-
-        public static InteractIntent None() => default;
     }
 
     public enum UseKind

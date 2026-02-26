@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.Entities.Control
             // todo: implement ai control
             if (entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetMove(Vector2.up, 1f);
+                intent.SetMove(new(Vector2.up));
             }
         }
     }

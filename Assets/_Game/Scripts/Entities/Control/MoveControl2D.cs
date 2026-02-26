@@ -39,7 +39,7 @@ namespace Assets._Game.Scripts.Entities.Control
         private void SynchronizeSpatial()
         {
             if (_entity.TryGetModule(out SpatialModule spatial))
-                spatial.SetPosition(_rigidbody.linearVelocity);
+                spatial.SetPosition(transform.position);
 
             if (_entity.TryGetModule(out KinematicsModule kin))
                 kin.SetVelocity(_rigidbody.linearVelocity);

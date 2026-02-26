@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Entities.Control
         protected override void OnTick(Entity entity, float delta)
         {
             if (entity.TryGetModule(out IntentModule intent))
-                intent.SetMove(_direction, _speedMultiplier);
+                intent.SetMove(new(_direction, _speedMultiplier));
         }
     }
 

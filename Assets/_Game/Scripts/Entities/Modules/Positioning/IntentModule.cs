@@ -1,6 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities.Control.Intents;
-using Assets._Game.Scripts.Entities.Interactions;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -10,19 +8,19 @@ namespace Assets._Game.Scripts.Entities.Modules
         public AimIntent Aim { get; private set; }
         public InteractIntent Interact { get; private set; }
 
-        public void SetMove(Vector2 direction, float speedMultiplier = 1f)
+        public void SetMove(MoveIntent moveIntent)
         {
-            Move = new MoveIntent(direction, speedMultiplier);
+            Move = moveIntent;
         }
 
-        public void SetAim(Vector2 direction)
+        public void SetAim(AimIntent aimIntent)
         {
-            Aim = new AimIntent(direction);
+            Aim = aimIntent;
         }
 
-        public void SetInteract(InteractionDefinition interactionDefinition, UseKind kind, Entity target, Vector2 point, bool hasPoint)
+        public void SetInteract(InteractIntent interactIntent)
         {
-            Interact = new InteractIntent(interactionDefinition, kind, target, point, hasPoint);
+            Interact = interactIntent;
         }
     }
 }

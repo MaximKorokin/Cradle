@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.Entities.Control
         {
             if (entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetMove(Vector2.zero, 0);
+                intent.SetMove(new(Vector2.zero, 0));
             }
         }
     }
