@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnStatusEffectChanged(StatusEffectChange change)
         {
-            Publish(new StatusEffectChangedEvent(change));
+            Publish(new StatusEffectChangedEvent(Entity, change));
         }
 
         public override void Dispose()
@@ -35,8 +35,11 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly StatusEffect StatusEffect;
         public readonly StatusEffectChangeKind Kind;
 
-        public StatusEffectChangedEvent(StatusEffectChange statusEffectChange)
+        public Entity Entity { get; }
+
+        public StatusEffectChangedEvent(Entity entity, StatusEffectChange statusEffectChange)
         {
+            Entity = entity;
             StatusEffect = statusEffectChange.StatusEffect;
             Kind = statusEffectChange.Kind;
         }

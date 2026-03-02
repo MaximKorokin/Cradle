@@ -20,12 +20,12 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnEquipmentSlotChanged(EquipmentChange equipmentChange)
         {
-            Publish(new EquipmentChangedEvent(equipmentChange));
+            Publish(new EquipmentChangedEvent(Entity, equipmentChange));
         }
 
         private void OnInventorySlotChanged(InventoryChange equipmentChange)
         {
-            Publish(new InventoryChangedEvent(equipmentChange));
+            Publish(new InventoryChangedEvent(Entity, equipmentChange));
         }
 
         public override void Dispose()
@@ -42,15 +42,19 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly ItemStackSnapshot? Item;
         public readonly EquipmentChangeKind Kind;
 
-        public EquipmentChangedEvent(EquipmentSlotKey slot, ItemStackSnapshot? item, EquipmentChangeKind kind)
+        public Entity Entity { get; }
+
+        public EquipmentChangedEvent(Entity entity, EquipmentSlotKey slot, ItemStackSnapshot? item, EquipmentChangeKind kind)
         {
+            Entity = entity;
             Slot = slot;
             Item = item;
             Kind = kind;
         }
 
-        public EquipmentChangedEvent(EquipmentChange equipmentChange)
+        public EquipmentChangedEvent(Entity entity, EquipmentChange equipmentChange)
         {
+            Entity = entity;
             Slot = equipmentChange.Slot;
             Item = equipmentChange.Item;
             Kind = equipmentChange.Kind;
@@ -63,15 +67,19 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly ItemStackSnapshot? Item;
         public readonly InventoryChangeKind Kind;
 
-        public InventoryChangedEvent(int slot, ItemStackSnapshot? item, InventoryChangeKind kind)
+        public Entity Entity { get; }
+
+        public InventoryChangedEvent(Entity entity, int slot, ItemStackSnapshot? item, InventoryChangeKind kind)
         {
+            Entity = entity;
             Slot = slot;
             Item = item;
             Kind = kind;
         }
 
-        public InventoryChangedEvent(InventoryChange inventoryChange)
+        public InventoryChangedEvent(Entity entity, InventoryChange inventoryChange)
         {
+            Entity = entity;
             Slot = inventoryChange.Slot;
             Item = inventoryChange.Item;
             Kind = inventoryChange.Kind;

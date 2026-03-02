@@ -12,14 +12,14 @@ public sealed class EventBusCore : IEventBus
 {
     private readonly Dictionary<Type, List<Delegate>> _handlers = new();
 
-    public void Publish<T>(in T evt) where T : struct
+    public void Publish<T>(in T e) where T : struct
     {
         if (!_handlers.TryGetValue(typeof(T), out var list) || list.Count == 0)
             return;
 
         var snapshot = list.ToArray();
         for (int i = 0; i < snapshot.Length; i++)
-            ((Action<T>)snapshot[i]).Invoke(evt);
+            ((Action<T>)snapshot[i]).Invoke(e);
     }
 
     public IDisposable Subscribe<T>(Action<T> handler) where T : struct
@@ -33,9 +33,16 @@ public sealed class EventBusCore : IEventBus
         list.Add(handler);
         return new Subscription(() =>
         {
-            if (_handlers.TryGetValue(type, out var l))
-                l.Remove(handler);
+            if (_handlers.TryGetValue(type, out var list))
+                list.Remove(handler);
         });
+    }
+
+    public void Unsubscribe<T>(Action<T> handler) where T : struct
+    {
+        var type = typeof(T);
+        if (_handlers.TryGetValue(type, out var list))
+            list.Remove(handler);
     }
 
     public void Clear() => _handlers.Clear();

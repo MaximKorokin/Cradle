@@ -89,8 +89,11 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public readonly IControlProvider ControlProvider;
 
-        public OverrideControlRequestEvent(IControlProvider controlProvider)
+        public Entity Entity { get; }
+
+        public OverrideControlRequestEvent(Entity entity, IControlProvider controlProvider)
         {
+            Entity = entity;
             ControlProvider = controlProvider;
         }
     }

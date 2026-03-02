@@ -56,14 +56,21 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public readonly StatId StatId;
 
-        public StatChangedEvent(StatId statId)
+        public Entity Entity {get; }
+
+        public StatChangedEvent(Entity entity, StatId statId)
         {
+            Entity = entity;
             StatId = statId;
         }
     }
 
     public readonly struct StatsChangedEvent : IEntityEvent
     {
-
+        public Entity Entity { get; }
+        public StatsChangedEvent(Entity entity)
+        {
+            Entity = entity;
+        }
     }
 }

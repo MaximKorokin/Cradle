@@ -1,13 +1,12 @@
-﻿using Assets._Game.Scripts.Infrastructure;
+﻿using Assets._Game.Scripts.Entities.Interactions;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
-namespace Assets._Game.Scripts.Entities.Interactions
+namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class InteractionSystem : IDisposable, IStartable
+    public sealed class InteractionSystem : SystemBase
     {
         private readonly IGlobalEventBus _globalBus;
         private readonly DispatcherService _dispatcher;
@@ -48,15 +47,11 @@ namespace Assets._Game.Scripts.Entities.Interactions
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _subscription.Dispose();
             _dispatcher.OnTick -= Tick;
-        }
-
-        public void Start()
-        {
-
         }
     }
 

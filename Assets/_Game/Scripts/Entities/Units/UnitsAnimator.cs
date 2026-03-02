@@ -40,6 +40,7 @@ namespace Assets._Game.Scripts.Entities.Units
             var overrideAnimation = animation;
             if (animation == null)
             {
+                // If animation is null, we want to return to default clip
                 overrideAnimation = _animatorOverrides.FirstOrDefault(x => x.Key.name == key.ToString()).Value;
             }
             if (_animator.runtimeAnimatorController is AnimatorOverrideController overrideController)

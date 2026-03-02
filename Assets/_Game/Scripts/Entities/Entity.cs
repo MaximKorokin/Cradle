@@ -4,7 +4,10 @@ using Assets._Game.Scripts.Infrastructure.Storage;
 using System;
 using System.Collections.Generic;
 
-public interface IEntityEvent { }
+public interface IEntityEvent
+{
+    Entity Entity { get; }
+}
 
 public sealed class Entity : IEntry, IDisposable
 {
@@ -28,16 +31,27 @@ public sealed class Entity : IEntry, IDisposable
 
     public bool TryGetModule<T>(out T module) where T : class, IEntityModule
     {
-        if (_modules.TryGetValue(typeof(T), out var m)) { module = (T)m; return true; }
+        if (_modules.TryGetValue(typeof(T), out var m))
+        {
+            module = (T)m;
+            return true;
+        }
+
         module = null!;
         return false;
     }
+
+    public bool HasModule<T>() where T : class, IEntityModule
+        => _modules.ContainsKey(typeof(T));
 
     public void Publish<TEvent>(in TEvent evt) where TEvent : struct, IEntityEvent
         => _bus.Publish(evt);
 
     public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
         => _bus.Subscribe(handler);
+
+    public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
+        => _bus.Unsubscribe(handler);
 
     public void Dispose()
     {

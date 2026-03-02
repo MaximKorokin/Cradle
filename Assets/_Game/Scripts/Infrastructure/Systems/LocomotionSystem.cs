@@ -1,12 +1,10 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Units;
-using Assets._Game.Scripts.Infrastructure;
-using System;
-using VContainer.Unity;
 
-namespace Assets._Game.Scripts.Entities.Control
+namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class LocomotionSystem : IDisposable, IStartable
+    public sealed class LocomotionSystem : SystemBase
     {
         private const float MoveEpsilonSqr = 0.0001f;
 
@@ -44,14 +42,10 @@ namespace Assets._Game.Scripts.Entities.Control
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.IsWalking, isMoving);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _dispatcher.OnFixedTick -= OnFixedTick;
-        }
-
-        public void Start()
-        {
-
         }
     }
 }

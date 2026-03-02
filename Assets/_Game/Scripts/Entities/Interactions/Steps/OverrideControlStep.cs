@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         {
             if (_done) return StepStatus.Completed;
 
-            context.Target.Publish(new OverrideControlRequestEvent(_controlProvider));
+            context.Target.Publish(new OverrideControlRequestEvent(context.Target, _controlProvider));
 
             _done = true;
             return StepStatus.Completed;
