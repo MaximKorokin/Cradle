@@ -53,10 +53,20 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<PlayerControlProvider>(Lifetime.Singleton);
             builder.Register<PlayerContext>(Lifetime.Singleton);
 
+            RegisterSystems(builder);
             RegisterSavesFeature(builder);
             RegisterEntityFeature(builder);
             RegisterItemFeature(builder);
             RegisterStatusEffectFeature(builder);
+        }
+
+        private void RegisterSystems(IContainerBuilder builder)
+        {
+            builder.RegisterEntryPoint<LocomotionSystem>();
+            builder.RegisterEntryPoint<AppearanceSystem>();
+            builder.RegisterEntryPoint<StatSystem>();
+
+            builder.RegisterEntryPoint<InteractionSystem>();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -75,8 +85,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityFeature(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<LocomotionSystem>();
-
             builder.RegisterEntryPoint<EntitySpawner>();
 
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
@@ -99,8 +107,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterInteractionFeature(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<InteractionSystem>();
-
             builder.Register<IDamageCalculator, DamageCalculator>(Lifetime.Scoped);
         }
 

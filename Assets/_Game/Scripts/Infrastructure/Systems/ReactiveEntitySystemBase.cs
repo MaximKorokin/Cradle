@@ -37,16 +37,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void OnEntityRemoved(Entity entity)
         {
             if (_tracked.Remove(entity))
+            {
                 OnUntrack(entity);
+            }
         }
 
         private void TryTrack(Entity entity)
         {
-            if (!Filter(entity))
-                return;
+            if (!Filter(entity)) return;
 
             if (_tracked.Add(entity))
+            {
                 OnTrack(entity);
+            }
         }
 
         protected abstract bool Filter(Entity entity);

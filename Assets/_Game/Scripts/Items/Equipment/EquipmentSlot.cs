@@ -1,4 +1,6 @@
-﻿namespace Assets._Game.Scripts.Items.Equipment
+﻿using System;
+
+namespace Assets._Game.Scripts.Items.Equipment
 {
     public enum EquipmentSlotType
     {
@@ -17,10 +19,23 @@
     {
         public EquipmentSlotType SlotType;
         public int Index;
+
         public EquipmentSlotKey(EquipmentSlotType slotType, int index)
         {
             SlotType = slotType;
             Index = index;
         }
+
+        public readonly bool Equals(EquipmentSlotKey other)
+            => SlotType == other.SlotType && Index == other.Index;
+
+        public readonly override bool Equals(object obj)
+            => obj is EquipmentSlotKey other && Equals(other);
+
+        public readonly override int GetHashCode()
+            => HashCode.Combine((int)SlotType, Index);
+
+        public readonly override string ToString()
+            => $"{SlotType}:{Index}";
     }
 }

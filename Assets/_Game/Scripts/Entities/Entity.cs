@@ -41,6 +41,15 @@ public sealed class Entity : IEntry, IDisposable
         return false;
     }
 
+    public T GetModule<T>() where T : class, IEntityModule
+    {
+        if (TryGetModule(out T module))
+        {
+            return module;
+        }
+        throw new InvalidOperationException($"Entity does not have a module of type {typeof(T).Name}");
+    }
+
     public bool HasModule<T>() where T : class, IEntityModule
         => _modules.ContainsKey(typeof(T));
 

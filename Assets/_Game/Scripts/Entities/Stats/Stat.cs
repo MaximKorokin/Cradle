@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Items.Equipment;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,25 +11,25 @@ namespace Assets._Game.Scripts.Entities.Stats
         private const float MinMultiplier = 0f;
         private const float MaxMultiplier = 10f;
 
-        private readonly List<(object Source, StatModifier Modifier)> _modifiers = new();
+        private readonly List<(StatModifierSource Source, StatModifier Modifier)> _modifiers = new();
 
         public Stat(float baseValue)
         {
             BaseValue = baseValue;
         }
 
-        public IEnumerable<(object Source, StatModifier Modifier)> Modifiers => _modifiers;
+        public IEnumerable<(StatModifierSource Source, StatModifier Modifier)> Modifiers => _modifiers;
 
         public float BaseValue { get; private set; }
 
         public void SetBase(float value) => BaseValue = value;
 
-        public void AddModifier(object source, StatModifier modifier)
+        public void AddModifier(StatModifierSource source, StatModifier modifier)
         {
             _modifiers.Add((source, modifier));
         }
 
-        public int RemoveBySource(object source)
+        public int RemoveBySource(StatModifierSource source)
         {
             return _modifiers.RemoveAll(e => Equals(e.Source, source));
         }
@@ -181,6 +182,63 @@ namespace Assets._Game.Scripts.Entities.Stats
             Value = value;
             Priority = priority;
         }
+    }
+
+    public readonly struct StatModifierSource : IEquatable<StatModifierSource>
+    {
+        public StatModifierSourceType Type { get; }
+        public object Key { get; }
+
+        private StatModifierSource(StatModifierSourceType type, object key)
+        {
+            Type = type;
+            Key = key;
+        }
+
+        // Factory
+
+        public static StatModifierSource FromEquipmentSlot(EquipmentSlotKey slot)
+            => new(StatModifierSourceType.EquipmentSlot, slot);
+
+        public static StatModifierSource FromInventorySlot(int slotIndex)
+            => new(StatModifierSourceType.InventorySlot, slotIndex);
+
+        public static StatModifierSource FromStatusEffect(string effectId)
+            => new(StatModifierSourceType.StatusEffect, effectId);
+
+        public static StatModifierSource Derived { get; }
+            = new(StatModifierSourceType.Derived, 0);
+
+        // Equality
+
+        public bool Equals(StatModifierSource other)
+        {
+            if (Type != other.Type) return false;
+            return Equals(Key, other.Key);
+        }
+
+        public override bool Equals(object obj)
+            => obj is StatModifierSource other && Equals(other);
+
+        public override int GetHashCode()
+            => HashCode.Combine((int)Type, Key);
+
+        public static bool operator ==(StatModifierSource left, StatModifierSource right)
+            => left.Equals(right);
+
+        public static bool operator !=(StatModifierSource left, StatModifierSource right)
+            => !left.Equals(right);
+
+        public override string ToString()
+            => $"{Type}:{Key}";
+    }
+
+    public enum StatModifierSourceType
+    {
+        EquipmentSlot,
+        InventorySlot,
+        StatusEffect,
+        Derived
     }
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]

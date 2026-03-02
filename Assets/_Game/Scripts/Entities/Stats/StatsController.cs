@@ -67,7 +67,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             RaiseChanged(id);
         }
 
-        public void AddModifiers(object source, IEnumerable<StatModifier> modifiers)
+        public void AddModifiers(StatModifierSource source, IEnumerable<StatModifier> modifiers)
         {
             foreach (var m in modifiers)
             {
@@ -82,7 +82,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             }
         }
 
-        public void RemoveModifiers(object source)
+        public void RemoveModifiers(StatModifierSource source)
         {
             foreach (var kv in _stats)
             {
@@ -95,7 +95,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             }
         }
 
-        public bool ContainsModifier(object source, StatModifier statModifier)
+        public bool ContainsModifier(StatModifierSource source, StatModifier statModifier)
         {
             var stat = GetOrCreate(statModifier.Stat);
             return stat.Modifiers.Contains((source, statModifier));
