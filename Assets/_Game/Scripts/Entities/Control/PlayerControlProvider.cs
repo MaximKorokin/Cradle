@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Entities.Control
     public sealed class PlayerControlProvider : IControlProvider
     {
         public ControlPriority Priority => ControlPriority.BasePlayer;
-        public ControlMask Mask => ControlMask.All;
+        public ControlMask Mask => _hasMoveTarget ? ControlMask.All : ControlMask.None;
         public bool IsActive => true;
 
         private bool _hasMoveTarget;

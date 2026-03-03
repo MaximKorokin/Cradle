@@ -115,7 +115,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         HpMax = 200,
         [StatRestriction(StatRestrictionType.NonNegative)]
         [StatRestriction(StatRestrictionType.ForbidModifiers)]
-        [StatRestriction(StatRestrictionType.NotBiggerThan, StatId.HpMax)]
+        [StatRestriction(StatRestrictionType.NotGreaterThan, StatId.HpMax)]
         HpCurrent = 210,
         HpRegeneration = 220,
 
@@ -124,6 +124,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalAttack = 310,
         [StatRestriction(StatRestrictionType.NonNegative)]
+        [StatRestriction(StatRestrictionType.NotGreaterThan, 1)]
         PhysicalCritChance = 315,
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalCritMultiplier = 316,
@@ -259,6 +260,6 @@ namespace Assets._Game.Scripts.Entities.Stats
         None = 0,
         NonNegative = 10,
         ForbidModifiers = 20,
-        NotBiggerThan = 30,
+        NotGreaterThan = 30,
     }
 }

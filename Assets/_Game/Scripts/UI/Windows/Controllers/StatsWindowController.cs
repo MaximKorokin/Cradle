@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public StatsWindowController(
             PlayerContext playerContext)
         {
-            _statsModule = playerContext.StatsModule;
+            _statsModule = playerContext.StatModule;
 
             _statsModule.Stats.Changed += Redraw;
         }

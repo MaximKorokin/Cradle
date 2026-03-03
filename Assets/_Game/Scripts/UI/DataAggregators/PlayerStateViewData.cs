@@ -10,30 +10,41 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class PlayerStateViewData : DataAggregatorBase
     {
-        private readonly StatModule _statsModule;
-        private readonly StatusEffectModule _statusEffectModule;
+        private readonly PlayerContext _playerContext;
 
         public event Action Changed;
 
         public PlayerStateViewData(PlayerContext playerContext)
         {
-            _statsModule = playerContext.StatsModule;
-            _statusEffectModule = playerContext.StatusEffectModule;
+            _playerContext = playerContext;
+            _playerContext.PlayerChanging += OnPlayerChanged;
+            _playerContext.PlayerChanged += OnPlayerChanged;
 
-            _statsModule.Stats.StatChanged += OnStatChanged;
-            _statusEffectModule.StatusEffectsController.Changed += OnStatusEffectsControllerChanged;
+            OnPlayerChanged();
         }
 
-        public float CurrentHp => _statsModule.Stats.Get(StatId.HpCurrent);
-        public float MaxHp => _statsModule.Stats.Get(StatId.HpMax);
-        public float Level => _statsModule.Stats.Get(StatId.Level);
-        public float Experience => _statsModule.Stats.Get(StatId.Experience);
+        private void OnPlayerChanging()
+        {
+            _playerContext.StatModule.Stats.StatChanged -= OnStatChanged;
+            _playerContext.StatusEffectModule.StatusEffectsController.Changed -= OnStatusEffectsControllerChanged;
+        }
 
-        public IEnumerable<StatusEffectSnapshot> Buffs => 
-            _statusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
+        private void OnPlayerChanged()
+        {
+            _playerContext.StatModule.Stats.StatChanged += OnStatChanged;
+            _playerContext.StatusEffectModule.StatusEffectsController.Changed += OnStatusEffectsControllerChanged;
+        }
 
-        public IEnumerable<StatusEffectSnapshot> Debuffs => 
-            _statusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
+        public float CurrentHp => _playerContext.StatModule.Stats.Get(StatId.HpCurrent);
+        public float MaxHp => _playerContext.StatModule.Stats.Get(StatId.HpMax);
+        public float Level => _playerContext.StatModule.Stats.Get(StatId.Level);
+        public float Experience => _playerContext.StatModule.Stats.Get(StatId.Experience);
+
+        public IEnumerable<StatusEffectSnapshot> Buffs =>
+            _playerContext.StatusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
+
+        public IEnumerable<StatusEffectSnapshot> Debuffs =>
+            _playerContext.StatusEffectModule.StatusEffectsController.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
 
         private void OnStatChanged(StatId statId)
         {
@@ -52,8 +63,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             base.Dispose();
 
-            _statsModule.Stats.StatChanged -= OnStatChanged;
-            _statusEffectModule.StatusEffectsController.Changed -= OnStatusEffectsControllerChanged;
+            _playerContext.PlayerChanged -= OnPlayerChanged;
+            _playerContext.PlayerChanging -= OnPlayerChanging;
+
+            OnPlayerChanging();
         }
     }
 }

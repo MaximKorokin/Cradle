@@ -19,7 +19,7 @@ MonoBehaviour:
   <Duration>k__BackingField: 2
   <IsEndless>k__BackingField: 0
   <StatModifiers>k__BackingField:
-  - <Stat>k__BackingField: 310
+  - <Stat>k__BackingField: 300
     <Stage>k__BackingField: 50
     <Operation>k__BackingField: 30
     <Value>k__BackingField: 0

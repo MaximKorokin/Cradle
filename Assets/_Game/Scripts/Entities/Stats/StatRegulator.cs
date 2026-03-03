@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Entities.Stats
         private readonly HashSet<StatId> _statsWithForbiddenModifiers = new();
         private readonly HashSet<StatId> _statsWithNonNegativeRestriction = new();
 
+        private readonly Dictionary<StatId, float> _statsRestrictedToBeLessThanValue = new();
+
         private readonly Dictionary<StatId, StatId> _statsRestrictedToBeLessThan = new();
         private readonly Dictionary<StatId, StatId> _statsThatRestrictMaxValue = new();
 
@@ -24,16 +26,20 @@ namespace Assets._Game.Scripts.Entities.Stats
                     {
                         _statsWithForbiddenModifiers.Add(statId);
                     }
-                    else if (restriction.Restriction == StatRestrictionType.NotBiggerThan)
+                    else if (restriction.Restriction == StatRestrictionType.NotGreaterThan)
                     {
                         if (restriction.Parameter is StatId statIdParameter)
                         {
                             _statsRestrictedToBeLessThan.Add(statId, statIdParameter);
                             _statsThatRestrictMaxValue.Add(statIdParameter, statId);
                         }
+                        else if (restriction.Parameter is float floatParameter)
+                        {
+                            _statsRestrictedToBeLessThanValue.Add(statId, floatParameter);
+                        }
                         else
                         {
-                            throw new InvalidOperationException($"Invalid parameter for {nameof(StatRestrictionType.NotBiggerThan)} restriction on stat {statId}");
+                            throw new InvalidOperationException($"Invalid parameter for {nameof(StatRestrictionType.NotGreaterThan)} restriction on stat {statId}");
                         }
                     }
                     else if (restriction.Restriction == StatRestrictionType.NonNegative)
@@ -55,6 +61,11 @@ namespace Assets._Game.Scripts.Entities.Stats
             {
                 var maxValue = statsController.Get(maxValueStatId);
                 value = Math.Min(value, maxValue);
+            }
+
+            if (_statsRestrictedToBeLessThanValue.TryGetValue(statId, out var maxRestrictedValue))
+            {
+                value = Math.Min(value, maxRestrictedValue);
             }
         }
 

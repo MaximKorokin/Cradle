@@ -10,13 +10,26 @@ namespace Assets._Game.Scripts.Entities.Control
         public ControlMask Mask => ControlMask.All;
         public bool IsActive => true;
 
+        private Vector2 _moveTarget = new(-3, 4);
+        private float _stopRadius = 0.1f;
+
         public void Tick(Entity entity, float delta)
         {
-            // todo: implement ai control
-            if (entity.TryGetModule(out IntentModule intent))
+            if (!entity.TryGetModule(out IntentModule intent))
+                return;
+
+            if (!entity.TryGetModule(out SpatialModule spatial))
+                return;
+
+            var moveDirection = _moveTarget - spatial.Position;
+
+            if (moveDirection.sqrMagnitude <= _stopRadius * _stopRadius)
             {
-                intent.SetMove(new(Vector2.up));
+                _moveTarget = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-5f, 5f));
+                return;
             }
+
+            intent.SetMove(new(moveDirection));
         }
     }
 

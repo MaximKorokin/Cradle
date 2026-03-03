@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Items.Inventory;
+using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
@@ -9,11 +10,14 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         private readonly PlayerControlProvider _playerControlProvider;
 
         public Entity Player { get; private set; }
-        public StatModule StatsModule { get; private set; }
+        public StatModule StatModule { get; private set; }
         public StatusEffectModule StatusEffectModule { get; private set; }
         public InventoryEquipmentModule IEModule { get; private set; }
         public InventoryModel StashInventory { get; private set; }
         public SpatialModule SpatialModule { get; private set; }
+
+        public event Action PlayerChanging;
+        public event Action PlayerChanged;
 
         public PlayerContext(PlayerControlProvider playerControlProvider)
         {
@@ -22,6 +26,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         public void SetPlayer(Entity player)
         {
+            PlayerChanging?.Invoke();
+
             // Remove the control provider from the old player, if there is one
             if (Player != null && Player.TryGetModule<ControlModule>(out var controlModule))
             {
@@ -43,7 +49,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
             if (Player.TryGetModule<StatModule>(out var statsModule))
             {
-                StatsModule = statsModule;
+                StatModule = statsModule;
             }
             if (Player.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
@@ -53,6 +59,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             {
                 SpatialModule = spatialModule;
             }
+
+            PlayerChanged?.Invoke();
         }
 
         public void SetStash(InventoryModel inventoryModel)

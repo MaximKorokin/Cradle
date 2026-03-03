@@ -29,7 +29,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
         {
             _inventoryModel = playerContext.IEModule.Inventory;
-            _statsController = playerContext.StatsModule.Stats;
+            _statsController = playerContext.StatModule.Stats;
             _itemsConfig = itemsConfig;
 
             _inventoryModel.Changed += OnInventoryChanged;

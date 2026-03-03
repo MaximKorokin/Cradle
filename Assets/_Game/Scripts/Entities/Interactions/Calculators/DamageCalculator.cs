@@ -5,7 +5,13 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Calculators
 {
-    public enum DamageType { Physical, Fire, Ice }
+    public enum DamageType
+    {
+        None = 0,
+        Physical = 10,
+        Magical = 20,
+        True = 30
+    }
 
     [Serializable]
     public struct DamageSpec
