@@ -6,7 +6,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public MoveIntent Move { get; private set; }
         public AimIntent Aim { get; private set; }
-        public InteractIntent Interact { get; private set; }
+        public UseAbilityIntent UseAbility { get; private set; }
 
         public void SetMove(MoveIntent moveIntent)
         {
@@ -18,9 +18,15 @@ namespace Assets._Game.Scripts.Entities.Modules
             Aim = aimIntent;
         }
 
-        public void SetInteract(InteractIntent interactIntent)
+        public void SetUseAbility(UseAbilityIntent interactIntent)
         {
-            Interact = interactIntent;
+            UseAbility = interactIntent;
+        }
+
+        public bool TryConsumeUseAbility(out UseAbilityIntent intent)
+        {
+            intent = UseAbility;
+            return !UseAbility.Equals(UseAbilityIntent.None);
         }
     }
 }

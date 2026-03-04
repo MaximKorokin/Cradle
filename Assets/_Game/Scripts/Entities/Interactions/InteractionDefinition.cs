@@ -13,9 +13,11 @@ namespace Assets._Game.Scripts.Entities.Interactions
     {
         [SerializeReference] public StepData Root;
 
-        public IInteractionStep BuildRuntime(IObjectResolver resolver)
+        public InteractionInstance BuildRuntime(InteractionContext context, IObjectResolver resolver)
         {
-            return Root?.Build(resolver) ?? new EmptyStep();
+            var root = Root?.Build(resolver) ?? new EmptyStep();
+            var instance = new InteractionInstance(root, context);
+            return instance;
         }
 
         [Serializable]

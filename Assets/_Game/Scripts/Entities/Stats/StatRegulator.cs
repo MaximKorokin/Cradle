@@ -37,6 +37,10 @@ namespace Assets._Game.Scripts.Entities.Stats
                         {
                             _statsRestrictedToBeLessThanValue.Add(statId, floatParameter);
                         }
+                        else if (restriction.Parameter is int intParameter)
+                        {
+                            _statsRestrictedToBeLessThanValue.Add(statId, intParameter);
+                        }
                         else
                         {
                             throw new InvalidOperationException($"Invalid parameter for {nameof(StatRestrictionType.NotGreaterThan)} restriction on stat {statId}");

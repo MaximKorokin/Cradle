@@ -25,6 +25,8 @@ public sealed class Entity : IEntry, IDisposable
 
     public void AddModule<T>(T module) where T : class, IEntityModule
     {
+        if (module == null) return;
+
         _modules[module.GetType()] = module;
         module.Attach(this);
     }

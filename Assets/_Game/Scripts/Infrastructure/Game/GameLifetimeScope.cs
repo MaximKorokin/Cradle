@@ -58,6 +58,7 @@ namespace Assets._Game.Scripts.Infrastructure
             RegisterEntityFeature(builder);
             RegisterItemFeature(builder);
             RegisterStatusEffectFeature(builder);
+            RegisterAbilityFeature(builder);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -66,7 +67,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterEntryPoint<AppearanceSystem>();
             builder.RegisterEntryPoint<StatSystem>();
 
-            builder.RegisterEntryPoint<InteractionSystem>();
+            builder.RegisterEntryPoint<AbilitySystem>();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -129,6 +130,11 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<StatusEffectModuleAssembler>(Lifetime.Singleton);
             builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
+        }
+
+        private void RegisterAbilityFeature(IContainerBuilder builder)
+        {
+            builder.Register<AbilityModuleAssembler>(Lifetime.Singleton);
         }
     }
 }

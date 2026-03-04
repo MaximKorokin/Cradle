@@ -24,12 +24,12 @@ namespace Assets._Game.Scripts.Entities.Interactions
         /// <summary>
         /// return true if the interaction has finished (either completed or failed), false if it is still running
         /// </summary>
-        /// <param name="dt"></param>
+        /// <param name="delta"></param>
         /// <returns>true = finished</returns>
-        public bool Tick(float dt)
+        public bool Tick(float delta)
         {
             if (!_started) Start();
-            var step = _root.Tick(_context, dt);
+            var step = _root.Tick(_context, delta);
             return step is StepStatus.Completed or StepStatus.Failed;
         }
 

@@ -26,7 +26,7 @@ namespace Assets.CoreScripts
         public float TimeSinceReset => Time.time - _lastUsedTime;
 
 
-        public CooldownCounter(float cooldown)
+        public CooldownCounter(float cooldown = 0)
         {
             Cooldown = cooldown;
             _lastUsedTime = float.MinValue;

@@ -20,6 +20,7 @@ MonoBehaviour:
   - rid: 1349792692413661262
   - rid: 1349792692413661263
   - rid: 1349792714110271692
+  - rid: 3412048547871981648
   references:
     version: 2
     RefIds:
@@ -42,3 +43,12 @@ MonoBehaviour:
       type: {class: StatusEffectModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
+    - rid: 3412048547871981648
+      type: {class: ControlModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        ControlProvider:
+          rid: 3412048547871981649
+    - rid: 3412048547871981649
+      type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
+      data: 

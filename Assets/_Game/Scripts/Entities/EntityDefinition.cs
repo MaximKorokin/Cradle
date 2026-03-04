@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
+using Assets._Game.Scripts.Entities.Interactions.Ability;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
@@ -60,5 +61,11 @@ namespace Assets._Game.Scripts.Entities
     {
         [SerializeReference]
         public ControlProviderData ControlProvider;
+    }
+
+    public class AbilityModuleDefinition : EntityModuleDefinition
+    {
+        [SerializeReference]
+        public AbilityDefinition[] Abilities;
     }
 }

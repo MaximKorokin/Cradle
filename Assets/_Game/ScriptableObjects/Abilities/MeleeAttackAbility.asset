@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f5c390e91f1144ea45c5bf3875049d, type: 3}
+  m_Name: MeleeAttackAbility
+  m_EditorClassIdentifier: 
+  _id: 616da68a43864a2b8c8c7e2a2029303f
+  <Name>k__BackingField: Physical Attack
+  <Description>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 6689699355126921553, guid: 692ce18cf22f2934ab8a66d461037786, type: 3}
+  <Interaction>k__BackingField: {fileID: 11400000, guid: 74c84a5f6f4dbca4ca4016428d432622, type: 2}
+  <ManaCost>k__BackingField: 0
+  <CastTime>k__BackingField: 0.5
+  <ChannelTime>k__BackingField: 0
+  <Cooldown>k__BackingField: 1
+  <CastRange>k__BackingField: 0.5
