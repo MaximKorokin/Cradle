@@ -1,14 +1,17 @@
 ﻿using Assets._Game.Scripts.Infrastructure;
 using System.Collections.Generic;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Modules.Positioning
 {
     public sealed class EntityPositioningFactory
     {
+        private readonly IObjectResolver _resolver;
         private readonly DispatcherService _dispatcherService;
 
-        public EntityPositioningFactory(DispatcherService dispatcherService)
+        public EntityPositioningFactory(IObjectResolver resolver, DispatcherService dispatcherService)
         {
+            _resolver = resolver;
             _dispatcherService = dispatcherService;
         }
 
@@ -25,7 +28,7 @@ namespace Assets._Game.Scripts.Entities.Modules.Positioning
             var controlModule = new ControlModule(_dispatcherService);
             if (entityDefinition.TryGetModuleDefinition<ControlModuleDefinition>(out var controlModuleDefinition))
             {
-                controlModule.AddProvider(controlModuleDefinition.ControlProvider.CreateInstance());
+                controlModule.AddProvider(controlModuleDefinition.ControlProvider.CreateInstance(_resolver));
             }
             yield return controlModule;
         }

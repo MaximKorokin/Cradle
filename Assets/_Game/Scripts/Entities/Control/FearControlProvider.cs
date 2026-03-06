@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using System;
 using UnityEngine;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
 {
@@ -22,9 +23,9 @@ namespace Assets._Game.Scripts.Entities.Control
             _direction = direction.normalized;
         }
 
-        protected override void OnTick(Entity entity, float delta)
+        protected override void OnTick(float delta)
         {
-            if (entity.TryGetModule(out IntentModule intent))
+            if (Entity.TryGetModule(out IntentModule intent))
                 intent.SetMove(new(_direction, _speedMultiplier));
         }
     }
@@ -35,6 +36,6 @@ namespace Assets._Game.Scripts.Entities.Control
         public float Duration = 2f;
         public float SpeedMultiplier = 1f;
 
-        public override IControlProvider CreateInstance() => new FearControlProvider(Duration, SpeedMultiplier);
+        public override IControlProvider CreateInstance(IObjectResolver resolver) => new FearControlProvider(Duration, SpeedMultiplier);
     }
 }

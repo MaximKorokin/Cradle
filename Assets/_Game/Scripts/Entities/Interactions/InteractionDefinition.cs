@@ -91,7 +91,7 @@ namespace Assets._Game.Scripts.Entities.Interactions
             public ControlProviderData ControlProvider;
 
             public override IInteractionStep Build(IObjectResolver resolver)
-                => new OverrideControlStep(ControlProvider.CreateInstance());
+                => new OverrideControlStep(ControlProvider.CreateInstance(resolver));
         }
     }
 }

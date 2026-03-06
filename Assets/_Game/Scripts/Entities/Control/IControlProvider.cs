@@ -1,4 +1,5 @@
 ﻿using System;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
 {
@@ -7,7 +8,8 @@ namespace Assets._Game.Scripts.Entities.Control
         ControlPriority Priority { get; }
         ControlMask Mask { get; }
         bool IsActive { get; }
-        void Tick(Entity entity, float delta);
+        void Initialize(Entity entity);
+        void Tick(float delta);
     }
 
     public enum ControlPriority
@@ -34,6 +36,6 @@ namespace Assets._Game.Scripts.Entities.Control
     [Serializable]
     public abstract class ControlProviderData
     {
-        public abstract IControlProvider CreateInstance();
+        public abstract IControlProvider CreateInstance(IObjectResolver resolver);
     }
 }

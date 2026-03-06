@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Entities.Control
         public ControlMask Mask => _hasMoveTarget ? ControlMask.All : ControlMask.None;
         public bool IsActive => true;
 
+        private Entity _entity;
+
         private bool _hasMoveTarget;
         private Vector2 _moveTarget;
         private float _stopRadius;
@@ -21,15 +23,20 @@ namespace Assets._Game.Scripts.Entities.Control
             _stopRadius = stopRadius;
         }
 
-        public void Tick(Entity entity, float delta)
+        public void Initialize(Entity entity)
+        {
+            _entity = entity;
+        }
+
+        public void Tick(float delta)
         {
             if (!_hasMoveTarget)
                 return;
 
-            if (!entity.TryGetModule(out IntentModule intent))
+            if (!_entity.TryGetModule(out IntentModule intent))
                 return;
 
-            if (!entity.TryGetModule(out SpatialModule spatial))
+            if (!_entity.TryGetModule(out SpatialModule spatial))
                 return;
 
             var moveDirection = _moveTarget - spatial.Position;

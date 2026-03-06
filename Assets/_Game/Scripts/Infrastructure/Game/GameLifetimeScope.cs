@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Control;
+using Assets._Game.Scripts.Entities.Control.AI;
 using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Modules.Positioning;
@@ -47,6 +48,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_defaultPrefabReferences);
 
             builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<UnityWorldQuery>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.RegisterInstance(_newGameDefinition);
 
@@ -104,6 +106,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
 
             builder.Register<EntityPositioningFactory>(Lifetime.Scoped);
+            builder.Register<AiBrainFactory>(Lifetime.Scoped);
         }
 
         private void RegisterInteractionFeature(IContainerBuilder builder)

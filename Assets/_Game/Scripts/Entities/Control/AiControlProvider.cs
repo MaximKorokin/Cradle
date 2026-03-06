@@ -1,6 +1,7 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Control.AI;
 using System;
 using UnityEngine;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
 {
@@ -10,32 +11,33 @@ namespace Assets._Game.Scripts.Entities.Control
         public ControlMask Mask => ControlMask.All;
         public bool IsActive => true;
 
-        private Vector2 _moveTarget = new(-3, 4);
-        private float _stopRadius = 0.1f;
+        private Entity _entity;
 
-        public void Tick(Entity entity, float delta)
+        private readonly AiBrain _brain;
+
+        public AiControlProvider(AiBrain brain)
         {
-            if (!entity.TryGetModule(out IntentModule intent))
-                return;
+            _brain = brain;
+        }
 
-            if (!entity.TryGetModule(out SpatialModule spatial))
-                return;
+        public void Initialize(Entity entity)
+        {
+            _entity = entity;
+            _brain.Initialize(entity);
+        }
 
-            var moveDirection = _moveTarget - spatial.Position;
-
-            if (moveDirection.sqrMagnitude <= _stopRadius * _stopRadius)
-            {
-                _moveTarget = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-5f, 5f));
-                return;
-            }
-
-            intent.SetMove(new(moveDirection));
+        public void Tick(float delta)
+        {
+            _brain.Tick(delta);
         }
     }
 
     [Serializable]
     public sealed class AiControlProviderData : ControlProviderData
     {
-        public override IControlProvider CreateInstance() => new AiControlProvider();
+        [field: SerializeField]
+        public AiBehaviour AiBehaviours { get; private set; }
+
+        public override IControlProvider CreateInstance(IObjectResolver resolver) => new AiControlProvider(resolver.Resolve<AiBrainFactory>().Create(AiBehaviours));
     }
 }

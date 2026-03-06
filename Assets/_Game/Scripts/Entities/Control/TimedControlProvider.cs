@@ -6,6 +6,8 @@
         public abstract ControlMask Mask { get; }
         public bool IsActive => _timeLeft > 0f;
 
+        protected Entity Entity { get; private set; }
+
         private float _timeLeft;
 
         protected TimedControlProvider(float duration)
@@ -13,12 +15,17 @@
             _timeLeft = duration;
         }
 
-        public void Tick(Entity e, float dt)
+        public void Initialize(Entity entity)
         {
-            _timeLeft -= dt;
-            OnTick(e, dt);
+            Entity = entity;
         }
 
-        protected abstract void OnTick(Entity e, float dt);
+        public void Tick(float delta)
+        {
+            _timeLeft -= delta;
+            OnTick(delta);
+        }
+
+        protected abstract void OnTick(float delta);
     }
 }

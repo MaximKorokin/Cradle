@@ -17,7 +17,11 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         protected override void OnAttach()
         {
-            base.OnAttach();
+            foreach (var provider in _providers)
+            {
+                provider.Initialize(Entity);
+            }
+
             Subscribe<OverrideControlRequestEvent>(OnOverrideControlRequested);
         }
 
@@ -28,6 +32,11 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public void AddProvider(IControlProvider p)
         {
+            if (Entity != null)
+            {
+                p.Initialize(Entity);
+            }
+
             _providers.Add(p);
         }
 
@@ -50,9 +59,9 @@ namespace Assets._Game.Scripts.Entities.Modules
             var aimProvider = SelectBest(ControlMask.Aim);
             var interactProvider = SelectBest(ControlMask.Interact);
 
-            moveProvider?.Tick(Entity, delta);
-            aimProvider?.Tick(Entity, delta);
-            interactProvider?.Tick(Entity, delta);
+            moveProvider?.Tick(delta);
+            aimProvider?.Tick(delta);
+            interactProvider?.Tick(delta);
         }
 
         private IControlProvider SelectBest(ControlMask channel)

@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using System;
 using UnityEngine;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
 {
@@ -13,9 +14,9 @@ namespace Assets._Game.Scripts.Entities.Control
         {
         }
 
-        protected override void OnTick(Entity entity, float delta)
+        protected override void OnTick(float delta)
         {
-            if (entity.TryGetModule(out IntentModule intent))
+            if (Entity.TryGetModule(out IntentModule intent))
             {
                 intent.SetMove(new(Vector2.zero, 0));
             }
@@ -26,6 +27,6 @@ namespace Assets._Game.Scripts.Entities.Control
     public sealed class StunControlProviderData : ControlProviderData
     {
         public float Duration = 2f;
-        public override IControlProvider CreateInstance() => new StunControlProvider(Duration);
+        public override IControlProvider CreateInstance(IObjectResolver resolver) => new StunControlProvider(Duration);
     }
 }
