@@ -65,7 +65,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!intent.TryConsumeUseAbility(out var abilityIntent))
                 return;
 
-            if (abilityModule.GlobalCooldown.IsOver())
+            if (!abilityModule.GlobalCooldown.IsOver())
                 return;
 
             var context = new InteractionContext(
@@ -137,8 +137,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             abilityModule.ActiveAbility.Cooldown.Reset();
             abilityModule.GlobalCooldown.Cooldown = statModule.Stats.Get(StatId.PhysicalAbilityDelay);
             abilityModule.GlobalCooldown.Reset();
-
-            abilityModule.ActiveAbility = null;
         }
     }
 }

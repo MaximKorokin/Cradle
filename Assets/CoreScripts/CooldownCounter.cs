@@ -34,7 +34,7 @@ namespace Assets.CoreScripts
 
         public bool IsOver()
         {
-            return TimeSinceReset >= Cooldown / CooldownDivider;
+            return Cooldown <= 0 || (TimeSinceReset >= Cooldown / CooldownDivider);
         }
 
         public bool TryReset()

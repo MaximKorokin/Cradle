@@ -64,6 +64,8 @@ namespace Assets._Game.Scripts.Infrastructure
             RegisterItemFeature(builder);
             RegisterStatusEffectFeature(builder);
             RegisterAbilityFeature(builder);
+
+            RegisterCalculators(builder);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -116,7 +118,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_factionRelations);
         }
 
-        private void RegisterInteractionFeature(IContainerBuilder builder)
+        private void RegisterCalculators(IContainerBuilder builder)
         {
             builder.Register<IDamageCalculator, DamageCalculator>(Lifetime.Scoped);
         }

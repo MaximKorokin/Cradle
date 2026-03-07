@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Interactions.Steps;
+using Assets._Game.Scripts.Entities.Units;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -92,6 +93,19 @@ namespace Assets._Game.Scripts.Entities.Interactions
 
             public override IInteractionStep Build(IObjectResolver resolver)
                 => new OverrideControlStep(ControlProvider.CreateInstance(resolver));
+        }
+
+        [Serializable]
+        public sealed class SetAnimatorValueStepData : StepData
+        {
+            public ApplyToTarget ApplyTo;
+            public EntityAnimatorParameterName Parameter;
+            public int Value;
+
+            public override IInteractionStep Build(IObjectResolver resolver)
+                => new SetAnimatorValueStep(Parameter, Value, ApplyTo);
+
+            public enum ApplyToTarget { Source, Target }
         }
     }
 }

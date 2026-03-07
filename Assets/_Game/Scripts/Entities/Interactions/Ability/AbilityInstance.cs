@@ -37,19 +37,18 @@ namespace Assets._Game.Scripts.Entities.Interactions.Ability
         {
             _interactionInstance = Definition.Interaction.BuildRuntime(context, resolver);
             _interactionInstance.Start();
-        }
-
-        public void OnTick(InteractionContext context, float delta)
-        {
-            if (_interactionInstance.Tick(delta))
-            {
-                _interactionInstance.Cancel();
-            }
+            _interactionInstance.Tick(0);
         }
 
         public void OnChannelTick(InteractionContext context, float delta)
         {
+            if (_interactionInstance == null) return;
 
+            if (_interactionInstance.Tick(delta))
+            {
+                _interactionInstance.Cancel();
+                _interactionInstance = null;
+            }
         }
     }
 }

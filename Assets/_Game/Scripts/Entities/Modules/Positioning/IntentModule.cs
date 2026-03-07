@@ -26,7 +26,8 @@ namespace Assets._Game.Scripts.Entities.Modules
         public bool TryConsumeUseAbility(out UseAbilityIntent intent)
         {
             intent = UseAbility;
-            return !UseAbility.Equals(UseAbilityIntent.None);
+            UseAbility = UseAbilityIntent.None;
+            return !intent.Equals(UseAbilityIntent.None);
         }
     }
 }
