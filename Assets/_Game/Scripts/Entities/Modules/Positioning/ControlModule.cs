@@ -59,6 +59,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             var aimProvider = SelectBest(ControlMask.Aim);
             var interactProvider = SelectBest(ControlMask.Interact);
 
+            // todo: remove logic duplication
             moveProvider?.Tick(delta);
             aimProvider?.Tick(delta);
             interactProvider?.Tick(delta);

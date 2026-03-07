@@ -1,8 +1,9 @@
 ﻿using Assets._Game.Scripts.Entities.Control.Intents;
+using Assets._Game.Scripts.Entities.Faction;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure;
+using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
@@ -12,35 +13,35 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         private const float ChaseStartDistance = 3;
 
         private readonly IWorldQuery _worldQuery;
+        private readonly FactionRelationResolver _relationResolver;
 
-        public ChaseBehaviour(IWorldQuery worldQuery)
+        public ChaseBehaviour(IWorldQuery worldQuery, FactionRelationResolver relationResolver)
         {
             _worldQuery = worldQuery;
+            _relationResolver = relationResolver;
         }
 
         public override float Evaluate()
         {
             var position = Entity.GetModule<SpatialModule>().Position;
-
-            var enemies = _worldQuery.GetEntitiesInRange(position, ChaseStartDistance).ToList();
-            enemies.Remove(Entity);
+            var enemies = _worldQuery.GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver).ToList();
 
             return enemies.Any() ? 0.8f : 0f;
         }
 
         public override void Execute(float delta)
         {
-            var spatial = Entity.GetModule<SpatialModule>();
+            var position = Entity.GetModule<SpatialModule>().Position;
             var intent = Entity.GetModule<IntentModule>();
 
             var target = _worldQuery
-                .GetEntitiesInRange(spatial.Position, ChaseStartDistance)
+                .GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver)
                 .FirstOrDefault();
 
             if (target == null)
                 return;
 
-            var direction = target.GetModule<SpatialModule>().Position - spatial.Position;
+            var direction = target.GetModule<SpatialModule>().Position - position;
 
             intent.SetMove(new MoveIntent(direction));
         }

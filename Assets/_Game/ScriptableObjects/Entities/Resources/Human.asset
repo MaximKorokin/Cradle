@@ -21,6 +21,7 @@ MonoBehaviour:
   - rid: 1349792692413661263
   - rid: 1349792714110271692
   - rid: 3412048547871981648
+  - rid: 3412048594719473664
   references:
     version: 2
     RefIds:
@@ -51,4 +52,11 @@ MonoBehaviour:
           rid: 3412048547871981649
     - rid: 3412048547871981649
       type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
-      data: 
+      data:
+        <AiBehaviours>k__BackingField: 6
+    - rid: 3412048594719473664
+      type: {class: AbilityModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Abilities:
+        - {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}

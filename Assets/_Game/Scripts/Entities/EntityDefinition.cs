@@ -65,7 +65,11 @@ namespace Assets._Game.Scripts.Entities
 
     public class AbilityModuleDefinition : EntityModuleDefinition
     {
-        [SerializeReference]
         public AbilityDefinition[] Abilities;
+    }
+
+    public class FactionModuleDefinition : EntityModuleDefinition
+    {
+        public Faction.Faction Faction;
     }
 }

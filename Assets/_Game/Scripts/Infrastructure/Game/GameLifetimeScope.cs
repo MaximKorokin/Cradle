@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Control.AI;
+using Assets._Game.Scripts.Entities.Faction;
 using Assets._Game.Scripts.Entities.Interactions.Calculators;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Modules.Positioning;
@@ -33,6 +34,8 @@ namespace Assets._Game.Scripts.Infrastructure
         private StatsConfig _statsConfig;
         [SerializeField]
         private StatusEffectsConfig _statusEffectsConfig;
+        [SerializeField]
+        private FactionRelations _factionRelations;
         [SerializeField]
         private DefaultPrefabReferences _defaultPrefabReferences;
 
@@ -107,6 +110,10 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<EntityPositioningFactory>(Lifetime.Scoped);
             builder.Register<AiBrainFactory>(Lifetime.Scoped);
+
+            builder.Register<FactionModuleFactory>(Lifetime.Singleton);
+            builder.Register<FactionRelationResolver>(Lifetime.Singleton);
+            builder.RegisterInstance(_factionRelations);
         }
 
         private void RegisterInteractionFeature(IContainerBuilder builder)

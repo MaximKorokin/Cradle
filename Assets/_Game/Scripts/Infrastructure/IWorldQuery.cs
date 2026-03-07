@@ -17,11 +17,6 @@ namespace Assets._Game.Scripts.Infrastructure
         private readonly LayerMask _obstacleMask = 0;
         private readonly LayerMask _entityMask = ~0;
 
-        //public UnityWorldQuery(LayerMask obstacleMask)
-        //{
-        //    _obstacleMask = obstacleMask;
-        //}
-
         public bool HasLineOfSight(Vector2 from, Vector2 to)
         {
             return !Physics2D.Linecast(from, to, _obstacleMask);
