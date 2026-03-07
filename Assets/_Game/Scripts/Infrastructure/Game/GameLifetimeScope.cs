@@ -73,8 +73,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterEntryPoint<LocomotionSystem>();
             builder.RegisterEntryPoint<AppearanceSystem>();
             builder.RegisterEntryPoint<StatSystem>();
-
             builder.RegisterEntryPoint<AbilitySystem>();
+            builder.RegisterEntryPoint<ControlSystem>();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

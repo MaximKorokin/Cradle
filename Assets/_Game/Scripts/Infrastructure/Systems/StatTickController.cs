@@ -15,6 +15,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         public void Tick(Entity entity)
         {
             var stats = entity.GetModule<StatModule>().Stats;
+
             // HP regeneration
             if (_cooldownCounter.TryReset() &&
                 stats.Has(StatId.HpCurrent) &&

@@ -1,23 +1,15 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
-using Assets._Game.Scripts.Infrastructure;
-using Assets._Game.Scripts.Shared.Utils;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class ControlModule : EntityModuleBase
     {
-        private readonly DispatcherService _dispatcherService;
         private readonly List<IControlProvider> _providers = new();
+        public IReadOnlyList<IControlProvider> Providers => _providers;
 
-        private readonly IControlProvider[] _rawControlProviders = new IControlProvider[100];
-        private readonly IControlProvider[] _uniqueControlProviders = new IControlProvider[100];
-
-        public ControlModule(DispatcherService dispatcherService)
-        {
-            _dispatcherService = dispatcherService;
-            _dispatcherService.OnTick += Tick;
-        }
+        public readonly IControlProvider[] RawControlProviders = new IControlProvider[100];
+        public readonly IControlProvider[] UniqueControlProviders = new IControlProvider[100];
 
         protected override void OnAttach()
         {
@@ -25,13 +17,6 @@ namespace Assets._Game.Scripts.Entities.Modules
             {
                 provider.Initialize(Entity);
             }
-
-            Subscribe<OverrideControlRequestEvent>(OnOverrideControlRequested);
-        }
-
-        private void OnOverrideControlRequested(OverrideControlRequestEvent overrideControlEvent)
-        {
-            AddProvider(overrideControlEvent.ControlProvider);
         }
 
         public void AddProvider(IControlProvider p)
@@ -47,62 +32,6 @@ namespace Assets._Game.Scripts.Entities.Modules
         public void RemoveProvider(IControlProvider p)
         {
             _providers.Remove(p);
-        }
-
-        public void Tick(float delta)
-        {
-            for (int i = 0; i < _providers.Count; i++)
-            {
-                if (!_providers[i].IsActive)
-                {
-                    _providers.RemoveAt(i);
-                }
-            }
-
-            OptimizedOperationUtils.CleanTillNull(_rawControlProviders);
-            OptimizedOperationUtils.CleanTillNull(_uniqueControlProviders);
-
-            _rawControlProviders[0] = SelectBest(ControlMask.Move);
-            _rawControlProviders[1] = SelectBest(ControlMask.Aim);
-            _rawControlProviders[2] = SelectBest(ControlMask.Interact);
-
-            OptimizedOperationUtils.CollectUnique(_rawControlProviders, _uniqueControlProviders);
-
-            for (int i = 0; i < _uniqueControlProviders.Length; i++)
-            {
-                if (_uniqueControlProviders[i] == null) break;
-
-                _uniqueControlProviders[i].Tick(delta);
-            }
-        }
-
-        private IControlProvider SelectBest(ControlMask channel)
-        {
-            IControlProvider best = null;
-            int bestPriority = int.MinValue;
-
-            for (int i = 0; i < _providers.Count; i++)
-            {
-                var provider = _providers[i];
-                if (!provider.IsActive) continue;
-                if ((provider.Mask & channel) == 0) continue;
-
-                var priority = (int)provider.Priority;
-                if (priority > bestPriority || priority == bestPriority)
-                {
-                    best = provider;
-                    bestPriority = priority;
-                }
-            }
-
-            return best;
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _dispatcherService.OnTick -= Tick;
         }
     }
 

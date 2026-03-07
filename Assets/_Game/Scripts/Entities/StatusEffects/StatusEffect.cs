@@ -13,7 +13,6 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         private readonly CooldownCounter _cooldownCounter;
 
         public event Action<StatusEffect> Expired;
-        public event Action<StatusEffect> Ticked;
 
         public StatusEffect(StatusEffectDefinition definition)
         {
@@ -28,7 +27,6 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             {
                 Expired?.Invoke(this);
             }
-            Ticked?.Invoke(this);
         }
     }
 

@@ -12,6 +12,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         private const float MaxSpotLeaveDistance = 3;
         private const float ChaseStartDistance = 3;
 
+        private readonly EntityQuery _entityQuery = new(RestrictionState.Disabled | RestrictionState.Dead);
         private readonly IWorldQuery _worldQuery;
         private readonly FactionRelationResolver _relationResolver;
 
@@ -24,7 +25,9 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         public override float Evaluate()
         {
             var position = Entity.GetModule<SpatialModule>().Position;
-            var enemies = _worldQuery.GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver).ToList();
+            var enemies = _worldQuery
+                .GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver)
+                .Query(_entityQuery);
 
             return enemies.Any() ? 0.8f : 0f;
         }
@@ -36,6 +39,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
             var target = _worldQuery
                 .GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver)
+                .Query(_entityQuery)
                 .FirstOrDefault();
 
             if (target == null)

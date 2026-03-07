@@ -4,7 +4,6 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
@@ -13,6 +12,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
     {
         private const float AttackRange = 0.7f;
 
+        private readonly EntityQuery _entityQuery = new(RestrictionState.Disabled | RestrictionState.Dead);
         private readonly IWorldQuery _worldQuery;
         private readonly FactionRelationResolver _relationResolver;
 
@@ -25,7 +25,9 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         public override float Evaluate()
         {
             var position = Entity.GetModule<SpatialModule>().Position;
-            var enemies = _worldQuery.GetEntitiesInRange(position, AttackRange, Entity, FactionRelation.Enemy, _relationResolver);
+            var enemies = _worldQuery
+                .GetEntitiesInRange(position, AttackRange, Entity, FactionRelation.Enemy, _relationResolver)
+                .Query(_entityQuery);
 
             return enemies.Any() ? 1.0f : 0f;
         }
@@ -37,6 +39,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
             var target = _worldQuery
                 .GetEntitiesInRange(position, AttackRange, Entity, FactionRelation.Enemy, _relationResolver)
+                .Query(_entityQuery)
                 .FirstOrDefault();
 
             if (target == null)
