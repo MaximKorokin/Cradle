@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Infrastructure.Calculators;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
@@ -14,8 +15,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     internal class StatSystem : ReactiveEntitySystemBase
     {
-        public StatSystem(EntityRepository repository) : base(repository)
+        private readonly DerivedStatsCalculator _derivedStatsCalculator;
+
+        public StatSystem(EntityRepository repository, DerivedStatsCalculator derivedStatsCalculator) : base(repository)
         {
+            _derivedStatsCalculator = derivedStatsCalculator;
         }
 
         protected override bool Filter(Entity entity)
@@ -29,7 +33,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             entity.Subscribe<InventoryChangedEvent>(OnInventoryChanged);
             entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
             entity.Subscribe<StatChangedEvent>(OnStatChanged);
-            RecalculateDerivedStats(entity);
+
+            _derivedStatsCalculator.RecalculateDerivedStats(entity);
         }
 
         protected override void OnUntrack(Entity entity)
@@ -83,30 +88,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             stats.AddModifiers(source, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, item.Definition.Weight).Yield());
         }
 
-        private static void OnStatChanged(StatChangedEvent e)
+        private void OnStatChanged(StatChangedEvent e)
         {
-            // todo: list primary stats at least in an array
-            if (e.StatId == StatId.Strength || e.StatId == StatId.Agility)
-                RecalculateDerivedStats(e.Entity);
-        }
-
-        private static void RecalculateDerivedStats(Entity entity)
-        {
-            var stats = entity.GetModule<StatModule>();
-
-            var source = StatModifierSource.Derived;
-
-            stats.RemoveModifiers(source);
-
-            var strength = stats.Stats.GetBase(StatId.Strength);
-            var agility = stats.Stats.GetBase(StatId.Agility);
-
-            // todo: list formulas at least in an array
-            stats.AddModifiers(source, new[]
-            {
-                new StatModifier(StatId.PhysicalAttack, StatStage.PreAdd, StatOperation.Add, strength * 2f),
-                new StatModifier(StatId.PhysicalAttackSpeed, StatStage.PreAdd, StatOperation.Add, agility * 0.01f),
-            });
+            _derivedStatsCalculator.RecalculateDerivedStats(e);
         }
 
         private static void OnInventoryChanged(InventoryChangedEvent e)

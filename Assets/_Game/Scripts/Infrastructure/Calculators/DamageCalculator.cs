@@ -3,7 +3,7 @@ using Assets._Game.Scripts.Entities.Stats;
 using System;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Interactions.Calculators
+namespace Assets._Game.Scripts.Infrastructure.Calculators
 {
     public enum DamageType
     {
