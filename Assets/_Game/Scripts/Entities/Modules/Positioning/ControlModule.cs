@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Infrastructure;
+using Assets._Game.Scripts.Shared.Utils;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules
@@ -8,6 +9,9 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private readonly DispatcherService _dispatcherService;
         private readonly List<IControlProvider> _providers = new();
+
+        private readonly IControlProvider[] _rawControlProviders = new IControlProvider[100];
+        private readonly IControlProvider[] _uniqueControlProviders = new IControlProvider[100];
 
         public ControlModule(DispatcherService dispatcherService)
         {
@@ -55,14 +59,21 @@ namespace Assets._Game.Scripts.Entities.Modules
                 }
             }
 
-            var moveProvider = SelectBest(ControlMask.Move);
-            var aimProvider = SelectBest(ControlMask.Aim);
-            var interactProvider = SelectBest(ControlMask.Interact);
+            OptimizedOperationUtils.CleanTillNull(_rawControlProviders);
+            OptimizedOperationUtils.CleanTillNull(_uniqueControlProviders);
 
-            // todo: remove logic duplication
-            moveProvider?.Tick(delta);
-            aimProvider?.Tick(delta);
-            interactProvider?.Tick(delta);
+            _rawControlProviders[0] = SelectBest(ControlMask.Move);
+            _rawControlProviders[1] = SelectBest(ControlMask.Aim);
+            _rawControlProviders[2] = SelectBest(ControlMask.Interact);
+
+            OptimizedOperationUtils.CollectUnique(_rawControlProviders, _uniqueControlProviders);
+
+            for (int i = 0; i < _uniqueControlProviders.Length; i++)
+            {
+                if (_uniqueControlProviders[i] == null) break;
+
+                _uniqueControlProviders[i].Tick(delta);
+            }
         }
 
         private IControlProvider SelectBest(ControlMask channel)
