@@ -67,6 +67,8 @@ namespace Assets._Game.Scripts.Entities
 
             _appearance.SetAnimationRequested += AnimatorController.SetAnimation;
             _appearance.SetAnimatorValueRequested += AnimatorController.SetValue;
+
+            entity.Publish<EntityBoundEvent>(new(entity));
         }
 
         public void Unbind()
@@ -114,5 +116,12 @@ namespace Assets._Game.Scripts.Entities
     {
         void Bind(Entity entity);
         void Unbind();
+    }
+
+    public readonly struct EntityBoundEvent : IEntityEvent
+    {
+        public Entity Entity { get; }
+
+        public EntityBoundEvent(Entity entity) => Entity = entity;
     }
 }

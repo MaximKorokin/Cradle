@@ -19,7 +19,11 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
         protected override void OnInitialize()
         {
-            _initialPosition = Entity.GetModule<SpatialModule>().Position;
+            Entity.Subscribe<EntityBoundEvent>(e =>
+            {
+                _initialPosition = Entity.GetModule<SpatialModule>().Position;
+                _target = _initialPosition;
+            });
             _wanderCooldown = new();
             ResetWanderCooldown();
         }
@@ -31,18 +35,19 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
         public override void Execute(float delta)
         {
+            if (!_wanderCooldown.IsOver())
+            {
+                return;
+            }
+
             var spatial = Entity.GetModule<SpatialModule>();
             var intent = Entity.GetModule<IntentModule>();
-
-            if (_wanderCooldown.IsOver())
-            {
-                _target = _initialPosition + Random.insideUnitCircle * 3f;
-            }
 
             var direction = _target - spatial.Position;
 
             if (direction.sqrMagnitude < StopDistance * StopDistance)
             {
+                _target = _initialPosition + Random.insideUnitCircle * 3f;
                 intent.SetMove(MoveIntent.None);
                 ResetWanderCooldown();
                 return;

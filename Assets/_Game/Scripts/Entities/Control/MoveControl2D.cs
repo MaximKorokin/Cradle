@@ -29,8 +29,10 @@ namespace Assets._Game.Scripts.Entities.Control
             if (!_entity.TryGetModule(out StatModule stats)) return;
 
             float moveSpeed = stats.Stats.Get(StatId.MoveSpeed);
-            var direction = intent.Move.NormalizedDirection;
-            var multiplier = intent.Move.SpeedMultiplier;
+
+            intent.TryConsumeMove(out var moveIntent);
+            var direction = moveIntent.NormalizedDirection;
+            var multiplier = moveIntent.SpeedMultiplier;
 
             _rigidbody.linearVelocity = moveSpeed * multiplier * direction;
         }

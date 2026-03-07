@@ -23,6 +23,13 @@ namespace Assets._Game.Scripts.Entities.Modules
             UseAbility = interactIntent;
         }
 
+        public bool TryConsumeMove(out MoveIntent intent)
+        {
+            intent = Move;
+            Move = MoveIntent.None;
+            return !intent.Equals(MoveIntent.None);
+        }
+
         public bool TryConsumeUseAbility(out UseAbilityIntent intent)
         {
             intent = UseAbility;

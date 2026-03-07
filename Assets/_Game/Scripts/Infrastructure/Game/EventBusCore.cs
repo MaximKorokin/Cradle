@@ -45,6 +45,17 @@ public sealed class EventBusCore : IEventBus
             list.Remove(handler);
     }
 
+    public IDisposable SubscribeOnce<T>(Action<T> handler) where T : struct
+    {
+        IDisposable subscription = null;
+        subscription = Subscribe<T>(e =>
+        {
+            handler(e);
+            subscription.Dispose();
+        });
+        return subscription;
+    }
+
     public void Clear() => _handlers.Clear();
 
     private sealed class Subscription : IDisposable

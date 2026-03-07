@@ -12,6 +12,7 @@ namespace Assets._Game.Scripts.Entities.Control
         public void Bind(Entity entity)
         {
             _entity = entity;
+            SynchronizeSpatial();
         }
 
         public void Unbind()

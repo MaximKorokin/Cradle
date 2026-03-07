@@ -42,7 +42,6 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             if (target == null)
                 return;
 
-            intent.SetMove(new(Vector2.zero));
             if (Entity.TryGetModule<AbilityModule>(out var abilityModule))
             {
                 intent.SetUseAbility(new UseAbilityIntent(abilityModule.Abilities.First(), target, target.GetModule<SpatialModule>().Position));

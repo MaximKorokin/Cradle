@@ -61,6 +61,9 @@ public sealed class Entity : IEntry, IDisposable
     public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
         => _bus.Subscribe(handler);
 
+    public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
+        => _bus.SubscribeOnce(handler);
+
     public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
         => _bus.Unsubscribe(handler);
 
