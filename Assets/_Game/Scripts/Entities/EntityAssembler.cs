@@ -39,6 +39,8 @@ namespace Assets._Game.Scripts.Entities
         {
             var entity = new Entity(entityDefinition);
 
+            entity.AddModule(new RestrictionStateModule());
+
             entity.AddModule(_statsModuleAssembler.Create(entityDefinition));
 
             entity.AddModule(_statusEffectModuleAssembler.Assemble());

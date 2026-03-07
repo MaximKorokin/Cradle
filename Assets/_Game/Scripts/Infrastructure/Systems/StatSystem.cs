@@ -15,16 +15,26 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     internal class StatSystem : ReactiveEntitySystemBase
     {
+        private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
 
-        public StatSystem(EntityRepository repository, DerivedStatsCalculator derivedStatsCalculator) : base(repository)
+        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead);
+
+        public StatSystem(EntityRepository repository, DerivedStatsCalculator derivedStatsCalculator, DispatcherService dispatcher, StatsConfig statsConfig) : base(repository, dispatcher)
         {
+            _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
+            TickAction += Tick;
+        }
+
+        private void Tick(Entity entity, float delta)
+        {
+            _tickController.Tick(entity);
         }
 
         protected override bool Filter(Entity entity)
         {
-            return entity.HasModule<StatModule>();
+            return entity.HasModule<StatModule>() && entity.HasModule<RestrictionStateModule>();
         }
 
         protected override void OnTrack(Entity entity)
@@ -91,6 +101,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void OnStatChanged(StatChangedEvent e)
         {
             _derivedStatsCalculator.RecalculateDerivedStats(e);
+
+            if (e.Entity.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
+            {
+                e.Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Dead);
+            }
         }
 
         private static void OnInventoryChanged(InventoryChangedEvent e)

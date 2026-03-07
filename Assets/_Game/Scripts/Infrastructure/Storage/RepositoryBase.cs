@@ -19,6 +19,7 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
             _byId.Add(e.Id, e);
             Added?.Invoke(e);
         }
+
         public bool Remove(string id)
         {
             if (_byId.TryGetValue(id, out var e))

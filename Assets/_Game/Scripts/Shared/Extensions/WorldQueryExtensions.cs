@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Faction;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Faction;
 using Assets._Game.Scripts.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;

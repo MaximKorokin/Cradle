@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 1349792714110271692
   - rid: 3412048547871981648
   - rid: 3412048594719473664
+  - rid: 3412048633303400551
   references:
     version: 2
     RefIds:
@@ -60,3 +61,8 @@ MonoBehaviour:
         Enabled: 1
         Abilities:
         - {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}
+    - rid: 3412048633303400551
+      type: {class: FactionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Faction: {fileID: 11400000, guid: 95f4653675b0a1441b2be05e22297bab, type: 2}

@@ -3,39 +3,26 @@ using Assets._Game.Scripts.Entities.Interactions;
 using Assets._Game.Scripts.Entities.Interactions.Ability;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Shared.Extensions;
 using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class AbilitySystem : SystemBase
+    public sealed class AbilitySystem : EntitySystemBase
     {
-        private readonly EntityRepository _entityRepository;
-        private readonly DispatcherService _dispatcher;
         private readonly IObjectResolver _resolver;
 
-        public AbilitySystem(EntityRepository entityRepository, DispatcherService dispatcher, IObjectResolver resolver)
+        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead | RestrictionState.Stunned | RestrictionState.Feared);
+
+        public AbilitySystem(EntityRepository entityRepository, DispatcherService dispatcher, IObjectResolver resolver) : base(entityRepository, dispatcher)
         {
-            _entityRepository = entityRepository;
-            _dispatcher = dispatcher;
             _resolver = resolver;
-
-            _dispatcher.OnTick += OnTick;
+            TickAction += Tick;
         }
 
-        public override void Dispose()
+        protected override bool Filter(Entity entity)
         {
-            base.Dispose();
-            _dispatcher.OnTick -= OnTick;
-        }
-
-        public void OnTick(float delta)
-        {
-            foreach (var entity in _entityRepository.All)
-            {
-                if (!entity.HasModule<AbilityModule>() || !entity.HasModule<StatModule>())
-                    continue;
-                Tick(entity, delta);
-            }
+            return entity.HasModule<AbilityModule>() && entity.HasModule<StatModule>();
         }
 
         public void Tick(Entity entity, float delta)

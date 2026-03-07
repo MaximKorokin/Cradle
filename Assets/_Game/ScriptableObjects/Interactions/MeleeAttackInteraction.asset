@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: MeleeAttackInteraction
   m_EditorClassIdentifier: 
   Root:
-    rid: 1349792869651841202
+    rid: 3412048633303400590
   references:
     version: 2
     RefIds:
-    - rid: 1349792869651841202
+    - rid: 3412048633303400590
+      type: {class: InteractionDefinition/ParallelData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        Steps:
+        - rid: 3412048633303400591
+        - rid: 3412048633303400629
+    - rid: 3412048633303400591
       type: {class: InteractionDefinition/DamageData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
       data:
         Spec:
@@ -25,3 +31,9 @@ MonoBehaviour:
           Flat: 0
           AttackScale: 1
           CanCrit: 1
+    - rid: 3412048633303400629
+      type: {class: InteractionDefinition/SetAnimatorValueStepData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        ApplyTo: 0
+        Parameter: 20
+        Value: 1

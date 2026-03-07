@@ -3,19 +3,16 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public abstract class ReactiveEntitySystemBase : SystemBase
+    public abstract class ReactiveEntitySystemBase : EntitySystemBase
     {
-        private readonly EntityRepository _repository;
         private readonly HashSet<Entity> _tracked = new();
 
-        protected ReactiveEntitySystemBase(EntityRepository repository)
+        protected ReactiveEntitySystemBase(EntityRepository repository, DispatcherService dispatcher) : base(repository, dispatcher)
         {
-            _repository = repository;
+            EntityRepository.Added += OnEntityAdded;
+            EntityRepository.Removed += OnEntityRemoved;
 
-            _repository.Added += OnEntityAdded;
-            _repository.Removed += OnEntityRemoved;
-
-            foreach (var entity in _repository.All)
+            foreach (var entity in EnumerateEntities())
             {
                 OnEntityAdded(entity);
             }
@@ -25,8 +22,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.Dispose();
 
-            _repository.Added -= OnEntityAdded;
-            _repository.Removed -= OnEntityRemoved;
+            EntityRepository.Added -= OnEntityAdded;
+            EntityRepository.Removed -= OnEntityRemoved;
         }
 
         private void OnEntityAdded(Entity entity)
@@ -51,8 +48,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 OnTrack(entity);
             }
         }
-
-        protected abstract bool Filter(Entity entity);
 
         protected abstract void OnTrack(Entity entity);
 

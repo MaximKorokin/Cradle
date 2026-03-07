@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -9,7 +10,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class AppearanceSystem : ReactiveEntitySystemBase
     {
-        public AppearanceSystem(EntityRepository repository) : base(repository)
+        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
+
+        public AppearanceSystem(EntityRepository repository, DispatcherService dispatcher) : base(repository, dispatcher)
         {
         }
 
@@ -21,16 +24,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected override void OnTrack(Entity entity)
         {
             entity.Subscribe<EquipmentChangedEvent>(OnEquipmentChanged);
+            entity.Subscribe<RestrictionStateChangedEvent>(OnRestrictionStateChanged);
         }
 
         protected override void OnUntrack(Entity entity)
         {
             entity.Unsubscribe<EquipmentChangedEvent>(OnEquipmentChanged);
+            entity.Unsubscribe<RestrictionStateChangedEvent>(OnRestrictionStateChanged);
         }
 
         private void OnEquipmentChanged(EquipmentChangedEvent e)
         {
-            e.Entity.TryGetModule(out AppearanceModule appearance);
+            var appearance = e.Entity.GetModule<AppearanceModule>();
 
             // Change units
             foreach (var entityUnitVisualModel in e.Entity.Definition.VisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
@@ -54,6 +59,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationTrait.AnimationClip;
                 appearance.RequestSetAnimation(animationTrait.AnimationKey, animationClip);
+            }
+        }
+
+        private void OnRestrictionStateChanged(RestrictionStateChangedEvent e)
+        {
+            if (e.State.HasFlag(RestrictionState.Dead))
+            {
+                var appearance = e.Entity.GetModule<AppearanceModule>();
+                appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.ToDie, true);
             }
         }
     }

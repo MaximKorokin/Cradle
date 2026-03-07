@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: Shirt
+  m_EditorClassIdentifier: 
+  _id: fdc995e972144d2faf6bde763adf4e12
+  <Name>k__BackingField: Shirt
+  <Icon>k__BackingField: {fileID: -564361632879031603, guid: 21b539ab1d3e29d40af25ebaff60cb2f, type: 3}
+  <Sprite>k__BackingField: {fileID: 3537499059100430296, guid: c74c90811d22fb444943251606ff5755, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 111
+  <Traits>k__BackingField:
+  - rid: 3412048633303400687
+  - rid: 3412048633303400688
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412048633303400687
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 30
+    - rid: 3412048633303400688
+      type: {class: StatModifiersTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Modifiers>k__BackingField:
+        - <Stat>k__BackingField: 320
+          <Stage>k__BackingField: 20
+          <Operation>k__BackingField: 10
+          <Value>k__BackingField: 100
+          <Priority>k__BackingField: 0

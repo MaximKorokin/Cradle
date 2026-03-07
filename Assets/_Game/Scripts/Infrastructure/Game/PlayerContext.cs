@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Control;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Items.Inventory;
 using System;

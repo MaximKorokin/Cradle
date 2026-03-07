@@ -6,25 +6,16 @@ namespace Assets._Game.Scripts.Entities.Modules
     public class StatModule : EntityModuleBase
     {
         private readonly StatsController _statsController;
-        private readonly StatsTickController _statsTickController;
 
-        public StatModule(StatsController stats, StatsTickController statsTickController)
+        public StatModule(StatsController stats)
         {
             _statsController = stats;
-            _statsTickController = statsTickController;
 
             _statsController.StatChanged += OnStatChanged;
             _statsController.Changed += OnStatsChanged;
         }
 
-        public IStatsReadOnly Stats => _statsController;
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _statsTickController.Dispose();
-        }
+        public StatsController Stats => _statsController;
 
         public void SetBase(StatId statId, float value)
         {
@@ -43,12 +34,12 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnStatChanged(StatId id)
         {
-            Publish<StatChangedEvent>(new());
+            Publish<StatChangedEvent>(new(Entity, id));
         }
 
         private void OnStatsChanged()
         {
-            Publish<StatsChangedEvent>(new());
+            Publish<StatsChangedEvent>(new(Entity));
         }
     }
 
@@ -56,7 +47,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public readonly StatId StatId;
 
-        public Entity Entity {get; }
+        public Entity Entity { get; }
 
         public StatChangedEvent(Entity entity, StatId statId)
         {

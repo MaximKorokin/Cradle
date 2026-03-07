@@ -1,77 +1,79 @@
-using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Storage;
 using System;
 using System.Collections.Generic;
 
-public interface IEntityEvent
+namespace Assets._Game.Scripts.Entities
 {
-    Entity Entity { get; }
-}
-
-public sealed class Entity : IEntry, IDisposable
-{
-    string IEntry.Id { get; set; }
-
-    private readonly Dictionary<Type, IEntityModule> _modules = new();
-    private readonly EventBusCore _bus = new();
-
-    public EntityDefinition Definition { get; private set; }
-
-    public Entity(EntityDefinition definition)
+    public sealed class Entity : IEntry, IDisposable
     {
-        Definition = definition;
-    }
+        string IEntry.Id { get; set; }
 
-    public void AddModule<T>(T module) where T : class, IEntityModule
-    {
-        if (module == null) return;
+        private readonly Dictionary<Type, IEntityModule> _modules = new();
+        private readonly EventBusCore _bus = new();
 
-        _modules[module.GetType()] = module;
-        module.Attach(this);
-    }
+        public EntityDefinition Definition { get; private set; }
 
-    public bool TryGetModule<T>(out T module) where T : class, IEntityModule
-    {
-        if (_modules.TryGetValue(typeof(T), out var m))
+        public Entity(EntityDefinition definition)
         {
-            module = (T)m;
-            return true;
+            Definition = definition;
         }
 
-        module = null!;
-        return false;
-    }
-
-    public T GetModule<T>() where T : class, IEntityModule
-    {
-        if (TryGetModule(out T module))
+        public void AddModule<T>(T module) where T : class, IEntityModule
         {
-            return module;
+            if (module == null) return;
+
+            _modules[module.GetType()] = module;
+            module.Attach(this);
         }
-        throw new InvalidOperationException($"Entity does not have a module of type {typeof(T).Name}");
+
+        public bool TryGetModule<T>(out T module) where T : class, IEntityModule
+        {
+            if (_modules.TryGetValue(typeof(T), out var m))
+            {
+                module = (T)m;
+                return true;
+            }
+
+            module = null!;
+            return false;
+        }
+
+        public T GetModule<T>() where T : class, IEntityModule
+        {
+            if (TryGetModule(out T module))
+            {
+                return module;
+            }
+            throw new InvalidOperationException($"Entity does not have a module of type {typeof(T).Name}");
+        }
+
+        public bool HasModule<T>() where T : class, IEntityModule
+            => _modules.ContainsKey(typeof(T));
+
+        public void Publish<TEvent>(in TEvent evt) where TEvent : struct, IEntityEvent
+            => _bus.Publish(evt);
+
+        public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
+            => _bus.Subscribe(handler);
+
+        public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
+            => _bus.SubscribeOnce(handler);
+
+        public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
+            => _bus.Unsubscribe(handler);
+
+        public void Dispose()
+        {
+            _bus.Clear();
+            foreach (var module in _modules.Values)
+                module.Dispose();
+            _modules.Clear();
+        }
     }
 
-    public bool HasModule<T>() where T : class, IEntityModule
-        => _modules.ContainsKey(typeof(T));
-
-    public void Publish<TEvent>(in TEvent evt) where TEvent : struct, IEntityEvent
-        => _bus.Publish(evt);
-
-    public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
-        => _bus.Subscribe(handler);
-
-    public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
-        => _bus.SubscribeOnce(handler);
-
-    public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
-        => _bus.Unsubscribe(handler);
-
-    public void Dispose()
+    public interface IEntityEvent
     {
-        _bus.Clear();
-        foreach (var module in _modules.Values)
-            module.Dispose();
-        _modules.Clear();
+        Entity Entity { get; }
     }
 }

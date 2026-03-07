@@ -1,37 +1,26 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.Shared.Extensions;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class LocomotionSystem : SystemBase
+    public sealed class LocomotionSystem : EntitySystemBase
     {
         private const float MoveEpsilonSqr = 0.0001f;
 
-        private readonly EntityRepository _entityRepository;
-        private readonly DispatcherService _dispatcher;
+        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead | RestrictionState.Stunned | RestrictionState.Feared);
 
-        public LocomotionSystem(EntityRepository entityRepository, DispatcherService dispatcher)
+        public LocomotionSystem(EntityRepository entityRepository, DispatcherService dispatcher) : base(entityRepository, dispatcher)
         {
-            _entityRepository = entityRepository;
-            _dispatcher = dispatcher;
-
-            _dispatcher.OnFixedTick += OnFixedTick;
+            FixedTickAction += FixedTick;
         }
 
-        private void OnFixedTick(float delta)
+        public void FixedTick(Entity entity, float delta)
         {
-            foreach (var entity in _entityRepository.All)
-            {
-                Tick(entity, delta);
-            }
-        }
-
-        public void Tick(Entity entity, float delta)
-        {
-            if (!entity.TryGetModule(out SpatialModule spatial)) return;
-            if (!entity.TryGetModule(out KinematicsModule kinematics)) return;
-            if (!entity.TryGetModule(out AppearanceModule appearance)) return;
+            var spatial = entity.GetModule<SpatialModule>();
+            var kinematics = entity.GetModule<KinematicsModule>();
+            var appearance = entity.GetModule<AppearanceModule>();
 
             var velocity = kinematics.Velocity;
 
@@ -42,10 +31,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.IsWalking, isMoving);
         }
 
-        public override void Dispose()
+        protected override bool Filter(Entity entity)
         {
-            base.Dispose();
-            _dispatcher.OnFixedTick -= OnFixedTick;
+            return entity.HasModule<SpatialModule>() && entity.HasModule<KinematicsModule>() && entity.HasModule<AppearanceModule>();
         }
     }
 }
