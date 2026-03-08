@@ -1,17 +1,23 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.Shared.Utils;
+using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class ControlSystem : ReactiveEntitySystemBase
     {
+        private readonly IObjectResolver _resolver;
+
         protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead);
 
-        public ControlSystem(EntityRepository repository, DispatcherService dispatcher) : base(repository, dispatcher)
+        public ControlSystem(EntityRepository repository, DispatcherService dispatcher, IObjectResolver resolver) : base(repository, dispatcher)
         {
+            _resolver = resolver;
+
             TickAction += Tick;
         }
 
@@ -73,17 +79,21 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         protected override void OnTrack(Entity entity)
         {
-            entity.Subscribe<OverrideControlRequestEvent>(OnOverrideControlRequested);
+            entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
         }
 
         protected override void OnUntrack(Entity entity)
         {
-            entity.Unsubscribe<OverrideControlRequestEvent>(OnOverrideControlRequested);
+            entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
         }
 
-        private void OnOverrideControlRequested(OverrideControlRequestEvent e)
+        private void OnStatusEffectChanged(StatusEffectChangedEvent e)
         {
-            e.Entity.GetModule<ControlModule>().AddProvider(e.ControlProvider);
+            if (e.Kind == StatusEffectChangeKind.Added && e.StatusEffect.Definition.ControlProvider != null)
+            {
+                var controlModule = e.Entity.GetModule<ControlModule>();
+                controlModule.AddProvider(e.StatusEffect.Definition.ControlProvider.CreateInstance(_resolver));
+            }
         }
     }
 }

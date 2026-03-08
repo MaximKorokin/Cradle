@@ -5,13 +5,11 @@ using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
 {
-    public sealed class AiControlProvider : IControlProvider
+    public sealed class AiControlProvider : ControlProviderBase
     {
-        public ControlPriority Priority => ControlPriority.BaseAI;
-        public ControlMask Mask => ControlMask.All;
-        public bool IsActive => true;
-
-        private Entity _entity;
+        public override ControlPriority Priority => ControlPriority.BaseAI;
+        public override ControlMask Mask => ControlMask.All;
+        public override bool IsActive => true;
 
         private readonly AiBrain _brain;
 
@@ -20,13 +18,14 @@ namespace Assets._Game.Scripts.Entities.Control
             _brain = brain;
         }
 
-        public void Initialize(Entity entity)
+        public override void Initialize(Entity entity)
         {
-            _entity = entity;
+            base.Initialize(entity);
+
             _brain.Initialize(entity);
         }
 
-        public void Tick(float delta)
+        public override void Tick(float delta)
         {
             _brain.Tick(delta);
         }

@@ -38,4 +38,10 @@ namespace Assets._Game.Scripts.Entities.Control
     {
         public abstract IControlProvider CreateInstance(IObjectResolver resolver);
     }
+
+    [Serializable]
+    public abstract class TimedControlProviderData : ControlProviderData
+    {
+        public float Duration;
+    }
 }

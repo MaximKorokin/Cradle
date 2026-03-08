@@ -75,6 +75,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterEntryPoint<StatSystem>();
             builder.RegisterEntryPoint<AbilitySystem>();
             builder.RegisterEntryPoint<ControlSystem>();
+            builder.RegisterEntryPoint<StatusEffectSystem>();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

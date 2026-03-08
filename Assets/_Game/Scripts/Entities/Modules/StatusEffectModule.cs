@@ -5,14 +5,12 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class StatusEffectModule : EntityModuleBase
     {
         private readonly StatusEffectsController _statusEffectsController;
-        private readonly StatusEffectsTickController _statusEffectsTickController;
 
-        public StatusEffectsController StatusEffectsController => _statusEffectsController;
+        public StatusEffectsController StatusEffects => _statusEffectsController;
 
-        public StatusEffectModule(StatusEffectsController statusEffectsController, StatusEffectsTickController statusEffectsTickController)
+        public StatusEffectModule(StatusEffectsController statusEffectsController)
         {
             _statusEffectsController = statusEffectsController;
-            _statusEffectsTickController = statusEffectsTickController;
 
             _statusEffectsController.StatusEffectChanged += OnStatusEffectChanged;
         }
@@ -20,13 +18,6 @@ namespace Assets._Game.Scripts.Entities.Modules
         private void OnStatusEffectChanged(StatusEffectChange change)
         {
             Publish(new StatusEffectChangedEvent(Entity, change));
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _statusEffectsTickController.Dispose();
         }
     }
 

@@ -24,12 +24,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
-            TickAction += Tick;
-        }
-
-        private void Tick(Entity entity, float delta)
-        {
-            _tickController.Tick(entity);
+            TickAction += (e, d) => _tickController.Tick(e);
         }
 
         protected override bool Filter(Entity entity)

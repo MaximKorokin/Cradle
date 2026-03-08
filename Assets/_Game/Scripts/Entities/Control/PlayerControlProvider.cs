@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control
 {
-    public sealed class PlayerControlProvider : IControlProvider
+    public sealed class PlayerControlProvider : ControlProviderBase
     {
-        public ControlPriority Priority => ControlPriority.BasePlayer;
-        public ControlMask Mask => _hasMoveTarget ? ControlMask.All : ControlMask.None;
-        public bool IsActive => true;
+        public override ControlPriority Priority => ControlPriority.BasePlayer;
+        public override ControlMask Mask => _hasMoveTarget ? ControlMask.All : ControlMask.None;
+        public override bool IsActive => true;
 
         private Entity _entity;
 
@@ -23,12 +23,14 @@ namespace Assets._Game.Scripts.Entities.Control
             _stopRadius = stopRadius;
         }
 
-        public void Initialize(Entity entity)
+        public override void Initialize(Entity entity)
         {
+            base.Initialize(entity);
+
             _entity = entity;
         }
 
-        public void Tick(float delta)
+        public override void Tick(float delta)
         {
             if (!_hasMoveTarget)
                 return;

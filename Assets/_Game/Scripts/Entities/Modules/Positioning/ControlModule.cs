@@ -34,17 +34,4 @@ namespace Assets._Game.Scripts.Entities.Modules
             _providers.Remove(p);
         }
     }
-
-    public readonly struct OverrideControlRequestEvent : IEntityEvent
-    {
-        public readonly IControlProvider ControlProvider;
-
-        public Entity Entity { get; }
-
-        public OverrideControlRequestEvent(Entity entity, IControlProvider controlProvider)
-        {
-            Entity = entity;
-            ControlProvider = controlProvider;
-        }
-    }
 }

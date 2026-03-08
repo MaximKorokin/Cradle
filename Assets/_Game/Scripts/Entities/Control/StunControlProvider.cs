@@ -1,6 +1,6 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Control.Intents;
+using Assets._Game.Scripts.Entities.Modules;
 using System;
-using UnityEngine;
 using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
@@ -14,19 +14,31 @@ namespace Assets._Game.Scripts.Entities.Control
         {
         }
 
+        public override void Initialize(Entity entity)
+        {
+            base.Initialize(entity);
+
+            Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Stunned);
+        }
+
         protected override void OnTick(float delta)
         {
             if (Entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetMove(new(Vector2.zero, 0));
+                intent.SetMove(MoveIntent.None);
+                intent.SetUseAbility(UseAbilityIntent.None);
             }
+        }
+
+        protected override void OnComplete()
+        {
+            Entity.GetModule<RestrictionStateModule>().Remove(RestrictionState.Stunned);
         }
     }
 
     [Serializable]
-    public sealed class StunControlProviderData : ControlProviderData
+    public sealed class StunControlProviderData : TimedControlProviderData
     {
-        public float Duration = 2f;
         public override IControlProvider CreateInstance(IObjectResolver resolver) => new StunControlProvider(Duration);
     }
 }

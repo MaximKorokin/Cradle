@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private const float MoveEpsilonSqr = 0.0001f;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead | RestrictionState.Stunned | RestrictionState.Feared);
+        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
 
         public LocomotionSystem(EntityRepository entityRepository, DispatcherService dispatcher) : base(entityRepository, dispatcher)
         {

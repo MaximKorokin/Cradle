@@ -18,9 +18,12 @@ namespace Assets._Game.Scripts.Entities.Control
             _speedMultiplier = speedMultiplier;
         }
 
-        public void InitializeDirection(Vector2 direction)
+        public override void Initialize(Entity entity)
         {
-            _direction = direction.normalized;
+            base.Initialize(entity);
+
+            _direction = UnityEngine.Random.insideUnitCircle;
+            Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Feared);
         }
 
         protected override void OnTick(float delta)
@@ -28,12 +31,16 @@ namespace Assets._Game.Scripts.Entities.Control
             if (Entity.TryGetModule(out IntentModule intent))
                 intent.SetMove(new(_direction, _speedMultiplier));
         }
+
+        protected override void OnComplete()
+        {
+            Entity.GetModule<RestrictionStateModule>().Remove(RestrictionState.Feared);
+        }
     }
 
     [Serializable]
-    public sealed class FearControlProviderData : ControlProviderData
+    public sealed class FearControlProviderData : TimedControlProviderData
     {
-        public float Duration = 2f;
         public float SpeedMultiplier = 1f;
 
         public override IControlProvider CreateInstance(IObjectResolver resolver) => new FearControlProvider(Duration, SpeedMultiplier);

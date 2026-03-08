@@ -32,6 +32,15 @@
             {
                 var menu = new GenericMenu();
 
+                menu.AddItem(
+                    new GUIContent("None"),
+                    false,
+                    () =>
+                    {
+                        property.managedReferenceValue = null;
+                        property.serializedObject.ApplyModifiedProperties();
+                    });
+
                 foreach (var type in _types)
                 {
                     menu.AddItem(

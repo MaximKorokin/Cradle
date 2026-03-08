@@ -42,7 +42,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             if (_playerContext.Player.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
                 var statusEffect = new StatusEffect(statusEffectDefinition);
-                statusEffectModule.StatusEffectsController.AddStatusEffect(statusEffect);
+                statusEffectModule.StatusEffects.AddStatusEffect(statusEffect);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using Assets.CoreScripts;
-using System;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
@@ -12,21 +11,13 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
         private readonly CooldownCounter _cooldownCounter;
 
-        public event Action<StatusEffect> Expired;
+        public bool IsExpired => !Definition.IsEndless && _cooldownCounter.IsOver();
 
         public StatusEffect(StatusEffectDefinition definition)
         {
             Definition = definition;
             _cooldownCounter = new(definition.Duration);
             _cooldownCounter.Reset();
-        }
-
-        public void OnTick()
-        {
-            if (!Definition.IsEndless && _cooldownCounter.IsOver())
-            {
-                Expired?.Invoke(this);
-            }
         }
     }
 
