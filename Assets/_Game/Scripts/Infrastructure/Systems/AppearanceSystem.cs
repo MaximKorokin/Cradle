@@ -10,10 +10,20 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class AppearanceSystem : ReactiveEntitySystemBase
     {
+        private readonly IGlobalEventBus _globalEventBus;
+
         protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
 
-        public AppearanceSystem(EntityRepository repository, DispatcherService dispatcher) : base(repository, dispatcher)
+        public AppearanceSystem(EntityRepository repository, DispatcherService dispatcher, IGlobalEventBus globalEventBus) : base(repository, dispatcher)
         {
+            _globalEventBus = globalEventBus;
+            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
         }
 
         protected override bool Filter(Entity entity)
@@ -24,13 +34,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected override void OnTrack(Entity entity)
         {
             entity.Subscribe<EquipmentChangedEvent>(OnEquipmentChanged);
-            entity.Subscribe<RestrictionStateChangedEvent>(OnRestrictionStateChanged);
         }
 
         protected override void OnUntrack(Entity entity)
         {
             entity.Unsubscribe<EquipmentChangedEvent>(OnEquipmentChanged);
-            entity.Unsubscribe<RestrictionStateChangedEvent>(OnRestrictionStateChanged);
         }
 
         private void OnEquipmentChanged(EquipmentChangedEvent e)
@@ -62,13 +70,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnRestrictionStateChanged(RestrictionStateChangedEvent e)
+        private void OnEntityDied(EntityDiedEvent e)
         {
-            if (e.State.HasFlag(RestrictionState.Dead))
-            {
-                var appearance = e.Entity.GetModule<AppearanceModule>();
-                appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.ToDie, true);
-            }
+            var appearance = e.Victim.GetModule<AppearanceModule>();
+            appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.ToDie, true);
         }
     }
 }

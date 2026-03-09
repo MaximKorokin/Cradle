@@ -1,21 +1,25 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets.CoreScripts;
+﻿using System;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace Assets._Game.Scripts.Entities
 {
-    public sealed class EntitySpawner : IStartable
+    public sealed class EntitySpawner : IStartable, IDisposable
     {
-        private readonly IGlobalEventBus _bus;
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly EntityViewFactory _entityViewFactory;
 
         public EntitySpawner(IGlobalEventBus bus, EntityViewFactory entityViewFactory)
         {
-            _bus = bus;
+            _globalEventBus = bus;
             _entityViewFactory = entityViewFactory;
 
-            _bus.Subscribe<SpawnEntityRequestEvent>(OnSpawn);
+            _globalEventBus.Subscribe<SpawnEntityRequestEvent>(OnSpawn);
+        }
+
+        public void Dispose()
+        {
+            _globalEventBus.Unsubscribe<SpawnEntityRequestEvent>(OnSpawn);
         }
 
         public void Start() { }
@@ -37,6 +41,18 @@ namespace Assets._Game.Scripts.Entities
         {
             Entity = entity;
             Position = position;
+        }
+    }
+
+    public readonly struct EntityDiedEvent : IGlobalEvent
+    {
+        public readonly Entity Victim;
+        public readonly Entity Killer;
+
+        public EntityDiedEvent(Entity victim, Entity killer)
+        {
+            Victim = victim;
+            Killer = killer;
         }
     }
 }

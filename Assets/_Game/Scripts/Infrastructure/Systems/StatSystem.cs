@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Interactions.Steps;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
@@ -17,13 +18,21 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
+        private readonly IGlobalEventBus _globalEventBus;
 
         protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead);
 
-        public StatSystem(EntityRepository repository, DerivedStatsCalculator derivedStatsCalculator, DispatcherService dispatcher, StatsConfig statsConfig) : base(repository, dispatcher)
+        public StatSystem(
+            EntityRepository repository, 
+            DerivedStatsCalculator derivedStatsCalculator, 
+            DispatcherService dispatcher, 
+            StatsConfig statsConfig, 
+            IGlobalEventBus globalEventBus) : base(repository, dispatcher)
         {
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
+            _globalEventBus = globalEventBus;
+
             TickAction += (e, d) => _tickController.Tick(e);
         }
 
@@ -38,6 +47,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             entity.Subscribe<InventoryChangedEvent>(OnInventoryChanged);
             entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
             entity.Subscribe<StatChangedEvent>(OnStatChanged);
+            entity.Subscribe<DamageAppliedEvent>(OnDamageApplied);
 
             _derivedStatsCalculator.RecalculateDerivedStats(entity);
         }
@@ -48,6 +58,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             entity.Unsubscribe<InventoryChangedEvent>(OnInventoryChanged);
             entity.Unsubscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
             entity.Unsubscribe<StatChangedEvent>(OnStatChanged);
+            entity.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
         }
 
         private static void OnEquipmentChanged(EquipmentChangedEvent e)
@@ -96,10 +107,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void OnStatChanged(StatChangedEvent e)
         {
             _derivedStatsCalculator.RecalculateDerivedStats(e);
+        }
 
-            if (e.Entity.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
+        private void OnDamageApplied(DamageAppliedEvent e)
+        {
+            var stateModule = e.Entity.GetModule<RestrictionStateModule>();
+            if (!stateModule.Has(RestrictionState.Dead) && e.Entity.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
             {
-                e.Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Dead);
+                stateModule.Add(RestrictionState.Dead);
+                _globalEventBus.Publish<EntityDiedEvent>(new(e.Entity, e.Source));
             }
         }
 

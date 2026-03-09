@@ -6,6 +6,7 @@ public interface IGlobalEventBus
 {
     void Publish<T>(in T evt) where T : struct, IGlobalEvent;
     IDisposable Subscribe<T>(Action<T> handler) where T : struct, IGlobalEvent;
+    void Unsubscribe<T>(Action<T> handler) where T : struct, IGlobalEvent;
     void Clear();
 }
 
@@ -18,6 +19,9 @@ public sealed class GlobalEventBus : IGlobalEventBus
 
     public IDisposable Subscribe<T>(Action<T> handler) where T : struct, IGlobalEvent
         => _core.Subscribe(handler);
+
+    public void Unsubscribe<T>(Action<T> handler) where T : struct, IGlobalEvent
+        => _core.Unsubscribe(handler);
 
     public void Clear() => _core.Clear();
 }

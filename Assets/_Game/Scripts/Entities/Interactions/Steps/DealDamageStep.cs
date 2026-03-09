@@ -28,6 +28,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             {
                 var hp = stats.Stats.Get(StatId.HpCurrent);
                 stats.SetBase(StatId.HpCurrent, hp - damage);
+                context.Target.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage));
             }
 
             _done = true;
@@ -37,4 +38,18 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         public void Cancel(in InteractionContext context) { }
     }
 
+    public readonly struct DamageAppliedEvent : IEntityEvent
+    {
+        public readonly Entity Source;
+        public readonly float Damage;
+
+        public Entity Entity { get; }
+
+        public DamageAppliedEvent(Entity entity, Entity source, float damage)
+        {
+            Entity = entity;
+            Source = source;
+            Damage = damage;
+        }
+    }
 }
