@@ -4,23 +4,53 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class RestrictionStateModule : EntityModuleBase
     {
-        public RestrictionState State { get; private set; }
+        private readonly int[] _counts;
+        private RestrictionState _state;
+
+        public RestrictionState State => _state;
+
+        public RestrictionStateModule()
+        {
+            _counts = new int[32];
+        }
 
         public bool Has(RestrictionState state)
         {
-            return (State & state) != 0;
+            return (_state & state) != 0;
         }
 
         public void Add(RestrictionState state)
         {
-            State |= state;
-            Entity.Publish(new RestrictionStateChangedEvent(Entity, State));
+            int index = BitIndex(state);
+
+            _counts[index]++;
+
+            if (_counts[index] == 1)
+                _state |= state;
         }
 
         public void Remove(RestrictionState state)
         {
-            State &= ~state;
-            Entity.Publish(new RestrictionStateChangedEvent(Entity, State));
+            int index = BitIndex(state);
+
+            if (_counts[index] == 0)
+                return;
+
+            _counts[index]--;
+
+            if (_counts[index] == 0)
+                _state &= ~state;
+        }
+
+        private static int BitIndex(RestrictionState state)
+        {
+            int value = (int)state;
+            int index = 0;
+
+            while ((value >>= 1) != 0)
+                index++;
+
+            return index;
         }
     }
 
