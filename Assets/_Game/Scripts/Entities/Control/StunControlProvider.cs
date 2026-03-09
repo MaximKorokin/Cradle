@@ -19,15 +19,15 @@ namespace Assets._Game.Scripts.Entities.Control
             base.Initialize(entity);
 
             Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Stunned);
-        }
-
-        protected override void OnTick(float delta)
-        {
             if (Entity.TryGetModule(out IntentModule intent))
             {
                 intent.SetMove(MoveIntent.None);
                 intent.SetUseAbility(UseAbilityIntent.None);
             }
+        }
+
+        protected override void OnTick(float delta)
+        {
         }
 
         protected override void OnComplete()

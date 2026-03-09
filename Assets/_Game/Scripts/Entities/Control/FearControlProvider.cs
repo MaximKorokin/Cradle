@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Control.Intents;
+using Assets._Game.Scripts.Entities.Modules;
 using System;
 using UnityEngine;
 using VContainer;
@@ -24,12 +25,18 @@ namespace Assets._Game.Scripts.Entities.Control
 
             _direction = UnityEngine.Random.insideUnitCircle;
             Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Feared);
+            if (Entity.TryGetModule(out IntentModule intent))
+            {
+                intent.SetUseAbility(UseAbilityIntent.None);
+            }
         }
 
         protected override void OnTick(float delta)
         {
             if (Entity.TryGetModule(out IntentModule intent))
+            {
                 intent.SetMove(new(_direction, _speedMultiplier));
+            }
         }
 
         protected override void OnComplete()
