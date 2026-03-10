@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Loot;
@@ -57,6 +58,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var entity = _entityAssembler.Create(_defaultEntityDefinitionReferences.LootItem);
             _globalEventBus.Publish<SpawnEntityRequestEvent>(new(entity, position));
+
+            entity.GetModule<AppearanceModule>().RequestSetUnitSprite(itemDefinition.Sprite);
+
+            entity.AddModule(new LootItemModule(itemDefinition, amount));
         }
     }
 

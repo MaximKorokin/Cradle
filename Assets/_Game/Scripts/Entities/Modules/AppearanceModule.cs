@@ -32,6 +32,12 @@ namespace Assets._Game.Scripts.Entities.Modules
             SetUnitSpriteRequested?.Invoke(path, sprite);
         }
 
+        public void RequestSetUnitSprite(Sprite sprite)
+        {
+            var path = Entity.Definition.VisualModel.Units[0].Path.ToString();
+            SetUnitSpriteRequested?.Invoke(path, sprite);
+        }
+
         public void RequestRemoveUnit(string path)
         {
             RemoveUnitRequested?.Invoke(path);

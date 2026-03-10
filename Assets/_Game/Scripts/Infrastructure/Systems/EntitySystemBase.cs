@@ -93,7 +93,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         protected void IterateMatchingEntities(Action<Entity> callback)
         {
-            SLog.Log(123);
             var count = CopySnapshot();
 
             for (var i = 0; i < count; i++)
