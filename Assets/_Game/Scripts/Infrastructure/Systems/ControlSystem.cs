@@ -8,7 +8,7 @@ using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class ControlSystem : ReactiveEntitySystemBase, ITickSystem
+    public sealed class ControlSystem : EntitySystemBase, ITickSystem
     {
         private readonly IObjectResolver _resolver;
 
@@ -21,14 +21,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public ControlSystem(EntityRepository repository, IObjectResolver resolver) : base(repository)
         {
             _resolver = resolver;
+
+            TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
         }
 
         public void Tick(float delta)
         {
-            foreach (var entity in EnumerateEntities())
-            {
-                TickEntity(entity, delta);
-            }
+            IterateMatchingEntities(entity => TickEntity(entity, delta));
         }
 
         private void TickEntity(Entity entity, float delta)
@@ -80,16 +79,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
 
             return best;
-        }
-
-        protected override void OnTrack(Entity entity)
-        {
-            entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
-        }
-
-        protected override void OnUntrack(Entity entity)
-        {
-            entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
         }
 
         private void OnStatusEffectChanged(StatusEffectChangedEvent e)

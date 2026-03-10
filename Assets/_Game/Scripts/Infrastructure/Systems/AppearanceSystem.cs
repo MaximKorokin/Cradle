@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class AppearanceSystem : ReactiveEntitySystemBase
+    public sealed class AppearanceSystem : EntitySystemBase
     {
         private readonly IGlobalEventBus _globalEventBus;
 
@@ -22,6 +22,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _globalEventBus = globalEventBus;
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
+            TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
         }
 
         public override void Dispose()
@@ -29,17 +30,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             base.Dispose();
             _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
         }
-
-        protected override void OnTrack(Entity entity)
-        {
-            entity.Subscribe<EquipmentChangedEvent>(OnEquipmentChanged);
-        }
-
-        protected override void OnUntrack(Entity entity)
-        {
-            entity.Unsubscribe<EquipmentChangedEvent>(OnEquipmentChanged);
-        }
-
         private void OnEquipmentChanged(EquipmentChangedEvent e)
         {
             var appearance = e.Entity.GetModule<AppearanceModule>();

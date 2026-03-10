@@ -20,10 +20,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         public void Tick(float delta)
         {
-            foreach (var entity in EnumerateEntities())
-            {
-                Tick(entity);
-            }
+            IterateMatchingEntities(Tick);
         }
 
         public void Tick(Entity entity)

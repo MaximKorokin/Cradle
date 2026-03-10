@@ -21,10 +21,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         public void FixedTick(float delta)
         {
-            foreach (var entity in EnumerateEntities())
-            {
-                FixedTick(entity);
-            }
+            IterateMatchingEntities(FixedTick);
         }
 
         public void FixedTick(Entity entity)

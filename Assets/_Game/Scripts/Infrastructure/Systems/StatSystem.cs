@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    internal class StatSystem : ReactiveEntitySystemBase, ITickSystem
+    internal class StatSystem : EntitySystemBase, ITickSystem
     {
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
@@ -35,34 +35,27 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
             _globalEventBus = globalEventBus;
+
+            TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
+            TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
+            TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
+            TrackEntityEvent<StatChangedEvent>(OnStatChanged);
+            TrackEntityEvent<DamageAppliedEvent>(OnDamageApplied);
         }
 
         public void Tick(float delta)
         {
-            foreach (var entity in EnumerateEntities())
+            IterateMatchingEntities(_tickController.Tick);
+        }
+
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            if (EntityQuery.Match(entity))
             {
-                _tickController.Tick(entity);
+                _derivedStatsCalculator.RecalculateDerivedStats(entity);
             }
-        }
-
-        protected override void OnTrack(Entity entity)
-        {
-            entity.Subscribe<EquipmentChangedEvent>(OnEquipmentChanged);
-            entity.Subscribe<InventoryChangedEvent>(OnInventoryChanged);
-            entity.Subscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
-            entity.Subscribe<StatChangedEvent>(OnStatChanged);
-            entity.Subscribe<DamageAppliedEvent>(OnDamageApplied);
-
-            _derivedStatsCalculator.RecalculateDerivedStats(entity);
-        }
-
-        protected override void OnUntrack(Entity entity)
-        {
-            entity.Unsubscribe<EquipmentChangedEvent>(OnEquipmentChanged);
-            entity.Unsubscribe<InventoryChangedEvent>(OnInventoryChanged);
-            entity.Unsubscribe<StatusEffectChangedEvent>(OnStatusEffectChanged);
-            entity.Unsubscribe<StatChangedEvent>(OnStatChanged);
-            entity.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
         }
 
         private static void OnEquipmentChanged(EquipmentChangedEvent e)
