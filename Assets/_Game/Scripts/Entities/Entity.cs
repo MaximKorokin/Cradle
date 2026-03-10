@@ -51,6 +51,11 @@ namespace Assets._Game.Scripts.Entities
         public bool HasModule<T>() where T : class, IEntityModule
             => _modules.ContainsKey(typeof(T));
 
+        public bool HasModule(Type moduleType)
+        {
+            return _modules.ContainsKey(moduleType);
+        }
+
         public void Publish<TEvent>(in TEvent evt) where TEvent : struct, IEntityEvent
             => _bus.Publish(evt);
 

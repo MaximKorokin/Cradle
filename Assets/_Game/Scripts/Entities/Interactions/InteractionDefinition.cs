@@ -9,7 +9,7 @@ using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Interactions
 {
-    [CreateAssetMenu(fileName = "Interaction", menuName = "ScriptableObjects/InteractionDefinition")]
+    [CreateAssetMenu(menuName = "Definitions/Interaction")]
     public class InteractionDefinition : ScriptableObject
     {
         [SerializeReference] public StepData Root;

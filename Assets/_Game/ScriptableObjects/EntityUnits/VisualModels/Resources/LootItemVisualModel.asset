@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
+  m_Name: LootItemVisualModel
+  m_EditorClassIdentifier: 
+  _id: 32a5bed708b64cea9f37b8cc42954629
+  <Name>k__BackingField: LootItem
+  <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: c74cdcca91c66e54ea00ff21a0646620, type: 3}
+  <Animator>k__BackingField: {fileID: 0}
+  <Units>k__BackingField:
+  - <Path>k__BackingField: 200
+    <EquipmentSlots>k__BackingField: 
+    <RelativeOrderInLayer>k__BackingField: 0

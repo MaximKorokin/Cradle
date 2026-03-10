@@ -104,7 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <UnitsRoot>k__BackingField: {fileID: 4665017758117268767}
   <UnitsAnimator>k__BackingField: {fileID: 2922528592660423052}
-  _entityBindables: []
+  _entityBindables:
+  - {fileID: -7159621036379810836}
 --- !u!114 &-7159621036379810836
 MonoBehaviour:
   m_ObjectHideFlags: 0

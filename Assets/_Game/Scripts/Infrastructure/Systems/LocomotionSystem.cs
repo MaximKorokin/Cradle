@@ -5,18 +5,29 @@ using Assets._Game.Scripts.Shared.Extensions;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class LocomotionSystem : EntitySystemBase
+    public sealed class LocomotionSystem : EntitySystemBase, IFixedTickSystem
     {
         private const float MoveEpsilonSqr = 0.0001f;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
+        protected override EntityQuery EntityQuery { get; } =
+            new EntityQuery(
+                RestrictionState.Disabled,
+                new[] { typeof(SpatialModule), typeof(KinematicsModule), typeof(AppearanceModule) }
+            );
 
-        public LocomotionSystem(EntityRepository entityRepository, DispatcherService dispatcher) : base(entityRepository, dispatcher)
+        public LocomotionSystem(EntityRepository entityRepository) : base(entityRepository)
         {
-            FixedTickAction += FixedTick;
         }
 
-        public void FixedTick(Entity entity, float delta)
+        public void FixedTick(float delta)
+        {
+            foreach (var entity in EnumerateEntities())
+            {
+                FixedTick(entity);
+            }
+        }
+
+        public void FixedTick(Entity entity)
         {
             var spatial = entity.GetModule<SpatialModule>();
             var kinematics = entity.GetModule<KinematicsModule>();
@@ -29,11 +40,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var isMoving = velocity.sqrMagnitude > MoveEpsilonSqr;
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.IsWalking, isMoving);
-        }
-
-        protected override bool Filter(Entity entity)
-        {
-            return entity.HasModule<SpatialModule>() && entity.HasModule<KinematicsModule>() && entity.HasModule<AppearanceModule>();
         }
     }
 }

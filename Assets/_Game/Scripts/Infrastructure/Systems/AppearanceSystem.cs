@@ -12,9 +12,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly IGlobalEventBus _globalEventBus;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
+        protected override EntityQuery EntityQuery { get; } =
+            new EntityQuery(
+                RestrictionState.Disabled,
+                new[] { typeof(AppearanceModule) }
+            );
 
-        public AppearanceSystem(EntityRepository repository, DispatcherService dispatcher, IGlobalEventBus globalEventBus) : base(repository, dispatcher)
+        public AppearanceSystem(EntityRepository repository, IGlobalEventBus globalEventBus) : base(repository)
         {
             _globalEventBus = globalEventBus;
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
@@ -24,11 +28,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.Dispose();
             _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
-        }
-
-        protected override bool Filter(Entity entity)
-        {
-            return entity.HasModule<AppearanceModule>();
         }
 
         protected override void OnTrack(Entity entity)

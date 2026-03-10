@@ -2,7 +2,7 @@
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
-    [CreateAssetMenu(fileName = "SaveConfig", menuName = "ScriptableObjects/SaveConfig")]
+    [CreateAssetMenu(menuName = "Configs/SaveConfig")]
     public sealed class SaveConfig : ScriptableObject
     {
         [field: SerializeField]

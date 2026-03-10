@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    [CreateAssetMenu(fileName = "UnitVariants", menuName = "ScriptableObjects/EntityUnitVariants")]
+    [CreateAssetMenu(fileName = "UnitVariants", menuName = "Visual/EntityUnitVariants")]
     public class UnitVariants : GuidScriptableObject
     {
         [field: SerializeField]

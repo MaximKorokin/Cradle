@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
     {
         readonly Dictionary<string, T> _byId = new();
 
-        public IEnumerable<T> All => _byId.Values;
+        public IReadOnlyCollection<T> All => _byId.Values;
 
         public event Action<T> Added;
         public event Action<T> Removed;
@@ -29,6 +29,12 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
                 return true;
             }
             return false;
+        }
+
+        public int CopyAllTo(T[] buffer)
+        {
+            _byId.Values.CopyTo(buffer, 0);
+            return _byId.Values.Count;
         }
 
         public bool Contains(string id) => _byId.ContainsKey(id);

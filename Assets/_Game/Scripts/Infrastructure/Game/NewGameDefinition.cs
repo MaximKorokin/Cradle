@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    [CreateAssetMenu(fileName = "NewGameDefinition", menuName = "ScriptableObjects/NewGameDefinition")]
+    [CreateAssetMenu(menuName = "Configs/NewGameDefinition")]
     public class NewGameDefinition : ScriptableObject
     {
         [field: SerializeField]

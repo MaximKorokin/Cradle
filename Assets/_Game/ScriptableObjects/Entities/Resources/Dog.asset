@@ -21,6 +21,7 @@ MonoBehaviour:
   - rid: 1349792944121708627
   - rid: 3412048594719473665
   - rid: 3412048633303400550
+  - rid: 3412048685788037207
   references:
     version: 2
     RefIds:
@@ -54,3 +55,9 @@ MonoBehaviour:
       data:
         Enabled: 1
         Faction: {fileID: 11400000, guid: ab42b80c0a34ebe4397143adc4591be5, type: 2}
+    - rid: 3412048685788037207
+      type: {class: RewardModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Experience: 11
+        LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}

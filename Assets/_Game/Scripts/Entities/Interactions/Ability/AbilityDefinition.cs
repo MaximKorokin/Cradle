@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Ability
 {
-    [CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/AbilityDefinition")]
+    [CreateAssetMenu(menuName = "Definitions/Ability")]
     public sealed class AbilityDefinition : GuidScriptableObject
     {
         [field: SerializeField]

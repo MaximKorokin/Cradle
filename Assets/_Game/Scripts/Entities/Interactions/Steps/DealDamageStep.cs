@@ -26,8 +26,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             var damage = _calculator.Calculate(_spec, context.Source, context.Target);
             if (context.Target.TryGetModule(out StatModule stats))
             {
-                var hp = stats.Stats.Get(StatId.HpCurrent);
-                stats.SetBase(StatId.HpCurrent, hp - damage);
+                stats.AddBase(StatId.HpCurrent, -damage);
                 context.Target.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage));
             }
 

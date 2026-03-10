@@ -14,31 +14,35 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    internal class StatSystem : ReactiveEntitySystemBase
+    internal class StatSystem : ReactiveEntitySystemBase, ITickSystem
     {
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
         private readonly IGlobalEventBus _globalEventBus;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead);
+        protected override EntityQuery EntityQuery { get; } =
+            new EntityQuery(
+                RestrictionState.Disabled | RestrictionState.Dead,
+                new[] { typeof(StatModule), typeof(RestrictionStateModule), }
+            );
 
         public StatSystem(
-            EntityRepository repository, 
-            DerivedStatsCalculator derivedStatsCalculator, 
-            DispatcherService dispatcher, 
-            StatsConfig statsConfig, 
-            IGlobalEventBus globalEventBus) : base(repository, dispatcher)
+            EntityRepository repository,
+            DerivedStatsCalculator derivedStatsCalculator,
+            StatsConfig statsConfig,
+            IGlobalEventBus globalEventBus) : base(repository)
         {
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
             _globalEventBus = globalEventBus;
-
-            TickAction += (e, d) => _tickController.Tick(e);
         }
 
-        protected override bool Filter(Entity entity)
+        public void Tick(float delta)
         {
-            return entity.HasModule<StatModule>() && entity.HasModule<RestrictionStateModule>();
+            foreach (var entity in EnumerateEntities())
+            {
+                _tickController.Tick(entity);
+            }
         }
 
         protected override void OnTrack(Entity entity)

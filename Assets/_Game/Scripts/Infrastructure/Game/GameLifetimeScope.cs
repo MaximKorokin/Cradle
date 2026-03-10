@@ -35,9 +35,13 @@ namespace Assets._Game.Scripts.Infrastructure
         [SerializeField]
         private StatusEffectsConfig _statusEffectsConfig;
         [SerializeField]
+        private EntityUnitConfig _entityUnitConfig;
+        [SerializeField]
         private FactionRelations _factionRelations;
         [SerializeField]
         private DefaultPrefabReferences _defaultPrefabReferences;
+        [SerializeField]
+        private DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -49,9 +53,11 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<PoolService>(Lifetime.Scoped);
             builder.RegisterInstance(_defaultPrefabReferences);
+            builder.RegisterInstance(_defaultEntityDefinitionReferences);
 
             builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<UnityWorldQuery>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<EntitySensor>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.RegisterInstance(_newGameDefinition);
 
@@ -70,12 +76,16 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterSystems(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<LocomotionSystem>();
-            builder.RegisterEntryPoint<AppearanceSystem>();
-            builder.RegisterEntryPoint<StatSystem>();
-            builder.RegisterEntryPoint<AbilitySystem>();
-            builder.RegisterEntryPoint<ControlSystem>();
-            builder.RegisterEntryPoint<StatusEffectSystem>();
+            builder.RegisterEntryPoint<SystemsRunner>();
+
+            builder.Register<LocomotionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<AppearanceSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<StatSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<AbilitySystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<ControlSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<StatusEffectSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<RewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -110,6 +120,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
             builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
+            builder.RegisterInstance(_entityUnitConfig);
 
             builder.Register<EntityPositioningFactory>(Lifetime.Scoped);
             builder.Register<AiBrainFactory>(Lifetime.Scoped);
@@ -117,6 +128,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<FactionModuleFactory>(Lifetime.Singleton);
             builder.Register<FactionRelationResolver>(Lifetime.Singleton);
             builder.RegisterInstance(_factionRelations);
+
+            builder.Register<RewardModuleFactory>(Lifetime.Singleton);
         }
 
         private void RegisterCalculators(IContainerBuilder builder)

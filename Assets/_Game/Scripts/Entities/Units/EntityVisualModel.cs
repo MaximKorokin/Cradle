@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    [CreateAssetMenu(fileName = "VisualModel", menuName = "ScriptableObjects/EntityVisualModel")]
+    [CreateAssetMenu(fileName = "VisualModel", menuName = "Visual/EntityVisualModel")]
     public class EntityVisualModel : GuidScriptableObject
     {
         [field: SerializeField]
@@ -32,24 +32,15 @@ namespace Assets._Game.Scripts.Entities.Units
     public enum EntityVisualModelUnitPath
     {
         Body = 200,
-        Shirt = 210,
-        Armor = 220,
 
         Head = 300,
         Hair = 310,
-        Helmet = 320,
 
         HandLeft = 400,
-        GloveLeft = 410,
-        HandheldLeft = 420,
         HandRight = 450,
-        GloveRight = 460,
-        HandheldRight = 480,
 
         FootLeft = 500,
-        BootLeft = 520,
         FootRight = 550,
-        BootRight = 570,
 
         FootFrontLeft = 1500,
         FootFrontRight = 1520,

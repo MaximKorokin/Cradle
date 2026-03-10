@@ -3,50 +3,37 @@ using Assets._Game.Scripts.Entities.Faction;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure;
 using Assets._Game.Scripts.Shared.Extensions;
-using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public sealed class ChaseBehaviour : AiBehaviourBase
     {
-        private const float MaxSpotLeaveDistance = 3;
-        private const float ChaseStartDistance = 3;
+        private const float MaxSpotLeaveDistance = 3f;
+        private const float ChaseStartDistance = 3f;
 
         private readonly EntityQuery _entityQuery = new(RestrictionState.Disabled | RestrictionState.Dead);
-        private readonly IWorldQuery _worldQuery;
-        private readonly FactionRelationResolver _relationResolver;
+        private readonly IEntitySensor _sensor;
 
-        public ChaseBehaviour(IWorldQuery worldQuery, FactionRelationResolver relationResolver)
+        public ChaseBehaviour(IEntitySensor sensor)
         {
-            _worldQuery = worldQuery;
-            _relationResolver = relationResolver;
+            _sensor = sensor;
         }
 
         public override float Evaluate()
         {
-            var position = Entity.GetModule<SpatialModule>().Position;
-            var enemies = _worldQuery
-                .GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver)
-                .Query(_entityQuery);
-
-            return enemies.Any() ? 0.8f : 0f;
+            return _sensor.HasAnyInRange(Entity, ChaseStartDistance, FactionRelation.Enemy, _entityQuery) ? 0.8f : 0f;
         }
 
         public override void Execute(float delta)
         {
-            var position = Entity.GetModule<SpatialModule>().Position;
-            var intent = Entity.GetModule<IntentModule>();
-
-            var target = _worldQuery
-                .GetEntitiesInRange(position, ChaseStartDistance, Entity, FactionRelation.Enemy, _relationResolver)
-                .Query(_entityQuery)
-                .FirstOrDefault();
-
-            if (target == null)
+            if (!_sensor.TryGetFirstInRange(Entity, ChaseStartDistance, FactionRelation.Enemy, _entityQuery, out var target))
                 return;
 
-            var direction = target.GetModule<SpatialModule>().Position - position;
+            var position = Entity.GetModule<SpatialModule>().Position;
+            var targetPosition = target.GetModule<SpatialModule>().Position;
+            var direction = targetPosition - position;
 
+            var intent = Entity.GetModule<IntentModule>();
             intent.SetMove(new MoveIntent(direction));
         }
     }

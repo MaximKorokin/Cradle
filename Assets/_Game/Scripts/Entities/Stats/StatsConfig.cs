@@ -2,7 +2,7 @@
 
 namespace Assets._Game.Scripts.Entities.Stats
 {
-    [CreateAssetMenu(fileName = "StatsConfig", menuName = "ScriptableObjects/StatsConfig")]
+    [CreateAssetMenu(menuName = "Configs/StatsConfig")]
     public sealed class StatsConfig : ScriptableObject
     {
         /// <summary>

@@ -1,18 +1,14 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Shared.Extensions;
-using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public class PlayerSystem : EntitySystemBase
+    public class PlayerSystem : SystemBase
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly PlayerContext _playerContext;
 
-        protected override EntityQuery EntityQuery => throw new NotImplementedException();
-
-        public PlayerSystem(EntityRepository repository, DispatcherService dispatcher, PlayerContext playerContext, IGlobalEventBus globalEventBus) : base(repository, dispatcher)
+        public PlayerSystem(PlayerContext playerContext, IGlobalEventBus globalEventBus)
         {
             _globalEventBus = globalEventBus;
             _playerContext = playerContext;
@@ -31,11 +27,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 SLog.Log("Player died");
             }
-        }
-
-        protected override bool Filter(Entity entity)
-        {
-            return true;
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Stats
 {
-    [CreateAssetMenu(fileName = "StatsDefinition", menuName = "ScriptableObjects/StatsDefinition")]
+    [CreateAssetMenu(menuName = "Definitions/Stats")]
     public sealed class StatsDefinition : ScriptableObject
     {
         [field: SerializeField]

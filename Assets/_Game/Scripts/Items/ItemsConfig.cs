@@ -1,11 +1,10 @@
-﻿using Assets.CoreScripts;
-using System;
+﻿using System;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
 {
-    [CreateAssetMenu(fileName = "ItemsConfig", menuName = "ScriptableObjects/ItemsConfig")]
+    [CreateAssetMenu(menuName = "Configs/ItemsConfig")]
     public sealed class ItemsConfig : ScriptableObject
     {
         [SerializeField]

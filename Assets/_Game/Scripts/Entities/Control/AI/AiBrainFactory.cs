@@ -1,19 +1,15 @@
-﻿using Assets._Game.Scripts.Entities.Faction;
-using Assets._Game.Scripts.Infrastructure;
+﻿using Assets._Game.Scripts.Infrastructure;
 using System.Collections.Generic;
-using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public sealed class AiBrainFactory
     {
-        private readonly IWorldQuery _worldQuery;
-        private readonly FactionRelationResolver _relationResolver;
+        private readonly IEntitySensor _entitySensor;
 
-        public AiBrainFactory(IWorldQuery worldQuery, FactionRelationResolver relationResolver)
+        public AiBrainFactory(IEntitySensor entitySensor)
         {
-            _worldQuery = worldQuery;
-            _relationResolver = relationResolver;
+            _entitySensor = entitySensor;
         }
 
         public AiBrain Create(AiBehaviour behaviour)
@@ -25,11 +21,11 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             }
             if (behaviour.HasFlag(AiBehaviour.Chase))
             {
-                behaviours.Add(new ChaseBehaviour(_worldQuery, _relationResolver));
+                behaviours.Add(new ChaseBehaviour(_entitySensor));
             }
             if (behaviour.HasFlag(AiBehaviour.Attack))
             {
-                behaviours.Add(new AttackBehaviour(_worldQuery, _relationResolver));
+                behaviours.Add(new AttackBehaviour(_entitySensor));
             }
 
             return new(behaviours);

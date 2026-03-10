@@ -8,24 +8,30 @@ using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class AbilitySystem : EntitySystemBase
+    public sealed class AbilitySystem : EntitySystemBase, ITickSystem
     {
         private readonly IObjectResolver _resolver;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead | RestrictionState.Stunned | RestrictionState.Feared);
+        protected override EntityQuery EntityQuery { get; } =
+            new EntityQuery(
+                RestrictionState.Disabled | RestrictionState.Dead | RestrictionState.Stunned | RestrictionState.Feared,
+                new[] { typeof(AbilityModule), typeof(StatModule), typeof(IntentModule) }
+            );
 
-        public AbilitySystem(EntityRepository entityRepository, DispatcherService dispatcher, IObjectResolver resolver) : base(entityRepository, dispatcher)
+        public AbilitySystem(EntityRepository entityRepository, IObjectResolver resolver) : base(entityRepository)
         {
             _resolver = resolver;
-            TickAction += Tick;
         }
 
-        protected override bool Filter(Entity entity)
+        public void Tick(float delta)
         {
-            return entity.HasModule<AbilityModule>() && entity.HasModule<StatModule>();
+            foreach (var entity in EnumerateEntities())
+            {
+                TickEntity(entity, delta);
+            }
         }
 
-        public void Tick(Entity entity, float delta)
+        private void TickEntity(Entity entity, float delta)
         {
             var statModule = entity.GetModule<StatModule>();
             var abilityModule = entity.GetModule<AbilityModule>();

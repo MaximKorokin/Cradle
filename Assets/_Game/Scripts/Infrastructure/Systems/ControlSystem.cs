@@ -8,20 +8,30 @@ using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class ControlSystem : ReactiveEntitySystemBase
+    public sealed class ControlSystem : ReactiveEntitySystemBase, ITickSystem
     {
         private readonly IObjectResolver _resolver;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled | RestrictionState.Dead);
+        protected override EntityQuery EntityQuery { get; } =
+            new EntityQuery(
+                RestrictionState.Disabled | RestrictionState.Dead,
+                new[] { typeof(ControlModule) }
+            );
 
-        public ControlSystem(EntityRepository repository, DispatcherService dispatcher, IObjectResolver resolver) : base(repository, dispatcher)
+        public ControlSystem(EntityRepository repository, IObjectResolver resolver) : base(repository)
         {
             _resolver = resolver;
-
-            TickAction += Tick;
         }
 
-        public void Tick(Entity entity, float delta)
+        public void Tick(float delta)
+        {
+            foreach (var entity in EnumerateEntities())
+            {
+                TickEntity(entity, delta);
+            }
+        }
+
+        private void TickEntity(Entity entity, float delta)
         {
             var controlModule = entity.GetModule<ControlModule>();
 
@@ -70,11 +80,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
 
             return best;
-        }
-
-        protected override bool Filter(Entity entity)
-        {
-            return entity.HasModule<ControlModule>();
         }
 
         protected override void OnTrack(Entity entity)

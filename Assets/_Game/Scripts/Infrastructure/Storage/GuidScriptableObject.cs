@@ -17,17 +17,18 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
             _id = Guid.NewGuid().ToString("N");
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
-
-            // save only if real asset
-            var path = AssetDatabase.GetAssetPath(this);
-            if (!string.IsNullOrEmpty(path))
-            {
-                AssetDatabase.SaveAssets();
-            }
 #endif
         }
 
         protected virtual void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(_id))
+            {
+                RegenerateId();
+            }
+        }
+
+        protected virtual void OnEnable()
         {
             if (string.IsNullOrWhiteSpace(_id))
             {

@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly HashSet<Entity> _tracked = new();
 
-        protected ReactiveEntitySystemBase(EntityRepository repository, DispatcherService dispatcher) : base(repository, dispatcher)
+        protected ReactiveEntitySystemBase(EntityRepository repository) : base(repository)
         {
             EntityRepository.Added += OnEntityAdded;
             EntityRepository.Removed += OnEntityRemoved;
@@ -26,6 +26,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             EntityRepository.Removed -= OnEntityRemoved;
         }
 
+        protected override IEnumerable<Entity> EnumerateEntities() => _tracked;
+
         private void OnEntityAdded(Entity entity)
         {
             TryTrack(entity);
@@ -41,7 +43,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void TryTrack(Entity entity)
         {
-            if (!Filter(entity)) return;
+            if (!EntityQuery.Match(entity)) return;
 
             if (_tracked.Add(entity))
             {

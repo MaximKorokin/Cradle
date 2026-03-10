@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e32430b7022d740aee558bec618ace, type: 3}
+  m_Name: DogLootTable
+  m_EditorClassIdentifier: 
+  _id: 5a412d8170ce459a834e3fe31dfdbe28
+  _lootEntries:
+  - ItemDefinition: {fileID: 11400000, guid: 8def6da0c958e1c41ba548b4b206f9ba, type: 2}
+    MinAmount: 1
+    MaxAmount: 3
+    Chance: 0.7
+  - ItemDefinition: {fileID: 11400000, guid: 56f357df387ce914f859b060a9e24cb4, type: 2}
+    MinAmount: 1
+    MaxAmount: 1
+    Chance: 0.01
+  - ItemDefinition: {fileID: 11400000, guid: 8ade05461f4c7564c81775d06715caf1, type: 2}
+    MinAmount: 1
+    MaxAmount: 2
+    Chance: 0.1
+  - ItemDefinition: {fileID: 11400000, guid: b3d71ac4d372c8143b55bb8c3ce59f4f, type: 2}
+    MinAmount: 3
+    MaxAmount: 9
+    Chance: 1

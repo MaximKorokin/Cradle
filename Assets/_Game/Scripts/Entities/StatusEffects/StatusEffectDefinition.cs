@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
 {
-    [CreateAssetMenu(fileName = "StatusEffect", menuName = "ScriptableObjects/StatusEffectDefinition")]
+    [CreateAssetMenu(menuName = "Definitions/StatusEffect")]
     public sealed class StatusEffectDefinition : GuidScriptableObject
     {
         [field: SerializeField]

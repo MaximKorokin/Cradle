@@ -3,21 +3,27 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
-using System;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class StatusEffectSystem : EntitySystemBase
+    public sealed class StatusEffectSystem : EntitySystemBase, ITickSystem
     {
         private readonly CooldownCounter _cooldownCounter;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
+        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled, new[] { typeof(StatusEffectModule) });
 
-        public StatusEffectSystem(EntityRepository repository, DispatcherService dispatcher, StatusEffectsConfig statusEffectsConfig) : base(repository, dispatcher)
+        public StatusEffectSystem(EntityRepository repository, StatusEffectsConfig statusEffectsConfig) : base(repository)
         {
             _cooldownCounter = new(1 / statusEffectsConfig.TickRate);
-            TickAction += (e, _) => Tick(e);
+        }
+
+        public void Tick(float delta)
+        {
+            foreach (var entity in EnumerateEntities())
+            {
+                Tick(entity);
+            }
         }
 
         public void Tick(Entity entity)
@@ -35,11 +41,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     }
                 }
             }
-        }
-
-        protected override bool Filter(Entity entity)
-        {
-            return entity.HasModule<StatusEffectModule>();
         }
     }
 }

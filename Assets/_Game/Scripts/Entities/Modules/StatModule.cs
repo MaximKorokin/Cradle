@@ -22,6 +22,12 @@ namespace Assets._Game.Scripts.Entities.Modules
             _statsController.SetBase(statId, value);
         }
 
+        public void AddBase(StatId statId, float value)
+        {
+            var currentValue = _statsController.GetBase(statId);
+            _statsController.SetBase(statId, currentValue + value);
+        }
+
         public void AddModifiers(StatModifierSource source, IEnumerable<StatModifier> modifiers)
         {
             _statsController.AddModifiers(source, modifiers);

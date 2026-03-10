@@ -4,13 +4,14 @@ using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
 using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Loot;
 using System;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
 {
-    [CreateAssetMenu(fileName = "Entity", menuName = "ScriptableObjects/EntityDefinition")]
+    [CreateAssetMenu(menuName = "Definitions/Entity")]
     public class EntityDefinition : GuidScriptableObject
     {
         [field: SerializeField]
@@ -71,5 +72,11 @@ namespace Assets._Game.Scripts.Entities
     public class FactionModuleDefinition : EntityModuleDefinition
     {
         public Faction.Faction Faction;
+    }
+
+    public class RewardModuleDefinition : EntityModuleDefinition
+    {
+        public int Experience;
+        public LootTable LootTable;
     }
 }

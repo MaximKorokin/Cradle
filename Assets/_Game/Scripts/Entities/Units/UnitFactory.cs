@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets.CoreScripts;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
@@ -9,12 +8,18 @@ namespace Assets._Game.Scripts.Entities.Units
         private readonly PoolService _poolService;
         private readonly UnitVariantsCatalog _entityUnitVariantsCatalog;
         private readonly DefaultPrefabReferences _defaultPrefabReferences;
+        private readonly EntityUnitConfig _entityUnitConfig;
 
-        public UnitFactory(PoolService poolService, UnitVariantsCatalog entityUnitVariantsCatalog, DefaultPrefabReferences defaultPrefabReferences)
+        public UnitFactory(
+            PoolService poolService,
+            UnitVariantsCatalog entityUnitVariantsCatalog,
+            DefaultPrefabReferences defaultPrefabReferences,
+            EntityUnitConfig entityUnitConfig)
         {
             _poolService = poolService;
             _entityUnitVariantsCatalog = entityUnitVariantsCatalog;
             _defaultPrefabReferences = defaultPrefabReferences;
+            _entityUnitConfig = entityUnitConfig;
         }
 
         public UnitView Create(string path, int relativeOrderInLayer)
@@ -34,18 +39,17 @@ namespace Assets._Game.Scripts.Entities.Units
                 return null;
             }
 
-            var unitVariant = unitVariants.GetVariant(variantName);
-            if (unitVariant == null)
+            var unitVariantSprite = unitVariants.GetVariant(variantName)?.Sprite;
+            if (unitVariantSprite == null)
             {
-                SLog.Error($"Cannot find unit variant by name: {variantName}");
-                return null;
+                unitVariantSprite = _entityUnitConfig.NotFoundVariantSprite;
             }
 
             var unitView = CreateUnit(entityUnitVisualModel.Path.ToString());
             unitView.Path = entityUnitVisualModel.Path.ToString();
             unitView.RelativeOrderInLayer = entityUnitVisualModel.RelativeOrderInLayer;
 
-            unitView.SpriteRenderer.sprite = unitVariant.Sprite;
+            unitView.SpriteRenderer.sprite = unitVariantSprite;
 
             return unitView;
         }

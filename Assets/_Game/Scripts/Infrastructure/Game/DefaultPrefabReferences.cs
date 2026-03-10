@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    [CreateAssetMenu(fileName = "DefaultPrefabReferences", menuName = "ScriptableObjects/DefaultPrefabReferences")]
+    [CreateAssetMenu(menuName = "Configs/DefaultPrefabReferences")]
     public class DefaultPrefabReferences : ScriptableObject
     {
         [field: SerializeField]

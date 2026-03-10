@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
 {
-    [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/ItemDefinition")]
+    [CreateAssetMenu(menuName = "Definitions/Item")]
     public class ItemDefinition : GuidScriptableObject
     {
         [field: SerializeField]

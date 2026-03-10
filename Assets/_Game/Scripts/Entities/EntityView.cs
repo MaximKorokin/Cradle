@@ -54,8 +54,11 @@ namespace Assets._Game.Scripts.Entities
                 SLog.Error($"Entity {entity.Definition.Id} has no {nameof(AppearanceModule)} attached.");
             }
 
-            AnimatorController = new(UnitsAnimator, appearance.EntityVisualModel.Animator);
-            AnimatorController.Rebind();
+            if (appearance.EntityVisualModel.Animator != null)
+            {
+                AnimatorController = new(UnitsAnimator, appearance.EntityVisualModel.Animator);
+                AnimatorController.Rebind();
+            }
 
             _appearance = appearance;
 
@@ -65,8 +68,11 @@ namespace Assets._Game.Scripts.Entities
             _appearance.SetTurnDirectionRequested += UnitsController.SetTurnDirection;
             _appearance.UpdateOrderInLayerRequested += UnitsController.UpdateOrderInLayer;
 
-            _appearance.SetAnimationRequested += AnimatorController.SetAnimation;
-            _appearance.SetAnimatorValueRequested += AnimatorController.SetValue;
+            if (AnimatorController != null)
+            {
+                _appearance.SetAnimationRequested += AnimatorController.SetAnimation;
+                _appearance.SetAnimatorValueRequested += AnimatorController.SetValue;
+            }
 
             entity.Publish<EntityBoundEvent>(new(entity));
         }
@@ -86,8 +92,11 @@ namespace Assets._Game.Scripts.Entities
             _appearance.SetTurnDirectionRequested -= UnitsController.SetTurnDirection;
             _appearance.UpdateOrderInLayerRequested -= UnitsController.UpdateOrderInLayer;
 
-            _appearance.SetAnimationRequested -= AnimatorController.SetAnimation;
-            _appearance.SetAnimatorValueRequested -= AnimatorController.SetValue;
+            if (AnimatorController != null)
+            {
+                _appearance.SetAnimationRequested -= AnimatorController.SetAnimation;
+                _appearance.SetAnimatorValueRequested -= AnimatorController.SetValue;
+            }
 
             _appearance = null;
             Entity = null;
