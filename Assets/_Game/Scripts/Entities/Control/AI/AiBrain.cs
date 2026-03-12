@@ -50,6 +50,6 @@ namespace Assets._Game.Scripts.Entities.Control.AI
     {
         Wander = 1,
         Chase = 2,
-        Attack = 4,
+        Action = 4,
     }
 }

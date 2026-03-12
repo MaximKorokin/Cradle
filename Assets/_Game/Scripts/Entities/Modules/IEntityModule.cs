@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private readonly List<IDisposable> _subscriptions = new();
 
-        protected Entity Entity { get; private set; }
+        public Entity Entity { get; private set; }
 
         public void Attach(Entity entity)
         {

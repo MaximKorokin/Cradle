@@ -15,7 +15,8 @@ namespace Assets._Game.Scripts.Entities.Control
     public enum ControlPriority
     {
         BaseAI = 0,
-        BasePlayer = 10,
+        OverrideAI = 10,  // loot pick up
+        BasePlayer = 20,
 
         OverrideLow = 100,  // fear
         OverrideHigh = 200, // stun

@@ -23,7 +23,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             {
                 behaviours.Add(new ChaseBehaviour(_entitySensor));
             }
-            if (behaviour.HasFlag(AiBehaviour.Attack))
+            if (behaviour.HasFlag(AiBehaviour.Action))
             {
                 behaviours.Add(new AttackBehaviour(_entitySensor));
             }

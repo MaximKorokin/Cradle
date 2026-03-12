@@ -8,7 +8,6 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public sealed class ChaseBehaviour : AiBehaviourBase
     {
-        private const float MaxSpotLeaveDistance = 3f;
         private const float ChaseStartDistance = 3f;
 
         private readonly EntityQuery _entityQuery = new(RestrictionState.Disabled | RestrictionState.Dead);

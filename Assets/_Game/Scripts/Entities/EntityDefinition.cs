@@ -90,4 +90,9 @@ namespace Assets._Game.Scripts.Entities
     {
         OnSpawn, OnDeath
     }
+
+    public class LootPickupModuleDefinition : EntityModuleDefinition
+    {
+        public float DetectionRange;
+    }
 }

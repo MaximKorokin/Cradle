@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control.Intents
 {
-    public readonly struct UseAbilityIntent
+    public readonly struct UseAbilityIntent : IIntent
     {
         public readonly AbilityInstance AbilityInstance;
         // can be null if the ability doesn't require a target
@@ -11,7 +11,8 @@ namespace Assets._Game.Scripts.Entities.Control.Intents
         // for ground-targeted abilities, the point where the ability should be used. If HasPoint is false, this value should be ignored.
         public readonly Vector2? Point;
 
-        public static UseAbilityIntent None { get; } = default;
+        IIntent IIntent.None => None;
+        public static UseAbilityIntent None => default;
 
         public UseAbilityIntent(AbilityInstance abilityInstance, Entity target, Vector2? point)
         {

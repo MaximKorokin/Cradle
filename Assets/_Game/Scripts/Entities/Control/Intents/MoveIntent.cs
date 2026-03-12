@@ -2,12 +2,13 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control.Intents
 {
-    public readonly struct MoveIntent
+    public readonly struct MoveIntent : IIntent
     {
         public readonly Vector2 NormalizedDirection;
         public readonly float SpeedMultiplier;
 
-        public static MoveIntent None { get; } = default;
+        IIntent IIntent.None => None;
+        public static MoveIntent None => default;
 
         public MoveIntent(Vector2 direction, float speedMultiplier = 1f)
         {

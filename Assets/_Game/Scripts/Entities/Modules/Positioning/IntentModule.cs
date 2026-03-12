@@ -4,37 +4,56 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class IntentModule : EntityModuleBase
     {
-        public MoveIntent Move { get; private set; }
-        public AimIntent Aim { get; private set; }
-        public UseAbilityIntent UseAbility { get; private set; }
+        private MoveIntent _move;
+        private AimIntent _aim;
+        private UseAbilityIntent _useAbility;
+        private PickupItemIntent _pickupItem;
 
         public void SetMove(MoveIntent moveIntent)
         {
-            Move = moveIntent;
+            _move = moveIntent;
         }
 
         public void SetAim(AimIntent aimIntent)
         {
-            Aim = aimIntent;
+            _aim = aimIntent;
         }
 
         public void SetUseAbility(UseAbilityIntent interactIntent)
         {
-            UseAbility = interactIntent;
+            _useAbility = interactIntent;
+        }
+
+        public void SetPickupItem(PickupItemIntent pickupItem)
+        {
+            _pickupItem = pickupItem;
         }
 
         public bool TryConsumeMove(out MoveIntent intent)
         {
-            intent = Move;
-            Move = MoveIntent.None;
-            return !intent.Equals(MoveIntent.None);
+            return TryConsumeIntent(ref _move, out intent);
+        }
+
+        public bool TryConsumeAim(out AimIntent intent)
+        {
+            return TryConsumeIntent(ref _aim, out intent);
         }
 
         public bool TryConsumeUseAbility(out UseAbilityIntent intent)
         {
-            intent = UseAbility;
-            UseAbility = UseAbilityIntent.None;
-            return !intent.Equals(UseAbilityIntent.None);
+            return TryConsumeIntent(ref _useAbility, out intent);
+        }
+
+        public bool TryConsumePickupItem(out PickupItemIntent intent)
+        {
+            return TryConsumeIntent(ref _pickupItem, out intent);
+        }
+
+        private static bool TryConsumeIntent<T>(ref T intentProperty, out T intent) where T : IIntent
+        {
+            intent = intentProperty;
+            intentProperty = (T)intentProperty.None;
+            return !intent.Equals(intentProperty.None);
         }
     }
 }

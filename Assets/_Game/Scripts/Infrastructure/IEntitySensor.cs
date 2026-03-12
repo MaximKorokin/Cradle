@@ -14,6 +14,13 @@ namespace Assets._Game.Scripts.Infrastructure
             EntityQuery query,
             out Entity entity);
 
+        bool TryGetNearestInRange(
+            Entity self,
+            float radius,
+            FactionRelation relation,
+            EntityQuery query,
+            out Entity entity);
+
         bool HasAnyInRange(
             Entity self,
             float radius,
@@ -73,6 +80,41 @@ namespace Assets._Game.Scripts.Infrastructure
             }
 
             return false;
+        }
+
+        public bool TryGetNearestInRange(
+            Entity self,
+            float radius,
+            FactionRelation relation,
+            EntityQuery query,
+            out Entity entity)
+        {
+            var result = false;
+            var minDistance = float.MaxValue;
+            entity = null;
+
+            var position = self.GetModule<SpatialModule>().Position;
+
+            var count = _worldQuery.GetEntitiesInRange(position, radius, _buffer);
+
+            for (var i = 0; i < count; i++)
+            {
+                var candidate = _buffer[i];
+                if (candidate == null) continue;
+                if (candidate == self) continue;
+                if (_relationResolver.GetRelation(candidate, self) != relation) continue;
+                if (!query.Match(candidate)) continue;
+
+                var distance = (candidate.GetModule<SpatialModule>().Position - position).magnitude;
+                if (distance < minDistance)
+                {
+                    entity = candidate;
+                    minDistance = distance;
+                    result = true;
+                }
+            }
+
+            return result;
         }
     }
 }
