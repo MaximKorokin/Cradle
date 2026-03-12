@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 3412048594719473665
   - rid: 3412048633303400550
   - rid: 3412048685788037207
+  - rid: 3412048734163566710
   references:
     version: 2
     RefIds:
@@ -61,3 +62,9 @@ MonoBehaviour:
         Enabled: 1
         Experience: 11
         LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}
+    - rid: 3412048734163566710
+      type: {class: DespawnModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        DespawnDelay: 5
+        Trigger: 1

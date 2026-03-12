@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439ff92471f697e4dafaf821676e23e9, type: 3}
   m_Name: DespawnConfig
   m_EditorClassIdentifier: 
-  <MinTimeToExist>k__BackingField: 1
-  <MaxTimeToExist>k__BackingField: 600
+  <MinDespawnDelay>k__BackingField: 1
+  <MaxDespawnDelay>k__BackingField: 600

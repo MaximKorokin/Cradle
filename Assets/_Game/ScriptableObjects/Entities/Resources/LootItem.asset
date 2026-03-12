@@ -15,7 +15,14 @@ MonoBehaviour:
   _id: 15e59cb461da468abc5405c6d0b8f439
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 474de3eef770bb74993993a555133e40, type: 2}
   <VariantName>k__BackingField: 
-  _modules: []
+  _modules:
+  - rid: 3412048734163566674
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3412048734163566674
+      type: {class: DespawnModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        DespawnDelay: 10
+        Trigger: 0
