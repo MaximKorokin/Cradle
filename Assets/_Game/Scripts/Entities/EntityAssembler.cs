@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.Entities
         private readonly StatsModuleAssembler _statsModuleAssembler;
         private readonly StatusEffectModuleAssembler _statusEffectModuleAssembler;
         private readonly EntityPositioningFactory _entityPositioningFactory;
-        private readonly AbilityModuleAssembler _abilityModuleAssembler;
+        private readonly ActionModuleAssembler _actionModuleAssembler;
         private readonly FactionModuleFactory _factionModuleFactory;
         private readonly RewardModuleFactory _rewardModuleFactory;
         private readonly DespawnModuleFactory _despawnModuleFactory;
@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.Entities
             StatsModuleAssembler statsModuleAssembler,
             StatusEffectModuleAssembler statusEffectModuleAssembler,
             EntityPositioningFactory entityPositioningFactory,
-            AbilityModuleAssembler abilityModuleAssembler,
+            ActionModuleAssembler actionModuleAssembler,
             FactionModuleFactory factionModuleFactory,
             RewardModuleFactory rewardModuleFactory,
             DespawnModuleFactory despawnModuleFactory)
@@ -35,7 +35,7 @@ namespace Assets._Game.Scripts.Entities
             _statsModuleAssembler = statsModuleAssembler;
             _statusEffectModuleAssembler = statusEffectModuleAssembler;
             _entityPositioningFactory = entityPositioningFactory;
-            _abilityModuleAssembler = abilityModuleAssembler;
+            _actionModuleAssembler = actionModuleAssembler;
             _factionModuleFactory = factionModuleFactory;
             _rewardModuleFactory = rewardModuleFactory;
             _despawnModuleFactory = despawnModuleFactory;
@@ -55,7 +55,7 @@ namespace Assets._Game.Scripts.Entities
 
             entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
 
-            entity.AddModule(_abilityModuleAssembler.Create(entityDefinition));
+            entity.AddModule(_actionModuleAssembler.Create(entityDefinition));
 
             entity.AddModule(_factionModuleFactory.Create(entityDefinition));
 

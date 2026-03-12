@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             }
             if (behaviour.HasFlag(AiBehaviour.Action))
             {
-                behaviours.Add(new AttackBehaviour(_entitySensor));
+                behaviours.Add(new WorldActionBehaviour(_entitySensor));
             }
 
             return new(behaviours);

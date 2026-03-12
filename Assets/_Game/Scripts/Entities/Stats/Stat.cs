@@ -131,7 +131,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalAttackSpeed = 320,
         [StatRestriction(StatRestrictionType.NonNegative)]
-        PhysicalAbilityDelay = 325,
+        PhysicalActionDelay = 325,
         PhysicalArmor = 330,
 
         [StatRestriction(StatRestrictionType.NonNegative)]

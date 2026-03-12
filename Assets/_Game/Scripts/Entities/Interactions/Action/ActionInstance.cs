@@ -2,19 +2,19 @@
 using Assets.CoreScripts;
 using VContainer;
 
-namespace Assets._Game.Scripts.Entities.Interactions.Ability
+namespace Assets._Game.Scripts.Entities.Interactions.Action
 {
-    public sealed class AbilityInstance
+    public sealed class ActionInstance
     {
         public readonly CooldownCounter Cooldown;
-        public readonly AbilityDefinition Definition;
+        public readonly ActionDefinition Definition;
 
         private InteractionInstance _interactionInstance;
 
-        public AbilityInstance(AbilityDefinition abilityDefinition)
+        public ActionInstance(ActionDefinition actionDefinition)
         {
-            Cooldown = new(abilityDefinition.Cooldown);
-            Definition = abilityDefinition;
+            Cooldown = new(actionDefinition.Cooldown);
+            Definition = actionDefinition;
         }
 
         public bool CanStartCast(InteractionContext context)

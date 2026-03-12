@@ -7,41 +7,41 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
-    public sealed class AttackBehaviour : AiBehaviourBase
+    public sealed class WorldActionBehaviour : AiBehaviourBase
     {
-        private const float AttackRange = 0.7f;
+        private const float ActionRange = 0.7f;
 
         private readonly EntityQuery _entityQuery = new(RestrictionState.Disabled | RestrictionState.Dead);
         private readonly IEntitySensor _sensor;
 
-        public AttackBehaviour(IEntitySensor sensor)
+        public WorldActionBehaviour(IEntitySensor sensor)
         {
             _sensor = sensor;
         }
 
         public override float Evaluate()
         {
-            return _sensor.HasAnyInRange(Entity, AttackRange, FactionRelation.Enemy, _entityQuery)
+            return _sensor.HasAnyInRange(Entity, ActionRange, FactionRelation.Enemy, _entityQuery)
                 ? 1.0f
                 : 0f;
         }
 
         public override void Execute(float delta)
         {
-            if (!_sensor.TryGetFirstInRange(Entity, AttackRange, FactionRelation.Enemy, _entityQuery, out var target))
+            if (!_sensor.TryGetFirstInRange(Entity, ActionRange, FactionRelation.Enemy, _entityQuery, out var target))
                 return;
 
-            if (!Entity.TryGetModule<AbilityModule>(out var abilityModule))
+            if (!Entity.TryGetModule<ActionModule>(out var actionModule))
                 return;
 
-            var ability = abilityModule.Abilities.FirstOrDefault();
-            if (ability == null)
+            var action = actionModule.Actions.FirstOrDefault();
+            if (action == null)
                 return;
 
             var targetPosition = target.GetModule<SpatialModule>().Position;
             var intent = Entity.GetModule<IntentModule>();
 
-            intent.SetUseAbility(new UseAbilityIntent(ability, target, targetPosition));
+            intent.SetAct(new ActIntent(action, target, targetPosition));
         }
     }
 }

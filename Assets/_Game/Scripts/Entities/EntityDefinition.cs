@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
-using Assets._Game.Scripts.Entities.Interactions.Ability;
+using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
@@ -64,9 +64,9 @@ namespace Assets._Game.Scripts.Entities
         public ControlProviderData ControlProvider;
     }
 
-    public class AbilityModuleDefinition : EntityModuleDefinition
+    public class ActionModuleDefinition : EntityModuleDefinition
     {
-        public AbilityDefinition[] Abilities;
+        public ActionDefinition[] Actions;
     }
 
     public class FactionModuleDefinition : EntityModuleDefinition

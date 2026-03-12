@@ -1,10 +1,10 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Storage;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Interactions.Ability
+namespace Assets._Game.Scripts.Entities.Interactions.Action
 {
-    [CreateAssetMenu(menuName = "Definitions/Ability")]
-    public sealed class AbilityDefinition : GuidScriptableObject
+    [CreateAssetMenu(menuName = "Definitions/Action")]
+    public sealed class ActionDefinition : GuidScriptableObject
     {
         [field: SerializeField]
         public string Name { get; private set; }

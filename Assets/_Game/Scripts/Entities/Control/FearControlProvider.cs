@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.Entities.Control
             Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Feared);
             if (Entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetUseAbility(UseAbilityIntent.None);
+                intent.SetAct(ActIntent.None);
             }
         }
 

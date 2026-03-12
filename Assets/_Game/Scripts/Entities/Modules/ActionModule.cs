@@ -1,12 +1,12 @@
 ﻿using Assets._Game.Scripts.Entities.Interactions;
-using Assets._Game.Scripts.Entities.Interactions.Ability;
+using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets.CoreScripts;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class AbilityModule : EntityModuleBase
+    public sealed class ActionModule : EntityModuleBase
     {
         public bool IsCasting;
         public float RemainingCastTime;
@@ -14,16 +14,16 @@ namespace Assets._Game.Scripts.Entities.Modules
         public bool IsChanneling;
         public float RemainingChannelTime;
 
-        public AbilityInstance ActiveAbility;
+        public ActionInstance ActiveAction;
         public InteractionContext ActiveContext;
 
-        public IEnumerable<AbilityInstance> Abilities;
+        public IEnumerable<ActionInstance> Actions;
 
         public CooldownCounter GlobalCooldown = new();
 
-        public AbilityModule(IEnumerable<AbilityInstance> abilities)
+        public ActionModule(IEnumerable<ActionInstance> actions)
         {
-            Abilities = abilities.ToArray();
+            Actions = actions.ToArray();
         }
     }
 }

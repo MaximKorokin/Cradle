@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: LootPickupAbility
   m_EditorClassIdentifier: 
   _id: 00ccdda2fc4245819f5854288699d6e0
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Pick Up
   <Description>k__BackingField: 
-  <Icon>k__BackingField: {fileID: 0}
-  <Interaction>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 7036222655963299068, guid: 3dc2a5cdac2ef8a4aa0e195896df3332, type: 3}
+  <Interaction>k__BackingField: {fileID: 11400000, guid: 86713e8f01e1c664388478fc5807c594, type: 2}
   <ManaCost>k__BackingField: 0
-  <CastTime>k__BackingField: 0
+  <CastTime>k__BackingField: 0.5
   <ChannelTime>k__BackingField: 0
-  <Cooldown>k__BackingField: 0
-  <CastRange>k__BackingField: 0
+  <Cooldown>k__BackingField: 0.5
+  <CastRange>k__BackingField: 0.1

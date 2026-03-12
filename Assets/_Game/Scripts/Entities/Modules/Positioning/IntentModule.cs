@@ -6,7 +6,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private MoveIntent _move;
         private AimIntent _aim;
-        private UseAbilityIntent _useAbility;
+        private ActIntent _act;
         private PickupItemIntent _pickupItem;
 
         public void SetMove(MoveIntent moveIntent)
@@ -19,9 +19,9 @@ namespace Assets._Game.Scripts.Entities.Modules
             _aim = aimIntent;
         }
 
-        public void SetUseAbility(UseAbilityIntent interactIntent)
+        public void SetAct(ActIntent actIntent)
         {
-            _useAbility = interactIntent;
+            _act = actIntent;
         }
 
         public void SetPickupItem(PickupItemIntent pickupItem)
@@ -39,9 +39,9 @@ namespace Assets._Game.Scripts.Entities.Modules
             return TryConsumeIntent(ref _aim, out intent);
         }
 
-        public bool TryConsumeUseAbility(out UseAbilityIntent intent)
+        public bool TryConsumeAct(out ActIntent intent)
         {
-            return TryConsumeIntent(ref _useAbility, out intent);
+            return TryConsumeIntent(ref _act, out intent);
         }
 
         public bool TryConsumePickupItem(out PickupItemIntent intent)

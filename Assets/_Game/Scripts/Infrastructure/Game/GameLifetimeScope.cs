@@ -59,7 +59,6 @@ namespace Assets._Game.Scripts.Infrastructure
             RegisterEntityFeature(builder);
             RegisterItemFeature(builder);
             RegisterStatusEffectFeature(builder);
-            RegisterAbilityFeature(builder);
 
             RegisterCalculators(builder);
         }
@@ -83,7 +82,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<LocomotionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AppearanceSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StatSystem>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<AbilitySystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<ActionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ControlSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StatusEffectSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<RewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -128,6 +127,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<FactionRelationResolver>(Lifetime.Singleton);
             builder.RegisterInstance(_factionRelations);
 
+            builder.Register<ActionModuleAssembler>(Lifetime.Singleton);
+
             builder.Register<RewardModuleFactory>(Lifetime.Singleton);
 
             builder.Register<DespawnModuleFactory>(Lifetime.Singleton);
@@ -154,11 +155,6 @@ namespace Assets._Game.Scripts.Infrastructure
         {
             builder.Register<StatusEffectModuleAssembler>(Lifetime.Singleton);
             builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
-        }
-
-        private void RegisterAbilityFeature(IContainerBuilder builder)
-        {
-            builder.Register<AbilityModuleAssembler>(Lifetime.Singleton);
         }
     }
 }
