@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets.CoreScripts;
 
 namespace Assets._Game.Scripts.Entities.Stats

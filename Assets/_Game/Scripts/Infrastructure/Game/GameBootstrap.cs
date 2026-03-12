@@ -34,8 +34,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             _saveService.LoadGame();
 
             var dogDefinition = _entityDefinitionCatalog.Get("d5855ca383df4ddd8c615e51609dc812");
-            var dogEntity = _entityAssembler.Create(dogDefinition);
-            _eventBus.Publish(new SpawnEntityRequestEvent(dogEntity, Vector2.one));
+            var dogEntity1 = _entityAssembler.Create(dogDefinition);
+            _eventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity1, Vector2.one));
+            var dogEntity2 = _entityAssembler.Create(dogDefinition);
+            _eventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity2, -Vector2.one));
 
             SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
         }

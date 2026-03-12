@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities
 {
-    public sealed class EntityViewFactory
+    public sealed class EntityViewProvider
     {
         private static int _entitiesCounter = 0;
 
@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.Entities
         private readonly DefaultPrefabReferences _defaultPrefabReferences;
         private readonly UnitsControllerFactory _unitsControllerFactory;
 
-        public EntityViewFactory(
+        public EntityViewProvider(
             PoolService poolService,
             DefaultPrefabReferences defaultPrefabReferences,
             UnitsControllerFactory unitsControllerFactory)
@@ -35,6 +35,11 @@ namespace Assets._Game.Scripts.Entities
             entityView.Initialize(unitsController);
 
             return entityView;
+        }
+
+        public void Destroy(EntityView view)
+        {
+            _poolService.Return(view);
         }
     }
 }

@@ -79,4 +79,15 @@ namespace Assets._Game.Scripts.Entities
         public int Experience;
         public LootTable LootTable;
     }
+
+    public class DespawnModuleDefinition : EntityModuleDefinition
+    {
+        public float DespawnDelay;
+        public DespawnCounterStartTrigger Trigger;
+    }
+
+    public enum DespawnCounterStartTrigger
+    {
+        OnSpawn, OnDeath
+    }
 }

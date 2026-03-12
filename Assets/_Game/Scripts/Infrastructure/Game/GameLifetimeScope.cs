@@ -8,6 +8,7 @@ using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Calculators;
+using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
@@ -25,17 +26,7 @@ namespace Assets._Game.Scripts.Infrastructure
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField]
-        private NewGameDefinition _newGameDefinition;
-        [SerializeField]
-        private SaveConfig _saveConfig;
-        [SerializeField]
-        private ItemsConfig _itemsConfig;
-        [SerializeField]
-        private StatsConfig _statsConfig;
-        [SerializeField]
-        private StatusEffectsConfig _statusEffectsConfig;
-        [SerializeField]
-        private EntityUnitConfig _entityUnitConfig;
+        private ConfigReferences _configReferences;
         [SerializeField]
         private FactionRelations _factionRelations;
         [SerializeField]
@@ -59,11 +50,10 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<UnityWorldQuery>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<EntitySensor>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.RegisterInstance(_newGameDefinition);
-
             builder.Register<PlayerControlProvider>(Lifetime.Singleton);
             builder.Register<PlayerContext>(Lifetime.Singleton);
 
+            RegisterConfigs(builder);
             RegisterSystems(builder);
             RegisterSavesFeature(builder);
             RegisterEntityFeature(builder);
@@ -72,6 +62,18 @@ namespace Assets._Game.Scripts.Infrastructure
             RegisterAbilityFeature(builder);
 
             RegisterCalculators(builder);
+        }
+
+        private void RegisterConfigs(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_configReferences.NewGameDefinition);
+
+            builder.RegisterInstance(_configReferences.StatusEffectsConfig);
+            builder.RegisterInstance(_configReferences.ItemsConfig);
+            builder.RegisterInstance(_configReferences.EntityUnitConfig);
+            builder.RegisterInstance(_configReferences.StatsConfig);
+            builder.RegisterInstance(_configReferences.SaveConfig);
+            builder.RegisterInstance(_configReferences.DespawnConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -86,12 +88,11 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<StatusEffectSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<RewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<DespawnSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_saveConfig);
-
             builder.Register<SaveService>(Lifetime.Scoped);
             builder.Register<GameSaveRepository>(Lifetime.Scoped);
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Scoped);
@@ -104,23 +105,21 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityFeature(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<EntitySpawner>();
+            builder.RegisterEntryPoint<EntityViewLifecycleOrchestrator>();
 
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<EntityRepository>(Lifetime.Scoped);
             builder.Register<EntityAssembler>(Lifetime.Scoped);
 
-            builder.RegisterInstance(_statsConfig);
             builder.Register<StatsModuleAssembler>(Lifetime.Scoped);
             builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
 
             builder.Register<AppearanceModuleFactory>(Lifetime.Scoped);
-            builder.Register<EntityViewFactory>(Lifetime.Scoped);
+            builder.Register<EntityViewProvider>(Lifetime.Scoped);
             builder.Register<UnitFactory>(Lifetime.Scoped);
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
             builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
-            builder.RegisterInstance(_entityUnitConfig);
 
             builder.Register<EntityPositioningFactory>(Lifetime.Scoped);
             builder.Register<AiBrainFactory>(Lifetime.Scoped);
@@ -130,6 +129,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_factionRelations);
 
             builder.Register<RewardModuleFactory>(Lifetime.Singleton);
+
+            builder.Register<DespawnModuleFactory>(Lifetime.Singleton);
         }
 
         private void RegisterCalculators(IContainerBuilder builder)
@@ -140,8 +141,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterItemFeature(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_itemsConfig);
-
             builder.Register<ItemStackAssembler>(Lifetime.Scoped);
             builder.Register<ItemDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<ItemCommandHandler>(Lifetime.Scoped);
@@ -153,8 +152,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterStatusEffectFeature(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_statusEffectsConfig);
-
             builder.Register<StatusEffectModuleAssembler>(Lifetime.Singleton);
             builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
         }

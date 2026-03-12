@@ -26,7 +26,7 @@ MonoBehaviour:
     MinAmount: 1
     MaxAmount: 2
     Chance: 0.1
-  - ItemDefinition: {fileID: 11400000, guid: b3d71ac4d372c8143b55bb8c3ce59f4f, type: 2}
+  - ItemDefinition: {fileID: 11400000, guid: 6017c12a5c2959f4ca9fa82246381ac7, type: 2}
     MinAmount: 3
     MaxAmount: 9
     Chance: 1

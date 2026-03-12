@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Units
+namespace Assets._Game.Scripts.Infrastructure.Configs
 {
     [CreateAssetMenu(menuName = "Configs/EntityUnitConfig")]
     public sealed class EntityUnitConfig : ScriptableObject

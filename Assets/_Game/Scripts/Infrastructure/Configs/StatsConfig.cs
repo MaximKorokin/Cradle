@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets._Game.Scripts.Entities.Stats
+namespace Assets._Game.Scripts.Infrastructure.Configs
 {
     [CreateAssetMenu(menuName = "Configs/StatsConfig")]
     public sealed class StatsConfig : ScriptableObject

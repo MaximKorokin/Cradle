@@ -32,13 +32,14 @@ public sealed class ComponentPool<T> where T : Component, IPoolable
     public T Take(Vector3 position, Quaternion rotation, Transform parent = null)
     {
         var obj = _stack.Count > 0 ? _stack.Pop() : Object.Instantiate(_prefab);
-        var transform = obj.transform;
+        obj.Prefab = _prefab;
 
+        var transform = obj.transform;
         transform.SetParent(parent != null ? parent : _root, false);
         transform.SetPositionAndRotation(position, rotation);
 
         obj.gameObject.SetActive(true);
-        if (obj is IPoolable p) p.OnTake();
+        obj.OnTake();
 
         return obj;
     }
@@ -47,7 +48,7 @@ public sealed class ComponentPool<T> where T : Component, IPoolable
     {
         if (obj == null) return;
 
-        if (obj is IPoolable p) p.OnReturn();
+        obj.OnReturn();
         obj.gameObject.SetActive(false);
         obj.transform.SetParent(_root, worldPositionStays: false);
 

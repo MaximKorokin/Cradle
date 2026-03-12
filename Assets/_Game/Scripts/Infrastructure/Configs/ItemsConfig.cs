@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Items;
+using System;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Items
+namespace Assets._Game.Scripts.Infrastructure.Configs
 {
     [CreateAssetMenu(menuName = "Configs/ItemsConfig")]
     public sealed class ItemsConfig : ScriptableObject

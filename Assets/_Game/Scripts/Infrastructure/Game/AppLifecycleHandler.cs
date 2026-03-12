@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Infrastructure.Persistence;
+﻿using Assets._Game.Scripts.Infrastructure.Configs;
+using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets.CoreScripts;
 
 namespace Assets._Game.Scripts.Infrastructure.Game

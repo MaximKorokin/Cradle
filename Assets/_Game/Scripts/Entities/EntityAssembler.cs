@@ -15,6 +15,7 @@ namespace Assets._Game.Scripts.Entities
         private readonly AbilityModuleAssembler _abilityModuleAssembler;
         private readonly FactionModuleFactory _factionModuleFactory;
         private readonly RewardModuleFactory _rewardModuleFactory;
+        private readonly DespawnModuleFactory _despawnModuleFactory;
 
         public EntityAssembler(
             EntityRepository entityRepository,
@@ -25,7 +26,8 @@ namespace Assets._Game.Scripts.Entities
             EntityPositioningFactory entityPositioningFactory,
             AbilityModuleAssembler abilityModuleAssembler,
             FactionModuleFactory factionModuleFactory,
-            RewardModuleFactory rewardModuleFactory)
+            RewardModuleFactory rewardModuleFactory,
+            DespawnModuleFactory despawnModuleFactory)
         {
             _entityRepository = entityRepository;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
@@ -36,6 +38,7 @@ namespace Assets._Game.Scripts.Entities
             _abilityModuleAssembler = abilityModuleAssembler;
             _factionModuleFactory = factionModuleFactory;
             _rewardModuleFactory = rewardModuleFactory;
+            _despawnModuleFactory = despawnModuleFactory;
         }
 
         public Entity Create(EntityDefinition entityDefinition)
@@ -57,6 +60,8 @@ namespace Assets._Game.Scripts.Entities
             entity.AddModule(_factionModuleFactory.Create(entityDefinition));
 
             entity.AddModule(_rewardModuleFactory.Create(entityDefinition));
+
+            entity.AddModule(_despawnModuleFactory.Create(entityDefinition));
 
             foreach (var module in _entityPositioningFactory.Create(entityDefinition))
             {

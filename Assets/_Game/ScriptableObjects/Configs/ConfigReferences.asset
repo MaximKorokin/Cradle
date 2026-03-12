@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443687fd25bcaaa4aa2572bd4cadcb2a, type: 3}
+  m_Name: ConfigReferences
+  m_EditorClassIdentifier: 
+  <NewGameDefinition>k__BackingField: {fileID: 11400000, guid: 46c0fe08b4fc5424180cb73dc2408f79, type: 2}
+  <SaveConfig>k__BackingField: {fileID: 11400000, guid: 6c49e312684f4b841b10dfd6e75e2082, type: 2}
+  <ItemsConfig>k__BackingField: {fileID: 11400000, guid: 5d949efdf99c17c4697df6b59e537bbb, type: 2}
+  <StatsConfig>k__BackingField: {fileID: 11400000, guid: 8255ace4ade20fc4b8629b0e4d714bd1, type: 2}
+  <StatusEffectsConfig>k__BackingField: {fileID: 11400000, guid: 2112acdf0bdc6014284ad1242b1c1a76, type: 2}
+  <EntityUnitConfig>k__BackingField: {fileID: 11400000, guid: b379158741e2bb94b86c10323e7491df, type: 2}
+  <DespawnConfig>k__BackingField: {fileID: 11400000, guid: 7b2436c0ab1590c4fbb8c928ab3c0ebe, type: 2}

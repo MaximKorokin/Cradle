@@ -57,7 +57,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void CreateLoot(Vector2 position, ItemDefinition itemDefinition, int amount)
         {
             var entity = _entityAssembler.Create(_defaultEntityDefinitionReferences.LootItem);
-            _globalEventBus.Publish<SpawnEntityRequestEvent>(new(entity, position));
+            _globalEventBus.Publish<SpawnEntityViewRequestEvent>(new(entity, position));
 
             entity.GetModule<AppearanceModule>().RequestSetUnitSprite(itemDefinition.Sprite);
 
