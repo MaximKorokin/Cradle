@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Configs;
-using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets.CoreScripts;
 using System.Linq;
 

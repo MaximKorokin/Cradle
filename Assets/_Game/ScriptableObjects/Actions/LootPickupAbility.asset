@@ -22,3 +22,8 @@ MonoBehaviour:
   <ChannelTime>k__BackingField: 0
   <Cooldown>k__BackingField: 0.5
   <CastRange>k__BackingField: 0.1
+  <EntityQueryData>k__BackingField:
+    ExcludedRestrictions: 1
+    IncludedTargetDeclarations: 1
+  <FactionRelation>k__BackingField: 0
+  <BaseScore>k__BackingField: 0.1

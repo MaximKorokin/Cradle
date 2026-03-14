@@ -1,15 +1,14 @@
-﻿using Assets._Game.Scripts.Infrastructure;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public sealed class AiBrainFactory
     {
-        private readonly IEntitySensor _entitySensor;
+        private readonly ActionEvaluator _actionEvaluator;
 
-        public AiBrainFactory(IEntitySensor entitySensor)
+        public AiBrainFactory(ActionEvaluator actionEvaluator)
         {
-            _entitySensor = entitySensor;
+            _actionEvaluator = actionEvaluator;
         }
 
         public AiBrain Create(AiBehaviour behaviour)
@@ -19,13 +18,9 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             {
                 behaviours.Add(new WanderBehaviour());
             }
-            if (behaviour.HasFlag(AiBehaviour.Chase))
-            {
-                behaviours.Add(new ChaseBehaviour(_entitySensor));
-            }
             if (behaviour.HasFlag(AiBehaviour.Action))
             {
-                behaviours.Add(new WorldActionBehaviour(_entitySensor));
+                behaviours.Add(new ActionBehaviour(_actionEvaluator));
             }
 
             return new(behaviours);

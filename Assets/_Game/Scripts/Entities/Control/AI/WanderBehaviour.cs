@@ -5,60 +5,44 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
-    public sealed class WanderBehaviour : AiBehaviourBase
+    public sealed class WanderBehaviour : IAiBehaviour
     {
         private const float StopDistance = 0.1f;
-        private const float MinIdleTime = 3;
-        private const float MaxIdleTime = 8;
 
-        private Vector2 _initialPosition;
+        private readonly CooldownCounter _wanderCooldown = new();
 
-        private Vector2 _target;
-
-        private CooldownCounter _wanderCooldown;
-
-        protected override void OnInitialize()
+        public ActionEvaluation Evaluate(Entity entity)
         {
-            Entity.Subscribe<EntityBoundEvent>(e =>
-            {
-                _initialPosition = Entity.GetModule<SpatialModule>().Position;
-                _target = _initialPosition;
-            });
-            _wanderCooldown = new();
-            ResetWanderCooldown();
+            return new ActionEvaluation(0.01f, default);
         }
 
-        public override float Evaluate()
-        {
-            return 0.1f;
-        }
-
-        public override void Execute(float delta)
+        public void Tick(Entity entity, ActionContext context, float delta)
         {
             if (!_wanderCooldown.IsOver())
             {
                 return;
             }
 
-            var spatial = Entity.GetModule<SpatialModule>();
-            var intent = Entity.GetModule<IntentModule>();
+            var wander = entity.GetModule<WanderModule>();
+            if (wander.AnchorPoint == null) return;
 
-            var direction = _target - spatial.Position;
+            var spatial = entity.GetModule<SpatialModule>();
+            var intent = entity.GetModule<IntentModule>();
 
-            if (direction.sqrMagnitude < StopDistance * StopDistance)
+            if (wander.CurrentPoint == null || (wander.CurrentPoint.Value - spatial.Position).sqrMagnitude < StopDistance * StopDistance)
             {
-                _target = _initialPosition + Random.insideUnitCircle * 3f;
+                wander.CurrentPoint = wander.AnchorPoint + Random.insideUnitCircle * 3f;
                 intent.SetMove(MoveIntent.None);
-                ResetWanderCooldown();
+                ResetWanderCooldown(wander.MinIdleTime, wander.MaxIdleTime);
                 return;
             }
 
-            intent.SetMove(new MoveIntent(direction));
+            intent.SetMove(new MoveIntent(wander.CurrentPoint.Value - spatial.Position));
         }
 
-        private void ResetWanderCooldown()
+        private void ResetWanderCooldown(float minIdleTime, float maxIdleTime)
         {
-            _wanderCooldown.Cooldown = Random.Range(MinIdleTime, MaxIdleTime);
+            _wanderCooldown.Cooldown = Random.Range(minIdleTime, maxIdleTime);
             _wanderCooldown.Reset();
         }
     }

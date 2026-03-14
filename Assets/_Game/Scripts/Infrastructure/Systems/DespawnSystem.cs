@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Storage;
-using Assets._Game.Scripts.Shared.Extensions;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems

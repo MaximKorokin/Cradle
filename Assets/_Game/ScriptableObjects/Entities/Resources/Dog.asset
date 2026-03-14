@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 1349792692413661260
   - rid: 1349792714110271691
   - rid: 1349792944121708627
+  - rid: 3412048792581832777
   - rid: 3412048633303400550
   - rid: 3412048685788037207
   - rid: 3412048734163566710
@@ -68,3 +69,9 @@ MonoBehaviour:
         Enabled: 1
         Actions:
         - {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}
+    - rid: 3412048792581832777
+      type: {class: WanderModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        MinIdleTime: 3
+        MaxIdleTime: 8

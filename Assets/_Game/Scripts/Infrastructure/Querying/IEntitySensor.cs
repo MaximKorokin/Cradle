@@ -1,9 +1,8 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Faction;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Shared.Extensions;
 
-namespace Assets._Game.Scripts.Infrastructure
+namespace Assets._Game.Scripts.Infrastructure.Querying
 {
     public interface IEntitySensor
     {

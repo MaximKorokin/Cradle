@@ -16,6 +16,7 @@ namespace Assets._Game.Scripts.Entities
         private readonly FactionModuleFactory _factionModuleFactory;
         private readonly RewardModuleFactory _rewardModuleFactory;
         private readonly DespawnModuleFactory _despawnModuleFactory;
+        private readonly WanderModuleFactory _wanderModuleFactory;
 
         public EntityAssembler(
             EntityRepository entityRepository,
@@ -27,7 +28,8 @@ namespace Assets._Game.Scripts.Entities
             ActionModuleAssembler actionModuleAssembler,
             FactionModuleFactory factionModuleFactory,
             RewardModuleFactory rewardModuleFactory,
-            DespawnModuleFactory despawnModuleFactory)
+            DespawnModuleFactory despawnModuleFactory,
+            WanderModuleFactory wanderModuleFactory)
         {
             _entityRepository = entityRepository;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
@@ -39,6 +41,7 @@ namespace Assets._Game.Scripts.Entities
             _factionModuleFactory = factionModuleFactory;
             _rewardModuleFactory = rewardModuleFactory;
             _despawnModuleFactory = despawnModuleFactory;
+            _wanderModuleFactory = wanderModuleFactory;
         }
 
         public Entity Create(EntityDefinition entityDefinition)
@@ -63,10 +66,14 @@ namespace Assets._Game.Scripts.Entities
 
             entity.AddModule(_despawnModuleFactory.Create(entityDefinition));
 
+            entity.AddModule(_wanderModuleFactory.Create(entityDefinition));
+
             foreach (var module in _entityPositioningFactory.Create(entityDefinition))
             {
                 entity.AddModule(module);
             }
+
+            PostCreateActions(entity);
 
             _entityRepository.Add(entity);
             return entity;
@@ -90,6 +97,15 @@ namespace Assets._Game.Scripts.Entities
                 save.EquipmentSave = inventoryEquipmentSave.EquipmentSave;
             }
             return save;
+        }
+
+        private void PostCreateActions(Entity entity)
+        {
+            entity.Subscribe<EntityBoundEvent>(e =>
+            {
+                if (!entity.TryGetModule<WanderModule>(out var wanderModule)) return;
+                wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
+            });
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         public ActionInstance ActiveAction;
         public InteractionContext ActiveContext;
 
-        public IEnumerable<ActionInstance> Actions;
+        public IReadOnlyList<ActionInstance> Actions;
 
         public CooldownCounter GlobalCooldown = new();
 

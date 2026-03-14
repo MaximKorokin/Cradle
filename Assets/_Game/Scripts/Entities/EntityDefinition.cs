@@ -91,8 +91,9 @@ namespace Assets._Game.Scripts.Entities
         OnSpawn, OnDeath
     }
 
-    public class LootPickupModuleDefinition : EntityModuleDefinition
+    public class WanderModuleDefinition : EntityModuleDefinition
     {
-        public float DetectionRange;
+        public float MinIdleTime;
+        public float MaxIdleTime;
     }
 }

@@ -1,8 +1,21 @@
-﻿namespace Assets._Game.Scripts.Entities.Interactions.Steps
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets._Game.Scripts.Items;
+
+namespace Assets._Game.Scripts.Entities.Interactions.Steps
 {
     public sealed class LootItemPickupStep : IInteractionStep
     {
+        private readonly IGlobalEventBus _globalEventBus;
+        private readonly EntityRepository _entityRepository;
+
         private bool _done;
+
+        public LootItemPickupStep(IGlobalEventBus globalEventBus, EntityRepository entityRepository)
+        {
+            _globalEventBus = globalEventBus;
+            _entityRepository = entityRepository;
+        }
 
         public void Start(in InteractionContext context) => _done = false;
 
@@ -12,26 +25,22 @@
         {
             if (_done) return StepStatus.Completed;
 
-            //if (Entity.TryGetModule<LootPickupModule>(out var _lootPickupModule) &&
-            //    _entitySensor.TryGetNearestInRange(Entity, _lootPickupModule.DetectionRange, FactionRelation.None, _entityQuery, out var item))
-            //{
-            //    _targetLootItem = item;
-            //}
+            var lootItemModule = context.Target.GetModule<LootItemModule>();
+            var inventory = context.Source.GetModule<InventoryEquipmentModule>().Inventory;
+            var added = inventory.Add(new(lootItemModule.ItemDefinition, new EmptyInstanceData(), lootItemModule.Amount));
 
-            //var directionToItem = _targetLootItem.GetModule<SpatialModule>().Position - Entity.GetModule<SpatialModule>().Position;
-            //var sqrDistanceToItem = directionToItem.sqrMagnitude;
+            if (added <= 0)
+            {
+                return StepStatus.Failed;
+            }
 
-            //var intent = Entity.GetModule<IntentModule>();
+            lootItemModule.Amount -= added;
 
-            //if (sqrDistanceToItem > _lootPickupModule.PickupRange * _lootPickupModule.PickupRange)
-            //{
-            //    intent.SetMove(new(directionToItem));
-            //}
-            //else
-            //{
-            //    intent.SetPickupItem(new(_targetLootItem));
-            //    _targetLootItem = null;
-            //}
+            if (lootItemModule.Amount <= 0)
+            {
+                _globalEventBus.Publish<DespawnEntityViewRequestEvent>(new(context.Target));
+                _entityRepository.Remove(((IEntry)context.Target).Id);
+            }
 
             _done = true;
             return StepStatus.Completed;

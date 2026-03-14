@@ -18,16 +18,9 @@ namespace Assets._Game.Scripts.Entities.Control
             _brain = brain;
         }
 
-        public override void Initialize(Entity entity)
-        {
-            base.Initialize(entity);
-
-            _brain.Initialize(entity);
-        }
-
         public override void Tick(float delta)
         {
-            _brain.Tick(delta);
+            _brain.Tick(Entity, delta);
         }
     }
 

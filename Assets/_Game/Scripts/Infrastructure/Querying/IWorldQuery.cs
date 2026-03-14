@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Infrastructure
+namespace Assets._Game.Scripts.Infrastructure.Querying
 {
     public interface IWorldQuery
     {
@@ -29,7 +29,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
         public int GetEntitiesInRange(Vector2 point, float radius, Entity[] entities)
         {
-            var count = Physics2D.OverlapCircle(point, radius, new() { layerMask = _entityMask }, _buffer);
+            var count = Physics2D.OverlapCircle(point, radius, new() { layerMask = _entityMask, useTriggers = true }, _buffer);
 
             var entitiesFound = 0;
             for (int i = 0; i < count; i++)

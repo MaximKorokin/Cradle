@@ -12,6 +12,7 @@ using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
@@ -127,11 +128,14 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<FactionRelationResolver>(Lifetime.Singleton);
             builder.RegisterInstance(_factionRelations);
 
+            builder.Register<ActionEvaluator>(Lifetime.Singleton);
             builder.Register<ActionModuleAssembler>(Lifetime.Singleton);
 
             builder.Register<RewardModuleFactory>(Lifetime.Singleton);
 
             builder.Register<DespawnModuleFactory>(Lifetime.Singleton);
+
+            builder.Register<WanderModuleFactory>(Lifetime.Singleton);
         }
 
         private void RegisterCalculators(IContainerBuilder builder)

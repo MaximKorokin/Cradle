@@ -1,8 +1,9 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using System;
+using System.Collections.Generic;
 
-namespace Assets._Game.Scripts.Shared.Extensions
+namespace Assets._Game.Scripts.Infrastructure.Querying
 {
     public readonly struct EntityQuery
     {
@@ -18,6 +19,23 @@ namespace Assets._Game.Scripts.Shared.Extensions
             _excludedRestrictions = excludedRestrictions;
             _requiredModules = requiredModules;
             _excludedModules = excludedModules;
+        }
+
+        public EntityQuery(EntityQueryData data)
+        {
+            _excludedRestrictions = data.ExcludedRestrictions;
+            _excludedModules = new Type[0];
+
+            var includedModules = new List<Type>();
+            if (data.IncludedTargetDeclarations.HasFlag(TargetDeclaration.Creature))
+            {
+                includedModules.Add(typeof(StatModule));
+            }
+            if (data.IncludedTargetDeclarations.HasFlag(TargetDeclaration.LootItem))
+            {
+                includedModules.Add(typeof(LootItemModule));
+            }
+            _requiredModules = includedModules.ToArray();
         }
 
         public bool Match(Entity entity)

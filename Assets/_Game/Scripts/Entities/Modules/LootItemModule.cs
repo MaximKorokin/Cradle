@@ -5,7 +5,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class LootItemModule : EntityModuleBase
     {
         public ItemDefinition ItemDefinition { get; }
-        public int Amount { get; }
+        public int Amount { get; set; }
 
         public LootItemModule(ItemDefinition itemDefinition, int amount)
         {

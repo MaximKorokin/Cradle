@@ -107,5 +107,11 @@ namespace Assets._Game.Scripts.Entities.Interactions
 
             public enum ApplyToTarget { Source, Target }
         }
+
+        [Serializable]
+        public sealed class LootItemPickupStepData : StepData
+        {
+            public override IInteractionStep Build(IObjectResolver resolver) => new LootItemPickupStep(resolver.Resolve<IGlobalEventBus>(), resolver.Resolve<EntityRepository>());
+        }
     }
 }

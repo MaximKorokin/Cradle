@@ -22,7 +22,6 @@ MonoBehaviour:
   - rid: 1349792714110271692
   - rid: 3412048547871981648
   - rid: 3412048633303400551
-  - rid: 3412048748974702670
   - rid: 3412048748974702678
   references:
     version: 2
@@ -61,11 +60,6 @@ MonoBehaviour:
       data:
         Enabled: 1
         Faction: {fileID: 11400000, guid: 95f4653675b0a1441b2be05e22297bab, type: 2}
-    - rid: 3412048748974702670
-      type: {class: LootPickupModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        DetectionRange: 2
     - rid: 3412048748974702678
       type: {class: ActionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

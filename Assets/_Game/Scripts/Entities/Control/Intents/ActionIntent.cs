@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control.Intents
 {
-    public readonly struct ActIntent : IIntent
+    public readonly struct ActionIntent : IIntent
     {
         public readonly ActionInstance ActionInstance;
         // can be null if the action doesn't require a target
@@ -12,9 +12,9 @@ namespace Assets._Game.Scripts.Entities.Control.Intents
         public readonly Vector2? Point;
 
         IIntent IIntent.None => None;
-        public static ActIntent None => default;
+        public static ActionIntent None => default;
 
-        public ActIntent(ActionInstance actionInstance, Entity target, Vector2? point)
+        public ActionIntent(ActionInstance actionInstance, Entity target, Vector2? point)
         {
             ActionInstance = actionInstance;
             Target = target;

@@ -13,17 +13,10 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             _behaviours = behaviours.ToList();
         }
 
-        public void Initialize(Entity entity)
-        {
-            for (int i = 0; i < _behaviours.Count; i++)
-            {
-                _behaviours[i].Initialize(entity);
-            }
-        }
-
-        public void Tick(float delta)
+        public void Tick(Entity entity, float delta)
         {
             IAiBehaviour bestBehaviour = null;
+            ActionContext bestContext = default;
             float bestScore = float.MinValue;
 
             var behaviours = _behaviours;
@@ -32,16 +25,17 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             for (int i = 0; i < count; i++)
             {
                 var behaviour = behaviours[i];
-                var score = behaviour.Evaluate();
+                var evaluation = behaviour.Evaluate(entity);
 
-                if (score > bestScore)
+                if (evaluation.Score > bestScore)
                 {
-                    bestScore = score;
+                    bestScore = evaluation.Score;
                     bestBehaviour = behaviour;
+                    bestContext = evaluation.Context;
                 }
             }
 
-            bestBehaviour?.Execute(delta);
+            bestBehaviour?.Tick(entity, bestContext, delta);
         }
     }
 

@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.Entities.Control
             if (Entity.TryGetModule(out IntentModule intent))
             {
                 intent.SetMove(MoveIntent.None);
-                intent.SetAct(ActIntent.None);
+                intent.SetAct(ActionIntent.None);
             }
         }
 

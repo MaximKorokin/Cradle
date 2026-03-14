@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using System;
 using System.Collections.Generic;
 

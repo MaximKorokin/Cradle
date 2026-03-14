@@ -13,15 +13,10 @@ MonoBehaviour:
   m_Name: LootPickupInteraction
   m_EditorClassIdentifier: 
   Root:
-    rid: 3412048748974702666
+    rid: 3412048792581832846
   references:
     version: 2
     RefIds:
-    - rid: 3412048748974702666
-      type: {class: InteractionDefinition/OverrideControlStepData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
-      data:
-        ControlProvider:
-          rid: 3412048748974702669
-    - rid: 3412048748974702669
-      type: {class: LootPickupControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
+    - rid: 3412048792581832846
+      type: {class: InteractionDefinition/LootItemPickupStepData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
       data: 

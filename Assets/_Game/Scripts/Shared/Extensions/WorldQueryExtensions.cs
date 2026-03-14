@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Faction;
-using Assets._Game.Scripts.Infrastructure;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Shared.Extensions
