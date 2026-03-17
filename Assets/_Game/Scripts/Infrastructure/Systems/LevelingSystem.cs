@@ -51,6 +51,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!e.Target.TryGetModule(out LevelingModule levelingModule))
                 return;
 
+            // todo: add penalty and bonus calculation here
+
             levelingModule.AddExperience(e.Experience);
         }
     }
