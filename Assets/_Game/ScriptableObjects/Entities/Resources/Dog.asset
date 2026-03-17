@@ -55,6 +55,7 @@ MonoBehaviour:
       type: {class: RewardModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
+        PreferredLevel: 0
         Experience: 11
         LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}
     - rid: 3412048734163566710

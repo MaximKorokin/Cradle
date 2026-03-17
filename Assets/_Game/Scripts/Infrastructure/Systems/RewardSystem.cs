@@ -1,6 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Game;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
@@ -29,26 +28,24 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!e.Victim.TryGetModule(out RewardModule rewardModule))
                 return;
 
-            GiveExperience(e.Killer, rewardModule.Experience);
+            _globalEventBus.Publish(new AddExperienceRequestEvent(e.Killer, rewardModule.Experience));
 
             if (!e.Victim.TryGetModule(out SpatialModule spatial))
                 return;
 
             _globalEventBus.Publish(new LootDropRequestedEvent(spatial.Position, rewardModule.LootTable));
         }
+    }
 
-        private void GiveExperience(Entity killer, int experienve)
+    public readonly struct AddExperienceRequestEvent : IGlobalEvent
+    {
+        public Entity Target { get; }
+        public long Experience { get; }
+
+        public AddExperienceRequestEvent(Entity target, long experience)
         {
-            if (killer == null)
-                return;
-
-            if (killer != _playerContext.Player)
-                return;
-
-            if (!killer.TryGetModule(out StatModule statModule))
-                return;
-
-            statModule.AddBase(StatId.Experience, experienve);
+            Target = target;
+            Experience = experience;
         }
     }
 }

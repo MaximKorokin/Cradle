@@ -19,3 +19,4 @@ MonoBehaviour:
   <StatusEffectsConfig>k__BackingField: {fileID: 11400000, guid: 2112acdf0bdc6014284ad1242b1c1a76, type: 2}
   <EntityUnitConfig>k__BackingField: {fileID: 11400000, guid: b379158741e2bb94b86c10323e7491df, type: 2}
   <DespawnConfig>k__BackingField: {fileID: 11400000, guid: 7b2436c0ab1590c4fbb8c928ab3c0ebe, type: 2}
+  <LevelingConfig>k__BackingField: {fileID: 11400000, guid: 2981b2513c4979c46bc8627d6db4d45f, type: 2}

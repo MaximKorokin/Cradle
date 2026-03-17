@@ -16,28 +16,30 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public PlayerStateViewData(PlayerContext playerContext)
         {
             _playerContext = playerContext;
-            _playerContext.PlayerChanging += OnPlayerChanged;
-            _playerContext.PlayerChanged += OnPlayerChanged;
+            _playerContext.PlayerChanging += SubscribeToPlayerModules;
+            _playerContext.PlayerChanged += SubscribeToPlayerModules;
 
-            OnPlayerChanged();
+            SubscribeToPlayerModules();
         }
 
-        private void OnPlayerChanging()
-        {
-            _playerContext.StatModule.Stats.StatChanged -= OnStatChanged;
-            _playerContext.StatusEffectModule.StatusEffects.Changed -= OnStatusEffectsControllerChanged;
-        }
-
-        private void OnPlayerChanged()
+        private void SubscribeToPlayerModules()
         {
             _playerContext.StatModule.Stats.StatChanged += OnStatChanged;
             _playerContext.StatusEffectModule.StatusEffects.Changed += OnStatusEffectsControllerChanged;
+            _playerContext.LevelingModule.Changed += OnLevelingModuleChanged;
+        }
+
+        private void UnsubscribeFromPlayerModules()
+        {
+            _playerContext.StatModule.Stats.StatChanged -= OnStatChanged;
+            _playerContext.StatusEffectModule.StatusEffects.Changed -= OnStatusEffectsControllerChanged;
+            _playerContext.LevelingModule.Changed -= OnLevelingModuleChanged;
         }
 
         public float CurrentHp => _playerContext.StatModule.Stats.Get(StatId.HpCurrent);
         public float MaxHp => _playerContext.StatModule.Stats.Get(StatId.HpMax);
-        public float Level => _playerContext.StatModule.Stats.Get(StatId.Level);
-        public float Experience => _playerContext.StatModule.Stats.Get(StatId.Experience);
+        public float Level => _playerContext.LevelingModule.Level;
+        public float NormalizedExperience => _playerContext.LevelingModule.GetNormalizedExperience();
 
         public IEnumerable<StatusEffectSnapshot> Buffs =>
             _playerContext.StatusEffectModule.StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
@@ -58,14 +60,19 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             Changed?.Invoke();
         }
 
+        private void OnLevelingModuleChanged()
+        {
+            Changed?.Invoke();
+        }
+
         public override void Dispose()
         {
             base.Dispose();
 
-            _playerContext.PlayerChanged -= OnPlayerChanged;
-            _playerContext.PlayerChanging -= OnPlayerChanging;
+            _playerContext.PlayerChanged -= SubscribeToPlayerModules;
+            _playerContext.PlayerChanging -= UnsubscribeFromPlayerModules;
 
-            OnPlayerChanging();
+            UnsubscribeFromPlayerModules();
         }
     }
 }

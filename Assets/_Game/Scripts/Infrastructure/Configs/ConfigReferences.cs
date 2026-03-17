@@ -20,5 +20,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public EntityUnitConfig EntityUnitConfig { get; private set; }
         [field: SerializeField]
         public DespawnConfig DespawnConfig { get; private set; }
+        [field: SerializeField]
+        public LevelingConfig LevelingConfig { get; private set; }
     }
 }

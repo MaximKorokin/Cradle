@@ -107,11 +107,6 @@ namespace Assets._Game.Scripts.Entities.Stats
     public enum StatId
     {
         [StatRestriction(StatRestrictionType.NonNegative)]
-        Level = 100,
-        [StatRestriction(StatRestrictionType.NonNegative)]
-        Experience = 110,
-
-        [StatRestriction(StatRestrictionType.NonNegative)]
         HpMax = 200,
         [StatRestriction(StatRestrictionType.NonNegative)]
         [StatRestriction(StatRestrictionType.ForbidModifiers)]
@@ -212,6 +207,9 @@ namespace Assets._Game.Scripts.Entities.Stats
         public static StatModifierSource Derived { get; }
             = new(StatModifierSourceType.Derived, 0);
 
+        public static StatModifierSource Level { get; }
+            = new(StatModifierSourceType.Level, 0);
+
         // Equality
 
         public bool Equals(StatModifierSource other)
@@ -241,7 +239,8 @@ namespace Assets._Game.Scripts.Entities.Stats
         EquipmentSlot,
         InventorySlot,
         StatusEffect,
-        Derived
+        Derived,
+        Level,
     }
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]

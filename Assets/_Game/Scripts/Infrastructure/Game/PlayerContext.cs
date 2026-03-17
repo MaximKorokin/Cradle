@@ -12,6 +12,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         public Entity Player { get; private set; }
         public StatModule StatModule { get; private set; }
+        public LevelingModule LevelingModule { get; private set; }
         public StatusEffectModule StatusEffectModule { get; private set; }
         public InventoryEquipmentModule IEModule { get; private set; }
         public InventoryModel StashInventory { get; private set; }
@@ -51,6 +52,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             if (Player.TryGetModule<StatModule>(out var statsModule))
             {
                 StatModule = statsModule;
+            }
+            if (Player.TryGetModule<LevelingModule>(out var levelingModule))
+            {
+                LevelingModule = levelingModule;
             }
             if (Player.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {

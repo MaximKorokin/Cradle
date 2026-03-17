@@ -23,6 +23,7 @@ MonoBehaviour:
   - rid: 3412048547871981648
   - rid: 3412048633303400551
   - rid: 3412048748974702678
+  - rid: 3412048868230037656
   references:
     version: 2
     RefIds:
@@ -67,3 +68,7 @@ MonoBehaviour:
         Actions:
         - {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}
         - {fileID: 11400000, guid: 128f37432a7c6f74ea8f55b0b803d6ea, type: 2}
+    - rid: 3412048868230037656
+      type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1

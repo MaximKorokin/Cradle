@@ -76,6 +76,7 @@ namespace Assets._Game.Scripts.Entities
 
     public class RewardModuleDefinition : EntityModuleDefinition
     {
+        public int PreferredLevel;
         public int Experience;
         public LootTable LootTable;
     }
@@ -95,5 +96,9 @@ namespace Assets._Game.Scripts.Entities
     {
         public float MinIdleTime;
         public float MaxIdleTime;
+    }
+
+    public class LevelingModuleDefinition : EntityModuleDefinition
+    {
     }
 }

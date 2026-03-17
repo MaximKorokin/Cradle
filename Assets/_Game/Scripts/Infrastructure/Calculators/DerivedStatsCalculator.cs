@@ -14,8 +14,8 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
 
             stats.RemoveModifiers(source);
 
-            var strength = stats.Stats.GetBase(StatId.Strength);
-            var agility = stats.Stats.GetBase(StatId.Agility);
+            var strength = stats.Stats.Get(StatId.Strength);
+            var agility = stats.Stats.Get(StatId.Agility);
 
             // todo: list formulas at least in an array
             stats.AddModifiers(source, new[]

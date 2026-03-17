@@ -67,8 +67,8 @@ namespace Assets._Game.Scripts.UI.Views
             _hpText.text = $"{_playerStateViewData.CurrentHp} / {_playerStateViewData.MaxHp}";
 
             // Level & Experience
-            _experienceFillBar.SetFillRatio(_playerStateViewData.Experience / 100);
-            _experienceText.text = $"{_playerStateViewData.Experience}%";
+            _experienceFillBar.SetFillRatio(_playerStateViewData.NormalizedExperience);
+            _experienceText.text = $"{_playerStateViewData.NormalizedExperience * 100:00.000}%";
             _levelText.text = $"{_playerStateViewData.Level}";
 
             // Buffs

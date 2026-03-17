@@ -74,6 +74,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.StatsConfig);
             builder.RegisterInstance(_configReferences.SaveConfig);
             builder.RegisterInstance(_configReferences.DespawnConfig);
+            builder.RegisterInstance(_configReferences.LevelingConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -89,6 +90,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<RewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<DespawnSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -136,6 +138,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<DespawnModuleFactory>(Lifetime.Singleton);
 
             builder.Register<WanderModuleFactory>(Lifetime.Singleton);
+
+            builder.Register<LevelingModuleAssembler>(Lifetime.Singleton);
         }
 
         private void RegisterCalculators(IContainerBuilder builder)
