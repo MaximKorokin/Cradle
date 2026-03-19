@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Infrastructure.Configs;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -33,6 +34,23 @@ namespace Assets._Game.Scripts.Entities.Modules
             Entity = entity;
             StatusEffect = statusEffectChange.StatusEffect;
             Kind = statusEffectChange.Kind;
+        }
+    }
+
+    public sealed class StatusEffectModuleFactory : IEntityModuleFactory
+    {
+        private readonly StatusEffectsConfig _config;
+
+        public StatusEffectModuleFactory(StatusEffectsConfig config)
+        {
+            _config = config;
+        }
+
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            var controller = new StatusEffectsController(_config);
+            var module = new StatusEffectModule(controller);
+            return module;
         }
     }
 }

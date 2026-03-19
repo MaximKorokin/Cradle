@@ -16,9 +16,9 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public sealed class RewardModuleFactory
+    public sealed class RewardModuleFactory : IEntityModuleFactory
     {
-        public RewardModule Create(EntityDefinition entityDefinition)
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (entityDefinition.TryGetModuleDefinition<RewardModuleDefinition>(out var moduleDefinition))
                 return new RewardModule(moduleDefinition.PreferredLevel, moduleDefinition.Experience, moduleDefinition.LootTable);

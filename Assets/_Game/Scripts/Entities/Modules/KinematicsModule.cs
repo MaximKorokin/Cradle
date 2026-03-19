@@ -11,4 +11,12 @@ namespace Assets._Game.Scripts.Entities.Modules
             Velocity = velocity;
         }
     }
+
+    public sealed class KinematicsModuleFactory : IEntityModuleFactory
+    {
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            return new KinematicsModule();
+        }
+    }
 }

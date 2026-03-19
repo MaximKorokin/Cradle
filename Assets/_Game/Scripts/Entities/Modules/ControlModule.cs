@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using System.Collections.Generic;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -32,6 +33,28 @@ namespace Assets._Game.Scripts.Entities.Modules
         public void RemoveProvider(IControlProvider p)
         {
             _providers.Remove(p);
+        }
+    }
+
+    public sealed class ControlModuleFactory : IEntityModuleFactory
+    {
+        private readonly IObjectResolver _resolver;
+
+        public ControlModuleFactory(IObjectResolver resolver)
+        {
+            _resolver = resolver;
+        }
+
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            if (!entityDefinition.TryGetModuleDefinition<ControlModuleDefinition>(out var controlModuleDefinition))
+            {
+                return null;
+            }
+
+            var controlModule = new ControlModule();
+            controlModule.AddProvider(controlModuleDefinition.ControlProvider.CreateInstance(_resolver));
+            return controlModule;
         }
     }
 }

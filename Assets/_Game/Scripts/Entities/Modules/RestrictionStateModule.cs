@@ -79,4 +79,12 @@ namespace Assets._Game.Scripts.Entities.Modules
             State = state;
         }
     }
+
+    public class RestrictionStateModuleFactory : IEntityModuleFactory
+    {
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            return new RestrictionStateModule();
+        }
+    }
 }

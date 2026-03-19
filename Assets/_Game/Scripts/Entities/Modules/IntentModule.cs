@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control.Intents;
+using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -43,6 +44,14 @@ namespace Assets._Game.Scripts.Entities.Modules
             intent = intentProperty;
             intentProperty = (T)intentProperty.None;
             return !intent.Equals(intentProperty.None);
+        }
+    }
+
+    public sealed class IntentModuleFactory : IEntityModuleFactory
+    {
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            return new IntentModule();
         }
     }
 }

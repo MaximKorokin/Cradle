@@ -1,81 +1,36 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Modules.Positioning;
 using Assets._Game.Scripts.Infrastructure.Persistence;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities
 {
     public class EntityAssembler
     {
         private readonly EntityRepository _entityRepository;
-        private readonly InventoryEquipmentModuleAssembler _inventoryEquipmentControllerAssembler;
-        private readonly AppearanceModuleFactory _appearanceModuleFactory;
-        private readonly StatsModuleAssembler _statsModuleAssembler;
-        private readonly StatusEffectModuleAssembler _statusEffectModuleAssembler;
-        private readonly EntityPositioningFactory _entityPositioningFactory;
-        private readonly ActionModuleAssembler _actionModuleAssembler;
-        private readonly FactionModuleFactory _factionModuleFactory;
-        private readonly RewardModuleFactory _rewardModuleFactory;
-        private readonly DespawnModuleFactory _despawnModuleFactory;
-        private readonly WanderModuleFactory _wanderModuleFactory;
-        private readonly LevelingModuleAssembler _levelingModuleAssembler;
+        private readonly InventoryEquipmentModuleFactory _inventoryEquipmentControllerAssembler;
+        private readonly IReadOnlyList<IEntityModuleFactory> _moduleFactories;
 
         public EntityAssembler(
             EntityRepository entityRepository,
-            InventoryEquipmentModuleAssembler inventoryEquipmentControllerAssembler,
-            AppearanceModuleFactory appearanceModuleFactory,
-            StatsModuleAssembler statsModuleAssembler,
-            StatusEffectModuleAssembler statusEffectModuleAssembler,
-            EntityPositioningFactory entityPositioningFactory,
-            ActionModuleAssembler actionModuleAssembler,
-            FactionModuleFactory factionModuleFactory,
-            RewardModuleFactory rewardModuleFactory,
-            DespawnModuleFactory despawnModuleFactory,
-            WanderModuleFactory wanderModuleFactory,
-            LevelingModuleAssembler levelingModuleAssembler)
+            InventoryEquipmentModuleFactory inventoryEquipmentControllerAssembler,
+            IReadOnlyList<IEntityModuleFactory> moduleFactories)
         {
             _entityRepository = entityRepository;
             _inventoryEquipmentControllerAssembler = inventoryEquipmentControllerAssembler;
-            _appearanceModuleFactory = appearanceModuleFactory;
-            _statsModuleAssembler = statsModuleAssembler;
-            _statusEffectModuleAssembler = statusEffectModuleAssembler;
-            _entityPositioningFactory = entityPositioningFactory;
-            _actionModuleAssembler = actionModuleAssembler;
-            _factionModuleFactory = factionModuleFactory;
-            _rewardModuleFactory = rewardModuleFactory;
-            _despawnModuleFactory = despawnModuleFactory;
-            _wanderModuleFactory = wanderModuleFactory;
-            _levelingModuleAssembler = levelingModuleAssembler;
+            _moduleFactories = moduleFactories;
         }
 
         public Entity Create(EntityDefinition entityDefinition)
         {
             var entity = new Entity(entityDefinition);
 
-            entity.AddModule(new RestrictionStateModule());
-
-            entity.AddModule(_statsModuleAssembler.Create(entityDefinition));
-
-            entity.AddModule(_statusEffectModuleAssembler.Assemble());
-
-            entity.AddModule(_appearanceModuleFactory.Create(entityDefinition.VisualModel));
-
-            entity.AddModule(_inventoryEquipmentControllerAssembler.Create(entityDefinition));
-
-            entity.AddModule(_actionModuleAssembler.Create(entityDefinition));
-
-            entity.AddModule(_factionModuleFactory.Create(entityDefinition));
-
-            entity.AddModule(_rewardModuleFactory.Create(entityDefinition));
-
-            entity.AddModule(_despawnModuleFactory.Create(entityDefinition));
-
-            entity.AddModule(_wanderModuleFactory.Create(entityDefinition));
-
-            entity.AddModule(_levelingModuleAssembler.Create(entityDefinition));
-
-            foreach (var module in _entityPositioningFactory.Create(entityDefinition))
+            for (int i = 0; i < _moduleFactories.Count; i++)
             {
-                entity.AddModule(module);
+                var module = _moduleFactories[i].Create(entityDefinition);
+                if (module != null)
+                {
+                    entity.AddModule(module);
+                }
             }
 
             PostCreateActions(entity);
@@ -88,7 +43,7 @@ namespace Assets._Game.Scripts.Entities
         {
             if (entity.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
             {
-                _inventoryEquipmentControllerAssembler.Apply(inventoryEquipmentModule, save);
+                _inventoryEquipmentControllerAssembler.Apply(inventoryEquipmentModule, (save.InventorySave, save.EquipmentSave));
             }
         }
 
@@ -108,7 +63,7 @@ namespace Assets._Game.Scripts.Entities
         {
             entity.Subscribe<EntityBoundEvent>(e =>
             {
-                if (!entity.TryGetModule<WanderModule>(out var wanderModule)) return;
+                if (!entity.TryGetModule<WanderBehaviourModule>(out var wanderModule)) return;
                 wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
             });
         }

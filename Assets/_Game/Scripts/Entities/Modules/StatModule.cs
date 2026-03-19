@@ -1,5 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Infrastructure.Persistence;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -68,6 +70,36 @@ namespace Assets._Game.Scripts.Entities.Modules
         public StatsChangedEvent(Entity entity)
         {
             Entity = entity;
+        }
+    }
+
+    public sealed class StatModuleFactory : IEntityModuleFactory, IEntityModulePersistance<StatModule, StatsSave>
+    {
+        private readonly StatsControllerAssembler _statsControllerAssembler;
+
+        public StatModuleFactory(StatsControllerAssembler statsControllerAssembler)
+        {
+            _statsControllerAssembler = statsControllerAssembler;
+        }
+
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            if (entityDefinition.TryGetModuleDefinition<StatsModuleDefinition>(out var statsDefinitionModule))
+            {
+                var statsController = _statsControllerAssembler.Create(statsDefinitionModule.Stats);
+                return new StatModule(statsController);
+            }
+            return null;
+        }
+
+        public void Apply(StatModule statsModule, StatsSave statsSave)
+        {
+            _statsControllerAssembler.Apply(statsModule.Stats as StatsController, statsSave);
+        }
+
+        public StatsSave Save(StatModule module)
+        {
+            return _statsControllerAssembler.Save(module.Stats);
         }
     }
 }

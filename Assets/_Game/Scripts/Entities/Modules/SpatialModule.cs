@@ -17,4 +17,12 @@ namespace Assets._Game.Scripts.Entities.Modules
             Facing = facing.sqrMagnitude > 0 ? facing.normalized : Facing;
         }
     }
+
+    public sealed class SpatialModuleFactory : IEntityModuleFactory
+    {
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            return new SpatialModule();
+        }
+    }
 }

@@ -23,7 +23,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                 return;
             }
 
-            var wander = entity.GetModule<WanderModule>();
+            var wander = entity.GetModule<WanderBehaviourModule>();
             if (wander.AnchorPoint == null) return;
 
             var spatial = entity.GetModule<SpatialModule>();

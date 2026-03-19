@@ -1,6 +1,8 @@
-﻿using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -83,6 +85,49 @@ namespace Assets._Game.Scripts.Entities.Modules
             Slot = inventoryChange.Slot;
             Item = inventoryChange.Item;
             Kind = inventoryChange.Kind;
+        }
+    }
+
+    public class InventoryEquipmentModuleFactory : IEntityModuleFactory, IEntityModulePersistance<InventoryEquipmentModule, (InventorySave InventorySave, EquipmentSave EquipmentSave)>
+    {
+        private readonly InventoryModelAssembler _inventoryModelAssembler;
+        private readonly EquipmentModelAssembler _equipmentModelAssembler;
+
+        public InventoryEquipmentModuleFactory(InventoryModelAssembler inventoryModelAssembler, EquipmentModelAssembler equipmentModelAssembler)
+        {
+            _inventoryModelAssembler = inventoryModelAssembler;
+            _equipmentModelAssembler = equipmentModelAssembler;
+        }
+
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            InventoryModel inventoryModel = null;
+            if (entityDefinition.TryGetModuleDefinition<InventoryModuleDefinition>(out var inventoryDefinitionModule))
+            {
+                inventoryModel = _inventoryModelAssembler.Create(inventoryDefinitionModule.SlotsAmount);
+            }
+
+            EquipmentModel equipmentModel = null;
+            if (entityDefinition.TryGetModuleDefinition<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
+            {
+                var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
+                equipmentModel = _equipmentModelAssembler.Create(slots);
+            }
+
+            return new InventoryEquipmentModule(inventoryModel, equipmentModel);
+        }
+
+        public void Apply(InventoryEquipmentModule entityInventoryEquipmentModule, (InventorySave InventorySave, EquipmentSave EquipmentSave) entitySave)
+        {
+            _inventoryModelAssembler.Apply(entityInventoryEquipmentModule.Inventory, entitySave.InventorySave);
+            _equipmentModelAssembler.Apply(entityInventoryEquipmentModule.Equipment, entitySave.EquipmentSave);
+        }
+
+        public (InventorySave InventorySave, EquipmentSave EquipmentSave) Save(InventoryEquipmentModule entityInventoryEquipmentModule)
+        {
+            var inventorySave = _inventoryModelAssembler.Save(entityInventoryEquipmentModule.Inventory);
+            var equipmentSave = _equipmentModelAssembler.Save(entityInventoryEquipmentModule.Equipment);
+            return (inventorySave, equipmentSave);
         }
     }
 }

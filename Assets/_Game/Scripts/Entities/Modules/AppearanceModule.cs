@@ -63,4 +63,18 @@ namespace Assets._Game.Scripts.Entities.Modules
             SetTurnDirectionRequested?.Invoke(turnDirection);
         }
     }
+
+    public sealed class AppearanceModuleFactory : IEntityModuleFactory
+    {
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
+        {
+            if (entityDefinition.VisualModel == null)
+            {
+                return null;
+            }
+
+            var appearanceModel = new AppearanceModule(entityDefinition.VisualModel);
+            return appearanceModel;
+        }
+    }
 }

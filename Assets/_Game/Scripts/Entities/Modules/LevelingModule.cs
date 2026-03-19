@@ -114,16 +114,16 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public sealed class LevelingModuleAssembler
+    public sealed class LevelingModuleFactory : IEntityModuleFactory
     {
         private readonly ExperienceTable _experienceTable;
 
-        public LevelingModuleAssembler(LevelingConfig levelingConfig)
+        public LevelingModuleFactory(LevelingConfig levelingConfig)
         {
             _experienceTable = levelingConfig.ExperienceTable;
         }
 
-        public LevelingModule Create(EntityDefinition entityDefinition)
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (entityDefinition.TryGetModuleDefinition<LevelingModuleDefinition>(out var _))
             {

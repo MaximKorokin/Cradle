@@ -92,7 +92,7 @@ namespace Assets._Game.Scripts.Entities
         OnSpawn, OnDeath
     }
 
-    public class WanderModuleDefinition : EntityModuleDefinition
+    public class WanderBehaviourModuleDefinition : EntityModuleDefinition
     {
         public float MinIdleTime;
         public float MaxIdleTime;

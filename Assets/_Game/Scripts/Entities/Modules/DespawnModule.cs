@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public sealed class DespawnModuleFactory
+    public sealed class DespawnModuleFactory : IEntityModuleFactory
     {
         private readonly DespawnConfig _config;
 
@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             _config = despawnConfig;
         }
 
-        public DespawnModule Create(EntityDefinition entityDefinition)
+        public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (entityDefinition.TryGetModuleDefinition<DespawnModuleDefinition>(out var definition))
             {
