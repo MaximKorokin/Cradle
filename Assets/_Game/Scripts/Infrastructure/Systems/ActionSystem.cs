@@ -59,13 +59,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         /// </summary>
         private void TickEntity(Entity entity, float delta)
         {
+            var intentModule = entity.GetModule<IntentModule>();
             var statModule = entity.GetModule<StatModule>();
             var actionModule = entity.GetModule<ActionModule>();
 
-            // If there's no active action, try to start one.
-            if (actionModule.ActiveAction == null)
+            if (actionModule.ActiveContext.Target != null)
             {
-                TryStartAction(entity, statModule, actionModule);
+                intentModule.SetAim(new(actionModule.ActiveContext.Target.GetPosition()));
+            }
+
+            // If there's no active action, try to start one.
+            if (TryStartAction(entity, statModule, actionModule))
+            {
                 return;
             }
 
@@ -82,22 +87,33 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
             
             // If there is an active action, but we're not in range, try to approach.
-            if (ApproachPreparationRange(entity, actionModule))
+            if (actionModule.ActiveAction != null && ApproachPreparationRange(entity, actionModule))
             {
                 TryStartActionPreparation(entity, statModule, actionModule);
                 return;
             }
         }
 
-        private void TryStartAction(Entity entity, StatModule statModule, ActionModule actionModule)
+        private bool TryStartAction(Entity entity, StatModule statModule, ActionModule actionModule)
         {
             var intent = entity.GetModule<IntentModule>();
 
-            if (!intent.TryConsumeAction(out var actionIntent))
-                return;
+            if (!intent.TryConsumeAction(out var actionIntent)) return false;
 
-            if (!actionModule.GlobalCooldown.IsOver())
-                return;
+            // If the intent doesn't have an action, clear the active state.
+            if (actionIntent.ActionInstance == null)
+            {
+                actionModule.ActiveAction = default;
+                actionModule.ActiveContext = default;
+                actionModule.IsPreparing = false;
+                actionModule.IsChanneling = false;
+                return false;
+            }
+
+            // Prevent restarting the same action.
+            if (actionModule.ActiveAction?.Definition.Id == actionIntent.ActionInstance?.Definition.Id) return false;
+
+            if (!actionModule.GlobalCooldown.IsOver()) return false;
 
             var context = new InteractionContext(
                 entity,
@@ -105,11 +121,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 actionIntent.Point);
             var action = actionIntent.ActionInstance;
 
-            if (!action.CanStartPreparation(context))
-                return;
+            if (!action.CanStartPreparation(context)) return false;
 
             actionModule.ActiveAction = action;
             actionModule.ActiveContext = context;
+
+            return true;
         }
 
         /// <summary>

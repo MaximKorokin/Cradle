@@ -30,11 +30,17 @@ namespace Assets._Game.Scripts.Entities.Control
 
             float moveSpeed = stats.Stats.Get(StatId.MoveSpeed);
 
-            intent.TryConsumeMove(out var moveIntent);
-            var direction = moveIntent.NormalizedDirection;
-            var multiplier = moveIntent.SpeedMultiplier;
+            if (intent.TryConsumeMove(out var moveIntent))
+            {
+                var direction = moveIntent.NormalizedDirection;
+                var multiplier = moveIntent.SpeedMultiplier;
 
-            _rigidbody.linearVelocity = moveSpeed * multiplier * direction;
+                _rigidbody.linearVelocity = moveSpeed * multiplier * direction;
+            }
+            else
+            {
+                _rigidbody.linearVelocity = Vector2.zero;
+            }
         }
     }
 }

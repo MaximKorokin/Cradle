@@ -5,14 +5,14 @@ using Assets._Game.Scripts.Infrastructure.Querying;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class LocomotionSystem : EntitySystemBase, IFixedTickSystem
+    public sealed class LocomotionSystem : EntitySystemBase, IFixedTickSystem, ITickSystem
     {
         private const float MoveEpsilonSqr = 0.0001f;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled,
-                new[] { typeof(SpatialModule), typeof(KinematicsModule), typeof(AppearanceModule) }
+                new[] { typeof(SpatialModule), typeof(KinematicsModule), typeof(AppearanceModule), typeof(IntentModule) }
             );
 
         public LocomotionSystem(EntityRepository entityRepository) : base(entityRepository)
@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IterateMatchingEntities(FixedTick);
         }
 
-        public void FixedTick(Entity entity)
+        private void FixedTick(Entity entity)
         {
             var spatial = entity.GetModule<SpatialModule>();
             var kinematics = entity.GetModule<KinematicsModule>();
@@ -32,11 +32,35 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var velocity = kinematics.Velocity;
 
-            var newTurnDirection = spatial.Facing.x >= 0f ? TurnDirection.Right : TurnDirection.Left;
-            appearance.RequestSetTurnDirection(newTurnDirection);
-
             var isMoving = velocity.sqrMagnitude > MoveEpsilonSqr;
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.IsWalking, isMoving);
+            if (isMoving)
+            {
+                spatial.SetFacing(velocity.normalized);
+                var newTurnDirection = velocity.x >= 0f ? TurnDirection.Right : TurnDirection.Left;
+                appearance.RequestSetTurnDirection(newTurnDirection);
+            }
+        }
+
+        public void Tick(float delta)
+        {
+            IterateMatchingEntities(Tick);
+        }
+
+        private void Tick(Entity entity)
+        {
+            var spatial = entity.GetModule<SpatialModule>();
+            var intent = entity.GetModule<IntentModule>();
+            var appearance = entity.GetModule<AppearanceModule>();
+
+            if (intent.TryConsumeAim(out var aimIntent) && aimIntent.HasPoint)
+            {
+                var facingDirection = aimIntent.WorldPoint - spatial.Position;
+                spatial.SetFacing(facingDirection);
+
+                var newTurnDirection = spatial.Facing.x >= 0f ? TurnDirection.Right : TurnDirection.Left;
+                appearance.RequestSetTurnDirection(newTurnDirection);
+            }
         }
     }
 }

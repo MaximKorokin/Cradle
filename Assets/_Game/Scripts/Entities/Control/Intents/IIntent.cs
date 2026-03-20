@@ -2,6 +2,6 @@
 {
     public interface IIntent
     {
-        public IIntent None { get; }
+        public bool HasIntent { get; }
     }
 }

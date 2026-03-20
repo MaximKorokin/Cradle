@@ -20,7 +20,7 @@ MonoBehaviour:
   <ManaCost>k__BackingField: 0
   <PreparationTime>k__BackingField: 0
   <MaxChannelingTime>k__BackingField: 5
-  <Cooldown>k__BackingField: 0.1
+  <Cooldown>k__BackingField: 0
   <Range>k__BackingField: 0.4
   <EntityQueryData>k__BackingField:
     ExcludedRestrictions: 3

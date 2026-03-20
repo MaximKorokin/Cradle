@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities.Control.Intents;
-using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -39,11 +38,12 @@ namespace Assets._Game.Scripts.Entities.Modules
             return TryConsumeIntent(ref _act, out intent);
         }
 
+        // This method retrieves the current intent and resets it to default, effectively consuming it.
         private static bool TryConsumeIntent<T>(ref T intentProperty, out T intent) where T : IIntent
         {
             intent = intentProperty;
-            intentProperty = (T)intentProperty.None;
-            return !intent.Equals(intentProperty.None);
+            intentProperty = default;
+            return intent.HasIntent;
         }
     }
 

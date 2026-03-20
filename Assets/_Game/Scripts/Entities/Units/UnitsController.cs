@@ -63,7 +63,6 @@ namespace Assets._Game.Scripts.Entities.Units
         {
             var pivotOrderInLayer = -(int)(_unitsRoot.position.y * 100);
             _tree.UpdateOrderInLayer(pivotOrderInLayer);
-            Changed?.Invoke();
         }
 
         public void SetTurnDirection(TurnDirection turnDirection)

@@ -31,7 +31,6 @@ namespace Assets._Game.Scripts.Entities.Control
             if (_entity.TryGetModule(out SpatialModule spatial))
             {
                 spatial.SetPosition(transform.position);
-                spatial.SetFacing(_rigidbody.linearVelocity);
             }
 
             if (_entity.TryGetModule(out KinematicsModule kinematics))

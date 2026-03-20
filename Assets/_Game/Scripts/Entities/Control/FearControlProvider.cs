@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.Entities.Control
             Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Feared);
             if (Entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetAct(ActionIntent.None);
+                intent.SetAct(default);
             }
         }
 
@@ -36,6 +36,7 @@ namespace Assets._Game.Scripts.Entities.Control
             if (Entity.TryGetModule(out IntentModule intent))
             {
                 intent.SetMove(new(_direction, _speedMultiplier));
+                intent.SetAct(new(null, null, null));
             }
         }
 

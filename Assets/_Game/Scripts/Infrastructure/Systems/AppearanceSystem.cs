@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class AppearanceSystem : EntitySystemBase
+    public sealed class AppearanceSystem : EntitySystemBase, ITickSystem
     {
         private readonly IGlobalEventBus _globalEventBus;
 
@@ -69,6 +69,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var appearance = e.Victim.GetModule<AppearanceModule>();
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.ToDie, true);
+        }
+
+        public void Tick(float delta)
+        {
+            IterateMatchingEntities(entity => TickEntity(entity, delta));
+        }
+
+        private void TickEntity(Entity entity, float delta)
+        {
+            var appearance = entity.GetModule<AppearanceModule>();
+            appearance.RequestUpdateOrderInLayer();
         }
     }
 }

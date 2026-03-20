@@ -46,11 +46,12 @@ namespace Assets._Game.Scripts.Entities.Control
             if (moveDirection.sqrMagnitude <= _stopRadius * _stopRadius)
             {
                 _hasMoveTarget = false;
-                intent.SetMove(MoveIntent.None);
+                intent.SetMove(default);
                 return;
             }
 
             intent.SetMove(new(moveDirection));
+            intent.SetAct(new(null, null, null));
         }
     }
 }

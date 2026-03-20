@@ -11,14 +11,16 @@ namespace Assets._Game.Scripts.Entities.Control.Intents
         // for ground-targeted actions, the point where the action should be used. If HasPoint is false, this value should be ignored.
         public readonly Vector2? Point;
 
-        IIntent IIntent.None => None;
-        public static ActionIntent None => default;
+        private readonly bool _hasIntent;
+        readonly bool IIntent.HasIntent => _hasIntent;
 
         public ActionIntent(ActionInstance actionInstance, Entity target, Vector2? point)
         {
             ActionInstance = actionInstance;
             Target = target;
             Point = point;
+
+            _hasIntent = true;
         }
     }
 }
