@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f5c390e91f1144ea45c5bf3875049d, type: 3}
+  m_Name: SpearMAA
+  m_EditorClassIdentifier: 
+  _id: cd4150dbb51e4e2aa2736cca306e77c3
+  <Name>k__BackingField: Physical Attack
+  <Description>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 6689699355126921553, guid: 692ce18cf22f2934ab8a66d461037786, type: 3}
+  <Interaction>k__BackingField: {fileID: 11400000, guid: abbdca880b1698c46992d5a0f519b1a5, type: 2}
+  <ManaCost>k__BackingField: 0
+  <PreparationTime>k__BackingField: 0
+  <MaxChannelingTime>k__BackingField: 5
+  <Cooldown>k__BackingField: 0.1
+  <Range>k__BackingField: 0.7
+  <EntityQueryData>k__BackingField:
+    ExcludedRestrictions: 3
+    IncludedTargetDeclarations: 2
+  <FactionRelation>k__BackingField: 40
+  <BaseScore>k__BackingField: 0.5

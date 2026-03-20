@@ -11,13 +11,13 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     {
         private readonly IGlobalEventBus _eventBus;
         private readonly SaveService _saveService;
-        private readonly EntityAssembler _entityAssembler;
+        private readonly EntityFactory _entityAssembler;
         private readonly EntityDefinitionCatalog _entityDefinitionCatalog;
 
         public GameBootstrap(
             IGlobalEventBus eventBus,
             SaveService saveService,
-            EntityAssembler entityAssembler,
+            EntityFactory entityAssembler,
             EntityDefinitionCatalog entityDefinitionCatalog)
         {
             _eventBus = eventBus;

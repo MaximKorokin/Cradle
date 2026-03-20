@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db4a0ceb99525a4d8ce490ab1fd0904, type: 3}
+  m_Name: SpearMA
+  m_EditorClassIdentifier: 
+  Root:
+    rid: 3412048633303400590
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412048633303400590
+      type: {class: InteractionDefinition/ParallelData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        Steps:
+        - rid: 3412048633303400629
+        - rid: 3412048909577486448
+    - rid: 3412048633303400629
+      type: {class: InteractionDefinition/SetAnimatorValueStepData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        ApplyTo: 0
+        Parameter: 20
+        Value: 1
+    - rid: 3412048909577486448
+      type: {class: InteractionDefinition/SequenceData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        Steps:
+        - rid: 3412048909577486449
+        - rid: 3412048909577486450
+        - rid: 3412048928327073890
+    - rid: 3412048909577486449
+      type: {class: InteractionDefinition/WaitData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        Seconds: 0.7
+    - rid: 3412048909577486450
+      type: {class: InteractionDefinition/DamageData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        Spec:
+          Type: 10
+          Flat: 0
+          AttackScale: 1
+          CanCrit: 1
+    - rid: 3412048928327073890
+      type: {class: InteractionDefinition/WaitData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
+      data:
+        Seconds: 0.3

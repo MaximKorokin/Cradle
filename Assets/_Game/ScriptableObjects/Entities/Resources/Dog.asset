@@ -68,8 +68,10 @@ MonoBehaviour:
       type: {class: ActionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        Actions:
-        - {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}
+        SpecialActions:
+        - Kind: 0
+          Action: {fileID: 11400000, guid: 652e0a937eccc3b4eaa020f529c4c65b, type: 2}
+        Actions: []
     - rid: 3412048909577486425
       type: {class: WanderBehaviourModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             if (!_sensor.TryGetNearestInRange(entity, range, relation, entityQuery, out var target))
                 return default;
 
-            if (!actionInstance.CanStartCast(new InteractionContext(entity, target, target.GetModule<SpatialModule>().Position)))
+            if (!actionInstance.CanStartPreparation(new InteractionContext(entity, target, target.GetModule<SpatialModule>().Position)))
                 return default;
 
             var score = actionInstance.Definition.BaseScore;

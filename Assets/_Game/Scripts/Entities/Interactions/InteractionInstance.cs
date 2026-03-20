@@ -24,7 +24,6 @@ namespace Assets._Game.Scripts.Entities.Interactions
         /// <summary>
         /// return true if the interaction has finished (either completed or failed), false if it is still running
         /// </summary>
-        /// <param name="delta"></param>
         /// <returns>true = finished</returns>
         public bool Tick(float delta)
         {

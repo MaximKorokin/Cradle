@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5f0efd704e83da4e985673a2859f4cb, type: 3}
+  m_Name: SpearAOP
+  m_EditorClassIdentifier: 
+  _animationOverrides:
+  - _animationKey: 11
+    _animationClip: {fileID: 7400000, guid: 31d3fd30132a40345b52da7a354ee862, type: 2}
+  - _animationKey: 21
+    _animationClip: {fileID: 7400000, guid: 768c67e2058e98f4b90b5a01cdde2bf0, type: 2}
+  - _animationKey: 31
+    _animationClip: {fileID: 7400000, guid: 418be04cfd5272b4a83ebb01604c7df7, type: 2}

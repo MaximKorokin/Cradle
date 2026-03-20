@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: Bread
+  m_Name: Cookie
   m_EditorClassIdentifier: 
   _id: fb4abe57743a458da92c16b2202c9955
-  <Name>k__BackingField: Bread
+  <Name>k__BackingField: Cookie
   <Icon>k__BackingField: {fileID: -5466532590776826969, guid: ed713d30f4f74334f9d82998deefde0e, type: 3}
   <Sprite>k__BackingField: {fileID: -5466532590776826969, guid: ed713d30f4f74334f9d82998deefde0e, type: 3}
   <MaxAmount>k__BackingField: 64

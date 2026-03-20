@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Interactions.Action;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
@@ -66,7 +67,15 @@ namespace Assets._Game.Scripts.Entities
 
     public class ActionModuleDefinition : EntityModuleDefinition
     {
+        public SpecialActionDefinition[] SpecialActions;
         public ActionDefinition[] Actions;
+    }
+
+    [Serializable]
+    public struct SpecialActionDefinition
+    {
+        public SpecialActionKind Kind;
+        public ActionDefinition Action;
     }
 
     public class FactionModuleDefinition : EntityModuleDefinition

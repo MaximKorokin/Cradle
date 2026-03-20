@@ -112,7 +112,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<EntityRepository>(Lifetime.Scoped);
-            builder.Register<EntityAssembler>(Lifetime.Scoped);
+            builder.Register<EntityFactory>(Lifetime.Scoped);
 
             builder.Register<EntityViewProvider>(Lifetime.Scoped);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);

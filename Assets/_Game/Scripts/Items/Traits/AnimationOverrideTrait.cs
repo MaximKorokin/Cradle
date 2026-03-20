@@ -8,8 +8,6 @@ namespace Assets._Game.Scripts.Items.Traits
     public class AnimationOverrideTrait : ItemTraitBase
     {
         [field: SerializeField]
-        public EntityAnimationClipName AnimationKey { get; private set; }
-        [field: SerializeField]
-        public AnimationClip AnimationClip { get; private set; }
+        public AnimationOverrideProfile AnimationOverrideProfile { get; private set; }
     }
 }

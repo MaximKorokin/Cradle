@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: Spear
+  m_Name: WolfFangDagger
   m_EditorClassIdentifier: 
-  _id: bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338
-  <Name>k__BackingField: Spear
-  <Icon>k__BackingField: {fileID: -2773593466412431158, guid: bf3d8dc71955519468ccbb3420936ef3, type: 3}
-  <Sprite>k__BackingField: {fileID: 1496440014, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+  _id: 9390478919cd4031bdb513c0db4bf3f3
+  <Name>k__BackingField: Wolf Fang Dagger
+  <Icon>k__BackingField: {fileID: 1021184004093599166, guid: 1b736c21ef29649459f8dbabb1c71c6e, type: 3}
+  <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   <MaxAmount>k__BackingField: 1
-  <Weight>k__BackingField: 100
+  <Weight>k__BackingField: 200
   <Traits>k__BackingField:
-  - rid: 2859158637052690514
-  - rid: 1349792509003825561
-  - rid: 3412048928327073882
+  - rid: 2859158637052690515
+  - rid: 1349792509003825562
+  - rid: 3412048928327073884
   references:
     version: 2
     RefIds:
-    - rid: 1349792509003825561
+    - rid: 1349792509003825562
       type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: 52ab11f2cdfadd24f86f7821c12c3654, type: 2}
-    - rid: 2859158637052690514
+        <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: 859fd67fe19a83643ab207885c6a67ec, type: 2}
+    - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 10
-    - rid: 3412048928327073882
+    - rid: 3412048928327073884
       type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Kind>k__BackingField: 0
-        <Action>k__BackingField: {fileID: 11400000, guid: a72b5461acafe5046a20cf24bb4d0499, type: 2}
+        <Action>k__BackingField: {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}

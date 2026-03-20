@@ -22,13 +22,13 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
         [field: SerializeField]
         public float ManaCost { get; private set; }
         [field: SerializeField]
-        public float CastTime { get; private set; }
+        public float PreparationTime { get; private set; }
         [field: SerializeField]
-        public float ChannelTime { get; private set; }
+        public float MaxChannelingTime { get; private set; }
         [field: SerializeField]
         public float Cooldown { get; private set; }
         [field: SerializeField]
-        public float CastRange { get; private set; }
+        public float Range { get; private set; }
         [field: Space]
         [field: Header("Evaluation")]
         [field: SerializeField]

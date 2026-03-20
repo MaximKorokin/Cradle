@@ -10,12 +10,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class LootSystem : SystemBase
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly EntityAssembler _entityAssembler;
+        private readonly EntityFactory _entityAssembler;
         private readonly DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
 
         public LootSystem(
             IGlobalEventBus globalEventBus,
-            EntityAssembler entityAssembler,
+            EntityFactory entityAssembler,
             DefaultEntityDefinitionReferences defaultEntityDefinitionReferences)
         {
             _globalEventBus = globalEventBus;

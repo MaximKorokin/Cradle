@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities
 {
-    public class EntityAssembler
+    public class EntityFactory
     {
         private readonly EntityRepository _entityRepository;
         private readonly InventoryEquipmentModuleFactory _inventoryEquipmentControllerAssembler;
         private readonly IReadOnlyList<IEntityModuleFactory> _moduleFactories;
 
-        public EntityAssembler(
+        public EntityFactory(
             EntityRepository entityRepository,
             InventoryEquipmentModuleFactory inventoryEquipmentControllerAssembler,
             IReadOnlyList<IEntityModuleFactory> moduleFactories)

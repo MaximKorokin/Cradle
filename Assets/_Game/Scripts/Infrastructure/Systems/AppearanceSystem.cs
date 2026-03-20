@@ -31,6 +31,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             base.Dispose();
             _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
         }
+
         private void OnEquipmentChanged(EquipmentChangedEvent e)
         {
             var appearance = e.Entity.GetModule<AppearanceModule>();
@@ -53,10 +54,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             appearance.RequestUpdateOrderInLayer();
 
             // Change animations
-            foreach (var animationTrait in e.Item.Value.GetTraits<AnimationOverrideTrait>())
+            var animationOverrideTrait = e.Item.Value.GetTraits<AnimationOverrideTrait>().FirstOrDefault();
+            if (animationOverrideTrait != null)
             {
-                var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationTrait.AnimationClip;
-                appearance.RequestSetAnimation(animationTrait.AnimationKey, animationClip);
+                foreach (var animationOverride in animationOverrideTrait.AnimationOverrideProfile.AnimationOverrides)
+                {
+                    var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationOverride.AnimationClip;
+                    appearance.RequestSetAnimation(animationOverride.AnimationKey, animationClip);
+                }
             }
         }
 

@@ -9,7 +9,12 @@ namespace Assets._Game.Scripts.Shared.Extensions
 {
     public static class ItemStackExtensions
     {
-        public static IEnumerable<T> GetTraits<T>(this ItemStackSnapshot itemStack)
+        public static T GetTrait<T>(this ItemStackSnapshot itemStack) where T : ItemTraitBase
+        {
+            return (T)itemStack.Definition.Traits.FirstOrDefault(t => t is T);
+        }
+
+        public static IEnumerable<T> GetTraits<T>(this ItemStackSnapshot itemStack) where T : ItemTraitBase
         {
             return itemStack.Definition.Traits.Where(t => t is T).Cast<T>();
         }

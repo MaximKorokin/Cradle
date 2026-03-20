@@ -13,11 +13,11 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
 
         public ActionInstance(ActionDefinition actionDefinition)
         {
-            Cooldown = new(actionDefinition.Cooldown);
             Definition = actionDefinition;
+            Cooldown = new(Definition.Cooldown);
         }
 
-        public bool CanStartCast(InteractionContext context)
+        public bool CanStartPreparation(InteractionContext context)
         {
             if (!Cooldown.IsOver())
                 return false;
@@ -27,28 +27,39 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
             return true;
         }
         
-        public void OnCastStart(InteractionContext context)
+        public void OnPreparationStart(InteractionContext context)
         {
-            // cast animation, play a sound, etc.
             //context.Source.GetModule<StatModule>().Mana -= 10;
         }
 
-        public void OnCastComplete(InteractionContext context, IObjectResolver resolver)
+        public void OnPreparationComplete(InteractionContext context, IObjectResolver resolver)
         {
             _interactionInstance = Definition.Interaction.BuildRuntime(context, resolver);
             _interactionInstance.Start();
-            _interactionInstance.Tick(0);
+
+            if (Definition.MaxChannelingTime == 0)
+            {
+                _interactionInstance.Tick(0);
+                _interactionInstance.Cancel();
+                _interactionInstance = null;
+            }
         }
 
-        public void OnChannelTick(InteractionContext context, float delta)
+        /// <summary>
+        /// return true if the interaction has finished (either completed or failed), false if it is still running
+        /// </summary>
+        /// <returns>true = finished</returns>
+        public bool OnChannelTick(InteractionContext context, float delta)
         {
-            if (_interactionInstance == null) return;
+            if (_interactionInstance == null) return true;
 
             if (_interactionInstance.Tick(delta))
             {
                 _interactionInstance.Cancel();
                 _interactionInstance = null;
+                return true;
             }
+            return false;
         }
     }
 }

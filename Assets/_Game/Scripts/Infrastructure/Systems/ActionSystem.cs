@@ -4,6 +4,8 @@ using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using VContainer;
 
@@ -22,8 +24,28 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public ActionSystem(EntityRepository entityRepository, IObjectResolver resolver) : base(entityRepository)
         {
             _resolver = resolver;
+
+            TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
         }
-        
+
+        private void OnEquipmentChanged(EquipmentChangedEvent e)
+        {
+            var actionModule = e.Entity.GetModule<ActionModule>();
+            if (!e.Item.HasValue) return;
+
+            var specialActionTrait = e.Item.Value.GetTrait<SpecialActionTrait>();
+            if (specialActionTrait == null) return;
+
+            if (e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced)
+            {
+                actionModule.SetSpecialAction(specialActionTrait.Kind, new(specialActionTrait.Action));
+            }
+            else if (e.Kind == EquipmentChangeKind.Unequipped)
+            {
+                actionModule.SetSpecialAction(specialActionTrait.Kind, null);
+            }
+        }
+
         public void Tick(float delta)
         {
             IterateMatchingEntities(entity => TickEntity(entity, delta));
@@ -32,7 +54,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         /// <summary>
         /// If there's no active action, try to start one.
         /// If there is an active action, but we're not in range, try to approach.
-        /// If we're casting, update the cast time.
+        /// If we're preparing, update the preparation time.
         /// If we're channeling, update the channel time.
         /// </summary>
         private void TickEntity(Entity entity, float delta)
@@ -47,9 +69,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 return;
             }
 
-            if (actionModule.IsCasting)
+            if (actionModule.IsPreparing)
             {
-                UpdateCasting(statModule, actionModule, delta);
+                UpdatePreparation(statModule, actionModule, delta);
                 return;
             }
 
@@ -60,9 +82,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
             
             // If there is an active action, but we're not in range, try to approach.
-            if (ApproachCastRange(entity, actionModule))
+            if (ApproachPreparationRange(entity, actionModule))
             {
-                TryStartActionCast(entity, statModule, actionModule);
+                TryStartActionPreparation(entity, statModule, actionModule);
                 return;
             }
         }
@@ -83,7 +105,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 actionIntent.Point);
             var action = actionIntent.ActionInstance;
 
-            if (!action.CanStartCast(context))
+            if (!action.CanStartPreparation(context))
                 return;
 
             actionModule.ActiveAction = action;
@@ -91,50 +113,45 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         }
 
         /// <summary>
-        /// Returns true if the entity is within cast range, otherwise sets the move intent towards the target and returns false
+        /// Returns true if the entity is within preparation range, otherwise sets the move intent towards the target and returns false
         /// </summary>
-        private bool ApproachCastRange(Entity entity, ActionModule actionModule)
+        private bool ApproachPreparationRange(Entity entity, ActionModule actionModule)
         {
             var direction = actionModule.ActiveContext.Target.GetPosition() - entity.GetPosition();
-            if (direction.sqrMagnitude <= actionModule.ActiveAction.Definition.CastRange * actionModule.ActiveAction.Definition.CastRange)
+            if (direction.sqrMagnitude <= actionModule.ActiveAction.Definition.Range * actionModule.ActiveAction.Definition.Range)
                 return true;
             var intent = entity.GetModule<IntentModule>();
             intent.SetMove(new(direction));
             return false;
         }
 
-        private void TryStartActionCast(Entity entity, StatModule statModule, ActionModule actionModule)
+        private void TryStartActionPreparation(Entity entity, StatModule statModule, ActionModule actionModule)
         {
             var action = actionModule.ActiveAction;
             var context = actionModule.ActiveContext;
-            action.OnCastStart(context);
+            action.OnPreparationStart(context);
 
-            if (action.Definition.CastTime > 0)
-            {
-                actionModule.IsCasting = true;
-                actionModule.RemainingCastTime = action.Definition.CastTime;
-            }
-            else
-            {
-                CompleteAction(statModule, actionModule, action);
-            }
+            actionModule.IsPreparing = true;
+            actionModule.RemainingPreparationTime = action.Definition.PreparationTime;
         }
 
-        private void UpdateCasting(StatModule statModule, ActionModule actionModule, float delta)
+        private void UpdatePreparation(StatModule statModule, ActionModule actionModule, float delta)
         {
-            actionModule.RemainingCastTime -= delta;
+            actionModule.RemainingPreparationTime -= delta;
 
-            if (actionModule.RemainingCastTime > 0)
+            if (actionModule.RemainingPreparationTime > 0)
                 return;
 
             var action = actionModule.ActiveAction;
 
-            actionModule.IsCasting = false;
+            actionModule.IsPreparing = false;
 
-            if (action.Definition.ChannelTime > 0)
+            action.OnPreparationComplete(actionModule.ActiveContext, _resolver);
+
+            if (action.Definition.MaxChannelingTime > 0)
             {
                 actionModule.IsChanneling = true;
-                actionModule.RemainingChannelTime = action.Definition.ChannelTime;
+                actionModule.RemainingChannelTime = action.Definition.MaxChannelingTime;
             }
             else
             {
@@ -146,11 +163,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var action = actionModule.ActiveAction;
 
-            action.OnChannelTick(actionModule.ActiveContext, delta);
-
             actionModule.RemainingChannelTime -= delta;
 
-            if (actionModule.RemainingChannelTime <= 0)
+            // The action can end channeling early if it returns true from OnChannelTick, or if the remaining channel time is 0 or less.
+            if (action.OnChannelTick(actionModule.ActiveContext, delta) || actionModule.RemainingChannelTime <= 0)
             {
                 actionModule.IsChanneling = false;
                 CompleteAction(statModule, actionModule, action);
@@ -159,8 +175,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void CompleteAction(StatModule statModule, ActionModule actionModule, ActionInstance action)
         {
-            action.OnCastComplete(actionModule.ActiveContext, _resolver);
-
             actionModule.ActiveAction.Cooldown.Reset();
             actionModule.ActiveAction = null;
             actionModule.GlobalCooldown.Cooldown = statModule.Stats.Get(StatId.PhysicalActionDelay);
