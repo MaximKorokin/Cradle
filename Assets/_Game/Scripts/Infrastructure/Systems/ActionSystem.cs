@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Entities.Interactions;
 using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
@@ -126,6 +127,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             actionModule.ActiveAction = action;
             actionModule.ActiveContext = context;
 
+            // sync the action speed multiplier to the animator
+            if (entity.TryGetModule<AppearanceModule>(out var appearanceModule))
+            {
+                var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
+                appearanceModule.RequestSetAnimatorValue(EntityAnimatorParameterName.ActionSpeedMultiplier, speedMultiplier);
+            }
+
             return true;
         }
 
@@ -154,7 +162,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void UpdatePreparation(StatModule statModule, ActionModule actionModule, float delta)
         {
-            actionModule.RemainingPreparationTime -= delta;
+            var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
+            actionModule.RemainingPreparationTime -= delta * speedMultiplier;
 
             if (actionModule.RemainingPreparationTime > 0)
                 return;
@@ -180,10 +189,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var action = actionModule.ActiveAction;
 
-            actionModule.RemainingChannelTime -= delta;
+            var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
+            actionModule.RemainingChannelTime -= delta * speedMultiplier;
 
             // The action can end channeling early if it returns true from OnChannelTick, or if the remaining channel time is 0 or less.
-            if (action.OnChannelTick(actionModule.ActiveContext, delta) || actionModule.RemainingChannelTime <= 0)
+            if (action.OnChannelTick(actionModule.ActiveContext, delta * speedMultiplier) || actionModule.RemainingChannelTime <= 0)
             {
                 actionModule.IsChanneling = false;
                 CompleteAction(statModule, actionModule, action);

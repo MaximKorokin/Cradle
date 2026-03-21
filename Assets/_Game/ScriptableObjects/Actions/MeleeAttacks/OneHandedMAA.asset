@@ -22,6 +22,7 @@ MonoBehaviour:
   <MaxChannelingTime>k__BackingField: 5
   <Cooldown>k__BackingField: 0
   <Range>k__BackingField: 0.5
+  <SpeedMultiplier>k__BackingField: 1
   <EntityQueryData>k__BackingField:
     ExcludedRestrictions: 3
     IncludedTargetDeclarations: 2

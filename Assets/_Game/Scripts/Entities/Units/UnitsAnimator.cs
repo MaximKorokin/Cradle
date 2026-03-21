@@ -73,5 +73,7 @@ namespace Assets._Game.Scripts.Entities.Units
         ToAction = 20,
         ToIdle = 30,
         IsWalking = 40,
+        WalkSpeedMultiplier = 110,
+        ActionSpeedMultiplier = 120,
     }
 }

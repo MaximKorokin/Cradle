@@ -116,6 +116,7 @@ namespace Assets._Game.Scripts.Entities.Stats
 
         [StatRestriction(StatRestrictionType.NonNegative)]
         MoveSpeed = 300,
+
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalAttack = 310,
         [StatRestriction(StatRestrictionType.NonNegative)]
@@ -128,6 +129,19 @@ namespace Assets._Game.Scripts.Entities.Stats
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalActionDelay = 325,
         PhysicalArmor = 330,
+
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        MagicalAttack = 360,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        [StatRestriction(StatRestrictionType.NotGreaterThan, 1)]
+        MagicalCritChance = 365,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        MagicalCritMultiplier = 366,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        MagicalAttackSpeed = 370,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        MagicalActionDelay = 375,
+        MagicalArmor = 380,
 
         [StatRestriction(StatRestrictionType.NonNegative)]
         Strength = 400,
