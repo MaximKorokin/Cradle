@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
-using Assets.CoreScripts;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities

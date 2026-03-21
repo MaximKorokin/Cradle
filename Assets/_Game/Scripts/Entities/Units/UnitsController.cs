@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.Entities.Units
         public UnitsController(Transform unitsRoot, UnitFactory unitFactory)
         {
             _unitsRoot = unitsRoot;
-            _tree = new(_unitsRoot);
+            _tree = new(_unitsRoot, TurnDirection.Right);
             _unitFactory = unitFactory;
         }
 
@@ -68,12 +68,7 @@ namespace Assets._Game.Scripts.Entities.Units
         public void SetTurnDirection(TurnDirection turnDirection)
         {
             _unitsRoot.localScale = new(turnDirection == TurnDirection.Right ? 1 : -1, 1, 1);
+            _tree.SetTurnDirection(turnDirection);
         }
-    }
-
-    public enum TurnDirection
-    {
-        Left,
-        Right
     }
 }

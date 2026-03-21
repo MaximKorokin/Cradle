@@ -7,17 +7,23 @@ namespace Assets._Game.Scripts.Entities.Units
 {
     public sealed class UnitTree
     {
+        private const string LeftTurnSuffix = "Left";
+        private const string RightTurnSuffix = "Right";
+
         private readonly Transform _unitsRoot;
 
         private readonly Dictionary<string, UnitView> _byPath = new();
         private readonly HashSet<UnitView> _roots = new();
         private readonly Dictionary<string, List<UnitView>> _pendingByParentPath = new();
 
+        private TurnDirection _turnDirection;
+
         public IReadOnlyCollection<UnitView> Roots => _roots;
 
-        public UnitTree(Transform unitsRoot)
+        public UnitTree(Transform unitsRoot, TurnDirection turnDirection)
         {
             _unitsRoot = unitsRoot ? unitsRoot : throw new ArgumentNullException(nameof(unitsRoot));
+            _turnDirection = turnDirection;
         }
 
         public bool TryGet(string path, out UnitView unit) => _byPath.TryGetValue(path, out unit);
@@ -94,6 +100,25 @@ namespace Assets._Game.Scripts.Entities.Units
         {
             foreach (var root in _roots)
                 ApplyOrderRecursive(root, pivotOrderInLayer);
+        }
+
+        public void SetTurnDirection(TurnDirection turnDirection)
+        {
+            if (_turnDirection == turnDirection) return;
+
+            var swapped = new HashSet<string>();
+            foreach (var root in _roots)
+            {
+                // Swap orders in layer for left/right turn pairs to keep them visually consistent
+                var oppositePath = GetOppositeTurnDirectionPath(root.Path);
+                if (oppositePath != null && !swapped.Contains(root.Path) && _byPath.TryGetValue(oppositePath, out var opposite))
+                {
+                    (root.RelativeOrderInLayer, opposite.RelativeOrderInLayer) = (opposite.RelativeOrderInLayer, root.RelativeOrderInLayer);
+                    swapped.Add(root.Path);
+                    swapped.Add(oppositePath);
+                }
+            }
+            _turnDirection = turnDirection;
         }
 
         // ---------------- internals ----------------
@@ -183,5 +208,20 @@ namespace Assets._Game.Scripts.Entities.Units
             for (int i = 0; i < unit.Children.Count; i++)
                 ApplyOrderRecursive(unit.Children[i], myOrder);
         }
+
+        private static string GetOppositeTurnDirectionPath(string path)
+        {
+            if (path.Contains(LeftTurnSuffix))
+                return path.Replace(LeftTurnSuffix, RightTurnSuffix);
+            if (path.Contains(RightTurnSuffix))
+                return path.Replace(RightTurnSuffix, LeftTurnSuffix);
+            return null;
+        }
+    }
+
+    public enum TurnDirection
+    {
+        Left,
+        Right
     }
 }
