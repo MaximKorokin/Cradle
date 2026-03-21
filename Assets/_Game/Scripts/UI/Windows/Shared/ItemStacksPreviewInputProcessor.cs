@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;

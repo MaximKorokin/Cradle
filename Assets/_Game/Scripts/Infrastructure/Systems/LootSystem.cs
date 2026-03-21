@@ -23,12 +23,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _defaultEntityDefinitionReferences = defaultEntityDefinitionReferences;
 
             _globalEventBus.Subscribe<LootDropRequestedEvent>(OnLootDropRequested);
+            _globalEventBus.Subscribe<LootItemDropRequestedEvent>(OnLootItemDropRequested);
         }
 
         public override void Dispose()
         {
             base.Dispose();
             _globalEventBus.Unsubscribe<LootDropRequestedEvent>(OnLootDropRequested);
+            _globalEventBus.Unsubscribe<LootItemDropRequestedEvent>(OnLootItemDropRequested);
         }
 
         private void OnLootDropRequested(LootDropRequestedEvent e)
@@ -54,6 +56,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
+        private void OnLootItemDropRequested(LootItemDropRequestedEvent e)
+        {
+            if (e.ItemDefinition != null && e.Amount > 0)
+            {
+                CreateLoot(e.Position, e.ItemDefinition, e.Amount);
+            }
+        }
+
         private void CreateLoot(Vector2 position, ItemDefinition itemDefinition, int amount)
         {
             var entity = _entityAssembler.Create(_defaultEntityDefinitionReferences.LootItem);
@@ -74,6 +84,20 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             Position = position;
             LootTable = lootTable;
+        }
+    }
+
+    public readonly struct LootItemDropRequestedEvent : IGlobalEvent
+    {
+        public Vector2 Position { get; }
+        public ItemDefinition ItemDefinition { get; }
+        public int Amount { get; }
+
+        public LootItemDropRequestedEvent(Vector2 position, ItemDefinition itemDefinition, int amount)
+        {
+            Position = position;
+            ItemDefinition = itemDefinition;
+            Amount = amount;
         }
     }
 }

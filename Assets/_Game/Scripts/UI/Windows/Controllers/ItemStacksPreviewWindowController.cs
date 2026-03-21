@@ -3,7 +3,6 @@ using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared.Utils;
-using Assets.CoreScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,4 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
@@ -20,10 +18,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             WindowManager windowManager)
         {
             _inventoryHudData = inventoryHudData;
-
             _equipmentHudData = equipmentHudData;
 
-            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel);
+            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, _inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel);
         }
 
         public override void Bind(InventoryEquipmentWindow window)

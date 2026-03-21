@@ -1,10 +1,21 @@
-﻿using Assets._Game.Scripts.Shared.Utils;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Shared.Utils;
 using System;
 
 namespace Assets._Game.Scripts.Items.Commands
 {
     public class ItemCommandHandler
     {
+        private readonly IGlobalEventBus _globalEventBus;
+        private readonly PlayerContext _playerContext;
+
+        public ItemCommandHandler(IGlobalEventBus globalEventBus, PlayerContext playerContext)
+        {
+            _globalEventBus = globalEventBus;
+            _playerContext = playerContext;
+        }
+
         public bool Handle<T>(IItemCommand cmd)
         {
             return cmd switch
@@ -133,7 +144,19 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleDrop<T>(DropItemCommand<T> c)
         {
-            return ItemContainerUtils.RemoveAmount(c.FromContainer, c.FromSlot, c.Amount) > 0;
+            if (_playerContext?.SpatialModule == null) return false;
+
+            var item = c.FromContainer.Get(c.FromSlot);
+            if (item == null) return false;
+
+            var removedAmount = ItemContainerUtils.RemoveAmount(c.FromContainer, c.FromSlot, c.Amount);
+            if (removedAmount > 0)
+            {
+                // todo: might need a change because we bind to player here
+                _globalEventBus.Publish(new LootItemDropRequestedEvent(_playerContext.SpatialModule.Position, item.Value.Definition, removedAmount));
+                return true;
+            }
+            return false;
         }
     }
 }
