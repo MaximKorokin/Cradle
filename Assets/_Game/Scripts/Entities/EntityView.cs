@@ -48,18 +48,16 @@ namespace Assets._Game.Scripts.Entities
                 ((IEntityBindable)_entityBindables[i]).Bind(entity);
             }
 
-            if (!entity.TryGetModule<AppearanceModule>(out var appearance))
+            if (!entity.TryGetModule(out _appearance))
             {
                 SLog.Error($"Entity {entity.Definition.Id} has no {nameof(AppearanceModule)} attached.");
             }
 
-            if (appearance.EntityVisualModel.Animator != null)
+            if (_appearance.EntityVisualModel.Animator != null)
             {
-                AnimatorController = new(UnitsAnimator, appearance.EntityVisualModel.Animator);
+                AnimatorController = new(UnitsAnimator, _appearance.EntityVisualModel.Animator);
                 AnimatorController.Rebind();
             }
-
-            _appearance = appearance;
 
             _appearance.EnsureUnitRequested += UnitsController.EnsureUnit;
             _appearance.SetUnitSpriteRequested += UnitsController.SetUnitSprite;

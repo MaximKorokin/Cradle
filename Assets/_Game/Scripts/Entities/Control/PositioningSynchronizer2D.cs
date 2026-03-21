@@ -6,6 +6,7 @@ namespace Assets._Game.Scripts.Entities.Control
     public sealed class PositioningSynchronizer2D : MonoBehaviour, IEntityBindable
     {
         [SerializeField] private Rigidbody2D _rigidbody;
+        [SerializeField] private Collider2D _collider;
 
         private Entity _entity;
 
@@ -36,6 +37,11 @@ namespace Assets._Game.Scripts.Entities.Control
             if (_entity.TryGetModule(out KinematicsModule kinematics))
             {
                 kinematics.SetVelocity(_rigidbody.linearVelocity);
+            }
+
+            if (_entity.TryGetModule(out RestrictionStateModule restrictionState))
+            {
+                _collider.enabled = !restrictionState.Has(RestrictionState.Dead);
             }
         }
     }

@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: -4951616091940891359}
+  _collider: {fileID: 8740819653784257246}
 --- !u!50 &-4951616091940891359
 Rigidbody2D:
   serializedVersion: 5
