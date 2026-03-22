@@ -4,21 +4,20 @@ namespace Assets._Game.Scripts.Entities.Units
 {
     public sealed class UnitsControllerFactory
     {
-        private readonly UnitFactory _unitFactory;
+        private readonly UnitViewProvider _unitViewProvider;
 
-        public UnitsControllerFactory(UnitFactory entityUnitFactory)
+        public UnitsControllerFactory(UnitViewProvider unitViewProvider)
         {
-            _unitFactory = entityUnitFactory;
+            _unitViewProvider = unitViewProvider;
         }
 
         public UnitsController Create(Transform unitsRoot, EntityVisualModel entityVisualModel, string variantName)
         {
-            var unitsController = new UnitsController(unitsRoot, _unitFactory);
+            var unitsController = new UnitsController(unitsRoot, _unitViewProvider);
 
-            // todo: don't use factory; use controller's methods instead
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
-                unitsController.AddUnit(_unitFactory.Create(unitVisualModel, variantName));
+                unitsController.AddUnit(_unitViewProvider.Create(unitVisualModel, variantName));
             }
 
             unitsController.UpdateOrderInLayer();

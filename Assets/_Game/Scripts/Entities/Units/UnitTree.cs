@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
@@ -51,10 +52,10 @@ namespace Assets._Game.Scripts.Entities.Units
             AttachPendingChildren(unit);
         }
 
-        public bool RemoveRecursive(string path, bool destroyGameObjects = true)
+        public IReadOnlyList<UnitView> RemoveRecursive(string path, bool destroyGameObjects = false)
         {
             if (!_byPath.TryGetValue(path, out var root))
-                return false;
+                return null;
 
             // Collect subtree (post-order or pre-order doesn't matter for Destroy, but we need a stable list)
             var toRemove = new List<UnitView>();
@@ -87,12 +88,13 @@ namespace Assets._Game.Scripts.Entities.Units
                     UnityEngine.Object.Destroy(u.gameObject);
             }
 
-            return true;
+            return toRemove;
         }
 
         public void ExecuteAllDepthFirst(Action<UnitView> action)
         {
-            foreach (var r in _roots)
+            // ToArray to avoid issues if action modifies the tree structure (e.g. by adding/removing units)
+            foreach (var r in _roots.ToArray())
                 ExecuteDepthFirst(r, action);
         }
 

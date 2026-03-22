@@ -93,9 +93,11 @@ namespace Assets._Game.Scripts.Entities
             {
                 _appearance.SetAnimationRequested -= AnimatorController.SetAnimation;
                 _appearance.SetAnimatorValueRequested -= AnimatorController.SetValue;
+                AnimatorController = null;
             }
 
             _appearance = null;
+            UnitsController = null;
             Entity = null;
         }
 

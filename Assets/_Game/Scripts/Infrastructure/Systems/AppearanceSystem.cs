@@ -51,7 +51,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     appearance.RequestRemoveUnit(path);
                 }
             }
-            appearance.RequestUpdateOrderInLayer();
 
             // Change animations
             var animationOverrideTrait = e.Item.Value.GetTraits<AnimationOverrideTrait>().FirstOrDefault();

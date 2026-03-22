@@ -39,6 +39,7 @@ namespace Assets._Game.Scripts.Entities
 
         public void Destroy(EntityView view)
         {
+            view.UnitsController.ClearUnits();
             _poolService.Return(view);
         }
     }

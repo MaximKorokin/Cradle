@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
 {
-    public sealed class UnitFactory
+    public sealed class UnitViewProvider
     {
         private readonly PoolService _poolService;
         private readonly UnitVariantsCatalog _entityUnitVariantsCatalog;
         private readonly DefaultPrefabReferences _defaultPrefabReferences;
         private readonly EntityUnitConfig _entityUnitConfig;
 
-        public UnitFactory(
+        public UnitViewProvider(
             PoolService poolService,
             UnitVariantsCatalog entityUnitVariantsCatalog,
             DefaultPrefabReferences defaultPrefabReferences,
@@ -60,6 +60,11 @@ namespace Assets._Game.Scripts.Entities.Units
             var unitView = _poolService.Take(_defaultPrefabReferences.UnitView, Vector3.zero, Quaternion.identity);
             unitView.gameObject.name = name;
             return unitView;
+        }
+
+        public void Destroy(UnitView unitView)
+        {
+            _poolService.Return(unitView);
         }
     }
 }

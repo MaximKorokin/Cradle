@@ -8,15 +8,15 @@ namespace Assets._Game.Scripts.Entities.Units
         private readonly UnitTree _tree;
 
         private readonly Transform _unitsRoot;
-        private readonly UnitFactory _unitFactory;
+        private readonly UnitViewProvider _unitViewProvider;
 
         public event Action Changed;
 
-        public UnitsController(Transform unitsRoot, UnitFactory unitFactory)
+        public UnitsController(Transform unitsRoot, UnitViewProvider unitViewProvider)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot, TurnDirection.Right);
-            _unitFactory = unitFactory;
+            _unitViewProvider = unitViewProvider;
         }
 
         public void EnsureUnit(string path, int relativeOrderInLayer)
@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.Entities.Units
                 return;
             }
 
-            unit = _unitFactory.Create(path, relativeOrderInLayer);
+            unit = _unitViewProvider.Create(path, relativeOrderInLayer);
             AddUnit(unit);
         }
 
@@ -55,8 +55,14 @@ namespace Assets._Game.Scripts.Entities.Units
 
         public void RemoveUnit(string path)
         {
-            _tree.RemoveRecursive(path);
-            Changed?.Invoke();
+            var unit = GetUnit(path);
+            var removed = _tree.RemoveRecursive(path, false);
+            if (removed != null && removed.Count > 0)
+            {
+                for (int i = 0; i < removed.Count; i++)
+                    _unitViewProvider.Destroy(removed[i]);
+                Changed?.Invoke();
+            }
         }
 
         public void UpdateOrderInLayer()
@@ -69,6 +75,11 @@ namespace Assets._Game.Scripts.Entities.Units
         {
             _unitsRoot.localScale = new(turnDirection == TurnDirection.Right ? 1 : -1, 1, 1);
             _tree.SetTurnDirection(turnDirection);
+        }
+
+        public void ClearUnits()
+        {
+            _tree.ExecuteAllDepthFirst(u => RemoveUnit(u.Path));
         }
     }
 }

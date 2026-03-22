@@ -126,18 +126,18 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityModuleFactories(IContainerBuilder builder)
         {
+            builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
             builder.Register<StatModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<StatsControllerAssembler>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 
             builder.Register<AppearanceModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 
             builder.Register<InventoryEquipmentModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<UnitFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<UnitViewProvider>(Lifetime.Scoped);
             builder.Register<UnitsControllerFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 
             builder.Register<ControlModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<AiBrainFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<AiBrainFactory>(Lifetime.Scoped);
             builder.Register<IntentModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<KinematicsModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<SpatialModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
