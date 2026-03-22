@@ -16,6 +16,10 @@ MonoBehaviour:
   <Name>k__BackingField: Quadruped
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 96ad2e14e0944f943af4f9ba299469bb, type: 2}
+  <ColorVariants>k__BackingField:
+  - {r: 0.56078434, g: 0.3372549, b: 0.23137255, a: 1}
+  - {r: 0.8301887, g: 0.576955, b: 0.4503382, a: 1}
+  - {r: 0.3584906, g: 0.34979406, b: 0.34327164, a: 1}
   <Units>k__BackingField:
   - <Path>k__BackingField: 300
     <EquipmentSlots>k__BackingField: 

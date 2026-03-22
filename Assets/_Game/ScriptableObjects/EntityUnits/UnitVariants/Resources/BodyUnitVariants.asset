@@ -15,7 +15,15 @@ MonoBehaviour:
   _id: d094409c8d8b4a688753dd510e5f56bf
   <Path>k__BackingField: 200
   <Variants>k__BackingField:
-  - <Name>k__BackingField: Human
-    <Sprite>k__BackingField: {fileID: -1938846929, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
   - <Name>k__BackingField: Dog
-    <Sprite>k__BackingField: {fileID: 835313484114452472, guid: c74c90811d22fb444943251606ff5755, type: 3}
+    <Sprites>k__BackingField:
+    - {fileID: 4592720289143835018, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+  - <Name>k__BackingField: Human
+    <Sprites>k__BackingField:
+    - {fileID: 5910136398673256184, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -5504484496649349667, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -7382400056747157653, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -6668446189047372956, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+  - <Name>k__BackingField: Player
+    <Sprites>k__BackingField:
+    - {fileID: 5910136398673256184, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}

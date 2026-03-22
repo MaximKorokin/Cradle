@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Shared.Extensions;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Units
@@ -31,7 +32,7 @@ namespace Assets._Game.Scripts.Entities.Units
             return unitView;
         }
 
-        public UnitView Create(EntityUnitVisualModel entityUnitVisualModel, string variantName)
+        public UnitView Create(EntityUnitVisualModel entityUnitVisualModel, string variantName, Color color)
         {
             var unitVariants = _entityUnitVariantsCatalog.GetByPath(entityUnitVisualModel.Path);
             if (unitVariants == null)
@@ -40,17 +41,16 @@ namespace Assets._Game.Scripts.Entities.Units
                 return null;
             }
 
-            var unitVariantSprite = unitVariants.GetVariant(variantName)?.Sprite;
-            if (unitVariantSprite == null)
-            {
-                unitVariantSprite = _entityUnitConfig.NotFoundVariantSprite;
-            }
-
             var unitView = CreateUnit(entityUnitVisualModel.Path.ToString());
             unitView.Path = entityUnitVisualModel.Path.ToString();
             unitView.RelativeOrderInLayer = entityUnitVisualModel.RelativeOrderInLayer;
 
+            var unitVariantSprite = unitVariants.GetVariant(variantName)?.Sprites.GetRandomElement(_entityUnitConfig.NotFoundVariantSprite);
+            if (unitVariantSprite == null)
+                unitVariantSprite = _entityUnitConfig.NotFoundVariantSprite;
+
             unitView.SpriteRenderer.sprite = unitVariantSprite;
+            unitView.SpriteRenderer.color = color;
 
             return unitView;
         }

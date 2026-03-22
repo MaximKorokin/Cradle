@@ -15,6 +15,8 @@ namespace Assets._Game.Scripts.Entities.Units
         [field: SerializeField]
         public AnimatorOverrideController Animator { get; private set; }
         [field: SerializeField]
+        public Color[] ColorVariants { get; private set; }
+        [field: SerializeField]
         public EntityUnitVisualModel[] Units { get; private set; }
     }
 

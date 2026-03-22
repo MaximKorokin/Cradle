@@ -16,6 +16,8 @@ MonoBehaviour:
   <Name>k__BackingField: LootItem
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: c74cdcca91c66e54ea00ff21a0646620, type: 3}
   <Animator>k__BackingField: {fileID: 0}
+  <ColorVariants>k__BackingField:
+  - {r: 1, g: 1, b: 1, a: 1}
   <Units>k__BackingField:
   - <Path>k__BackingField: 200
     <EquipmentSlots>k__BackingField: 

@@ -10,18 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
-  m_Name: HumanoidVisualModel
+  m_Name: PlayerVisualModel
   m_EditorClassIdentifier: 
   _id: 3aef2ec1f26b4e6687888ec7ae33028c
-  <Name>k__BackingField: Humanoid
+  <Name>k__BackingField: Player
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
   <ColorVariants>k__BackingField:
-  - {r: 0.8396226, g: 0.7725144, b: 0.5980331, a: 1}
-  - {r: 0.6603774, g: 0.60315204, b: 0.4516732, a: 1}
-  - {r: 0.5660378, g: 0.49795306, b: 0.31772876, a: 1}
-  - {r: 0.4245283, g: 0.33241367, b: 0.10212708, a: 1}
-  - {r: 0.2924528, g: 0.21793787, b: 0.020692414, a: 1}
+  - {r: 0.78039217, g: 0.7607843, b: 0.70980394, a: 1}
   <Units>k__BackingField:
   - <Path>k__BackingField: 300
     <EquipmentSlots>k__BackingField: 14000000

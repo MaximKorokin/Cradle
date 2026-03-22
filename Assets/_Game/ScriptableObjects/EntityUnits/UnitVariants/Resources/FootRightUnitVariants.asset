@@ -16,4 +16,8 @@ MonoBehaviour:
   <Path>k__BackingField: 550
   <Variants>k__BackingField:
   - <Name>k__BackingField: Human
-    <Sprite>k__BackingField: {fileID: -6579165489411396765, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+    <Sprites>k__BackingField:
+    - {fileID: 4364421176935254655, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+  - <Name>k__BackingField: Player
+    <Sprites>k__BackingField:
+    - {fileID: 4364421176935254655, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}

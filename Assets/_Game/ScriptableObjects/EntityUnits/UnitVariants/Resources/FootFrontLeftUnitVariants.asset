@@ -16,4 +16,5 @@ MonoBehaviour:
   <Path>k__BackingField: 1500
   <Variants>k__BackingField:
   - <Name>k__BackingField: Dog
-    <Sprite>k__BackingField: {fileID: 388460889276955702, guid: c74c90811d22fb444943251606ff5755, type: 3}
+    <Sprites>k__BackingField:
+    - {fileID: 9173402735476556308, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}

@@ -25,6 +25,6 @@ namespace Assets._Game.Scripts.Entities.Units
         [field: SerializeField]
         public string Name { get; private set; }
         [field: SerializeField]
-        public Sprite Sprite { get; private set; }
+        public Sprite[] Sprites { get; private set; }
     }
 }
