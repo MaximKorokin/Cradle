@@ -14,7 +14,7 @@ namespace Assets._Game.Scripts.Entities.Units
 
         public UnitsController Create(Transform unitsRoot, EntityVisualModel entityVisualModel, string variantName)
         {
-            var unitsController = new UnitsController(unitsRoot, _unitViewProvider);
+            var unitsController = new UnitsController(unitsRoot, _unitViewProvider, entityVisualModel.SwapOrderInLayerForDirection);
             var colorVariant = entityVisualModel.ColorVariants.GetRandomElement(Color.white);
 
             foreach (var unitVisualModel in entityVisualModel.Units)

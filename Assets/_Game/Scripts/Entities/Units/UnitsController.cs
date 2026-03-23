@@ -9,14 +9,16 @@ namespace Assets._Game.Scripts.Entities.Units
 
         private readonly Transform _unitsRoot;
         private readonly UnitViewProvider _unitViewProvider;
+        private readonly bool _swapOrderInLayerForDirection;
 
         public event Action Changed;
 
-        public UnitsController(Transform unitsRoot, UnitViewProvider unitViewProvider)
+        public UnitsController(Transform unitsRoot, UnitViewProvider unitViewProvider, bool swapOrderInLayerForDirection)
         {
             _unitsRoot = unitsRoot;
             _tree = new(_unitsRoot, TurnDirection.Right);
             _unitViewProvider = unitViewProvider;
+            _swapOrderInLayerForDirection = swapOrderInLayerForDirection;
         }
 
         public void EnsureUnit(string path, int relativeOrderInLayer)
@@ -74,7 +76,9 @@ namespace Assets._Game.Scripts.Entities.Units
         public void SetTurnDirection(TurnDirection turnDirection)
         {
             _unitsRoot.localScale = new(turnDirection == TurnDirection.Right ? 1 : -1, 1, 1);
-            _tree.SetTurnDirection(turnDirection);
+            
+            if (_swapOrderInLayerForDirection)
+                _tree.SetTurnDirection(turnDirection);
         }
 
         public void ClearUnits()

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
   m_Name: PlayerVisualModel
   m_EditorClassIdentifier: 
-  _id: 3aef2ec1f26b4e6687888ec7ae33028c
+  _id: 0116374367f143f38e847fdc904c32ae
   <Name>k__BackingField: Player
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
+  <SwapOrderInLayerForDirection>k__BackingField: 1
   <ColorVariants>k__BackingField:
   - {r: 0.78039217, g: 0.7607843, b: 0.70980394, a: 1}
   <Units>k__BackingField:

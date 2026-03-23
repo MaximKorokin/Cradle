@@ -1,16 +1,37 @@
 fileFormatVersion: 2
-guid: 1be0b5dce98b60f428cd16570e609975
+guid: b6e6023625bc48b42bbe7f1d06ab7d02
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6960679547787412037
-    second: QuadrupedVariants_0
+      213: -8285773504889700863
+    second: Helmets_0
   - first:
-      213: 4592720289143835018
-    second: QuadrupedVariants_1
+      213: -867696522777932473
+    second: Helmets_1
   - first:
-      213: 9173402735476556308
-    second: QuadrupedVariants_2
+      213: 4217637359650165115
+    second: Helmets_2
+  - first:
+      213: 5973168979162390250
+    second: Helmets_3
+  - first:
+      213: -2181531001292581395
+    second: Helmets_4
+  - first:
+      213: -3736965265862010466
+    second: Helmets_5
+  - first:
+      213: -8078583308040718562
+    second: Helmets_6
+  - first:
+      213: 7562801619373699399
+    second: Helmets_7
+  - first:
+      213: 2546969554786897382
+    second: Helmets_8
+  - first:
+      213: 5614001128715215490
+    second: Helmets_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -132,13 +153,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: QuadrupedVariants_0
+      name: Helmets_0
       rect:
         serializedVersion: 2
-        x: 16
-        y: 472
-        width: 32
-        height: 24
+        x: 0
+        y: 944
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,272 +168,206 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 54202316b2d499060800000000000000
-      internalID: 6960679547787412037
+      spriteID: 10eb4bfa5e4030d80800000000000000
+      internalID: -8285773504889700863
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: QuadrupedVariants_10
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 416
-        width: 64
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a89c52b05ce9cbf30800000000000000
-      internalID: 4592720289143835018
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_20
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 388
-        width: 12
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4124da56f297e4f70800000000000000
-      internalID: 9173402735476556308
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_1
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 472
-        width: 32
-        height: 25
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 333ad8753c78c8543a1e79e2743f1e46
-      internalID: 1690722556
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_2
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 474
-        width: 32
-        height: 22
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7afabff4cb8ef3044a6dd1a123740593
-      internalID: 932852225
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_3
-      rect:
-        serializedVersion: 2
-        x: 161
-        y: 475
-        width: 31
-        height: 21
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 90604ae6a919ecb47a8ae23a1e7cec46
-      internalID: 1765645653
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_4
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 473
-        width: 32
-        height: 23
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 70dc007a1b5f97f47952cce1b289255f
-      internalID: 1821998810
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_21
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 390
-        width: 12
-        height: 10
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c72ea938cf620204394bcc44f7261597
-      internalID: 1080468472
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: QuadrupedVariants_22
+      name: Helmets_1
       rect:
         serializedVersion: 2
         x: 80
-        y: 391
-        width: 16
-        height: 9
+        y: 944
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 04323b9aab5667445a17541c03b0499c
-      internalID: -702077541
+      spriteID: 74dcafa1c9255f3f0800000000000000
+      internalID: -867696522777932473
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: QuadrupedVariants_23
+      name: Helmets_2
       rect:
         serializedVersion: 2
-        x: 112
-        y: 390
-        width: 16
-        height: 10
+        x: 160
+        y: 944
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c567e1abd6efef84f80cc500f9919df3
-      internalID: 572408901
+      spriteID: b715d5525de088a30800000000000000
+      internalID: 4217637359650165115
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: QuadrupedVariants_11
+      name: Helmets_3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 416
-        width: 64
-        height: 32
+        x: 240
+        y: 944
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: b3767c47d7b22354393c2f079b555252
-      internalID: 426013388
+      spriteID: aee5b521a85f4e250800000000000000
+      internalID: 5973168979162390250
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: QuadrupedVariants_12
+      name: Helmets_4
       rect:
         serializedVersion: 2
-        x: 176
-        y: 419
-        width: 64
-        height: 29
+        x: 320
+        y: 944
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 03d2ad3ccb18f6449860c95fc0739108
-      internalID: 656039261
+      spriteID: de51471dc15a9b1e0800000000000000
+      internalID: -2181531001292581395
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: QuadrupedVariants_13
+      name: Helmets_5
       rect:
         serializedVersion: 2
-        x: 256
-        y: 416
-        width: 64
-        height: 32
+        x: 400
+        y: 944
+        width: 80
+        height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 7c99ad41753979f4bbea2048527c66e0
-      internalID: -314207970
+      spriteID: e995256d3e1a32cc0800000000000000
+      internalID: -3736965265862010466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Helmets_6
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 944
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1735d3984b13ef80800000000000000
+      internalID: -8078583308040718562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Helmets_7
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 944
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 741b48dd00874f860800000000000000
+      internalID: 7562801619373699399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Helmets_8
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 944
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6edcecec057a85320800000000000000
+      internalID: 2546969554786897382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Helmets_9
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 944
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28266b54840f8ed40800000000000000
+      internalID: 5614001128715215490
       vertices: []
       indices: 
       edges: []
@@ -421,7 +376,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6f9425c166b42514f8d9ab79950298ca
+    spriteID: 4dd9690badc7e7046ad7eec27eceacf1
     internalID: 0
     vertices: []
     indices: 
@@ -431,19 +386,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      QuadrupedVariants_0: 6960679547787412037
-      QuadrupedVariants_1: 1690722556
-      QuadrupedVariants_10: 4592720289143835018
-      QuadrupedVariants_11: 426013388
-      QuadrupedVariants_12: 656039261
-      QuadrupedVariants_13: -314207970
-      QuadrupedVariants_2: 932852225
-      QuadrupedVariants_20: 9173402735476556308
-      QuadrupedVariants_21: 1080468472
-      QuadrupedVariants_22: -702077541
-      QuadrupedVariants_23: 572408901
-      QuadrupedVariants_3: 1765645653
-      QuadrupedVariants_4: 1821998810
+      Helmets_0: -8285773504889700863
+      Helmets_1: -867696522777932473
+      Helmets_2: 4217637359650165115
+      Helmets_3: 5973168979162390250
+      Helmets_4: -2181531001292581395
+      Helmets_5: -3736965265862010466
+      Helmets_6: -8078583308040718562
+      Helmets_7: 7562801619373699399
+      Helmets_8: 2546969554786897382
+      Helmets_9: 5614001128715215490
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

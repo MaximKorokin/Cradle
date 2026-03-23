@@ -16,6 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: Humanoid
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
+  <SwapOrderInLayerForDirection>k__BackingField: 1
   <ColorVariants>k__BackingField:
   - {r: 0.8396226, g: 0.7725144, b: 0.5980331, a: 1}
   - {r: 0.6603774, g: 0.60315204, b: 0.4516732, a: 1}
