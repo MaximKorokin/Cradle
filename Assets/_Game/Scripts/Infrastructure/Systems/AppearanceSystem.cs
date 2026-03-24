@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items.Equipment;
@@ -16,7 +17,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled,
-                new[] { typeof(AppearanceModule) }
+                new[] { typeof(AppearanceModule), typeof(StatModule) }
             );
 
         public AppearanceSystem(EntityRepository repository, IGlobalEventBus globalEventBus) : base(repository)
@@ -24,12 +25,30 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _globalEventBus = globalEventBus;
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
+            TrackEntityEvent<StatChangedEvent>(OnStatChanged);
         }
 
         public override void Dispose()
         {
             base.Dispose();
             _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
+        }
+
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            entity.SubscribeOnce<EntityBoundEvent>(e =>
+            {
+                if (!EntityQuery.Match(entity)) return;
+
+                var appearance = entity.GetModule<AppearanceModule>();
+                var stats = entity.GetModule<StatModule>();
+                // Set initial walk speed multiplier
+                appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.WalkSpeedMultiplier, stats.Stats.Get(StatId.MoveSpeed));
+                // Set initial scale
+                appearance.RequestSetScale(stats.Stats.Get(StatId.SizeScale));
+            });
         }
 
         private void OnEquipmentChanged(EquipmentChangedEvent e)
@@ -61,6 +80,23 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationOverride.AnimationClip;
                     appearance.RequestSetAnimation(animationOverride.AnimationKey, animationClip);
                 }
+            }
+        }
+
+        private void OnStatChanged(StatChangedEvent e)
+        {
+            var stats = e.Entity.GetModule<StatModule>();
+            var appearance = e.Entity.GetModule<AppearanceModule>();
+
+            // sync the walk speed stat to the animator
+            if (e.StatId == StatId.MoveSpeed)
+            {
+                appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.WalkSpeedMultiplier, stats.Stats.Get(StatId.MoveSpeed));
+            }
+            // sync the scale stat to visual scale
+            else if (e.StatId == StatId.SizeScale)
+            {
+                appearance.RequestSetScale(stats.Stats.Get(StatId.SizeScale));
             }
         }
 

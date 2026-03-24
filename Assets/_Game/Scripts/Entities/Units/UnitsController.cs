@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-
 namespace Assets._Game.Scripts.Entities.Units
 {
     public class UnitsController
@@ -75,10 +74,17 @@ namespace Assets._Game.Scripts.Entities.Units
 
         public void SetTurnDirection(TurnDirection turnDirection)
         {
-            _unitsRoot.localScale = new(turnDirection == TurnDirection.Right ? 1 : -1, 1, 1);
+            var sign = turnDirection == TurnDirection.Right ? 1 : -1;
+            var absoluteScaleX = Mathf.Abs(_unitsRoot.localScale.x);
+            _unitsRoot.localScale = new Vector3(sign * absoluteScaleX, _unitsRoot.localScale.y, 1);
             
             if (_swapOrderInLayerForDirection)
                 _tree.SetTurnDirection(turnDirection);
+        }
+
+        public void SetScale(float scale)
+        {
+            _unitsRoot.localScale = new Vector3(scale, scale, 1);
         }
 
         public void ClearUnits()

@@ -13,6 +13,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         public event Action<EntityAnimatorParameterName, ValueType> SetAnimatorValueRequested;
         public event Action<EntityAnimationClipName, AnimationClip> SetAnimationRequested;
         public event Action<TurnDirection> SetTurnDirectionRequested;
+        public event Action<float> SetScaleRequested;
         public event Action UpdateOrderInLayerRequested;
 
         public EntityVisualModel EntityVisualModel { get; private set; }
@@ -61,6 +62,11 @@ namespace Assets._Game.Scripts.Entities.Modules
         public void RequestSetTurnDirection(TurnDirection turnDirection)
         {
             SetTurnDirectionRequested?.Invoke(turnDirection);
+        }
+
+        public void RequestSetScale(float scale)
+        {
+            SetScaleRequested?.Invoke(scale);
         }
     }
 

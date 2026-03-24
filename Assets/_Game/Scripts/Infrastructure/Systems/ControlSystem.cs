@@ -25,6 +25,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
         }
 
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            entity.SubscribeOnce<EntityBoundEvent>(e =>
+            {
+                if (entity.TryGetModule<WanderBehaviourModule>(out var wanderModule))
+                    wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
+            });
+        }
+
         public void Tick(float delta)
         {
             IterateMatchingEntities(entity => TickEntity(entity, delta));

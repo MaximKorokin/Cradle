@@ -33,8 +33,6 @@ namespace Assets._Game.Scripts.Entities
                 }
             }
 
-            PostCreateActions(entity);
-
             _entityRepository.Add(entity);
             return entity;
         }
@@ -57,15 +55,6 @@ namespace Assets._Game.Scripts.Entities
                 save.EquipmentSave = inventoryEquipmentSave.EquipmentSave;
             }
             return save;
-        }
-
-        private void PostCreateActions(Entity entity)
-        {
-            entity.Subscribe<EntityBoundEvent>(e =>
-            {
-                if (!entity.TryGetModule<WanderBehaviourModule>(out var wanderModule)) return;
-                wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
-            });
         }
     }
 }

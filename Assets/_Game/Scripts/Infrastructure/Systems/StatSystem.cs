@@ -114,13 +114,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void OnStatChanged(StatChangedEvent e)
         {
             _derivedStatsCalculator.RecalculateDerivedStats(e);
-
-            // sync the walk speed stat to the animator
-            if (e.StatId == StatId.MoveSpeed && e.Entity.TryGetModule<AppearanceModule>(out var appearanceModule))
-            {
-                var stats = e.Entity.GetModule<StatModule>();
-                appearanceModule.RequestSetAnimatorValue(EntityAnimatorParameterName.WalkSpeedMultiplier, stats.Stats.Get(StatId.MoveSpeed));
-            }
         }
 
         private void OnDamageApplied(DamageAppliedEvent e)

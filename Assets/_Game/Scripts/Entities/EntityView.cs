@@ -63,6 +63,7 @@ namespace Assets._Game.Scripts.Entities
             _appearance.SetUnitSpriteRequested += UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested += UnitsController.RemoveUnit;
             _appearance.SetTurnDirectionRequested += UnitsController.SetTurnDirection;
+            _appearance.SetScaleRequested += UnitsController.SetScale;
             _appearance.UpdateOrderInLayerRequested += UnitsController.UpdateOrderInLayer;
 
             if (AnimatorController != null)
@@ -87,6 +88,7 @@ namespace Assets._Game.Scripts.Entities
             _appearance.SetUnitSpriteRequested -= UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested -= UnitsController.RemoveUnit;
             _appearance.SetTurnDirectionRequested -= UnitsController.SetTurnDirection;
+            _appearance.SetScaleRequested -= UnitsController.SetScale;
             _appearance.UpdateOrderInLayerRequested -= UnitsController.UpdateOrderInLayer;
 
             if (AnimatorController != null)

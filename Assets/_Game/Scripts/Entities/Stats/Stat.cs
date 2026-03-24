@@ -128,6 +128,8 @@ namespace Assets._Game.Scripts.Entities.Stats
         PhysicalAttackSpeed = 320,
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalActionDelay = 325,
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        PhysicalRangeMultiplier = 327,
         PhysicalArmor = 330,
 
         [StatRestriction(StatRestrictionType.NonNegative)]
@@ -150,6 +152,9 @@ namespace Assets._Game.Scripts.Entities.Stats
 
         CarryWeight = 500,
         CarryWeightMax = 510,
+
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        SizeScale = 1000,
     }
 
     public enum StatStage

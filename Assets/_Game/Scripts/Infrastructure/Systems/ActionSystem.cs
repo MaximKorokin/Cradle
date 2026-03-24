@@ -88,7 +88,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
             
             // If there is an active action, but we're not in range, try to approach.
-            if (actionModule.ActiveAction != null && ApproachPreparationRange(entity, actionModule))
+            if (actionModule.ActiveAction != null && ApproachPreparationRange(entity, statModule, actionModule))
             {
                 TryStartActionPreparation(entity, statModule, actionModule);
                 return;
@@ -140,11 +140,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         /// <summary>
         /// Returns true if the entity is within preparation range, otherwise sets the move intent towards the target and returns false
         /// </summary>
-        private bool ApproachPreparationRange(Entity entity, ActionModule actionModule)
+        private bool ApproachPreparationRange(Entity entity, StatModule statModule, ActionModule actionModule)
         {
             var direction = actionModule.ActiveContext.Target.GetPosition() - entity.GetPosition();
-            if (direction.sqrMagnitude <= actionModule.ActiveAction.Definition.Range * actionModule.ActiveAction.Definition.Range)
+
+            var resultingRange = actionModule.ActiveAction.Definition.Range * statModule.Stats.Get(StatId.PhysicalRangeMultiplier);
+            if (direction.sqrMagnitude <= resultingRange * resultingRange)
                 return true;
+
             var intent = entity.GetModule<IntentModule>();
             intent.SetMove(new(direction));
             return false;
