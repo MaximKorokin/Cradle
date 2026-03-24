@@ -71,8 +71,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
                 for (int i = 0; i < e.StatusEffect.Definition.AttackModifiers.Length; i++)
                 {
-                    var attackModifierDefinition = e.StatusEffect.Definition.AttackModifiers[i];
-                    attackModifierModule.AddModifier(attackModifierDefinition.CreateInstance());
+                    attackModifierModule.AddModifier(e.StatusEffect.Definition.AttackModifiers[i]);
                 }
             }
             else if (e.Kind == StatusEffectChangeKind.Removed)
@@ -80,8 +79,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 if (!e.Entity.TryGetModule<AttackModifierModule>(out var attackModifierModule)) return;
                 for (int i = 0; i < e.StatusEffect.Definition.AttackModifiers.Length; i++)
                 {
-                    var attackModifierDefinition = e.StatusEffect.Definition.AttackModifiers[i];
-                    attackModifierModule.RemoveModifier(attackModifierDefinition.CreateInstance());
+                    attackModifierModule.RemoveModifier(e.StatusEffect.Definition.AttackModifiers[i]);
                 }
             }
         }

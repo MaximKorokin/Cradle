@@ -6,18 +6,18 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class AttackModifierModule : EntityModuleBase
     {
-        private readonly List<AttackModifierEntry> _modifiers = new();
+        private readonly List<AttackModifierDefinition> _modifiers = new();
 
-        public IReadOnlyList<AttackModifierEntry> Modifiers => _modifiers;
+        public IReadOnlyList<AttackModifierDefinition> Modifiers => _modifiers;
 
-        public void AddModifier(AttackModifierEntry attackModifierEntry)
+        public void AddModifier(AttackModifierDefinition definition)
         {
-            _modifiers.Add(attackModifierEntry);
+            _modifiers.Add(definition);
         }
 
-        public void RemoveModifier(AttackModifierEntry attackModifierEntry)
+        public void RemoveModifier(AttackModifierDefinition definition)
         {
-            _modifiers.Remove(attackModifierEntry);
+            _modifiers.Remove(definition);
         }
 
         public void ClearModifiers()
@@ -35,20 +35,6 @@ namespace Assets._Game.Scripts.Entities.Modules
         Heating = 40,
     }
 
-    public readonly struct AttackModifierEntry
-    {
-        public readonly AttackModifierType Type;
-        public readonly float Value;
-        public readonly float Chance;
-
-        public AttackModifierEntry(AttackModifierType type, float value, float chance)
-        {
-            Type = type;
-            Value = value;
-            Chance = chance;
-        }
-    }
-
     [Serializable]
     public sealed class AttackModifierDefinition
     {
@@ -58,10 +44,5 @@ namespace Assets._Game.Scripts.Entities.Modules
         public float Value { get; private set; }
         [field: SerializeField]
         public float Chance { get; private set; }
-
-        public AttackModifierEntry CreateInstance()
-        {
-            return new AttackModifierEntry(Type, Value, Chance);
-        }
     }
 }
