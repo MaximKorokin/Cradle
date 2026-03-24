@@ -90,6 +90,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<DespawnSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<AttackModifierSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

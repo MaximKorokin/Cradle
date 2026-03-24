@@ -29,7 +29,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             if (context.Target.TryGetModule(out StatModule stats))
             {
                 stats.AddBase(StatId.HpCurrent, -damage);
-                _globalEventBus.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage));
+                _globalEventBus.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage, DamageSourceType.Original));
             }
 
             _done = true;
@@ -44,12 +44,21 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         public readonly Entity Target;
         public readonly Entity Source;
         public readonly float Damage;
+        public readonly DamageSourceType SourceType;
 
-        public DamageAppliedEvent(Entity target, Entity source, float damage)
+        public DamageAppliedEvent(Entity target, Entity source, float damage, DamageSourceType sourceType)
         {
             Target = target;
             Source = source;
             Damage = damage;
+            SourceType = sourceType;
         }
+    }
+
+    public enum DamageSourceType
+    {
+        Original = 10,
+        AttackModifier = 20,
+        Other = 100
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Storage;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         public bool IsEndless { get; private set; }
         [field: SerializeField]
         public StatModifier[] StatModifiers { get; private set; }
+        [field: SerializeField]
+        public AttackModifierDefinition[] AttackModifiers { get; private set; }
         [field: SerializeReference]
         [field: Header("Control Provider")]
         public ControlProviderData ControlProvider { get; private set; }

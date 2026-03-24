@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79116d10ba7a0044980441119a7c653d, type: 3}
+  m_Name: DamageEcho
+  m_EditorClassIdentifier: 
+  _id: 882985cea942482f96c5663e24ef4607
+  <Name>k__BackingField: Damage Echo
+  <Icon>k__BackingField: {fileID: 1308624975233488409, guid: d5940575a81e1074daf366f2a262578c, type: 3}
+  <Category>k__BackingField: 0
+  <Duration>k__BackingField: 5
+  <IsEndless>k__BackingField: 0
+  <StatModifiers>k__BackingField: []
+  <AttackModifiers>k__BackingField:
+  - <Type>k__BackingField: 20
+    <Value>k__BackingField: 3
+    <Chance>k__BackingField: 1
+  <ControlProvider>k__BackingField:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
