@@ -61,7 +61,7 @@ namespace Assets._Game.Scripts.Entities.Interactions
         public sealed class DamageData : StepData
         {
             public DamageSpec Spec;
-            public override IInteractionStep Build(IObjectResolver resolver) => new DealDamageStep(Spec, resolver.Resolve<IDamageCalculator>());
+            public override IInteractionStep Build(IObjectResolver resolver) => new DealDamageStep(Spec, resolver.Resolve<IDamageCalculator>(), resolver.Resolve<IGlobalEventBus>());
         }
 
         [Serializable]

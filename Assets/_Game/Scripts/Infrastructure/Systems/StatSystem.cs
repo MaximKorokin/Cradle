@@ -14,7 +14,6 @@ using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
 using System.Collections.Generic;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
@@ -44,7 +43,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
-            TrackEntityEvent<DamageAppliedEvent>(OnDamageApplied);
+
+            _globalEventBus.Subscribe<DamageAppliedEvent>(OnDamageApplied);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _globalEventBus.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
         }
 
         public void Tick(float delta)
@@ -119,11 +125,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnDamageApplied(DamageAppliedEvent e)
         {
-            var stateModule = e.Entity.GetModule<RestrictionStateModule>();
-            if (!stateModule.Has(RestrictionState.Dead) && e.Entity.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
+            var stateModule = e.Target.GetModule<RestrictionStateModule>();
+            if (!stateModule.Has(RestrictionState.Dead) && e.Target.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
             {
                 stateModule.Add(RestrictionState.Dead);
-                _globalEventBus.Publish<EntityDiedEvent>(new(e.Entity, e.Source));
+                _globalEventBus.Publish<EntityDiedEvent>(new(e.Target, e.Source));
             }
         }
 

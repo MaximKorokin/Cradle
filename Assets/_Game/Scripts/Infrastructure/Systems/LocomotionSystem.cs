@@ -33,6 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             var velocity = kinematics.Velocity;
 
             var isMoving = velocity.sqrMagnitude > MoveEpsilonSqr;
+            SLog.Log(velocity.sqrMagnitude);
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.IsWalking, isMoving);
             if (isMoving)
             {

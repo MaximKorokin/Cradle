@@ -8,13 +8,15 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
     {
         private readonly DamageSpec _spec;
         private readonly IDamageCalculator _calculator;
+        private readonly IGlobalEventBus _globalEventBus;
 
         private bool _done;
 
-        public DealDamageStep(DamageSpec spec, IDamageCalculator calc)
+        public DealDamageStep(DamageSpec spec, IDamageCalculator calc, IGlobalEventBus globalEventBus)
         {
             _spec = spec;
             _calculator = calc;
+            _globalEventBus = globalEventBus;
         }
 
         public void Start(in InteractionContext context) => _done = false;
@@ -27,7 +29,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             if (context.Target.TryGetModule(out StatModule stats))
             {
                 stats.AddBase(StatId.HpCurrent, -damage);
-                context.Target.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage));
+                _globalEventBus.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage));
             }
 
             _done = true;
@@ -37,16 +39,15 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         public void Cancel(in InteractionContext context) { }
     }
 
-    public readonly struct DamageAppliedEvent : IEntityEvent
+    public readonly struct DamageAppliedEvent : IGlobalEvent
     {
+        public readonly Entity Target;
         public readonly Entity Source;
         public readonly float Damage;
 
-        public Entity Entity { get; }
-
-        public DamageAppliedEvent(Entity entity, Entity source, float damage)
+        public DamageAppliedEvent(Entity target, Entity source, float damage)
         {
-            Entity = entity;
+            Target = target;
             Source = source;
             Damage = damage;
         }
