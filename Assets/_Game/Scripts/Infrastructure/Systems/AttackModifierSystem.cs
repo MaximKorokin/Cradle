@@ -48,7 +48,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                         sourceStatModule.AddBase(StatId.HpCurrent, healAmount);
                         break;
 
-                    case AttackModifierType.MultipliedDamage:
+                    case AttackModifierType.MultipliedRepeatDamage:
                         var extraDamage = e.Damage * modifier.Value;
                         targetStatModule.AddBase(StatId.HpCurrent, -extraDamage);
                         _globalEventBus.Publish<DamageAppliedEvent>(new(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));

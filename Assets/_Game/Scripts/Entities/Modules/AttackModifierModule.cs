@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         None = 0,
         Vampiric = 10,
-        MultipliedDamage = 20,
+        MultipliedRepeatDamage = 20,
         Chilling = 30,
         Heating = 40,
     }

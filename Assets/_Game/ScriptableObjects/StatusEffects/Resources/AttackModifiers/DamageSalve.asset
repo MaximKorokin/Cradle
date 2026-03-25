@@ -18,12 +18,12 @@ MonoBehaviour:
   <Category>k__BackingField: 0
   <Behaviour>k__BackingField: 16
   <Duration>k__BackingField: 0
-  <Charges>k__BackingField: 2
+  <Charges>k__BackingField: 3
   <Stacks>k__BackingField: 0
   <StatModifiers>k__BackingField: []
   <AttackModifiers>k__BackingField:
   - <Type>k__BackingField: 20
-    <Value>k__BackingField: 3
+    <Value>k__BackingField: 1
     <Chance>k__BackingField: 1
   <ControlProvider>k__BackingField:
     rid: -2
