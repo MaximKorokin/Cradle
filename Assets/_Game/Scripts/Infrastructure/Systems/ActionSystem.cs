@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Control.Intents;
 using Assets._Game.Scripts.Entities.Interactions;
 using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
@@ -12,6 +13,10 @@ using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
+    /// <summary>
+    /// Drives the action lifecycle for each entity: intent → preparation → channeling → completion.
+    /// Also reacts to equipment changes that grant or revoke special actions.
+    /// </summary>
     public sealed class ActionSystem : EntitySystemBase, ITickSystem
     {
         private readonly IObjectResolver _resolver;
@@ -29,108 +34,120 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
         }
 
+        // ───────────────────────── Equipment Events ─────────────────────────
+
         private void OnEquipmentChanged(EquipmentChangedEvent e)
         {
-            var actionModule = e.Entity.GetModule<ActionModule>();
             if (!e.Item.HasValue) return;
 
             var specialActionTrait = e.Item.Value.GetTrait<SpecialActionTrait>();
             if (specialActionTrait == null) return;
 
-            if (e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced)
-            {
-                actionModule.SetSpecialAction(specialActionTrait.Kind, new(specialActionTrait.Action));
-            }
-            else if (e.Kind == EquipmentChangeKind.Unequipped)
-            {
-                actionModule.SetSpecialAction(specialActionTrait.Kind, null);
-            }
+            var actionModule = e.Entity.GetModule<ActionModule>();
+            var isEquipping = e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced;
+
+            actionModule.SetSpecialAction(
+                specialActionTrait.Kind,
+                isEquipping ? new ActionInstance(specialActionTrait.Action) : null
+            );
         }
+
+        // ───────────────────────── Tick Loop ─────────────────────────
 
         public void Tick(float delta)
         {
             IterateMatchingEntities(entity => TickEntity(entity, delta));
         }
 
-        /// <summary>
-        /// If there's no active action, try to start one.
-        /// If there is an active action, but we're not in range, try to approach.
-        /// If we're preparing, update the preparation time.
-        /// If we're channeling, update the channel time.
-        /// </summary>
         private void TickEntity(Entity entity, float delta)
         {
             var statModule = entity.GetModule<StatModule>();
             var actionModule = entity.GetModule<ActionModule>();
 
-            // If there's no active action, try to start one.
-            if (TryStartAction(entity, statModule, actionModule))
+            if (actionModule.IsPreparing)
             {
-                StartActionPreparation(actionModule);
-                return;
-            }
-            else if (actionModule.IsPreparing)
-            {
-                UpdatePreparation(statModule, actionModule, delta);
-                return;
+                TickPreparation(statModule, actionModule, delta);
             }
             else if (actionModule.IsChanneling)
             {
-                UpdateChanneling(statModule, actionModule, delta);
-                return;
+                TickChanneling(statModule, actionModule, delta);
+            }
+            else
+            {
+                TryBeginNewAction(entity, statModule, actionModule);
             }
         }
 
-        private bool TryStartAction(Entity entity, StatModule statModule, ActionModule actionModule)
+        // ───────────────────────── Starting a New Action ─────────────────────────
+
+        private void TryBeginNewAction(Entity entity, StatModule statModule, ActionModule actionModule)
         {
             var intent = entity.GetModule<IntentModule>();
 
-            if (!intent.TryConsumeAction(out var actionIntent)) return false;
+            if (!intent.TryConsumeAction(out var actionIntent))
+                return;
 
             var action = actionIntent.ActionInstance;
-            // If the intent doesn't have an action, resets the active state.
+
+            // A null action signals that the current action should be cancelled.
             if (action == null)
             {
                 actionModule.ResetActiveState();
-                return false;
+                return;
             }
 
-            // Prevent restarting the same action.
-            if (actionModule.ActiveAction?.Definition.Id == action.Definition.Id) return false;
+            if (!CanStartAction(actionModule, action, entity, actionIntent))
+                return;
 
-            if (!actionModule.GlobalCooldown.IsOver()) return false;
-
-            var context = new InteractionContext(
-                entity,
-                actionIntent.Target,
-                actionIntent.Point);
-
-            if (!action.CanStartPreparation(context)) return false;
-
-            actionModule.ActiveAction = action;
-            actionModule.ActiveContext = context;
-
-            // sync the action speed multiplier to the animator
-            if (entity.TryGetModule<AppearanceModule>(out var appearanceModule))
-            {
-                var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
-                appearanceModule.RequestSetAnimatorValue(EntityAnimatorParameterName.ActionSpeedMultiplier, speedMultiplier);
-            }
-
-            return true;
+            ActivateAction(entity, statModule, actionModule, action, actionIntent);
+            BeginPreparation(actionModule);
         }
 
-        private void StartActionPreparation(ActionModule actionModule)
+        private bool CanStartAction(ActionModule actionModule, ActionInstance action, Entity entity, ActionIntent actionIntent)
+        {
+            // Prevent restarting the same action.
+            if (actionModule.ActiveAction?.Definition.Id == action.Definition.Id)
+                return false;
+
+            if (!actionModule.GlobalCooldown.IsOver())
+                return false;
+
+            var context = new InteractionContext(entity, actionIntent.Target, actionIntent.Point);
+            return action.CanStartPreparation(context);
+        }
+
+        private void ActivateAction(Entity entity, StatModule statModule, ActionModule actionModule, ActionInstance action, ActionIntent actionIntent)
+        {
+            actionModule.ResetActiveState();
+
+            actionModule.ActiveAction = action;
+            actionModule.ActiveContext = new InteractionContext(entity, actionIntent.Target, actionIntent.Point);
+
+            SyncAnimatorSpeed(entity, statModule, actionModule);
+        }
+
+        private void SyncAnimatorSpeed(Entity entity, StatModule statModule, ActionModule actionModule)
+        {
+            if (!entity.TryGetModule<AppearanceModule>(out var appearanceModule))
+                return;
+
+            var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
+            appearanceModule.RequestSetAnimatorValue(EntityAnimatorParameterName.ActionSpeedMultiplier, speedMultiplier);
+        }
+
+        // ───────────────────────── Preparation Phase ─────────────────────────
+
+        private void BeginPreparation(ActionModule actionModule)
         {
             var action = actionModule.ActiveAction;
-            var context = actionModule.ActiveContext;
-            action.OnPreparationStart(context);
+
+            action.OnPreparationStart(actionModule.ActiveContext);
 
             actionModule.IsPreparing = true;
             actionModule.RemainingPreparationTime = action.Definition.PreparationTime;
         }
 
-        private void UpdatePreparation(StatModule statModule, ActionModule actionModule, float delta)
+        private void TickPreparation(StatModule statModule, ActionModule actionModule, float delta)
         {
             var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
             actionModule.RemainingPreparationTime -= delta * speedMultiplier;
@@ -138,16 +155,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (actionModule.RemainingPreparationTime > 0)
                 return;
 
-            var action = actionModule.ActiveAction;
-
             actionModule.IsPreparing = false;
 
+            var action = actionModule.ActiveAction;
             action.OnPreparationComplete(actionModule.ActiveContext, _resolver);
 
             if (action.Definition.MaxChannelingTime > 0)
             {
-                actionModule.IsChanneling = true;
-                actionModule.RemainingChannelTime = action.Definition.MaxChannelingTime;
+                BeginChanneling(actionModule, action);
             }
             else
             {
@@ -155,24 +170,36 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void UpdateChanneling(StatModule statModule, ActionModule actionModule, float delta)
+        // ───────────────────────── Channeling Phase ─────────────────────────
+
+        private void BeginChanneling(ActionModule actionModule, ActionInstance action)
+        {
+            actionModule.IsChanneling = true;
+            actionModule.RemainingChannelTime = action.Definition.MaxChannelingTime;
+        }
+
+        private void TickChanneling(StatModule statModule, ActionModule actionModule, float delta)
         {
             var action = actionModule.ActiveAction;
+            var speedMultiplier = action.Definition.SpeedMultiplier.GetValue(statModule);
+            var scaledDelta = delta * speedMultiplier;
 
-            var speedMultiplier = actionModule.ActiveAction.Definition.SpeedMultiplier.GetValue(statModule);
-            actionModule.RemainingChannelTime -= delta * speedMultiplier;
+            actionModule.RemainingChannelTime -= scaledDelta;
 
-            // The action can end channeling early if it returns true from OnChannelTick, or if the remaining channel time is 0 or less.
-            if (action.OnChannelTick(actionModule.ActiveContext, delta * speedMultiplier) || actionModule.RemainingChannelTime <= 0)
+            var channelingFinished = action.OnChannelTick(actionModule.ActiveContext, scaledDelta);
+
+            if (channelingFinished || actionModule.RemainingChannelTime <= 0)
             {
                 actionModule.IsChanneling = false;
                 CompleteAction(statModule, actionModule, action);
             }
         }
 
+        // ───────────────────────── Completion ─────────────────────────
+
         private void CompleteAction(StatModule statModule, ActionModule actionModule, ActionInstance action)
         {
-            actionModule.ActiveAction.Cooldown.Reset();
+            action.Cooldown.Reset();
             actionModule.ResetActiveState();
 
             actionModule.GlobalCooldown.Cooldown = statModule.Stats.Get(StatId.PhysicalActionDelay);
