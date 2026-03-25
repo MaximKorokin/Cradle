@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.Dispose();
 
-            _globalEventBus.Subscribe<DamageAppliedEvent>(OnDamageApplied);
+            _globalEventBus.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
         }
 
         private void OnDamageApplied(DamageAppliedEvent e)
@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     case AttackModifierType.MultipliedDamage:
                         var extraDamage = e.Damage * modifier.Value;
                         targetStatModule.AddBase(StatId.HpCurrent, -extraDamage);
-                        _globalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
+                        _globalEventBus.Publish<DamageAppliedEvent>(new(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
                         break;
                 }
             }
@@ -63,6 +63,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (e.Kind == StatusEffectChangeKind.Added)
             {
+                // If the entity doesn't have an AttackModifierModule, add one.
                 if (!e.Entity.TryGetModule<AttackModifierModule>(out var attackModifierModule))
                 {
                     attackModifierModule = new();

@@ -69,14 +69,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 StartActionPreparation(actionModule);
                 return;
             }
-
-            if (actionModule.IsPreparing)
+            else if (actionModule.IsPreparing)
             {
                 UpdatePreparation(statModule, actionModule, delta);
                 return;
             }
-
-            if (actionModule.IsChanneling)
+            else if (actionModule.IsChanneling)
             {
                 UpdateChanneling(statModule, actionModule, delta);
                 return;
@@ -89,18 +87,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (!intent.TryConsumeAction(out var actionIntent)) return false;
 
-            // If the intent doesn't have an action, clear the active state.
-            if (actionIntent.ActionInstance == null)
+            var action = actionIntent.ActionInstance;
+            // If the intent doesn't have an action, resets the active state.
+            if (action == null)
             {
-                actionModule.ActiveAction = default;
-                actionModule.ActiveContext = default;
-                actionModule.IsPreparing = false;
-                actionModule.IsChanneling = false;
+                actionModule.ResetActiveState();
                 return false;
             }
 
             // Prevent restarting the same action.
-            if (actionModule.ActiveAction?.Definition.Id == actionIntent.ActionInstance?.Definition.Id) return false;
+            if (actionModule.ActiveAction?.Definition.Id == action.Definition.Id) return false;
 
             if (!actionModule.GlobalCooldown.IsOver()) return false;
 
@@ -108,7 +104,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 entity,
                 actionIntent.Target,
                 actionIntent.Point);
-            var action = actionIntent.ActionInstance;
 
             if (!action.CanStartPreparation(context)) return false;
 
@@ -178,7 +173,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void CompleteAction(StatModule statModule, ActionModule actionModule, ActionInstance action)
         {
             actionModule.ActiveAction.Cooldown.Reset();
-            actionModule.ActiveAction = null;
+            actionModule.ResetActiveState();
+
             actionModule.GlobalCooldown.Cooldown = statModule.Stats.Get(StatId.PhysicalActionDelay);
             actionModule.GlobalCooldown.Reset();
 

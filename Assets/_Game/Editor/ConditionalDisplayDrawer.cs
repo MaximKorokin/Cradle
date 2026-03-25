@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using Assets._Game.Scripts.Shared.Attributes;
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,9 +48,9 @@ public class ConditionalDisplayDrawer : PropertyDrawer
         if (comparisonType == ConditionalDisplayAttribute.ComparisonType.Flag)
         {
             var flagValue = comparedProperty.enumValueFlag;
-            if (comparedValue is not int expectedValue)
-                expectedValue = default;
-            return flagValue == expectedValue;
+            if (comparedValue is Enum)
+                return (flagValue & (int)comparedValue) != 0;
+            return true; // Default to showing if comparedValue is not an enum
         }
 
         return true; // Default to showing if type not supported
@@ -67,8 +68,9 @@ public class ConditionalDisplayDrawer : PropertyDrawer
             return property.serializedObject.FindProperty(conditionPath);
         }
 
-        return property.serializedObject.FindProperty(conditionName);
+        var conditionProperty = property.serializedObject.FindProperty(conditionName);
+        conditionProperty ??= property.serializedObject.FindProperty($"<{conditionName}>k__BackingField");
+        return conditionProperty;
     }
 }
 #endif
-

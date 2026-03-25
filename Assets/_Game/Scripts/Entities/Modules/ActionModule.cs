@@ -103,6 +103,19 @@ namespace Assets._Game.Scripts.Entities.Modules
                 AddAction(initialAction);
             }
         }
+
+        /// <summary>
+        /// Resets all active state properties to their default values.
+        /// </summary>
+        public void ResetActiveState()
+        {
+            IsPreparing = false;
+            RemainingPreparationTime = 0;
+            IsChanneling = false;
+            RemainingChannelTime = 0;
+            ActiveAction = null;
+            ActiveContext = default;
+        }
     }
 
     public struct SpecialAction

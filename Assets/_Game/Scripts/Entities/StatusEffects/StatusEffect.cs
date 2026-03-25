@@ -6,12 +6,12 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     public sealed class StatusEffect
     {
         public StatusEffectDefinition Definition { get; }
-        public float RemainingDuration => Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) ? Definition.Duration : _cooldownCounter.Cooldown - _cooldownCounter.TimeSinceReset;
+        public float RemainingDuration => !Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) ? float.PositiveInfinity : _cooldownCounter.Cooldown - _cooldownCounter.TimeSinceReset;
         public StatusEffectSnapshot Snapshot => new(this);
 
         private readonly CooldownCounter _cooldownCounter;
 
-        public bool IsExpired => !Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) && _cooldownCounter.IsOver();
+        public bool IsExpired => Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) && _cooldownCounter.IsOver();
 
         public StatusEffect(StatusEffectDefinition definition)
         {

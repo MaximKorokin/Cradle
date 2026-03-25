@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79116d10ba7a0044980441119a7c653d, type: 3}
-  m_Name: Vampiric
+  m_Name: DamageSalve
   m_EditorClassIdentifier: 
-  _id: 193c9d5a3f374441964f6999a45870b5
-  <Name>k__BackingField: Vampiric Rage
-  <Icon>k__BackingField: {fileID: -3267301643039810566, guid: dea6515f09b35bf46a70f33867f17cf8, type: 3}
+  _id: e97dc6a885ca4c838676ef12395bc8ce
+  <Name>k__BackingField: Damage Salve
+  <Icon>k__BackingField: {fileID: 5807367746513092223, guid: 92a4a48f3385e1a46bbed831c497cd64, type: 3}
   <Category>k__BackingField: 0
-  <Behaviour>k__BackingField: 1
-  <Duration>k__BackingField: 30
-  <Charges>k__BackingField: 0
+  <Behaviour>k__BackingField: 16
+  <Duration>k__BackingField: 0
+  <Charges>k__BackingField: 2
   <Stacks>k__BackingField: 0
   <StatModifiers>k__BackingField: []
   <AttackModifiers>k__BackingField:
-  - <Type>k__BackingField: 10
-    <Value>k__BackingField: 0.5
-    <Chance>k__BackingField: 0.5
+  - <Type>k__BackingField: 20
+    <Value>k__BackingField: 3
+    <Chance>k__BackingField: 1
   <ControlProvider>k__BackingField:
     rid: -2
   references:

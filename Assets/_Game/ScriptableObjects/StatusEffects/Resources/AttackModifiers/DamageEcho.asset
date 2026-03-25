@@ -16,8 +16,10 @@ MonoBehaviour:
   <Name>k__BackingField: Damage Echo
   <Icon>k__BackingField: {fileID: 1308624975233488409, guid: d5940575a81e1074daf366f2a262578c, type: 3}
   <Category>k__BackingField: 0
+  <Behaviour>k__BackingField: 1
   <Duration>k__BackingField: 5
-  <IsEndless>k__BackingField: 0
+  <Charges>k__BackingField: 0
+  <Stacks>k__BackingField: 0
   <StatModifiers>k__BackingField: []
   <AttackModifiers>k__BackingField:
   - <Type>k__BackingField: 20

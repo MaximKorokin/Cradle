@@ -18,16 +18,17 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         [field: SerializeField]
         public StatusEffectCategory Category { get; private set; }
 
+        [field: Header("Lifetime Behaviour")]
         [field: SerializeField]
         public StatusEffectBehaviour Behaviour { get; private set; }
         [field: SerializeField]
         [field: ConditionalDisplay(nameof(Behaviour), StatusEffectBehaviour.Duration, ConditionalDisplayAttribute.ComparisonType.Flag)]
         public float Duration { get; private set; }
         [field: SerializeField]
-        //[field: ConditionalDisplay()]
+        [field: ConditionalDisplay(nameof(Behaviour), StatusEffectBehaviour.Charges, ConditionalDisplayAttribute.ComparisonType.Flag)]
         public int Charges { get; private set; }
         [field: SerializeField]
-        //[field: ConditionalDisplay()]
+        [field: ConditionalDisplay(nameof(Behaviour), StatusEffectBehaviour.Stacks, ConditionalDisplayAttribute.ComparisonType.Flag)]
         public int Stacks { get; private set; }
 
         [field: SerializeField]
@@ -59,8 +60,8 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     public enum StatusEffectBehaviour
     {
         None = 0,
-        Duration = 10,
-        Charges = 20,
-        Stacks = 30,
+        Duration = 1,
+        Charges = 16,
+        Stacks = 256,
     }
 }

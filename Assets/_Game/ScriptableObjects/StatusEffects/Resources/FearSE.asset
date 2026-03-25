@@ -16,9 +16,12 @@ MonoBehaviour:
   <Name>k__BackingField: Stun
   <Icon>k__BackingField: {fileID: 5674045359778475710, guid: 14f4d8085dae9c44b9711d92914372da, type: 3}
   <Category>k__BackingField: 1
+  <Behaviour>k__BackingField: 1
   <Duration>k__BackingField: 1
-  <IsEndless>k__BackingField: 0
+  <Charges>k__BackingField: 0
+  <Stacks>k__BackingField: 0
   <StatModifiers>k__BackingField: []
+  <AttackModifiers>k__BackingField: []
   <ControlProvider>k__BackingField:
     rid: 3412048660377108617
   references:
