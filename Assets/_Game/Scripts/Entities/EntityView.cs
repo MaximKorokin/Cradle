@@ -59,11 +59,12 @@ namespace Assets._Game.Scripts.Entities
                 AnimatorController.Rebind();
             }
 
+            _appearance.SetScaleRequested += SetScale;
+
             _appearance.EnsureUnitRequested += UnitsController.EnsureUnit;
             _appearance.SetUnitSpriteRequested += UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested += UnitsController.RemoveUnit;
             _appearance.SetTurnDirectionRequested += UnitsController.SetTurnDirection;
-            _appearance.SetScaleRequested += UnitsController.SetScale;
             _appearance.UpdateOrderInLayerRequested += UnitsController.UpdateOrderInLayer;
 
             if (AnimatorController != null)
@@ -84,11 +85,12 @@ namespace Assets._Game.Scripts.Entities
 
             if (_appearance == null) return;
 
+            _appearance.SetScaleRequested -= SetScale;
+
             _appearance.EnsureUnitRequested -= UnitsController.EnsureUnit;
             _appearance.SetUnitSpriteRequested -= UnitsController.SetUnitSprite;
             _appearance.RemoveUnitRequested -= UnitsController.RemoveUnit;
             _appearance.SetTurnDirectionRequested -= UnitsController.SetTurnDirection;
-            _appearance.SetScaleRequested -= UnitsController.SetScale;
             _appearance.UpdateOrderInLayerRequested -= UnitsController.UpdateOrderInLayer;
 
             if (AnimatorController != null)
@@ -101,6 +103,11 @@ namespace Assets._Game.Scripts.Entities
             _appearance = null;
             UnitsController = null;
             Entity = null;
+        }
+
+        public void SetScale(float scale)
+        {
+            transform.localScale = new Vector3(scale, scale, 1);
         }
 
         private void OnDisable()

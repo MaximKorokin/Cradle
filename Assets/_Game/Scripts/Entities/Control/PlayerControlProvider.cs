@@ -46,7 +46,7 @@ namespace Assets._Game.Scripts.Entities.Control
             if (moveDirection.sqrMagnitude <= _stopRadius * _stopRadius)
             {
                 _hasMoveTarget = false;
-                intent.SetMove(default);
+                intent.SetMove(new(Vector2.zero));
                 return;
             }
 

@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Shared.Utils;
+using UnityEngine;
 using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
@@ -11,6 +12,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class ControlSystem : EntitySystemBase, ITickSystem
     {
         private readonly IObjectResolver _resolver;
+        private readonly IGlobalEventBus _globalEventBus;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -18,11 +20,20 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 new[] { typeof(ControlModule) }
             );
 
-        public ControlSystem(EntityRepository repository, IObjectResolver resolver) : base(repository)
+        public ControlSystem(EntityRepository repository, IObjectResolver resolver, IGlobalEventBus globalEventBus) : base(repository)
         {
             _resolver = resolver;
+            _globalEventBus = globalEventBus;
+
+            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
 
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
         }
 
         protected override void OnEntityAdded(Entity entity)
@@ -99,6 +110,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 var controlModule = e.Entity.GetModule<ControlModule>();
                 controlModule.AddProvider(e.StatusEffect.Definition.ControlProvider.CreateInstance(_resolver));
             }
+        }
+
+        private void OnEntityDied(EntityDiedEvent e)
+        {
+            if (!e.Victim.TryGetModule<IntentModule>(out var intent)) return;
+
+            intent.SetMove(new(Vector2.zero));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Querying;
 
@@ -12,7 +13,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled,
-                new[] { typeof(SpatialModule), typeof(KinematicsModule), typeof(AppearanceModule), typeof(IntentModule) }
+                new[] { typeof(SpatialModule), typeof(KinematicsModule), typeof(AppearanceModule), typeof(IntentModule), typeof(StatModule) }
             );
 
         public LocomotionSystem(EntityRepository entityRepository) : base(entityRepository)
@@ -27,10 +28,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void FixedTick(Entity entity)
         {
             var spatial = entity.GetModule<SpatialModule>();
+            var intent = entity.GetModule<IntentModule>();
+            var stat = entity.GetModule<StatModule>();
             var kinematics = entity.GetModule<KinematicsModule>();
             var appearance = entity.GetModule<AppearanceModule>();
 
-            var velocity = kinematics.Velocity;
+            if (!intent.TryConsumeMove(out var move)) return;
+
+            float moveSpeed = stat.Stats.Get(StatId.MoveSpeed);
+
+            var direction = move.NormalizedDirection;
+            var multiplier = move.SpeedMultiplier;
+            var velocity = moveSpeed * multiplier * direction;
+            kinematics.SetVelocity(velocity);
 
             var isMoving = velocity.sqrMagnitude > MoveEpsilonSqr;
             appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.IsWalking, isMoving);

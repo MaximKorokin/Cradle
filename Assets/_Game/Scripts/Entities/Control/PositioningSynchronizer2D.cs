@@ -34,11 +34,6 @@ namespace Assets._Game.Scripts.Entities.Control
                 spatial.SetPosition(transform.position);
             }
 
-            if (_entity.TryGetModule(out KinematicsModule kinematics))
-            {
-                kinematics.SetVelocity(_rigidbody.linearVelocity);
-            }
-
             if (_entity.TryGetModule(out RestrictionStateModule restrictionState))
             {
                 _collider.enabled = !restrictionState.Has(RestrictionState.Dead);

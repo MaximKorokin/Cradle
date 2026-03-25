@@ -32,7 +32,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             if (wander.CurrentPoint == null || (wander.CurrentPoint.Value - spatial.Position).sqrMagnitude < StopDistance * StopDistance)
             {
                 wander.CurrentPoint = wander.AnchorPoint + Random.insideUnitCircle * 3f;
-                intent.SetMove(default);
+                intent.SetMove(new(Vector2.zero));
                 ResetWanderCooldown(wander.MinIdleTime, wander.MaxIdleTime);
                 return;
             }

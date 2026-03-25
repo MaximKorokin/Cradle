@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets.CoreScripts;
 using VContainer;
 
@@ -17,12 +18,18 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
             Cooldown = new(Definition.Cooldown);
         }
 
+        public float GetEffectiveRange(Entity entity)
+        {
+            var stat = entity.GetModule<StatModule>();
+            return Definition.Range * stat.Stats.Get(StatId.PhysicalRangeMultiplier);
+        }
+
         public bool CanStartPreparation(InteractionContext context)
         {
             if (!Cooldown.IsOver())
                 return false;
 
-            var stats = context.Source.GetModule<StatModule>();
+            var stat = context.Source.GetModule<StatModule>();
             //return stats.Mana >= 10;
             return true;
         }

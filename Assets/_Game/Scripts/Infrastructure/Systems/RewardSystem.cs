@@ -1,18 +1,15 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Game;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public class RewardSystem : SystemBase
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly PlayerContext _playerContext;
 
-        public RewardSystem(IGlobalEventBus globalEventBus, PlayerContext playerContext)
+        public RewardSystem(IGlobalEventBus globalEventBus)
         {
             _globalEventBus = globalEventBus;
-            _playerContext = playerContext;
 
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
         }

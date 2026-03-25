@@ -60,18 +60,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         /// </summary>
         private void TickEntity(Entity entity, float delta)
         {
-            var intentModule = entity.GetModule<IntentModule>();
             var statModule = entity.GetModule<StatModule>();
             var actionModule = entity.GetModule<ActionModule>();
-
-            if (actionModule.ActiveContext.Target != null)
-            {
-                intentModule.SetAim(new(actionModule.ActiveContext.Target.GetPosition()));
-            }
 
             // If there's no active action, try to start one.
             if (TryStartAction(entity, statModule, actionModule))
             {
+                StartActionPreparation(actionModule);
                 return;
             }
 
@@ -84,13 +79,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (actionModule.IsChanneling)
             {
                 UpdateChanneling(statModule, actionModule, delta);
-                return;
-            }
-            
-            // If there is an active action, but we're not in range, try to approach.
-            if (actionModule.ActiveAction != null && ApproachPreparationRange(entity, statModule, actionModule))
-            {
-                TryStartActionPreparation(entity, statModule, actionModule);
                 return;
             }
         }
@@ -137,23 +125,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             return true;
         }
 
-        /// <summary>
-        /// Returns true if the entity is within preparation range, otherwise sets the move intent towards the target and returns false
-        /// </summary>
-        private bool ApproachPreparationRange(Entity entity, StatModule statModule, ActionModule actionModule)
-        {
-            var direction = actionModule.ActiveContext.Target.GetPosition() - entity.GetPosition();
-
-            var resultingRange = actionModule.ActiveAction.Definition.Range * statModule.Stats.Get(StatId.PhysicalRangeMultiplier);
-            if (direction.sqrMagnitude <= resultingRange * resultingRange)
-                return true;
-
-            var intent = entity.GetModule<IntentModule>();
-            intent.SetMove(new(direction));
-            return false;
-        }
-
-        private void TryStartActionPreparation(Entity entity, StatModule statModule, ActionModule actionModule)
+        private void StartActionPreparation(ActionModule actionModule)
         {
             var action = actionModule.ActiveAction;
             var context = actionModule.ActiveContext;

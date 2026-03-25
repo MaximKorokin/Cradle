@@ -1,6 +1,6 @@
-﻿using Assets._Game.Scripts.Entities.Control.Intents;
-using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Modules;
 using System;
+using UnityEngine;
 using VContainer;
 
 namespace Assets._Game.Scripts.Entities.Control
@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Entities.Control
             Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Stunned);
             if (Entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetMove(default);
+                intent.SetMove(new(Vector2.zero));
                 intent.SetAct(new(null, null, null));
             }
         }

@@ -82,11 +82,6 @@ namespace Assets._Game.Scripts.Entities.Units
                 _tree.SetTurnDirection(turnDirection);
         }
 
-        public void SetScale(float scale)
-        {
-            _unitsRoot.localScale = new Vector3(scale, scale, 1);
-        }
-
         public void ClearUnits()
         {
             _tree.ExecuteAllDepthFirst(u => RemoveUnit(u.Path));
