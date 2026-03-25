@@ -6,12 +6,12 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     public sealed class StatusEffect
     {
         public StatusEffectDefinition Definition { get; }
-        public float RemainingDuration => Definition.IsEndless ? Definition.Duration : _cooldownCounter.Cooldown - _cooldownCounter.TimeSinceReset;
+        public float RemainingDuration => Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) ? Definition.Duration : _cooldownCounter.Cooldown - _cooldownCounter.TimeSinceReset;
         public StatusEffectSnapshot Snapshot => new(this);
 
         private readonly CooldownCounter _cooldownCounter;
 
-        public bool IsExpired => !Definition.IsEndless && _cooldownCounter.IsOver();
+        public bool IsExpired => !Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) && _cooldownCounter.IsOver();
 
         public StatusEffect(StatusEffectDefinition definition)
         {
@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         public readonly Sprite Icon;
         public readonly float Duration;
         public readonly float RemainingDuration;
-        public readonly bool IsEndless;
+        public readonly StatusEffectBehaviour Behaviour;
 
         public StatusEffectSnapshot(StatusEffect statusEffect)
         {
@@ -35,7 +35,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             Icon = statusEffect.Definition.Icon;
             Duration = statusEffect.Definition.Duration;
             RemainingDuration = statusEffect.RemainingDuration;
-            IsEndless = statusEffect.Definition.IsEndless;
+            Behaviour = statusEffect.Definition.Behaviour;
         }
     }
 }

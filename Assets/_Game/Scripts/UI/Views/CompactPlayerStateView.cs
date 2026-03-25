@@ -42,12 +42,11 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void Update()
         {
-            //foreach (var (fillBar, snapshot, remainingDuration) in _activeStatusEffects)
             for (int i = 0; i < _activeStatusEffects.Count; i++)
             {
                 var (fillBar, snapshot, remainingDuration) = _activeStatusEffects[i];
 
-                if (snapshot.IsEndless) continue;
+                if (!snapshot.Behaviour.HasFlag(StatusEffectBehaviour.Duration)) continue;
 
                 remainingDuration -= Time.deltaTime;
                 _activeStatusEffects[i] = (fillBar, snapshot, remainingDuration);

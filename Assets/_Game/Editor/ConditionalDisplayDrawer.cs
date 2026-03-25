@@ -39,14 +39,17 @@ public class ConditionalDisplayDrawer : PropertyDrawer
     {
         if (comparisonType == ConditionalDisplayAttribute.ComparisonType.Bool)
         {
-            bool boolValue = comparedProperty.boolValue;
-            bool expectedValue = comparedValue is not bool || (bool)comparedValue; // Default to true if not specified
+            var boolValue = comparedProperty.boolValue;
+            var expectedValue = comparedValue is not bool || (bool)comparedValue; // Default to true if not specified
             return boolValue == expectedValue;
         }
 
-        if (comparisonType == ConditionalDisplayAttribute.ComparisonType.Type)
+        if (comparisonType == ConditionalDisplayAttribute.ComparisonType.Flag)
         {
-            var a = comparedProperty.type;
+            var flagValue = comparedProperty.enumValueFlag;
+            if (comparedValue is not int expectedValue)
+                expectedValue = default;
+            return flagValue == expectedValue;
         }
 
         return true; // Default to showing if type not supported

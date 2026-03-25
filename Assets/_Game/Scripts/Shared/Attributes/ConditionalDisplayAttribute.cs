@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.Shared.Attributes
         public enum ComparisonType
         {
             Bool = 1,
-            Type = 2,
+            Flag = 2,
         }
     }
 }

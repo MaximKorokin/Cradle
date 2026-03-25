@@ -181,6 +181,21 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             actionModule.ActiveAction = null;
             actionModule.GlobalCooldown.Cooldown = statModule.Stats.Get(StatId.PhysicalActionDelay);
             actionModule.GlobalCooldown.Reset();
+
+            actionModule.Entity.Publish<ActionCompletedEvent>(new(actionModule.Entity, action));
+        }
+    }
+
+    public readonly struct ActionCompletedEvent : IEntityEvent
+    {
+        public readonly ActionInstance ActionInstance;
+
+        public Entity Entity { get; }
+
+        public ActionCompletedEvent(Entity entity, ActionInstance actionInstance)
+        {
+            Entity = entity;
+            ActionInstance = actionInstance;
         }
     }
 }

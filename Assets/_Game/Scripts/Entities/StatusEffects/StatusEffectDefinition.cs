@@ -2,6 +2,8 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets._Game.Scripts.Shared.Attributes;
+using System;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
@@ -15,10 +17,19 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         public Sprite Icon { get; private set; }
         [field: SerializeField]
         public StatusEffectCategory Category { get; private set; }
+
         [field: SerializeField]
+        public StatusEffectBehaviour Behaviour { get; private set; }
+        [field: SerializeField]
+        [field: ConditionalDisplay(nameof(Behaviour), StatusEffectBehaviour.Duration, ConditionalDisplayAttribute.ComparisonType.Flag)]
         public float Duration { get; private set; }
         [field: SerializeField]
-        public bool IsEndless { get; private set; }
+        //[field: ConditionalDisplay()]
+        public int Charges { get; private set; }
+        [field: SerializeField]
+        //[field: ConditionalDisplay()]
+        public int Stacks { get; private set; }
+
         [field: SerializeField]
         public StatModifier[] StatModifiers { get; private set; }
         [field: SerializeField]
@@ -42,5 +53,14 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     {
         Buff,
         Debuff
+    }
+
+    [Flags]
+    public enum StatusEffectBehaviour
+    {
+        None = 0,
+        Duration = 10,
+        Charges = 20,
+        Stacks = 30,
     }
 }
