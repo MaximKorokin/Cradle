@@ -6,5 +6,4 @@ namespace Assets._Game.Scripts.Items
 
     [Serializable]
     public abstract class ItemTraitBase : IItemTrait { }
-
 }

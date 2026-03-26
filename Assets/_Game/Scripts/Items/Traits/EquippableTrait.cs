@@ -9,6 +9,5 @@ namespace Assets._Game.Scripts.Items.Traits
     {
         [field: SerializeField]
         public EquipmentSlotType Slot { get; private set; }
-        //public int RequiredLevel;
     }
 }

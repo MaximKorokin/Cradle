@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             if (_done) return StepStatus.Completed;
 
             var lootItemModule = context.Target.GetModule<LootItemModule>();
-            var inventory = context.Source.GetModule<InventoryEquipmentModule>().Inventory;
+            var inventory = context.Source.GetModule<InventoryModule>().Inventory;
             var added = inventory.Add(new(lootItemModule.ItemDefinition, new EmptyInstanceData(), lootItemModule.Amount));
 
             if (added <= 0)

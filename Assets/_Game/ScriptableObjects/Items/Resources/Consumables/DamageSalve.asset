@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: DamageSalve
+  m_EditorClassIdentifier: 
+  _id: f74f9cd5ddde49718c3967839374baa0
+  <Name>k__BackingField: Damage Salve
+  <Icon>k__BackingField: {fileID: 5807367746513092223, guid: 92a4a48f3385e1a46bbed831c497cd64, type: 3}
+  <Sprite>k__BackingField: {fileID: 5807367746513092223, guid: 92a4a48f3385e1a46bbed831c497cd64, type: 3}
+  <MaxAmount>k__BackingField: 64
+  <Weight>k__BackingField: 1
+  <Traits>k__BackingField:
+  - rid: 7990781616137175118
+  references:
+    version: 2
+    RefIds:
+    - rid: 7990781616137175118
+      type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Consumable>k__BackingField: 1
+        <Cooldown>k__BackingField: 1

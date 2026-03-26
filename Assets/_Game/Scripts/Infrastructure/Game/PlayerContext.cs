@@ -14,7 +14,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         public StatModule StatModule { get; private set; }
         public LevelingModule LevelingModule { get; private set; }
         public StatusEffectModule StatusEffectModule { get; private set; }
-        public InventoryEquipmentModule IEModule { get; private set; }
+        public InventoryModule InventoryModule { get; private set; }
+        public EquipmentModule EquipmentModule { get; private set; }
         public InventoryModel StashInventory { get; private set; }
         public SpatialModule SpatialModule { get; private set; }
 
@@ -45,9 +46,13 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
 
             // Try to get the modules we care about from the new player
-            if (Player.TryGetModule<InventoryEquipmentModule>(out var inventoryEquipmentModule))
+            if (Player.TryGetModule<InventoryModule>(out var inventoryModule))
             {
-                IEModule = inventoryEquipmentModule;
+                InventoryModule = inventoryModule;
+            }
+            if (Player.TryGetModule<EquipmentModule>(out var equipmentModule))
+            {
+                EquipmentModule = equipmentModule;
             }
             if (Player.TryGetModule<StatModule>(out var statsModule))
             {

@@ -48,9 +48,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnItemDefinitionClicked(ItemDefinition itemDefinition)
         {
-            if (_playerContext.Player.TryGetModule<InventoryEquipmentModule>(out var ieModule))
+            if (_playerContext.Player.TryGetModule<InventoryModule>(out var inventoryModule))
             {
-                ieModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, 1).Snapshot);
+                inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, 1).Snapshot);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public EquipmentHudData(PlayerContext playerContext)
         {
-            _equipmentModel = playerContext.IEModule.Equipment;
+            _equipmentModel = playerContext.EquipmentModule.Equipment;
             _equipmentModel.Changed += OnEquipmentChanged;
             OnEquipmentChanged();
         }

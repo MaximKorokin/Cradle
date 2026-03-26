@@ -46,6 +46,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public void LoadGame()
         {
             //ResetSave();
+
             var gameSave = _gameSaveRepository.Load(SaveKey);
 
             // hardcoded 100 slots in stash
