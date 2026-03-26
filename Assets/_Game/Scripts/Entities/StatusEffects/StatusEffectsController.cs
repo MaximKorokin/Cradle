@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Configs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
 {
@@ -29,7 +28,16 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 _statusEffects[category] = stack = new List<StatusEffect>();
             }
 
-            var activeStatusEffect = stack.FirstOrDefault(s => s.Definition.Id == statusEffect.Definition.Id);
+            StatusEffect activeStatusEffect = null;
+            for (int i = 0; i < stack.Count; i++)
+            {
+                if (stack[i].Definition.Id == statusEffect.Definition.Id)
+                {
+                    activeStatusEffect = stack[i];
+                    break;
+                }
+            }
+
             if (activeStatusEffect != null)
             {
                 RemoveStatusEffect(activeStatusEffect);
@@ -72,12 +80,18 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             {
                 return stack;
             }
-            return Enumerable.Empty<StatusEffect>();
+            return Array.Empty<StatusEffect>();
         }
 
         public IEnumerable<StatusEffect> GetStatusEffects()
         {
-            return _statusEffects.Values.SelectMany(x => x);
+            foreach (var stack in _statusEffects.Values)
+            {
+                for (int i = 0; i < stack.Count; i++)
+                {
+                    yield return stack[i];
+                }
+            }
         }
     }
 

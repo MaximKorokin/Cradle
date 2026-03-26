@@ -65,13 +65,11 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            EquipmentModel equipmentModel = null;
-            if (entityDefinition.TryGetModuleDefinition<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
-            {
-                var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
-                equipmentModel = _equipmentModelAssembler.Create(slots);
-            }
+            if (!entityDefinition.TryGetModuleDefinition<EquipmentModuleDefinition>(out var equipmentDefinitionModule))
+                return null;
 
+            var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
+            var equipmentModel = _equipmentModelAssembler.Create(slots);
             return new EquipmentModule(equipmentModel);
         }
 

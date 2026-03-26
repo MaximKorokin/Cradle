@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer.Unity;
@@ -24,7 +25,7 @@ namespace Assets._Game.Scripts.Entities
         public void Dispose()
         {
             _globalEventBus.Unsubscribe<SpawnEntityViewRequestEvent>(OnSpawn);
-            _globalEventBus.Subscribe<DespawnEntityViewRequestEvent>(OnDespawn);
+            _globalEventBus.Unsubscribe<DespawnEntityViewRequestEvent>(OnDespawn);
         }
 
         public void Start() { }

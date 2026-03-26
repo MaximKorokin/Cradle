@@ -9,8 +9,9 @@ namespace Assets._Game.Scripts.Entities.Modules
         private readonly List<IControlProvider> _providers = new();
         public IReadOnlyList<IControlProvider> Providers => _providers;
 
-        public readonly IControlProvider[] RawControlProviders = new IControlProvider[100];
-        public readonly IControlProvider[] UniqueControlProviders = new IControlProvider[100];
+        public const int ControlMaskCount = 3;
+        public readonly IControlProvider[] RawControlProviders = new IControlProvider[ControlMaskCount];
+        public readonly IControlProvider[] UniqueControlProviders = new IControlProvider[ControlMaskCount];
 
         protected override void OnAttach()
         {

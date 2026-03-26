@@ -1,27 +1,30 @@
 ﻿using System;
 
-public interface IGlobalEvent { }
-
-public interface IGlobalEventBus
+namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    void Publish<T>(in T evt) where T : struct, IGlobalEvent;
-    IDisposable Subscribe<T>(Action<T> handler) where T : struct, IGlobalEvent;
-    void Unsubscribe<T>(Action<T> handler) where T : struct, IGlobalEvent;
-    void Clear();
-}
+    public interface IGlobalEvent { }
 
-public sealed class GlobalEventBus : IGlobalEventBus
-{
-    private readonly EventBusCore _core = new();
+    public interface IGlobalEventBus
+    {
+        void Publish<T>(in T evt) where T : struct, IGlobalEvent;
+        IDisposable Subscribe<T>(Action<T> handler) where T : struct, IGlobalEvent;
+        void Unsubscribe<T>(Action<T> handler) where T : struct, IGlobalEvent;
+        void Clear();
+    }
 
-    public void Publish<T>(in T evt) where T : struct, IGlobalEvent
-        => _core.Publish(evt);
+    public sealed class GlobalEventBus : IGlobalEventBus
+    {
+        private readonly EventBusCore _core = new();
 
-    public IDisposable Subscribe<T>(Action<T> handler) where T : struct, IGlobalEvent
-        => _core.Subscribe(handler);
+        public void Publish<T>(in T evt) where T : struct, IGlobalEvent
+            => _core.Publish(evt);
 
-    public void Unsubscribe<T>(Action<T> handler) where T : struct, IGlobalEvent
-        => _core.Unsubscribe(handler);
+        public IDisposable Subscribe<T>(Action<T> handler) where T : struct, IGlobalEvent
+            => _core.Subscribe(handler);
 
-    public void Clear() => _core.Clear();
+        public void Unsubscribe<T>(Action<T> handler) where T : struct, IGlobalEvent
+            => _core.Unsubscribe(handler);
+
+        public void Clear() => _core.Clear();
+    }
 }

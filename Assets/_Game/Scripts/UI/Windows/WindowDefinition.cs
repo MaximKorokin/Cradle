@@ -33,7 +33,7 @@ namespace Assets._Game.Scripts.UI.Windows
         Cheats = 10,
         Stats = 20,
         InventoryInventory = 30,
-        InvestoryEquipment = 31,
+        InventoryEquipment = 31,
         //ItemStacksPreview = 40,
         Pause = 50,
     }

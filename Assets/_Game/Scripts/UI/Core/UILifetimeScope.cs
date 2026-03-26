@@ -48,8 +48,7 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController)),
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
                 new(WindowId.InventoryInventory, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
-                new(WindowId.InvestoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
-                new(WindowId.Pause, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
+                new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
 
                 new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<, >)),
             };

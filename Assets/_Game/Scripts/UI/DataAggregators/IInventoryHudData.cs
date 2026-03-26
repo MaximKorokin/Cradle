@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Stats;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items.Inventory;
@@ -28,8 +29,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
         {
-            _inventoryModel = playerContext.InventoryModule.Inventory;
-            _statsController = playerContext.StatModule.Stats;
+            _inventoryModel = playerContext.GetModule<InventoryModule>().Inventory;
+            _statsController = playerContext.GetModule<StatModule>().Stats;
             _itemsConfig = itemsConfig;
 
             _inventoryModel.Changed += OnInventoryChanged;
@@ -82,7 +83,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public StorageHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
         {
-            _inventoryModel = playerContext.StorageModule.Storage;
+            _inventoryModel = playerContext.GetModule<StorageModule>().Storage;
             _itemsConfig = itemsConfig;
 
             _inventoryModel.Changed += OnInventoryChanged;

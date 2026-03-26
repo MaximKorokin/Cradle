@@ -132,7 +132,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             if (primaryItemNullable == null)
             {
                 SLog.Error($"Trying to get actions for item that is not found in {_primaryItemContainer} in slot {_primaryContainerSlot}");
-                return Enumerable.Empty<ItemStackAction>();
+                return Array.Empty<ItemStackAction>();
             }
 
             var primaryItem = primaryItemNullable.Value;

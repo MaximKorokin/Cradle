@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Items.Inventory;
 using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
@@ -16,13 +15,6 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         private readonly PlayerControlProvider _playerControlProvider;
 
         public Entity Player { get; private set; }
-        public StatModule StatModule { get; private set; }
-        public LevelingModule LevelingModule { get; private set; }
-        public StatusEffectModule StatusEffectModule { get; private set; }
-        public StorageModule StorageModule { get; private set; }
-        public InventoryModule InventoryModule { get; private set; }
-        public EquipmentModule EquipmentModule { get; private set; }
-        public SpatialModule SpatialModule { get; private set; }
 
         public event Action PlayerChanging;
         public event Action PlayerChanged;
@@ -31,6 +23,12 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         {
             _playerControlProvider = playerControlProvider;
         }
+
+        public T GetModule<T>() where T : class, IEntityModule
+            => Player.GetModule<T>();
+
+        public bool TryGetModule<T>(out T module) where T : class, IEntityModule
+            => Player.TryGetModule(out module);
 
         public void SetPlayer(Entity player)
         {
@@ -48,36 +46,6 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             if (Player.TryGetModule(out controlModule))
             {
                 controlModule.AddProvider(_playerControlProvider);
-            }
-
-            // Try to get the modules we care about from the new player
-            if (Player.TryGetModule<StorageModule>(out var storageModule))
-            {
-                StorageModule = storageModule;
-            }
-            if (Player.TryGetModule<InventoryModule>(out var inventoryModule))
-            {
-                InventoryModule = inventoryModule;
-            }
-            if (Player.TryGetModule<EquipmentModule>(out var equipmentModule))
-            {
-                EquipmentModule = equipmentModule;
-            }
-            if (Player.TryGetModule<StatModule>(out var statsModule))
-            {
-                StatModule = statsModule;
-            }
-            if (Player.TryGetModule<LevelingModule>(out var levelingModule))
-            {
-                LevelingModule = levelingModule;
-            }
-            if (Player.TryGetModule<StatusEffectModule>(out var statusEffectModule))
-            {
-                StatusEffectModule = statusEffectModule;
-            }
-            if (Player.TryGetModule<SpatialModule>(out var spatialModule))
-            {
-                SpatialModule = spatialModule;
             }
 
             PlayerChanged?.Invoke();

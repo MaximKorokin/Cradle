@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Storage;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly IGlobalEventBus _globalEventBus;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled, new[] { typeof(DespawnModule) });
+        protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(DespawnModule) });
 
         public DespawnSystem(EntityRepository repository, IGlobalEventBus globalEventBus) : base(repository)
         {

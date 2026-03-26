@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Stats;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using System;
@@ -24,28 +25,28 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private void SubscribeToPlayerModules()
         {
-            _playerContext.StatModule.Stats.StatChanged += OnStatChanged;
-            _playerContext.StatusEffectModule.StatusEffects.Changed += OnStatusEffectsControllerChanged;
-            _playerContext.LevelingModule.Changed += OnLevelingModuleChanged;
+            _playerContext.GetModule<StatModule>().Stats.StatChanged += OnStatChanged;
+            _playerContext.GetModule<StatusEffectModule>().StatusEffects.Changed += OnStatusEffectsControllerChanged;
+            _playerContext.GetModule<LevelingModule>().Changed += OnLevelingModuleChanged;
         }
 
         private void UnsubscribeFromPlayerModules()
         {
-            _playerContext.StatModule.Stats.StatChanged -= OnStatChanged;
-            _playerContext.StatusEffectModule.StatusEffects.Changed -= OnStatusEffectsControllerChanged;
-            _playerContext.LevelingModule.Changed -= OnLevelingModuleChanged;
+            _playerContext.GetModule<StatModule>().Stats.StatChanged -= OnStatChanged;
+            _playerContext.GetModule<StatusEffectModule>().StatusEffects.Changed -= OnStatusEffectsControllerChanged;
+            _playerContext.GetModule<LevelingModule>().Changed -= OnLevelingModuleChanged;
         }
 
-        public float CurrentHp => _playerContext.StatModule.Stats.Get(StatId.HpCurrent);
-        public float MaxHp => _playerContext.StatModule.Stats.Get(StatId.HpMax);
-        public float Level => _playerContext.LevelingModule.Level;
-        public float NormalizedExperience => _playerContext.LevelingModule.GetNormalizedExperience();
+        public float CurrentHp => _playerContext.GetModule<StatModule>().Stats.Get(StatId.HpCurrent);
+        public float MaxHp => _playerContext.GetModule<StatModule>().Stats.Get(StatId.HpMax);
+        public float Level => _playerContext.GetModule<LevelingModule>().Level;
+        public float NormalizedExperience => _playerContext.GetModule<LevelingModule>().GetNormalizedExperience();
 
         public IEnumerable<StatusEffectSnapshot> Buffs =>
-            _playerContext.StatusEffectModule.StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
+            _playerContext.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
 
         public IEnumerable<StatusEffectSnapshot> Debuffs =>
-            _playerContext.StatusEffectModule.StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
+            _playerContext.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
 
         private void OnStatChanged(StatId statId)
         {

@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Stats
@@ -12,6 +11,13 @@ namespace Assets._Game.Scripts.Entities.Stats
         private const float MaxMultiplier = 10f;
 
         private readonly List<(StatModifierSource Source, StatModifier Modifier)> _modifiers = new();
+        private static readonly Comparison<(StatModifierSource Source, StatModifier Modifier)> _modifierComparison =
+            (a, b) =>
+            {
+                int comparison = ((int)a.Modifier.Stage).CompareTo((int)b.Modifier.Stage);
+                if (comparison != 0) return comparison;
+                return a.Modifier.Priority.CompareTo(b.Modifier.Priority);
+            };
 
         public Stat(float baseValue)
         {
@@ -39,9 +45,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             float value = BaseValue;
 
             // Sort by Stage then Priority (Priority used within same stage)
-            var ordered = _modifiers
-                .OrderBy(m => m.Modifier.Stage)
-                .ThenBy(m => m.Modifier.Priority);
+            _modifiers.Sort(_modifierComparison);
 
             float addAccumulated = 0f;
             float multiplyAccumulated = 0f;
@@ -51,7 +55,7 @@ namespace Assets._Game.Scripts.Entities.Stats
             float? clampMin = null;
             float? clampMax = null;
 
-            foreach (var (_, modifier) in ordered)
+            foreach (var (_, modifier) in _modifiers)
             {
                 // You can switch on stage explicitly; easiest is switch by Op + Stage.
                 switch (modifier.Stage)

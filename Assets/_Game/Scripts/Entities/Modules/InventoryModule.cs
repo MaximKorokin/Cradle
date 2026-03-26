@@ -64,12 +64,10 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            InventoryModel inventoryModel = null;
             if (entityDefinition.TryGetModuleDefinition<InventoryModuleDefinition>(out var inventoryDefinitionModule))
-            {
-                inventoryModel = _inventoryModelAssembler.Create(inventoryDefinitionModule.SlotsAmount);
-            }
+                return null;
 
+            var inventoryModel = _inventoryModelAssembler.Create(inventoryDefinitionModule.SlotsAmount);
             return new InventoryModule(inventoryModel);
         }
 

@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 
@@ -17,7 +18,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public EquipmentHudData(PlayerContext playerContext)
         {
-            _equipmentModel = playerContext.EquipmentModule.Equipment;
+            _equipmentModel = playerContext.GetModule<EquipmentModule>().Equipment;
             _equipmentModel.Changed += OnEquipmentChanged;
             OnEquipmentChanged();
         }

@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Calculators;
+using Assets._Game.Scripts.Infrastructure.Game;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Steps
 {

@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
                     return attributes.Cast<T>();
                 }
             }
-            return Enumerable.Empty<T>();
+            return Array.Empty<T>();
         }
     }
 }

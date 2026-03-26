@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Configs;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using System.Linq;
 

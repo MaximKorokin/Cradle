@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Shared.Utils;
 using UnityEngine;
