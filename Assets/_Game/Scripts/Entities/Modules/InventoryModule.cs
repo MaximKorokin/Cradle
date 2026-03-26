@@ -64,7 +64,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            if (entityDefinition.TryGetModuleDefinition<InventoryModuleDefinition>(out var inventoryDefinitionModule))
+            if (!entityDefinition.TryGetModuleDefinition<InventoryModuleDefinition>(out var inventoryDefinitionModule))
                 return null;
 
             var inventoryModel = _inventoryModelAssembler.Create(inventoryDefinitionModule.SlotsAmount);
