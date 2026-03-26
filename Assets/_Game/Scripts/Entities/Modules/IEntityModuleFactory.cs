@@ -1,4 +1,4 @@
-﻿using VContainer;
+﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -7,10 +7,10 @@ namespace Assets._Game.Scripts.Entities.Modules
         EntityModuleBase Create(EntityDefinition entityDefinition);
     }
 
-    public interface IEntityModulePersistance<T, S> where T : IEntityModule
+    public interface IEntityModulePersistance
     {
-        void Apply(T module, S save);
-        S Save(T module);
+        void Apply(Entity entity, EntitySave entitySave);
+        void Save(Entity entity, EntitySave entitySave);
     }
 
     //public abstract class EntityModuleFactory<T, D> : IEntityModuleFactory<T>

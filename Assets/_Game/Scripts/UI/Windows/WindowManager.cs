@@ -86,7 +86,7 @@ namespace Assets._Game.Scripts.UI.Windows
             return window;
         }
 
-        public void CloseTop()
+        public void CloseTopWindow()
         {
             if (_windowStack.Count == 0) return;
             var (window, controller) = _windowStack.Pop();
@@ -102,6 +102,12 @@ namespace Assets._Game.Scripts.UI.Windows
                 UnityEngine.Object.Destroy(window.gameObject);
             }
             controller.Dispose();
+        }
+
+        // todo: implement CloseWindow method
+        public void CloseWindow(UIWindowBase window)
+        {
+            throw new NotImplementedException();
         }
     }
 }

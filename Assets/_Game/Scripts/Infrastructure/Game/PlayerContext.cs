@@ -14,9 +14,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         public StatModule StatModule { get; private set; }
         public LevelingModule LevelingModule { get; private set; }
         public StatusEffectModule StatusEffectModule { get; private set; }
+        public StorageModule StorageModule { get; private set; }
         public InventoryModule InventoryModule { get; private set; }
         public EquipmentModule EquipmentModule { get; private set; }
-        public InventoryModel StashInventory { get; private set; }
         public SpatialModule SpatialModule { get; private set; }
 
         public event Action PlayerChanging;
@@ -46,6 +46,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
 
             // Try to get the modules we care about from the new player
+            if (Player.TryGetModule<StorageModule>(out var storageModule))
+            {
+                StorageModule = storageModule;
+            }
             if (Player.TryGetModule<InventoryModule>(out var inventoryModule))
             {
                 InventoryModule = inventoryModule;
@@ -72,11 +76,6 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
 
             PlayerChanged?.Invoke();
-        }
-
-        public void SetStash(InventoryModel inventoryModel)
-        {
-            StashInventory = inventoryModel;
         }
     }
 }

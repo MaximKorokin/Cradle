@@ -39,6 +39,11 @@ namespace Assets._Game.Scripts.Entities
         public bool Enabled = true;
     }
 
+    public class StorageModuleDefinition : EntityModuleDefinition
+    {
+        public int SlotsAmount;
+    }
+
     public class InventoryModuleDefinition : EntityModuleDefinition
     {
         public int SlotsAmount;

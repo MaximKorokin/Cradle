@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Inventory;
 using System;
 
@@ -76,14 +75,14 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         }
     }
 
-    public class StashHudData : DataAggregatorBase, IInventoryHudData
+    public class StorageHudData : DataAggregatorBase, IInventoryHudData
     {
         private readonly InventoryModel _inventoryModel;
         private readonly ItemsConfig _itemsConfig;
 
-        public StashHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
+        public StorageHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
         {
-            _inventoryModel = playerContext.StashInventory;
+            _inventoryModel = playerContext.StorageModule.Storage;
             _itemsConfig = itemsConfig;
 
             _inventoryModel.Changed += OnInventoryChanged;

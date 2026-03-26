@@ -17,6 +17,7 @@ MonoBehaviour:
   <VariantName>k__BackingField: Player
   _modules:
   - rid: 1349792692413661261
+  - rid: 7990781616137175140
   - rid: 1349792692413661262
   - rid: 1349792692413661263
   - rid: 1349792714110271692
@@ -75,3 +76,8 @@ MonoBehaviour:
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
+    - rid: 7990781616137175140
+      type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        SlotsAmount: 100

@@ -54,7 +54,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public class EquipmentModuleFactory : IEntityModuleFactory, IEntityModulePersistance<EquipmentModule, EquipmentSave>
+    public class EquipmentModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
         private readonly EquipmentModelAssembler _equipmentModelAssembler;
 
@@ -75,15 +75,16 @@ namespace Assets._Game.Scripts.Entities.Modules
             return new EquipmentModule(equipmentModel);
         }
 
-        public void Apply(EquipmentModule entityEquipmentModule, EquipmentSave entitySave)
+        public void Apply(Entity entity, EntitySave entitySave)
         {
-            _equipmentModelAssembler.Apply(entityEquipmentModule.Equipment, entitySave);
+            if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
+            _equipmentModelAssembler.Apply(equipmentModule.Equipment, entitySave.EquipmentSave);
         }
 
-        public EquipmentSave Save(EquipmentModule entityEquipmentModule)
+        public void Save(Entity entity, EntitySave entitySave)
         {
-            var equipmentSave = _equipmentModelAssembler.Save(entityEquipmentModule.Equipment);
-            return equipmentSave;
+            if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
+            entitySave.EquipmentSave = _equipmentModelAssembler.Save(equipmentModule.Equipment);
         }
     }
 }

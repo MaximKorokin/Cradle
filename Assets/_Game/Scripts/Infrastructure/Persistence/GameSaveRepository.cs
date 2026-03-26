@@ -33,13 +33,13 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public int Version;
         public long SavedAtUtc;
         public EntitySave PlayerSave;
-        public InventorySave StashSave;
     }
 
     public sealed class EntitySave
     {
         public string EntityId;
         public string DefinitionId;
+        public InventorySave StorageSave;
         public InventorySave InventorySave;
         public EquipmentSave EquipmentSave;
         public StatsSave StatsSave;

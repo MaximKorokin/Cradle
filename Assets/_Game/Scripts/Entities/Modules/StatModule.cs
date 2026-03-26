@@ -73,7 +73,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public sealed class StatModuleFactory : IEntityModuleFactory, IEntityModulePersistance<StatModule, StatsSave>
+    public sealed class StatModuleFactory : IEntityModuleFactory
     {
         private readonly StatsControllerAssembler _statsControllerAssembler;
 
@@ -90,16 +90,6 @@ namespace Assets._Game.Scripts.Entities.Modules
                 return new StatModule(statsController);
             }
             return null;
-        }
-
-        public void Apply(StatModule statsModule, StatsSave statsSave)
-        {
-            _statsControllerAssembler.Apply(statsModule.Stats as StatsController, statsSave);
-        }
-
-        public StatsSave Save(StatModule module)
-        {
-            return _statsControllerAssembler.Save(module.Stats);
         }
     }
 }

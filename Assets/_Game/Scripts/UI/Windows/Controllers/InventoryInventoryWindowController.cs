@@ -1,6 +1,4 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
@@ -8,21 +6,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, EmptyWindowControllerArguments>
     {
         private InventoryInventoryWindow _window;
-        private readonly InventoryHudData _inventoryStashData;
-        private readonly StashHudData _stashHudData;
+        private readonly InventoryHudData _inventoryHudData;
+        private readonly StorageHudData _storageHudData;
 
         private readonly ItemStacksPreviewInputProcessor<int, int> _previewProcessor;
 
         public InventoryInventoryWindowController(
             InventoryHudData inventoryHudData,
-            StashHudData stashHudData,
+            StorageHudData storageHudData,
             EquipmentHudData equipmentHudData,
             WindowManager windowManager)
         {
-            _inventoryStashData = inventoryHudData;
-            _stashHudData = stashHudData;
+            _inventoryHudData = inventoryHudData;
+            _storageHudData = storageHudData;
 
-            _previewProcessor = new(windowManager, equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, stashHudData.InventoryModel);
+            _previewProcessor = new(windowManager, equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, storageHudData.InventoryModel);
         }
 
         public override void Bind(InventoryInventoryWindow window)
@@ -47,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void Redraw()
         {
-            _window.Render(_inventoryStashData, _stashHudData);
+            _window.Render(_inventoryHudData, _storageHudData);
         }
     }
 }

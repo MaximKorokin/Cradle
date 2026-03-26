@@ -22,9 +22,9 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (Inventory != null) Inventory.InventoryChanged -= OnInventorySlotChanged;
         }
 
-        private void OnInventorySlotChanged(InventoryChange equipmentChange)
+        private void OnInventorySlotChanged(InventoryChange inventoryChange)
         {
-            Publish(new InventoryChangedEvent(Entity, equipmentChange));
+            Publish(new InventoryChangedEvent(Entity, inventoryChange));
         }
     }
 
@@ -53,7 +53,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public class InventoryModuleFactory : IEntityModuleFactory, IEntityModulePersistance<InventoryModule, InventorySave>
+    public class InventoryModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
         private readonly InventoryModelAssembler _inventoryModelAssembler;
 
@@ -73,15 +73,16 @@ namespace Assets._Game.Scripts.Entities.Modules
             return new InventoryModule(inventoryModel);
         }
 
-        public void Apply(InventoryModule entityInventoryEquipmentModule, InventorySave entitySave)
+        public void Apply(Entity entity, EntitySave entitySave)
         {
-            _inventoryModelAssembler.Apply(entityInventoryEquipmentModule.Inventory, entitySave);
+            if (!entity.TryGetModule<InventoryModule>(out var inventoryModule)) return;
+            _inventoryModelAssembler.Apply(inventoryModule.Inventory, entitySave.InventorySave);
         }
 
-        public InventorySave Save(InventoryModule entityInventoryEquipmentModule)
+        public void Save(Entity entity, EntitySave entitySave)
         {
-            var inventorySave = _inventoryModelAssembler.Save(entityInventoryEquipmentModule.Inventory);
-            return inventorySave;
+            if (!entity.TryGetModule<InventoryModule>(out var inventoryModule)) return;
+            entitySave.InventorySave = _inventoryModelAssembler.Save(inventoryModule.Inventory);
         }
     }
 }

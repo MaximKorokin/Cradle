@@ -133,6 +133,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<AppearanceModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 
+            builder.Register<StorageModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<InventoryModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
             builder.Register<EquipmentModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
 

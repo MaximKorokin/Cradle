@@ -63,8 +63,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void Redraw()
         {
             var primaryItem = _primaryItemContainer.Get(_primaryContainerSlot);
+
+            // Primary item disappeared, nothing to preview
+            if (primaryItem == null)
+            {
+                _windowManager.CloseTopWindow();
+                return;
+            }
+
             var equipmentItem = _equipmentSlot != null ? _equipmentModel.Get(_equipmentSlot.Value) : null;
-            _window.Render(primaryItem, equipmentItem, GetActions());
+            var actions = GetActions();
+            _window.Render(primaryItem, equipmentItem, actions);
         }
 
         private void OnDropClicked<T>(IItemContainer<T> fromContainer, T slot, int amount)
@@ -154,7 +163,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void ProcessAction(ItemStackActionType actionType)
         {
-            _windowManager.CloseTop();
+            _windowManager.CloseTopWindow();
             var item = _primaryItemContainer.Get(_primaryContainerSlot);
             switch (actionType)
             {

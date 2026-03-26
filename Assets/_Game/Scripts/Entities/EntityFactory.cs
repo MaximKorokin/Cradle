@@ -7,20 +7,17 @@ namespace Assets._Game.Scripts.Entities
     public class EntityFactory
     {
         private readonly EntityRepository _entityRepository;
-        private readonly InventoryModuleFactory _inventoryModuleAssembler;
-        private readonly EquipmentModuleFactory _equipmentModuleAssembler;
         private readonly IReadOnlyList<IEntityModuleFactory> _moduleFactories;
+        private readonly IReadOnlyList<IEntityModulePersistance> _modulePersistances;
 
         public EntityFactory(
             EntityRepository entityRepository,
-            InventoryModuleFactory inventoryModuleAssembler,
-            EquipmentModuleFactory equipmentModuleAssembler,
-            IReadOnlyList<IEntityModuleFactory> moduleFactories)
+            IReadOnlyList<IEntityModuleFactory> moduleFactories,
+            IReadOnlyList<IEntityModulePersistance> modulePersistances)
         {
             _entityRepository = entityRepository;
-            _inventoryModuleAssembler = inventoryModuleAssembler;
-            _equipmentModuleAssembler = equipmentModuleAssembler;
             _moduleFactories = moduleFactories;
+            _modulePersistances = modulePersistances;
         }
 
         public Entity Create(EntityDefinition entityDefinition)
@@ -42,28 +39,18 @@ namespace Assets._Game.Scripts.Entities
 
         public void Apply(Entity entity, EntitySave save)
         {
-            if (entity.TryGetModule<InventoryModule>(out var inventoryModule))
+            for (int i = 0; i < _modulePersistances.Count; i++)
             {
-                _inventoryModuleAssembler.Apply(inventoryModule, save.InventorySave);
-            }
-            if (entity.TryGetModule<EquipmentModule>(out var equipmentModule))
-            {
-                _equipmentModuleAssembler.Apply(equipmentModule, save.EquipmentSave);
+                _modulePersistances[i].Apply(entity, save);
             }
         }
 
         public EntitySave Save(Entity entity)
         {
             var save = new EntitySave();
-            if (entity.TryGetModule<InventoryModule>(out var inventoryModule))
+            for (int i = 0; i < _modulePersistances.Count; i++)
             {
-                var inventorySave = _inventoryModuleAssembler.Save(inventoryModule);
-                save.InventorySave = inventorySave;
-            }
-            if (entity.TryGetModule<EquipmentModule>(out var equipmentModule))
-            {
-                var equipmentSave = _equipmentModuleAssembler.Save(equipmentModule);
-                save.EquipmentSave = equipmentSave;
+                _modulePersistances[i].Save(entity, save);
             }
             return save;
         }

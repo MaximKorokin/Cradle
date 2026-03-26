@@ -36,7 +36,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             var save = new GameSave
             {
                 PlayerSave = _entityAssembler.Save(_playerContext.Player),
-                StashSave = _inventoryModelAssembler.Save(_playerContext.StashInventory),
                 Version = 1,
                 SavedAtUtc = System.DateTime.UtcNow.Ticks
             };
@@ -48,11 +47,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             //ResetSave();
 
             var gameSave = _gameSaveRepository.Load(SaveKey);
-
-            // hardcoded 100 slots in stash
-            var stash = _inventoryModelAssembler.Create(100);
-            if (gameSave?.StashSave != null) _inventoryModelAssembler.Apply(stash, gameSave.StashSave);
-            _playerContext.SetStash(stash);
 
             var humanoid = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
             _globalEventBus.Publish(new SpawnEntityViewRequestEvent(humanoid, UnityEngine.Vector2.zero));

@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.UI.Windows.Modal
 
         public void Close()
         {
-            _windowManager.CloseTop();
+            _windowManager.CloseTopWindow();
         }
     }
 }
