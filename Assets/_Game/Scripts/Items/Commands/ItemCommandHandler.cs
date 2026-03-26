@@ -1,5 +1,8 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
 
@@ -8,22 +11,23 @@ namespace Assets._Game.Scripts.Items.Commands
     public class ItemCommandHandler
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly PlayerContext _playerContext;
 
-        public ItemCommandHandler(IGlobalEventBus globalEventBus, PlayerContext playerContext)
+        public ItemCommandHandler(IGlobalEventBus globalEventBus)
         {
             _globalEventBus = globalEventBus;
-            _playerContext = playerContext;
         }
 
-        public bool Handle<T>(IItemCommand cmd)
+        public bool Handle(Entity entity, IItemCommand cmd)
         {
             return cmd switch
             {
-                MoveItemCommand<T> c => HandleMove(c),
-                EquipFromContainerCommand<T> c => HandleEquip(c),
+                MoveItemCommand<int> c => HandleMove(c),
+                MoveItemCommand<EquipmentSlotKey> c => HandleMove(c),
+                EquipFromContainerCommand<int> c => HandleEquip(c),
+                EquipFromContainerCommand<EquipmentSlotKey> c => HandleEquip(c),
                 UnequipToContainerCommand c => HandleUnequip(c),
-                DropItemCommand<T> c => HandleDrop(c),
+                DropItemCommand<int> c => HandleDrop(entity, c),
+                DropItemCommand<EquipmentSlotKey> c => HandleDrop(entity, c),
                 _ => throw new NotSupportedException(cmd.GetType().Name),
             };
         }
@@ -142,9 +146,9 @@ namespace Assets._Game.Scripts.Items.Commands
             return ItemContainerUtils.MoveAmount(c.EquipmentModel, c.SlotKey, c.ToContainer, item.Value.Amount) > 0;
         }
 
-        private bool HandleDrop<T>(DropItemCommand<T> c)
+        private bool HandleDrop<T>(Entity entity, DropItemCommand<T> c)
         {
-            if (_playerContext?.SpatialModule == null) return false;
+            if (!entity.TryGetModule<SpatialModule>(out var spatialModule)) return false;
 
             var item = c.FromContainer.Get(c.FromSlot);
             if (item == null) return false;
@@ -152,8 +156,7 @@ namespace Assets._Game.Scripts.Items.Commands
             var removedAmount = ItemContainerUtils.RemoveAmount(c.FromContainer, c.FromSlot, c.Amount);
             if (removedAmount > 0)
             {
-                // todo: might need a change because we bind to player here
-                _globalEventBus.Publish(new LootItemDropRequestedEvent(_playerContext.SpatialModule.Position, item.Value.Definition, removedAmount));
+                _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
                 return true;
             }
             return false;

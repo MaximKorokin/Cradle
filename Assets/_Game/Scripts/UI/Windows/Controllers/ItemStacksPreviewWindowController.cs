@@ -1,4 +1,6 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
@@ -12,7 +14,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class ItemStacksPreviewWindowController<T1, T2> : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T1, T2>>
     {
         private readonly WindowManager _windowManager;
-        private readonly ItemCommandHandler _handler;
+        private readonly IPlayerProvider _playerProvider;
 
         private ItemStacksPreviewWindow _window;
         private EquipmentModel _equipmentModel;
@@ -23,10 +25,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public ItemStacksPreviewWindowController(
             WindowManager windowManager,
-            ItemCommandHandler handler)
+            IPlayerProvider playerProvider)
         {
             _windowManager = windowManager;
-            _handler = handler;
+            _playerProvider = playerProvider;
         }
 
         public override void Bind(ItemStacksPreviewWindow window)
@@ -76,9 +78,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.Render(primaryItem, equipmentItem, actions);
         }
 
+        private void PublishItemCommand(IItemCommand command)
+        {
+            var entity = _playerProvider.Player;
+            entity.Publish(new ItemCommandRequest(entity, command));
+        }
+
         private void OnDropClicked<T>(IItemContainer<T> fromContainer, T slot, int amount)
         {
-            _handler.Handle<T>(new DropItemCommand<T>()
+            PublishItemCommand(new DropItemCommand<T>()
             {
                 FromContainer = fromContainer,
                 FromSlot = slot,
@@ -88,7 +96,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnTransferClicked<T>(IItemContainer<T> fromContainer, T slot, IItemContainer toContainer, int amount)
         {
-            _handler.Handle<T>(new MoveItemCommand<T>()
+            PublishItemCommand(new MoveItemCommand<T>()
             {
                 FromContainer = fromContainer,
                 FromSlot = slot,
@@ -99,7 +107,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnEquipClicked<T>(IItemContainer<T> fromContainer, T slot, EquipmentModel equipmentModel, EquipmentSlotKey equipmentSlot)
         {
-            _handler.Handle<T>(new EquipFromContainerCommand<T>()
+            PublishItemCommand(new EquipFromContainerCommand<T>()
             {
                 EquipmentModel = equipmentModel,
                 EquipmentSlot = equipmentSlot,
@@ -110,7 +118,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnUnequipClicked<T>(IItemContainer<T> toContainer, EquipmentSlotKey slot, EquipmentModel equipmentModel)
         {
-            _handler.Handle<T>(new UnequipToContainerCommand()
+            PublishItemCommand(new UnequipToContainerCommand()
             {
                 EquipmentModel = equipmentModel,
                 ToContainer = toContainer,

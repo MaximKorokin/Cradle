@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntitySensor>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<PlayerControlProvider>(Lifetime.Singleton);
-            builder.Register<PlayerContext>(Lifetime.Singleton);
+            builder.Register<PlayerContext>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             RegisterConfigs(builder);
             RegisterSystems(builder);
@@ -92,6 +92,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<DespawnSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AttackModifierSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<ItemSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

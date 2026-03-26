@@ -6,7 +6,12 @@ using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    public sealed class PlayerContext
+    public interface IPlayerProvider
+    {
+        Entity Player { get; }
+    }
+
+    public sealed class PlayerContext : IPlayerProvider
     {
         private readonly PlayerControlProvider _playerControlProvider;
 
