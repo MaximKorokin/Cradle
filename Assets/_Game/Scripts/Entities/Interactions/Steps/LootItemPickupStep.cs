@@ -9,13 +9,15 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly EntityRepository _entityRepository;
+        private readonly ItemInstanceDataFactory _itemInstanceDataFactory;
 
         private bool _done;
 
-        public LootItemPickupStep(IGlobalEventBus globalEventBus, EntityRepository entityRepository)
+        public LootItemPickupStep(IGlobalEventBus globalEventBus, EntityRepository entityRepository, ItemInstanceDataFactory itemInstanceDataFactory)
         {
             _globalEventBus = globalEventBus;
             _entityRepository = entityRepository;
+            _itemInstanceDataFactory = itemInstanceDataFactory;
         }
 
         public void Start(in InteractionContext context) => _done = false;
@@ -28,7 +30,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
             var lootItemModule = context.Target.GetModule<LootItemModule>();
             var inventory = context.Source.GetModule<InventoryModule>().Inventory;
-            var added = inventory.Add(new(lootItemModule.ItemDefinition, new EmptyInstanceData(), lootItemModule.Amount));
+            var added = inventory.Add(new(lootItemModule.ItemDefinition, _itemInstanceDataFactory.Create(lootItemModule.ItemDefinition.Id), lootItemModule.Amount));
 
             if (added <= 0)
             {

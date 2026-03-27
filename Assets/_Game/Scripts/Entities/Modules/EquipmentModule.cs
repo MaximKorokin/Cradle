@@ -56,9 +56,9 @@ namespace Assets._Game.Scripts.Entities.Modules
 
     public class EquipmentModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
-        private readonly EquipmentModelAssembler _equipmentModelAssembler;
+        private readonly EquipmentModelFactory _equipmentModelAssembler;
 
-        public EquipmentModuleFactory(EquipmentModelAssembler equipmentModelAssembler)
+        public EquipmentModuleFactory(EquipmentModelFactory equipmentModelAssembler)
         {
             _equipmentModelAssembler = equipmentModelAssembler;
         }

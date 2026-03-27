@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Entities.Interactions.Steps;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Calculators;
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Items;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -112,7 +113,7 @@ namespace Assets._Game.Scripts.Entities.Interactions
         [Serializable]
         public sealed class LootItemPickupStepData : StepData
         {
-            public override IInteractionStep Build(IObjectResolver resolver) => new LootItemPickupStep(resolver.Resolve<IGlobalEventBus>(), resolver.Resolve<EntityRepository>());
+            public override IInteractionStep Build(IObjectResolver resolver) => new LootItemPickupStep(resolver.Resolve<IGlobalEventBus>(), resolver.Resolve<EntityRepository>(), resolver.Resolve<ItemInstanceDataFactory>());
         }
     }
 }

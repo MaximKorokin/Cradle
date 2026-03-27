@@ -2,11 +2,19 @@
 
 namespace Assets._Game.Scripts.Items.Commands
 {
-    public class EquipFromContainerCommand<T> : IItemCommand
+    public readonly struct EquipFromContainerCommand<T> : IItemCommand
     {
-        public IItemContainer<T> FromContainer;
-        public T FromSlot;
-        public EquipmentModel EquipmentModel;
-        public EquipmentSlotKey EquipmentSlot;
+        public readonly IItemContainer<T> FromContainer;
+        public readonly T FromSlot;
+        public readonly EquipmentModel EquipmentModel;
+        public readonly EquipmentSlotKey EquipmentSlot;
+
+        public EquipFromContainerCommand(IItemContainer<T> fromContainer, T fromSlot, EquipmentModel equipmentModel, EquipmentSlotKey equipmentSlot)
+        {
+            FromContainer = fromContainer;
+            FromSlot = fromSlot;
+            EquipmentModel = equipmentModel;
+            EquipmentSlot = equipmentSlot;
+        }
     }
 }

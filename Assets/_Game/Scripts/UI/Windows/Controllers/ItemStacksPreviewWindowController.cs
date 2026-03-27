@@ -1,13 +1,14 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -86,44 +87,27 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnDropClicked<T>(IItemContainer<T> fromContainer, T slot, int amount)
         {
-            PublishItemCommand(new DropItemCommand<T>()
-            {
-                FromContainer = fromContainer,
-                FromSlot = slot,
-                Amount = amount
-            });
+            PublishItemCommand(new DropItemCommand<T>(fromContainer, slot, amount));
         }
 
         private void OnTransferClicked<T>(IItemContainer<T> fromContainer, T slot, IItemContainer toContainer, int amount)
         {
-            PublishItemCommand(new MoveItemCommand<T>()
-            {
-                FromContainer = fromContainer,
-                FromSlot = slot,
-                ToContainer = toContainer,
-                Amount = amount
-            });
+            PublishItemCommand(new MoveItemCommand<T>(fromContainer, slot, toContainer, amount));
         }
 
         private void OnEquipClicked<T>(IItemContainer<T> fromContainer, T slot, EquipmentModel equipmentModel, EquipmentSlotKey equipmentSlot)
         {
-            PublishItemCommand(new EquipFromContainerCommand<T>()
-            {
-                EquipmentModel = equipmentModel,
-                EquipmentSlot = equipmentSlot,
-                FromContainer = fromContainer,
-                FromSlot = slot,
-            });
+            PublishItemCommand(new EquipFromContainerCommand<T>(fromContainer, slot, equipmentModel, equipmentSlot));
         }
 
         private void OnUnequipClicked<T>(IItemContainer<T> toContainer, EquipmentSlotKey slot, EquipmentModel equipmentModel)
         {
-            PublishItemCommand(new UnequipToContainerCommand()
-            {
-                EquipmentModel = equipmentModel,
-                ToContainer = toContainer,
-                SlotKey = slot
-            });
+            PublishItemCommand(new UnequipToContainerCommand(toContainer, equipmentModel, slot));
+        }
+
+        private void OnUseClicked<T>(IItemContainer<T> container, T slot)
+        {
+            PublishItemCommand(new UseItemCommand<T>(container, slot));
         }
 
         private IEnumerable<ItemStackAction> GetActions()
@@ -156,6 +140,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                     actions.Add(new ItemStackAction(ItemStackActionType.TransferAll, "Transfer"));
                 }
             }
+
             if ((_primaryItemContainer is EquipmentModel equipmentModel) &&
                 equipmentModel == _equipmentModel &&
                 _equipmentModel.Has(primaryItem.Key, 1))
@@ -165,6 +150,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             else if (_equipmentModel.CanEquip(primaryItem))
             {
                 actions.Add(new ItemStackAction(ItemStackActionType.Equip, "Equip"));
+            }
+
+            if (primaryItem.GetTrait<UsableTrait>() != null)
+            {
+                actions.Add(new ItemStackAction(ItemStackActionType.Use, "Use"));
             }
             return actions;
         }
@@ -206,6 +196,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                         OnUnequipClicked(_secondaryItemContainer, key, _equipmentModel);
                     }
                     break;
+                case ItemStackActionType.Use:
+                    OnUseClicked(_primaryItemContainer, _primaryContainerSlot);
+                    break;
             }
         }
     }
@@ -229,6 +222,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         TransferOne,
         TransferHalf,
         Equip,
-        Unequip
+        Unequip,
+        Use,
     }
 }

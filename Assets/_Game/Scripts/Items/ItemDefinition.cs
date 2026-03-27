@@ -1,5 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Storage;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
@@ -19,5 +21,36 @@ namespace Assets._Game.Scripts.Items
         public int Weight { get; private set; }
         [field: SerializeReference]
         public ItemTraitBase[] Traits { get; private set; } = Array.Empty<ItemTraitBase>();
+
+        public bool TryGetTrait<T>(out T trait) where T : ItemTraitBase
+        {
+            for (int i = 0; i < Traits.Length; i++)
+            {
+                if (Traits[i] is T t)
+                {
+                    trait = t;
+                    return true;
+                }
+            }
+
+            trait = null;
+            return false;
+        }
+
+        public T GetTrait<T>() where T : ItemTraitBase
+        {
+            return TryGetTrait<T>(out var trait) ? trait : null;
+        }
+
+        public IEnumerable<T> GetTraits<T>() where T : ItemTraitBase
+        {
+            for (int i = 0; i < Traits.Length; i++)
+            {
+                if (Traits[i] is T t)
+                {
+                    yield return t;
+                }
+            }
+        }
     }
 }

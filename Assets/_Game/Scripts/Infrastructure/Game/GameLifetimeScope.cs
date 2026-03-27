@@ -102,6 +102,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Scoped);
             builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Scoped);
 
+            builder.Register<IDataCodec, CooldownCodec>(Lifetime.Scoped);
             builder.Register<IDataCodec, DurabilityCodec>(Lifetime.Scoped);
             builder.Register<IDataCodec, EmptyCodec>(Lifetime.Scoped);
             builder.Register<CodecRegistry>(Lifetime.Scoped);
@@ -172,12 +173,13 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterItemFeature(IContainerBuilder builder)
         {
-            builder.Register<ItemStackAssembler>(Lifetime.Scoped);
+            builder.Register<ItemInstanceDataFactory>(Lifetime.Scoped);
+            builder.Register<ItemStackFactory>(Lifetime.Scoped);
             builder.Register<ItemDefinitionCatalog>(Lifetime.Scoped);
             builder.Register<ItemCommandHandler>(Lifetime.Scoped);
 
-            builder.Register<InventoryModelAssembler>(Lifetime.Scoped);
-            builder.Register<EquipmentModelAssembler>(Lifetime.Scoped);
+            builder.Register<InventoryModelFactory>(Lifetime.Scoped);
+            builder.Register<EquipmentModelFactory>(Lifetime.Scoped);
         }
     }
 }

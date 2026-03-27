@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
         private readonly EntityFactory _entityAssembler;
-        private readonly InventoryModelAssembler _inventoryModelAssembler;
+        private readonly InventoryModelFactory _inventoryModelAssembler;
 
         public SaveService(
             IGlobalEventBus eventBus,
@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             NewGameDefinition newGameDefinition,
             PlayerContext playerContext,
             EntityFactory entityAssembler,
-            InventoryModelAssembler inventoryModelAssembler)
+            InventoryModelFactory inventoryModelAssembler)
         {
             _globalEventBus = eventBus;
             _gameSaveRepository = gameSaveRepository;

@@ -1,17 +1,16 @@
-﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Infrastructure.Persistence;
+﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Equipment
 {
-    public class EquipmentModelAssembler
+    public class EquipmentModelFactory
     {
-        private readonly ItemStackAssembler _itemStackAssembler;
+        private readonly ItemStackFactory _itemStackFactory;
 
-        public EquipmentModelAssembler(ItemStackAssembler itemStackAssembler)
+        public EquipmentModelFactory(ItemStackFactory itemStackFactory)
         {
-            _itemStackAssembler = itemStackAssembler;
+            _itemStackFactory = itemStackFactory;
         }
 
         public EquipmentModel Apply(EquipmentModel model, EquipmentSave save)
@@ -20,7 +19,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             {
                 foreach (var item in save.Items)
                 {
-                    var itemStack = _itemStackAssembler.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
+                    var itemStack = _itemStackFactory.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
                     model.AddToSlot(new(item.Type, item.Index), itemStack.Snapshot);
                 }
             }
@@ -30,7 +29,7 @@ namespace Assets._Game.Scripts.Items.Equipment
 
         public EquipmentModel Create(EquipmentSlotType[] slots)
         {
-            return new EquipmentModel(slots, new DefaultEquipmentRules());
+            return new EquipmentModel(slots, new DefaultEquipmentRules(), _itemStackFactory);
         }
 
         public EquipmentSave Save(EquipmentModel model)
@@ -43,7 +42,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                     {
                         Type = slot.Slot.SlotType,
                         Index = slot.Slot.Index,
-                        Stack = _itemStackAssembler.Save(slot.Snapshot.Value)
+                        Stack = _itemStackFactory.Save(slot.Snapshot.Value)
                     })
                     .ToArray()
             };

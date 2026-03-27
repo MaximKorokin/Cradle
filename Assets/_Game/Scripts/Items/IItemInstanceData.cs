@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.CoreScripts;
+using System;
 
 namespace Assets._Game.Scripts.Items
 {
@@ -26,5 +27,21 @@ namespace Assets._Game.Scripts.Items
     {
         public int Current;
         public int Max;
+    }
+
+    [Serializable]
+    public class CooldownInstanceData : IImmutableItemInstanceData
+    {
+        public CooldownCounter Cooldown { get; private set; }
+
+        public CooldownInstanceData(float cooldown)
+        {
+            Cooldown = new CooldownCounter(cooldown);
+        }
+
+        public string GetStackingKey()
+        {
+            return "";
+        }
     }
 }

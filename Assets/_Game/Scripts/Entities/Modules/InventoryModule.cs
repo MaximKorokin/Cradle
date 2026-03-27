@@ -55,9 +55,9 @@ namespace Assets._Game.Scripts.Entities.Modules
 
     public class InventoryModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
-        private readonly InventoryModelAssembler _inventoryModelAssembler;
+        private readonly InventoryModelFactory _inventoryModelAssembler;
 
-        public InventoryModuleFactory(InventoryModelAssembler inventoryModelAssembler)
+        public InventoryModuleFactory(InventoryModelFactory inventoryModelAssembler)
         {
             _inventoryModelAssembler = inventoryModelAssembler;
         }

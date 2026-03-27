@@ -12,12 +12,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private readonly CheatsHudData _cheatsHudData;
         private readonly PlayerContext _playerContext;
-        private readonly ItemStackAssembler _itemStackAssembler;
+        private readonly ItemStackFactory _itemStackAssembler;
 
         public CheatsWindowController(
             CheatsHudData cheatsHudData,
             PlayerContext playerContext,
-            ItemStackAssembler itemStackAssembler)
+            ItemStackFactory itemStackAssembler)
         {
             _cheatsHudData = cheatsHudData;
             _playerContext = playerContext;

@@ -1,17 +1,16 @@
-﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Infrastructure.Persistence;
+﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Inventory
 {
-    public class InventoryModelAssembler
+    public class InventoryModelFactory
     {
-        private readonly ItemStackAssembler _itemStackAssembler;
+        private readonly ItemStackFactory _itemStackFactory;
 
-        public InventoryModelAssembler(ItemStackAssembler itemStackAssembler)
+        public InventoryModelFactory(ItemStackFactory itemStackFactory)
         {
-            _itemStackAssembler = itemStackAssembler;
+            _itemStackFactory = itemStackFactory;
         }
 
         public InventoryModel Apply(InventoryModel model, InventorySave save)
@@ -20,7 +19,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             {
                 foreach (var item in save.Items)
                 {
-                    var itemStack = _itemStackAssembler.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
+                    var itemStack = _itemStackFactory.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
                     if (itemStack != null) model.AddToSlot(item.Slot, itemStack.Snapshot);
                 }
             }
@@ -30,7 +29,7 @@ namespace Assets._Game.Scripts.Items.Inventory
 
         public InventoryModel Create(int slotsAmount)
         {
-            return new InventoryModel(slotsAmount);
+            return new InventoryModel(slotsAmount, _itemStackFactory);
         }
 
         public InventorySave Save(InventoryModel model)
@@ -42,7 +41,7 @@ namespace Assets._Game.Scripts.Items.Inventory
                     .Select(slot => new InventorySlotSave
                     {
                         Slot = slot.Slot,
-                        Stack = _itemStackAssembler.Save(slot.Snapshot.Value)
+                        Stack = _itemStackFactory.Save(slot.Snapshot.Value)
                     })
                     .ToArray()
             };

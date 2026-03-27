@@ -8,14 +8,17 @@ namespace Assets._Game.Scripts.Items.Equipment
     {
         private readonly Dictionary<EquipmentSlotKey, ItemStack> _slots;
         private readonly IEquipmentRules _rules;
+        private readonly ItemStackFactory _itemStackFactory;
 
         public event Action<EquipmentChange> EquipmentChanged;
         public event Action<EquipmentSlotKey> SlotChanged;
         public event Action Changed;
 
-        public EquipmentModel(EquipmentSlotType[] slots, IEquipmentRules rules)
+        public EquipmentModel(EquipmentSlotType[] slots, IEquipmentRules rules, ItemStackFactory itemStackFactory)
         {
             _rules = rules;
+            _itemStackFactory = itemStackFactory;
+
             _slots = new();
             var slotTypeCounts = new Dictionary<EquipmentSlotType, int>();
             foreach (var slotType in slots)
@@ -96,7 +99,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                 if (!_rules.CanPlace(slot, snapshot)) continue;
 
                 int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
-                _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
                 remaining -= put;
                 added += put;
                 EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Equipped, _slots[slot].Snapshot));
@@ -120,7 +123,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             if (existing is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
-                _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
                 EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Equipped, _slots[slot].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
@@ -279,7 +282,7 @@ namespace Assets._Game.Scripts.Items.Equipment
         }
 
         /// <summary>
-        /// Ignores if there is anything in the slot
+        /// Ignores if there is nothing in the slot
         /// </summary>
         public bool CanEquip(ItemStackSnapshot snapshot)
         {

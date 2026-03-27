@@ -6,16 +6,18 @@ namespace Assets._Game.Scripts.Items.Inventory
     public sealed class InventoryModel : IItemContainer<int>
     {
         private readonly ItemStack[] _slots;
+        private readonly ItemStackFactory _itemStackFactory;
         public int Capacity => _slots.Length;
 
         public event Action<InventoryChange> InventoryChanged;
         public event Action<int> SlotChanged;
         public event Action Changed;
 
-        public InventoryModel(int capacity)
+        public InventoryModel(int capacity, ItemStackFactory itemStackFactory)
         {
             if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity));
             _slots = new ItemStack[capacity];
+            _itemStackFactory = itemStackFactory;
         }
 
         public bool IsValidSlot(int slot) => slot >= 0 && slot < _slots.Length;
@@ -84,7 +86,7 @@ namespace Assets._Game.Scripts.Items.Inventory
                     if (_slots[i] is not null) continue;
 
                     int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
-                    _slots[i] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                    _slots[i] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
                     remaining -= put;
                     added += put;
                     InventoryChanged?.Invoke(new(i, InventoryChangeKind.Added, _slots[i].Snapshot));
@@ -108,7 +110,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             if (s is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
-                _slots[slot] = new ItemStack(snapshot.Definition, snapshot.InstanceData, put);
+                _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
                 InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Added, _slots[slot].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();

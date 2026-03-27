@@ -5,6 +5,7 @@ using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
+using Assets._Game.Scripts.Items.Traits;
 
 namespace Assets._Game.Scripts.Items.Commands
 {
@@ -17,18 +18,25 @@ namespace Assets._Game.Scripts.Items.Commands
             _globalEventBus = globalEventBus;
         }
 
-        public bool Handle(Entity entity, IItemCommand cmd)
+        public bool Handle(Entity entity, IItemCommand command)
         {
-            return cmd switch
+            return command switch
             {
                 MoveItemCommand<int> c => HandleMove(c),
                 MoveItemCommand<EquipmentSlotKey> c => HandleMove(c),
+
                 EquipFromContainerCommand<int> c => HandleEquip(c),
                 EquipFromContainerCommand<EquipmentSlotKey> c => HandleEquip(c),
+
                 UnequipToContainerCommand c => HandleUnequip(c),
+
                 DropItemCommand<int> c => HandleDrop(entity, c),
                 DropItemCommand<EquipmentSlotKey> c => HandleDrop(entity, c),
-                _ => throw new NotSupportedException(cmd.GetType().Name),
+
+                UseItemCommand<int> c => HandleUse(entity, c),
+                UseItemCommand<EquipmentSlotKey> c => HandleUse(entity, c),
+
+                _ => throw new NotSupportedException(command.GetType().Name),
             };
         }
 
@@ -141,9 +149,9 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleUnequip(UnequipToContainerCommand c)
         {
-            var item = c.EquipmentModel.Get(c.SlotKey);
+            var item = c.EquipmentModel.Get(c.EquipmentSlot);
             if (item == null) return false;
-            return ItemContainerUtils.MoveAmount(c.EquipmentModel, c.SlotKey, c.ToContainer, item.Value.Amount) > 0;
+            return ItemContainerUtils.MoveAmount(c.EquipmentModel, c.EquipmentSlot, c.ToContainer, item.Value.Amount) > 0;
         }
 
         private bool HandleDrop<T>(Entity entity, DropItemCommand<T> c)
@@ -158,6 +166,20 @@ namespace Assets._Game.Scripts.Items.Commands
             {
                 _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
                 return true;
+            }
+            return false;
+        }
+
+        private bool HandleUse<T>(Entity entity, UseItemCommand<T> c)
+        {
+            var item = c.Container.Get(c.Slot);
+            if (item != null && item.Value.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
+            {
+                if (usableTrait.Cooldown > 0 && item.Value.InstanceData is CooldownInstanceData cooldownTrait && cooldownTrait.Cooldown.IsOver())
+                {
+                    cooldownTrait.Cooldown.Reset();
+                    SLog.Log($"item {item.Value.Definition.Name} used");
+                }
             }
             return false;
         }

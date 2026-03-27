@@ -3,7 +3,6 @@ using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Assets._Game.Scripts.Shared.Extensions
 {
@@ -11,17 +10,17 @@ namespace Assets._Game.Scripts.Shared.Extensions
     {
         public static T GetTrait<T>(this ItemStackSnapshot itemStack) where T : ItemTraitBase
         {
-            return (T)itemStack.Definition.Traits.FirstOrDefault(t => t is T);
+            return itemStack.Definition.GetTrait<T>();
         }
 
         public static IEnumerable<T> GetTraits<T>(this ItemStackSnapshot itemStack) where T : ItemTraitBase
         {
-            return itemStack.Definition.Traits.Where(t => t is T).Cast<T>();
+            return itemStack.Definition.GetTraits<T>();
         }
 
         public static EquippableTrait GetEquippableTrait(this ItemStackSnapshot itemStack)
         {
-            return itemStack.Definition.Traits.FirstOrDefault(x => x is EquippableTrait trait) as EquippableTrait;
+            return itemStack.Definition.GetTrait<EquippableTrait>();
         }
 
         public static EquipmentSlotType GetEquipmentSlotType(this ItemStackSnapshot itemStack)

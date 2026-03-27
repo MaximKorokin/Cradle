@@ -19,6 +19,7 @@ MonoBehaviour:
   <MaxAmount>k__BackingField: 64
   <Weight>k__BackingField: 5
   <Traits>k__BackingField:
+  - rid: 7990781638785105999
   - rid: 7990781616137175118
   references:
     version: 2
@@ -28,3 +29,7 @@ MonoBehaviour:
       data:
         <Consumable>k__BackingField: 1
         <Cooldown>k__BackingField: 1
+    - rid: 7990781638785105999
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 1000

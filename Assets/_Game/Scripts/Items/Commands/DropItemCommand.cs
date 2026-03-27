@@ -1,9 +1,16 @@
 ﻿namespace Assets._Game.Scripts.Items.Commands
 {
-    public sealed class DropItemCommand<T> : IItemCommand
+    public readonly struct DropItemCommand<T> : IItemCommand
     {
-        public IItemContainer<T> FromContainer;
-        public T FromSlot;
-        public int Amount;
+        public readonly IItemContainer<T> FromContainer;
+        public readonly T FromSlot;
+        public readonly int Amount;
+
+        public DropItemCommand(IItemContainer<T> fromContainer, T fromSlot, int amount)
+        {
+            FromContainer = fromContainer;
+            FromSlot = fromSlot;
+            Amount = amount;
+        }
     }
 }
