@@ -40,7 +40,7 @@ namespace Assets._Game.Scripts.Items.Inventory
                     .Where(slot => slot.Snapshot != null)
                     .Select(slot => new InventorySlotSave
                     {
-                        Slot = slot.Slot,
+                        Slot = slot.Slot.Index,
                         Stack = _itemStackFactory.Save(slot.Snapshot.Value)
                     })
                     .ToArray()

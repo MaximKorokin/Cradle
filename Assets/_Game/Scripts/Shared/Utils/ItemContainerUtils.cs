@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.Shared.Utils
             TFromSlot fromSlot,
             IItemContainer to,
             int amount)
-            where TFromSlot : notnull
+            where TFromSlot : notnull, IContainerSlot
         {
             if (amount <= 0) return 0;
 
@@ -60,8 +60,8 @@ namespace Assets._Game.Scripts.Shared.Utils
             IItemContainer<TToSlot> to,
             TToSlot toSlot,
             int amount)
-            where TFromSlot : notnull
-            where TToSlot : notnull
+            where TFromSlot : notnull, IContainerSlot
+            where TToSlot : notnull, IContainerSlot
         {
             if (amount <= 0) return 0;
 
@@ -104,25 +104,13 @@ namespace Assets._Game.Scripts.Shared.Utils
             return added;
         }
 
-        /// <summary>Move between containers without specifying destination slot.</summary>
-        public static int MoveAmount<TFromSlot, TToSlot>(
-            IItemContainer<TFromSlot> from,
-            TFromSlot fromSlot,
-            IItemContainer<TToSlot> to,
-            int amount)
-            where TFromSlot : notnull
-            where TToSlot : notnull
-        {
-            return MoveAmount(from, fromSlot, to, toSlot: default, amount: amount);
-        }
-
         /// <summary>Move within same container (drag-drop), optional destination slot.</summary>
         public static int MoveAmount<TSlot>(
             IItemContainer<TSlot> container,
             TSlot fromSlot,
             TSlot toSlot,
             int amount)
-            where TSlot : notnull
+            where TSlot : notnull, IContainerSlot
         {
             return MoveAmount(container, fromSlot, container, toSlot, amount);
         }
@@ -134,7 +122,7 @@ namespace Assets._Game.Scripts.Shared.Utils
             IItemContainer<TSlot> container,
             TSlot fromSlot,
             int amount)
-            where TSlot : notnull
+            where TSlot : notnull, IContainerSlot
         {
             if (container.Get(fromSlot) == null) return 0;
             return container.RemoveFromSlot(fromSlot, amount);

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using System;
@@ -13,8 +14,8 @@ namespace Assets._Game.Scripts.UI.Windows
         [SerializeField]
         private EquipmentView _equipmentView;
 
-        public event Action<int> InventorySlotPointerDown;
-        public event Action<int> InventorySlotPointerUp;
+        public event Action<InventorySlot> InventorySlotPointerDown;
+        public event Action<InventorySlot> InventorySlotPointerUp;
         public event Action<EquipmentSlotKey> EquipmentSlotPointerDown;
         public event Action<EquipmentSlotKey> EquipmentSlotPointerUp;
 
@@ -44,12 +45,12 @@ namespace Assets._Game.Scripts.UI.Windows
             _equipmentView.Bind();
         }
 
-        private void OnInventorySlotPointerDown(int slotIndex)
+        private void OnInventorySlotPointerDown(InventorySlot slotIndex)
         {
             InventorySlotPointerDown?.Invoke(slotIndex);
         }
 
-        private void OnInventorySlotPointerUp(int slotIndex)
+        private void OnInventorySlotPointerUp(InventorySlot slotIndex)
         {
             InventorySlotPointerUp?.Invoke(slotIndex);
         }

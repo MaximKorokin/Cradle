@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
@@ -6,11 +7,15 @@ using System.Linq;
 namespace Assets._Game.Scripts.UI.Windows.Shared
 {
     public sealed class ItemStacksPreviewInputProcessor<T1, T2>
+        where T1 : struct, IContainerSlot
+        where T2 : struct, IContainerSlot
     {
         private readonly WindowManager _windowManager;
         private readonly EquipmentModel _equipmentModel;
         private readonly IItemContainer<T1> _firstItemContainer;
         private readonly IItemContainer<T2> _secondItemContainer;
+        private readonly ItemContainerId _firstContainerId;
+        private readonly ItemContainerId _secondContainerId;
 
         private T1 _firstPointerDownSlotIndex;
         private T2 _secondPointerDownSlotIndex;
@@ -19,12 +24,16 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             WindowManager windowManager,
             EquipmentModel equipmentModel,
             IItemContainer<T1> primaryItemContainer,
-            IItemContainer<T2> secondaryItemContainer)
+            IItemContainer<T2> secondaryItemContainer,
+            ItemContainerId primaryContainerId,
+            ItemContainerId secondaryContainerId)
         {
             _windowManager = windowManager;
             _equipmentModel = equipmentModel;
             _firstItemContainer = primaryItemContainer;
             _secondItemContainer = secondaryItemContainer;
+            _firstContainerId = primaryContainerId;
+            _secondContainerId = secondaryContainerId;
         }
 
         public void OnFirstItemContainerSlotPointerDown(T1 slotIndex)
@@ -49,7 +58,9 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
                     GetEquipmentSlotToCompare(primaryItem.Value, _firstItemContainer),
                     _firstItemContainer,
                     _firstPointerDownSlotIndex,
-                    _secondItemContainer),
+                    _secondItemContainer,
+                    _firstContainerId,
+                    _secondContainerId),
                 typeof(T1),
                 typeof(T2));
         }
@@ -66,7 +77,9 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
                     GetEquipmentSlotToCompare(primaryItem.Value, _secondItemContainer),
                     _secondItemContainer,
                     _secondPointerDownSlotIndex,
-                    _firstItemContainer),
+                    _firstItemContainer,
+                    _secondContainerId,
+                    _firstContainerId),
                 typeof(T2),
                 typeof(T1));
         }

@@ -1,19 +1,15 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
-
-namespace Assets._Game.Scripts.Items.Commands
+﻿namespace Assets._Game.Scripts.Items.Commands
 {
-    public readonly struct EquipFromContainerCommand<T> : IItemCommand
+    public readonly struct EquipFromContainerCommand : IItemCommand
     {
-        public readonly IItemContainer<T> FromContainer;
-        public readonly T FromSlot;
-        public readonly EquipmentModel EquipmentModel;
-        public readonly EquipmentSlotKey EquipmentSlot;
+        public readonly ItemContainerId FromContainer;
+        public readonly long FromSlot;
+        public readonly long EquipmentSlot;
 
-        public EquipFromContainerCommand(IItemContainer<T> fromContainer, T fromSlot, EquipmentModel equipmentModel, EquipmentSlotKey equipmentSlot)
+        public EquipFromContainerCommand(ItemContainerId fromContainer, long fromSlot, long equipmentSlot)
         {
             FromContainer = fromContainer;
             FromSlot = fromSlot;
-            EquipmentModel = equipmentModel;
             EquipmentSlot = equipmentSlot;
         }
     }

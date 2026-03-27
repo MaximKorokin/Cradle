@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -21,8 +22,8 @@ namespace Assets._Game.Scripts.UI.Views
 
         private IInventoryHudData _inventoryHudData;
 
-        public event Action<int> SlotPointerDown;
-        public event Action<int> SlotPointerUp;
+        public event Action<InventorySlot> SlotPointerDown;
+        public event Action<InventorySlot> SlotPointerUp;
 
         public void Render(IInventoryHudData inventoryHudData)
         {
@@ -40,18 +41,18 @@ namespace Assets._Game.Scripts.UI.Views
                 slot.gameObject.SetActive(false);
             }
 
-            foreach (var (index, stack) in _inventoryHudData.InventoryModel.Enumerate())
+            foreach (var (inventorySlot, stack) in _inventoryHudData.InventoryModel.Enumerate())
             {
-                if (_slots.Count > index)
+                if (_slots.Count > inventorySlot.Index)
                 {
-                    var slot = _slots[index];
+                    var slot = _slots[inventorySlot.Index];
                     slot.Render(stack);
                     slot.gameObject.SetActive(true);
                     continue;
                 }
 
                 var slotView = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                slotView.Bind(index);
+                slotView.Bind(inventorySlot);
                 slotView.PointerDown += OnSlotPointerDown;
                 slotView.PointerUp += OnSlotPointerUp;
                 _slots.Add(slotView);
@@ -72,12 +73,12 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
-        private void OnSlotPointerDown(int slotIndex)
+        private void OnSlotPointerDown(InventorySlot slotIndex)
         {
             SlotPointerDown?.Invoke(slotIndex);
         }
 
-        private void OnSlotPointerUp(int slotIndex)
+        private void OnSlotPointerUp(InventorySlot slotIndex)
         {
             SlotPointerUp?.Invoke(slotIndex);
         }

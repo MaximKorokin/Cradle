@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Items.Inventory
 {
-    public sealed class InventoryModel : IItemContainer<int>
+    public sealed class InventoryModel : IItemContainer<InventorySlot>
     {
         private readonly ItemStack[] _slots;
         private readonly ItemStackFactory _itemStackFactory;
         public int Capacity => _slots.Length;
 
         public event Action<InventoryChange> InventoryChanged;
-        public event Action<int> SlotChanged;
+        public event Action<InventorySlot> SlotChanged;
         public event Action Changed;
 
         public InventoryModel(int capacity, ItemStackFactory itemStackFactory)
@@ -20,22 +20,22 @@ namespace Assets._Game.Scripts.Items.Inventory
             _itemStackFactory = itemStackFactory;
         }
 
-        public bool IsValidSlot(int slot) => slot >= 0 && slot < _slots.Length;
+        public bool IsValidSlot(InventorySlot slot) => slot.Index >= 0 && slot.Index < _slots.Length;
 
-        public ItemStackSnapshot? Get(int slot)
+        public ItemStackSnapshot? Get(InventorySlot slot)
         {
             if (!IsValidSlot(slot)) return null;
-            var s = _slots[slot];
+            var s = _slots[slot.Index];
             if (s is null) return null;
             return s.Snapshot;
         }
 
-        public IEnumerable<(int Slot, ItemStackSnapshot? Snapshot)> Enumerate()
+        public IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Snapshot)> Enumerate()
         {
             for (int i = 0; i < _slots.Length; i++)
             {
                 var s = _slots[i];
-                yield return (i, s?.Snapshot);
+                yield return (new InventorySlot(i), s?.Snapshot);
             }
         }
 
@@ -70,8 +70,9 @@ namespace Assets._Game.Scripts.Items.Inventory
                     {
                         remaining -= a;
                         added += a;
-                        InventoryChanged?.Invoke(new(i, InventoryChangeKind.Updated, s.Snapshot));
-                        SlotChanged?.Invoke(i);
+                        var slot = new InventorySlot(i);
+                        InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Updated, s.Snapshot));
+                        SlotChanged?.Invoke(slot);
                         Changed?.Invoke();
                     }
                 }
@@ -89,8 +90,9 @@ namespace Assets._Game.Scripts.Items.Inventory
                     _slots[i] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
                     remaining -= put;
                     added += put;
-                    InventoryChanged?.Invoke(new(i, InventoryChangeKind.Added, _slots[i].Snapshot));
-                    SlotChanged?.Invoke(i);
+                    var slot = new InventorySlot(i);
+                    InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Added, _slots[i].Snapshot));
+                    SlotChanged?.Invoke(slot);
                     Changed?.Invoke();
                 }
             }
@@ -98,20 +100,20 @@ namespace Assets._Game.Scripts.Items.Inventory
             return added;
         }
 
-        public int AddToSlot(int slot, ItemStackSnapshot snapshot)
+        public int AddToSlot(InventorySlot slot, ItemStackSnapshot snapshot)
         {
             if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
             if (!IsValidSlot(slot)) return 0;
             if (snapshot.Amount <= 0) return 0;
 
             var key = ItemKey.From(snapshot.Definition, snapshot.InstanceData);
-            var s = _slots[slot];
+            var s = _slots[slot.Index];
 
             if (s is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
-                _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
-                InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Added, _slots[slot].Snapshot));
+                _slots[slot.Index] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
+                InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Added, _slots[slot.Index].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
                 return put;
@@ -148,16 +150,17 @@ namespace Assets._Game.Scripts.Items.Inventory
                     remaining -= r;
                     removed += r;
 
+                    var slot = new InventorySlot(i);
                     if (s.Amount == 0)
                     {
                         _slots[i] = null;
-                        InventoryChanged?.Invoke(new(i, InventoryChangeKind.Removed, s.Snapshot));
+                        InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Removed, s.Snapshot));
                     }
                     else
                     {
-                        InventoryChanged?.Invoke(new(i, InventoryChangeKind.Updated, s.Snapshot));
+                        InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Updated, s.Snapshot));
                     }
-                    SlotChanged?.Invoke(i);
+                    SlotChanged?.Invoke(slot);
                     Changed?.Invoke();
                 }
             }
@@ -165,12 +168,12 @@ namespace Assets._Game.Scripts.Items.Inventory
             return removed;
         }
 
-        public int RemoveFromSlot(int slot, int amount)
+        public int RemoveFromSlot(InventorySlot slot, int amount)
         {
             if (!IsValidSlot(slot)) return 0;
             if (amount <= 0) return 0;
 
-            var s = _slots[slot];
+            var s = _slots[slot.Index];
             if (s is null) return 0;
 
             int removed = s.RemoveUpTo(amount);
@@ -178,7 +181,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             {
                 if (s.Amount == 0)
                 {
-                    _slots[slot] = null;
+                    _slots[slot.Index] = null;
                     InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Removed, s.Snapshot));
                 }
                 else
@@ -237,13 +240,13 @@ namespace Assets._Game.Scripts.Items.Inventory
             return canAdd;
         }
 
-        public int PreviewAddToSlot(int slot, ItemStackSnapshot snapshot)
+        public int PreviewAddToSlot(InventorySlot slot, ItemStackSnapshot snapshot)
         {
             if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
             if (snapshot.Amount <= 0) return 0;
             if (!IsValidSlot(slot)) return 0;
 
-            var existing = _slots[slot];
+            var existing = _slots[slot.Index];
 
             // Empty slot, can put a new stack
             if (existing is null)
@@ -259,12 +262,12 @@ namespace Assets._Game.Scripts.Items.Inventory
         }
 
         // Utility: swap stacks (UI drag-drop inside inventory)
-        public bool Swap(int a, int b)
+        public bool Swap(InventorySlot a, InventorySlot b)
         {
-            if (!IsValidSlot(a) || !IsValidSlot(b) || a == b) return false;
-            (_slots[a], _slots[b]) = (_slots[b], _slots[a]);
-            InventoryChanged?.Invoke(new(a, InventoryChangeKind.Replaced, _slots[a].Snapshot));
-            InventoryChanged?.Invoke(new(b, InventoryChangeKind.Replaced, _slots[b].Snapshot));
+            if (!IsValidSlot(a) || !IsValidSlot(b) || a.Index == b.Index) return false;
+            (_slots[a.Index], _slots[b.Index]) = (_slots[b.Index], _slots[a.Index]);
+            InventoryChanged?.Invoke(new(a, InventoryChangeKind.Replaced, _slots[a.Index].Snapshot));
+            InventoryChanged?.Invoke(new(b, InventoryChangeKind.Replaced, _slots[b.Index].Snapshot));
             SlotChanged?.Invoke(a);
             SlotChanged?.Invoke(b);
             Changed?.Invoke();
@@ -274,12 +277,12 @@ namespace Assets._Game.Scripts.Items.Inventory
 
     public readonly struct InventoryChange
     {
-        public readonly int Slot;
+        public readonly InventorySlot Slot;
         public readonly InventoryChangeKind Kind;
         public readonly ItemStackSnapshot? Item;
 
         public InventoryChange(
-            int slot,
+            InventorySlot slot,
             InventoryChangeKind kind,
             ItemStackSnapshot? item)
         {

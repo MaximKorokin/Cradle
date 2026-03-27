@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Items.Inventory;
+using System;
 
 namespace Assets._Game.Scripts.Items.Equipment
 {
@@ -15,7 +16,7 @@ namespace Assets._Game.Scripts.Items.Equipment
         Consumable = 1000,
     }
 
-    public struct EquipmentSlotKey
+    public struct EquipmentSlotKey : IContainerSlot
     {
         public EquipmentSlotType SlotType;
         public int Index;
@@ -25,6 +26,12 @@ namespace Assets._Game.Scripts.Items.Equipment
             SlotType = slotType;
             Index = index;
         }
+
+        public readonly long ToInt64()
+            => ((long)(int)SlotType << 32) | (uint)Index;
+
+        public static EquipmentSlotKey FromInt64(long value)
+            => new((EquipmentSlotType)(int)(value >> 32), (int)(value & 0xFFFFFFFF));
 
         public readonly bool Equals(EquipmentSlotKey other)
             => SlotType == other.SlotType && Index == other.Index;

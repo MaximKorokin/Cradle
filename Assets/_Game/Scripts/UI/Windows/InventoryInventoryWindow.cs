@@ -13,10 +13,10 @@ namespace Assets._Game.Scripts.UI.Windows
         [SerializeField]
         private InventoryView _secondInventoryView;
 
-        public event Action<int> FirstInventorySlotPointerDown;
-        public event Action<int> FirstInventorySlotPointerUp;
-        public event Action<int> SecondInventorySlotPointerDown;
-        public event Action<int> SecondInventorySlotPointerUp;
+        public event Action<InventorySlot> FirstInventorySlotPointerDown;
+        public event Action<InventorySlot> FirstInventorySlotPointerUp;
+        public event Action<InventorySlot> SecondInventorySlotPointerDown;
+        public event Action<InventorySlot> SecondInventorySlotPointerUp;
 
         public override void OnShow()
         {
@@ -43,22 +43,22 @@ namespace Assets._Game.Scripts.UI.Windows
             _secondInventoryView.Render(secondInventoryHudData);
         }
 
-        private void OnFirstInventorySlotPointerDown(int slotIndex)
+        private void OnFirstInventorySlotPointerDown(InventorySlot slotIndex)
         {
             FirstInventorySlotPointerDown?.Invoke(slotIndex);
         }
 
-        private void OnFirstInventorySlotPointerUp(int slotIndex)
+        private void OnFirstInventorySlotPointerUp(InventorySlot slotIndex)
         {
             FirstInventorySlotPointerUp?.Invoke(slotIndex);
         }
 
-        private void OnSecondInventorySlotPointerDown(int slotIndex)
+        private void OnSecondInventorySlotPointerDown(InventorySlot slotIndex)
         {
             SecondInventorySlotPointerDown?.Invoke(slotIndex);
         }
 
-        private void OnSecondInventorySlotPointerUp(int slotIndex)
+        private void OnSecondInventorySlotPointerUp(InventorySlot slotIndex)
         {
             SecondInventorySlotPointerUp?.Invoke(slotIndex);
         }

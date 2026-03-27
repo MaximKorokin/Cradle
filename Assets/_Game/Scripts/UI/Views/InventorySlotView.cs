@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Inventory;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class InventorySlotView : ContainerSlotView<int>
+    public sealed class InventorySlotView : ContainerSlotView<InventorySlot>
     {
         [SerializeField]
         private Image _itemImage;

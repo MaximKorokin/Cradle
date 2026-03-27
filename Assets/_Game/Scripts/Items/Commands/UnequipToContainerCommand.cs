@@ -1,17 +1,13 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
-
-namespace Assets._Game.Scripts.Items.Commands
+﻿namespace Assets._Game.Scripts.Items.Commands
 {
     public readonly struct UnequipToContainerCommand : IItemCommand
     {
-        public readonly IItemContainer ToContainer;
-        public readonly EquipmentModel EquipmentModel;
-        public readonly EquipmentSlotKey EquipmentSlot;
+        public readonly ItemContainerId ToContainer;
+        public readonly long EquipmentSlot;
 
-        public UnequipToContainerCommand(IItemContainer toContainer, EquipmentModel equipmentModel, EquipmentSlotKey equipmentSlot)
+        public UnequipToContainerCommand(ItemContainerId toContainer, long equipmentSlot)
         {
             ToContainer = toContainer;
-            EquipmentModel = equipmentModel;
             EquipmentSlot = equipmentSlot;
         }
     }

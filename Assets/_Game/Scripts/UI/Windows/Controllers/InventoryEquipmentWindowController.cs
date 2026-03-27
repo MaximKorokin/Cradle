@@ -1,4 +1,6 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
@@ -10,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IInventoryHudData _inventoryHudData;
         private readonly IEquipmentHudData _equipmentHudData;
 
-        private readonly ItemStacksPreviewInputProcessor<int, EquipmentSlotKey> _previewProcessor;
+        private readonly ItemStacksPreviewInputProcessor<InventorySlot, EquipmentSlotKey> _previewProcessor;
 
         public InventoryEquipmentWindowController(
             InventoryHudData inventoryHudData,
@@ -20,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryHudData = inventoryHudData;
             _equipmentHudData = equipmentHudData;
 
-            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, _inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel);
+            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, _inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel, ItemContainerId.Inventory, ItemContainerId.Equipment);
         }
 
         public override void Bind(InventoryEquipmentWindow window)

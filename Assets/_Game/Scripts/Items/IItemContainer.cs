@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Items
 {
-    public interface IItemContainer<TSlot> : IItemContainer where TSlot : notnull
+    public interface IItemContainer<TSlot> : IItemContainer where TSlot : notnull, IContainerSlot
     {
         event Action<TSlot> SlotChanged;
 

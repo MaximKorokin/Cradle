@@ -1,11 +1,11 @@
 ﻿namespace Assets._Game.Scripts.Items.Commands
 {
-    public readonly struct UseItemCommand<T> : IItemCommand
+    public readonly struct UseItemCommand : IItemCommand
     {
-        public readonly IItemContainer<T> Container;
-        public readonly T Slot;
+        public readonly ItemContainerId Container;
+        public readonly long Slot;
 
-        public UseItemCommand(IItemContainer<T> container, T slot)
+        public UseItemCommand(ItemContainerId container, long slot)
         {
             Container = container;
             Slot = slot;

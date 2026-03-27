@@ -3,9 +3,10 @@ using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
-using Assets._Game.Scripts.Items.Traits;
 
 namespace Assets._Game.Scripts.Items.Commands
 {
@@ -22,33 +23,45 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             return command switch
             {
-                MoveItemCommand<int> c => HandleMove(c),
-                MoveItemCommand<EquipmentSlotKey> c => HandleMove(c),
-
-                EquipFromContainerCommand<int> c => HandleEquip(c),
-                EquipFromContainerCommand<EquipmentSlotKey> c => HandleEquip(c),
-
-                UnequipToContainerCommand c => HandleUnequip(c),
-
-                DropItemCommand<int> c => HandleDrop(entity, c),
-                DropItemCommand<EquipmentSlotKey> c => HandleDrop(entity, c),
-
-                UseItemCommand<int> c => HandleUse(entity, c),
-                UseItemCommand<EquipmentSlotKey> c => HandleUse(entity, c),
-
+                TransferItemCommand c => HandleTransfer(entity, c),
+                EquipFromContainerCommand c => HandleEquip(entity, c),
+                UnequipToContainerCommand c => HandleUnequip(entity, c),
+                DropItemCommand c => HandleDrop(entity, c),
+                UseItemCommand c => HandleUse(entity, c),
                 _ => throw new NotSupportedException(command.GetType().Name),
             };
         }
 
-        private bool HandleMove<T>(MoveItemCommand<T> c)
+        private InventoryModel ResolveInventory(Entity entity, ItemContainerId id)
         {
-            return ItemContainerUtils.MoveAmount(c.FromContainer, c.FromSlot, c.ToContainer, c.Amount) > 0;
+            return id switch
+            {
+                ItemContainerId.Inventory => entity.GetModule<InventoryModule>().Inventory,
+                ItemContainerId.Storage => entity.GetModule<StorageModule>().Storage,
+                _ => throw new NotSupportedException($"Container {id} is not an inventory."),
+            };
         }
 
-        private bool HandleEquip<T>(EquipFromContainerCommand<T> c) where T : notnull
+        private EquipmentModel ResolveEquipment(Entity entity)
         {
-            // Read the source slot snapshot.
-            var fromItemNullable = c.FromContainer.Get(c.FromSlot);
+            return entity.GetModule<EquipmentModule>().Equipment;
+        }
+
+        private bool HandleTransfer(Entity entity, TransferItemCommand c)
+        {
+            var from = ResolveInventory(entity, c.FromContainer);
+            var to = ResolveInventory(entity, c.ToContainer);
+            return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
+        }
+
+        private bool HandleEquip(Entity entity, EquipFromContainerCommand c)
+        {
+            var fromContainer = ResolveInventory(entity, c.FromContainer);
+            var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+            var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
+            var equipmentModel = ResolveEquipment(entity);
+
+            var fromItemNullable = fromContainer.Get(fromSlot);
             if (fromItemNullable == null)
                 return false;
 
@@ -57,18 +70,15 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // --- 1) Fast path: try to equip directly into the requested equipment slot (no swap).
-            if (c.EquipmentModel.PreviewAddToSlot(c.EquipmentSlot, fromItem) == fromItem.Amount)
+            if (equipmentModel.PreviewAddToSlot(equipmentSlot, fromItem) == fromItem.Amount)
             {
-                // Remove from source first.
-                if (c.FromContainer.RemoveFromSlot(c.FromSlot, fromItem.Amount) == 0)
+                if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
                     return false;
 
-                // Put into equipment slot.
-                int equipped = c.EquipmentModel.AddToSlot(c.EquipmentSlot, fromItem);
+                int equipped = equipmentModel.AddToSlot(equipmentSlot, fromItem);
                 if (equipped == 0)
                 {
-                    // Rollback: return the item back to the source container.
-                    c.FromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
+                    fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
                     return false;
                 }
 
@@ -76,27 +86,23 @@ namespace Assets._Game.Scripts.Items.Commands
             }
 
             // --- 2) Fast path: try to equip without specifying the equipment slot (no swap).
-            if (c.EquipmentModel.PreviewAdd(fromItem) >= 1)
+            if (equipmentModel.PreviewAdd(fromItem) >= 1)
             {
-                // Remove from source first.
-                if (c.FromContainer.RemoveFromSlot(c.FromSlot, fromItem.Amount) == 0)
+                if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
                     return false;
 
-                // Put into equipment slot.
-                int equipped = c.EquipmentModel.Add(fromItem);
+                int equipped = equipmentModel.Add(fromItem);
                 if (equipped == 0)
                 {
-                    // Rollback: return the item back to the source container.
-                    c.FromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
+                    fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
                     return false;
                 }
 
                 return true;
             }
 
-            // --- 3) Swap path: the target equipment slot is not directly acceptive (occupied or incompatible).
-            // We only perform swap if there is an item currently equipped in that slot.
-            var oldItemNullable = c.EquipmentModel.Get(c.EquipmentSlot);
+            // --- 3) Swap path: the target equipment slot is occupied.
+            var oldItemNullable = equipmentModel.Get(equipmentSlot);
             if (oldItemNullable == null)
                 return false;
 
@@ -104,64 +110,74 @@ namespace Assets._Game.Scripts.Items.Commands
             if (oldItem.Amount <= 0)
                 return false;
 
-            // Before we unequip anything, ensure the old equipped item can be stored back in the source container.
-            // This prevents "losing" items if the source inventory is full.
-            if (c.FromContainer.PreviewAdd(oldItem, AddPolicy.StackThenEmpty) < oldItem.Amount)
+            if (fromContainer.PreviewAdd(oldItem, AddPolicy.StackThenEmpty) < oldItem.Amount)
                 return false;
 
-            // Unequip the old item (clear the equipment slot).
-            int removedOld = c.EquipmentModel.RemoveFromSlot(c.EquipmentSlot, oldItem.Amount);
+            int removedOld = equipmentModel.RemoveFromSlot(equipmentSlot, oldItem.Amount);
             if (removedOld != oldItem.Amount)
                 return false;
 
-            // Remove the new item from the source.
-            if (c.FromContainer.RemoveFromSlot(c.FromSlot, fromItem.Amount) == 0)
+            if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
             {
-                // Rollback: re-equip the old item.
-                c.EquipmentModel.AddToSlot(c.EquipmentSlot, oldItem);
+                equipmentModel.AddToSlot(equipmentSlot, oldItem);
                 return false;
             }
 
-            // Equip the new item into the now-empty equipment slot.
-            int equippedNew = c.EquipmentModel.AddToSlot(c.EquipmentSlot, fromItem);
+            int equippedNew = equipmentModel.AddToSlot(equipmentSlot, fromItem);
             if (equippedNew == 0)
             {
-                // Rollback: return the new item to the source and re-equip the old item.
-                c.FromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
-                c.EquipmentModel.AddToSlot(c.EquipmentSlot, oldItem);
+                fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
+                equipmentModel.AddToSlot(equipmentSlot, oldItem);
                 return false;
             }
 
-            // Store the previously equipped item back into the source container.
-            int storedOld = c.FromContainer.Add(oldItem, AddPolicy.StackThenEmpty);
+            int storedOld = fromContainer.Add(oldItem, AddPolicy.StackThenEmpty);
             if (storedOld != oldItem.Amount)
             {
-                // This should not happen because of the PreviewAdd check above,
-                // but if it does, perform a hard rollback to keep the state consistent.
-                c.EquipmentModel.RemoveFromSlot(c.EquipmentSlot, fromItem.Amount);
-                c.FromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
-                c.EquipmentModel.AddToSlot(c.EquipmentSlot, oldItem);
+                equipmentModel.RemoveFromSlot(equipmentSlot, fromItem.Amount);
+                fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
+                equipmentModel.AddToSlot(equipmentSlot, oldItem);
                 throw new InvalidOperationException("Swap failed: cannot store old equipped item in source container.");
             }
 
             return true;
         }
 
-        private bool HandleUnequip(UnequipToContainerCommand c)
+        private bool HandleUnequip(Entity entity, UnequipToContainerCommand c)
         {
-            var item = c.EquipmentModel.Get(c.EquipmentSlot);
+            var equipmentModel = ResolveEquipment(entity);
+            var toContainer = ResolveInventory(entity, c.ToContainer);
+            var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
+
+            var item = equipmentModel.Get(equipmentSlot);
             if (item == null) return false;
-            return ItemContainerUtils.MoveAmount(c.EquipmentModel, c.EquipmentSlot, c.ToContainer, item.Value.Amount) > 0;
+            return ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount) > 0;
         }
 
-        private bool HandleDrop<T>(Entity entity, DropItemCommand<T> c)
+        private bool HandleDrop(Entity entity, DropItemCommand c)
         {
             if (!entity.TryGetModule<SpatialModule>(out var spatialModule)) return false;
 
-            var item = c.FromContainer.Get(c.FromSlot);
-            if (item == null) return false;
+            ItemStackSnapshot? item;
+            int removedAmount;
 
-            var removedAmount = ItemContainerUtils.RemoveAmount(c.FromContainer, c.FromSlot, c.Amount);
+            if (c.FromContainer == ItemContainerId.Equipment)
+            {
+                var equipment = ResolveEquipment(entity);
+                var slot = ContainerSlotConverter.ToEquipmentSlot(c.FromSlot);
+                item = equipment.Get(slot);
+                if (item == null) return false;
+                removedAmount = ItemContainerUtils.RemoveAmount(equipment, slot, c.Amount);
+            }
+            else
+            {
+                var from = ResolveInventory(entity, c.FromContainer);
+                var slot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                item = from.Get(slot);
+                if (item == null) return false;
+                removedAmount = ItemContainerUtils.RemoveAmount(from, slot, c.Amount);
+            }
+
             if (removedAmount > 0)
             {
                 _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
@@ -170,9 +186,21 @@ namespace Assets._Game.Scripts.Items.Commands
             return false;
         }
 
-        private bool HandleUse<T>(Entity entity, UseItemCommand<T> c)
+        private bool HandleUse(Entity entity, UseItemCommand c)
         {
-            var item = c.Container.Get(c.Slot);
+            ItemStackSnapshot? item;
+
+            if (c.Container == ItemContainerId.Equipment)
+            {
+                var equipment = ResolveEquipment(entity);
+                item = equipment.Get(ContainerSlotConverter.ToEquipmentSlot(c.Slot));
+            }
+            else
+            {
+                var container = ResolveInventory(entity, c.Container);
+                item = container.Get(ContainerSlotConverter.ToInventorySlot(c.Slot));
+            }
+
             if (item != null && item.Value.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
             {
                 if (usableTrait.Cooldown > 0 && item.Value.InstanceData is CooldownInstanceData cooldownTrait && cooldownTrait.Cooldown.IsOver())

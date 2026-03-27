@@ -30,13 +30,13 @@ namespace Assets._Game.Scripts.Entities.Modules
 
     public readonly struct InventoryChangedEvent : IEntityEvent
     {
-        public readonly int Slot;
+        public readonly InventorySlot Slot;
         public readonly ItemStackSnapshot? Item;
         public readonly InventoryChangeKind Kind;
 
         public Entity Entity { get; }
 
-        public InventoryChangedEvent(Entity entity, int slot, ItemStackSnapshot? item, InventoryChangeKind kind)
+        public InventoryChangedEvent(Entity entity, InventorySlot slot, ItemStackSnapshot? item, InventoryChangeKind kind)
         {
             Entity = entity;
             Slot = slot;

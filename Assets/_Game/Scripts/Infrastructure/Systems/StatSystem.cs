@@ -130,7 +130,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var stats = e.Entity.GetModule<StatModule>();
 
-            var source = StatModifierSource.FromInventorySlot(e.Slot);
+            var source = StatModifierSource.FromInventorySlot(e.Slot.Index);
 
             stats.RemoveModifiers(source);
 
