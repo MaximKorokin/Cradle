@@ -20,7 +20,12 @@ MonoBehaviour:
   <Duration>k__BackingField: 30
   <Charges>k__BackingField: 0
   <Stacks>k__BackingField: 0
-  <StatModifiers>k__BackingField: []
+  <StatModifiers>k__BackingField:
+  - <Stat>k__BackingField: 220
+    <Stage>k__BackingField: 50
+    <Operation>k__BackingField: 30
+    <Value>k__BackingField: 0
+    <Priority>k__BackingField: 999
   <AttackModifiers>k__BackingField:
   - <Type>k__BackingField: 10
     <Value>k__BackingField: 0.5

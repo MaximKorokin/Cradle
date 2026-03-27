@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
             return new EncodedSaveData
             {
                 Type = Type,
-                Json = JsonConvert.SerializeObject(d.Cooldown.Cooldown)
+                Json = JsonConvert.SerializeObject(d.CooldownCounter.Cooldown)
             };
         }
 

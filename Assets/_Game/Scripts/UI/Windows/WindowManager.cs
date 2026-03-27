@@ -55,6 +55,11 @@ namespace Assets._Game.Scripts.UI.Windows
             // find prefab
             var prefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == windowType);
             if (prefab == null) throw new InvalidOperationException($"No prefab for window of type {windowType} registered.");
+            if (prefab.IsSingleton && _windowStack.Any(w => w.Window.GetType() == windowType))
+            {
+                SLog.Warn($"Window of type {windowType} is a singleton and is already open. Returning existing instance.");
+                return _windowStack.First(w => w.Window.GetType() == windowType).Window;
+            }
 
             // find controller type
             var controllerType = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType).GetControllerType(controllerTypes);

@@ -32,11 +32,11 @@ namespace Assets._Game.Scripts.Items
     [Serializable]
     public class CooldownInstanceData : IImmutableItemInstanceData
     {
-        public CooldownCounter Cooldown { get; private set; }
+        public CooldownCounter CooldownCounter { get; private set; }
 
         public CooldownInstanceData(float cooldown)
         {
-            Cooldown = new CooldownCounter(cooldown);
+            CooldownCounter = new CooldownCounter(cooldown);
         }
 
         public string GetStackingKey()

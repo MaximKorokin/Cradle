@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: BloodStone
+  m_EditorClassIdentifier: 
+  _id: 87d3549c31564e9baf7ad220cc918e7e
+  <Name>k__BackingField: Blood Stone
+  <Icon>k__BackingField: {fileID: -6692747315308655370, guid: 1496f778f3506c24e8ea8879d934bdc9, type: 3}
+  <Sprite>k__BackingField: {fileID: -6692747315308655370, guid: 1496f778f3506c24e8ea8879d934bdc9, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 100
+  <Traits>k__BackingField:
+  - rid: 3412049091508568176
+  - rid: 3412049091508568172
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412049091508568172
+      type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Consumable>k__BackingField: 0
+        <Cooldown>k__BackingField: 100
+    - rid: 3412049091508568176
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 1000

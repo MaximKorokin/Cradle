@@ -203,9 +203,10 @@ namespace Assets._Game.Scripts.Items.Commands
 
             if (item != null && item.Value.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
             {
-                if (usableTrait.Cooldown > 0 && item.Value.InstanceData is CooldownInstanceData cooldownTrait && cooldownTrait.Cooldown.IsOver())
+                if (usableTrait.Cooldown > 0 && item.Value.InstanceData is CooldownInstanceData cooldownTrait && cooldownTrait.CooldownCounter.IsOver())
                 {
-                    cooldownTrait.Cooldown.Reset();
+                    cooldownTrait.CooldownCounter.Reset();
+                    entity.Publish<ItemUsedEvent>(new(entity, item.Value));
                     SLog.Log($"item {item.Value.Definition.Name} used");
                 }
             }

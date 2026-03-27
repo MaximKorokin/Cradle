@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
@@ -34,6 +35,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             Entity = entity;
             Command = command;
+        }
+    }
+
+    public readonly struct ItemUsedEvent : IEntityEvent
+    {
+        public readonly ItemStackSnapshot Item;
+        public Entity Entity { get; }
+
+        public ItemUsedEvent(Entity entity, ItemStackSnapshot item)
+        {
+            Entity = entity;
+            Item = item;
         }
     }
 }
