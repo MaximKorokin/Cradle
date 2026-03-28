@@ -65,8 +65,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 }
             }
 
-            OptimizedOperationUtils.CleanTillNull(controlModule.RawControlProviders);
-            OptimizedOperationUtils.CleanTillNull(controlModule.UniqueControlProviders);
+            OptimizedOperationUtils.ClearTillNull(controlModule.RawControlProviders);
+            OptimizedOperationUtils.ClearTillNull(controlModule.UniqueControlProviders);
 
             controlModule.RawControlProviders[0] = SelectBestControlProvider(controlModule, ControlMask.Move);
             controlModule.RawControlProviders[1] = SelectBestControlProvider(controlModule, ControlMask.Aim);

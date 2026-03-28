@@ -1,13 +1,30 @@
-﻿namespace Assets._Game.Scripts.Shared.Utils
+﻿using System;
+using System.Collections.Generic;
+
+namespace Assets._Game.Scripts.Shared.Utils
 {
     public static class OptimizedOperationUtils
     {
-        public static void CleanTillNull<T>(T[] buffer) where T : class
+        public static void ClearTillNull<T>(T[] buffer) where T : class
         {
             for (int i = 0; i < buffer.Length; i++)
             {
                 if (buffer[i] == null) return;
                 buffer[i] = null;
+            }
+        }
+
+        public static void Clear<T>(T[] buffer, int count)
+        {
+            Array.Clear(buffer, 0, count);
+        }
+
+        public static void Copy<T>(IReadOnlyCollection<T> from, T[] to)
+        {
+            int i = 0;
+            foreach (var item in from)
+            {
+                to[i++] = item;
             }
         }
 

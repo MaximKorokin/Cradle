@@ -6,7 +6,7 @@ using Assets._Game.Scripts.Items.Commands;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class ItemSystem : EntitySystemBase
+    public sealed class ItemSystem : EntitySystemBase, ITickSystem
     {
         private readonly ItemCommandHandler _itemCommandHandler;
 
@@ -17,6 +17,22 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _itemCommandHandler = itemCommandHandler;
 
             TrackEntityEvent<ItemCommandRequest>(OnItemCommandRequested);
+        }
+
+        public void Tick(float delta)
+        {
+            IterateMatchingEntities(TickEntity);
+        }
+
+        private void TickEntity(Entity entity)
+        {
+            if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
+
+            for (int i = 0; i < equipmentModule.Equipment.Slots.Count; i++)
+            {
+                var command = new UseItemCommand(ItemContainerId.Equipment, equipmentModule.Equipment.Slots[i].ToInt64(), false);
+                _itemCommandHandler.Handle(entity, command);
+            }
         }
 
         private void OnItemCommandRequested(ItemCommandRequest e)

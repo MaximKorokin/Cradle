@@ -49,6 +49,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnActionCompleted(ActionCompletedEvent e)
         {
+            if (!e.ActionInstance.Definition.ConsumesCharges) return;
             if (!e.Entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
             var statusEffects = statusEffectModule.StatusEffects.GetStatusEffects().ToArray();

@@ -10,6 +10,9 @@ namespace Assets._Game.Scripts.Items.Equipment
         private readonly IEquipmentRules _rules;
         private readonly ItemStackFactory _itemStackFactory;
 
+        private readonly EquipmentSlotKey[] _slotList;
+        public IReadOnlyList<EquipmentSlotKey> Slots => _slotList;
+
         public event Action<EquipmentChange> EquipmentChanged;
         public event Action<EquipmentSlotKey> SlotChanged;
         public event Action Changed;
@@ -29,6 +32,8 @@ namespace Assets._Game.Scripts.Items.Equipment
                 _slots[new(slotType, count)] = null;
                 slotTypeCounts[slotType] = count + 1;
             }
+            
+            _slotList = _slots.Keys.ToArray();
         }
 
         public bool IsValidSlot(EquipmentSlotKey slot)

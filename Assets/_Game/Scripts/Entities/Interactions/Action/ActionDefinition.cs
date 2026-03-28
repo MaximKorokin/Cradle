@@ -24,6 +24,8 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
         [field: SerializeField]
         public float ManaCost { get; private set; }
         [field: SerializeField]
+        public bool ConsumesCharges { get; private set; }
+        [field: SerializeField]
         public float PreparationTime { get; private set; }
         [field: SerializeField]
         public float MaxChannelingTime { get; private set; }

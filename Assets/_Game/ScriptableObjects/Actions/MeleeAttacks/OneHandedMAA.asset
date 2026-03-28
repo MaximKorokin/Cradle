@@ -18,6 +18,7 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 6689699355126921553, guid: 692ce18cf22f2934ab8a66d461037786, type: 3}
   <Interaction>k__BackingField: {fileID: 11400000, guid: 3425c99df00653146bfe8d8e27d9e699, type: 2}
   <ManaCost>k__BackingField: 0
+  <ConsumesCharges>k__BackingField: 1
   <PreparationTime>k__BackingField: 0
   <MaxChannelingTime>k__BackingField: 5
   <Cooldown>k__BackingField: 0
