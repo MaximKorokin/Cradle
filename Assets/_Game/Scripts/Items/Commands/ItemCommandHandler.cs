@@ -7,6 +7,8 @@ using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
+using Assets._Game.Scripts.Shared.Extensions;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Commands
 {
@@ -201,16 +203,39 @@ namespace Assets._Game.Scripts.Items.Commands
                 item = container.Get(ContainerSlotConverter.ToInventorySlot(c.Slot));
             }
 
-            if (item != null && item.Value.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
+            // First, check if the item exists and has the Usable trait.
+            if (item == null || !item.Value.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
+                return false;
+
+            // Check cooldown and reset it if the item can be used.
+            if (usableTrait.Cooldown <= 0 || item.Value.InstanceData is not CooldownInstanceData cooldownTrait || !cooldownTrait.CooldownCounter.IsOver())
+                return false;
+
+            // Check if all functional traits allow triggering with the given context.
+            var triggerContext = new ItemTriggerContext(entity, c.IsManual ? ItemTrigger.OnManualUse : ItemTrigger.OnAutoUse, item.Value);
+            if (item.Value.GetTraits<FunctionalItemTraitBase>().Any(t => !t.CanTrigger(triggerContext)))
+                return false;
+
+            // All checks passed, trigger the item use.
+            cooldownTrait.CooldownCounter.Reset();
+            entity.Publish<ItemUseStartedEvent>(new(entity, item.Value, c.IsManual));
+
+            // If the item is consumable, remove one from the stack.
+            if (usableTrait.Consumable)
             {
-                if (usableTrait.Cooldown > 0 && item.Value.InstanceData is CooldownInstanceData cooldownTrait && cooldownTrait.CooldownCounter.IsOver())
+                if (c.Container == ItemContainerId.Equipment)
                 {
-                    cooldownTrait.CooldownCounter.Reset();
-                    entity.Publish<ItemUsedEvent>(new(entity, item.Value));
-                    SLog.Log($"item {item.Value.Definition.Name} used");
+                    var equipment = ResolveEquipment(entity);
+                    equipment.RemoveFromSlot(ContainerSlotConverter.ToEquipmentSlot(c.Slot), 1);
+                }
+                else
+                {
+                    var container = ResolveInventory(entity, c.Container);
+                    container.RemoveFromSlot(ContainerSlotConverter.ToInventorySlot(c.Slot), 1);
                 }
             }
-            return false;
+
+            return true;
         }
     }
 }

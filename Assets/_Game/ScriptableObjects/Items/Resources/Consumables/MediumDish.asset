@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: Food
+  m_Name: MediumDish
   m_EditorClassIdentifier: 
   _id: b72afba6cb9d49f7bc64c85b10260a73
-  <Name>k__BackingField: Food
+  <Name>k__BackingField: Medium Dish
   <Icon>k__BackingField: {fileID: -7951491290743021505, guid: 05bbc83f544c57745860545592ccc07e, type: 3}
   <Sprite>k__BackingField: {fileID: -7951491290743021505, guid: 05bbc83f544c57745860545592ccc07e, type: 3}
   <MaxAmount>k__BackingField: 64
@@ -29,13 +29,13 @@ MonoBehaviour:
     - rid: 3412049108851753065
       type: {class: InteractionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Triggers>k__BackingField: 64
-        <Interaction>k__BackingField: {fileID: 0}
+        <Triggers>k__BackingField: 192
+        <Interaction>k__BackingField: {fileID: 11400000, guid: 86f5b133ac81a914fac1d93b077b5342, type: 2}
     - rid: 3412049108851753066
       type: {class: StatusEffectTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Triggers>k__BackingField: 64
-        <StatusEffect>k__BackingField: {fileID: 0}
+        <Triggers>k__BackingField: 192
+        <StatusEffect>k__BackingField: {fileID: 11400000, guid: c3d85fbe447da7d40bdf63515ac0cbe2, type: 2}
     - rid: 7990781616137175118
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

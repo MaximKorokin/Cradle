@@ -4,11 +4,13 @@
     {
         public readonly ItemContainerId Container;
         public readonly long Slot;
+        public readonly bool IsManual;
 
-        public UseItemCommand(ItemContainerId container, long slot)
+        public UseItemCommand(ItemContainerId container, long slot, bool isManual)
         {
             Container = container;
             Slot = slot;
+            IsManual = isManual;
         }
     }
 }

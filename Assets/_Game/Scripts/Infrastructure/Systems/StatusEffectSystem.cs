@@ -3,6 +3,9 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
 using System.Linq;
 
@@ -10,15 +13,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class StatusEffectSystem : EntitySystemBase, ITickSystem
     {
-        private readonly CooldownCounter _cooldownCounter;
+        private readonly CooldownCounter _tickCooldownCounter;
 
         protected override EntityQuery EntityQuery => new(RestrictionState.Disabled, new[] { typeof(StatusEffectModule) });
 
         public StatusEffectSystem(EntityRepository repository, StatusEffectsConfig statusEffectsConfig) : base(repository)
         {
-            _cooldownCounter = new(1 / statusEffectsConfig.TickRate);
+            _tickCooldownCounter = new(1 / statusEffectsConfig.TickRate);
 
             TrackEntityEvent<ActionCompletedEvent>(OnActionCompleted);
+            TrackEntityEvent<ItemUseStartedEvent>(OnItemUseStarted);
         }
 
         public void Tick(float delta)
@@ -30,7 +34,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var statusEffectModule = entity.GetModule<StatusEffectModule>();
 
-            if (_cooldownCounter.TryReset())
+            if (_tickCooldownCounter.TryReset())
             {
                 var statusEffects = statusEffectModule.StatusEffects.GetStatusEffects().ToArray();
                 foreach (var statusEffect in statusEffects)
@@ -45,8 +49,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnActionCompleted(ActionCompletedEvent e)
         {
-            var entity = e.Entity;
-            if (!entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+            if (!e.Entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+
             var statusEffects = statusEffectModule.StatusEffects.GetStatusEffects().ToArray();
             foreach (var statusEffect in statusEffects)
             {
@@ -58,6 +62,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                         statusEffectModule.StatusEffects.RemoveStatusEffect(statusEffect);
                     }
                 }
+            }
+        }
+
+        private void OnItemUseStarted(ItemUseStartedEvent e)
+        {
+            if (!e.Entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+
+            foreach (var trait in e.Item.GetFunctionalTraits<StatusEffectTrait>(e.IsManual ? ItemTrigger.OnManualUse : ItemTrigger.OnAutoUse))
+            {
+                statusEffectModule.StatusEffects.AddStatusEffect(new(trait.StatusEffect));
             }
         }
     }

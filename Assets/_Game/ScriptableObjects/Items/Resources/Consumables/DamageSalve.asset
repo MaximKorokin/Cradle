@@ -28,8 +28,8 @@ MonoBehaviour:
     - rid: 3412049108851753064
       type: {class: StatusEffectTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Triggers>k__BackingField: 64
-        <StatusEffect>k__BackingField: {fileID: 0}
+        <Triggers>k__BackingField: 192
+        <StatusEffect>k__BackingField: {fileID: 11400000, guid: 5c8fee90c10594e4fabcf815983c6dfc, type: 2}
     - rid: 7990781616137175118
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

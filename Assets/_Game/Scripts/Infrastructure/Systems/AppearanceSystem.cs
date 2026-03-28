@@ -73,15 +73,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 }
             }
 
-            // Change animations
+            // Check for animation overrides
             var animationOverrideTrait = e.Item.Value.GetFunctionalTrait<AnimationOverrideTrait>(ItemTrigger.OnEquipmentChange);
-            if (animationOverrideTrait != null)
+            if (animationOverrideTrait == null || !animationOverrideTrait.CanTrigger(new(e.Entity, ItemTrigger.OnEquipmentChange, e.Item.Value)))
+                return;
+
+            // Change animations
+            foreach (var animationOverride in animationOverrideTrait.AnimationOverrideProfile.AnimationOverrides)
             {
-                foreach (var animationOverride in animationOverrideTrait.AnimationOverrideProfile.AnimationOverrides)
-                {
-                    var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationOverride.AnimationClip;
-                    appearance.RequestSetAnimation(animationOverride.AnimationKey, animationClip);
-                }
+                var animationClip = e.Kind == EquipmentChangeKind.Unequipped ? null : animationOverride.AnimationClip;
+                appearance.RequestSetAnimation(animationOverride.AnimationKey, animationClip);
             }
         }
 

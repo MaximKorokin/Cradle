@@ -18,8 +18,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
             if (context.Target.TryGetModule(out StatModule stats))
             {
-                var hp = stats.Stats.Get(StatId.HpCurrent);
-                stats.SetBase(StatId.HpCurrent, hp - _amount);
+                stats.AddBase(StatId.HpCurrent, _amount);
             }
 
             _done = true;

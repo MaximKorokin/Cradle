@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Entities;
+using System;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Items
@@ -12,12 +13,34 @@ namespace Assets._Game.Scripts.Items
     {
         [field: SerializeField]
         public ItemTrigger Triggers { get; private set; }
+
+        public virtual bool CanTrigger(in ItemTriggerContext context)
+        {
+            return (Triggers & context.Trigger) != 0;
+        }
     }
 
     [Flags]
     public enum ItemTrigger
     {
         OnEquipmentChange = 1,
-        OnUse = 64,
+        OnManualUse = 64,
+        OnAutoUse = 128,
+    }
+
+    public readonly struct ItemTriggerContext
+    {
+        public readonly Entity User;
+        public readonly ItemTrigger Trigger;
+        public readonly ItemStackSnapshot Item;
+        public readonly object Payload;
+
+        public ItemTriggerContext(Entity user, ItemTrigger trigger, ItemStackSnapshot item, object payload = null)
+        {
+            User = user;
+            Trigger = trigger;
+            Item = item;
+            Payload = payload;
+        }
     }
 }

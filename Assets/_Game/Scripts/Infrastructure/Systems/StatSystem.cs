@@ -80,7 +80,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // Apply new modifiers if something is equipped now
             if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
             {
-                var modifiers = ExtractStatModifiers(e.Item.Value, ItemTrigger.OnEquipmentChange);
+                var modifiers = ExtractStatModifiers(e.Entity, e.Item.Value, ItemTrigger.OnEquipmentChange);
                 if (modifiers.Count > 0)
                 {
                     stats.AddModifiers(source, modifiers);
@@ -94,13 +94,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private static List<StatModifier> ExtractStatModifiers(ItemStackSnapshot item, ItemTrigger trigger)
+        private static List<StatModifier> ExtractStatModifiers(Entity entity, ItemStackSnapshot item, ItemTrigger trigger)
         {
             var result = new List<StatModifier>();
 
+            var triggerContext = new ItemTriggerContext(entity, ItemTrigger.OnEquipmentChange, item);
             foreach (var trait in item.GetFunctionalTraits<StatModifiersTrait>(trigger))
             {
-                result.AddRange(trait.Modifiers);
+                if (trait.CanTrigger(triggerContext))
+                    result.AddRange(trait.Modifiers);
             }
 
             return result;

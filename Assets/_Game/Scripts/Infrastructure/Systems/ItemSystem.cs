@@ -38,15 +38,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         }
     }
 
-    public readonly struct ItemUsedEvent : IEntityEvent
+    public readonly struct ItemUseStartedEvent : IEntityEvent
     {
-        public readonly ItemStackSnapshot Item;
         public Entity Entity { get; }
+        public readonly ItemStackSnapshot Item;
+        public readonly bool IsManual;
 
-        public ItemUsedEvent(Entity entity, ItemStackSnapshot item)
+        public ItemUseStartedEvent(Entity entity, ItemStackSnapshot item, bool isManual)
         {
             Entity = entity;
             Item = item;
+            IsManual = isManual;
         }
     }
 }

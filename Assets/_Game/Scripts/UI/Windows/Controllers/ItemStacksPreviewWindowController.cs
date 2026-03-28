@@ -177,7 +177,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                     PublishItemCommand(new UnequipToContainerCommand(_secondaryContainerId, primarySlot));
                     break;
                 case ItemStackActionType.Use:
-                    PublishItemCommand(new UseItemCommand(_primaryContainerId, primarySlot));
+                    PublishItemCommand(new UseItemCommand(_primaryContainerId, primarySlot, true));
                     break;
             }
         }

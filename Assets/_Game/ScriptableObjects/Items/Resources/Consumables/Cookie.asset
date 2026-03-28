@@ -32,8 +32,8 @@ MonoBehaviour:
     - rid: 3412049108851753063
       type: {class: InteractionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Triggers>k__BackingField: 64
-        <Interaction>k__BackingField: {fileID: 0}
+        <Triggers>k__BackingField: 192
+        <Interaction>k__BackingField: {fileID: 11400000, guid: ac8d2742f1d5df64b839009fbd7da733, type: 2}
     - rid: 7990781638785105996
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

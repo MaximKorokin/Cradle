@@ -42,7 +42,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!e.Item.HasValue) return;
 
             var specialActionTrait = e.Item.Value.GetFunctionalTrait<SpecialActionTrait>(ItemTrigger.OnEquipmentChange);
-            if (specialActionTrait == null) return;
+            if (specialActionTrait == null || !specialActionTrait.CanTrigger(new(e.Entity, ItemTrigger.OnEquipmentChange, e.Item.Value))) return;
 
             var actionModule = e.Entity.GetModule<ActionModule>();
             var isEquipping = e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced;

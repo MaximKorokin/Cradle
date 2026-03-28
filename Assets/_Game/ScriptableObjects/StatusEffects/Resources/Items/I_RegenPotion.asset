@@ -10,21 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79116d10ba7a0044980441119a7c653d, type: 3}
-  m_Name: DamageSalve
+  m_Name: I_RegenPotion
   m_EditorClassIdentifier: 
-  _id: e97dc6a885ca4c838676ef12395bc8ce
+  _id: 7eb30ef2ed644654ba0eb71ba25a3004
   <Name>k__BackingField: Damage Salve
-  <Icon>k__BackingField: {fileID: 5807367746513092223, guid: 92a4a48f3385e1a46bbed831c497cd64, type: 3}
+  <Icon>k__BackingField: {fileID: -5060692187931261751, guid: 36c061f7f6944534380734307273b73f, type: 3}
   <Category>k__BackingField: 0
-  <Behaviour>k__BackingField: 16
-  <Duration>k__BackingField: 0
-  <Charges>k__BackingField: 3
+  <Behaviour>k__BackingField: 1
+  <Duration>k__BackingField: 10
+  <Charges>k__BackingField: 1
   <Stacks>k__BackingField: 0
-  <StatModifiers>k__BackingField: []
-  <AttackModifiers>k__BackingField:
-  - <Type>k__BackingField: 20
-    <Value>k__BackingField: 1
-    <Chance>k__BackingField: 1
+  <StatModifiers>k__BackingField:
+  - <Stat>k__BackingField: 220
+    <Stage>k__BackingField: 20
+    <Operation>k__BackingField: 10
+    <Value>k__BackingField: 10
+    <Priority>k__BackingField: 0
+  <AttackModifiers>k__BackingField: []
   <ControlProvider>k__BackingField:
     rid: -2
   references:
