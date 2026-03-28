@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Items.Traits
 {
-    public sealed class SpecialActionTrait : ItemTraitBase
+    public sealed class SpecialActionTrait : FunctionalItemTraitBase
     {
         [field: SerializeField]
         public SpecialActionKind Kind { get; private set; }

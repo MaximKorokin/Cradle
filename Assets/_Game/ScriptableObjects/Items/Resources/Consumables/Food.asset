@@ -21,9 +21,21 @@ MonoBehaviour:
   <Traits>k__BackingField:
   - rid: 7990781638785105998
   - rid: 7990781616137175118
+  - rid: 3412049108851753065
+  - rid: 3412049108851753066
   references:
     version: 2
     RefIds:
+    - rid: 3412049108851753065
+      type: {class: InteractionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 64
+        <Interaction>k__BackingField: {fileID: 0}
+    - rid: 3412049108851753066
+      type: {class: StatusEffectTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 64
+        <StatusEffect>k__BackingField: {fileID: 0}
     - rid: 7990781616137175118
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

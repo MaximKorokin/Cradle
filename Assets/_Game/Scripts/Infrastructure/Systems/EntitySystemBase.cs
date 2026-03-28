@@ -8,12 +8,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public abstract class EntitySystemBase : SystemBase
     {
         protected readonly EntityRepository EntityRepository;
+
         private Entity[] _buffer = new Entity[256];
+        private readonly List<Action<Entity, List<IDisposable>>> _eventBinders = new();
+        private readonly Dictionary<Entity, List<IDisposable>> _subscriptionsByEntity = new();
 
         protected abstract EntityQuery EntityQuery { get; }
-
-        private readonly List<Action<Entity>> _subscribe = new();
-        private readonly List<Action<Entity>> _unsubscribe = new();
 
         protected EntitySystemBase(EntityRepository repository)
         {
@@ -22,70 +22,95 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             EntityRepository.Added += OnEntityAdded;
             EntityRepository.Removed += OnEntityRemoved;
 
-            IterateAllEntities(SubscribeEntity);
+            IterateAllEntities(RegisterEntity);
         }
 
-        // ------------------------ Reacting ------------------------
-        protected void TrackEntityEvent<T>(Action<T> handler) where T : struct, IEntityEvent
+        protected void TrackEntityEvent<T>(Action<T> handler)
+            where T : struct, IEntityEvent
         {
-            void Callback(T evt)
+            void Bind(Entity entity, List<IDisposable> subscriptions)
             {
-                var entity = evt.Entity;
+                var subscription = entity.Subscribe<T>(evt =>
+                {
+                    if (!EntityQuery.Match(entity))
+                        return;
 
-                if (!EntityQuery.Match(entity))
-                    return;
+                    handler(evt);
+                });
 
-                handler(evt);
+                subscriptions.Add(subscription);
             }
 
-            _subscribe.Add(e => e.Subscribe<T>(Callback));
-            _unsubscribe.Add(e => e.Unsubscribe<T>(Callback));
+            _eventBinders.Add(Bind);
 
-            IterateAllEntities(entity => entity.Subscribe<T>(Callback));
+            foreach (var pair in _subscriptionsByEntity)
+            {
+                Bind(pair.Key, pair.Value);
+            }
         }
 
         protected virtual void OnEntityAdded(Entity entity)
         {
-            SubscribeEntity(entity);
+            RegisterEntity(entity);
         }
 
         protected virtual void OnEntityRemoved(Entity entity)
         {
-            UnsubscribeEntity(entity);
+            UnregisterEntity(entity);
         }
 
-        private void SubscribeEntity(Entity entity)
+        private void RegisterEntity(Entity entity)
         {
-            for (int i = 0; i < _subscribe.Count; i++)
+            if (_subscriptionsByEntity.ContainsKey(entity))
+                return;
+
+            var subscriptions = new List<IDisposable>(4);
+            _subscriptionsByEntity.Add(entity, subscriptions);
+
+            for (int i = 0; i < _eventBinders.Count; i++)
             {
-                _subscribe[i](entity);
+                _eventBinders[i](entity, subscriptions);
             }
         }
 
-        private void UnsubscribeEntity(Entity entity)
+        private void UnregisterEntity(Entity entity)
         {
-            for (int i = 0; i < _unsubscribe.Count; i++)
+            if (!_subscriptionsByEntity.TryGetValue(entity, out var subscriptions))
+                return;
+
+            for (int i = 0; i < subscriptions.Count; i++)
             {
-                _unsubscribe[i](entity);
+                subscriptions[i].Dispose();
             }
+
+            _subscriptionsByEntity.Remove(entity);
         }
 
         public override void Dispose()
         {
-            base.Dispose();
-
             EntityRepository.Added -= OnEntityAdded;
             EntityRepository.Removed -= OnEntityRemoved;
 
-            IterateAllEntities(UnsubscribeEntity);
+            foreach (var pair in _subscriptionsByEntity)
+            {
+                var subscriptions = pair.Value;
+                for (int i = 0; i < subscriptions.Count; i++)
+                {
+                    subscriptions[i].Dispose();
+                }
+            }
+
+            _subscriptionsByEntity.Clear();
+            _eventBinders.Clear();
+
+            base.Dispose();
         }
 
-        // ------------------------ Iterating ------------------------
         protected void IterateAllEntities(Action<Entity> callback)
         {
             var count = CopySnapshot();
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 callback(_buffer[i]);
             }
@@ -95,7 +120,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var count = CopySnapshot();
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var entity = _buffer[i];
 
@@ -117,7 +142,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var newSize = _buffer.Length;
             while (newSize < required)
+            {
                 newSize *= 2;
+            }
 
             _buffer = new Entity[newSize];
         }

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79116d10ba7a0044980441119a7c653d, type: 3}
+  m_Name: AiSE
+  m_EditorClassIdentifier: 
+  _id: 767ee987513b4166bcb206d40051e6a9
+  <Name>k__BackingField: Auto Farm
+  <Icon>k__BackingField: {fileID: -7989652502919391114, guid: 22205e1be9a6f6845ab44599b012162e, type: 3}
+  <Category>k__BackingField: 0
+  <Behaviour>k__BackingField: 0
+  <Duration>k__BackingField: 33
+  <Charges>k__BackingField: 0
+  <Stacks>k__BackingField: 0
+  <StatModifiers>k__BackingField: []
+  <AttackModifiers>k__BackingField: []
+  <ControlProvider>k__BackingField:
+    rid: 3412049108851753035
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412049108851753035
+      type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
+      data:
+        <AiBehaviours>k__BackingField: 6

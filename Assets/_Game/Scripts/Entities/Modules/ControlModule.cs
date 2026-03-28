@@ -54,7 +54,10 @@ namespace Assets._Game.Scripts.Entities.Modules
             }
 
             var controlModule = new ControlModule();
-            controlModule.AddProvider(controlModuleDefinition.ControlProvider.CreateInstance(_resolver));
+            if (controlModuleDefinition.ControlProvider != null)
+            {
+                controlModule.AddProvider(controlModuleDefinition.ControlProvider.CreateInstance(_resolver));
+            }
             return controlModule;
         }
     }

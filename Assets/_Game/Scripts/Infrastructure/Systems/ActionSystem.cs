@@ -6,6 +6,7 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -40,7 +41,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (!e.Item.HasValue) return;
 
-            var specialActionTrait = e.Item.Value.GetTrait<SpecialActionTrait>();
+            var specialActionTrait = e.Item.Value.GetFunctionalTrait<SpecialActionTrait>(ItemTrigger.OnEquipmentChange);
             if (specialActionTrait == null) return;
 
             var actionModule = e.Entity.GetModule<ActionModule>();

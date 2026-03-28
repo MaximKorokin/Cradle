@@ -27,6 +27,7 @@ MonoBehaviour:
     - rid: 1349792551833698424
       type: {class: StatModifiersTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
+        <Triggers>k__BackingField: 1
         <Modifiers>k__BackingField:
         - <Stat>k__BackingField: 310
           <Stage>k__BackingField: 20

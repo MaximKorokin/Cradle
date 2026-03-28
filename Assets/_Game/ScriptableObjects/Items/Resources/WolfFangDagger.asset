@@ -28,6 +28,7 @@ MonoBehaviour:
     - rid: 1349792509003825562
       type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
+        <Triggers>k__BackingField: 1
         <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: 859fd67fe19a83643ab207885c6a67ec, type: 2}
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
@@ -36,5 +37,6 @@ MonoBehaviour:
     - rid: 3412048928327073884
       type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
+        <Triggers>k__BackingField: 1
         <Kind>k__BackingField: 0
         <Action>k__BackingField: {fileID: 11400000, guid: 93581f990a501ea4ba3b2b10d5124ce4, type: 2}

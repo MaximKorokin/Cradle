@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets._Game.Scripts.Items.Traits
 {
     [Serializable]
-    public class AnimationOverrideTrait : ItemTraitBase
+    public class AnimationOverrideTrait : FunctionalItemTraitBase
     {
         [field: SerializeField]
         public AnimationOverrideProfile AnimationOverrideProfile { get; private set; }

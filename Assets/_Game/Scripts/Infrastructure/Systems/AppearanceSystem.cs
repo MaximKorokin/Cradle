@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -73,7 +74,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
 
             // Change animations
-            var animationOverrideTrait = e.Item.Value.GetTraits<AnimationOverrideTrait>().FirstOrDefault();
+            var animationOverrideTrait = e.Item.Value.GetFunctionalTrait<AnimationOverrideTrait>(ItemTrigger.OnEquipmentChange);
             if (animationOverrideTrait != null)
             {
                 foreach (var animationOverride in animationOverrideTrait.AnimationOverrideProfile.AnimationOverrides)

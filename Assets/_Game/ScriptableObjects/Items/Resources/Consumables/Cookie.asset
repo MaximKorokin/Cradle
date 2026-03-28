@@ -21,6 +21,7 @@ MonoBehaviour:
   <Traits>k__BackingField:
   - rid: 2859158637052690512
   - rid: 7990781638785105996
+  - rid: 3412049108851753063
   references:
     version: 2
     RefIds:
@@ -28,6 +29,11 @@ MonoBehaviour:
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 1000
+    - rid: 3412049108851753063
+      type: {class: InteractionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 64
+        <Interaction>k__BackingField: {fileID: 0}
     - rid: 7990781638785105996
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets._Game.Scripts.Items.Traits
 {
     [Serializable]
-    public sealed class StatModifiersTrait : ItemTraitBase
+    public sealed class StatModifiersTrait : FunctionalItemTraitBase
     {
         [field: SerializeField]
         public StatModifier[] Modifiers { get; private set; }
