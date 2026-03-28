@@ -32,7 +32,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnDamageApplied(DamageAppliedEvent e)
         {
-            if (e.SourceType == DamageSourceType.AttackModifier) return;
+            if (e.SourceType != DamageSourceType.Action) return;
             if (!e.Source.TryGetModule<AttackModifierModule>(out var attackModifier) ||
                 !e.Source.TryGetModule<StatModule>(out var sourceStatModule) ||
                 !e.Target.TryGetModule<StatModule>(out var targetStatModule)) return;

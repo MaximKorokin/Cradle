@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: c631233806f04eb590d06adb78eb66de
   <Name>k__BackingField: Iron Helmet
-  <Icon>k__BackingField: {fileID: -2806466515258389058, guid: 315a1061eb4ff6c4a9751e98b0595395, type: 3}
+  <Icon>k__BackingField: {fileID: -4593610227131382681, guid: 7ad737543b8cb6d43a05f1d7441b7e62, type: 3}
   <Sprite>k__BackingField: {fileID: 5973168979162390250, guid: b6e6023625bc48b42bbe7f1d06ab7d02, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 111

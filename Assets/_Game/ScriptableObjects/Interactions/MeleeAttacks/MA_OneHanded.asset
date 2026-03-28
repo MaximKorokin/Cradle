@@ -44,6 +44,7 @@ MonoBehaviour:
       type: {class: InteractionDefinition/DamageData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
       data:
         Spec:
+          Source: 10
           Type: 10
           Flat: 0
           AttackScale: 1

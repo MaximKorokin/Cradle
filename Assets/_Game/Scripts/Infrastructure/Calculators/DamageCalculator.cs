@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Interactions.Steps;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using System;
@@ -17,13 +18,15 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
     [Serializable]
     public struct DamageSpec
     {
+        public DamageSourceType Source;
         public DamageType Type;
         public float Flat;
         public float AttackScale;
         public bool CanCrit;
 
-        DamageSpec(DamageType type, float flat, float attackScale, bool canCrit)
+        DamageSpec(DamageSourceType source, DamageType type, float flat, float attackScale, bool canCrit)
         {
+            Source = source;
             Type = type;
             Flat = flat;
             AttackScale = attackScale;

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: f2eac9e0d14c49b1bccdb7883c78a505
   <Name>k__BackingField: Cotton Helmet
-  <Icon>k__BackingField: {fileID: -2806466515258389058, guid: 315a1061eb4ff6c4a9751e98b0595395, type: 3}
+  <Icon>k__BackingField: {fileID: -5067351220873990964, guid: 59a92ecbc0e4781479c704aec7801b78, type: 3}
   <Sprite>k__BackingField: {fileID: 4217637359650165115, guid: b6e6023625bc48b42bbe7f1d06ab7d02, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 111

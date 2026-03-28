@@ -9,6 +9,7 @@ using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -133,7 +134,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 actions.Add(new ItemStackAction(ItemStackActionType.Equip, "Equip"));
             }
 
-            if (primaryItem.GetTrait<UsableTrait>() != null)
+            if (primaryItem.GetTrait<UsableTrait>() != null && primaryItem.GetTraits<FunctionalItemTraitBase>().Any(t => t.Triggers.HasFlag(ItemTrigger.OnManualUse)))
             {
                 actions.Add(new ItemStackAction(ItemStackActionType.Use, "Use"));
             }

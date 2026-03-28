@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 03977e173df64ff9ba7a1543a26e8e92
   <Name>k__BackingField: Hood
-  <Icon>k__BackingField: {fileID: -2806466515258389058, guid: 315a1061eb4ff6c4a9751e98b0595395, type: 3}
+  <Icon>k__BackingField: {fileID: -4644663976674663309, guid: 48c9d1360a46c1c4bb60231196383ca3, type: 3}
   <Sprite>k__BackingField: {fileID: 5614001128715215490, guid: b6e6023625bc48b42bbe7f1d06ab7d02, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 111

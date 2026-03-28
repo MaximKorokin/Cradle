@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             if (context.Target.TryGetModule(out StatModule stats))
             {
                 stats.AddBase(StatId.HpCurrent, -damage);
-                _globalEventBus.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage, DamageSourceType.Original));
+                _globalEventBus.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage, _spec.Source));
             }
 
             _done = true;
@@ -58,8 +58,10 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
     public enum DamageSourceType
     {
-        Original = 10,
+        None = 0,
+        Action = 10,
         AttackModifier = 20,
+        Item = 30,
         Other = 100
     }
 }
