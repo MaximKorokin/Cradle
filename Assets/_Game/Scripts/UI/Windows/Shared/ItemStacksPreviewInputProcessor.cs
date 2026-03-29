@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.UI.Windows.Controllers;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Shared

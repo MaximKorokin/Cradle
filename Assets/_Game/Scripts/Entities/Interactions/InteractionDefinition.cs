@@ -29,10 +29,14 @@ namespace Assets._Game.Scripts.Entities.Interactions
             public abstract IInteractionStep Build(IObjectResolver resolver);
         }
 
-        [Serializable]
-        public sealed class SequenceData : StepData
+        public abstract class StepsStepData : StepData
         {
             [SerializeReference] public List<StepData> Steps = new();
+        }
+
+        [Serializable]
+        public sealed class SequenceData : StepsStepData
+        {
             public override IInteractionStep Build(IObjectResolver resolver)
             {
                 var built = new IInteractionStep[Steps.Count];
@@ -45,9 +49,8 @@ namespace Assets._Game.Scripts.Entities.Interactions
         }
 
         [Serializable]
-        public sealed class ParallelData : StepData
+        public sealed class ParallelData : StepsStepData
         {
-            [SerializeReference] public List<StepData> Steps = new();
             public override IInteractionStep Build(IObjectResolver resolver)
             {
                 var built = new IInteractionStep[Steps.Count];

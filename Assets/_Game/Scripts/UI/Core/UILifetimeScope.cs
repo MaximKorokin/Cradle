@@ -51,6 +51,8 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
 
                 new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<, >)),
+
+                new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController)),
             };
 
             foreach (var windowDefinition in windows)

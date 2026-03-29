@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly CooldownCounter _tickCooldownCounter;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled, new[] { typeof(StatusEffectModule) });
+        protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(StatusEffectModule) });
 
         public StatusEffectSystem(EntityRepository repository, StatusEffectsConfig statusEffectsConfig) : base(repository)
         {
@@ -70,8 +70,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (!e.Entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
-            foreach (var trait in e.Item.GetFunctionalTraits<StatusEffectTrait>(e.IsManual ? ItemTrigger.OnManualUse : ItemTrigger.OnAutoUse))
+            foreach (var trait in e.Item.GetFunctionalTraits<StatusEffectTrait>(ItemTrigger.OnUse))
             {
+                // No need to check if trait can trigger, as it was already checked in ItemSystem when starting item use.
                 statusEffectModule.StatusEffects.AddStatusEffect(new(trait.StatusEffect));
             }
         }

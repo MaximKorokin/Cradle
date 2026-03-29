@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private readonly List<InteractionInstance> _completedInteractions = new();
         private readonly IObjectResolver _resolver;
 
-        protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
+        protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled);
 
         public InteractionSystem(EntityRepository repository, IObjectResolver resolver) : base(repository)
         {
@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnItemUseStarted(ItemUseStartedEvent e)
         {
-            var trigger = e.IsManual ? ItemTrigger.OnManualUse : ItemTrigger.OnAutoUse;
+            var trigger = ItemTrigger.OnUse;
             foreach (var trait in e.Item.GetFunctionalTraits<InteractionTrait>(trigger))
             {
                 var context = new InteractionContext(e.Entity, e.Entity, e.Entity.GetPosition());

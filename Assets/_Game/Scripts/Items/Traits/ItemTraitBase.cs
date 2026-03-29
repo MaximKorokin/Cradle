@@ -24,8 +24,7 @@ namespace Assets._Game.Scripts.Items
     public enum ItemTrigger
     {
         OnEquipmentChange = 1,
-        OnManualUse = 64,
-        OnAutoUse = 128,
+        OnUse = 64,
     }
 
     public readonly struct ItemTriggerContext

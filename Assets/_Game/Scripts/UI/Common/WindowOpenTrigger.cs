@@ -1,11 +1,11 @@
 ﻿using Assets._Game.Scripts.UI.Windows;
-using Assets.CoreScripts;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Common
 {
+    [RequireComponent(typeof(Button))]
     public sealed class WindowOpenTrigger : MonoBehaviour
     {
         [SerializeField] private WindowId _windowId;

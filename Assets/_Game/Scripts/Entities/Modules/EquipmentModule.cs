@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
+using System;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
@@ -8,10 +9,13 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class EquipmentModule : EntityModuleBase
     {
         public EquipmentModel Equipment { get; private set; }
+        public ItemUseSettings AutoItemUseSettings { get; private set; }
+        public ItemUseSettings ManualItemUseSettings { get; private set; }
 
-        public EquipmentModule(EquipmentModel equipment)
+        public EquipmentModule(EquipmentModel equipment, ItemUseSettings manualItemUseSettings)
         {
             Equipment = equipment;
+            ManualItemUseSettings = manualItemUseSettings;
 
             if (Equipment != null) Equipment.EquipmentChanged += OnEquipmentSlotChanged;
         }
@@ -23,9 +27,27 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (Equipment != null) Equipment.EquipmentChanged -= OnEquipmentSlotChanged;
         }
 
+        public void SetAutoItemUseSettings(ItemUseSettings settings)
+        {
+            AutoItemUseSettings = settings;
+        }
+
         private void OnEquipmentSlotChanged(EquipmentChange equipmentChange)
         {
             Publish(new EquipmentChangedEvent(Entity, equipmentChange));
+        }
+    }
+
+    [Serializable]
+    public struct ItemUseSettings
+    {
+        public int HpPercent;
+        public bool OverrideStatusEffects;
+
+        public ItemUseSettings(int hpPercent, bool overrideStatusEffect)
+        {
+            HpPercent = hpPercent;
+            OverrideStatusEffects = overrideStatusEffect;
         }
     }
 
@@ -70,19 +92,21 @@ namespace Assets._Game.Scripts.Entities.Modules
 
             var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
             var equipmentModel = _equipmentModelAssembler.Create(slots);
-            return new EquipmentModule(equipmentModel);
+            return new EquipmentModule(equipmentModel, equipmentDefinitionModule.ManualItemUseSettings);
         }
 
         public void Apply(Entity entity, EntitySave entitySave)
         {
             if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
             _equipmentModelAssembler.Apply(equipmentModule.Equipment, entitySave.EquipmentSave);
+            equipmentModule.SetAutoItemUseSettings(entitySave.EquipmentSave.AutoItemUseSettings);
         }
 
         public void Save(Entity entity, EntitySave entitySave)
         {
             if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
             entitySave.EquipmentSave = _equipmentModelAssembler.Save(equipmentModule.Equipment);
+            entitySave.EquipmentSave.AutoItemUseSettings = equipmentModule.AutoItemUseSettings;
         }
     }
 }

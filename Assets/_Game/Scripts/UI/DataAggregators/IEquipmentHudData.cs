@@ -14,16 +14,17 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public class EquipmentHudData : DataAggregatorBase, IEquipmentHudData
     {
-        private readonly EquipmentModel _equipmentModel;
+        private readonly EquipmentModule _equipmentModule;
 
         public EquipmentHudData(PlayerContext playerContext)
         {
-            _equipmentModel = playerContext.GetModule<EquipmentModule>().Equipment;
-            _equipmentModel.Changed += OnEquipmentChanged;
+            _equipmentModule = playerContext.GetModule<EquipmentModule>();
+            _equipmentModule.Equipment.Changed += OnEquipmentChanged;
             OnEquipmentChanged();
         }
 
-        public EquipmentModel EquipmentModel => _equipmentModel;
+        public EquipmentModel EquipmentModel => _equipmentModule.Equipment;
+        public ItemUseSettings ItemUseSettings => _equipmentModule.AutoItemUseSettings;
 
         public event Action Changed;
 
@@ -35,7 +36,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public override void Dispose()
         {
             base.Dispose();
-            _equipmentModel.Changed -= OnEquipmentChanged;
+            _equipmentModule.Equipment.Changed -= OnEquipmentChanged;
         }
     }
 }

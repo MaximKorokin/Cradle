@@ -92,6 +92,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<DespawnSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AttackModifierSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<EquipmentSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ItemSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InteractionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }

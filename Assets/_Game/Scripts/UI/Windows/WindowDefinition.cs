@@ -36,5 +36,7 @@ namespace Assets._Game.Scripts.UI.Windows
         InventoryEquipment = 31,
         //ItemStacksPreview = 40,
         Pause = 50,
+
+        ItemUseSettings = 1100,
     }
 }

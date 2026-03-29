@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.UI.Core;
+using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System;
 using System.Collections.Generic;

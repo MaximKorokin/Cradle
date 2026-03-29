@@ -134,7 +134,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 actions.Add(new ItemStackAction(ItemStackActionType.Equip, "Equip"));
             }
 
-            if (primaryItem.GetTrait<UsableTrait>() != null && primaryItem.GetTraits<FunctionalItemTraitBase>().Any(t => t.Triggers.HasFlag(ItemTrigger.OnManualUse)))
+            if (primaryItem.GetTrait<UsableTrait>() != null && primaryItem.GetTraits<FunctionalItemTraitBase>().Any(t => t.Triggers.HasFlag(ItemTrigger.OnUse)))
             {
                 actions.Add(new ItemStackAction(ItemStackActionType.Use, "Use"));
             }

@@ -49,6 +49,12 @@ namespace Assets._Game.Scripts.Items.Commands
             return entity.GetModule<EquipmentModule>().Equipment;
         }
 
+        private ItemUseSettings ResolveItemUseSettings(Entity entity, bool isManual)
+        {
+            var equipmentModule = entity.GetModule<EquipmentModule>();
+            return isManual ? equipmentModule.ManualItemUseSettings : equipmentModule.AutoItemUseSettings;
+        }
+
         private bool HandleTransfer(Entity entity, TransferItemCommand c)
         {
             var from = ResolveInventory(entity, c.FromContainer);
@@ -212,13 +218,14 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // Check if all functional traits allow triggering with the given context.
-            var triggerContext = new ItemTriggerContext(entity, c.IsManual ? ItemTrigger.OnManualUse : ItemTrigger.OnAutoUse, item.Value);
+            var itemUseSettings = ResolveItemUseSettings(entity, c.IsManual);
+            var triggerContext = new ItemTriggerContext(entity, ItemTrigger.OnUse, item.Value, itemUseSettings);
             if (item.Value.GetTraits<FunctionalItemTraitBase>().Any(t => !t.CanTrigger(triggerContext)))
                 return false;
 
             // All checks passed, trigger the item use.
             cooldownTrait.CooldownCounter.Reset();
-            entity.Publish<ItemUseStartedEvent>(new(entity, item.Value, c.IsManual));
+            entity.Publish<ItemUseStartedEvent>(new(entity, item.Value, itemUseSettings));
 
             // If the item is consumable, remove one from the stack.
             if (usableTrait.Consumable)

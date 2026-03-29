@@ -52,6 +52,7 @@ namespace Assets._Game.Scripts.Entities
     public class EquipmentModuleDefinition : EntityModuleDefinition
     {
         public EquipmentSlotType[] EquipmentSlots;
+        public ItemUseSettings ManualItemUseSettings;
     }
 
     public class StatsModuleDefinition : EntityModuleDefinition

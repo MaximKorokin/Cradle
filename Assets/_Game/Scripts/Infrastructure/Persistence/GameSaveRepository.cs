@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Stats;
+﻿using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Items.Equipment;
 using System.Collections.Generic;
 
@@ -77,6 +78,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     public sealed class EquipmentSave
     {
         public EquipmentSlotSave[] Items;
+        public ItemUseSettings AutoItemUseSettings;
     }
 
     public class ItemStackSave

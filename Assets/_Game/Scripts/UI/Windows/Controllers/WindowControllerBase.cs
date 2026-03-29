@@ -3,7 +3,7 @@ using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 
-namespace Assets._Game.Scripts.UI.Windows
+namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public abstract class WindowControllerBase<TWindow, TArguments> : IWindowController<TWindow, TArguments>
         where TWindow : UIWindowBase
