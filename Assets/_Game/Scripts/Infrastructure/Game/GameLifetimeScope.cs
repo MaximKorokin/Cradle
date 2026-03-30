@@ -17,6 +17,7 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Locations;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -52,6 +53,10 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<PlayerControlProvider>(Lifetime.Singleton);
             builder.Register<PlayerContext>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<PlayerReference>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<LocationManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<LocationCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             RegisterConfigs(builder);
             RegisterSystems(builder);

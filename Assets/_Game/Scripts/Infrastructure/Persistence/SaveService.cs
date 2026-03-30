@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Locations;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
@@ -9,6 +10,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private const string SaveKey = "Player";
 
         private readonly IGlobalEventBus _globalEventBus;
+        private readonly LocationManager _locationManager;
         private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
@@ -16,14 +18,16 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private readonly InventoryModelFactory _inventoryModelAssembler;
 
         public SaveService(
-            IGlobalEventBus eventBus,
+            IGlobalEventBus globalEventBus,
+            LocationManager locationManager,
             GameSaveRepository gameSaveRepository,
             NewGameDefinition newGameDefinition,
             PlayerContext playerContext,
             EntityFactory entityAssembler,
             InventoryModelFactory inventoryModelAssembler)
         {
-            _globalEventBus = eventBus;
+            _globalEventBus = globalEventBus;
+            _locationManager = locationManager;
             _gameSaveRepository = gameSaveRepository;
             _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
@@ -56,6 +60,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
                 _entityAssembler.Apply(humanoid, gameSave.PlayerSave);
             }
             _playerContext.SetPlayer(humanoid);
+
+            _ = _locationManager.LoadInitialLocation(_newGameDefinition.Location.Id, _newGameDefinition.LocationEntrance);
         }
 
         public void ResetSave()

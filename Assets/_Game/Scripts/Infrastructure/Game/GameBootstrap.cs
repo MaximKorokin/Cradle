@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Locations;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,18 +10,18 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 {
     public class GameBootstrap : IStartable
     {
-        private readonly IGlobalEventBus _eventBus;
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly SaveService _saveService;
         private readonly EntityFactory _entityAssembler;
         private readonly EntityDefinitionCatalog _entityDefinitionCatalog;
 
         public GameBootstrap(
-            IGlobalEventBus eventBus,
+            IGlobalEventBus globalEventBus,
             SaveService saveService,
             EntityFactory entityAssembler,
             EntityDefinitionCatalog entityDefinitionCatalog)
         {
-            _eventBus = eventBus;
+            _globalEventBus = globalEventBus;
             _saveService = saveService;
             _entityAssembler = entityAssembler;
             _entityDefinitionCatalog = entityDefinitionCatalog;
@@ -35,9 +36,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
             var dogDefinition = _entityDefinitionCatalog.Get("d5855ca383df4ddd8c615e51609dc812");
             var dogEntity1 = _entityAssembler.Create(dogDefinition);
-            _eventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity1, Vector2.one));
+            _globalEventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity1, Vector2.one));
             var dogEntity2 = _entityAssembler.Create(dogDefinition);
-            _eventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity2, -Vector2.one));
+            _globalEventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity2, -Vector2.one));
 
             SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
         }

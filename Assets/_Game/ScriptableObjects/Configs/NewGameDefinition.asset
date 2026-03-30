@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: NewGameDefinition
   m_EditorClassIdentifier: 
   <PlayerEntityDefinition>k__BackingField: {fileID: 11400000, guid: 8152b2c4633aec6448b38d643bcda4ec, type: 2}
+  <Location>k__BackingField: {fileID: 11400000, guid: 4b198a041011eeb478bc9174b6ec1792, type: 2}
+  <LocationEntrance>k__BackingField: Default
