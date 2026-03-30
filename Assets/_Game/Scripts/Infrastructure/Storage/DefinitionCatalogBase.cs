@@ -1,5 +1,4 @@
-﻿using Assets.CoreScripts;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
         {
         }
 
-        public T Get(string id)
+        public virtual T Get(string id)
         {
             if (Definitions.TryGetValue(id, out var entityDefinition))
             {

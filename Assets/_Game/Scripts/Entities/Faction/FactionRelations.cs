@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Faction
 {
-    [CreateAssetMenu(menuName = "Game/Faction Relations")]
+    [CreateAssetMenu(menuName = "Game/FactionRelations")]
     public class FactionRelations : ScriptableObject
     {
         public List<Faction> Factions = new();
