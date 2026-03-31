@@ -53,7 +53,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<PlayerControlProvider>(Lifetime.Singleton);
             builder.Register<PlayerContext>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-            builder.Register<PlayerReference>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<LocationManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<LocationCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
@@ -100,6 +99,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EquipmentSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ItemSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InteractionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<EntityPlacementSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

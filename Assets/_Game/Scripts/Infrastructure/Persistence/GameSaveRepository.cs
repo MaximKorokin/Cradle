@@ -34,6 +34,14 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public int Version;
         public long SavedAtUtc;
         public EntitySave PlayerSave;
+        public LocationSave PlayerLocationSave;
+    }
+
+    public sealed class LocationSave
+    {
+        public string LocationId;
+        public float PositionX;
+        public float PositionY;
     }
 
     public sealed class EntitySave

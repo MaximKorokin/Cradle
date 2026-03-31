@@ -1,6 +1,5 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Persistence;
-using Assets._Game.Scripts.Locations;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,9 +35,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
             var dogDefinition = _entityDefinitionCatalog.Get("d5855ca383df4ddd8c615e51609dc812");
             var dogEntity1 = _entityAssembler.Create(dogDefinition);
-            _globalEventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity1, Vector2.one));
+            _globalEventBus.Publish<SpawnEntityViewRequest>(new(dogEntity1, Vector2.one));
             var dogEntity2 = _entityAssembler.Create(dogDefinition);
-            _globalEventBus.Publish(new SpawnEntityViewRequestEvent(dogEntity2, -Vector2.one));
+            _globalEventBus.Publish<SpawnEntityViewRequest>(new(dogEntity2, -Vector2.one));
 
             SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
         }

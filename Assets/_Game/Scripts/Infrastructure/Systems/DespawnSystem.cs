@@ -36,7 +36,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (entity.GetModule<DespawnModule>().IsExpired)
             {
-                _globalEventBus.Publish(new DespawnEntityViewRequestEvent(entity));
+                _globalEventBus.Publish(new DespawnEntityViewRequest(entity));
                 // For now entity does not exist if it does not have view
                 // There will be a big TODO in the future if this will change
                 EntityRepository.Remove(((IEntry)entity).Id);

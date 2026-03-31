@@ -18,19 +18,20 @@ namespace Assets._Game.Scripts.Entities
             _globalEventBus = bus;
             _entityViewProvider = entityViewProvider;
 
-            _globalEventBus.Subscribe<SpawnEntityViewRequestEvent>(OnSpawn);
-            _globalEventBus.Subscribe<DespawnEntityViewRequestEvent>(OnDespawn);
+            _globalEventBus.Subscribe<SpawnEntityViewRequest>(OnSpawn);
+            _globalEventBus.Subscribe<DespawnEntityViewRequest>(OnDespawn);
         }
 
         public void Dispose()
         {
-            _globalEventBus.Unsubscribe<SpawnEntityViewRequestEvent>(OnSpawn);
-            _globalEventBus.Unsubscribe<DespawnEntityViewRequestEvent>(OnDespawn);
+            _globalEventBus.Unsubscribe<SpawnEntityViewRequest>(OnSpawn);
+            _globalEventBus.Unsubscribe<DespawnEntityViewRequest>(OnDespawn);
         }
 
+        // This is required to ensure that the orchestrator is created at the start of the game and subscribes to the events before any other system publishes them
         public void Start() { }
 
-        private void OnSpawn(SpawnEntityViewRequestEvent e)
+        private void OnSpawn(SpawnEntityViewRequest e)
         {
             var view = _entityViewProvider.Create(e.Entity.Definition);
             view.transform.position = e.Position;
@@ -39,7 +40,7 @@ namespace Assets._Game.Scripts.Entities
             view.Bind(e.Entity);
         }
 
-        private void OnDespawn(DespawnEntityViewRequestEvent e)
+        private void OnDespawn(DespawnEntityViewRequest e)
         {
             if (!_entitiesMapping.TryGetValue(e.Entity, out var view))
             {
@@ -51,23 +52,23 @@ namespace Assets._Game.Scripts.Entities
         }
     }
 
-    public readonly struct SpawnEntityViewRequestEvent : IGlobalEvent
+    public readonly struct SpawnEntityViewRequest : IGlobalEvent
     {
         public readonly Entity Entity;
         public readonly Vector2 Position;
 
-        public SpawnEntityViewRequestEvent(Entity entity, Vector2 position)
+        public SpawnEntityViewRequest(Entity entity, Vector2 position)
         {
             Entity = entity;
             Position = position;
         }
     }
 
-    public readonly struct DespawnEntityViewRequestEvent : IGlobalEvent
+    public readonly struct DespawnEntityViewRequest : IGlobalEvent
     {
         public readonly Entity Entity;
 
-        public DespawnEntityViewRequestEvent(Entity entity)
+        public DespawnEntityViewRequest(Entity entity)
         {
             Entity = entity;
         }

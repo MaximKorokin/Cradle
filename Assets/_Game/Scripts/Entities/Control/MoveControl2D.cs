@@ -7,26 +7,25 @@ namespace Assets._Game.Scripts.Entities.Control
     {
         [SerializeField] private Rigidbody2D _rigidbody;
 
-        private Entity _entity;
+        private KinematicsModule _kinematicsModule;
 
         public void Bind(Entity entity)
         {
-            _entity = entity;
+            _kinematicsModule = entity.GetModule<KinematicsModule>();
         }
 
         public void Unbind()
         {
-            _entity = null;
-            if (_rigidbody) _rigidbody.linearVelocity = Vector2.zero;
+            _kinematicsModule = null;
+            if (_rigidbody != null) _rigidbody.linearVelocity = Vector2.zero;
         }
 
         private void FixedUpdate()
         {
-            if (_entity == null) return;
-
-            if (!_entity.TryGetModule(out KinematicsModule kinematics)) return;
-
-            _rigidbody.linearVelocity = kinematics.Velocity;
+            if (_kinematicsModule != null)
+            {
+                _rigidbody.linearVelocity = _kinematicsModule.Velocity;
+            }
         }
     }
 }

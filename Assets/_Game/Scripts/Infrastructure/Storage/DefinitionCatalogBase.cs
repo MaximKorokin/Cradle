@@ -28,8 +28,13 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
                 return entityDefinition;
             }
 
-            SLog.Error($"{nameof(T)} with id '{id}' not found in catalog.");
+            SLog.Error($"{typeof(T)} with id '{id}' not found in catalog.");
             return null;
+        }
+
+        public virtual bool TryGet(string id, out T definition)
+        {
+            return Definitions.TryGetValue(id, out definition);
         }
 
         public IEnumerator<T> GetEnumerator()

@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
             if (lootItemModule.Amount <= 0)
             {
-                _globalEventBus.Publish<DespawnEntityViewRequestEvent>(new(context.Target));
+                _globalEventBus.Publish<DespawnEntityViewRequest>(new(context.Target));
                 _entityRepository.Remove(((IEntry)context.Target).Id);
             }
 

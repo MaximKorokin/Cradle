@@ -1,6 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Units;
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Shared.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ namespace Assets._Game.Scripts.Locations
 {
     public sealed class LocationManager
     {
+        private readonly IPlayerProvider _playerProvider;
         private readonly LocationCatalog _locationCatalog;
-        private readonly PlayerReference _playerReference;
         private readonly IGlobalEventBus _globalEventBus;
 
         private Scene _currentScene;
@@ -21,13 +20,18 @@ namespace Assets._Game.Scripts.Locations
         public bool IsTransitionInProgress { get; private set; }
 
         public LocationManager(
+            IPlayerProvider playerProvider,
             LocationCatalog locationCatalog,
-            PlayerReference playerReference,
             IGlobalEventBus globalEventBus)
         {
+            _playerProvider = playerProvider;
             _locationCatalog = locationCatalog;
-            _playerReference = playerReference;
             _globalEventBus = globalEventBus;
+        }
+
+        public async Task LoadInitialLocation(string locationId)
+        {
+            await LoadInitialLocation(locationId, entranceId: null);
         }
 
         public async Task LoadInitialLocation(string locationId, string entranceId)
@@ -70,10 +74,17 @@ namespace Assets._Game.Scripts.Locations
                 _currentLocationId = nextLocation.Id;
                 CurrentLocation = nextLocation;
 
-                var entrance = FindEntrance(scene, entranceId);
-                MovePlayerToEntrance(entrance);
+                if (!string.IsNullOrWhiteSpace(entranceId))
+                {
+                    var entrance = FindEntrance(scene, entranceId);
+                    MovePlayerToEntrance(entrance);
+                }
 
                 _globalEventBus.Publish(new LocationChangedEvent(locationId, entranceId));
+            }
+            catch (Exception ex)
+            {
+                SLog.Error($"Failed to load location '{locationId}': {ex}");
             }
             finally
             {
@@ -100,15 +111,9 @@ namespace Assets._Game.Scripts.Locations
 
         private void MovePlayerToEntrance(LocationEntranceMarker entrance)
         {
-            var player = _playerReference.Player;
-            if (player == null)
-                throw new InvalidOperationException("Player is not registered.");
+            var playerEntity = _playerProvider.Player;
 
-            player.transform.position = entrance.Position;
-
-            var entity = _playerReference.Entity;
-            if (entity != null && entity.TryGetModule<AppearanceModule>(out var appearance))
-                appearance.RequestSetTurnDirection(entrance.FaceRight ? TurnDirection.Right : TurnDirection.Left);
+            playerEntity.Publish(new EntityPlacementRequest(playerEntity, entrance.Position));
         }
     }
 
