@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Interactions;
 using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Querying;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
@@ -37,7 +38,10 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
         private ActionEvaluation EvaluateAction(Entity entity, ActionInstance actionInstance)
         {
-            var range = 3; // vision range
+            var range = 0f;
+            if (entity.TryGetModule<StatModule>(out var statModule))
+                range = statModule.Stats.Get(StatId.VisionRange);
+
             var relation = actionInstance.Definition.FactionRelation;
             var entityQuery = new EntityQuery(actionInstance.Definition.EntityQueryData);
 

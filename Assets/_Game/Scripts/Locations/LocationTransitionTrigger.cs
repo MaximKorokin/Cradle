@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using UnityEngine;
 using VContainer;
 
@@ -12,7 +13,7 @@ namespace Assets._Game.Scripts.Locations
         private IPlayerProvider _playerProvider;
 
         [SerializeField]
-        private string _targetLocationId;
+        private LocationDefinition _location;
 
         [SerializeField]
         private string _targetEntranceId;
@@ -29,19 +30,7 @@ namespace Assets._Game.Scripts.Locations
             if (!other.TryGetComponent<EntityView>(out var entityView) && entityView.Entity != _playerProvider.Player)
                 return;
 
-            _globalEventBus.Publish<RequestLocationTransitionEvent>(new(_targetLocationId, _targetEntranceId));
-        }
-    }
-
-    public readonly struct RequestLocationTransitionEvent : IGlobalEvent
-    {
-        public readonly string TargetLocationId;
-        public readonly string TargetEntranceId;
-
-        public RequestLocationTransitionEvent(string targetLocationId, string targetEntranceId)
-        {
-            TargetLocationId = targetLocationId;
-            TargetEntranceId = targetEntranceId;
+            _globalEventBus.Publish<LocationTransitionRequest>(new(_location.Id, _targetEntranceId));
         }
     }
 }

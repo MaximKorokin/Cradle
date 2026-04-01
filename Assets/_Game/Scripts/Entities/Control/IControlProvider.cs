@@ -10,6 +10,7 @@ namespace Assets._Game.Scripts.Entities.Control
         bool IsActive { get; }
         void Initialize(Entity entity);
         void Tick(float delta);
+        void Reset();
     }
 
     public enum ControlPriority

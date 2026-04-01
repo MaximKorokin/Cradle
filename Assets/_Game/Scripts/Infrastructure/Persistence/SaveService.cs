@@ -13,29 +13,26 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private const string SaveKey = "Player";
 
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly LocationManager _locationManager;
+        private readonly ILocationContext _locationContext;
         private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
         private readonly EntityFactory _entityAssembler;
-        private readonly InventoryModelFactory _inventoryModelAssembler;
 
         public SaveService(
             IGlobalEventBus globalEventBus,
-            LocationManager locationManager,
+            ILocationContext locationContext,
             GameSaveRepository gameSaveRepository,
             NewGameDefinition newGameDefinition,
             PlayerContext playerContext,
-            EntityFactory entityAssembler,
-            InventoryModelFactory inventoryModelAssembler)
+            EntityFactory entityAssembler)
         {
             _globalEventBus = globalEventBus;
-            _locationManager = locationManager;
+            _locationContext = locationContext;
             _gameSaveRepository = gameSaveRepository;
             _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
             _entityAssembler = entityAssembler;
-            _inventoryModelAssembler = inventoryModelAssembler;
         }
 
         public void SaveGame()
@@ -43,7 +40,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             var playerPosition = _playerContext.Player.GetPosition();
             var playerLocationSave = new LocationSave
             {
-                LocationId = _locationManager.CurrentLocation != null ? _locationManager.CurrentLocation.Id : "",
+                LocationId = _locationContext.CurrentLocation != null ? _locationContext.CurrentLocation.Id : "",
                 PositionX = playerPosition.x,
                 PositionY = playerPosition.y
             };
@@ -59,6 +56,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
         public void LoadGame()
         {
+            ResetLocationSave();
             //ResetSave();
 
             var gameSave = _gameSaveRepository.Load(SaveKey);
@@ -76,15 +74,22 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             // Load the location
             if (gameSave?.PlayerLocationSave == null)
             {
-                _ = _locationManager.LoadInitialLocation(_newGameDefinition.Location.Id, _newGameDefinition.LocationEntrance);
+                _globalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.Location.Id, _newGameDefinition.LocationEntrance));
             }
             else
             {
-                _ = _locationManager.LoadInitialLocation(gameSave.PlayerLocationSave.LocationId);
+                _globalEventBus.Publish(new LocationTransitionRequest(gameSave.PlayerLocationSave.LocationId, null));
 
                 var position = new Vector2(gameSave.PlayerLocationSave.PositionX, gameSave.PlayerLocationSave.PositionY);
-                playerEntity.Publish<EntityPlacementRequest>(new(playerEntity, position));
+                playerEntity.Publish<EntityRepositionRequest>(new(playerEntity, position));
             }
+        }
+
+        public void ResetLocationSave()
+        {
+            var save = _gameSaveRepository.Load(SaveKey);
+            save.PlayerLocationSave = null;
+            _gameSaveRepository.Save(SaveKey, save);
         }
 
         public void ResetSave()

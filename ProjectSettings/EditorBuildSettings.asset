@@ -14,6 +14,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Game/Scenes/Locations/Loc_NewGame.unity
     guid: 15a17d6bac975ef4a800f53bb1474949
+  - enabled: 1
+    path: Assets/_Game/Scenes/Locations/Loc_Camp.unity
+    guid: c6f570d0d62f5ff4992d6f25f7152a41
+  - enabled: 1
+    path: Assets/_Game/Scenes/Locations/Loc_Forest.unity
+    guid: 7ac0c24e61859e448a83f366ad55bd96
+  - enabled: 1
+    path: Assets/_Game/Scenes/Locations/Loc_ForbiddenTemple.unity
+    guid: 5e66c77df194ee347a489de3424de43f
+  - enabled: 1
+    path: Assets/_Game/Scenes/Locations/Loc_ForbiddenTempleDungeon.unity
+    guid: 550ecde2cfe5db945b7e689fc125cf5f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

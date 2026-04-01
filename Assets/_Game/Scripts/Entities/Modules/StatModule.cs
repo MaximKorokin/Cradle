@@ -1,7 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
-using Assets._Game.Scripts.Infrastructure.Persistence;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {

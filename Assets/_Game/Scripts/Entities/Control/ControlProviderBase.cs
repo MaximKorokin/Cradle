@@ -14,5 +14,10 @@
         }
 
         public abstract void Tick(float delta);
+
+        public virtual void Reset()
+        {
+
+        }
     }
 }

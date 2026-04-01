@@ -100,6 +100,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ItemSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InteractionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityPlacementSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<LocationSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Entities.Control.Intents;
-using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Modules;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control
@@ -9,8 +8,6 @@ namespace Assets._Game.Scripts.Entities.Control
         public override ControlPriority Priority => ControlPriority.BasePlayer;
         public override ControlMask Mask => _hasMoveTarget ? ControlMask.All : ControlMask.None;
         public override bool IsActive => true;
-
-        private Entity _entity;
 
         private bool _hasMoveTarget;
         private Vector2 _moveTarget;
@@ -23,22 +20,15 @@ namespace Assets._Game.Scripts.Entities.Control
             _stopRadius = stopRadius;
         }
 
-        public override void Initialize(Entity entity)
-        {
-            base.Initialize(entity);
-
-            _entity = entity;
-        }
-
         public override void Tick(float delta)
         {
             if (!_hasMoveTarget)
                 return;
 
-            if (!_entity.TryGetModule(out IntentModule intent))
+            if (!Entity.TryGetModule(out IntentModule intent))
                 return;
 
-            if (!_entity.TryGetModule(out SpatialModule spatial))
+            if (!Entity.TryGetModule(out SpatialModule spatial))
                 return;
 
             var moveDirection = _moveTarget - spatial.Position;
@@ -52,6 +42,14 @@ namespace Assets._Game.Scripts.Entities.Control
 
             intent.SetMove(new(moveDirection));
             intent.SetAct(new(null, null, null));
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+
+            _hasMoveTarget = false;
+            _moveTarget = Vector2.zero;
         }
     }
 }

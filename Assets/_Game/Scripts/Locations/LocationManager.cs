@@ -7,7 +7,20 @@ using UnityEngine.SceneManagement;
 
 namespace Assets._Game.Scripts.Locations
 {
-    public sealed class LocationManager
+    public interface ILocationContext
+    {
+        LocationDefinition CurrentLocation { get; }
+        bool IsTransitionInProgress { get; }
+    }
+
+    public interface ILocationService
+    {
+        Task LoadInitialLocation(string locationId);
+        Task LoadInitialLocation(string locationId, string entranceId);
+        Task TransitToLocation(string locationId, string entranceId);
+    }
+
+    public sealed class LocationManager : ILocationContext, ILocationService
     {
         private readonly IPlayerProvider _playerProvider;
         private readonly LocationCatalog _locationCatalog;
@@ -42,7 +55,7 @@ namespace Assets._Game.Scripts.Locations
             await LoadLocationInternal(locationId, entranceId, unloadCurrent: false);
         }
 
-        public async Task TransitionTo(string locationId, string entranceId)
+        public async Task TransitToLocation(string locationId, string entranceId)
         {
             if (IsTransitionInProgress)
                 return;
@@ -113,7 +126,7 @@ namespace Assets._Game.Scripts.Locations
         {
             var playerEntity = _playerProvider.Player;
 
-            playerEntity.Publish(new EntityPlacementRequest(playerEntity, entrance.Position));
+            playerEntity.Publish(new EntityRepositionRequest(playerEntity, entrance.Position));
         }
     }
 

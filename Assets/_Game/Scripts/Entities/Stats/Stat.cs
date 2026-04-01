@@ -111,6 +111,9 @@ namespace Assets._Game.Scripts.Entities.Stats
     public enum StatId
     {
         [StatRestriction(StatRestrictionType.NonNegative)]
+        VisionRange = 100,
+
+        [StatRestriction(StatRestrictionType.NonNegative)]
         HpMax = 200,
         [StatRestriction(StatRestrictionType.NonNegative)]
         [StatRestriction(StatRestrictionType.ForbidModifiers)]

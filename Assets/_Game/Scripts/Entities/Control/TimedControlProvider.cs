@@ -18,6 +18,13 @@
             else OnComplete();
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+
+            _timeLeft = 0f;
+        }
+
         protected abstract void OnTick(float delta);
         protected abstract void OnComplete();
     }

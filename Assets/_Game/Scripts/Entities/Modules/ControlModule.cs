@@ -35,6 +35,14 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             _providers.Remove(p);
         }
+
+        public void ResetProviders()
+        {
+            for (int i = 0; i < Providers.Count; i++)
+            {
+                Providers[i].Reset();
+            }
+        }
     }
 
     public sealed class ControlModuleFactory : IEntityModuleFactory

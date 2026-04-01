@@ -12,23 +12,23 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         public EntityPlacementSystem(EntityRepository repository) : base(repository)
         {
-            TrackEntityEvent<EntityPlacementRequest>(OnEntityPlacementRequested);
+            TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
         }
 
-        private void OnEntityPlacementRequested(EntityPlacementRequest request)
+        private void OnEntityRepositionRequested(EntityRepositionRequest request)
         {
             var spatialModule = request.Entity.GetModule<SpatialModule>();
             spatialModule.RequestSetPosition(request.Position);
         }
     }
 
-    public readonly struct EntityPlacementRequest : IEntityEvent
+    public readonly struct EntityRepositionRequest : IEntityEvent
     {
         public readonly Vector2 Position;
 
         public Entity Entity { get; }
 
-        public EntityPlacementRequest(Entity entity, Vector2 position)
+        public EntityRepositionRequest(Entity entity, Vector2 position)
         {
             Entity = entity;
             Position = position;

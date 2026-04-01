@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: PlayerStatsDefinition
   m_EditorClassIdentifier: 
   <Stats>k__BackingField:
+  - <Id>k__BackingField: 100
+    <DefaultBase>k__BackingField: 5
   - <Id>k__BackingField: 200
     <DefaultBase>k__BackingField: 100
   - <Id>k__BackingField: 210

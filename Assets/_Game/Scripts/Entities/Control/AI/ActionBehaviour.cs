@@ -21,35 +21,39 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
         public void Tick(Entity entity, ActionContext context, float delta)
         {
+            var intentModule = entity.GetModule<IntentModule>();
+
             if (context.ActionInstance == null)
+            {
+                intentModule.SetMove(new(Vector2.zero));
                 return;
+            }
 
             var targetPosition = context.Target.GetPosition();
-            var intent = entity.GetModule<IntentModule>();
 
-            intent.SetAim(new(targetPosition));
+            intentModule.SetAim(new(targetPosition));
 
-            if (ApproachActionRange(entity, intent, targetPosition, context))
+            if (ApproachActionRange(entity, intentModule, targetPosition, context))
             {
-                intent.SetAct(new ActionIntent(context.ActionInstance, context.Target, targetPosition));
+                intentModule.SetAct(new ActionIntent(context.ActionInstance, context.Target, targetPosition));
             }
         }
 
         /// <summary>
         /// Returns true if the entity is within preparation range, otherwise sets the move intent towards the target and returns false
         /// </summary>
-        private bool ApproachActionRange(Entity entity, IntentModule intent, Vector2 targetPosition, ActionContext context)
+        private bool ApproachActionRange(Entity entity, IntentModule intentModule, Vector2 targetPosition, ActionContext context)
         {
             var direction = targetPosition - entity.GetPosition();
 
             var effectiveRange = context.ActionInstance.GetEffectiveRange(entity);
             if (direction.sqrMagnitude <= effectiveRange * effectiveRange)
             {
-                intent.SetMove(new(Vector2.zero));
+                intentModule.SetMove(new(Vector2.zero));
                 return true;
             }
 
-            intent.SetMove(new(direction));
+            intentModule.SetMove(new(direction));
             return false;
         }
     }

@@ -29,6 +29,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
 
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
+            TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
         }
 
         public override void Dispose()
@@ -104,6 +105,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             return best;
         }
 
+        private void OnEntityDied(EntityDiedEvent e)
+        {
+            if (!e.Victim.TryGetModule<IntentModule>(out var intent)) return;
+
+            intent.SetMove(new(Vector2.zero));
+        }
+
         private void OnStatusEffectChanged(StatusEffectChangedEvent e)
         {
             if (e.Kind == StatusEffectChangeKind.Added && e.StatusEffect.Definition.ControlProvider != null)
@@ -113,11 +121,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnEntityDied(EntityDiedEvent e)
+        private void OnEntityRepositionRequested(EntityRepositionRequest request)
         {
-            if (!e.Victim.TryGetModule<IntentModule>(out var intent)) return;
-
-            intent.SetMove(new(Vector2.zero));
+            var controlModule = request.Entity.GetModule<ControlModule>();
+            controlModule.ResetProviders();
         }
     }
 }
