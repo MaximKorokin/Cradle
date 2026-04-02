@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8165201c216a5104385007faa191843d, type: 3}
+  m_Name: WolfESS
+  m_EditorClassIdentifier: 
+  _id: 8b7627be0bbc42b381e110df44c613bd
+  <Groups>k__BackingField:
+  - EntityDefinition: {fileID: 11400000, guid: d52724609bd1c004c9df88bdb5afe673, type: 2}
+    Count: 2
+  <Radius>k__BackingField: 4
+  <SpawnOnLocationLoad>k__BackingField: 1

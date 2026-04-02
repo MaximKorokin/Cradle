@@ -1,16 +1,19 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Shared.Unity;
 using UnityEngine;
 using VContainer;
 
-namespace Assets._Game.Scripts.Locations
+namespace Assets._Game.Scripts.Locations.Markers
 {
-    [RequireComponent(typeof(Collider2D))]
-    public sealed class LocationTransitionTrigger : MonoBehaviour
+    public sealed class LocationTransitionMarker : MonoBehaviour
     {
         private IGlobalEventBus _globalEventBus;
         private IPlayerProvider _playerProvider;
+
+        [SerializeField]
+        private Trigger2D _transitionTrigger;
 
         [SerializeField]
         private LocationDefinition _location;
@@ -25,9 +28,14 @@ namespace Assets._Game.Scripts.Locations
             _playerProvider = playerProvider;
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void Awake()
         {
-            if (!other.TryGetComponent<EntityView>(out var entityView) && entityView.Entity != _playerProvider.Player)
+            _transitionTrigger.OnTriggerEntered += OnTriggerEntered;
+        }
+
+        private void OnTriggerEntered(Collider2D collider)
+        {
+            if (!collider.TryGetComponent<EntityView>(out var entityView) && entityView.Entity != _playerProvider.Player)
                 return;
 
             _globalEventBus.Publish<LocationTransitionRequest>(new(_location.Id, _targetEntranceId));

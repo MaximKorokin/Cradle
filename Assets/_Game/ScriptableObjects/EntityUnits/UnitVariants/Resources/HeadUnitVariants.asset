@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 67add6d562d54f17a09cb5dd36c3c157
   <Path>k__BackingField: 300
   <Variants>k__BackingField:
-  - <Name>k__BackingField: Dog
+  - <Name>k__BackingField: Wolf
     <Sprites>k__BackingField:
     - {fileID: 6960679547787412037, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     - {fileID: 1690722556, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}

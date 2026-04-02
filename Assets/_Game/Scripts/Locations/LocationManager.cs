@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Locations.Markers;
 using Assets._Game.Scripts.Shared.Extensions;
 using System;
 using System.Threading.Tasks;

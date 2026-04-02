@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets._Game.Scripts.Locations
+namespace Assets._Game.Scripts.Locations.Markers
 {
     public sealed class LocationEntranceMarker : MonoBehaviour
     {

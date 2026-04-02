@@ -283,7 +283,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 277800474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38e7b46b6cbb43d4e8e3039b8ef330c9, type: 3}
+  m_Script: {fileID: 11500000, guid: a1e734ef9aefb5a45941726db03ccf56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <EntranceId>k__BackingField: Default
@@ -297,6 +297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 334939334}
+  - component: {fileID: 334939335}
   m_Layer: 0
   m_Name: Markers
   m_TagString: Untagged
@@ -319,8 +320,75 @@ Transform:
   m_Children:
   - {fileID: 277800475}
   - {fileID: 2067831397}
+  - {fileID: 336965156}
+  - {fileID: 1045136839}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &334939335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334939333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fccb608f1e6ea341a404d663f3c4e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <LocationEntranceMarkers>k__BackingField:
+  - {fileID: 277800476}
+  <LocationTransitionMarkers>k__BackingField:
+  - {fileID: 2067831398}
+  <EntitySpawnPointMarkers>k__BackingField:
+  - {fileID: 336965157}
+  - {fileID: 1045136840}
+  <EntitySpawnSpotMarkers>k__BackingField: []
+--- !u!1 &336965155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 336965156}
+  - component: {fileID: 336965157}
+  m_Layer: 0
+  m_Name: SpawnPoint1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &336965156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336965155}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.84, y: 1.44, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 334939334}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &336965157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336965155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c10e8eaf4369b4babde076b1310e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Definition>k__BackingField: {fileID: 11400000, guid: 66d21629b0fd1a543bc433e03689aaf6, type: 2}
 --- !u!1 &509648706
 GameObject:
   m_ObjectHideFlags: 0
@@ -5437,6 +5505,51 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1045136838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1045136839}
+  - component: {fileID: 1045136840}
+  m_Layer: 0
+  m_Name: SpawnPoint2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1045136839
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045136838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.57, y: 3.23, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 334939334}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1045136840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045136838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c10e8eaf4369b4babde076b1310e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Definition>k__BackingField: {fileID: 11400000, guid: 66d21629b0fd1a543bc433e03689aaf6, type: 2}
 --- !u!1 &1568497555
 GameObject:
   m_ObjectHideFlags: 0
@@ -5653,8 +5766,9 @@ GameObject:
   - component: {fileID: 2067831397}
   - component: {fileID: 2067831399}
   - component: {fileID: 2067831398}
+  - component: {fileID: 2067831400}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: TransitionToCamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5684,9 +5798,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2067831396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d09d7207e42de234e971c71766381a63, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad31626a80e7cf4ca5784aaf38dd747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _transitionTrigger: {fileID: 2067831400}
   _location: {fileID: 11400000, guid: 121a29130d1cc5548b781e84a3e38098, type: 2}
   _targetEntranceId: Default
 --- !u!61 &2067831399
@@ -5735,6 +5850,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2067831400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067831396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b58f4f9a23f1da439fcda0defc6ef6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
