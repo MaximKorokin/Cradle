@@ -1,6 +1,8 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Faction;
 using Assets._Game.Scripts.Entities.Modules;
+using System;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Querying
 {
@@ -29,12 +31,10 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
 
     public sealed class EntitySensor : IEntitySensor
     {
-        private const int BufferSize = 32;
-
         private readonly IWorldQuery _worldQuery;
         private readonly FactionRelationResolver _relationResolver;
 
-        private readonly Entity[] _buffer = new Entity[BufferSize];
+        private Entity[] _buffer = new Entity[32];
 
         public EntitySensor(
             IWorldQuery worldQuery,
@@ -63,8 +63,7 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
             entity = null;
 
             var position = self.GetModule<SpatialModule>().Position;
-
-            var count = _worldQuery.GetEntitiesInRange(position, radius, _buffer);
+            var count = GetEntitiesWithResize(position, radius);
 
             for (var i = 0; i < count; i++)
             {
@@ -93,8 +92,7 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
             entity = null;
 
             var position = self.GetModule<SpatialModule>().Position;
-
-            var count = _worldQuery.GetEntitiesInRange(position, radius, _buffer);
+            var count = GetEntitiesWithResize(position, radius);
 
             for (var i = 0; i < count; i++)
             {
@@ -104,7 +102,8 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
                 if (_relationResolver.GetRelation(candidate, self) != relation) continue;
                 if (!query.Match(candidate)) continue;
 
-                var distance = (candidate.GetModule<SpatialModule>().Position - position).magnitude;
+                var distance = (candidate.GetModule<SpatialModule>().Position - position).sqrMagnitude;
+
                 if (distance < minDistance)
                 {
                     entity = candidate;
@@ -114,6 +113,21 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
             }
 
             return result;
+        }
+
+        private int GetEntitiesWithResize(Vector2 position, float radius)
+        {
+            int count;
+
+            while (true)
+            {
+                count = _worldQuery.GetEntitiesInRange(position, radius, _buffer);
+
+                if (count < _buffer.Length)
+                    return count;
+
+                Array.Resize(ref _buffer, _buffer.Length * 2);
+            }
         }
     }
 }

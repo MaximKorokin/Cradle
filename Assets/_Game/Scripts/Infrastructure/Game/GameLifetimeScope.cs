@@ -13,6 +13,7 @@ using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
@@ -43,7 +44,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<IAppLifecycleHandler, AppLifecycleHandler>(Lifetime.Transient);
             builder.Register<IGlobalEventBus, GlobalEventBus>(Lifetime.Singleton);
 
-            builder.Register<PoolService>(Lifetime.Scoped);
+            builder.Register<PoolService>(Lifetime.Singleton);
             builder.RegisterInstance(_defaultPrefabReferences);
             builder.RegisterInstance(_defaultEntityDefinitionReferences);
 
@@ -93,27 +94,27 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<StatusEffectSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<RewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<DespawnSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<EntityLifecycleSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AttackModifierSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EquipmentSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ItemSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InteractionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityPlacementSystem>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<LocationSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<LocationTransitionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
         {
-            builder.Register<SaveService>(Lifetime.Scoped);
-            builder.Register<GameSaveRepository>(Lifetime.Scoped);
-            builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Scoped);
-            builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Scoped);
+            builder.Register<SaveService>(Lifetime.Singleton);
+            builder.Register<GameSaveRepository>(Lifetime.Singleton);
+            builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Singleton);
+            builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Singleton);
 
-            builder.Register<IDataCodec, CooldownCodec>(Lifetime.Scoped);
-            builder.Register<IDataCodec, DurabilityCodec>(Lifetime.Scoped);
-            builder.Register<IDataCodec, EmptyCodec>(Lifetime.Scoped);
-            builder.Register<CodecRegistry>(Lifetime.Scoped);
+            builder.Register<IDataCodec, CooldownCodec>(Lifetime.Singleton);
+            builder.Register<IDataCodec, DurabilityCodec>(Lifetime.Singleton);
+            builder.Register<IDataCodec, EmptyCodec>(Lifetime.Singleton);
+            builder.Register<CodecRegistry>(Lifetime.Singleton);
         }
 
         private void RegisterEntityFeature(IContainerBuilder builder)
@@ -122,13 +123,13 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
 
-            builder.Register<EntityDefinitionCatalog>(Lifetime.Scoped);
-            builder.Register<EntityRepository>(Lifetime.Scoped);
-            builder.Register<EntityFactory>(Lifetime.Scoped);
+            builder.Register<EntityDefinitionCatalog>(Lifetime.Singleton);
+            builder.Register<EntityRepository>(Lifetime.Singleton);
+            builder.Register<EntityFactory>(Lifetime.Singleton);
 
-            builder.Register<EntityViewProvider>(Lifetime.Scoped);
-            builder.Register<EntityVisualModelCatalog>(Lifetime.Scoped);
-            builder.Register<UnitVariantsCatalog>(Lifetime.Scoped);
+            builder.Register<EntityViewProvider>(Lifetime.Singleton);
+            builder.Register<EntityVisualModelCatalog>(Lifetime.Singleton);
+            builder.Register<UnitVariantsCatalog>(Lifetime.Singleton);
 
             builder.Register<FactionRelationResolver>(Lifetime.Singleton);
             builder.RegisterInstance(_factionRelations);
@@ -138,25 +139,25 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityModuleFactories(IContainerBuilder builder)
         {
-            builder.Register<StatsControllerAssembler>(Lifetime.Scoped);
-            builder.Register<StatModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<StatsControllerAssembler>(Lifetime.Singleton);
+            builder.Register<StatModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<AppearanceModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<AppearanceModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<StorageModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<InventoryModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<EquipmentModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<StorageModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<InventoryModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<EquipmentModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<UnitViewProvider>(Lifetime.Scoped);
-            builder.Register<UnitsControllerFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<UnitViewProvider>(Lifetime.Singleton);
+            builder.Register<UnitsControllerFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<ControlModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<AiBrainFactory>(Lifetime.Scoped);
-            builder.Register<IntentModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<KinematicsModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
-            builder.Register<SpatialModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<ControlModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<AiBrainFactory>(Lifetime.Singleton);
+            builder.Register<IntentModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<KinematicsModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<SpatialModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<RestrictionStateModuleFactory>(Lifetime.Scoped).AsImplementedInterfaces().AsSelf();
+            builder.Register<RestrictionStateModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<FactionModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
@@ -181,13 +182,13 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterItemFeature(IContainerBuilder builder)
         {
-            builder.Register<ItemInstanceDataFactory>(Lifetime.Scoped);
-            builder.Register<ItemStackFactory>(Lifetime.Scoped);
-            builder.Register<ItemDefinitionCatalog>(Lifetime.Scoped);
-            builder.Register<ItemCommandHandler>(Lifetime.Scoped);
+            builder.Register<ItemInstanceDataFactory>(Lifetime.Singleton);
+            builder.Register<ItemStackFactory>(Lifetime.Singleton);
+            builder.Register<ItemDefinitionCatalog>(Lifetime.Singleton);
+            builder.Register<ItemCommandHandler>(Lifetime.Singleton);
 
-            builder.Register<InventoryModelFactory>(Lifetime.Scoped);
-            builder.Register<EquipmentModelFactory>(Lifetime.Scoped);
+            builder.Register<InventoryModelFactory>(Lifetime.Singleton);
+            builder.Register<EquipmentModelFactory>(Lifetime.Singleton);
         }
     }
 }

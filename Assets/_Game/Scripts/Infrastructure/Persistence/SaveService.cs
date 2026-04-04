@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Locations;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -17,7 +18,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private readonly GameSaveRepository _gameSaveRepository;
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
-        private readonly EntityFactory _entityAssembler;
+        private readonly EntityFactory _entityFactory;
 
         public SaveService(
             IGlobalEventBus globalEventBus,
@@ -25,14 +26,14 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             GameSaveRepository gameSaveRepository,
             NewGameDefinition newGameDefinition,
             PlayerContext playerContext,
-            EntityFactory entityAssembler)
+            EntityFactory entityFactory)
         {
             _globalEventBus = globalEventBus;
             _locationContext = locationContext;
             _gameSaveRepository = gameSaveRepository;
             _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
-            _entityAssembler = entityAssembler;
+            _entityFactory = entityFactory;
         }
 
         public void SaveGame()
@@ -46,7 +47,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             };
             var save = new GameSave
             {
-                PlayerSave = _entityAssembler.Save(_playerContext.Player),
+                PlayerSave = _entityFactory.Save(_playerContext.Player),
                 PlayerLocationSave = playerLocationSave,
                 Version = 1,
                 SavedAtUtc = System.DateTime.UtcNow.Ticks
@@ -61,13 +62,13 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
             var gameSave = _gameSaveRepository.Load(SaveKey);
 
-            var playerEntity = _entityAssembler.Create(_newGameDefinition.PlayerEntityDefinition);
+            var playerEntity = _entityFactory.Create(_newGameDefinition.PlayerEntityDefinition);
             _globalEventBus.Publish<SpawnEntityViewRequest>(new(playerEntity, Vector2.zero));
 
             // Apply player save data if it exists, otherwise the player will be in a default state.
             if (gameSave?.PlayerSave != null)
             {
-                _entityAssembler.Apply(playerEntity, gameSave.PlayerSave);
+                _entityFactory.Apply(playerEntity, gameSave.PlayerSave);
             }
             _playerContext.SetPlayer(playerEntity);
 

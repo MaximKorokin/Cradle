@@ -3,14 +3,14 @@ using Assets._Game.Scripts.Locations;
 using System;
 using System.Threading.Tasks;
 
-namespace Assets._Game.Scripts.Infrastructure.Systems
+namespace Assets._Game.Scripts.Infrastructure.Systems.Location
 {
-    public sealed class LocationSystem : SystemBase
+    public sealed class LocationTransitionSystem : SystemBase
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly LocationManager _locationManager;
 
-        public LocationSystem(IGlobalEventBus globalEventBus, LocationManager locationManager)
+        public LocationTransitionSystem(IGlobalEventBus globalEventBus, LocationManager locationManager)
         {
             _globalEventBus = globalEventBus;
             _locationManager = locationManager;

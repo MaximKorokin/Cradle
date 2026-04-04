@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.Entities
         {
             if (!_entitiesMapping.TryGetValue(e.Entity, out var view))
             {
-                SLog.Error($"No View found for Entity {e.Entity}");
+                SLog.Error($"No View found for Entity {e.Entity.Definition}");
                 return;
             }
             _entityViewProvider.Destroy(view);

@@ -9,8 +9,6 @@ namespace Assets._Game.Scripts.Locations.Markers
         [field: SerializeField]
         public LocationTransitionMarker[] LocationTransitionMarkers { get; private set; }
         [field: SerializeField]
-        public EntitySpawnPointMarker[] EntitySpawnPointMarkers { get; private set; }
-        [field: SerializeField]
         public EntitySpawnSpotMarker[] EntitySpawnSpotMarkers { get; private set; }
     }
 }

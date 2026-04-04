@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VContainer.Unity;
 
-namespace Assets._Game.Scripts.Infrastructure.Systems
+namespace Assets._Game.Scripts.Infrastructure.Systems.Location
 {
-    public sealed class SystemsRunner : IStartable, IDisposable
+    public sealed class LocationSystemRunner : IStartable, IDisposable
     {
         private readonly DispatcherService _dispatcherService;
         private readonly IReadOnlyList<IStartSystem> _startSystems;
         private readonly IReadOnlyList<ITickSystem> _tickSystems;
         private readonly IReadOnlyList<IFixedTickSystem> _fixedTickSystems;
 
-        public SystemsRunner(
+        public LocationSystemRunner(
             DispatcherService dispatcherService,
-            IReadOnlyList<ISystem> systems, // for auto initialization of systems in the container
-            IReadOnlyList<IStartSystem> startSystems,
-            IReadOnlyList<ITickSystem> tickSystems,
-            IReadOnlyList<IFixedTickSystem> fixedTickSystems)
+            IReadOnlyList<ILocationSystem> systems)
         {
             _dispatcherService = dispatcherService;
-            _startSystems = startSystems;
-            _tickSystems = tickSystems;
-            _fixedTickSystems = fixedTickSystems;
+            _startSystems = systems.OfType<IStartSystem>().ToArray();
+            _tickSystems = systems.OfType<ITickSystem>().ToArray();
+            _fixedTickSystems = systems.OfType<IFixedTickSystem>().ToArray();
         }
 
         public void Start()
@@ -56,20 +54,5 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 _fixedTickSystems[i].FixedTick(delta);
             }
         }
-    }
-
-    public interface IStartSystem
-    {
-        void Start();
-    }
-
-    public interface ITickSystem
-    {
-        void Tick(float delta);
-    }
-
-    public interface IFixedTickSystem
-    {
-        void FixedTick(float delta);
     }
 }
