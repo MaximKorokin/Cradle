@@ -67,12 +67,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
         {
             foreach (var entity in _entityRepository.All.ToArray())
             {
+                // Despawn all entities that are spawned on the current location
                 if (entity.TryGetModule<SpawnSourceModule>(out var spawnSourceModule))
                 {
                     if (_entitySpawnSpots.Any(s => s.Id == spawnSourceModule.SourceId))
                     {
                         _globalEventBus.Publish(new DespawnEntityRequest(entity));
                     }
+                }
+                // Despawn all loot
+                if (entity.TryGetModule<LootItemModule>(out var lootItemModule))
+                {
+                    _globalEventBus.Publish(new DespawnEntityRequest(entity));
                 }
             }
         }
@@ -91,7 +97,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
                         globalEventBus.Publish(new SpawnEntityRequest(
                             entityDefinition,
                             GetSpawnPosition(spot.Center, spot.Radius),
-                            new EntityModuleBase[] { new SpawnSourceModule(spot.Id) }));
+                            new[] { new SpawnSourceEntitySpawnInitializer(spot.Id) }));
                         spot.MarkSpawned(entityDefinition.Id);
                     }
                 }

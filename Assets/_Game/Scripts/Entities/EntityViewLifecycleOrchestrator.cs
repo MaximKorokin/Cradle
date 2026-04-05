@@ -18,20 +18,20 @@ namespace Assets._Game.Scripts.Entities
             _globalEventBus = bus;
             _entityViewProvider = entityViewProvider;
 
-            _globalEventBus.Subscribe<SpawnEntityViewRequest>(OnSpawn);
-            _globalEventBus.Subscribe<DespawnEntityViewRequest>(OnDespawn);
+            _globalEventBus.Subscribe<SpawnEntityViewRequest>(OnSpawnRequested);
+            _globalEventBus.Subscribe<DespawnEntityViewRequest>(OnDespawnRequested);
         }
 
         public void Dispose()
         {
-            _globalEventBus.Unsubscribe<SpawnEntityViewRequest>(OnSpawn);
-            _globalEventBus.Unsubscribe<DespawnEntityViewRequest>(OnDespawn);
+            _globalEventBus.Unsubscribe<SpawnEntityViewRequest>(OnSpawnRequested);
+            _globalEventBus.Unsubscribe<DespawnEntityViewRequest>(OnDespawnRequested);
         }
 
         // This is required to ensure that the orchestrator is created at the start of the game and subscribes to the events before any other system publishes them
         public void Start() { }
 
-        private void OnSpawn(SpawnEntityViewRequest e)
+        private void OnSpawnRequested(SpawnEntityViewRequest e)
         {
             var view = _entityViewProvider.Create(e.Entity.Definition);
             view.transform.position = e.Position;
@@ -40,7 +40,7 @@ namespace Assets._Game.Scripts.Entities
             view.Bind(e.Entity);
         }
 
-        private void OnDespawn(DespawnEntityViewRequest e)
+        private void OnDespawnRequested(DespawnEntityViewRequest e)
         {
             if (!_entitiesMapping.TryGetValue(e.Entity, out var view))
             {

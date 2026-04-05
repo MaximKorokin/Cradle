@@ -6,16 +6,13 @@ namespace Assets._Game.Scripts.Entities
 {
     public class EntityFactory
     {
-        private readonly EntityRepository _entityRepository;
         private readonly IReadOnlyList<IEntityModuleFactory> _moduleFactories;
         private readonly IReadOnlyList<IEntityModulePersistance> _modulePersistances;
 
         public EntityFactory(
-            EntityRepository entityRepository,
             IReadOnlyList<IEntityModuleFactory> moduleFactories,
             IReadOnlyList<IEntityModulePersistance> modulePersistances)
         {
-            _entityRepository = entityRepository;
             _moduleFactories = moduleFactories;
             _modulePersistances = modulePersistances;
         }
@@ -33,7 +30,6 @@ namespace Assets._Game.Scripts.Entities
                 }
             }
 
-            _entityRepository.Add(entity);
             return entity;
         }
 

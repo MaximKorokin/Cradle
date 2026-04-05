@@ -10,16 +10,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class LootSystem : SystemBase
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly EntityFactory _entityAssembler;
         private readonly DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
 
         public LootSystem(
             IGlobalEventBus globalEventBus,
-            EntityFactory entityAssembler,
             DefaultEntityDefinitionReferences defaultEntityDefinitionReferences)
         {
             _globalEventBus = globalEventBus;
-            _entityAssembler = entityAssembler;
             _defaultEntityDefinitionReferences = defaultEntityDefinitionReferences;
 
             _globalEventBus.Subscribe<LootDropRequestedEvent>(OnLootDropRequested);
@@ -66,12 +63,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void CreateLoot(Vector2 position, ItemDefinition itemDefinition, int amount)
         {
-            var entity = _entityAssembler.Create(_defaultEntityDefinitionReferences.LootItem);
-            _globalEventBus.Publish<SpawnEntityViewRequest>(new(entity, position));
-
-            entity.GetModule<AppearanceModule>().RequestSetUnitSprite(itemDefinition.Sprite);
-
-            entity.AddModule(new LootItemModule(itemDefinition, amount));
+            _globalEventBus.Publish(new SpawnEntityRequest(
+                _defaultEntityDefinitionReferences.LootItem,
+                position,
+                new IEntitySpawnInitializer[] {
+                    new AppearanceEntitySpawnInitializer(itemDefinition.Sprite),
+                    new LootItemEntitySpawnInitializer(itemDefinition, amount)
+                }));
         }
     }
 

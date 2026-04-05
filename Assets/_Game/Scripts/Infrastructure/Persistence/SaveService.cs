@@ -1,8 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
-using Assets._Game.Scripts.Infrastructure.Systems.Location;
-using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Locations;
 using Assets._Game.Scripts.Shared.Extensions;
 using UnityEngine;
@@ -62,28 +60,16 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
             var gameSave = _gameSaveRepository.Load(SaveKey);
 
-            var playerEntity = _entityFactory.Create(_newGameDefinition.PlayerEntityDefinition);
-            _globalEventBus.Publish<SpawnEntityViewRequest>(new(playerEntity, Vector2.zero));
-
-            // Apply player save data if it exists, otherwise the player will be in a default state.
-            if (gameSave?.PlayerSave != null)
-            {
-                _entityFactory.Apply(playerEntity, gameSave.PlayerSave);
-            }
-            _playerContext.SetPlayer(playerEntity);
-
-            // Load the location
-            if (gameSave?.PlayerLocationSave == null)
-            {
-                _globalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.Location.Id, _newGameDefinition.LocationEntrance));
-            }
-            else
-            {
-                _globalEventBus.Publish(new LocationTransitionRequest(gameSave.PlayerLocationSave.LocationId, null));
-
-                var position = new Vector2(gameSave.PlayerLocationSave.PositionX, gameSave.PlayerLocationSave.PositionY);
-                playerEntity.Publish<EntityRepositionRequest>(new(playerEntity, position));
-            }
+            _globalEventBus.Publish<SpawnEntityRequest>(new(
+                _newGameDefinition.PlayerEntityDefinition,
+                Vector2.zero,
+                new[] { new PlayerEntitySpawnInitializer(
+                    _globalEventBus,
+                    _newGameDefinition,
+                    _playerContext,
+                    _entityFactory,
+                    gameSave)
+                }));
         }
 
         public void ResetLocationSave()
