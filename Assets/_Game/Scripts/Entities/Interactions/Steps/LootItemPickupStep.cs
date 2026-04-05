@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Steps
@@ -8,15 +8,13 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
     public sealed class LootItemPickupStep : IInteractionStep
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly EntityRepository _entityRepository;
         private readonly ItemInstanceDataFactory _itemInstanceDataFactory;
 
         private bool _done;
 
-        public LootItemPickupStep(IGlobalEventBus globalEventBus, EntityRepository entityRepository, ItemInstanceDataFactory itemInstanceDataFactory)
+        public LootItemPickupStep(IGlobalEventBus globalEventBus, ItemInstanceDataFactory itemInstanceDataFactory)
         {
             _globalEventBus = globalEventBus;
-            _entityRepository = entityRepository;
             _itemInstanceDataFactory = itemInstanceDataFactory;
         }
 
@@ -41,8 +39,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
             if (lootItemModule.Amount <= 0)
             {
-                _globalEventBus.Publish<DespawnEntityViewRequest>(new(context.Target));
-                _entityRepository.Remove(((IEntry)context.Target).Id);
+                _globalEventBus.Publish<DespawnEntityRequest>(new(context.Target));
             }
 
             _done = true;

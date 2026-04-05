@@ -89,7 +89,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEntityDespawnRequested(DespawnEntityRequest request)
         {
-            _globalEventBus.Publish(new DespawnEntityViewRequest(request.Entity));
+            _globalEventBus.Publish<DespawnEntityViewRequest>(new(request.Entity));
             // For now entity does not exist if it does not have view
             // There will be a big TODO in the future if this will change
             EntityRepository.Remove(((IEntry)request.Entity).Id);

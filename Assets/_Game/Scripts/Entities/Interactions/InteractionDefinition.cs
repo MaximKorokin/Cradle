@@ -116,7 +116,7 @@ namespace Assets._Game.Scripts.Entities.Interactions
         [Serializable]
         public sealed class LootItemPickupStepData : StepData
         {
-            public override IInteractionStep Build(IObjectResolver resolver) => new LootItemPickupStep(resolver.Resolve<IGlobalEventBus>(), resolver.Resolve<EntityRepository>(), resolver.Resolve<ItemInstanceDataFactory>());
+            public override IInteractionStep Build(IObjectResolver resolver) => new LootItemPickupStep(resolver.Resolve<IGlobalEventBus>(), resolver.Resolve<ItemInstanceDataFactory>());
         }
     }
 }
