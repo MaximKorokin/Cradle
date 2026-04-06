@@ -35,6 +35,9 @@ namespace Assets._Game.Scripts.Infrastructure
         private DefaultPrefabReferences _defaultPrefabReferences;
         [SerializeField]
         private DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
+        [Space]
+        [SerializeField]
+        private CinemachineCameraService _cinemachineCameraService;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -47,6 +50,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<PoolService>(Lifetime.Singleton);
             builder.RegisterInstance(_defaultPrefabReferences);
             builder.RegisterInstance(_defaultEntityDefinitionReferences);
+
+            builder.RegisterComponent(_cinemachineCameraService).AsImplementedInterfaces().AsSelf();
 
             builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<UnityWorldQuery>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
@@ -103,6 +108,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<InteractionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityPlacementSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LocationTransitionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<CameraFollowSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -120,7 +126,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityFeature(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<EntityViewLifecycleOrchestrator>();
+            builder.Register<EntityViewService>(Lifetime.Singleton);
 
             builder.Register<StatusEffectDefinitionCatalog>(Lifetime.Singleton);
 

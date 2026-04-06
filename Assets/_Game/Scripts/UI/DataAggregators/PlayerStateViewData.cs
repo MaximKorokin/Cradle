@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public PlayerStateViewData(PlayerContext playerContext)
         {
             _playerContext = playerContext;
-            _playerContext.PlayerChanging += SubscribeToPlayerModules;
+            _playerContext.PlayerChanging += UnsubscribeFromPlayerModules;
             _playerContext.PlayerChanged += SubscribeToPlayerModules;
 
             SubscribeToPlayerModules();
@@ -70,8 +70,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             base.Dispose();
 
-            _playerContext.PlayerChanged -= SubscribeToPlayerModules;
             _playerContext.PlayerChanging -= UnsubscribeFromPlayerModules;
+            _playerContext.PlayerChanged -= SubscribeToPlayerModules;
 
             UnsubscribeFromPlayerModules();
         }

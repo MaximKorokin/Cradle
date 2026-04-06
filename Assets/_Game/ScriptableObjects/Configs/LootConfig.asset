@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7d968c44e75904dbf8710b79ba3df3, type: 3}
   m_Name: LootConfig
   m_EditorClassIdentifier: 
-  <SpawnRaidus>k__BackingField: 0
+  <SpawnRadius>k__BackingField: 0.3

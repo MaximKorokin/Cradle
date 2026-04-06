@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Locations;
+using Assets._Game.Scripts.Locations.Core;
 using Assets._Game.Scripts.Locations.Markers;
 using System.Linq;
 using UnityEngine;
@@ -36,6 +37,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
 
         public void Start()
         {
+            // todo: move runtimes creation to context
             _entitySpawnSpots = _locationMarkersContext.EntitySpawnSpotMarkers
                 .Where(m => m.SpawnOnLocationLoad)
                 .Select(m => m.Definition.CreateRuntime(m.transform.position))

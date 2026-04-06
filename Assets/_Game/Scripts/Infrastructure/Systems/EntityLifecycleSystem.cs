@@ -14,13 +14,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly EntityFactory _entityFactory;
+        private readonly EntityViewService _entityViewService;
 
         protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(DespawnModule) });
 
-        public EntityLifecycleSystem(EntityRepository repository, IGlobalEventBus globalEventBus, EntityFactory entityFactory) : base(repository)
+        public EntityLifecycleSystem(
+            EntityRepository repository,
+            IGlobalEventBus globalEventBus,
+            EntityFactory entityFactory,
+            EntityViewService entityViewService) : base(repository)
         {
             _globalEventBus = globalEventBus;
             _entityFactory = entityFactory;
+            _entityViewService = entityViewService;
 
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
             _globalEventBus.Subscribe<SpawnEntityRequest>(OnEntitySpawnRequested);
@@ -76,7 +82,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             var entity = _entityFactory.Create(request.EntityDefinition);
             EntityRepository.Add(entity);
 
-            _globalEventBus.Publish<SpawnEntityViewRequest>(new(entity, request.Position));
+            _entityViewService.SpawnEntityView(entity, request.Position);
 
             if (request.Initializers != null)
             {
@@ -89,7 +95,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEntityDespawnRequested(DespawnEntityRequest request)
         {
-            _globalEventBus.Publish<DespawnEntityViewRequest>(new(request.Entity));
+            _entityViewService.DespawnEntityView(request.Entity);
             // For now entity does not exist if it does not have view
             // There will be a big TODO in the future if this will change
             EntityRepository.Remove(((IEntry)request.Entity).Id);
@@ -116,6 +122,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public DespawnEntityRequest(Entity entity)
         {
             Entity = entity;
+        }
+    }
+
+    public readonly struct PlayerSpawnedEvent : IGlobalEvent
+    {
+        public readonly Entity Player;
+        public PlayerSpawnedEvent(Entity player)
+        {
+            Player = player;
         }
     }
 
@@ -222,6 +237,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 var position = new Vector2(_gameSave.PlayerLocationSave.PositionX, _gameSave.PlayerLocationSave.PositionY);
                 entity.Publish<EntityRepositionRequest>(new(entity, position));
             }
+
+            _globalEventBus.Publish<PlayerSpawnedEvent>(new(entity));
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets._Game.Scripts.Locations.Markers;
+using UnityEngine;
 
-namespace Assets._Game.Scripts.Locations.Markers
+namespace Assets._Game.Scripts.Locations.Core
 {
     public sealed class LocationMarkersContext : MonoBehaviour
     {

@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    internal class StatSystem : EntitySystemBase, ITickSystem
+    public sealed class StatSystem : EntitySystemBase, ITickSystem
     {
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
@@ -160,6 +160,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     stats.RemoveModifiers(source);
                 }
             }
+        }
+    }
+
+    public readonly struct EntityDiedEvent : IGlobalEvent
+    {
+        public readonly Entity Victim;
+        public readonly Entity Killer;
+
+        public EntityDiedEvent(Entity victim, Entity killer)
+        {
+            Victim = victim;
+            Killer = killer;
         }
     }
 }
