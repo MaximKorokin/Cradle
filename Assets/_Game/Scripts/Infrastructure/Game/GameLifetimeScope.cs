@@ -79,6 +79,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.SaveConfig);
             builder.RegisterInstance(_configReferences.DespawnConfig);
             builder.RegisterInstance(_configReferences.LevelingConfig);
+            builder.RegisterInstance(_configReferences.LootConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)

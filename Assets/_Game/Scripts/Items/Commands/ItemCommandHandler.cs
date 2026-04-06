@@ -188,7 +188,7 @@ namespace Assets._Game.Scripts.Items.Commands
 
             if (removedAmount > 0)
             {
-                _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
+                _globalEventBus.Publish<LootItemDropRequestedEvent>(new(spatialModule.Position, item.Value.Definition, removedAmount));
                 return true;
             }
             return false;

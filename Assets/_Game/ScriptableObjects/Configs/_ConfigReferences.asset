@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 443687fd25bcaaa4aa2572bd4cadcb2a, type: 3}
-  m_Name: ConfigReferences
+  m_Name: _ConfigReferences
   m_EditorClassIdentifier: 
   <NewGameDefinition>k__BackingField: {fileID: 11400000, guid: 46c0fe08b4fc5424180cb73dc2408f79, type: 2}
   <SaveConfig>k__BackingField: {fileID: 11400000, guid: 6c49e312684f4b841b10dfd6e75e2082, type: 2}
@@ -20,3 +20,4 @@ MonoBehaviour:
   <EntityUnitConfig>k__BackingField: {fileID: 11400000, guid: b379158741e2bb94b86c10323e7491df, type: 2}
   <DespawnConfig>k__BackingField: {fileID: 11400000, guid: 7b2436c0ab1590c4fbb8c928ab3c0ebe, type: 2}
   <LevelingConfig>k__BackingField: {fileID: 11400000, guid: 2981b2513c4979c46bc8627d6db4d45f, type: 2}
+  <LootConfig>k__BackingField: {fileID: 11400000, guid: b79e02c93ce6f18409cdca9641831f72, type: 2}

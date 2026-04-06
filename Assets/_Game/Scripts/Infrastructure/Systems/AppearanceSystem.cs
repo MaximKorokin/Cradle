@@ -111,13 +111,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         public void Tick(float delta)
         {
-            IterateMatchingEntities(entity => TickEntity(entity, delta));
+            IterateAllEntities(entity => TickEntity(entity, delta));
         }
 
         private void TickEntity(Entity entity, float delta)
         {
-            var appearance = entity.GetModule<AppearanceModule>();
-            appearance.RequestUpdateOrderInLayer();
+            if (entity.TryGetModule<AppearanceModule>(out var appearanceModule))
+                appearanceModule.RequestUpdateOrderInLayer();
         }
     }
 }

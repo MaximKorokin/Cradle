@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Loot;
@@ -9,13 +8,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class LootSystem : SystemBase
     {
+        private readonly LootConfig _lootConfig;
         private readonly IGlobalEventBus _globalEventBus;
         private readonly DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
 
         public LootSystem(
+            LootConfig lootConfig,
             IGlobalEventBus globalEventBus,
             DefaultEntityDefinitionReferences defaultEntityDefinitionReferences)
         {
+            _lootConfig = lootConfig;
             _globalEventBus = globalEventBus;
             _defaultEntityDefinitionReferences = defaultEntityDefinitionReferences;
 
@@ -49,7 +51,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 if (amount <= 0)
                     continue;
 
-                CreateLoot(e.Position, entry.ItemDefinition, amount);
+                var spawnPosition = e.Position + Random.insideUnitCircle * _lootConfig.SpawnRadius;
+                CreateLoot(spawnPosition, entry.ItemDefinition, amount);
             }
         }
 
