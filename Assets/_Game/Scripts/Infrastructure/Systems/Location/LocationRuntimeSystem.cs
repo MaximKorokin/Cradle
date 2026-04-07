@@ -62,20 +62,28 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
         {
             foreach (var entity in _entityRepository.All.ToArray())
             {
-                // Despawn all entities that are spawned on the current location
+                // Disable and despawn all entities that are spawned on the current location
                 if (entity.TryGetModule<SpawnSourceModule>(out var spawnSourceModule))
                 {
                     if (_entitySpawnSpots.Any(s => s.Id == spawnSourceModule.SourceId))
                     {
-                        _globalEventBus.Publish(new DespawnEntityRequest(entity));
+                        DisableAndDespawnEntity(entity);
                     }
                 }
-                // Despawn all loot
+                // Disable and despawn all loot
                 if (entity.TryGetModule<LootItemModule>(out var lootItemModule))
                 {
-                    _globalEventBus.Publish(new DespawnEntityRequest(entity));
+                    DisableAndDespawnEntity(entity);
                 }
             }
+        }
+
+        private void DisableAndDespawnEntity(Entity entity)
+        {
+            if (entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule))
+                restrictionStateModule.Add(RestrictionState.Disabled);
+
+            _globalEventBus.Publish(new DespawnEntityRequest(entity));
         }
 
         private static void IterateSpots(IReadOnlyList<EntitySpawnSpotRuntime> spots, IGlobalEventBus globalEventBus)
