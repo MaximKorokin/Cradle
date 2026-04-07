@@ -19,9 +19,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<ItemCommandRequest>(OnItemCommandRequested);
         }
 
-        private void OnItemCommandRequested(ItemCommandRequest e)
+        private void OnItemCommandRequested(Entity entity, ItemCommandRequest e)
         {
-            _itemCommandHandler.Handle(e.Entity, e.Command);
+            _itemCommandHandler.Handle(entity, e.Command);
         }
     }
 
@@ -29,24 +29,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         public readonly IItemCommand Command;
 
-        public Entity Entity { get; }
-
-        public ItemCommandRequest(Entity entity, IItemCommand command)
+        public ItemCommandRequest(IItemCommand command)
         {
-            Entity = entity;
             Command = command;
         }
     }
 
     public readonly struct ItemUseStartedEvent : IEntityEvent
     {
-        public Entity Entity { get; }
         public readonly ItemStackSnapshot Item;
         public readonly ItemUseSettings ItemUseSettings;
 
-        public ItemUseStartedEvent(Entity entity, ItemStackSnapshot item, ItemUseSettings itemUseSettings)
+        public ItemUseStartedEvent(ItemStackSnapshot item, ItemUseSettings itemUseSettings)
         {
-            Entity = entity;
             Item = item;
             ItemUseSettings = itemUseSettings;
         }

@@ -66,14 +66,16 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void InvokeExperienceChanged(long oldExperience, long newExperience)
         {
-            ExperienceChanged?.Invoke(new ExperienceChangedEvent(Entity, oldExperience, newExperience));
-            Entity.Publish(new ExperienceChangedEvent(Entity, oldExperience, newExperience));
+            var e = new ExperienceChangedEvent(oldExperience, newExperience);
+            ExperienceChanged?.Invoke(e);
+            Entity.Publish(e);
         }
 
         private void InvokeLevelChanged(int oldLevel, int newLevel)
         {
-            LevelChanged?.Invoke(new LevelChangedEvent(Entity, oldLevel, newLevel));
-            Entity.Publish(new LevelChangedEvent(Entity, oldLevel, newLevel));
+            var e = new LevelChangedEvent(oldLevel, newLevel);
+            LevelChanged?.Invoke(e);
+            Entity.Publish(e);
         }
 
         private void InvokeChanged(long oldExperience, long newExperience, int oldLevel, int newLevel)
@@ -89,11 +91,8 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly int OldLevel;
         public readonly int NewLevel;
 
-        public Entity Entity { get; }
-
-        public LevelChangedEvent(Entity entity, int oldLevel, int newLevel)
+        public LevelChangedEvent(int oldLevel, int newLevel)
         {
-            Entity = entity;
             OldLevel = oldLevel;
             NewLevel = newLevel;
         }
@@ -104,11 +103,8 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly long OldAmount;
         public readonly long NewAmount;
 
-        public Entity Entity { get; }
-
-        public ExperienceChangedEvent(Entity entity, long oldAmount, long newAmount)
+        public ExperienceChangedEvent(long oldAmount, long newAmount)
         {
-            Entity = entity;
             OldAmount = oldAmount;
             NewAmount = newAmount;
         }

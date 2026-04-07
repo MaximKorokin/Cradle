@@ -53,12 +53,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             });
         }
 
-        private void OnEquipmentChanged(EquipmentChangedEvent e)
+        private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
-            var appearance = e.Entity.GetModule<AppearanceModule>();
+            var appearance = entity.GetModule<AppearanceModule>();
 
             // Change units
-            foreach (var entityUnitVisualModel in e.Entity.Definition.VisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
+            foreach (var entityUnitVisualModel in entity.Definition.VisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
             {
                 var path = $"{entityUnitVisualModel.Path}/{e.Slot.SlotType}";
                 if (e.Kind == EquipmentChangeKind.Equipped)
@@ -75,7 +75,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             // Check for animation overrides
             var animationOverrideTrait = e.Item.Value.GetFunctionalTrait<AnimationOverrideTrait>(ItemTrigger.OnEquipmentChange);
-            if (animationOverrideTrait == null || !animationOverrideTrait.CanTrigger(new(e.Entity, ItemTrigger.OnEquipmentChange, e.Item.Value)))
+            if (animationOverrideTrait == null || !animationOverrideTrait.CanTrigger(new(entity, ItemTrigger.OnEquipmentChange, e.Item.Value)))
                 return;
 
             // Change animations
@@ -86,10 +86,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnStatChanged(StatChangedEvent e)
+        private void OnStatChanged(Entity entity, StatChangedEvent e)
         {
-            var stats = e.Entity.GetModule<StatModule>();
-            var appearance = e.Entity.GetModule<AppearanceModule>();
+            var stats = entity.GetModule<StatModule>();
+            var appearance = entity.GetModule<AppearanceModule>();
 
             // sync the walk speed stat to the animator
             if (e.StatId == StatId.MoveSpeed)

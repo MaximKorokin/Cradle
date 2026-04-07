@@ -112,18 +112,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             intent.SetMove(new(Vector2.zero));
         }
 
-        private void OnStatusEffectChanged(StatusEffectChangedEvent e)
+        private void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
         {
             if (e.Kind == StatusEffectChangeKind.Added && e.StatusEffect.Definition.ControlProvider != null)
             {
-                var controlModule = e.Entity.GetModule<ControlModule>();
+                var controlModule = entity.GetModule<ControlModule>();
                 controlModule.AddProvider(e.StatusEffect.Definition.ControlProvider.CreateInstance(_resolver));
             }
         }
 
-        private void OnEntityRepositionRequested(EntityRepositionRequest request)
+        private void OnEntityRepositionRequested(Entity entity, EntityRepositionRequest request)
         {
-            var controlModule = request.Entity.GetModule<ControlModule>();
+            var controlModule = entity.GetModule<ControlModule>();
             controlModule.ResetProviders();
         }
     }

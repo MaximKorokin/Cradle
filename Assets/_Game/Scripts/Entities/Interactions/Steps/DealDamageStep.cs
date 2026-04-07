@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             if (context.Target.TryGetModule(out StatModule stats))
             {
                 stats.AddBase(StatId.HpCurrent, -damage);
-                _globalEventBus.Publish<DamageAppliedEvent>(new(context.Target, context.Source, damage, _spec.Source));
+                _globalEventBus.Publish(new DamageAppliedEvent(context.Target, context.Source, damage, _spec.Source));
             }
 
             _done = true;

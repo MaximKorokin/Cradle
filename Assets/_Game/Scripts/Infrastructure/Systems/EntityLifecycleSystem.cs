@@ -235,10 +235,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 _globalEventBus.Publish(new LocationTransitionRequest(_gameSave.PlayerLocationSave.LocationId, null));
 
                 var position = new Vector2(_gameSave.PlayerLocationSave.PositionX, _gameSave.PlayerLocationSave.PositionY);
-                entity.Publish<EntityRepositionRequest>(new(entity, position));
+                entity.Publish(new EntityRepositionRequest(position));
             }
 
-            _globalEventBus.Publish<PlayerSpawnedEvent>(new(entity));
+            _globalEventBus.Publish(new PlayerSpawnedEvent(entity));
         }
     }
 }

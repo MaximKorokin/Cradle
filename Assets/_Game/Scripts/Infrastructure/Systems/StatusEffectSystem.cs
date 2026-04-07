@@ -47,10 +47,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnActionCompleted(ActionCompletedEvent e)
+        private void OnActionCompleted(Entity entity, ActionCompletedEvent e)
         {
             if (!e.ActionInstance.Definition.ConsumesCharges) return;
-            if (!e.Entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+            if (!entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
             var statusEffects = statusEffectModule.StatusEffects.GetStatusEffects().ToArray();
             foreach (var statusEffect in statusEffects)
@@ -66,9 +66,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnItemUseStarted(ItemUseStartedEvent e)
+        private void OnItemUseStarted(Entity entity, ItemUseStartedEvent e)
         {
-            if (!e.Entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+            if (!entity.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
             foreach (var trait in e.Item.GetFunctionalTraits<StatusEffectTrait>(ItemTrigger.OnUse))
             {

@@ -188,7 +188,7 @@ namespace Assets._Game.Scripts.Items.Commands
 
             if (removedAmount > 0)
             {
-                _globalEventBus.Publish<LootItemDropRequestedEvent>(new(spatialModule.Position, item.Value.Definition, removedAmount));
+                _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
                 return true;
             }
             return false;
@@ -225,7 +225,7 @@ namespace Assets._Game.Scripts.Items.Commands
 
             // All checks passed, trigger the item use.
             cooldownTrait.CooldownCounter.Reset();
-            entity.Publish<ItemUseStartedEvent>(new(entity, item.Value, itemUseSettings));
+            entity.Publish(new ItemUseStartedEvent(item.Value, itemUseSettings));
 
             // If the item is consumable, remove one from the stack.
             if (usableTrait.Consumable)

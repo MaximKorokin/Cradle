@@ -34,9 +34,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _globalEventBus.Unsubscribe<AddExperienceRequestEvent>(OnAddExperienceRequested);
         }
 
-        private void OnLevelChanged(LevelChangedEvent levelChangedEvent)
+        private void OnLevelChanged(Entity entity, LevelChangedEvent levelChangedEvent)
         {
-            var statModule = levelChangedEvent.Entity.GetModule<StatModule>();
+            var statModule = entity.GetModule<StatModule>();
 
             statModule.RemoveModifiers(StatModifierSource.Level);
             statModule.AddModifiers(

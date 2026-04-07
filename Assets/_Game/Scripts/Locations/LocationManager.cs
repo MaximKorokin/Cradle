@@ -127,7 +127,7 @@ namespace Assets._Game.Scripts.Locations
         {
             var playerEntity = _playerProvider.Player;
 
-            playerEntity.Publish(new EntityRepositionRequest(playerEntity, entrance.Position));
+            playerEntity.Publish(new EntityRepositionRequest(entrance.Position));
         }
     }
 

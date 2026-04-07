@@ -39,7 +39,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
             if (lootItemModule.Amount <= 0)
             {
-                _globalEventBus.Publish<DespawnEntityRequest>(new(context.Target));
+                _globalEventBus.Publish(new DespawnEntityRequest(context.Target));
             }
 
             _done = true;

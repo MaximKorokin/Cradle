@@ -29,14 +29,14 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
             });
         }
 
-        public void RecalculateDerivedStats(StatChangedEvent e)
+        public void RecalculateDerivedStats(Entity entity, StatChangedEvent e)
         {
             for (int i = 0; i < _primaryStats.Length; i++)
             {
                 if (e.StatId == _primaryStats[i])
                 {
                     // todo: recalculate only changed stats
-                    RecalculateDerivedStats(e.Entity);
+                    RecalculateDerivedStats(entity);
                     // return here to avoid unnecessary recalculations if multiple primary stats are changed at once
                     return;
                 }

@@ -40,12 +40,12 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnStatChanged(StatId id)
         {
-            Publish<StatChangedEvent>(new(Entity, id));
+            Publish(new StatChangedEvent(id));
         }
 
         private void OnStatsChanged()
         {
-            Publish<StatsChangedEvent>(new(Entity));
+            Publish(new StatsChangedEvent());
         }
     }
 
@@ -53,22 +53,14 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public readonly StatId StatId;
 
-        public Entity Entity { get; }
-
-        public StatChangedEvent(Entity entity, StatId statId)
+        public StatChangedEvent(StatId statId)
         {
-            Entity = entity;
             StatId = statId;
         }
     }
 
     public readonly struct StatsChangedEvent : IEntityEvent
     {
-        public Entity Entity { get; }
-        public StatsChangedEvent(Entity entity)
-        {
-            Entity = entity;
-        }
     }
 
     public sealed class StatModuleFactory : IEntityModuleFactory

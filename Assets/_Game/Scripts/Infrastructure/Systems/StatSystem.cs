@@ -68,9 +68,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private static void OnEquipmentChanged(EquipmentChangedEvent e)
+        private static void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
-            var stats = e.Entity.GetModule<StatModule>();
+            var stats = entity.GetModule<StatModule>();
 
             var source = StatModifierSource.FromEquipmentSlot(e.Slot);
 
@@ -80,7 +80,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // Apply new modifiers if something is equipped now
             if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
             {
-                var modifiers = ExtractStatModifiers(e.Entity, e.Item.Value, ItemTrigger.OnEquipmentChange);
+                var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.OnEquipmentChange);
                 if (modifiers.Count > 0)
                 {
                     stats.AddModifiers(source, modifiers);
@@ -113,9 +113,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             stats.AddModifiers(source, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, item.Definition.Weight).Yield());
         }
 
-        private void OnStatChanged(StatChangedEvent e)
+        private void OnStatChanged(Entity entity, StatChangedEvent e)
         {
-            _derivedStatsCalculator.RecalculateDerivedStats(e);
+            _derivedStatsCalculator.RecalculateDerivedStats(entity, e);
         }
 
         private void OnDamageApplied(DamageAppliedEvent e)
@@ -124,13 +124,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!stateModule.Has(RestrictionState.Dead) && e.Target.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
             {
                 stateModule.Add(RestrictionState.Dead);
-                _globalEventBus.Publish<EntityDiedEvent>(new(e.Target, e.Source));
+                _globalEventBus.Publish(new EntityDiedEvent(e.Target, e.Source));
             }
         }
 
-        private static void OnInventoryChanged(InventoryChangedEvent e)
+        private static void OnInventoryChanged(Entity entity, InventoryChangedEvent e)
         {
-            var stats = e.Entity.GetModule<StatModule>();
+            var stats = entity.GetModule<StatModule>();
 
             var source = StatModifierSource.FromInventorySlot(e.Slot.Index);
 
@@ -142,9 +142,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private static void OnStatusEffectChanged(StatusEffectChangedEvent e)
+        private static void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
         {
-            var stats = e.Entity.GetModule<StatModule>();
+            var stats = entity.GetModule<StatModule>();
 
             var source = StatModifierSource.FromStatusEffect(e.StatusEffect.Definition.Id);
 

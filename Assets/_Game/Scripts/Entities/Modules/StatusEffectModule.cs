@@ -18,7 +18,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnStatusEffectChanged(StatusEffectChange change)
         {
-            Publish(new StatusEffectChangedEvent(Entity, change));
+            Publish(new StatusEffectChangedEvent(change));
         }
     }
 
@@ -27,11 +27,8 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly StatusEffect StatusEffect;
         public readonly StatusEffectChangeKind Kind;
 
-        public Entity Entity { get; }
-
-        public StatusEffectChangedEvent(Entity entity, StatusEffectChange statusEffectChange)
+        public StatusEffectChangedEvent(StatusEffectChange statusEffectChange)
         {
-            Entity = entity;
             StatusEffect = statusEffectChange.StatusEffect;
             Kind = statusEffectChange.Kind;
         }

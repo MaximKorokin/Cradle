@@ -36,10 +36,10 @@ namespace Assets._Game.Scripts.Locations.Markers
 
         private void OnTriggerEntered(Collider2D collider)
         {
-            if (!collider.TryGetComponent<EntityView>(out var entityView) && entityView.Entity != _playerProvider.Player)
+            if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
                 return;
 
-            _globalEventBus.Publish<LocationTransitionRequest>(new(_location.Id, _targetEntranceId));
+            _globalEventBus.Publish(new LocationTransitionRequest(_location.Id, _targetEntranceId));
         }
     }
 }

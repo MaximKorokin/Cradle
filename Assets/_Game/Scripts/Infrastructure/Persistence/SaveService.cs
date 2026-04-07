@@ -60,7 +60,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
             var gameSave = _gameSaveRepository.Load(SaveKey);
 
-            _globalEventBus.Publish<SpawnEntityRequest>(new(
+            _globalEventBus.Publish(new SpawnEntityRequest(
                 _newGameDefinition.PlayerEntityDefinition,
                 Vector2.zero,
                 new[] { new PlayerEntitySpawnInitializer(

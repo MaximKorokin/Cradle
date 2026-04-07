@@ -37,14 +37,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         // ───────────────────────── Equipment Events ─────────────────────────
 
-        private void OnEquipmentChanged(EquipmentChangedEvent e)
+        private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
             if (!e.Item.HasValue) return;
 
             var specialActionTrait = e.Item.Value.GetFunctionalTrait<SpecialActionTrait>(ItemTrigger.OnEquipmentChange);
-            if (specialActionTrait == null || !specialActionTrait.CanTrigger(new(e.Entity, ItemTrigger.OnEquipmentChange, e.Item.Value))) return;
+            if (specialActionTrait == null || !specialActionTrait.CanTrigger(new(entity, ItemTrigger.OnEquipmentChange, e.Item.Value))) return;
 
-            var actionModule = e.Entity.GetModule<ActionModule>();
+            var actionModule = entity.GetModule<ActionModule>();
             var isEquipping = e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced;
 
             actionModule.SetSpecialAction(
@@ -206,7 +206,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             actionModule.GlobalCooldown.Cooldown = statModule.Stats.Get(StatId.PhysicalActionDelay);
             actionModule.GlobalCooldown.Reset();
 
-            actionModule.Entity.Publish<ActionCompletedEvent>(new(actionModule.Entity, action));
+            actionModule.Entity.Publish(new ActionCompletedEvent(action));
         }
     }
 
@@ -214,11 +214,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         public readonly ActionInstance ActionInstance;
 
-        public Entity Entity { get; }
-
-        public ActionCompletedEvent(Entity entity, ActionInstance actionInstance)
+        public ActionCompletedEvent(ActionInstance actionInstance)
         {
-            Entity = entity;
             ActionInstance = actionInstance;
         }
     }

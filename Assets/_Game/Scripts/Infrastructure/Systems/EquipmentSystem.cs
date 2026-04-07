@@ -14,9 +14,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<ItemUseSettingsUpdateRequest>(OnItemUseSettingsUpdateRequested);
         }
 
-        private void OnItemUseSettingsUpdateRequested(ItemUseSettingsUpdateRequest request)
+        private void OnItemUseSettingsUpdateRequested(Entity entity, ItemUseSettingsUpdateRequest request)
         {
-            if (!request.Entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
+            if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
 
             equipmentModule.SetAutoItemUseSettings(request.ItemUseSettings);
         }
@@ -33,7 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             for (int i = 0; i < equipmentModule.Equipment.Slots.Count; i++)
             {
                 var command = new UseItemCommand(ItemContainerId.Equipment, equipmentModule.Equipment.Slots[i].ToInt64(), false);
-                var request = new ItemCommandRequest(entity, command);
+                var request = new ItemCommandRequest(command);
                 entity.Publish(request);
             }
         }
@@ -43,11 +43,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         public readonly ItemUseSettings ItemUseSettings;
 
-        public Entity Entity { get; }
-
-        public ItemUseSettingsUpdateRequest(Entity entity, ItemUseSettings itemUseSettings)
+        public ItemUseSettingsUpdateRequest(ItemUseSettings itemUseSettings)
         {
-            Entity = entity;
             ItemUseSettings = itemUseSettings;
         }
     }

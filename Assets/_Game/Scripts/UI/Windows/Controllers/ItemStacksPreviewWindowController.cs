@@ -89,7 +89,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void PublishItemCommand(IItemCommand command)
         {
             var entity = _playerProvider.Player;
-            entity.Publish(new ItemCommandRequest(entity, command));
+            entity.Publish(new ItemCommandRequest(command));
         }
 
         private IEnumerable<ItemStackAction> GetActions()

@@ -80,6 +80,5 @@ namespace Assets._Game.Scripts.Entities
 
     public interface IEntityEvent
     {
-        Entity Entity { get; }
     }
 }

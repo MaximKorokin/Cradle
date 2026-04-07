@@ -29,9 +29,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
 		private void OnChanged(ItemUseSettings settings)
 		{
-			_playerProvider.Player.Publish(new ItemUseSettingsUpdateRequest(
-				_playerProvider.Player,
-				settings));
+			_playerProvider.Player.Publish(new ItemUseSettingsUpdateRequest(settings));
 		}
 
 		private void Redraw()

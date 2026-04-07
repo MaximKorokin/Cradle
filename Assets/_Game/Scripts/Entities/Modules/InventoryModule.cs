@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnInventorySlotChanged(InventoryChange inventoryChange)
         {
-            Publish(new InventoryChangedEvent(Entity, inventoryChange));
+            Publish(new InventoryChangedEvent(inventoryChange));
         }
     }
 
@@ -34,19 +34,15 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly ItemStackSnapshot? Item;
         public readonly InventoryChangeKind Kind;
 
-        public Entity Entity { get; }
-
-        public InventoryChangedEvent(Entity entity, InventorySlot slot, ItemStackSnapshot? item, InventoryChangeKind kind)
+        public InventoryChangedEvent(InventorySlot slot, ItemStackSnapshot? item, InventoryChangeKind kind)
         {
-            Entity = entity;
             Slot = slot;
             Item = item;
             Kind = kind;
         }
 
-        public InventoryChangedEvent(Entity entity, InventoryChange inventoryChange)
+        public InventoryChangedEvent(InventoryChange inventoryChange)
         {
-            Entity = entity;
             Slot = inventoryChange.Slot;
             Item = inventoryChange.Item;
             Kind = inventoryChange.Kind;

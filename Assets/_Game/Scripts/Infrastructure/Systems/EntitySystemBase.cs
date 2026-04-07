@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IterateAllEntities(RegisterEntity);
         }
 
-        protected void TrackEntityEvent<T>(Action<T> handler)
+        protected void TrackEntityEvent<T>(Action<Entity, T> handler)
             where T : struct, IEntityEvent
         {
             void Bind(Entity entity, List<IDisposable> subscriptions)
@@ -35,7 +35,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     if (!EntityQuery.Match(entity))
                         return;
 
-                    handler(evt);
+                    handler(entity, evt);
                 });
 
                 subscriptions.Add(subscription);

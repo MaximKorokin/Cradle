@@ -39,12 +39,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 _activeInteractions.Remove(_completedInteractions[i]);
         }
 
-        private void OnItemUseStarted(ItemUseStartedEvent e)
+        private void OnItemUseStarted(Entity entity, ItemUseStartedEvent e)
         {
             var trigger = ItemTrigger.OnUse;
             foreach (var trait in e.Item.GetFunctionalTraits<InteractionTrait>(trigger))
             {
-                var context = new InteractionContext(e.Entity, e.Entity, e.Entity.GetPosition());
+                var context = new InteractionContext(entity, entity, entity.GetPosition());
                 _activeInteractions.Add(trait.Interaction.BuildRuntime(context, _resolver));
             }
         }

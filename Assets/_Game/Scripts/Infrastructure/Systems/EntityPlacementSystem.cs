@@ -15,9 +15,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
         }
 
-        private void OnEntityRepositionRequested(EntityRepositionRequest request)
+        private void OnEntityRepositionRequested(Entity entity, EntityRepositionRequest request)
         {
-            var spatialModule = request.Entity.GetModule<SpatialModule>();
+            var spatialModule = entity.GetModule<SpatialModule>();
             spatialModule.RequestSetPosition(request.Position);
         }
     }
@@ -26,11 +26,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         public readonly Vector2 Position;
 
-        public Entity Entity { get; }
-
-        public EntityRepositionRequest(Entity entity, Vector2 position)
+        public EntityRepositionRequest(Vector2 position)
         {
-            Entity = entity;
             Position = position;
         }
     }

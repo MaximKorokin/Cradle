@@ -34,7 +34,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnEquipmentSlotChanged(EquipmentChange equipmentChange)
         {
-            Publish(new EquipmentChangedEvent(Entity, equipmentChange));
+            Publish(new EquipmentChangedEvent(equipmentChange));
         }
     }
 
@@ -57,19 +57,15 @@ namespace Assets._Game.Scripts.Entities.Modules
         public readonly ItemStackSnapshot? Item;
         public readonly EquipmentChangeKind Kind;
 
-        public Entity Entity { get; }
-
-        public EquipmentChangedEvent(Entity entity, EquipmentSlotKey slot, ItemStackSnapshot? item, EquipmentChangeKind kind)
+        public EquipmentChangedEvent(EquipmentSlotKey slot, ItemStackSnapshot? item, EquipmentChangeKind kind)
         {
-            Entity = entity;
             Slot = slot;
             Item = item;
             Kind = kind;
         }
 
-        public EquipmentChangedEvent(Entity entity, EquipmentChange equipmentChange)
+        public EquipmentChangedEvent(EquipmentChange equipmentChange)
         {
-            Entity = entity;
             Slot = equipmentChange.Slot;
             Item = equipmentChange.Item;
             Kind = equipmentChange.Kind;

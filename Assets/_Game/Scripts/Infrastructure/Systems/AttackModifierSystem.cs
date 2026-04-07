@@ -52,23 +52,23 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     case AttackModifierType.MultipliedRepeatDamage:
                         var extraDamage = e.Damage * modifier.Value;
                         targetStatModule.AddBase(StatId.HpCurrent, -extraDamage);
-                        _globalEventBus.Publish<DamageAppliedEvent>(new(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
+                        _globalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
                         break;
                 }
             }
         }
 
-        private void OnStatusEffectChanged(StatusEffectChangedEvent e)
+        private void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
         {
             if (e.StatusEffect.Definition.AttackModifiers == null || e.StatusEffect.Definition.AttackModifiers.Length == 0) return;
 
             if (e.Kind == StatusEffectChangeKind.Added)
             {
                 // If the entity doesn't have an AttackModifierModule, add one.
-                if (!e.Entity.TryGetModule<AttackModifierModule>(out var attackModifierModule))
+                if (!entity.TryGetModule<AttackModifierModule>(out var attackModifierModule))
                 {
                     attackModifierModule = new();
-                    e.Entity.AddModule(attackModifierModule);
+                    entity.AddModule(attackModifierModule);
                 }
 
                 for (int i = 0; i < e.StatusEffect.Definition.AttackModifiers.Length; i++)
@@ -78,7 +78,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
             else if (e.Kind == StatusEffectChangeKind.Removed)
             {
-                if (!e.Entity.TryGetModule<AttackModifierModule>(out var attackModifierModule)) return;
+                if (!entity.TryGetModule<AttackModifierModule>(out var attackModifierModule)) return;
                 for (int i = 0; i < e.StatusEffect.Definition.AttackModifiers.Length; i++)
                 {
                     attackModifierModule.RemoveModifier(e.StatusEffect.Definition.AttackModifiers[i]);
