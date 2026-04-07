@@ -1,6 +1,4 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Infrastructure.Systems;
-using Assets._Game.Scripts.Locations.Markers;
 using Assets._Game.Scripts.Shared.Extensions;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +9,7 @@ namespace Assets._Game.Scripts.Locations
     public interface ILocationContext
     {
         LocationDefinition CurrentLocation { get; }
+        string CurrentEntranceId { get; }
         bool IsTransitionInProgress { get; }
     }
 
@@ -23,7 +22,6 @@ namespace Assets._Game.Scripts.Locations
 
     public sealed class LocationManager : ILocationContext, ILocationService
     {
-        private readonly IPlayerProvider _playerProvider;
         private readonly LocationCatalog _locationCatalog;
         private readonly IGlobalEventBus _globalEventBus;
 
@@ -31,14 +29,13 @@ namespace Assets._Game.Scripts.Locations
         private string _currentLocationId;
 
         public LocationDefinition CurrentLocation { get; private set; }
+        public string CurrentEntranceId { get; private set; }
         public bool IsTransitionInProgress { get; private set; }
 
         public LocationManager(
-            IPlayerProvider playerProvider,
             LocationCatalog locationCatalog,
             IGlobalEventBus globalEventBus)
         {
-            _playerProvider = playerProvider;
             _locationCatalog = locationCatalog;
             _globalEventBus = globalEventBus;
         }
@@ -87,12 +84,7 @@ namespace Assets._Game.Scripts.Locations
                 _currentScene = scene;
                 _currentLocationId = nextLocation.Id;
                 CurrentLocation = nextLocation;
-
-                if (!string.IsNullOrWhiteSpace(entranceId))
-                {
-                    var entrance = FindEntrance(scene, entranceId);
-                    MovePlayerToEntrance(entrance);
-                }
+                CurrentEntranceId = entranceId;
 
                 _globalEventBus.Publish(new LocationChangedEvent(locationId, entranceId));
             }
@@ -104,30 +96,6 @@ namespace Assets._Game.Scripts.Locations
             {
                 IsTransitionInProgress = false;
             }
-        }
-
-        private static LocationEntranceMarker FindEntrance(Scene scene, string entranceId)
-        {
-            var roots = scene.GetRootGameObjects();
-            for (int i = 0; i < roots.Length; i++)
-            {
-                var entrances = roots[i].GetComponentsInChildren<LocationEntranceMarker>(true);
-                for (int j = 0; j < entrances.Length; j++)
-                {
-                    if (entrances[j].EntranceId == entranceId)
-                        return entrances[j];
-                }
-            }
-
-            throw new InvalidOperationException(
-                $"Entrance '{entranceId}' was not found in scene '{scene.name}'.");
-        }
-
-        private void MovePlayerToEntrance(LocationEntranceMarker entrance)
-        {
-            var playerEntity = _playerProvider.Player;
-
-            playerEntity.Publish(new EntityRepositionRequest(entrance.Position));
         }
     }
 

@@ -2,8 +2,8 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Locations;
-using Assets._Game.Scripts.Locations.Core;
 using Assets._Game.Scripts.Locations.Markers;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,15 +12,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
     public sealed class LocationRuntimeSystem : SystemBase, ILocationSystem, IStartSystem, ITickSystem
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly LocationMarkersContext _locationMarkersContext;
         private readonly EntityRepository _entityRepository;
 
-        private EntitySpawnSpotRuntime[] _entitySpawnSpots;
+        private readonly IReadOnlyList<EntitySpawnSpotRuntime> _entitySpawnSpots;
 
-        public LocationRuntimeSystem(IGlobalEventBus globalEventBus, LocationMarkersContext locationMarkersContext, EntityRepository entityRepository)
+        public LocationRuntimeSystem(IGlobalEventBus globalEventBus, IReadOnlyList<EntitySpawnSpotRuntime> entitySpawnSpots, EntityRepository entityRepository)
         {
             _globalEventBus = globalEventBus;
-            _locationMarkersContext = locationMarkersContext;
+            _entitySpawnSpots = entitySpawnSpots;
             _entityRepository = entityRepository;
 
             _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
@@ -37,12 +36,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
 
         public void Start()
         {
-            // todo: move runtimes creation to context
-            _entitySpawnSpots = _locationMarkersContext.EntitySpawnSpotMarkers
-                .Where(m => m.SpawnOnLocationLoad)
-                .Select(m => m.Definition.CreateRuntime(m.transform.position))
-                .ToArray();
-
             IterateSpots(_entitySpawnSpots, _globalEventBus);
         }
 
@@ -55,7 +48,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
         {
             if (!e.Victim.TryGetModule<SpawnSourceModule>(out var spawnSourceModule)) return;
 
-            for (int i = 0; i < _entitySpawnSpots.Length; i++)
+            for (int i = 0; i < _entitySpawnSpots.Count; i++)
             {
                 if (spawnSourceModule.SourceId != _entitySpawnSpots[i].Id) continue;
 
@@ -85,9 +78,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
             }
         }
 
-        private static void IterateSpots(EntitySpawnSpotRuntime[] spots, IGlobalEventBus globalEventBus)
+        private static void IterateSpots(IReadOnlyList<EntitySpawnSpotRuntime> spots, IGlobalEventBus globalEventBus)
         {
-            for (int i = 0; i < spots.Length; i++)
+            for (int i = 0; i < spots.Count; i++)
             {
                 var spot = spots[i];
                 for (int j = 0; j < spot.EntityDefinitions.Count; j++)

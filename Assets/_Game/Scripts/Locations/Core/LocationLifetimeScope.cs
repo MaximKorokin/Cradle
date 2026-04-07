@@ -20,6 +20,8 @@ namespace Assets._Game.Scripts.Locations.Core
             builder.RegisterComponent(_markersContext);
             builder.RegisterComponent(_bordersContext);
 
+            builder.RegisterInstance(_markersContext.GetEntitySpawnSpotRuntimes()).AsImplementedInterfaces();
+
             builder.Register<LocationRuntimeSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }
