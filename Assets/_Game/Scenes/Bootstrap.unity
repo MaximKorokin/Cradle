@@ -484,6 +484,7 @@ MonoBehaviour:
   _factionRelations: {fileID: 11400000, guid: 85d3c2bc010d1d240b49bf44ff039781, type: 2}
   _defaultPrefabReferences: {fileID: 11400000, guid: 454b4801d101cf9448825aecb183176e, type: 2}
   _defaultEntityDefinitionReferences: {fileID: 11400000, guid: 038be9780167a7f4e9ddcac39a5a62af, type: 2}
+  _mainCamera: {fileID: 519420031}
   _cinemachineCameraService: {fileID: 407775990}
 --- !u!114 &551049544
 MonoBehaviour:

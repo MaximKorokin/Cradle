@@ -7,6 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 {
     public interface ICameraService
     {
+        Camera Camera { get; }
         void Follow(Entity target);
         void ClearFollow();
         void SetConfiner(Collider2D bounds);
@@ -19,10 +20,13 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         [SerializeField] private CinemachineCamera _camera;
 
         [Inject]
-        private void Construct(EntityViewService entityViewService)
+        private void Construct(Camera camera, EntityViewService entityViewService)
         {
+            Camera = camera;
             _entityViewService = entityViewService;
         }
+
+        public Camera Camera { get; private set; }
 
         public void Follow(Entity target)
         {

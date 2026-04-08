@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.UI.Views
         private readonly CompactPlayerStateViewController _compactPlayerStateViewController;
 
         public HudViewController(
-            HudView hudView,
+            //HudView hudView,
             CompactPlayerStateViewController compactPlayerStateViewController)
         {
             _compactPlayerStateViewController = compactPlayerStateViewController;

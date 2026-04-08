@@ -91,10 +91,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     request.Initializers[i].Initialize(entity);
                 }
             }
+
+            _globalEventBus.Publish(new EntitySpawnedEvent(entity));
         }
 
         private void OnEntityDespawnRequested(DespawnEntityRequest request)
         {
+            _globalEventBus.Publish(new EntityDespawningEvent(request.Entity));
+
             _entityViewService.DespawnEntityView(request.Entity);
             // For now entity does not exist if it does not have view
             // There will be a big TODO in the future if this will change
@@ -131,6 +135,26 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public PlayerSpawnedEvent(Entity player)
         {
             Player = player;
+        }
+    }
+
+    public readonly struct EntitySpawnedEvent : IGlobalEvent
+    {
+        public readonly Entity Entity;
+
+        public EntitySpawnedEvent(Entity entity)
+        {
+            Entity = entity;
+        }
+    }
+
+    public readonly struct EntityDespawningEvent : IGlobalEvent
+    {
+        public readonly Entity Entity;
+
+        public EntityDespawningEvent(Entity entity)
+        {
+            Entity = entity;
         }
     }
 

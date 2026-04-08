@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Units
 
         private TurnDirection _turnDirection;
 
-        public IReadOnlyCollection<UnitView> Roots => _roots;
+        public IReadOnlyCollection<UnitView> Units => _byPath.Values;
 
         public UnitTree(Transform unitsRoot, TurnDirection turnDirection)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 namespace Assets._Game.Scripts.Entities.Units
 {
@@ -9,6 +10,8 @@ namespace Assets._Game.Scripts.Entities.Units
         private readonly Transform _unitsRoot;
         private readonly UnitViewProvider _unitViewProvider;
         private readonly bool _swapOrderInLayerForDirection;
+
+        public IReadOnlyCollection<UnitView> Units => _tree.Units;
 
         public event Action Changed;
 

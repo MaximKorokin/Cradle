@@ -37,6 +37,8 @@ namespace Assets._Game.Scripts.Infrastructure
         private DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
         [Space]
         [SerializeField]
+        private Camera _mainCamera;
+        [SerializeField]
         private CinemachineCameraService _cinemachineCameraService;
 
         protected override void Configure(IContainerBuilder builder)
@@ -51,6 +53,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_defaultPrefabReferences);
             builder.RegisterInstance(_defaultEntityDefinitionReferences);
 
+            builder.RegisterComponent(_mainCamera);
             builder.RegisterComponent(_cinemachineCameraService).AsImplementedInterfaces().AsSelf();
 
             builder.Register<DispatcherService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();

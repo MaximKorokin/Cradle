@@ -1292,8 +1292,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2540377535027292814, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}
+      propertyPath: <SmoothFill>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2540377535027292814, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}
       propertyPath: <UseGradient>k__BackingField
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2540377535027292814, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}
+      propertyPath: <SmoothFillImage>k__BackingField
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2991615780745921410, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}
       propertyPath: m_Color.b
@@ -1324,10 +1332,11 @@ PrefabInstance:
       value: ExperienceFillBar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6429090008557229278, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 916409769938545910, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}
-      insertIndex: 3
+      insertIndex: 2
       addedObject: {fileID: 6607648978606448646}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d5e10275cf9b2543b966b68f4def98e, type: 3}

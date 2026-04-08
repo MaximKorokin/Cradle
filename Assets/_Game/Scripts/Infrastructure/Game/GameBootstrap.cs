@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
             _saveService.LoadGame();
 
-            SceneManager.LoadSceneAsync("UIRoot", LoadSceneMode.Additive);
+            SceneManager.LoadScene("UIRoot", LoadSceneMode.Additive);
         }
     }
 }

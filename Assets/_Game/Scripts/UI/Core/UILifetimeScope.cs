@@ -1,5 +1,5 @@
-using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
@@ -13,7 +13,9 @@ namespace Assets._Game.Scripts.UI.Core
 {
     public class UILifetimeScope : LifetimeScope
     {
-        [Header("Windows")]
+        [Header("Prefabs")]
+        [SerializeField]
+        private EntityNameplateView _entityNameplateView;
         [SerializeField]
         private UIWindowBase[] _windowPrefabs;
         [SerializeField]
@@ -36,6 +38,7 @@ namespace Assets._Game.Scripts.UI.Core
 
             RegisterWindows(builder);
             RegisterHud(builder);
+            RegisterNameplates(builder);
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -66,12 +69,17 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterHud(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<HudView>();
             builder.Register<HudViewController>(Lifetime.Scoped);
 
             builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
+        }
+
+        private void RegisterNameplates(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_entityNameplateView);
+            builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
         }
     }
 }
