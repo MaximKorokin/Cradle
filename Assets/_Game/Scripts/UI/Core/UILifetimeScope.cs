@@ -69,8 +69,6 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterHud(IContainerBuilder builder)
         {
-            builder.Register<HudViewController>(Lifetime.Scoped);
-
             builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);

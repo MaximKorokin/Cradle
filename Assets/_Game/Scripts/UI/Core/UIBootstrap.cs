@@ -5,16 +5,16 @@ namespace Assets._Game.Scripts.UI.Core
 {
     public sealed class UIBootstrap : IStartable
     {
-        private readonly HudViewController _hudViewController;
+        private readonly CompactPlayerStateViewController _compactPlayerStateViewController;
 
-        public UIBootstrap(HudViewController hudViewController)
+        public UIBootstrap(CompactPlayerStateViewController compactPlayerStateViewController)
         {
-            _hudViewController = hudViewController;
+            _compactPlayerStateViewController = compactPlayerStateViewController;
         }
 
         public void Start()
         {
-            _hudViewController.Render();
+            _compactPlayerStateViewController.Render();
         }
     }
 }
