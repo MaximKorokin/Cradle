@@ -54,6 +54,7 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
+        // todo: optimize by only updating changed values instead of redrawing everything
         public void Redraw(PlayerStateViewData playerStateViewData)
         {
             Clear();

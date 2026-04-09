@@ -36,7 +36,6 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                 }
             }
 
-            if (entity.Definition.VariantName == "Player") SLog.Log($"Best behaviour: {bestEvaluation.Context.ActionInstance?.Definition.Name}");
             return bestEvaluation;
         }
 

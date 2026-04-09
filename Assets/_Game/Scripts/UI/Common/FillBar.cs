@@ -33,7 +33,7 @@ namespace Assets._Game.Scripts.UI.Common
 
         private const float DefaultAlphaValue = 1;
 
-        public float CurrentFillRatio { get; private set; }
+        public float CurrentFillRatio => Fill.fillAmount;
         private float _currentStartFadeTime;
 
         public void SetFillRatio(float value)
@@ -42,24 +42,31 @@ namespace Assets._Game.Scripts.UI.Common
             {
                 return;
             }
-            if (TimeToFade > 0)
+            if (TimeToFade > 0 && CurrentFillRatio != value)
             {
                 _currentStartFadeTime = Time.time + TimeToStartFade;
-                IncrementAlphaValue(DefaultAlphaValue);
+                SetAlpha(DefaultAlphaValue);
             }
 
-            CurrentFillRatio = value;
-            Fill.fillAmount = CurrentFillRatio;
+            Fill.fillAmount = value;
             if (UseGradient)
             {
                 FillImage.color = Gradient.Evaluate(CurrentFillRatio);
             }
         }
 
+        private void Awake()
+        {
+            if (TimeToFade > 0)
+            {
+                SetAlpha(0);
+            }
+        }
+
         private void Update()
         {
             SetSmoothBar();
-            Fade();
+            FadeStep();
         }
 
         private void SetSmoothBar()
@@ -83,38 +90,38 @@ namespace Assets._Game.Scripts.UI.Common
             }
         }
 
-        private void Fade()
+        private void FadeStep()
         {
             if (TimeToFade <= 0 || Time.time < _currentStartFadeTime)
             {
                 return;
             }
             var fadeStep = -1 / TimeToFade * Time.deltaTime;
-            IncrementAlphaValue(fadeStep);
+            var newAlpha = Mathf.Clamp01(BackgroundImage.color.a + fadeStep);
+            SetAlpha(newAlpha);
         }
 
-        private void IncrementAlphaValue(float alphaStep)
+        private void SetAlpha(float newAlpha)
         {
-            var newAlpha = Mathf.Clamp01(BackgroundImage.color.a + alphaStep);
             if (BackgroundImage != null)
             {
-                SetAlpha(BackgroundImage, newAlpha);
+                SetImageAlpha(BackgroundImage, newAlpha);
             }
             if (ForegroundImage != null)
             {
-                SetAlpha(ForegroundImage, newAlpha);
+                SetImageAlpha(ForegroundImage, newAlpha);
             }
             if (FillImage != null)
             {
-                SetAlpha(FillImage, newAlpha);
+                SetImageAlpha(FillImage, newAlpha);
             }
             if (SmoothFillImage != null)
             {
-                SetAlpha(SmoothFillImage, newAlpha);
+                SetImageAlpha(SmoothFillImage, newAlpha);
             }
         }
 
-        private void SetAlpha(Image image, float alpha)
+        private void SetImageAlpha(Image image, float alpha)
         {
             image.color = new Color(
                 image.color.r,

@@ -72,7 +72,7 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
                 if (candidate == null) continue;
                 if (candidate == self) continue;
                 if (_relationResolver.GetRelation(candidate, self) != relation) continue;
-                if (!query.Match(candidate)) continue;
+                if (!query.Match(candidate, self)) continue;
 
                 entity = candidate;
                 return true;
@@ -102,7 +102,7 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
                 if (candidate == null) continue;
                 if (candidate == self) continue;
                 if (_relationResolver.GetRelation(candidate, self) != relation) continue;
-                if (!query.Match(candidate)) continue;
+                if (!query.Match(candidate, self)) continue;
 
                 var sqrDistance = (candidate.GetModule<SpatialModule>().Position - position).sqrMagnitude;
 
