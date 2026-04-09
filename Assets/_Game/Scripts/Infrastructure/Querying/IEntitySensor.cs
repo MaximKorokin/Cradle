@@ -20,7 +20,8 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
             float radius,
             FactionRelation relation,
             EntityQuery query,
-            out Entity entity);
+            out Entity entity,
+            out float distance);
 
         bool HasAnyInRange(
             Entity self,
@@ -85,10 +86,11 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
             float radius,
             FactionRelation relation,
             EntityQuery query,
-            out Entity entity)
+            out Entity entity,
+            out float distance)
         {
             var result = false;
-            var minDistance = float.MaxValue;
+            var minSqrDistance = float.MaxValue;
             entity = null;
 
             var position = self.GetModule<SpatialModule>().Position;
@@ -102,16 +104,17 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
                 if (_relationResolver.GetRelation(candidate, self) != relation) continue;
                 if (!query.Match(candidate)) continue;
 
-                var distance = (candidate.GetModule<SpatialModule>().Position - position).sqrMagnitude;
+                var sqrDistance = (candidate.GetModule<SpatialModule>().Position - position).sqrMagnitude;
 
-                if (distance < minDistance)
+                if (sqrDistance < minSqrDistance)
                 {
                     entity = candidate;
-                    minDistance = distance;
+                    minSqrDistance = sqrDistance;
                     result = true;
                 }
             }
 
+            distance = Mathf.Sqrt(minSqrDistance);
             return result;
         }
 

@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets.CoreScripts;
 using VContainer;
 
@@ -9,6 +10,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
     {
         public readonly CooldownCounter Cooldown;
         public readonly ActionDefinition Definition;
+        public readonly EntityQuery EntityQuery;
 
         private InteractionInstance _interactionInstance;
 
@@ -16,6 +18,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
         {
             Definition = actionDefinition;
             Cooldown = new(Definition.Cooldown);
+            EntityQuery = new(Definition.EntityQueryData);
         }
 
         public float GetEffectiveRange(Entity entity)
@@ -33,7 +36,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
             //return stats.Mana >= 10;
             return true;
         }
-        
+
         public void OnPreparationStart(InteractionContext context)
         {
             //context.Source.GetModule<StatModule>().Mana -= 10;

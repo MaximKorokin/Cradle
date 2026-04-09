@@ -29,3 +29,4 @@ MonoBehaviour:
     IncludedTargetDeclarations: 2
   <FactionRelation>k__BackingField: 40
   <BaseScore>k__BackingField: 0.5
+  <DistanceScorePenalty>k__BackingField: 0.1

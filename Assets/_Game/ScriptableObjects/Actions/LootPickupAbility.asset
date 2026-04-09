@@ -21,11 +21,12 @@ MonoBehaviour:
   <ConsumesCharges>k__BackingField: 0
   <PreparationTime>k__BackingField: 0.1
   <MaxChannelingTime>k__BackingField: 0
-  <Cooldown>k__BackingField: 0.1
+  <Cooldown>k__BackingField: 0
   <Range>k__BackingField: 0.1
   <SpeedMultiplier>k__BackingField: 0
   <EntityQueryData>k__BackingField:
     ExcludedRestrictions: 1
     IncludedTargetDeclarations: 1
   <FactionRelation>k__BackingField: 0
-  <BaseScore>k__BackingField: 0.1
+  <BaseScore>k__BackingField: 0.4
+  <DistanceScorePenalty>k__BackingField: 0.1

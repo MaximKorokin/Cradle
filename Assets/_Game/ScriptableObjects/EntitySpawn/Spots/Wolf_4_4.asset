@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 8b7627be0bbc42b381e110df44c613bd
   <Entities>k__BackingField:
   - EntityDefinition: {fileID: 11400000, guid: d52724609bd1c004c9df88bdb5afe673, type: 2}
-    RespawnTime: 10
+    RespawnTime: 15
     Count: 3
-  <Radius>k__BackingField: 1
+  <Radius>k__BackingField: 5
   <RespawnEnabled>k__BackingField: 1

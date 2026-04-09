@@ -8,6 +8,8 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public sealed class ActionEvaluator
     {
+        private readonly ActionEvaluation _defaultActionEvaluation = new(float.NegativeInfinity, default);
+
         private readonly IEntitySensor _sensor;
 
         public ActionEvaluator(IEntitySensor entitySensor)
@@ -18,9 +20,9 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         public ActionEvaluation Evaluate(Entity entity)
         {
             if (!entity.TryGetModule<ActionModule>(out var actionModule))
-                return default;
+                return _defaultActionEvaluation;
 
-            var bestEvaluation = default(ActionEvaluation);
+            var bestEvaluation = _defaultActionEvaluation;
 
             for (var i = 0; i < actionModule.Actions.Count; i++)
             {
@@ -33,6 +35,8 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                     bestEvaluation = evaluation;
                 }
             }
+
+            if (entity.Definition.VariantName == "Player") SLog.Log($"Best behaviour: {bestEvaluation.Context.ActionInstance?.Definition.Name}");
             return bestEvaluation;
         }
 
@@ -43,15 +47,15 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                 range = statModule.Stats.Get(StatId.VisionRange);
 
             var relation = actionInstance.Definition.FactionRelation;
-            var entityQuery = new EntityQuery(actionInstance.Definition.EntityQueryData);
+            var entityQuery = actionInstance.EntityQuery;
 
-            if (!_sensor.TryGetNearestInRange(entity, range, relation, entityQuery, out var target))
-                return default;
+            if (!_sensor.TryGetNearestInRange(entity, range, relation, entityQuery, out var target, out var distance))
+                return _defaultActionEvaluation;
 
             if (!actionInstance.CanStartPreparation(new InteractionContext(entity, target, target.GetModule<SpatialModule>().Position)))
-                return default;
+                return _defaultActionEvaluation;
 
-            var score = actionInstance.Definition.BaseScore;
+            var score = actionInstance.Definition.BaseScore - actionInstance.Definition.DistanceScorePenalty * distance;
             return new ActionEvaluation(
                 score,
                 new ActionContext(actionInstance, target)

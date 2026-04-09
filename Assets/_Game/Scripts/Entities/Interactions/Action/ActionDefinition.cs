@@ -43,6 +43,8 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
         public FactionRelation FactionRelation { get; private set; }
         [field: SerializeField]
         public float BaseScore { get; private set; }
+        [field: SerializeField]
+        public float DistanceScorePenalty { get; private set; }
     }
 
     public enum ActionExecutionSpeedMultiplier
