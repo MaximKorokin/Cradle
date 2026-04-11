@@ -18,6 +18,10 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             {
                 behaviours.Add(new WanderBehaviour());
             }
+            if (behaviour.HasFlag(AiBehaviour.StandStill))
+            {
+                behaviours.Add(new StandStillBehaviour());
+            }
             if (behaviour.HasFlag(AiBehaviour.Action))
             {
                 behaviours.Add(new ActionBehaviour(_actionEvaluator));

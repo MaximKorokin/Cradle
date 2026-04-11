@@ -6,14 +6,16 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public readonly float MinIdleTime;
         public readonly float MaxIdleTime;
+        public readonly float WanderRadius;
 
         public Vector2? AnchorPoint { get; set; }
         public Vector2? CurrentPoint { get; set; }
 
-        public WanderBehaviourModule(float minIdleTime, float maxIdleTime)
+        public WanderBehaviourModule(float minIdleTime, float maxIdleTime, float wanderRadius)
         {
             MinIdleTime = minIdleTime;
             MaxIdleTime = maxIdleTime;
+            WanderRadius = wanderRadius;
         }
     }
 
@@ -23,7 +25,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             if (entityDefinition.TryGetModuleDefinition<WanderBehaviourModuleDefinition>(out var wanderModuleDefinition))
             {
-                return new WanderBehaviourModule(wanderModuleDefinition.MinIdleTime, wanderModuleDefinition.MaxIdleTime);
+                return new WanderBehaviourModule(wanderModuleDefinition.MinIdleTime, wanderModuleDefinition.MaxIdleTime, wanderModuleDefinition.WanderRadius);
             }
             return null;
         }

@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
     public enum AiBehaviour
     {
         Wander = 1,
-        Chase = 2,
+        StandStill = 2,
         Action = 4,
     }
 }

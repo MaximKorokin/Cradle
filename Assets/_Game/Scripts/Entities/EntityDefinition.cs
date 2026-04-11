@@ -111,6 +111,7 @@ namespace Assets._Game.Scripts.Entities
     {
         public float MinIdleTime;
         public float MaxIdleTime;
+        public float WanderRadius;
     }
 
     public class LevelingModuleDefinition : EntityModuleDefinition

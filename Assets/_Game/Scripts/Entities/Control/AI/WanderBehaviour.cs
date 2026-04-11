@@ -24,14 +24,14 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             }
 
             var wander = entity.GetModule<WanderBehaviourModule>();
-            if (wander.AnchorPoint == null) return;
+            if (wander.AnchorPoint == null || wander.WanderRadius <= 0) return;
 
             var spatial = entity.GetModule<SpatialModule>();
             var intent = entity.GetModule<IntentModule>();
 
             if (wander.CurrentPoint == null || (wander.CurrentPoint.Value - spatial.Position).sqrMagnitude < StopDistance * StopDistance)
             {
-                wander.CurrentPoint = wander.AnchorPoint + Random.insideUnitCircle * 3f;
+                wander.CurrentPoint = wander.AnchorPoint + Random.insideUnitCircle * wander.WanderRadius;
                 intent.SetMove(new(Vector2.zero));
                 ResetWanderCooldown(wander.MinIdleTime, wander.MaxIdleTime);
                 return;
