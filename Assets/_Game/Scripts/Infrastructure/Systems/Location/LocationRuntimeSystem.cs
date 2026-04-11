@@ -112,13 +112,4 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
             return center + Random.insideUnitCircle * radius;
         }
     }
-
-    public readonly struct LocationLoadedEvent
-    {
-        public readonly string LocationId;
-        public LocationLoadedEvent(string locationId)
-        {
-            LocationId = locationId;
-        }
-    }
 }

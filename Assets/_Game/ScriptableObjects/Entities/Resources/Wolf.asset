@@ -45,7 +45,7 @@ MonoBehaviour:
     - rid: 3412048594719473768
       type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
-        <AiBehaviours>k__BackingField: -1
+        <AiBehaviours>k__BackingField: 5
     - rid: 3412048633303400550
       type: {class: FactionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -78,3 +78,4 @@ MonoBehaviour:
         Enabled: 1
         MinIdleTime: 3
         MaxIdleTime: 8
+        WanderRadius: 3

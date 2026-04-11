@@ -6,14 +6,13 @@ using Assets._Game.Scripts.Shared.Utils;
 using Assets._Game.Scripts.UI.Core;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems
 {
-    public sealed class EntityNameplateUISystem : MonoBehaviour, IDisposable
+    public sealed class EntityNameplateUISystem : UISystemBase
     {
         private IGlobalEventBus _globalEventBus;
         private Camera _camera;
@@ -41,10 +40,12 @@ namespace Assets._Game.Scripts.UI.Systems
             _globalEventBus.Subscribe<EntityDespawningEvent>(OnEntityDespawning);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
+
             _globalEventBus.Unsubscribe<EntitySpawnedEvent>(OnEntitySpawned);
-            _globalEventBus.Subscribe<EntityDespawningEvent>(OnEntityDespawning);
+            _globalEventBus.Unsubscribe<EntityDespawningEvent>(OnEntityDespawning);
         }
 
         private void OnEntitySpawned(EntitySpawnedEvent e)

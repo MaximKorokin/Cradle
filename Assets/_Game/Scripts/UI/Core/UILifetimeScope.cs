@@ -24,10 +24,15 @@ namespace Assets._Game.Scripts.UI.Core
         [Header("MonoBehaviours")]
         [SerializeField]
         private UIRootReferences _rootReferences;
+        [SerializeField]
+        private LocationAnnounceView _locationAnnounceView;
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.RegisterInstance(_entityNameplateView);
             builder.RegisterInstance(_rootReferences);
+
+            builder.RegisterComponent(_locationAnnounceView);
 
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
 
@@ -36,9 +41,15 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<StorageHudData>(Lifetime.Transient);
             builder.Register<CheatsHudData>(Lifetime.Transient);
 
+            RegisterSystems(builder);
             RegisterWindows(builder);
             RegisterHud(builder);
-            RegisterNameplates(builder);
+        }
+
+        private void RegisterSystems(IContainerBuilder builder)
+        {
+            builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
+            builder.RegisterComponentInHierarchy<LocationAnnounceUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -72,12 +83,6 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
-        }
-
-        private void RegisterNameplates(IContainerBuilder builder)
-        {
-            builder.RegisterInstance(_entityNameplateView);
-            builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
         }
     }
 }
