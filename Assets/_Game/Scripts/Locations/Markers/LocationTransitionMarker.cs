@@ -1,8 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Infrastructure.Systems;
-using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Shared.Unity;
+using Assets._Game.Scripts.UI.Systems;
 using UnityEngine;
 using VContainer;
 
@@ -32,6 +31,7 @@ namespace Assets._Game.Scripts.Locations.Markers
         private void Awake()
         {
             _transitionTrigger.OnTriggerEntered += OnTriggerEntered;
+            _transitionTrigger.OnTriggerExited += OnTriggerExited;
         }
 
         private void OnTriggerEntered(Collider2D collider)
@@ -39,7 +39,15 @@ namespace Assets._Game.Scripts.Locations.Markers
             if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
                 return;
 
-            _globalEventBus.Publish(new LocationTransitionRequest(_location.Id, _targetEntranceId));
+            _globalEventBus.Publish(new LocationTransitionViewRequest(_location.Id, _targetEntranceId, true));
+        }
+
+        private void OnTriggerExited(Collider2D collider)
+        {
+            if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
+                return;
+
+            _globalEventBus.Publish(new LocationTransitionViewRequest(_location.Id, _targetEntranceId, false));
         }
     }
 }

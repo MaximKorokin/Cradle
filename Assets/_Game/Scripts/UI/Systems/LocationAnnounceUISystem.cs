@@ -8,18 +8,18 @@ namespace Assets._Game.Scripts.UI.Systems
     public sealed class LocationAnnounceUISystem : UISystemBase
     {
         private IGlobalEventBus _globalEventBus;
-        private LocationAnnounceView _locationAnnounceView;
         private LocationCatalog _locationCatalog;
+        private LocationAnnounceView _locationAnnounceView;
 
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
-            LocationAnnounceView locationAnnounceView,
-            LocationCatalog locationCatalog)
+            LocationCatalog locationCatalog,
+            LocationAnnounceView locationAnnounceView)
         {
             _globalEventBus = globalEventBus;
-            _locationAnnounceView = locationAnnounceView;
             _locationCatalog = locationCatalog;
+            _locationAnnounceView = locationAnnounceView;
 
             _globalEventBus.Subscribe<LocationChangedEvent>(OnLocationChanged);
         }

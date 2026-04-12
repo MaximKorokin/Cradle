@@ -26,6 +26,8 @@ namespace Assets._Game.Scripts.UI.Core
         private UIRootReferences _rootReferences;
         [SerializeField]
         private LocationAnnounceView _locationAnnounceView;
+        [SerializeField]
+        private LocationTransitionView _locationTransitionView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -33,6 +35,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterInstance(_rootReferences);
 
             builder.RegisterComponent(_locationAnnounceView);
+            builder.RegisterComponent(_locationTransitionView);
 
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
 
@@ -50,6 +53,7 @@ namespace Assets._Game.Scripts.UI.Core
         {
             builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
             builder.RegisterComponentInHierarchy<LocationAnnounceUISystem>();
+            builder.RegisterComponentInHierarchy<LocationTransitionUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)

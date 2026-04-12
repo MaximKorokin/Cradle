@@ -7,10 +7,16 @@ namespace Assets._Game.Scripts.Shared.Unity
     public sealed class Trigger2D : MonoBehaviour
     {
         public event Action<Collider2D> OnTriggerEntered;
+        public event Action<Collider2D> OnTriggerExited;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             OnTriggerEntered?.Invoke(other);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            OnTriggerExited?.Invoke(other);
         }
     }
 }
