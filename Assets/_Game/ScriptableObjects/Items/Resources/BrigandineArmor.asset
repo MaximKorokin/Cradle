@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: Shirt
+  m_Name: BrigandineArmor
   m_EditorClassIdentifier: 
-  _id: fdc995e972144d2faf6bde763adf4e12
-  <Name>k__BackingField: Shirt
-  <Icon>k__BackingField: {fileID: -564361632879031603, guid: 21b539ab1d3e29d40af25ebaff60cb2f, type: 3}
-  <Sprite>k__BackingField: {fileID: -4628747989415327827, guid: a1a087c604dd2314a92ccefa47553a58, type: 3}
+  _id: 46ee87c9a8914802bdcdbd893eece3ad
+  <Name>k__BackingField: Brigandine Armor
+  <Icon>k__BackingField: {fileID: -1312236867968706146, guid: 8b9bc9e104ad27743997634e5dcbe9c5, type: 3}
+  <Sprite>k__BackingField: {fileID: -6382405390791700388, guid: a1a087c604dd2314a92ccefa47553a58, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 111
   <Traits>k__BackingField:
