@@ -34,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Systems
         private void OnLocationChanged(LocationChangedEvent e)
         {
             var locationDefinition = _locationCatalog.Get(e.LocationId);
-            _locationAnnounceView.Show(locationDefinition.Name);
+            _locationAnnounceView.Show(locationDefinition.DisplayName);
         }
     }
 }

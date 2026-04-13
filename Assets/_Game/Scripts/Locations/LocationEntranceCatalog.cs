@@ -2,7 +2,7 @@
 
 namespace Assets._Game.Scripts.Locations
 {
-    public sealed class LocationCatalog : DefinitionCatalogBase<LocationDefinition>
+    public sealed class LocationEntranceCatalog : DefinitionCatalogBase<LocationEntranceDefinition>
     {
     }
 }

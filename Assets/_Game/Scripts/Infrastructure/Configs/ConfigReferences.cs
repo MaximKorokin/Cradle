@@ -24,5 +24,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public LevelingConfig LevelingConfig { get; private set; }
         [field: SerializeField]
         public LootConfig LootConfig { get; private set; }
+        [field: SerializeField]
+        public LocationConfig LocationConfig { get; private set; }
     }
 }

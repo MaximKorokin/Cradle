@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Locations
     public sealed class LocationDefinition : GuidScriptableObject
     {
         [field: SerializeField]
-        public string Name { get; private set; }
+        public string DisplayName { get; private set; }
 
         [field: SerializeField]
         public string SceneName { get; private set; }

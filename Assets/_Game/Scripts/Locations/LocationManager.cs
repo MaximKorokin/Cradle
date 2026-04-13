@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.Locations
     public interface ILocationContext
     {
         LocationDefinition CurrentLocation { get; }
-        string CurrentEntranceId { get; }
+        LocationEntranceDefinition CurrentEntrance { get; }
         bool IsTransitionInProgress { get; }
     }
 
@@ -23,20 +23,23 @@ namespace Assets._Game.Scripts.Locations
     public sealed class LocationManager : ILocationContext, ILocationService
     {
         private readonly LocationCatalog _locationCatalog;
+        private readonly LocationEntranceCatalog _locationEntranceCatalog;
         private readonly IGlobalEventBus _globalEventBus;
 
         private Scene _currentScene;
         private string _currentLocationId;
 
         public LocationDefinition CurrentLocation { get; private set; }
-        public string CurrentEntranceId { get; private set; }
+        public LocationEntranceDefinition CurrentEntrance { get; private set; }
         public bool IsTransitionInProgress { get; private set; }
 
         public LocationManager(
             LocationCatalog locationCatalog,
+            LocationEntranceCatalog locationEntranceCatalog,
             IGlobalEventBus globalEventBus)
         {
             _locationCatalog = locationCatalog;
+            _locationEntranceCatalog = locationEntranceCatalog;
             _globalEventBus = globalEventBus;
         }
 
@@ -68,6 +71,7 @@ namespace Assets._Game.Scripts.Locations
             try
             {
                 var nextLocation = _locationCatalog.Get(locationId);
+                var nextLocationEntrance = _locationEntranceCatalog.Get(entranceId);
 
                 _globalEventBus.Publish(new LocationChangingEvent(_currentLocationId, locationId));
 
@@ -84,7 +88,7 @@ namespace Assets._Game.Scripts.Locations
                 _currentScene = scene;
                 _currentLocationId = nextLocation.Id;
                 CurrentLocation = nextLocation;
-                CurrentEntranceId = entranceId;
+                CurrentEntrance = nextLocationEntrance;
 
                 _globalEventBus.Publish(new LocationChangedEvent(locationId, entranceId));
             }

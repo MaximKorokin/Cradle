@@ -675,7 +675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1e734ef9aefb5a45941726db03ccf56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EntranceId>k__BackingField: Default
+  <LocationEntranceDefinition>k__BackingField: {fileID: 11400000, guid: ec568c09d05a0294bac28e190c234996, type: 2}
   <SpawnPoint>k__BackingField: {fileID: 1999887667}
 --- !u!1 &2062280575
 GameObject:

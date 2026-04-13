@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1e734ef9aefb5a45941726db03ccf56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EntranceId>k__BackingField: Default
+  <LocationEntranceDefinition>k__BackingField: {fileID: 11400000, guid: e3c66083505112849ba45481e4f58d40, type: 2}
   <SpawnPoint>k__BackingField: {fileID: 277800475}
 --- !u!1 &334939333
 GameObject:
@@ -5874,7 +5874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2067831397
 Transform:
   m_ObjectHideFlags: 0

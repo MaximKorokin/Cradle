@@ -65,6 +65,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<LocationManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<LocationCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<LocationEntranceCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             RegisterConfigs(builder);
             RegisterSystems(builder);
@@ -88,6 +89,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.DespawnConfig);
             builder.RegisterInstance(_configReferences.LevelingConfig);
             builder.RegisterInstance(_configReferences.LootConfig);
+            builder.RegisterInstance(_configReferences.LocationConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)

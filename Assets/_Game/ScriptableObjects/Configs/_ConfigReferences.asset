@@ -21,3 +21,4 @@ MonoBehaviour:
   <DespawnConfig>k__BackingField: {fileID: 11400000, guid: 7b2436c0ab1590c4fbb8c928ab3c0ebe, type: 2}
   <LevelingConfig>k__BackingField: {fileID: 11400000, guid: 2981b2513c4979c46bc8627d6db4d45f, type: 2}
   <LootConfig>k__BackingField: {fileID: 11400000, guid: b79e02c93ce6f18409cdca9641831f72, type: 2}
+  <LocationConfig>k__BackingField: {fileID: 11400000, guid: a202547b8a2378b4c9b3519c1bd39076, type: 2}

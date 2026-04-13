@@ -36,7 +36,7 @@ namespace Assets._Game.Scripts.UI.Systems
             if (request.Show)
             {
                 var locationDescriptor = _locationCatalog.Get(request.TargetLocationId);
-                _locationTransitionView.Show(locationDescriptor.Name, request.TargetLocationId,  request.TargetEntranceId);
+                _locationTransitionView.Show(locationDescriptor.DisplayName, request.TargetLocationId,  request.TargetEntranceId);
             }
             else
             {

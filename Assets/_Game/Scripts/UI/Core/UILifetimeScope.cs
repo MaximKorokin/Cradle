@@ -67,6 +67,7 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
                 new(WindowId.InventoryInventory, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
                 new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
+                new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
 
                 new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<, >)),
 

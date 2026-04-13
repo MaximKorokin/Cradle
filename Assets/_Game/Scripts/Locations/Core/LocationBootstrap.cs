@@ -33,9 +33,9 @@ namespace Assets._Game.Scripts.Locations.Core
         {
             _cameraService.SetConfiner(_locationBordersContext.CameraBorder);
 
-            if (!string.IsNullOrWhiteSpace(_locationContext.CurrentEntranceId))
+            if (_locationContext.CurrentEntrance != null)
             {
-                var entrance = FindEntrance(_locationContext.CurrentEntranceId);
+                var entrance = FindEntrance(_locationContext.CurrentEntrance.Id);
                 MovePlayerToEntrance(entrance);
             }
         }

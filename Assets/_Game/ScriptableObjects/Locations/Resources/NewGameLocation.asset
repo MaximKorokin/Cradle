@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: NewGameLocation
   m_EditorClassIdentifier: 
   _id: aa9d371b1be346168ef77b8eb9505b4f
-  <Name>k__BackingField: Field
+  <DisplayName>k__BackingField: NewGame
   <SceneName>k__BackingField: Loc_NewGame
   <Type>k__BackingField: 2
