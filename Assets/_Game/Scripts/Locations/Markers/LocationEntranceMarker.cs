@@ -5,7 +5,7 @@ namespace Assets._Game.Scripts.Locations.Markers
     public sealed class LocationEntranceMarker : MonoBehaviour
     {
         [field: SerializeField]
-        public string EntranceId { get; private set; }
+        public LocationEntranceDefinition LocationEntranceDefinition { get; private set; }
 
         [field: SerializeField]
         public Transform SpawnPoint { get; private set; }

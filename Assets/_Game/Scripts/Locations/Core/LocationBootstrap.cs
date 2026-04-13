@@ -45,7 +45,7 @@ namespace Assets._Game.Scripts.Locations.Core
             if (_locationMarkersContext == null)
                 throw new InvalidOperationException($"Scene '{_locationContext.CurrentLocation.name}' does not contain a {nameof(LocationMarkersContext)}.");
 
-            var entrance = _locationMarkersContext.LocationEntranceMarkers.FirstOrDefault(e => e.EntranceId == entranceId);
+            var entrance = _locationMarkersContext.LocationEntranceMarkers.FirstOrDefault(e => e.LocationEntranceDefinition.Id == entranceId);
 
             if (entrance == null)
                 throw new InvalidOperationException($"Entrance '{entranceId}' was not found in scene '{_locationContext.CurrentLocation.name}'.");
