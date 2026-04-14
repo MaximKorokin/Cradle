@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VContainer.Unity;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class SystemsRunner : IStartable, IDisposable
+    public abstract class SystemRunnerBase : IStartable, IDisposable
     {
         private readonly DispatcherService _dispatcherService;
         private readonly IReadOnlyList<IStartSystem> _startSystems;
         private readonly IReadOnlyList<ITickSystem> _tickSystems;
         private readonly IReadOnlyList<IFixedTickSystem> _fixedTickSystems;
 
-        public SystemsRunner(
+        public SystemRunnerBase(
             DispatcherService dispatcherService,
-            IReadOnlyList<ISystem> systems, // for auto initialization of systems in the container
-            IReadOnlyList<IStartSystem> startSystems,
-            IReadOnlyList<ITickSystem> tickSystems,
-            IReadOnlyList<IFixedTickSystem> fixedTickSystems)
+            IReadOnlyList<ISystem> systems)
         {
             _dispatcherService = dispatcherService;
-            _startSystems = startSystems;
-            _tickSystems = tickSystems;
-            _fixedTickSystems = fixedTickSystems;
+            _startSystems = systems.OfType<IStartSystem>().ToArray();
+            _tickSystems = systems.OfType<ITickSystem>().ToArray();
+            _fixedTickSystems = systems.OfType<IFixedTickSystem>().ToArray();
         }
 
         public void Start()

@@ -94,7 +94,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterSystems(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<SystemsRunner>();
+            builder.RegisterEntryPoint<SystemRunner>();
 
             builder.Register<PlayerSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LocomotionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
