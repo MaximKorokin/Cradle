@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fb3b5a04a988f34cb0d4cd6797a2845, type: 3}
-  m_Name: CampLocation
+  m_Name: DriedMeadowsLocation
   m_EditorClassIdentifier: 
-  _id: 4578715ea62040ad9ad6b46799885fe0
-  <DisplayName>k__BackingField: Camp
-  <SceneName>k__BackingField: Loc_Camp
-  <Type>k__BackingField: 1
+  _id: aa9d371b1be346168ef77b8eb9505b4f
+  <DisplayName>k__BackingField: Dried Meadows
+  <SceneName>k__BackingField: Loc_DriedMeadows
+  <Type>k__BackingField: 2

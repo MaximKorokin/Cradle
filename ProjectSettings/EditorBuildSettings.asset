@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/UIRoot.unity
     guid: be2de9ff549fcc24a80b02b13bbfa110
   - enabled: 1
-    path: Assets/_Game/Scenes/Locations/Loc_NewGame.unity
+    path: Assets/_Game/Scenes/Locations/Loc_DriedMeadows.unity
     guid: 15a17d6bac975ef4a800f53bb1474949
   - enabled: 1
     path: Assets/_Game/Scenes/Locations/Loc_Camp.unity

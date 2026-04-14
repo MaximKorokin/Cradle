@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53e8a02aeaed91945aff3d382c229199, type: 3}
-  m_Name: NewGameLocationEntrance
+  m_Script: {fileID: 11500000, guid: 5fb3b5a04a988f34cb0d4cd6797a2845, type: 3}
+  m_Name: PlateauOfAshLocation
   m_EditorClassIdentifier: 
-  _id: 8a3f0b40a3ab47588dbbe68c45286172
-  <DisplayName>k__BackingField: Main
+  _id: 4578715ea62040ad9ad6b46799885fe0
+  <DisplayName>k__BackingField: Plateau of Ash
+  <SceneName>k__BackingField: Loc_Camp
+  <Type>k__BackingField: 1

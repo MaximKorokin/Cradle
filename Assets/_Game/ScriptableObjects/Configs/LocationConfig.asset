@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5122852a6a923694d900d8a2eeda20dd, type: 3}
   m_Name: LocationConfig
   m_EditorClassIdentifier: 
-  <Locations>k__BackingField: []
+  <Locations>k__BackingField:
+  - <LocationDefinition>k__BackingField: {fileID: 11400000, guid: 4b198a041011eeb478bc9174b6ec1792, type: 2}
+    <EntranceDefinition>k__BackingField: {fileID: 11400000, guid: e3c66083505112849ba45481e4f58d40, type: 2}
   <LocationRequirements>k__BackingField:
   - Location:
       <LocationDefinition>k__BackingField: {fileID: 11400000, guid: 121a29130d1cc5548b781e84a3e38098, type: 2}

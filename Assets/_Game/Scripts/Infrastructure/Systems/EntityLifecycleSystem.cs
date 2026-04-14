@@ -239,7 +239,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _playerContext.SetPlayer(entity);
 
             // Load the location
-            if (_gameSave?.PlayerLocationSave == null)
+            if (_gameSave?.PlayerLocationSave == null || string.IsNullOrWhiteSpace(_gameSave?.PlayerLocationSave.LocationId))
             {
                 _globalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.Location.Id, _newGameDefinition.LocationEntrance.Id));
             }
