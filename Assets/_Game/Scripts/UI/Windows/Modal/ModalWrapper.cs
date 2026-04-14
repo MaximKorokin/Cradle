@@ -12,6 +12,8 @@ namespace Assets._Game.Scripts.UI.Windows.Modal
 
         private WindowManager _windowManager;
 
+        private UIWindowBase _window;
+
         [Inject]
         private void Construct(WindowManager windowManager)
         {
@@ -22,12 +24,13 @@ namespace Assets._Game.Scripts.UI.Windows.Modal
 
         public void SetWindow(UIWindowBase window)
         {
+            _window = window;
             window.transform.SetParent(_windowParent, false);
         }
 
         public void Close()
         {
-            _windowManager.CloseTopWindow();
+            _windowManager.CloseWindow(_window);
         }
     }
 }

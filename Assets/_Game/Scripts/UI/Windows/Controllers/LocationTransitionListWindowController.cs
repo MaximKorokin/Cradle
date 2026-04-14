@@ -42,7 +42,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnTransitionButtonClicked(LocationTransitionData transitionData)
         {
-            _windowManager.CloseTopWindow();
+            _windowManager.CloseWindow(_window);
             _globalEventBus.Publish(new LocationTransitionRequest(transitionData.LocationDefinition.Id, transitionData.EntranceDefinition.Id));
         }
 

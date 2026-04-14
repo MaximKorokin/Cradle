@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows
 {
     public class WindowManager
     {
-        private readonly Stack<(UIWindowBase Window, IDisposable Controller)> _windowStack = new();
+        private readonly List<(UIWindowBase Window, IDisposable Controller)> _windowStack = new();
 
         private readonly RectTransform _windowsRoot;
         private readonly RectTransform _modalsRoot;
@@ -77,7 +77,7 @@ namespace Assets._Game.Scripts.UI.Windows
             instantiatedCallback?.Invoke(window, controller);
             
             // push window and controller to stack that will be used to destroy everything correctly
-            _windowStack.Push((window, controller as IDisposable));
+            _windowStack.Add((window, controller as IDisposable));
 
             // initialize window
             window.OnShow();
@@ -92,10 +92,11 @@ namespace Assets._Game.Scripts.UI.Windows
             return window;
         }
 
-        public void CloseTopWindow()
+        private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller) element)
         {
-            if (_windowStack.Count == 0) return;
-            var (window, controller) = _windowStack.Pop();
+            _windowStack.Remove(element);
+
+            var (window, controller) = element;
             window.OnHide();
             if (window.IsModal)
             {
@@ -110,10 +111,25 @@ namespace Assets._Game.Scripts.UI.Windows
             controller.Dispose();
         }
 
-        // todo: implement CloseWindow method
+        public void CloseTopWindow()
+        {
+            if (_windowStack.Count == 0) return;
+
+            var lastElement = _windowStack.Last();
+
+            CloseWindowInternal(lastElement);
+        }
+
         public void CloseWindow(UIWindowBase window)
         {
-            throw new NotImplementedException();
+            var element = _windowStack.FirstOrDefault(e => e.Window == window);
+            if (element == default)
+            {
+                SLog.Warn($"Trying to close window {window} wih name {window.name} that is not tracked inside WinowManager");
+                return;
+            }
+
+            CloseWindowInternal(element);
         }
     }
 }

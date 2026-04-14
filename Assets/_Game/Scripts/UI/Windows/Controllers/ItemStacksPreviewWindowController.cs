@@ -77,7 +77,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             // Primary item disappeared, nothing to preview
             if (primaryItem == null)
             {
-                _windowManager.CloseTopWindow();
+                _windowManager.CloseWindow(_window);
                 return;
             }
 
@@ -143,7 +143,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void ProcessAction(ItemStackActionType actionType)
         {
-            _windowManager.CloseTopWindow();
+            _windowManager.CloseWindow(_window);
             var item = _primaryItemContainer.Get(_primaryContainerSlot);
             var primarySlot = ContainerSlotConverter.ToInt64(_primaryContainerSlot);
 
