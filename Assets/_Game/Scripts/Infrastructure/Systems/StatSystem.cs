@@ -21,7 +21,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
-        private readonly IGlobalEventBus _globalEventBus;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -30,27 +29,20 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             );
 
         public StatSystem(
+            IGlobalEventBus globalEventBus,
             EntityRepository repository,
             DerivedStatsCalculator derivedStatsCalculator,
-            StatsConfig statsConfig,
-            IGlobalEventBus globalEventBus) : base(repository)
+            StatsConfig statsConfig) : base(globalEventBus, repository)
         {
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
-            _globalEventBus = globalEventBus;
 
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
 
-            _globalEventBus.Subscribe<DamageAppliedEvent>(OnDamageApplied);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
+            TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
         }
 
         public void Tick(float delta)
@@ -124,7 +116,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!stateModule.Has(RestrictionState.Dead) && e.Target.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
             {
                 stateModule.Add(RestrictionState.Dead);
-                _globalEventBus.Publish(new EntityDiedEvent(e.Target, e.Source));
+                GlobalEventBus.Publish(new EntityDiedEvent(e.Target, e.Source));
             }
         }
 

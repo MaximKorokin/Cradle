@@ -12,34 +12,23 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class EntityLifecycleSystem : EntitySystemBase, ITickSystem
     {
-        private readonly IGlobalEventBus _globalEventBus;
         private readonly EntityFactory _entityFactory;
         private readonly EntityViewService _entityViewService;
 
         protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(DespawnModule) });
 
         public EntityLifecycleSystem(
-            EntityRepository repository,
             IGlobalEventBus globalEventBus,
+            EntityRepository repository,
             EntityFactory entityFactory,
-            EntityViewService entityViewService) : base(repository)
+            EntityViewService entityViewService) : base(globalEventBus, repository)
         {
-            _globalEventBus = globalEventBus;
             _entityFactory = entityFactory;
             _entityViewService = entityViewService;
 
-            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
-            _globalEventBus.Subscribe<SpawnEntityRequest>(OnEntitySpawnRequested);
-            _globalEventBus.Subscribe<DespawnEntityRequest>(OnEntityDespawnRequested);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
-            _globalEventBus.Unsubscribe<SpawnEntityRequest>(OnEntitySpawnRequested);
-            _globalEventBus.Unsubscribe<DespawnEntityRequest>(OnEntityDespawnRequested);
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<SpawnEntityRequest>(OnEntitySpawnRequested);
+            TrackGlobalEvent<DespawnEntityRequest>(OnEntityDespawnRequested);
         }
 
         public void Tick(float delta)
@@ -51,7 +40,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (entity.GetModule<DespawnModule>().IsExpired)
             {
-                _globalEventBus.Publish(new DespawnEntityRequest(entity));
+                GlobalEventBus.Publish(new DespawnEntityRequest(entity));
             }
         }
 
@@ -92,12 +81,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 }
             }
 
-            _globalEventBus.Publish(new EntitySpawnedEvent(entity));
+            GlobalEventBus.Publish(new EntitySpawnedEvent(entity));
         }
 
         private void OnEntityDespawnRequested(DespawnEntityRequest request)
         {
-            _globalEventBus.Publish(new EntityDespawningEvent(request.Entity));
+            GlobalEventBus.Publish(new EntityDespawningEvent(request.Entity));
 
             _entityViewService.DespawnEntityView(request.Entity);
             // For now entity does not exist if it does not have view

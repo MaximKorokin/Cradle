@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Interactions;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
@@ -18,7 +19,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled);
 
-        public InteractionSystem(EntityRepository repository, IObjectResolver resolver) : base(repository)
+        public InteractionSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository,
+            IObjectResolver resolver) : base(globalEventBus, repository)
         {
             _resolver = resolver;
 

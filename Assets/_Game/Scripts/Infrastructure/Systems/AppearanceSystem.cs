@@ -14,26 +14,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class AppearanceSystem : EntitySystemBase, ITickSystem
     {
-        private readonly IGlobalEventBus _globalEventBus;
-
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled,
                 new[] { typeof(AppearanceModule), typeof(StatModule) }
             );
 
-        public AppearanceSystem(EntityRepository repository, IGlobalEventBus globalEventBus) : base(repository)
+        public AppearanceSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository) : base(globalEventBus, repository)
         {
-            _globalEventBus = globalEventBus;
-            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
         }
 
         protected override void OnEntityAdded(Entity entity)

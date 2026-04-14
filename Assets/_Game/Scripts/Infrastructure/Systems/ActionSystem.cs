@@ -5,6 +5,7 @@ using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
@@ -28,7 +29,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 new[] { typeof(ActionModule), typeof(StatModule), typeof(IntentModule) }
             );
 
-        public ActionSystem(EntityRepository entityRepository, IObjectResolver resolver) : base(entityRepository)
+        public ActionSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository,
+            IObjectResolver resolver) : base(globalEventBus, entityRepository)
         {
             _resolver = resolver;
 

@@ -7,7 +7,6 @@ namespace Assets._Game.Scripts.UI.Systems
 {
     public sealed class LocationAnnounceUISystem : UISystemBase
     {
-        private IGlobalEventBus _globalEventBus;
         private LocationCatalog _locationCatalog;
         private LocationAnnounceView _locationAnnounceView;
 
@@ -17,18 +16,12 @@ namespace Assets._Game.Scripts.UI.Systems
             LocationCatalog locationCatalog,
             LocationAnnounceView locationAnnounceView)
         {
-            _globalEventBus = globalEventBus;
+            BaseConstruct(globalEventBus);
+
             _locationCatalog = locationCatalog;
             _locationAnnounceView = locationAnnounceView;
 
-            _globalEventBus.Subscribe<LocationChangedEvent>(OnLocationChanged);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _globalEventBus.Unsubscribe<LocationChangedEvent>(OnLocationChanged);
+            TrackGlobalEvent<LocationChangedEvent>(OnLocationChanged);
         }
 
         private void OnLocationChanged(LocationChangedEvent e)

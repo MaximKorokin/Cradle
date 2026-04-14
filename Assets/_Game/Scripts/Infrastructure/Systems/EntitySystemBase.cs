@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         protected abstract EntityQuery EntityQuery { get; }
 
-        protected EntitySystemBase(EntityRepository repository)
+        protected EntitySystemBase(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository) : base(globalEventBus)
         {
             EntityRepository = repository;
 

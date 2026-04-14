@@ -13,7 +13,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class ControlSystem : EntitySystemBase, ITickSystem
     {
         private readonly IObjectResolver _resolver;
-        private readonly IGlobalEventBus _globalEventBus;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -21,21 +20,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 new[] { typeof(ControlModule) }
             );
 
-        public ControlSystem(EntityRepository repository, IObjectResolver resolver, IGlobalEventBus globalEventBus) : base(repository)
+        public ControlSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository, IObjectResolver resolver) : base(globalEventBus, repository)
         {
             _resolver = resolver;
-            _globalEventBus = globalEventBus;
 
-            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
 
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
         }
 
         protected override void OnEntityAdded(Entity entity)

@@ -11,23 +11,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class AttackModifierSystem : EntitySystemBase
     {
-        private readonly IGlobalEventBus _globalEventBus;
-
         protected override EntityQuery EntityQuery => new(RestrictionState.Disabled);
 
-        public AttackModifierSystem(EntityRepository repository, IGlobalEventBus globalEventBus) : base(repository)
+        public AttackModifierSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository) : base(globalEventBus, repository)
         {
-            _globalEventBus = globalEventBus;
-
-            _globalEventBus.Subscribe<DamageAppliedEvent>(OnDamageApplied);
+            TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _globalEventBus.Unsubscribe<DamageAppliedEvent>(OnDamageApplied);
         }
 
         private void OnDamageApplied(DamageAppliedEvent e)
@@ -52,7 +43,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     case AttackModifierType.MultipliedRepeatDamage:
                         var extraDamage = e.Damage * modifier.Value;
                         targetStatModule.AddBase(StatId.HpCurrent, -extraDamage);
-                        _globalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
+                        GlobalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
                         break;
                 }
             }

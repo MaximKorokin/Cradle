@@ -9,27 +9,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class LootSystem : SystemBase
     {
         private readonly LootConfig _lootConfig;
-        private readonly IGlobalEventBus _globalEventBus;
         private readonly DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
 
         public LootSystem(
-            LootConfig lootConfig,
             IGlobalEventBus globalEventBus,
-            DefaultEntityDefinitionReferences defaultEntityDefinitionReferences)
+            LootConfig lootConfig,
+            DefaultEntityDefinitionReferences defaultEntityDefinitionReferences) : base(globalEventBus)
         {
             _lootConfig = lootConfig;
-            _globalEventBus = globalEventBus;
             _defaultEntityDefinitionReferences = defaultEntityDefinitionReferences;
 
-            _globalEventBus.Subscribe<LootDropRequestedEvent>(OnLootDropRequested);
-            _globalEventBus.Subscribe<LootItemDropRequestedEvent>(OnLootItemDropRequested);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<LootDropRequestedEvent>(OnLootDropRequested);
-            _globalEventBus.Unsubscribe<LootItemDropRequestedEvent>(OnLootItemDropRequested);
+            TrackGlobalEvent<LootDropRequestedEvent>(OnLootDropRequested);
+            TrackGlobalEvent<LootItemDropRequestedEvent>(OnLootItemDropRequested);
         }
 
         private void OnLootDropRequested(LootDropRequestedEvent e)
@@ -66,7 +57,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void CreateLoot(Vector2 position, ItemDefinition itemDefinition, int amount)
         {
-            _globalEventBus.Publish(new SpawnEntityRequest(
+            GlobalEventBus.Publish(new SpawnEntityRequest(
                 _defaultEntityDefinitionReferences.LootItem,
                 position,
                 new IEntitySpawnInitializer[] {

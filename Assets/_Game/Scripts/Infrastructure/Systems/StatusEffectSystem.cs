@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Configs;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
@@ -17,7 +18,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(StatusEffectModule) });
 
-        public StatusEffectSystem(EntityRepository repository, StatusEffectsConfig statusEffectsConfig) : base(repository)
+        public StatusEffectSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository,
+            StatusEffectsConfig statusEffectsConfig) : base(globalEventBus, repository)
         {
             _tickCooldownCounter = new(1 / statusEffectsConfig.TickRate);
 

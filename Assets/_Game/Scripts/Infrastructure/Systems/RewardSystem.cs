@@ -6,32 +6,25 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public class RewardSystem : SystemBase
     {
-        private readonly IGlobalEventBus _globalEventBus;
-
-        public RewardSystem(IGlobalEventBus globalEventBus)
+        public RewardSystem(IGlobalEventBus globalEventBus) : base(globalEventBus)
         {
-            _globalEventBus = globalEventBus;
-
-            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
         }
 
         private void OnEntityDied(EntityDiedEvent e)
         {
+            if (e.Victim.TryGetModule(out RestrictionStateModule restrictionStateModule) && restrictionStateModule.Has(RestrictionState.Disabled))
+                return;
+
             if (!e.Victim.TryGetModule(out RewardModule rewardModule))
                 return;
 
-            _globalEventBus.Publish(new AddExperienceRequestEvent(e.Killer, rewardModule.Experience));
+            GlobalEventBus.Publish(new AddExperienceRequestEvent(e.Killer, rewardModule.Experience));
 
             if (!e.Victim.TryGetModule(out SpatialModule spatial))
                 return;
 
-            _globalEventBus.Publish(new LootDropRequestedEvent(spatial.Position, rewardModule.LootTable));
+            GlobalEventBus.Publish(new LootDropRequestedEvent(spatial.Position, rewardModule.LootTable));
         }
     }
 

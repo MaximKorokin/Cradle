@@ -7,22 +7,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
 {
     public sealed class LocationTransitionSystem : SystemBase
     {
-        private readonly IGlobalEventBus _globalEventBus;
         private readonly LocationManager _locationManager;
 
-        public LocationTransitionSystem(IGlobalEventBus globalEventBus, LocationManager locationManager)
+        public LocationTransitionSystem(
+            IGlobalEventBus globalEventBus,
+            LocationManager locationManager) : base(globalEventBus)
         {
-            _globalEventBus = globalEventBus;
             _locationManager = locationManager;
 
-            _globalEventBus.Subscribe<LocationTransitionRequest>(OnLocationTransitionRequested);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _globalEventBus.Unsubscribe<LocationTransitionRequest>(OnLocationTransitionRequested);
+            TrackGlobalEvent<LocationTransitionRequest>(OnLocationTransitionRequested);
         }
 
         private void OnLocationTransitionRequested(LocationTransitionRequest request)

@@ -5,20 +5,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public class PlayerSystem : SystemBase
     {
-        private readonly IGlobalEventBus _globalEventBus;
         private readonly PlayerContext _playerContext;
 
-        public PlayerSystem(PlayerContext playerContext, IGlobalEventBus globalEventBus)
+        public PlayerSystem(
+            IGlobalEventBus globalEventBus,
+            PlayerContext playerContext) : base(globalEventBus)
         {
-            _globalEventBus = globalEventBus;
             _playerContext = playerContext;
-            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDiedEvent);
-        }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDiedEvent);
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDiedEvent);
         }
 
         private void OnEntityDiedEvent(EntityDiedEvent e)

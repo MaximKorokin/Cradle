@@ -10,7 +10,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class LevelingSystem : EntitySystemBase
     {
-        private readonly IGlobalEventBus _globalEventBus;
         private readonly LevelingConfig _levelingConfig;
 
         protected override EntityQuery EntityQuery { get; } =
@@ -19,19 +18,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 new[] { typeof(StatModule), typeof(LevelingModule) }
             );
 
-        public LevelingSystem(EntityRepository repository, IGlobalEventBus globalEventBus, LevelingConfig levelingConfig) : base(repository)
+        public LevelingSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository,
+            LevelingConfig levelingConfig) : base(globalEventBus, repository)
         {
-            _globalEventBus = globalEventBus;
             _levelingConfig = levelingConfig;
 
-            _globalEventBus.Subscribe<AddExperienceRequestEvent>(OnAddExperienceRequested);
+            TrackGlobalEvent<AddExperienceRequestEvent>(OnAddExperienceRequested);
             TrackEntityEvent<LevelChangedEvent>(OnLevelChanged);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _globalEventBus.Unsubscribe<AddExperienceRequestEvent>(OnAddExperienceRequested);
         }
 
         private void OnLevelChanged(Entity entity, LevelChangedEvent levelChangedEvent)

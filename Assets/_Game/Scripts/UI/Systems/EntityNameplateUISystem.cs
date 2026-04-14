@@ -14,7 +14,6 @@ namespace Assets._Game.Scripts.UI.Systems
 {
     public sealed class EntityNameplateUISystem : UISystemBase
     {
-        private IGlobalEventBus _globalEventBus;
         private Camera _camera;
         private RectTransform _root;
         private EntityNameplateView _entityNameplateViewPrefab;
@@ -30,22 +29,15 @@ namespace Assets._Game.Scripts.UI.Systems
             EntityNameplateView entityNameplateViewPrefab,
             EntityViewService entityViewService)
         {
-            _globalEventBus = globalEventBus;
+            BaseConstruct(globalEventBus);
+
             _camera = cameraService.Camera;
             _root = roots.NameplatesRoot;
             _entityNameplateViewPrefab = entityNameplateViewPrefab;
             _entityViewService = entityViewService;
 
-            _globalEventBus.Subscribe<EntitySpawnedEvent>(OnEntitySpawned);
-            _globalEventBus.Subscribe<EntityDespawningEvent>(OnEntityDespawning);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _globalEventBus.Unsubscribe<EntitySpawnedEvent>(OnEntitySpawned);
-            _globalEventBus.Unsubscribe<EntityDespawningEvent>(OnEntityDespawning);
+            TrackGlobalEvent<EntitySpawnedEvent>(OnEntitySpawned);
+            TrackGlobalEvent<EntityDespawningEvent>(OnEntityDespawning);
         }
 
         private void OnEntitySpawned(EntitySpawnedEvent e)

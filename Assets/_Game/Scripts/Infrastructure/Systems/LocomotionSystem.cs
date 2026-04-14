@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
@@ -16,7 +17,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 new[] { typeof(SpatialModule), typeof(KinematicsModule), typeof(AppearanceModule), typeof(IntentModule), typeof(StatModule) }
             );
 
-        public LocomotionSystem(EntityRepository entityRepository) : base(entityRepository)
+        public LocomotionSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository) : base(globalEventBus, entityRepository)
         {
         }
 

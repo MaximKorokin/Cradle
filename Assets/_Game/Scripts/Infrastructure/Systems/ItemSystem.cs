@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
@@ -12,7 +13,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         protected override EntityQuery EntityQuery { get; } = new (RestrictionState.Disabled);
 
-        public ItemSystem(EntityRepository repository, ItemCommandHandler itemCommandHandler) : base(repository)
+        public ItemSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository,
+            ItemCommandHandler itemCommandHandler) : base(globalEventBus, repository)
         {
             _itemCommandHandler = itemCommandHandler;
 

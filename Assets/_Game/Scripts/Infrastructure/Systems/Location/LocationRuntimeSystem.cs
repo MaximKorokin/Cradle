@@ -11,37 +11,30 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
 {
     public sealed class LocationRuntimeSystem : SystemBase, ILocationSystem, IStartSystem, ITickSystem
     {
-        private readonly IGlobalEventBus _globalEventBus;
         private readonly EntityRepository _entityRepository;
 
         private readonly IReadOnlyList<EntitySpawnSpotRuntime> _entitySpawnSpots;
 
-        public LocationRuntimeSystem(IGlobalEventBus globalEventBus, IReadOnlyList<EntitySpawnSpotRuntime> entitySpawnSpots, EntityRepository entityRepository)
+        public LocationRuntimeSystem(
+            IGlobalEventBus globalEventBus,
+            IReadOnlyList<EntitySpawnSpotRuntime> entitySpawnSpots,
+            EntityRepository entityRepository) : base(globalEventBus)
         {
-            _globalEventBus = globalEventBus;
             _entitySpawnSpots = entitySpawnSpots;
             _entityRepository = entityRepository;
 
-            _globalEventBus.Subscribe<EntityDiedEvent>(OnEntityDied);
-            _globalEventBus.Subscribe<LocationChangingEvent>(OnLocationChangingEvent);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _globalEventBus.Unsubscribe<EntityDiedEvent>(OnEntityDied);
-            _globalEventBus.Unsubscribe<LocationChangingEvent>(OnLocationChangingEvent);
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<LocationChangingEvent>(OnLocationChangingEvent);
         }
 
         public void Start()
         {
-            IterateSpots(_entitySpawnSpots, _globalEventBus);
+            IterateSpots(_entitySpawnSpots, GlobalEventBus);
         }
 
         public void Tick(float delta)
         {
-            IterateSpots(_entitySpawnSpots, _globalEventBus);
+            IterateSpots(_entitySpawnSpots, GlobalEventBus);
         }
 
         private void OnEntityDied(EntityDiedEvent e)
@@ -83,7 +76,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
             if (entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule))
                 restrictionStateModule.Add(RestrictionState.Disabled);
 
-            _globalEventBus.Publish(new DespawnEntityRequest(entity));
+            GlobalEventBus.Publish(new DespawnEntityRequest(entity));
         }
 
         private static void IterateSpots(IReadOnlyList<EntitySpawnSpotRuntime> spots, IGlobalEventBus globalEventBus)

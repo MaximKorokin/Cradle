@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using System;
 using UnityEngine;
@@ -10,7 +11,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         protected override EntityQuery EntityQuery { get; } = new(requiredModules: new Type[] { typeof(SpatialModule) });
 
-        public EntityPlacementSystem(EntityRepository repository) : base(repository)
+        public EntityPlacementSystem(
+            IGlobalEventBus globalEventBus,
+            EntityRepository repository) : base(globalEventBus, repository)
         {
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
         }
