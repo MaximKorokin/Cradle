@@ -13,6 +13,8 @@ namespace Assets._Game.Scripts.Items.Traits
         public override bool CanTrigger(in ItemTriggerContext context)
         {
             if (!base.CanTrigger(context)) return false;
+
+            // OnUse requires additional checks
             if (context.Trigger != ItemTrigger.OnUse) return true;
             if (context.Payload is not ItemUseSettings itemUseSettings) return true;
             if (itemUseSettings.OverrideStatusEffects) return true;

@@ -93,6 +93,14 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 }
             }
         }
+
+        public void ClearStatusEffects()
+        {
+            foreach (var stack in _statusEffects.Values)
+            {
+                stack.Clear();
+            }
+        }
     }
 
     public struct StatusEffectChange

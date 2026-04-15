@@ -1,13 +1,14 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.Shared.Utils;
 using System;
-using Assets._Game.Scripts.Shared.Extensions;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Commands
@@ -209,13 +210,22 @@ namespace Assets._Game.Scripts.Items.Commands
                 item = container.Get(ContainerSlotConverter.ToInventorySlot(c.Slot));
             }
 
-            // First, check if the item exists and has the Usable trait.
+            // Check if the item exists and has the Usable trait.
             if (item == null || !item.Value.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
                 return false;
 
             // Check cooldown and reset it if the item can be used.
             if (usableTrait.Cooldown <= 0 || item.Value.InstanceData is not CooldownInstanceData cooldownTrait || !cooldownTrait.CooldownCounter.IsOver())
                 return false;
+
+            // Check for allowed and limiting RestrictionState
+            if (entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule))
+            {
+                if (usableTrait.LimitingRestrictionState != RestrictionState.None &&
+                    restrictionStateModule.Has(usableTrait.LimitingRestrictionState)) return false;
+                if (usableTrait.RequiredRestrictionState != RestrictionState.None &&
+                    !restrictionStateModule.Has(usableTrait.RequiredRestrictionState)) return false;
+            }
 
             // Check if all functional traits allow triggering with the given context.
             var itemUseSettings = ResolveItemUseSettings(entity, c.IsManual);

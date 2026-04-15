@@ -27,6 +27,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackEntityEvent<ActionCompletedEvent>(OnActionCompleted);
             TrackEntityEvent<ItemUseStartedEvent>(OnItemUseStarted);
+
+            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
         }
 
         public void Tick(float delta)
@@ -79,6 +81,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 // No need to check if trait can trigger, as it was already checked in ItemSystem when starting item use.
                 statusEffectModule.StatusEffects.AddStatusEffect(new(trait.StatusEffect));
             }
+        }
+
+        private void OnEntityDied(EntityDiedEvent e)
+        {
+            if (!e.Victim.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+
+            statusEffectModule.StatusEffects.ClearStatusEffects();
         }
     }
 }
