@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.UI.Views
         private void OnDataChanged()
         {
             _nameText.text = data.Name;
-            _healthFillBar.SetFillRatio(data.HealthPercent);
+            _healthFillBar.SetFillRatio(data.HealthRatio);
         }
     }
 }

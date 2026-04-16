@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Stats;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Steps
 {
@@ -16,9 +15,9 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         {
             if (_done) return StepStatus.Completed;
 
-            if (context.Target.TryGetModule(out StatModule stats))
+            if (context.Target.TryGetModule(out HealthModule healthModule))
             {
-                stats.AddBase(StatId.HpCurrent, _amount);
+                healthModule.Heal(_amount);
             }
 
             _done = true;

@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled | RestrictionState.Dead,
-                new[] { typeof(StatModule), typeof(RestrictionStateModule), }
+                new[] { typeof(StatModule), typeof(HealthModule), typeof(RestrictionStateModule), }
             );
 
         public StatSystem(
@@ -113,7 +113,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void OnDamageApplied(DamageAppliedEvent e)
         {
             var stateModule = e.Target.GetModule<RestrictionStateModule>();
-            if (!stateModule.Has(RestrictionState.Dead) && e.Target.GetModule<StatModule>().Stats.Get(StatId.HpCurrent) <= 0)
+            if (!stateModule.Has(RestrictionState.Dead) && e.Target.GetModule<HealthModule>().CurrentHealth <= 0)
             {
                 stateModule.Add(RestrictionState.Dead);
                 GlobalEventBus.Publish(new EntityDiedEvent(e.Target, e.Source));

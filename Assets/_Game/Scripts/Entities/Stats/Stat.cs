@@ -115,10 +115,10 @@ namespace Assets._Game.Scripts.Entities.Stats
 
         [StatRestriction(StatRestrictionType.NonNegative)]
         HpMax = 200,
-        [StatRestriction(StatRestrictionType.NonNegative)]
-        [StatRestriction(StatRestrictionType.ForbidModifiers)]
-        [StatRestriction(StatRestrictionType.NotGreaterThan, StatId.HpMax)]
-        HpCurrent = 210,
+        //[StatRestriction(StatRestrictionType.NonNegative)]
+        //[StatRestriction(StatRestrictionType.ForbidModifiers)]
+        //[StatRestriction(StatRestrictionType.NotGreaterThan, StatId.HpMax)]
+        //HpCurrent = 210,
         HpRegeneration = 220,
 
         [StatRestriction(StatRestrictionType.NonNegative)]

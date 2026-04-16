@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Calculators;
 using Assets._Game.Scripts.Infrastructure.Game;
 
@@ -27,10 +26,10 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
             if (_done) return StepStatus.Completed;
 
             var damage = _calculator.Calculate(_spec, context.Source, context.Target);
-            if (context.Target.TryGetModule(out StatModule stats))
+            if (context.Target.TryGetModule(out HealthModule healthModule))
             {
-                stats.AddBase(StatId.HpCurrent, -damage);
-                _globalEventBus.Publish(new DamageAppliedEvent(context.Target, context.Source, damage, _spec.Source));
+                var appliedDamage = healthModule.ApplyDamage(damage);
+                _globalEventBus.Publish(new DamageAppliedEvent(context.Target, context.Source, appliedDamage, _spec.Source));
             }
 
             _done = true;

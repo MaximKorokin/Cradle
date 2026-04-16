@@ -153,6 +153,7 @@ namespace Assets._Game.Scripts.Infrastructure
         {
             builder.Register<StatsControllerAssembler>(Lifetime.Singleton);
             builder.Register<StatModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<HealthModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<AppearanceModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 

@@ -1,61 +1,40 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Stats;
 using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public class EntityNameplateViewData : DataAggregatorBase
     {
-        private readonly Entity _entity;
+        private readonly HealthModule _healthModule;
 
         public string Name { get; private set; }
-        public float HealthPercent { get; private set; }
+        public float HealthRatio { get; private set; }
 
         public event Action Changed;
 
         public EntityNameplateViewData(Entity entity)
         {
-            _entity = entity;
+            _healthModule = entity.GetModule<HealthModule>();
 
-            Name = _entity.Definition.VariantName;
-            HealthPercent = GetHealthPercent(_entity);
+            Name = entity.Definition.VariantName;
+            HealthRatio = _healthModule.HealthRatio;
 
-            if (_entity.TryGetModule<StatModule>(out var statModule))
-            {
-                statModule.Stats.StatChanged += OnEntityStatChanged;
-            }
+            _healthModule.Changed += OnHealthChanged;
         }
 
         public override void Dispose()
         {
             base.Dispose();
 
-            if (_entity.TryGetModule<StatModule>(out var statModule))
-            {
-                statModule.Stats.StatChanged -= OnEntityStatChanged;
-            }
+            _healthModule.Changed -= OnHealthChanged;
         }
 
-        private void OnEntityStatChanged(StatId statId)
+        private void OnHealthChanged(float previous, float current)
         {
-            if (statId != StatId.HpCurrent && statId != StatId.HpMax) return;
-
-            HealthPercent = GetHealthPercent(_entity);
+            HealthRatio = _healthModule.HealthRatio;
 
             Changed?.Invoke();
-        }
-
-        private static float GetHealthPercent(Entity entity)
-        {
-            if (!entity.TryGetModule<StatModule>(out var statModule)) return 1;
-
-            var currentHp = statModule.Stats.Get(StatId.HpCurrent);
-            var maxHp = statModule.Stats.Get(StatId.HpMax);
-            
-            if (maxHp <= 0) return 0;
-
-            return currentHp / maxHp;
         }
     }
 }

@@ -25,8 +25,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (e.SourceType != DamageSourceType.Action) return;
             if (!e.Source.TryGetModule<AttackModifierModule>(out var attackModifier) ||
-                !e.Source.TryGetModule<StatModule>(out var sourceStatModule) ||
-                !e.Target.TryGetModule<StatModule>(out var targetStatModule)) return;
+                !e.Source.TryGetModule<HealthModule>(out var sourceHealthModule) ||
+                !e.Target.TryGetModule<HealthModule>(out var targetHealthModule)) return;
 
             foreach (var modifier in attackModifier.Modifiers)
             {
@@ -37,13 +37,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     case AttackModifierType.Vampiric:
                         if (modifier.Value <= 0) continue;
                         var healAmount = e.Damage * modifier.Value;
-                        sourceStatModule.AddBase(StatId.HpCurrent, healAmount);
+                        sourceHealthModule.Heal(healAmount);
                         break;
 
                     case AttackModifierType.MultipliedRepeatDamage:
                         var extraDamage = e.Damage * modifier.Value;
-                        targetStatModule.AddBase(StatId.HpCurrent, -extraDamage);
-                        GlobalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, extraDamage, DamageSourceType.AttackModifier));
+                        var appliedDamage = targetHealthModule.ApplyDamage(extraDamage);
+                        GlobalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, appliedDamage, DamageSourceType.AttackModifier));
                         break;
                 }
             }

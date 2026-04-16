@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (e.Victim == _playerContext.Player)
             {
-                e.Victim.GetModule<StatModule>().SetBase(Entities.Stats.StatId.HpCurrent, 1000);
+                e.Victim.GetModule<HealthModule>().Heal(1000);
                 e.Victim.GetModule<AppearanceModule>().RequestSetAnimatorValue(Entities.Units.EntityAnimatorParameterName.ToRevive, true);
                 e.Victim.GetModule<RestrictionStateModule>().Remove(RestrictionState.Dead);
             }

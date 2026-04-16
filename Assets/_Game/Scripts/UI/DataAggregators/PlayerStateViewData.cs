@@ -26,6 +26,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private void SubscribeToPlayerModules()
         {
             _playerContext.GetModule<StatModule>().Stats.StatChanged += OnStatChanged;
+            _playerContext.GetModule<HealthModule>().Changed += OnHealthChanged;
             _playerContext.GetModule<StatusEffectModule>().StatusEffects.Changed += OnStatusEffectsControllerChanged;
             _playerContext.GetModule<LevelingModule>().Changed += OnLevelingModuleChanged;
         }
@@ -33,11 +34,12 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private void UnsubscribeFromPlayerModules()
         {
             _playerContext.GetModule<StatModule>().Stats.StatChanged -= OnStatChanged;
+            _playerContext.GetModule<HealthModule>().Changed -= OnHealthChanged;
             _playerContext.GetModule<StatusEffectModule>().StatusEffects.Changed -= OnStatusEffectsControllerChanged;
             _playerContext.GetModule<LevelingModule>().Changed -= OnLevelingModuleChanged;
         }
 
-        public float CurrentHp => _playerContext.GetModule<StatModule>().Stats.Get(StatId.HpCurrent);
+        public float CurrentHp => _playerContext.GetModule<HealthModule>().CurrentHealth;
         public float MaxHp => _playerContext.GetModule<StatModule>().Stats.Get(StatId.HpMax);
         public float Level => _playerContext.GetModule<LevelingModule>().Level;
         public float NormalizedExperience => _playerContext.GetModule<LevelingModule>().GetNormalizedExperience();
@@ -50,10 +52,15 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private void OnStatChanged(StatId statId)
         {
-            if (statId == StatId.HpCurrent || statId == StatId.HpMax)
+            if (statId == StatId.HpMax)
             {
                 Changed?.Invoke();
             }
+        }
+
+        private void OnHealthChanged(float previous, float current)
+        {
+            Changed?.Invoke();
         }
 
         private void OnStatusEffectsControllerChanged()

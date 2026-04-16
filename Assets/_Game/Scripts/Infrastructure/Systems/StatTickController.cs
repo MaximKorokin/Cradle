@@ -16,19 +16,15 @@ namespace Assets._Game.Scripts.Entities.Stats
         public void Tick(Entity entity)
         {
             var stats = entity.GetModule<StatModule>().Stats;
+            var healthModule = entity.GetModule<HealthModule>();
 
             // HP regeneration
-            if (_cooldownCounter.TryReset() &&
-                stats.Has(StatId.HpCurrent) &&
-                stats.Has(StatId.HpRegeneration))
+            if (_cooldownCounter.TryReset() && stats.Has(StatId.HpRegeneration))
             {
-                var hpCurrent = stats.Get(StatId.HpCurrent);
+                var hpCurrent = healthModule.CurrentHealth;
                 var hpRegeneration = stats.Get(StatId.HpRegeneration);
-                var hpMax = stats.Get(StatId.HpMax);
 
-                if (hpCurrent >= hpMax) return;
-
-                stats.SetBase(StatId.HpCurrent, hpCurrent + hpRegeneration * _cooldownCounter.Cooldown);
+                healthModule.Heal(hpRegeneration * _cooldownCounter.Cooldown);
             }
         }
     }

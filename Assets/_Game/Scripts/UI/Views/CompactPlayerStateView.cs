@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             // HP
             _hpFillBar.SetFillRatio(_playerStateViewData.CurrentHp / _playerStateViewData.MaxHp);
-            _hpText.text = $"{_playerStateViewData.CurrentHp} / {_playerStateViewData.MaxHp}";
+            _hpText.text = $"{MathF.Floor(_playerStateViewData.CurrentHp)} / {MathF.Floor(_playerStateViewData.MaxHp)}";
 
             // Level & Experience
             _experienceFillBar.SetFillRatio(_playerStateViewData.NormalizedExperience);
