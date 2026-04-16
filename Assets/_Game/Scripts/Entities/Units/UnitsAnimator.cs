@@ -70,6 +70,7 @@ namespace Assets._Game.Scripts.Entities.Units
     public enum EntityAnimatorParameterName
     {
         ToDie = 10,
+        ToRevive = 15,
         ToAction = 20,
         ToIdle = 30,
         IsWalking = 40,

@@ -46,7 +46,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
     public sealed class EntitySave
     {
-        public string EntityId;
         public string DefinitionId;
         public InventorySave StorageSave;
         public InventorySave InventorySave;

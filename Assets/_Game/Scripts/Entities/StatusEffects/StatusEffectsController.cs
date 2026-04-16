@@ -98,7 +98,12 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         {
             foreach (var stack in _statusEffects.Values)
             {
-                stack.Clear();
+                if (stack.Count == 0) continue;
+
+                foreach (var statusEffect in stack.ToArray())
+                {
+                    RemoveStatusEffect(statusEffect);
+                }
             }
         }
     }

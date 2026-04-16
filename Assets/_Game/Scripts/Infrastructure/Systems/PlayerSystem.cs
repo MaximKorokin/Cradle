@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
@@ -20,7 +20,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (e.Victim == _playerContext.Player)
             {
-                SLog.Log("Player died");
+                e.Victim.GetModule<StatModule>().SetBase(Entities.Stats.StatId.HpCurrent, 1000);
+                e.Victim.GetModule<AppearanceModule>().RequestSetAnimatorValue(Entities.Units.EntityAnimatorParameterName.ToRevive, true);
+                e.Victim.GetModule<RestrictionStateModule>().Remove(RestrictionState.Dead);
             }
         }
     }

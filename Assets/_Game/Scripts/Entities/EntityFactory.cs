@@ -44,6 +44,8 @@ namespace Assets._Game.Scripts.Entities
         public EntitySave Save(Entity entity)
         {
             var save = new EntitySave();
+            save.DefinitionId = entity.Definition.Id;
+
             for (int i = 0; i < _modulePersistances.Count; i++)
             {
                 _modulePersistances[i].Save(entity, save);
