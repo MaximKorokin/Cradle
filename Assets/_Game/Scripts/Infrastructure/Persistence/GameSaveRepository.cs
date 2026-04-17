@@ -50,12 +50,13 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public InventorySave StorageSave;
         public InventorySave InventorySave;
         public EquipmentSave EquipmentSave;
-        public StatsSave StatsSave;
+        public LevelingSave LevelingSave;
     }
 
-    public sealed class StatsSave
+    public sealed class LevelingSave
     {
-        public List<StatBaseSave> BaseValues = new();
+        public int Level;
+        public long Experience;
     }
 
     public sealed class StatBaseSave

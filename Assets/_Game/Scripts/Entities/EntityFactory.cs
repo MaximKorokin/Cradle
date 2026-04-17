@@ -23,7 +23,6 @@ namespace Assets._Game.Scripts.Entities
 
             var modules = new List<EntityModuleBase>();
 
-            // Step 1: Create and attach modules
             for (int i = 0; i < _moduleFactories.Count; i++)
             {
                 var module = _moduleFactories[i].Create(entityDefinition);
@@ -32,12 +31,6 @@ namespace Assets._Game.Scripts.Entities
                     modules.Add(module);
                     entity.AddModule(module);
                 }
-            }
-
-            // Step 2: Resolve dependencies inside modules
-            for (int i = 0; i < modules.Count; i++)
-            {
-                modules[i].Initialize();
             }
 
             return entity;

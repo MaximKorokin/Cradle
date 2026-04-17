@@ -14,6 +14,7 @@ namespace Assets._Game.Scripts.Entities
         private readonly EventBusCore _bus = new();
 
         public EntityDefinition Definition { get; private set; }
+        public IReadOnlyCollection<IEntityModule> Modules => _modules.Values;
 
         public Entity(EntityDefinition definition)
         {

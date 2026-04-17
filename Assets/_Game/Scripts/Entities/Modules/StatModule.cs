@@ -7,6 +7,8 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private readonly StatsController _statsController;
 
+        public StatsController Stats => _statsController;
+
         public StatModule(StatsController stats)
         {
             _statsController = stats;
@@ -14,8 +16,6 @@ namespace Assets._Game.Scripts.Entities.Modules
             _statsController.StatChanged += OnStatChanged;
             _statsController.Changed += OnStatsChanged;
         }
-
-        public StatsController Stats => _statsController;
 
         public void SetBase(StatId statId, float value)
         {

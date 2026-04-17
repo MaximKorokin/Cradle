@@ -33,6 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.OnEntityAdded(entity);
 
+            // Set initial visuals when the entity view created
             entity.SubscribeOnce<EntityBoundEvent>(e =>
             {
                 if (!EntityQuery.Match(entity)) return;
@@ -43,6 +44,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.WalkSpeedMultiplier, stats.Stats.Get(StatId.MoveSpeed));
                 // Set initial scale
                 appearance.RequestSetScale(stats.Stats.Get(StatId.SizeScale));
+
+                if (entity.TryGetModule<EquipmentModule>(out var equipmentModule))
+                {
+                    // Set initial equipment visuals
+                    foreach (var (slot, item) in equipmentModule.Equipment.Enumerate())
+                    {
+                        if (item == null) continue;
+                        var equipmentChangedEvent = new EquipmentChangedEvent(slot, item.Value, EquipmentChangeKind.Equipped);
+                        OnEquipmentChanged(entity, equipmentChangedEvent);
+                    }
+                }
             });
         }
 

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Configs;
+using Assets._Game.Scripts.Infrastructure.Persistence;
 using System;
 
 namespace Assets._Game.Scripts.Entities.Modules
@@ -15,12 +16,16 @@ namespace Assets._Game.Scripts.Entities.Modules
         public event Action<ExperienceChangedEvent> ExperienceChanged;
         public event Action Changed;
 
-        public LevelingModule(ExperienceTable experienceTable)
+        public LevelingModule(int level, ExperienceTable experienceTable)
         {
+            Level = level;
+
             _experienceTable = experienceTable;
         }
 
-        // Returns a value between 0 and 1 representing the progress towards the next level.
+        /// <summary>
+        /// Returns a value between 0 and 1 representing the progress towards the next level.
+        /// </summary>
         public float GetNormalizedExperience()
         {
             if (Level >= _experienceTable.MaxLevel)
@@ -47,6 +52,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             }
         }
 
+        // todo: add silent flag
         public void SetLevel(int level)
         {
             if (level < 1 || level > _experienceTable.MaxLevel)
@@ -110,7 +116,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public sealed class LevelingModuleFactory : IEntityModuleFactory
+    public sealed class LevelingModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
         private readonly ExperienceTable _experienceTable;
 
@@ -121,11 +127,30 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            if (entityDefinition.TryGetModuleDefinition<LevelingModuleDefinition>(out var _))
+            if (entityDefinition.TryGetModuleDefinition<LevelingModuleDefinition>(out var levelingModuleDefinition))
             {
-                return new LevelingModule(_experienceTable);
+                return new LevelingModule(levelingModuleDefinition.Level, _experienceTable);
             }
             return null;
+        }
+
+        public void Apply(Entity entity, EntitySave entitySave)
+        {
+            if (!entity.TryGetModule<LevelingModule>(out var levelingModule) || entitySave.LevelingSave == null) return;
+
+            levelingModule.SetLevel(entitySave.LevelingSave.Level);
+            levelingModule.AddExperience(entitySave.LevelingSave.Experience);
+        }
+
+        public void Save(Entity entity, EntitySave entitySave)
+        {
+            if (!entity.TryGetModule<LevelingModule>(out var levelingModule)) return;
+
+            entitySave.LevelingSave = new()
+            {
+                Level = levelingModule.Level,
+                Experience = levelingModule.Experience,
+            };
         }
     }
 }

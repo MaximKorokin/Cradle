@@ -26,17 +26,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _levelingConfig = levelingConfig;
 
             TrackGlobalEvent<AddExperienceRequestEvent>(OnAddExperienceRequested);
-            TrackEntityEvent<LevelChangedEvent>(OnLevelChanged);
-        }
-
-        private void OnLevelChanged(Entity entity, LevelChangedEvent levelChangedEvent)
-        {
-            var statModule = entity.GetModule<StatModule>();
-
-            statModule.RemoveModifiers(StatModifierSource.Level);
-            statModule.AddModifiers(
-                StatModifierSource.Level,
-                Enumerable.Repeat(0, levelChangedEvent.NewLevel).SelectMany(_ => _levelingConfig.StatModifiersOnLevelUp));
         }
 
         private void OnAddExperienceRequested(AddExperienceRequestEvent e)

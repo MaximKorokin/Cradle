@@ -46,7 +46,6 @@ namespace Assets._Game.Scripts.Entities.Modules
             {
                 SLog.Error($"No {typeof(StatModule)} found on entity {Entity} but {typeof(HealthModule)} requires it");
                 return;
-
             }
             _statModule = statModule;
 

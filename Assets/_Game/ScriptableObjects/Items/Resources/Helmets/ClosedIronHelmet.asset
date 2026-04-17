@@ -22,9 +22,20 @@ MonoBehaviour:
   - rid: 3412048633303400687
   - rid: 3412049108851753208
   - rid: 3412049108851753209
+  - rid: 2155386242765160585
   references:
     version: 2
     RefIds:
+    - rid: 2155386242765160585
+      type: {class: StatModifiersTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <Modifiers>k__BackingField:
+        - <Stat>k__BackingField: 320
+          <Stage>k__BackingField: 20
+          <Operation>k__BackingField: 10
+          <Value>k__BackingField: 1
+          <Priority>k__BackingField: 0
     - rid: 3412048633303400687
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

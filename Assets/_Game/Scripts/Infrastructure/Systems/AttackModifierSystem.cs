@@ -20,6 +20,21 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
         }
 
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            if (!EntityQuery.Match(entity)) return;
+
+            if (entity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            {
+                foreach (var statusEffect in statusEffectModule.StatusEffects.GetStatusEffects())
+                {
+                    OnStatusEffectChanged(entity, new StatusEffectChangedEvent(new() { Kind = StatusEffectChangeKind.Added, StatusEffect = statusEffect }));
+                }
+            }
+        }
+
         private void OnDamageApplied(DamageAppliedEvent e)
         {
             if (e.SourceType != DamageSourceType.Action) return;

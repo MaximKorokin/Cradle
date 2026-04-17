@@ -39,6 +39,23 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
         }
 
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            if (!EntityQuery.Match(entity)) return;
+
+            if (entity.TryGetModule<EquipmentModule>(out var equipmentModule))
+            {
+                foreach (var (slot, item) in equipmentModule.Equipment.Enumerate())
+                {
+                    if (item == null) continue;
+                    var equipmentChangedEvent = new EquipmentChangedEvent(slot, item.Value, EquipmentChangeKind.Equipped);
+                    OnEquipmentChanged(entity, equipmentChangedEvent);
+                }
+            }
+        }
+
         // ───────────────────────── Equipment Events ─────────────────────────
 
         private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)

@@ -41,6 +41,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 if (entity.TryGetModule<WanderBehaviourModule>(out var wanderModule))
                     wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
             });
+
+            if (!EntityQuery.Match(entity)) return;
+
+            if (entity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            {
+                foreach (var statusEffect in statusEffectModule.StatusEffects.GetStatusEffects())
+                {
+                    OnStatusEffectChanged(entity, new StatusEffectChangedEvent(new() { Kind = StatusEffectChangeKind.Added, StatusEffect = statusEffect }));
+                }
+            }
         }
 
         public void Tick(float delta)

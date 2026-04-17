@@ -5,19 +5,24 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class CameraFollowSystem : SystemBase
     {
         private readonly ICameraService _cameraService;
+        private readonly IPlayerProvider _playerProvider;
 
         public CameraFollowSystem(
             IGlobalEventBus globalEventBus,
-            ICameraService cameraService) : base(globalEventBus)
+            ICameraService cameraService,
+            IPlayerProvider playerProvider) : base(globalEventBus)
         {
             _cameraService = cameraService;
+            _playerProvider = playerProvider;
 
-            TrackGlobalEvent<PlayerSpawnedEvent>(OnPlayerSpawned);
+            TrackGlobalEvent<EntitySpawnedEvent>(OnEntitySpawned);
         }
 
-        public void OnPlayerSpawned(PlayerSpawnedEvent playerTransform)
+        public void OnEntitySpawned(EntitySpawnedEvent e)
         {
-            _cameraService.Follow(playerTransform.Player);
+            if (e.Entity != _playerProvider.Player) return;
+
+            _cameraService.Follow(e.Entity);
         }
     }
 }

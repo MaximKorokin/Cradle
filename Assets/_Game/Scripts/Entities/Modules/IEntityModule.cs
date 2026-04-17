@@ -6,6 +6,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         void Attach(Entity entity);
         void Detach();
+        void Initialize();
     }
 
     public abstract class EntityModuleBase : IEntityModule

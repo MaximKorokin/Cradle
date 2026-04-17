@@ -14,6 +14,7 @@ using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets.CoreScripts;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
@@ -21,6 +22,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
+        private readonly LevelingConfig _levelingConfig;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -32,15 +34,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IGlobalEventBus globalEventBus,
             EntityRepository repository,
             DerivedStatsCalculator derivedStatsCalculator,
-            StatsConfig statsConfig) : base(globalEventBus, repository)
+            StatsConfig statsConfig,
+            LevelingConfig levelingConfig) : base(globalEventBus, repository)
         {
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
+            _levelingConfig = levelingConfig;
 
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
+            TrackEntityEvent<LevelChangedEvent>(OnLevelChanged);
 
             TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
         }
@@ -54,9 +59,46 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.OnEntityAdded(entity);
 
-            if (EntityQuery.Match(entity))
+            if (!EntityQuery.Match(entity)) return;
+
+            _derivedStatsCalculator.RecalculateDerivedStats(entity);
+
+            // Apply stat modifiers from currently equipped items (if any)
+            if (entity.TryGetModule<EquipmentModule>(out var equipmentModule))
             {
-                _derivedStatsCalculator.RecalculateDerivedStats(entity);
+                foreach (var (slot, item) in equipmentModule.Equipment.Enumerate())
+                {
+                    if (item == null) continue;
+                    var equipmentChangedEvent = new EquipmentChangedEvent(slot, item.Value, EquipmentChangeKind.Equipped);
+                    OnEquipmentChanged(entity, equipmentChangedEvent);
+                }
+            }
+
+            // Apply weight modifiers from items in inventory (if any)
+            if (entity.TryGetModule<InventoryModule>(out var inventoryModule))
+            {
+                foreach (var (slot, item) in inventoryModule.Inventory.Enumerate())
+                {
+                    if (item == null) continue;
+                    var inventoryChangedEvent = new InventoryChangedEvent(slot, item.Value, InventoryChangeKind.Added);
+                    OnInventoryChanged(entity, inventoryChangedEvent);
+                }
+            }
+
+            // Apply stat modifiers from active status effects (if any)
+            if (entity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            {
+                foreach (var statusEffect in statusEffectModule.StatusEffects.GetStatusEffects())
+                {
+                    var statusEffectChangedEvent = new StatusEffectChangedEvent(new() { Kind = StatusEffectChangeKind.Added, StatusEffect = statusEffect });
+                    OnStatusEffectChanged(entity, statusEffectChangedEvent);
+                }
+            }
+
+            // Apply stat modifiers from current level
+            if (entity.TryGetModule<LevelingModule>(out var levelingModule))
+            {
+                OnLevelChanged(entity, new LevelChangedEvent(levelingModule.Level, levelingModule.Level));
             }
         }
 
@@ -140,7 +182,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var source = StatModifierSource.FromStatusEffect(e.StatusEffect.Definition.Id);
 
-            if (stats == null) return;
             foreach (var modifier in e.StatusEffect.Definition.StatModifiers)
             {
                 if (e.Kind == StatusEffectChangeKind.Added)
@@ -152,6 +193,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     stats.RemoveModifiers(source);
                 }
             }
+        }
+
+        private void OnLevelChanged(Entity entity, LevelChangedEvent levelChangedEvent)
+        {
+            var statModule = entity.GetModule<StatModule>();
+
+            statModule.RemoveModifiers(StatModifierSource.Level);
+            statModule.AddModifiers(
+                StatModifierSource.Level,
+                Enumerable.Repeat(0, levelChangedEvent.NewLevel).SelectMany(_ => _levelingConfig.StatModifiersOnLevelUp));
         }
     }
 

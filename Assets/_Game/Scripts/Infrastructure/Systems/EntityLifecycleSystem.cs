@@ -68,11 +68,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEntitySpawnRequested(SpawnEntityRequest request)
         {
+            // 1) Create entity with modules defined in the definition
             var entity = _entityFactory.Create(request.EntityDefinition);
-            EntityRepository.Add(entity);
 
-            _entityViewService.SpawnEntityView(entity, request.Position);
-
+            // 2) Apply any additional initialization logic (e.g. add more modules, set up module state, etc.)
             if (request.Initializers != null)
             {
                 for (int i = 0; i < request.Initializers.Length; i++)
@@ -80,6 +79,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     request.Initializers[i].Initialize(entity);
                 }
             }
+
+            // 3) Initialize all modules (this will run the logic in the modules that depends on other modules being present
+            foreach (var module in entity.Modules)
+            {
+                module.Initialize();
+            }
+
+            // 4) Add entity to repository so it can be found by other systems and modules
+            EntityRepository.Add(entity);
+
+            // 5) Spawn view for the entity
+            _entityViewService.SpawnEntityView(entity, request.Position);
 
             GlobalEventBus.Publish(new EntitySpawnedEvent(entity));
         }
@@ -115,15 +126,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public DespawnEntityRequest(Entity entity)
         {
             Entity = entity;
-        }
-    }
-
-    public readonly struct PlayerSpawnedEvent : IGlobalEvent
-    {
-        public readonly Entity Player;
-        public PlayerSpawnedEvent(Entity player)
-        {
-            Player = player;
         }
     }
 
@@ -250,8 +252,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 var position = new Vector2(_gameSave.PlayerLocationSave.PositionX, _gameSave.PlayerLocationSave.PositionY);
                 entity.Publish(new EntityRepositionRequest(position));
             }
-
-            _globalEventBus.Publish(new PlayerSpawnedEvent(entity));
         }
     }
 }
