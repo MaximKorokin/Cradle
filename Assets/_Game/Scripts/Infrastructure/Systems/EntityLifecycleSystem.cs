@@ -202,7 +202,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (string.IsNullOrWhiteSpace(_path))
                 appearanceModule.RequestSetUnitSprite(_sprite);
-            else 
+            else
                 appearanceModule.RequestSetUnitSprite(_path, _sprite);
         }
     }

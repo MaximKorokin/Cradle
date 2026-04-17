@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {

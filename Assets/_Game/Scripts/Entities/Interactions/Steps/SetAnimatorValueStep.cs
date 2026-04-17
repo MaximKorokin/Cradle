@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
         public void Start(in InteractionContext context)
         {
-            
+
         }
 
         public StepStatus Tick(in InteractionContext context, float delta)

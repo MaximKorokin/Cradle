@@ -9,11 +9,11 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         [field: SerializeField]
         public ExperienceTable ExperienceTable { get; private set; }
         [field: Space]
-        [field:Header("Changes on level up")]
+        [field: Header("Changes on level up")]
         [field: SerializeField]
         public StatModifier[] StatModifiersOnLevelUp { get; private set; }
         [field: Space]
-        [field:Header("Level difference Penalties")]
+        [field: Header("Level difference Penalties")]
         [field: SerializeField]
         public float ExperiencePenaltyForOverLeveling { get; private set; } = 0.5f;
         [field: SerializeField]

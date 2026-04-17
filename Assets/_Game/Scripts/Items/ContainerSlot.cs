@@ -1,6 +1,5 @@
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
-using System;
 
 namespace Assets._Game.Scripts.Items
 {

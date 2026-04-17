@@ -33,7 +33,7 @@ namespace Assets._Game.Scripts.Entities.Control
         {
             if (_spatialModule != null)
                 _spatialModule.SetPositionRequested -= OnSetPositionRequested;
-            
+
             _spatialModule = null;
             _restrictionStateModule = null;
         }

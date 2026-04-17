@@ -1,7 +1,6 @@
 ﻿// Staggart Creations http://staggart.xyz
 // Copyright protected under Unity asset store EULA
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -15,7 +14,7 @@ public class SelectionHistoryWindow : EditorWindow
     public static void Init()
     {
         SelectionHistoryWindow window = GetWindow<SelectionHistoryWindow>();
-        
+
         //Options
         window.autoRepaintOnSceneChange = true;
         window.titleContent.image = EditorGUIUtility.IconContent(EditorGUIUtility.isProSkin ? "d_UnityEditor.SceneHierarchyWindow" : "UnityEditor.SceneHierarchyWindow").image;
@@ -27,19 +26,19 @@ public class SelectionHistoryWindow : EditorWindow
     }
 
     private string iconPrefix => EditorGUIUtility.isProSkin ? "d_" : "";
-    
+
     public static bool RecordHierarchy
     {
         get { return EditorPrefs.GetBool(PlayerSettings.productName + "_SH_RecordHierachy", true); }
         set { EditorPrefs.SetBool(PlayerSettings.productName + "_SH_RecordHierachy", value); }
     }
-    
+
     public static bool RecordProject
     {
         get { return EditorPrefs.GetBool(PlayerSettings.productName + "_SH_RecordProject", true); }
         set { EditorPrefs.SetBool(PlayerSettings.productName + "_SH_RecordProject", value); }
     }
-    
+
     public static int MaxHistorySize
     {
         get { return EditorPrefs.GetInt(PlayerSettings.productName + "_SH_MaxHistorySize", 50); }
@@ -65,7 +64,7 @@ public class SelectionHistoryWindow : EditorWindow
 
         isFocused = true;
     }
-    
+
     private void OnLostFocus()
     {
         isFocused = false;
@@ -83,11 +82,11 @@ public class SelectionHistoryWindow : EditorWindow
 
         if (EditorUtility.IsPersistent(Selection.activeObject) && !RecordProject) return;
         if (EditorUtility.IsPersistent(Selection.activeObject) == false && !RecordHierarchy) return;
-        
-        if(selectionHistory.Contains(Selection.activeObject) == false) selectionHistory.Insert(0, Selection.activeObject);
-        
+
+        if (selectionHistory.Contains(Selection.activeObject) == false) selectionHistory.Insert(0, Selection.activeObject);
+
         //Trim end
-        if(selectionHistory.Count-1 == MaxHistorySize) selectionHistory.RemoveAt(selectionHistory.Count-1);
+        if (selectionHistory.Count - 1 == MaxHistorySize) selectionHistory.RemoveAt(selectionHistory.Count - 1);
     }
 
     private void OnEnable()
@@ -97,9 +96,9 @@ public class SelectionHistoryWindow : EditorWindow
 #else
         SceneView.duringSceneGui += ListenForNavigationInput;
 #endif
-        
+
         EditorApplication.update += Update;
-        
+
         settingAnimation = new AnimBool(false);
         settingAnimation.valueChanged.AddListener(this.Repaint);
         settingAnimation.speed = 4f;
@@ -115,19 +114,19 @@ public class SelectionHistoryWindow : EditorWindow
 #else
         SceneView.duringSceneGui -= ListenForNavigationInput;
 #endif
-        
+
         EditorApplication.update -= Update;
     }
 
-    
+
     private void Update()
     {
         if (Selection.activeObject && Selection.activeObject != previouslySelectedObject)
         {
             previouslySelectedObject = Selection.activeObject;
-            
+
             if (muteRecording || !Selection.activeObject) return;
-            
+
             this.Repaint();
             AddToHistory();
         }
@@ -139,12 +138,12 @@ public class SelectionHistoryWindow : EditorWindow
         {
             SelectPrevious();
         }
-        if (Event.current.type == EventType.KeyDown &&  Event.current.isKey && Event.current.keyCode == KeyCode.RightBracket)
+        if (Event.current.type == EventType.KeyDown && Event.current.isKey && Event.current.keyCode == KeyCode.RightBracket)
         {
             SelectNext();
         }
     }
-    
+
     private void SetSelection(Object target, int index)
     {
         muteRecording = true;
@@ -157,7 +156,7 @@ public class SelectionHistoryWindow : EditorWindow
     {
         selectedIndex--;
         selectedIndex = Mathf.Clamp(selectedIndex, 0, selectionHistory.Count - 1);
-            
+
         SetSelection(selectionHistory[selectedIndex], selectedIndex);
     }
 
@@ -179,7 +178,7 @@ public class SelectionHistoryWindow : EditorWindow
         {
             using (new EditorGUI.DisabledScope(selectionHistory.Count == 0))
             {
-                using (new EditorGUI.DisabledScope(selectedIndex == selectionHistory.Count-1))
+                using (new EditorGUI.DisabledScope(selectedIndex == selectionHistory.Count - 1))
                 {
                     if (GUILayout.Button(
                         new GUIContent(EditorGUIUtility.IconContent(iconPrefix + "back@2x").image,
@@ -206,13 +205,13 @@ public class SelectionHistoryWindow : EditorWindow
                     historyVisible = false;
                 }
             }
-            
+
             GUILayout.FlexibleSpace();
-            
+
             settingExpanded = GUILayout.Toggle(settingExpanded, new GUIContent(EditorGUIUtility.IconContent(iconPrefix + "Settings").image, "Edit settings"), EditorStyles.miniButtonMid);
             settingAnimation.target = settingExpanded;
         }
-        
+
         if (EditorGUILayout.BeginFadeGroup(settingAnimation.faded))
         {
             EditorGUILayout.Space();
@@ -226,37 +225,37 @@ public class SelectionHistoryWindow : EditorWindow
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                EditorGUILayout.LabelField("History size", EditorStyles.boldLabel,GUILayout.Width(100f));
+                EditorGUILayout.LabelField("History size", EditorStyles.boldLabel, GUILayout.Width(100f));
                 MaxHistorySize = EditorGUILayout.IntField(MaxHistorySize, GUILayout.MaxWidth(40f));
             }
-            
+
             EditorGUILayout.Space();
         }
         EditorGUILayout.EndFadeGroup();
-        
+
         clearAnimation.target = !historyVisible;
-        
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, EditorStyles.helpBox, GUILayout.MaxHeight(this.maxSize.y-20f));
+
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, EditorStyles.helpBox, GUILayout.MaxHeight(this.maxSize.y - 20f));
         {
-            EditorGUILayout.BeginFadeGroup(1f-clearAnimation.faded);
-            
+            EditorGUILayout.BeginFadeGroup(1f - clearAnimation.faded);
+
             var prevColor = GUI.color;
             var prevBgColor = GUI.backgroundColor;
 
             for (int i = 0; i < selectionHistory.Count; i++)
             {
-                if(selectionHistory[i] == null) continue;
-                
+                if (selectionHistory[i] == null) continue;
+
                 var rect = EditorGUILayout.BeginHorizontal();
-                
-                GUI.color = i % 2 == 0 ?  Color.grey * (EditorGUIUtility.isProSkin ? 1f : 1.7f) : Color.grey * (EditorGUIUtility.isProSkin ? 1.05f : 1.66f);
-                
+
+                GUI.color = i % 2 == 0 ? Color.grey * (EditorGUIUtility.isProSkin ? 1f : 1.7f) : Color.grey * (EditorGUIUtility.isProSkin ? 1.05f : 1.66f);
+
                 //Hover color
                 if (rect.Contains(Event.current.mousePosition) || Selection.activeObject == (selectionHistory[i]))
                 {
                     GUI.color = EditorGUIUtility.isProSkin ? Color.grey * 1.1f : Color.grey * 1.5f;
                 }
-                
+
                 //Selection outline
                 if (Selection.activeObject == (selectionHistory[i]))
                 {
@@ -270,10 +269,10 @@ public class SelectionHistoryWindow : EditorWindow
 
                 //Background
                 EditorGUI.DrawRect(rect, GUI.color);
-                
+
                 GUI.color = prevColor;
                 GUI.backgroundColor = prevBgColor;
-                
+
 
                 if (GUILayout.Button(new GUIContent(" " + selectionHistory[i].name, EditorGUIUtility.ObjectContent(selectionHistory[i], selectionHistory[i].GetType()).image), EditorStyles.label, GUILayout.MaxHeight(17f)))
                 {
@@ -287,11 +286,11 @@ public class SelectionHistoryWindow : EditorWindow
         EditorGUILayout.EndScrollView();
 
         //Once the list is collapse, clear the collection
-        if(clearAnimation.faded ==1f) selectionHistory.Clear();
+        if (clearAnimation.faded == 1f) selectionHistory.Clear();
         //Reset
         if (selectionHistory.Count == 0) historyVisible = true;
     }
-    
+
     private void RemoveItem(int i)
     {
         selectionHistory.RemoveAt(i);

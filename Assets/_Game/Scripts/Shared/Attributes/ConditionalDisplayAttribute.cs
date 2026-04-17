@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Shared.Attributes
 {

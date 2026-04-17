@@ -75,7 +75,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
             // call callback (e.g. for controller Initialize method)
             instantiatedCallback?.Invoke(window, controller);
-            
+
             // push window and controller to stack that will be used to destroy everything correctly
             _windowStack.Add((window, controller as IDisposable));
 

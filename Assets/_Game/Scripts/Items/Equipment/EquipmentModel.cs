@@ -32,7 +32,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                 _slots[new(slotType, count)] = null;
                 slotTypeCounts[slotType] = count + 1;
             }
-            
+
             _slotList = _slots.Keys.ToArray();
         }
 

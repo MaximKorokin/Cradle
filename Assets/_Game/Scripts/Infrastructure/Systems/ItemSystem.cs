@@ -11,7 +11,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         private readonly ItemCommandHandler _itemCommandHandler;
 
-        protected override EntityQuery EntityQuery { get; } = new (RestrictionState.Disabled);
+        protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled);
 
         public ItemSystem(
             IGlobalEventBus globalEventBus,

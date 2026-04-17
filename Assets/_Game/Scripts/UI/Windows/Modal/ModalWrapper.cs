@@ -5,7 +5,7 @@ namespace Assets._Game.Scripts.UI.Windows.Modal
 {
     public sealed class ModalWrapper : MonoBehaviour
     {
-        [SerializeField] 
+        [SerializeField]
         private RectTransform _windowParent;
         [SerializeField]
         private ModalOverlay _overlay;

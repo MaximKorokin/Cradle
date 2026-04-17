@@ -80,7 +80,7 @@ namespace Assets._Game.Scripts.Entities.Units
             var sign = turnDirection == TurnDirection.Right ? 1 : -1;
             var absoluteScaleX = Mathf.Abs(_unitsRoot.localScale.x);
             _unitsRoot.localScale = new Vector3(sign * absoluteScaleX, _unitsRoot.localScale.y, 1);
-            
+
             if (_swapOrderInLayerForDirection)
                 _tree.SetTurnDirection(turnDirection);
         }
