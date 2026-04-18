@@ -8,6 +8,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         private readonly HealthModule _healthModule;
 
+        public string Level { get; private set; }
         public string Name { get; private set; }
         public float HealthRatio { get; private set; }
 
@@ -17,6 +18,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             _healthModule = entity.GetModule<HealthModule>();
 
+            Level = entity.TryGetModule<LevelingModule>(out var levelingModule) ? levelingModule.Level.ToString() : "";
             Name = entity.Definition.VariantName;
             HealthRatio = _healthModule.HealthRatio;
 

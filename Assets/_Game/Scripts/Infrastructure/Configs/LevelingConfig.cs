@@ -8,21 +8,23 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
     {
         [field: SerializeField]
         public ExperienceTable ExperienceTable { get; private set; }
+        [field: SerializeField]
+        public float ExperienceMultiplier { get; private set; } = 1f;
         [field: Space]
         [field: Header("Changes on level up")]
         [field: SerializeField]
         public StatModifier[] StatModifiersOnLevelUp { get; private set; }
         [field: Space]
-        [field: Header("Level difference Penalties")]
+        [field: Header("Level difference Penalties (per level)")]
         [field: SerializeField]
-        public float ExperiencePenaltyForOverLeveling { get; private set; } = 0.5f;
+        public float ExperiencePenaltyForOverLeveling { get; private set; }
         [field: SerializeField]
-        public float AttackPenaltyForUnderLeveling { get; private set; } = 0.2f;
+        public float AttackPenaltyForUnderLeveling { get; private set; }
         [field: SerializeField]
-        public float DefencePenaltyForUnderLeveling { get; private set; } = 0.2f;
+        public float DefencePenaltyForUnderLeveling { get; private set; }
         [field: Space]
-        [field: Header("Level difference Bonuses")]
+        [field: Header("Level difference Bonuses (per level)")]
         [field: SerializeField]
-        public float ExperienceBonusForUnderLeveling { get; private set; } = 0.2f;
+        public float ExperienceBonusForUnderLeveling { get; private set; }
     }
 }

@@ -12,6 +12,8 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private RectTransform _rect;
         [SerializeField]
+        private TMP_Text _levelText;
+        [SerializeField]
         private TMP_Text _nameText;
         [SerializeField]
         private FillBar _healthFillBar;
@@ -37,6 +39,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void OnDataChanged()
         {
+            _levelText.text = data.Level;
             _nameText.text = data.Name;
             _healthFillBar.SetFillRatio(data.HealthRatio);
         }

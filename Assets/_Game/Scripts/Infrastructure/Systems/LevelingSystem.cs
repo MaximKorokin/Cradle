@@ -1,10 +1,9 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
-using System.Linq;
+using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
@@ -33,12 +32,20 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (e.Target == null)
                 return;
 
-            if (!e.Target.TryGetModule(out LevelingModule levelingModule))
+            if (!e.Source.TryGetModule(out LevelingModule sourceLevelingModule) || !e.Target.TryGetModule(out LevelingModule targetLevelingModule))
                 return;
 
-            // todo: add penalty and bonus calculation here
+            var resultingExperience = (long)(e.Experience * _levelingConfig.ExperienceMultiplier);
 
-            levelingModule.AddExperience(e.Experience);
+            var levelDifference = sourceLevelingModule.Level - targetLevelingModule.Level;
+
+            if (levelDifference < 0 && _levelingConfig.ExperiencePenaltyForOverLeveling != 0)
+                resultingExperience += (long)(_levelingConfig.ExperiencePenaltyForOverLeveling * levelDifference * resultingExperience);
+
+            if (levelDifference > 0 && _levelingConfig.ExperienceBonusForUnderLeveling != 0)
+                resultingExperience += (long)(_levelingConfig.ExperienceBonusForUnderLeveling * levelDifference * resultingExperience);
+
+            targetLevelingModule.AddExperience(Math.Max(0, resultingExperience));
         }
     }
 }

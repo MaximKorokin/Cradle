@@ -33,11 +33,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.OnEntityAdded(entity);
 
+            if (!EntityQuery.Match(entity)) return;
+
             // Set initial visuals when the entity view created
             entity.SubscribeOnce<EntityBoundEvent>(e =>
             {
-                if (!EntityQuery.Match(entity)) return;
-
                 var appearance = entity.GetModule<AppearanceModule>();
                 var stats = entity.GetModule<StatModule>();
                 // Set initial walk speed multiplier

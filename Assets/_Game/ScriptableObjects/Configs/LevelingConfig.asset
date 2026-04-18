@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LevelingConfig
   m_EditorClassIdentifier: 
   <ExperienceTable>k__BackingField: {fileID: 11400000, guid: 446d0697c7910404e9058fa9e583fb0e, type: 2}
+  <ExperienceMultiplier>k__BackingField: 1
   <StatModifiersOnLevelUp>k__BackingField:
   - <Stat>k__BackingField: 400
     <Stage>k__BackingField: 20
@@ -24,7 +25,7 @@ MonoBehaviour:
     <Operation>k__BackingField: 10
     <Value>k__BackingField: 1
     <Priority>k__BackingField: 0
-  <ExperiencePenaltyForOverLeveling>k__BackingField: 0.5
-  <AttackPenaltyForUnderLeveling>k__BackingField: 0.2
-  <DefencePenaltyForUnderLeveling>k__BackingField: 0.2
+  <ExperiencePenaltyForOverLeveling>k__BackingField: 0.2
+  <AttackPenaltyForUnderLeveling>k__BackingField: 0.5
+  <DefencePenaltyForUnderLeveling>k__BackingField: 0.5
   <ExperienceBonusForUnderLeveling>k__BackingField: 0.2

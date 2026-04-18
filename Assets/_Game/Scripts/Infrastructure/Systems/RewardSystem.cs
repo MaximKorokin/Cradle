@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!e.Victim.TryGetModule(out RewardModule rewardModule))
                 return;
 
-            GlobalEventBus.Publish(new AddExperienceRequestEvent(e.Killer, rewardModule.Experience));
+            GlobalEventBus.Publish(new AddExperienceRequestEvent(e.Victim, e.Killer, rewardModule.Experience));
 
             if (!e.Victim.TryGetModule(out SpatialModule spatial))
                 return;
@@ -30,11 +30,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct AddExperienceRequestEvent : IGlobalEvent
     {
+        public Entity Source { get; }
         public Entity Target { get; }
         public long Experience { get; }
 
-        public AddExperienceRequestEvent(Entity target, long experience)
+        public AddExperienceRequestEvent(Entity source, Entity target, long experience)
         {
+            Source = source;
             Target = target;
             Experience = experience;
         }

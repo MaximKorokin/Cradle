@@ -186,29 +186,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         }
     }
 
-    public class AppearanceEntitySpawnInitializer : IEntitySpawnInitializer
-    {
-        private readonly string _path;
-        private readonly Sprite _sprite;
-
-        public AppearanceEntitySpawnInitializer(Sprite sprite) : this(null, sprite) { }
-        public AppearanceEntitySpawnInitializer(string path, Sprite sprite)
-        {
-            _path = path;
-            _sprite = sprite;
-        }
-
-        public void Initialize(Entity entity)
-        {
-            if (!entity.TryGetModule<AppearanceModule>(out var appearanceModule)) return;
-
-            if (string.IsNullOrWhiteSpace(_path))
-                appearanceModule.RequestSetUnitSprite(_sprite);
-            else
-                appearanceModule.RequestSetUnitSprite(_path, _sprite);
-        }
-    }
-
     public class PlayerEntitySpawnInitializer : IEntitySpawnInitializer
     {
         private readonly IGlobalEventBus _globalEventBus;

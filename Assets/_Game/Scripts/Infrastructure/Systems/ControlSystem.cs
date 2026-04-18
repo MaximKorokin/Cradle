@@ -36,13 +36,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.OnEntityAdded(entity);
 
+            if (!EntityQuery.Match(entity)) return;
+
             entity.SubscribeOnce<EntityBoundEvent>(e =>
             {
                 if (entity.TryGetModule<WanderBehaviourModule>(out var wanderModule))
                     wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
             });
-
-            if (!EntityQuery.Match(entity)) return;
 
             if (entity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {

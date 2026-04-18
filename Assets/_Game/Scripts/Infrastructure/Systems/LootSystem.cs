@@ -1,26 +1,53 @@
-﻿using Assets._Game.Scripts.Infrastructure.Configs;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Loot;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public sealed class LootSystem : SystemBase
+    public sealed class LootSystem : EntitySystemBase
     {
         private readonly LootConfig _lootConfig;
         private readonly DefaultEntityDefinitionReferences _defaultEntityDefinitionReferences;
 
+        protected override EntityQuery EntityQuery { get; } =
+            new EntityQuery(
+                RestrictionState.Disabled | RestrictionState.Dead,
+                new[] { typeof(LootItemModule) }
+            );
+
         public LootSystem(
             IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository,
             LootConfig lootConfig,
-            DefaultEntityDefinitionReferences defaultEntityDefinitionReferences) : base(globalEventBus)
+            DefaultEntityDefinitionReferences defaultEntityDefinitionReferences) : base(globalEventBus, entityRepository)
         {
             _lootConfig = lootConfig;
             _defaultEntityDefinitionReferences = defaultEntityDefinitionReferences;
 
             TrackGlobalEvent<LootDropRequestedEvent>(OnLootDropRequested);
             TrackGlobalEvent<LootItemDropRequestedEvent>(OnLootItemDropRequested);
+        }
+
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            if (!EntityQuery.Match(entity)) return;
+
+            entity.SubscribeOnce<EntityBoundEvent>(e =>
+            {
+                // Set the loot item's sprite based on its item definition
+                if (entity.TryGetModule<AppearanceModule>(out var appearanceModule))
+                {
+                    var lootItemModule = entity.GetModule<LootItemModule>();
+                    appearanceModule.RequestSetUnitSprite(lootItemModule.ItemDefinition.Sprite);
+                }
+            });
         }
 
         private void OnLootDropRequested(LootDropRequestedEvent e)
@@ -60,8 +87,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             GlobalEventBus.Publish(new SpawnEntityRequest(
                 _defaultEntityDefinitionReferences.LootItem,
                 position,
-                new IEntitySpawnInitializer[] {
-                    new AppearanceEntitySpawnInitializer(itemDefinition.Sprite),
+                new[] {
                     new LootItemEntitySpawnInitializer(itemDefinition, amount)
                 }));
         }
