@@ -306,6 +306,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1999887667}
+  - {fileID: 1650446311}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &186474293
@@ -322,6 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <LocationEntranceMarkers>k__BackingField:
   - {fileID: 1999887668}
+  - {fileID: 1650446312}
   <LocationTransitionMarkers>k__BackingField: []
   <EntitySpawnSpotMarkers>k__BackingField: []
 --- !u!1 &488501935
@@ -631,6 +633,52 @@ PolygonCollider2D:
       - {x: 11, y: -11}
       - {x: -11, y: -11}
   m_UseDelaunayMesh: 0
+--- !u!1 &1650446310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1650446311}
+  - component: {fileID: 1650446312}
+  m_Layer: 0
+  m_Name: ReviveEntrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1650446311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650446310}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.01, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 186474292}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1650446312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650446310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e734ef9aefb5a45941726db03ccf56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <LocationEntranceDefinition>k__BackingField: {fileID: 11400000, guid: f4feede54018a3543953532f58fe82db, type: 2}
+  <SpawnPoint>k__BackingField: {fileID: 1650446311}
 --- !u!1 &1999887666
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,7 +690,7 @@ GameObject:
   - component: {fileID: 1999887667}
   - component: {fileID: 1999887668}
   m_Layer: 0
-  m_Name: Entrance
+  m_Name: MainEntrance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

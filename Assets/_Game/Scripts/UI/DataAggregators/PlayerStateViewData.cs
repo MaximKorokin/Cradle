@@ -40,7 +40,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         }
 
         public float CurrentHp => _playerContext.GetModule<HealthModule>().CurrentHealth;
-        public float MaxHp => _playerContext.GetModule<StatModule>().Stats.Get(StatId.HpMax);
+        public float MaxHp => _playerContext.GetModule<HealthModule>().MaxHealth;
         public float Level => _playerContext.GetModule<LevelingModule>().Level;
         public float NormalizedExperience => _playerContext.GetModule<LevelingModule>().GetNormalizedExperience();
 

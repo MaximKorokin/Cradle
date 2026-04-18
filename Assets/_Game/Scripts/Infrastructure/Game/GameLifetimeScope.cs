@@ -91,13 +91,13 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.LootConfig);
             builder.RegisterInstance(_configReferences.LocationConfig);
             builder.RegisterInstance(_configReferences.FloatingTextConfig);
+            builder.RegisterInstance(_configReferences.ReviveConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<SystemRunner>();
 
-            builder.Register<PlayerSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LocomotionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AppearanceSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StatSystem>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -116,6 +116,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<LocationTransitionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<CameraFollowSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<FloatingTextSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<EntityReviveSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

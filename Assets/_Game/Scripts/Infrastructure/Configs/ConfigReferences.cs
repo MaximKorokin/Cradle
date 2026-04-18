@@ -28,5 +28,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public LocationConfig LocationConfig { get; private set; }
         [field: SerializeField]
         public FloatingTextConfig FloatingTextConfig { get; private set; }
+        [field: SerializeField]
+        public EntityReviveConfig ReviveConfig { get; private set; }
     }
 }

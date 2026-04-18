@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private float _currentHealth;
 
+        public float MaxHealth => _maxHealth;
+
         public float CurrentHealth
         {
             get => _currentHealth;

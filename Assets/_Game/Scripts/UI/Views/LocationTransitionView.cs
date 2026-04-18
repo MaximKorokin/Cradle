@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.UI.Views
     public sealed class LocationTransitionView : MonoBehaviour
     {
         [SerializeField]
+        private GameObject _viewGameObject;
+        [SerializeField]
         private TMP_Text _locationNameText;
         [SerializeField]
         private Button _button;
@@ -31,7 +33,7 @@ namespace Assets._Game.Scripts.UI.Views
             _targetEntranceId = targetEntranceId;
 
             _locationNameText.text = targetLocationName;
-            _button.gameObject.SetActive(true);
+            _viewGameObject.SetActive(true);
 
             _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(OnButtonClicked);
@@ -39,7 +41,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Hide()
         {
-            _button.gameObject.SetActive(false);
+            _viewGameObject.SetActive(false);
 
             _button.onClick.RemoveAllListeners();
         }

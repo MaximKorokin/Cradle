@@ -21,7 +21,6 @@ namespace Assets._Game.Scripts.Entities.Stats
             // HP regeneration
             if (_cooldownCounter.TryReset() && stats.Has(StatId.HpRegeneration))
             {
-                var hpCurrent = healthModule.CurrentHealth;
                 var hpRegeneration = stats.Get(StatId.HpRegeneration);
 
                 healthModule.Heal(hpRegeneration * _cooldownCounter.Cooldown);

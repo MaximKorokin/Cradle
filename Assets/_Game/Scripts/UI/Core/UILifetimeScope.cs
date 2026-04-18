@@ -55,6 +55,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<LocationAnnounceUISystem>();
             builder.RegisterComponentInHierarchy<LocationTransitionUISystem>();
             builder.RegisterComponentInHierarchy<FloatingTextUISystem>();
+            builder.RegisterComponentInHierarchy<PlayerReviveUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -89,6 +90,8 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
+
+            builder.RegisterComponentInHierarchy<PlayerReviveView>();
         }
     }
 }
