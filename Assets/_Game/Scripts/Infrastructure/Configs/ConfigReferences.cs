@@ -26,5 +26,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public LootConfig LootConfig { get; private set; }
         [field: SerializeField]
         public LocationConfig LocationConfig { get; private set; }
+        [field: SerializeField]
+        public FloatingTextConfig FloatingTextConfig { get; private set; }
     }
 }

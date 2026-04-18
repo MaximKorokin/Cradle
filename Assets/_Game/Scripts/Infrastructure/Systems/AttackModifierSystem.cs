@@ -57,7 +57,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     case AttackModifierType.MultipliedRepeatDamage:
                         var extraDamage = e.Damage * modifier.Value;
                         var appliedDamage = targetHealthModule.ApplyDamage(extraDamage);
-                        GlobalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, appliedDamage, DamageSourceType.AttackModifier));
+                        GlobalEventBus.Publish(new DamageAppliedEvent(e.Target, e.Source, appliedDamage, false, DamageSourceType.AttackModifier));
                         break;
                 }
             }

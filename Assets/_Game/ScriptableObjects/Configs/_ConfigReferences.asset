@@ -22,3 +22,4 @@ MonoBehaviour:
   <LevelingConfig>k__BackingField: {fileID: 11400000, guid: 2981b2513c4979c46bc8627d6db4d45f, type: 2}
   <LootConfig>k__BackingField: {fileID: 11400000, guid: b79e02c93ce6f18409cdca9641831f72, type: 2}
   <LocationConfig>k__BackingField: {fileID: 11400000, guid: a202547b8a2378b4c9b3519c1bd39076, type: 2}
+  <FloatingTextConfig>k__BackingField: {fileID: 11400000, guid: 8cb45c64dc019d74983032e17f0d802f, type: 2}

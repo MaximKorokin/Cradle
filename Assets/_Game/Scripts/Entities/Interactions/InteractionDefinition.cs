@@ -73,7 +73,7 @@ namespace Assets._Game.Scripts.Entities.Interactions
         public sealed class HealData : StepData
         {
             public int Amount = 10;
-            public override IInteractionStep Build(IObjectResolver resolver) => new HealStep(Amount);
+            public override IInteractionStep Build(IObjectResolver resolver) => new HealStep(Amount, resolver.Resolve<IGlobalEventBus>());
         }
 
         [Serializable]

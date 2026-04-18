@@ -10,5 +10,7 @@ namespace Assets._Game.Scripts.UI.Core
         public RectTransform ModalsRoot { get; private set; }
         [field: SerializeField]
         public RectTransform NameplatesRoot { get; private set; }
+        [field: SerializeField]
+        public RectTransform FloatingTextRoot { get; private set; }
     }
 }

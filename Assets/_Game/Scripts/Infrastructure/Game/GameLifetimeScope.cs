@@ -90,6 +90,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.LevelingConfig);
             builder.RegisterInstance(_configReferences.LootConfig);
             builder.RegisterInstance(_configReferences.LocationConfig);
+            builder.RegisterInstance(_configReferences.FloatingTextConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -114,6 +115,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityPlacementSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LocationTransitionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<CameraFollowSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<FloatingTextSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

@@ -54,6 +54,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
             builder.RegisterComponentInHierarchy<LocationAnnounceUISystem>();
             builder.RegisterComponentInHierarchy<LocationTransitionUISystem>();
+            builder.RegisterComponentInHierarchy<FloatingTextUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)

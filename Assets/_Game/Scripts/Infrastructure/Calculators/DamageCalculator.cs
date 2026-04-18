@@ -36,13 +36,14 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
 
     public interface IDamageCalculator
     {
-        int Calculate(in DamageSpec spec, Entity source, Entity target);
+        int Calculate(in DamageSpec spec, Entity source, Entity target, out bool isCritical);
     }
 
     public sealed class DamageCalculator : IDamageCalculator
     {
-        public int Calculate(in DamageSpec spec, Entity source, Entity target)
+        public int Calculate(in DamageSpec spec, Entity source, Entity target, out bool isCritical)
         {
+            isCritical = false;
             if (!source.TryGetModule(out StatModule sourceStats)) return 0;
             if (!target.TryGetModule(out StatModule targetStats)) return 0;
 
@@ -65,6 +66,7 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
                 if (Roll(critChance))
                 {
                     reduced *= critMultiplier;
+                    isCritical = true;
                 }
             }
 

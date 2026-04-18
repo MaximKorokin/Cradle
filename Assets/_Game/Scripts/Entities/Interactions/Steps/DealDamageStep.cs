@@ -25,11 +25,11 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         {
             if (_done) return StepStatus.Completed;
 
-            var damage = _calculator.Calculate(_spec, context.Source, context.Target);
+            var damage = _calculator.Calculate(_spec, context.Source, context.Target, out bool isCritical);
             if (context.Target.TryGetModule(out HealthModule healthModule))
             {
                 var appliedDamage = healthModule.ApplyDamage(damage);
-                _globalEventBus.Publish(new DamageAppliedEvent(context.Target, context.Source, appliedDamage, _spec.Source));
+                _globalEventBus.Publish(new DamageAppliedEvent(context.Target, context.Source, appliedDamage, isCritical, _spec.Source));
             }
 
             _done = true;
@@ -44,13 +44,15 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
         public readonly Entity Target;
         public readonly Entity Source;
         public readonly float Damage;
+        public readonly bool IsCritical;
         public readonly DamageSourceType SourceType;
 
-        public DamageAppliedEvent(Entity target, Entity source, float damage, DamageSourceType sourceType)
+        public DamageAppliedEvent(Entity target, Entity source, float damage, bool isCritical, DamageSourceType sourceType)
         {
             Target = target;
             Source = source;
             Damage = damage;
+            IsCritical = isCritical;
             SourceType = sourceType;
         }
     }
