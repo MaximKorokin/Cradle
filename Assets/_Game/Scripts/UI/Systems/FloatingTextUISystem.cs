@@ -32,7 +32,8 @@ namespace Assets._Game.Scripts.UI.Systems
         private void OnFloatingTextRequested(FloatingTextRequest e)
         {
             var view = Instantiate(_floatingTextConfig.FloatingTextPrefab, _root);
-            var screenPosition = _cameraService.Camera.WorldToScreenPoint(e.WorldPosition + (Vector3)_floatingTextConfig.Offset);
+            var position = (Vector2)e.WorldPosition + _floatingTextConfig.Offset + Random.insideUnitCircle * _floatingTextConfig.RandomOffset;
+            var screenPosition = _cameraService.Camera.WorldToScreenPoint(position);
             view.transform.position = screenPosition;
             view.Bind(e.Text, e.Style);
         }

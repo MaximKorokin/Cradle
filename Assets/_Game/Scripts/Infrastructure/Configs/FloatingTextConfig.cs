@@ -9,10 +9,12 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
     {
         public FloatingTextView FloatingTextPrefab;
         public Vector2 Offset;
+        public Vector2 RandomOffset;
 
         [Space]
         public FloatingTextStyle DamageStyle;
         public FloatingTextStyle CriticalStyle;
+        public FloatingTextStyle DamageReceiveStyle;
         public FloatingTextStyle HealStyle;
         public FloatingTextStyle ExperienceStyle;
     }

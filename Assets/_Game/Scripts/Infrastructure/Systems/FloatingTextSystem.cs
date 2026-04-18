@@ -11,6 +11,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class FloatingTextSystem : EntitySystemBase
     {
         private readonly FloatingTextConfig _floatingTextConfig;
+        private readonly IPlayerProvider _playerProvider;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -21,9 +22,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public FloatingTextSystem(
             IGlobalEventBus globalEventBus,
             EntityRepository entityRepository,
-            FloatingTextConfig floatingTextConfig) : base(globalEventBus, entityRepository)
+            FloatingTextConfig floatingTextConfig,
+            IPlayerProvider playerProvider) : base(globalEventBus, entityRepository)
         {
             _floatingTextConfig = floatingTextConfig;
+            _playerProvider = playerProvider;
 
             TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
             TrackGlobalEvent<HealAppliedEvent>(OnHealApplied);
@@ -36,14 +39,25 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             var damageText = damageAppliedEvent.Damage.ToString();
             var position = damageAppliedEvent.Target.GetModule<SpatialModule>().Position;
 
-            if (damageAppliedEvent.IsCritical)
-                GlobalEventBus.Publish(new FloatingTextRequest(damageText, position, _floatingTextConfig.CriticalStyle));
-            else
-                GlobalEventBus.Publish(new FloatingTextRequest(damageText, position, _floatingTextConfig.DamageStyle));
+            // Show different styles for damage received by the player vs damage dealt to others
+            if (damageAppliedEvent.Target == _playerProvider.Player)
+            {
+                GlobalEventBus.Publish(new FloatingTextRequest(damageText, position, _floatingTextConfig.DamageReceiveStyle));
+            }
+            else if (damageAppliedEvent.Source == _playerProvider.Player)
+            {
+                if (damageAppliedEvent.IsCritical)
+                    GlobalEventBus.Publish(new FloatingTextRequest(damageText, position, _floatingTextConfig.CriticalStyle));
+                else
+                    GlobalEventBus.Publish(new FloatingTextRequest(damageText, position, _floatingTextConfig.DamageStyle));
+            }
         }
 
         private void OnHealApplied(HealAppliedEvent healAppliedEvent)
         {
+            // Only show heal text for the player
+            if (healAppliedEvent.Target != _playerProvider.Player) return;
+
             var healText = healAppliedEvent.Heal.ToString();
             var position = healAppliedEvent.Target.GetModule<SpatialModule>().Position;
 
@@ -52,6 +66,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnExperienceChanged(Entity entity, ExperienceChangedEvent experienceChangedEvent)
         {
+            // Only show experience gain for the player
+            if (entity != _playerProvider.Player) return;
+
             var experienceText = $"{experienceChangedEvent.NewAmount - experienceChangedEvent.OldAmount} XP";
             var position = entity.GetModule<SpatialModule>().Position;
 
