@@ -27,6 +27,7 @@ namespace Assets._Game.Scripts.Entities.Units
 
         public void OnReturn()
         {
+            SpriteRenderer.color = Color.white;
         }
     }
 }

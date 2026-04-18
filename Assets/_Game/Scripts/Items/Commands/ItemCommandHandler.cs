@@ -229,7 +229,7 @@ namespace Assets._Game.Scripts.Items.Commands
             // Check if all functional traits allow triggering with the given context.
             var itemUseSettings = ResolveItemUseSettings(entity, c.IsManual);
             var triggerContext = new ItemTriggerContext(entity, ItemTrigger.OnUse, item.Value, itemUseSettings);
-            if (item.Value.GetTraits<FunctionalItemTraitBase>().Any(t => !t.CanTrigger(triggerContext)))
+            if (item.Value.GetFunctionalTraits<FunctionalItemTraitBase>(ItemTrigger.OnUse).Any(t => !t.CanTrigger(triggerContext)))
                 return false;
 
             // All checks passed, trigger the item use.

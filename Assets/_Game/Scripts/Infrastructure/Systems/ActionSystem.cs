@@ -62,16 +62,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (!e.Item.HasValue) return;
 
-            var specialActionTrait = e.Item.Value.GetFunctionalTrait<SpecialActionTrait>(ItemTrigger.OnEquipmentChange);
-            if (specialActionTrait == null || !specialActionTrait.CanTrigger(new(entity, ItemTrigger.OnEquipmentChange, e.Item.Value))) return;
-
             var actionModule = entity.GetModule<ActionModule>();
             var isEquipping = e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced;
+            var context = new ItemTriggerContext(entity, ItemTrigger.OnEquipmentChange, e.Item.Value);
 
-            actionModule.SetSpecialAction(
-                specialActionTrait.Kind,
-                isEquipping ? new ActionInstance(specialActionTrait.Action) : null
-            );
+            foreach (var specialActionTrait in e.Item.Value.GetFunctionalTraits<SpecialActionTrait>(ItemTrigger.OnEquipmentChange))
+            {
+                if (specialActionTrait == null || !specialActionTrait.CanTrigger(context)) continue;
+
+                actionModule.SetSpecialAction(
+                    specialActionTrait.Kind,
+                    isEquipping ? new ActionInstance(specialActionTrait.Action) : null
+                );
+            }
         }
 
         // ───────────────────────── Tick Loop ─────────────────────────
