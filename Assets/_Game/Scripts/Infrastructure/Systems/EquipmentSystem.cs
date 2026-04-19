@@ -2,12 +2,16 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class EquipmentSystem : EntitySystemBase, ITickSystem
     {
+        private readonly Dictionary<ItemDefinition, long> _autoUsedItems = new();
+
         protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(EquipmentModule) });
 
         public EquipmentSystem(
@@ -33,9 +37,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var equipmentModule = entity.GetModule<EquipmentModule>();
 
-            for (int i = 0; i < equipmentModule.Equipment.Slots.Count; i++)
+            _autoUsedItems.Clear();
+
+            // Auto use items in equipment slots
+            // Prevent using the same item multiple times if it appears in multiple slots
+            foreach (var (slot, item) in equipmentModule.Equipment.Enumerate())
             {
-                var command = new UseItemCommand(ItemContainerId.Equipment, equipmentModule.Equipment.Slots[i].ToInt64(), false);
+                if (item == null || !_autoUsedItems.TryAdd(item.Value.Definition, slot.ToInt64())) continue;
+            }
+
+            // Publish use item commands for auto used items
+            foreach (var slot in _autoUsedItems.Values)
+            {
+                var command = new UseItemCommand(ItemContainerId.Equipment, slot, false);
                 var request = new ItemCommandRequest(command);
                 entity.Publish(request);
             }

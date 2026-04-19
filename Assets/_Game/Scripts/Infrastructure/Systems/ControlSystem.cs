@@ -5,7 +5,6 @@ using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Shared.Utils;
-using UnityEngine;
 using VContainer;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
@@ -111,9 +110,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEntityDied(EntityDiedEvent e)
         {
-            if (!e.Victim.TryGetModule<IntentModule>(out var intent)) return;
-
-            intent.SetMove(new(Vector2.zero));
+            ResetControl(e.Victim);
         }
 
         private void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
@@ -127,8 +124,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEntityRepositionRequested(Entity entity, EntityRepositionRequest request)
         {
-            var controlModule = entity.GetModule<ControlModule>();
-            controlModule.ResetProviders();
+            ResetControl(entity);
+        }
+
+        private static void ResetControl(Entity entity)
+        {
+            if (entity.TryGetModule<IntentModule>(out var intentModule))
+                intentModule.ClearIntents();
+
+            if (entity.TryGetModule<ControlModule>(out var controlModule))
+                controlModule.ResetProviders();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control.Intents;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -7,6 +8,32 @@ namespace Assets._Game.Scripts.Entities.Modules
         private MoveIntent _move;
         private AimIntent _aim;
         private ActionIntent _act;
+
+        private readonly MoveIntent EmptyMoveIntent = new(Vector2.zero);
+        private readonly AimIntent EmptyAimIntent = new(Vector2.zero);
+        private readonly ActionIntent EmptyActionIntent = new(null, null, null);
+
+        public void ClearIntents()
+        {
+            ClearMove();
+            ClearAim();
+            ClearAct();
+        }
+
+        public void ClearMove()
+        {
+            SetMove(EmptyMoveIntent);
+        }
+
+        public void ClearAim()
+        {
+            SetAim(EmptyAimIntent);
+        }
+
+        public void ClearAct()
+        {
+            SetAct(EmptyActionIntent);
+        }
 
         public void SetMove(MoveIntent moveIntent)
         {

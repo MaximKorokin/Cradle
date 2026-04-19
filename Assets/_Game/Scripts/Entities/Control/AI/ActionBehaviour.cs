@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
             if (context.ActionInstance == null)
             {
-                intentModule.SetMove(new(Vector2.zero));
+                intentModule.ClearMove();
                 return;
             }
 
@@ -49,7 +49,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             var effectiveRange = context.ActionInstance.GetEffectiveRange(entity);
             if (direction.sqrMagnitude <= effectiveRange * effectiveRange)
             {
-                intentModule.SetMove(new(Vector2.zero));
+                intentModule.ClearMove();
                 return true;
             }
 

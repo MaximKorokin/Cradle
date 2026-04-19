@@ -118,5 +118,11 @@ namespace Assets._Game.Scripts.Entities.Interactions
         {
             public override IInteractionStep Build(IObjectResolver resolver) => new LootItemPickupStep(resolver.Resolve<IGlobalEventBus>(), resolver.Resolve<ItemInstanceDataFactory>());
         }
+
+        [Serializable]
+        public sealed class ReviveStepData : StepData
+        {
+            public override IInteractionStep Build(IObjectResolver resolver) => new ReviveStep(resolver.Resolve<IGlobalEventBus>());
+        }
     }
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: Stem
   <Icon>k__BackingField: {fileID: -2528899500779814246, guid: decbd013596915b4b8c0907b6d318b44, type: 3}
   <Sprite>k__BackingField: {fileID: -2528899500779814246, guid: decbd013596915b4b8c0907b6d318b44, type: 3}
-  <MaxAmount>k__BackingField: 64
+  <MaxAmount>k__BackingField: 640
   <Weight>k__BackingField: 1
   <Traits>k__BackingField: []
   references:

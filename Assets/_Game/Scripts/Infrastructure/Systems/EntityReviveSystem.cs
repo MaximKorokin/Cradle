@@ -30,7 +30,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             entity.GetModule<RestrictionStateModule>().Remove(RestrictionState.Dead);
 
-            GlobalEventBus.Publish(new LocationTransitionRequest(_reviveConfig.ReviveLocation.LocationDefinition.Id, _reviveConfig.ReviveLocation.EntranceDefinition.Id));
+            if (!reviveRequest.InPlace)
+            {
+                GlobalEventBus.Publish(new LocationTransitionRequest(_reviveConfig.ReviveLocation.LocationDefinition.Id, _reviveConfig.ReviveLocation.EntranceDefinition.Id));
+            }
 
             GlobalEventBus.Publish(new EntityRevivedEvent(entity));
         }
@@ -39,10 +42,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public readonly struct EntityReviveRequest : IGlobalEvent
     {
         public readonly Entity Entity;
+        public readonly bool InPlace;
 
-        public EntityReviveRequest(Entity entity)
+        public EntityReviveRequest(Entity entity, bool inPlace)
         {
             Entity = entity;
+            InPlace = inPlace;
         }
     }
 

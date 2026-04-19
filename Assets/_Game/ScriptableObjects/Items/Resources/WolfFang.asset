@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: 'Wolf Fang '
   <Icon>k__BackingField: {fileID: -8160811844406572245, guid: e933a5ec60a337b4b978e93a94b2704c, type: 3}
   <Sprite>k__BackingField: {fileID: -3212882744364061700, guid: 198a99c34dcd5794180a2514ddd792c0, type: 3}
-  <MaxAmount>k__BackingField: 64
+  <MaxAmount>k__BackingField: 640
   <Weight>k__BackingField: 80
   <Traits>k__BackingField: []
   references:

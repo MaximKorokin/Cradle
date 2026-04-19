@@ -21,8 +21,8 @@ namespace Assets._Game.Scripts.Entities.Control
             Entity.GetModule<RestrictionStateModule>().Add(RestrictionState.Stunned);
             if (Entity.TryGetModule(out IntentModule intent))
             {
-                intent.SetMove(new(Vector2.zero));
-                intent.SetAct(new(null, null, null));
+                intent.ClearMove();
+                intent.ClearAct();
             }
         }
 

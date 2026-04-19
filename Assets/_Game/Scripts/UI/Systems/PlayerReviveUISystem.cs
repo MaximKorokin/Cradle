@@ -24,6 +24,12 @@ namespace Assets._Game.Scripts.UI.Systems
             _playerReviveView.ReviveButtonClicked += OnReviveButtonClicked;
 
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<EntityRevivedEvent>(OnEntityRevived);
+        }
+
+        private void OnReviveButtonClicked()
+        {
+            GlobalEventBus.Publish(new EntityReviveRequest(_playerProvider.Player, false));
         }
 
         private void OnEntityDied(EntityDiedEvent e)
@@ -34,10 +40,12 @@ namespace Assets._Game.Scripts.UI.Systems
             }
         }
 
-        private void OnReviveButtonClicked()
+        private void OnEntityRevived(EntityRevivedEvent e)
         {
-            GlobalEventBus.Publish(new EntityReviveRequest(_playerProvider.Player));
-            _playerReviveView.Hide();
+            if (e.Entity == _playerProvider.Player)
+            {
+                _playerReviveView.Hide();
+            }
         }
     }
 }

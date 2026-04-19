@@ -13,8 +13,8 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         public void Tick(Entity entity, ActionContext context, float delta)
         {
             var intent = entity.GetModule<IntentModule>();
-            intent.SetAct(new(null, null, null));
-            intent.SetMove(new(Vector2.zero));
+            intent.ClearAct();
+            intent.ClearMove();
         }
     }
 }
