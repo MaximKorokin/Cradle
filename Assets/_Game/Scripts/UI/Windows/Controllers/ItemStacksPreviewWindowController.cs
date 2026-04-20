@@ -88,6 +88,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void PublishItemCommand(IItemCommand command)
         {
+            _windowManager.CloseWindow(_window);
+
             var entity = _playerProvider.Player;
             entity.Publish(new ItemCommandRequest(command));
         }
@@ -113,13 +115,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             {
                 if (primaryItem.Amount > 1)
                 {
-                    actions.Add(new ItemStackAction(ItemStackActionType.TransferOne, "Transfer One"));
-                    actions.Add(new ItemStackAction(ItemStackActionType.TransferHalf, "Transfer Half"));
-                    actions.Add(new ItemStackAction(ItemStackActionType.TransferAll, "Transfer All"));
-                }
-                else
-                {
-                    actions.Add(new ItemStackAction(ItemStackActionType.TransferAll, "Transfer"));
+                    actions.Add(new ItemStackAction(ItemStackActionType.Transfer, "Transfer"));
                 }
             }
 
@@ -143,7 +139,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void ProcessAction(ItemStackActionType actionType)
         {
-            _windowManager.CloseWindow(_window);
             var item = _primaryItemContainer.Get(_primaryContainerSlot);
             var primarySlot = ContainerSlotConverter.ToInt64(_primaryContainerSlot);
 
@@ -155,20 +150,26 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                         PublishItemCommand(new DropItemCommand(_primaryContainerId, primarySlot, item.Value.Amount));
                     }
                     break;
-                case ItemStackActionType.TransferOne:
-                    PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, 1));
-                    break;
-                case ItemStackActionType.TransferHalf:
+                case ItemStackActionType.Transfer:
                     if (item != null)
                     {
-                        var halfAmount = (int)Math.Ceiling(item.Value.Amount / 2f);
-                        PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, halfAmount));
-                    }
-                    break;
-                case ItemStackActionType.TransferAll:
-                    if (item != null)
-                    {
-                        PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, item.Value.Amount));
+                        // If there's only one item, transfer it directly, otherwise show amount picker
+                        if (item.Value.Amount == 1)
+                        {
+                            PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, 1));
+                        }
+                        else
+                        {
+                            AmountPickerWindow amountPickerWindow = null;
+                            amountPickerWindow = _windowManager.InstantiateWindow<AmountPickerWindow, AmountPickerWindowControllerArguments>(
+                                new(1,
+                                    item.Value.Amount,
+                                    amount =>
+                                    {
+                                        PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, amount));
+                                        _windowManager.CloseWindow(amountPickerWindow);
+                                    }));
+                        }
                     }
                     break;
                 case ItemStackActionType.Equip:
@@ -199,9 +200,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public enum ItemStackActionType
     {
         Drop,
-        TransferAll,
-        TransferOne,
-        TransferHalf,
+        Transfer,
         Equip,
         Unequip,
         Use,

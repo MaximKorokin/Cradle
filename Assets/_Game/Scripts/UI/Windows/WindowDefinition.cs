@@ -21,7 +21,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public Type GetControllerType(params Type[] genericTypes)
         {
-            if (ControllerType.IsGenericType)
+            // Choose the generic route only if generic types are provided
+            if (ControllerType.IsGenericType && genericTypes.Length > 0)
             {
                 var genericArgCount = ControllerType.GetGenericArguments().Length;
                 if (genericTypes.Length != genericArgCount)
@@ -46,5 +47,7 @@ namespace Assets._Game.Scripts.UI.Windows
         LocationTransitionList = 50,
 
         ItemUseSettings = 1100,
+
+        AmountPicker = 2100,
     }
 }

@@ -71,9 +71,11 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
 
-                new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<, >)),
-
                 new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController)),
+                new(WindowId.AmountPicker, typeof(AmountPickerWindow), typeof(AmountPickerWindowController)),
+
+                // Unbound generic can be registered, but needs to be resolved with generic type parameters specified
+                new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<,>)),
             };
 
             foreach (var windowDefinition in windows)

@@ -26,6 +26,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public interface IWindowControllerArguments { }
 
     public readonly struct EmptyWindowControllerArguments : IWindowControllerArguments { }
+
     public readonly struct ItemStacksPreviewWindowControllerArguments<T1, T2> : IWindowControllerArguments
         where T1 : struct, IContainerSlot
         where T2 : struct, IContainerSlot
@@ -54,6 +55,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             SecondaryItemContainer = secondaryItemContainer;
             PrimaryContainerId = primaryContainerId;
             SecondaryContainerId = secondaryContainerId;
+        }
+    }
+
+    public readonly struct AmountPickerWindowControllerArguments : IWindowControllerArguments
+    {
+        public readonly int MinAmount;
+        public readonly int MaxAmount;
+        public readonly Action<int> OnAmountPickedCallback;
+
+        public AmountPickerWindowControllerArguments(int minAmount, int maxAmount, Action<int> onAmountPicked)
+        {
+            MinAmount = minAmount;
+            MaxAmount = maxAmount;
+            OnAmountPickedCallback = onAmountPicked;
         }
     }
 }
