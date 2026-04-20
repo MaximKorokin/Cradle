@@ -20,6 +20,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public override void OnShow()
         {
+            base.OnShow();
+
             _firstInventoryView.SlotPointerDown += OnFirstInventorySlotPointerDown;
             _firstInventoryView.SlotPointerUp += OnFirstInventorySlotPointerUp;
             _secondInventoryView.SlotPointerDown += OnSecondInventorySlotPointerDown;
@@ -28,6 +30,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public override void OnHide()
         {
+            base.OnHide();
+
             _firstInventoryView.Unbind();
             _secondInventoryView.Unbind();
 

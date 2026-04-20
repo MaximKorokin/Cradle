@@ -21,6 +21,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public override void OnShow()
         {
+            base.OnShow();
+
             _inventoryView.SlotPointerDown += OnInventorySlotPointerDown;
             _inventoryView.SlotPointerUp += OnInventorySlotPointerUp;
             _equipmentView.SlotPointerDown += OnEquipmentSlotPointerDown;
@@ -29,6 +31,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public override void OnHide()
         {
+            base.OnHide();
+
             _inventoryView.Unbind();
             _equipmentView.Unbind();
 

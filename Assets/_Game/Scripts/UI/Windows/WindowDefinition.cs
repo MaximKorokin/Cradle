@@ -21,8 +21,16 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public Type GetControllerType(params Type[] genericTypes)
         {
-            if (ControllerType.IsGenericType && genericTypes.Length > 0)
+            if (ControllerType.IsGenericType)
+            {
+                var genericArgCount = ControllerType.GetGenericArguments().Length;
+                if (genericTypes.Length != genericArgCount)
+                {
+                    throw new InvalidOperationException(
+                        $"Controller {ControllerType.Name} requires {genericArgCount} generic arguments but {genericTypes.Length} were provided.");
+                }
                 return ControllerType.MakeGenericType(genericTypes);
+            }
             return ControllerType;
         }
     }

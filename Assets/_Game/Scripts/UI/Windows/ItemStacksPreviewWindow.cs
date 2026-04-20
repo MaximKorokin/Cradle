@@ -26,12 +26,16 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public override void OnShow()
         {
+            base.OnShow();
+
             _actionButtonTemplate.gameObject.SetActive(false);
         }
 
         public override void OnHide()
         {
+            base.OnHide();
 
+            Clear();
         }
 
         public void Render(ItemStackSnapshot? primaryItemStack, ItemStackSnapshot? secondaryItemStack, IEnumerable<ItemStackAction> actions)
@@ -66,6 +70,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
             foreach (var button in _actionButtons)
             {
+                button.onClick.RemoveAllListeners();
                 Destroy(button.gameObject);
             }
             _actionButtons.Clear();

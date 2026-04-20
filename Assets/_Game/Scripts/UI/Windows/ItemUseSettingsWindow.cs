@@ -16,12 +16,22 @@ namespace Assets._Game.Scripts.UI.Windows
         [SerializeField]
         private Toggle _overrideStatusEffectsToggle;
 
-        public Action<ItemUseSettings> Changed;
+        public event Action<ItemUseSettings> Changed;
 
-        private void Awake()
+        public override void OnShow()
         {
+            base.OnShow();
+
             _hpPercentSlider.onValueChanged.AddListener(OnHpPercentSliderValueChanged);
             _overrideStatusEffectsToggle.onValueChanged.AddListener(OnOverrideStatusEffectsToggleValueChanged);
+        }
+
+        public override void OnHide()
+        {
+            base.OnHide();
+
+            _hpPercentSlider.onValueChanged.RemoveListener(OnHpPercentSliderValueChanged);
+            _overrideStatusEffectsToggle.onValueChanged.RemoveListener(OnOverrideStatusEffectsToggleValueChanged);
         }
 
         public void Render(EquipmentHudData equipmentHudData)

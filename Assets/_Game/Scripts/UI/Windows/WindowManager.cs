@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows
 {
     public class WindowManager
     {
-        private readonly List<(UIWindowBase Window, IDisposable Controller)> _windowStack = new();
+        private readonly List<(UIWindowBase Window, IDisposable Controller, GameObject ModalRoot)> _windowStack = new();
 
         private readonly RectTransform _windowsRoot;
         private readonly RectTransform _modalsRoot;
@@ -76,33 +76,33 @@ namespace Assets._Game.Scripts.UI.Windows
             // call callback (e.g. for controller Initialize method)
             instantiatedCallback?.Invoke(window, controller);
 
-            // push window and controller to stack that will be used to destroy everything correctly
-            _windowStack.Add((window, controller as IDisposable));
-
-            // initialize window
-            window.OnShow();
-
-            // wrap window into a modal if needed
+            GameObject modalRoot = null;
             if (prefab.IsModal)
             {
                 var modalWrapper = _resolver.Instantiate(_modalWrapperPrefab, _modalsRoot);
                 modalWrapper.SetWindow(window);
+                modalRoot = modalWrapper.gameObject;
             }
+
+            // push window and controller to stack that will be used to destroy everything correctly
+            _windowStack.Add((window, controller as IDisposable, modalRoot));
+
+            // initialize window
+            window.OnShow();
 
             return window;
         }
 
-        private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller) element)
+        private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller, GameObject ModalRoot) element)
         {
             _windowStack.Remove(element);
 
-            var (window, controller) = element;
+            var (window, controller, modalRoot) = element;
             window.OnHide();
-            if (window.IsModal)
+            
+            if (modalRoot != null)
             {
-                // The window is wrapped in a modal wrapper, so we need to destroy the parent game object.
-                // todo: this is a bit hacky, consider refactoring the modal wrapper to avoid this.
-                UnityEngine.Object.Destroy(window.transform.parent.parent.gameObject);
+                UnityEngine.Object.Destroy(modalRoot);
             }
             else
             {
