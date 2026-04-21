@@ -13,15 +13,13 @@ namespace Assets._Game.Scripts.UI.Views
 
         private IEquipmentHudData _equipmentHudData;
 
-        public event Action<EquipmentSlotKey> SlotPointerDown;
-        public event Action<EquipmentSlotKey> SlotPointerUp;
+        public event Action<EquipmentSlotKey> SlotClick;
 
         public void Bind()
         {
             foreach (var slot in _slots)
             {
-                slot.PointerDown += OnSlotPointerDown;
-                slot.PointerUp += OnSlotPointerUp;
+                slot.PointerClick += OnSlotPointerClick;
             }
         }
 
@@ -52,8 +50,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             foreach (var slot in _slots)
             {
-                slot.PointerDown -= OnSlotPointerDown;
-                slot.PointerUp -= OnSlotPointerUp;
+                slot.PointerClick -= OnSlotPointerClick;
             }
 
             if (_equipmentHudData != null)
@@ -63,14 +60,9 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
-        private void OnSlotPointerDown(EquipmentSlotKey slot)
+        private void OnSlotPointerClick(EquipmentSlotKey slot)
         {
-            SlotPointerDown?.Invoke(slot);
-        }
-
-        private void OnSlotPointerUp(EquipmentSlotKey slot)
-        {
-            SlotPointerUp?.Invoke(slot);
+            SlotClick?.Invoke(slot);
         }
     }
 }

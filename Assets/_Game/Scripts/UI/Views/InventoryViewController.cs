@@ -9,15 +9,10 @@ namespace Assets._Game.Scripts.UI.Views
         private readonly InventoryView _inventoryView;
         private readonly InventoryModel _inventoryModel;
 
-        public event Action<InventorySlot> SlotPointerDown
+        public event Action<InventorySlot> SlotClick
         {
-            add => _inventoryView.SlotPointerDown += value;
-            remove => _inventoryView.SlotPointerDown -= value;
-        }
-        public event Action<InventorySlot> SlotPointerUp
-        {
-            add => _inventoryView.SlotPointerUp += value;
-            remove => _inventoryView.SlotPointerUp -= value;
+            add => _inventoryView.SlotClick += value;
+            remove => _inventoryView.SlotClick -= value;
         }
 
         public InventoryViewController(

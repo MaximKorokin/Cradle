@@ -35,20 +35,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryViewController = new InventoryViewController(_window.InventoryView, _inventoryHudData.InventoryModel);
             _equipmentViewController = new EquipmentViewController(_window.EquipmentView);
 
-            _inventoryViewController.SlotPointerDown += _previewProcessor.OnFirstItemContainerSlotPointerDown;
-            _inventoryViewController.SlotPointerUp += _previewProcessor.OnFirstItemContainerSlotPointerUp;
-            _equipmentViewController.SlotPointerDown += _previewProcessor.OnSecondItemContainerSlotPointerDown;
-            _equipmentViewController.SlotPointerUp += _previewProcessor.OnSecondItemContainerSlotPointerUp;
+            _inventoryViewController.SlotClick += _previewProcessor.OnFirstItemContainerSlotClick;
+            _equipmentViewController.SlotClick += _previewProcessor.OnSecondItemContainerSlotClick;
 
             Redraw();
         }
 
         public override void Dispose()
         {
-            _inventoryViewController.SlotPointerDown -= _previewProcessor.OnFirstItemContainerSlotPointerDown;
-            _inventoryViewController.SlotPointerUp -= _previewProcessor.OnFirstItemContainerSlotPointerUp;
-            _equipmentViewController.SlotPointerDown -= _previewProcessor.OnSecondItemContainerSlotPointerDown;
-            _equipmentViewController.SlotPointerUp -= _previewProcessor.OnSecondItemContainerSlotPointerUp;
+            _inventoryViewController.SlotClick -= _previewProcessor.OnFirstItemContainerSlotClick;
+            _equipmentViewController.SlotClick -= _previewProcessor.OnSecondItemContainerSlotClick;
         }
 
         private void Redraw()

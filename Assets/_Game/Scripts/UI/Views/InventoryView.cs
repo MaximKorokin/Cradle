@@ -40,8 +40,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private IInventoryHudData _inventoryHudData;
 
-        public event Action<InventorySlot> SlotPointerDown;
-        public event Action<InventorySlot> SlotPointerUp;
+        public event Action<InventorySlot> SlotClick;
 
         public event Action FilterByArmorButtonClicked;
         public event Action FilterByWeaponButtonClicked;
@@ -101,8 +100,7 @@ namespace Assets._Game.Scripts.UI.Views
 
                 var slotView = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
                 slotView.Bind(inventorySlot);
-                slotView.PointerDown += OnSlotPointerDown;
-                slotView.PointerUp += OnSlotPointerUp;
+                slotView.PointerClick += OnSlotPointerClick;
                 _slots.Add(slotView);
                 slotView.gameObject.SetActive(true);
                 slotView.Render(stack);
@@ -122,14 +120,9 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
-        private void OnSlotPointerDown(InventorySlot slotIndex)
+        private void OnSlotPointerClick(InventorySlot slotIndex)
         {
-            SlotPointerDown?.Invoke(slotIndex);
-        }
-
-        private void OnSlotPointerUp(InventorySlot slotIndex)
-        {
-            SlotPointerUp?.Invoke(slotIndex);
+            SlotClick?.Invoke(slotIndex);
         }
     }
 }

@@ -7,15 +7,10 @@ namespace Assets._Game.Scripts.UI.Views
     {
         private readonly EquipmentView _equipmentView;
 
-        public event Action<EquipmentSlotKey> SlotPointerDown
+        public event Action<EquipmentSlotKey> SlotClick
         {
-            add => _equipmentView.SlotPointerDown += value;
-            remove => _equipmentView.SlotPointerDown -= value;
-        }
-        public event Action<EquipmentSlotKey> SlotPointerUp
-        {
-            add => _equipmentView.SlotPointerUp += value;
-            remove => _equipmentView.SlotPointerUp -= value;
+            add => _equipmentView.SlotClick += value;
+            remove => _equipmentView.SlotClick -= value;
         }
 
         public EquipmentViewController(EquipmentView equipmentView)
