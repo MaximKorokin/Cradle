@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
@@ -13,10 +14,27 @@ namespace Assets._Game.Scripts.UI.Views
         private RectTransform _inventorySlotsParent;
         [SerializeField]
         private InventorySlotView _inventorySlotTemplate;
+        [Space]
         [SerializeField]
         private TMP_Text _weightText;
         [SerializeField]
         private TMP_Text _goldText;
+        [SerializeField]
+        private TMP_Text _slotsAmountText;
+        [Space]
+        [SerializeField]
+        private Button _filterByArmorButton;
+        [SerializeField]
+        private Button _filterByWeaponButton;
+        [SerializeField]
+        private Button _filterByConsumableButton;
+        [SerializeField]
+        private Button _filterByResourceButton;
+        [Space]
+        [SerializeField]
+        private Button _OrderByNameButton;
+        [SerializeField]
+        private Button _OrderByTypeButton;
 
         private readonly List<InventorySlotView> _slots = new();
 
@@ -24,6 +42,36 @@ namespace Assets._Game.Scripts.UI.Views
 
         public event Action<InventorySlot> SlotPointerDown;
         public event Action<InventorySlot> SlotPointerUp;
+
+        public event Action FilterByArmorButtonClicked;
+        public event Action FilterByWeaponButtonClicked;
+        public event Action FilterByConsumableButtonClicked;
+        public event Action FilterByResourceButtonClicked;
+
+        public event Action OrderByNameButtonClicked;
+        public event Action OrderByTypeButtonClicked;
+
+        private void OnEnable()
+        {
+            _filterByArmorButton.onClick.AddListener(() => FilterByArmorButtonClicked?.Invoke());
+            _filterByWeaponButton.onClick.AddListener(() => FilterByWeaponButtonClicked?.Invoke());
+            _filterByConsumableButton.onClick.AddListener(() => FilterByConsumableButtonClicked?.Invoke());
+            _filterByResourceButton.onClick.AddListener(() => FilterByResourceButtonClicked?.Invoke());
+
+            _OrderByNameButton.onClick.AddListener(() => OrderByNameButtonClicked?.Invoke());
+            _OrderByTypeButton.onClick.AddListener(() => OrderByTypeButtonClicked?.Invoke());
+        }
+
+        private void OnDisable()
+        {
+            _filterByArmorButton.onClick.RemoveAllListeners();
+            _filterByWeaponButton.onClick.RemoveAllListeners();
+            _filterByConsumableButton.onClick.RemoveAllListeners();
+            _filterByResourceButton.onClick.RemoveAllListeners();
+
+            _OrderByNameButton.onClick.RemoveAllListeners();
+            _OrderByTypeButton.onClick.RemoveAllListeners();
+        }
 
         public void Render(IInventoryHudData inventoryHudData)
         {
@@ -62,6 +110,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             _weightText.text = _inventoryHudData.ViewWeight ? $"{_inventoryHudData.WeightCurrent}kg / {_inventoryHudData.WeightMax}kg" : "";
             _goldText.text = _inventoryHudData.ViewGold ? $"{_inventoryHudData.Gold} gold" : "";
+            _slotsAmountText.text = _inventoryHudData.ViewSlotsAmount ? $"{_inventoryHudData.SlotsUsed} / {_inventoryHudData.SlotsMax} slots" : "";
         }
 
         public void Unbind()

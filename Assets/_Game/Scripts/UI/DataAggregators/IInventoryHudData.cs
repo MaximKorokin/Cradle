@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items.Inventory;
 using System;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
@@ -17,6 +18,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         bool ViewWeight { get; }
         float WeightCurrent { get; }
         float WeightMax { get; }
+
+        bool ViewSlotsAmount { get; }
+        int SlotsUsed { get; }
+        int SlotsMax { get; }
 
         event Action Changed;
     }
@@ -49,11 +54,17 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public float WeightCurrent { get; private set; }
         public float WeightMax { get; private set; }
 
+        public bool ViewSlotsAmount => true;
+        public int SlotsUsed { get; private set; }
+        public int SlotsMax { get; private set; }
+
         public event Action Changed;
 
         private void OnInventoryChanged()
         {
             Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, _inventoryModel);
+            SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(_inventoryModel);
+            SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(_inventoryModel);
 
             Changed?.Invoke();
         }
@@ -99,11 +110,17 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public float WeightCurrent => 0;
         public float WeightMax => 0;
 
+        public bool ViewSlotsAmount => true;
+        public int SlotsUsed { get; private set; }
+        public int SlotsMax { get; private set; }
+
         public event Action Changed;
 
         private void OnInventoryChanged()
         {
             Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, _inventoryModel);
+            SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(_inventoryModel);
+            SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(_inventoryModel);
 
             Changed?.Invoke();
         }
@@ -136,6 +153,16 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
 
             return gold;
+        }
+
+        public static int CalculateSlotsUsed(InventoryModel inventoryModel)
+        {
+            return inventoryModel.Enumerate().Count(slot => slot.Snapshot != null);
+        }
+
+        public static int CalculateSlotsMax(InventoryModel inventoryModel)
+        {
+            return inventoryModel.Capacity;
         }
     }
 }
