@@ -205,6 +205,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<InventoryModelFactory>(Lifetime.Singleton);
             builder.Register<EquipmentModelFactory>(Lifetime.Singleton);
+
+            builder.Register<ItemContainerResolver>(Lifetime.Singleton);
         }
     }
 }

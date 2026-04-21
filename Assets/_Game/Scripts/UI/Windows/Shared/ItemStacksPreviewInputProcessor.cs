@@ -53,17 +53,11 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             var primaryItem = _firstItemContainer.Get(slotIndex);
             if (primaryItem == null) return;
 
-            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T1, T2>>(
-                new(
-                    _equipmentModel,
-                    GetEquipmentSlotToCompare(primaryItem.Value, _firstItemContainer),
-                    _firstItemContainer,
-                    _firstPointerDownSlotIndex,
-                    _secondItemContainer,
-                    _firstContainerId,
-                    _secondContainerId),
-                typeof(T1),
-                typeof(T2));
+            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(new ItemStacksPreviewWindowControllerArguments(
+                GetEquipmentSlotToCompare(primaryItem.Value, _firstItemContainer),
+                _firstPointerDownSlotIndex.ToInt64(),
+                _firstContainerId,
+                _secondContainerId));
         }
 
         public void OnSecondItemContainerSlotPointerUp(T2 slotIndex)
@@ -72,17 +66,11 @@ namespace Assets._Game.Scripts.UI.Windows.Shared
             var primaryItem = _secondItemContainer.Get(slotIndex);
             if (primaryItem == null) return;
 
-            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T2, T1>>(
-                new(
-                    _equipmentModel,
-                    GetEquipmentSlotToCompare(primaryItem.Value, _secondItemContainer),
-                    _secondItemContainer,
-                    _secondPointerDownSlotIndex,
-                    _firstItemContainer,
-                    _secondContainerId,
-                    _firstContainerId),
-                typeof(T2),
-                typeof(T1));
+            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(new ItemStacksPreviewWindowControllerArguments(
+                GetEquipmentSlotToCompare(primaryItem.Value, _secondItemContainer),
+                _secondPointerDownSlotIndex.ToInt64(),
+                _secondContainerId,
+                _firstContainerId));
         }
 
         private EquipmentSlotKey? GetEquipmentSlotToCompare(ItemStackSnapshot primaryItem, IItemContainer containerToExcept)

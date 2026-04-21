@@ -22,6 +22,8 @@ namespace Assets._Game.Scripts.Items
     {
         event Action Changed;
 
+        ItemStackSnapshot? Get(long slot);
+
         int Count(ItemKey key);
 
         int Add(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty);

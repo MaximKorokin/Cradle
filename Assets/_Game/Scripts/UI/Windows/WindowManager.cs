@@ -36,22 +36,22 @@ namespace Assets._Game.Scripts.UI.Windows
             _resolver = resolver;
         }
 
-        public UIWindowBase InstantiateWindow(WindowId windowId, params Type[] controllerTypes)
+        public UIWindowBase InstantiateWindow(WindowId windowId)
         {
             var windowType = _windowDefinitions.FirstOrDefault(d => d.Id == windowId).WindowType;
             if (windowType == null) throw new InvalidOperationException($"No definition for window of type {windowType} registered.");
 
-            return InstantiateWindow(windowType, controllerTypes);
+            return InstantiateWindow(windowType);
         }
 
-        public T InstantiateWindow<T, K>(K controllerArguments, params Type[] controllerTypes)
+        public T InstantiateWindow<T, K>(K controllerArguments)
             where T : UIWindowBase
             where K : IWindowControllerArguments
         {
-            return (T)InstantiateWindow(typeof(T), controllerTypes, (w, c) => ((IWindowController<T, K>)c).Initialize(controllerArguments));
+            return (T)InstantiateWindow(typeof(T), (w, c) => ((IWindowController<T, K>)c).Initialize(controllerArguments));
         }
 
-        private UIWindowBase InstantiateWindow(Type windowType, Type[] controllerTypes, Action<UIWindowBase, object> instantiatedCallback = null)
+        private UIWindowBase InstantiateWindow(Type windowType, Action<UIWindowBase, object> instantiatedCallback = null)
         {
             // find prefab
             var prefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == windowType);
@@ -63,8 +63,8 @@ namespace Assets._Game.Scripts.UI.Windows
             }
 
             // find controller type
-            var controllerType = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType).GetControllerType(controllerTypes);
-            if (controllerType == null) throw new InvalidOperationException($"No controller for window of type {windowType} registered.");
+            var controllerType = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType).ControllerType
+                ?? throw new InvalidOperationException($"No controller for window of type {windowType} registered.");
 
             // create window and controller
             var controller = _resolver.Resolve(controllerType);

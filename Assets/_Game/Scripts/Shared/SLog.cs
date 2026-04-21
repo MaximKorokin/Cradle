@@ -41,6 +41,9 @@ public static class SLog
     public static void Log(object obj, params object[] objects) => Log(obj.YieldWith(objects));
 
     [HideInCallstack]
+    public static void Info(object obj, params object[] objects) => Log(obj.YieldWith(objects));
+
+    [HideInCallstack]
     public static void Warn(object obj)
     {
         Debug.LogWarning(obj);

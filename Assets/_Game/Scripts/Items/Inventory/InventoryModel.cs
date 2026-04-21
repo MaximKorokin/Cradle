@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Items.Equipment;
+using System;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Items.Inventory
@@ -28,6 +29,11 @@ namespace Assets._Game.Scripts.Items.Inventory
             var s = _slots[slot.Index];
             if (s is null) return null;
             return s.Snapshot;
+        }
+
+        public ItemStackSnapshot? Get(long slot)
+        {
+            return Get(InventorySlot.FromInt64(slot));
         }
 
         public IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Snapshot)> Enumerate()

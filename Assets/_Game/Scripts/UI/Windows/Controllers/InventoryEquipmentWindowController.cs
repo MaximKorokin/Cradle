@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
@@ -13,6 +14,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IEquipmentHudData _equipmentHudData;
 
         private readonly ItemStacksPreviewInputProcessor<InventorySlot, EquipmentSlotKey> _previewProcessor;
+
+        private InventoryViewController _inventoryViewController;
+        private EquipmentViewController _equipmentViewController;
 
         public InventoryEquipmentWindowController(
             InventoryHudData inventoryHudData,
@@ -28,21 +32,23 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(InventoryEquipmentWindow window)
         {
             _window = window;
+            _inventoryViewController = new InventoryViewController(_window.InventoryView, _inventoryHudData.InventoryModel);
+            _equipmentViewController = new EquipmentViewController(_window.EquipmentView);
 
-            _window.InventorySlotPointerDown += _previewProcessor.OnFirstItemContainerSlotPointerDown;
-            _window.InventorySlotPointerUp += _previewProcessor.OnFirstItemContainerSlotPointerUp;
-            _window.EquipmentSlotPointerDown += _previewProcessor.OnSecondItemContainerSlotPointerDown;
-            _window.EquipmentSlotPointerUp += _previewProcessor.OnSecondItemContainerSlotPointerUp;
+            _inventoryViewController.SlotPointerDown += _previewProcessor.OnFirstItemContainerSlotPointerDown;
+            _inventoryViewController.SlotPointerUp += _previewProcessor.OnFirstItemContainerSlotPointerUp;
+            _equipmentViewController.SlotPointerDown += _previewProcessor.OnSecondItemContainerSlotPointerDown;
+            _equipmentViewController.SlotPointerUp += _previewProcessor.OnSecondItemContainerSlotPointerUp;
 
             Redraw();
         }
 
         public override void Dispose()
         {
-            _window.InventorySlotPointerDown -= _previewProcessor.OnFirstItemContainerSlotPointerDown;
-            _window.InventorySlotPointerUp -= _previewProcessor.OnFirstItemContainerSlotPointerUp;
-            _window.EquipmentSlotPointerDown -= _previewProcessor.OnSecondItemContainerSlotPointerDown;
-            _window.EquipmentSlotPointerUp -= _previewProcessor.OnSecondItemContainerSlotPointerUp;
+            _inventoryViewController.SlotPointerDown -= _previewProcessor.OnFirstItemContainerSlotPointerDown;
+            _inventoryViewController.SlotPointerUp -= _previewProcessor.OnFirstItemContainerSlotPointerUp;
+            _equipmentViewController.SlotPointerDown -= _previewProcessor.OnSecondItemContainerSlotPointerDown;
+            _equipmentViewController.SlotPointerUp -= _previewProcessor.OnSecondItemContainerSlotPointerUp;
         }
 
         private void Redraw()

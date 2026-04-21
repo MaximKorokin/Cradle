@@ -27,32 +27,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct EmptyWindowControllerArguments : IWindowControllerArguments { }
 
-    public readonly struct ItemStacksPreviewWindowControllerArguments<T1, T2> : IWindowControllerArguments
-        where T1 : struct, IContainerSlot
-        where T2 : struct, IContainerSlot
+    public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly EquipmentModel EquipmentModel;
         public readonly EquipmentSlotKey? EquipmentSlot;
-        public readonly IItemContainer<T1> PrimaryItemContainer;
-        public readonly T1 PrimaryContainerSlot;
-        public readonly IItemContainer<T2> SecondaryItemContainer;
+        public readonly long PrimaryContainerSlot;
         public readonly ItemContainerId PrimaryContainerId;
         public readonly ItemContainerId SecondaryContainerId;
 
         public ItemStacksPreviewWindowControllerArguments(
-            EquipmentModel equipmentModel,
             EquipmentSlotKey? equipmentSlot,
-            IItemContainer<T1> primaryItemContainer,
-            T1 primaryContainerSlot,
-            IItemContainer<T2> secondaryItemContainer,
+            long primaryContainerSlot,
             ItemContainerId primaryContainerId,
             ItemContainerId secondaryContainerId)
         {
-            EquipmentModel = equipmentModel;
             EquipmentSlot = equipmentSlot;
-            PrimaryItemContainer = primaryItemContainer;
             PrimaryContainerSlot = primaryContainerSlot;
-            SecondaryItemContainer = secondaryItemContainer;
             PrimaryContainerId = primaryContainerId;
             SecondaryContainerId = secondaryContainerId;
         }

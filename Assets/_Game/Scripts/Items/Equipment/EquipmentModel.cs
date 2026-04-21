@@ -45,6 +45,11 @@ namespace Assets._Game.Scripts.Items.Equipment
             return s.Snapshot;
         }
 
+        public ItemStackSnapshot? Get(long slot)
+        {
+            return Get(EquipmentSlotKey.FromInt64(slot));
+        }
+
         public IEnumerable<(EquipmentSlotKey Slot, ItemStackSnapshot? Snapshot)> Enumerate()
         {
             foreach (var kv in _slots)

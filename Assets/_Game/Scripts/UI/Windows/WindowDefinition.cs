@@ -10,29 +10,13 @@ namespace Assets._Game.Scripts.UI.Windows
         [field: SerializeField]
         public Type WindowType { get; private set; }
         [field: SerializeField]
-        private Type ControllerType { get; set; }
+        public Type ControllerType { get; set; }
 
         public WindowDefinition(WindowId id, Type windowType, Type controllerType)
         {
             Id = id;
             WindowType = windowType;
             ControllerType = controllerType;
-        }
-
-        public Type GetControllerType(params Type[] genericTypes)
-        {
-            // Choose the generic route only if generic types are provided
-            if (ControllerType.IsGenericType && genericTypes.Length > 0)
-            {
-                var genericArgCount = ControllerType.GetGenericArguments().Length;
-                if (genericTypes.Length != genericArgCount)
-                {
-                    throw new InvalidOperationException(
-                        $"Controller {ControllerType.Name} requires {genericArgCount} generic arguments but {genericTypes.Length} were provided.");
-                }
-                return ControllerType.MakeGenericType(genericTypes);
-            }
-            return ControllerType;
         }
     }
 
@@ -43,7 +27,7 @@ namespace Assets._Game.Scripts.UI.Windows
         Stats = 20,
         InventoryInventory = 30,
         InventoryEquipment = 31,
-        //ItemStacksPreview = 40,
+        ItemStacksPreview = 40,
         LocationTransitionList = 50,
 
         ItemUseSettings = 1100,

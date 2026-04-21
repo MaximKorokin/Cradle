@@ -65,22 +65,22 @@ namespace Assets._Game.Scripts.UI.Core
 
             var windows = new WindowDefinition[]
             {
+                // Primary windows
                 new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController)),
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
                 new(WindowId.InventoryInventory, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
                 new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
 
+                // Service windows
+                new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),
                 new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController)),
                 new(WindowId.AmountPicker, typeof(AmountPickerWindow), typeof(AmountPickerWindowController)),
-
-                // Unbound generic can be registered, but needs to be resolved with generic type parameters specified
-                new(WindowId.None, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController<,>)),
             };
 
             foreach (var windowDefinition in windows)
             {
-                builder.Register(windowDefinition.GetControllerType(), Lifetime.Transient);
+                builder.Register(windowDefinition.ControllerType, Lifetime.Transient);
             }
 
             builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);

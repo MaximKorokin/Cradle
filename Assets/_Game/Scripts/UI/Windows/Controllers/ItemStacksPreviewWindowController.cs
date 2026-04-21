@@ -13,28 +13,29 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ItemStacksPreviewWindowController<T1, T2> : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments<T1, T2>>
-        where T1 : struct, IContainerSlot
-        where T2 : struct, IContainerSlot
+    public sealed class ItemStacksPreviewWindowController : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
     {
         private readonly WindowManager _windowManager;
         private readonly IPlayerProvider _playerProvider;
+        private readonly ItemContainerResolver _itemContainerResolver;
 
         private ItemStacksPreviewWindow _window;
-        private EquipmentModel _equipmentModel;
         private EquipmentSlotKey? _equipmentSlot;
-        private IItemContainer<T1> _primaryItemContainer;
-        private T1 _primaryContainerSlot;
-        private IItemContainer<T2> _secondaryItemContainer;
+        private long _primaryContainerSlot;
         private ItemContainerId _primaryContainerId;
         private ItemContainerId _secondaryContainerId;
+        private IItemContainer _primaryContainer;
+        private IItemContainer _secondaryContainer;
+        private EquipmentModel _equipmentModel;
 
         public ItemStacksPreviewWindowController(
             WindowManager windowManager,
-            IPlayerProvider playerProvider)
+            IPlayerProvider playerProvider,
+            ItemContainerResolver itemContainerResolver)
         {
             _windowManager = windowManager;
             _playerProvider = playerProvider;
+            _itemContainerResolver = itemContainerResolver;
         }
 
         public override void Bind(ItemStacksPreviewWindow window)
@@ -44,35 +45,35 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.ActionButtonClicked += ProcessAction;
         }
 
-        public override void Initialize(ItemStacksPreviewWindowControllerArguments<T1, T2> arguments)
+        public override void Initialize(ItemStacksPreviewWindowControllerArguments arguments)
         {
             base.Initialize(arguments);
 
-            _equipmentModel = arguments.EquipmentModel;
             _equipmentSlot = arguments.EquipmentSlot;
-            _primaryItemContainer = arguments.PrimaryItemContainer;
             _primaryContainerSlot = arguments.PrimaryContainerSlot;
-            _secondaryItemContainer = arguments.SecondaryItemContainer;
             _primaryContainerId = arguments.PrimaryContainerId;
             _secondaryContainerId = arguments.SecondaryContainerId;
+            _primaryContainer = _itemContainerResolver.ResolveContainer(_playerProvider.Player, arguments.PrimaryContainerId);
+            _secondaryContainer = _itemContainerResolver.ResolveContainer(_playerProvider.Player, arguments.SecondaryContainerId);
+            _equipmentModel = _itemContainerResolver.ResolveEquipment(_playerProvider.Player);
 
-            _primaryItemContainer.Changed += Redraw;
-            _secondaryItemContainer.Changed += Redraw;
+            _primaryContainer.Changed += Redraw;
+            _secondaryContainer.Changed += Redraw;
 
             Redraw();
         }
 
         public override void Dispose()
         {
-            _primaryItemContainer.Changed -= Redraw;
-            _secondaryItemContainer.Changed -= Redraw;
+            _primaryContainer.Changed -= Redraw;
+            _secondaryContainer.Changed -= Redraw;
 
             _window.ActionButtonClicked -= ProcessAction;
         }
 
         private void Redraw()
         {
-            var primaryItem = _primaryItemContainer.Get(_primaryContainerSlot);
+            var primaryItem = _primaryContainer.Get(_primaryContainerSlot);
 
             // Primary item disappeared, nothing to preview
             if (primaryItem == null)
@@ -96,10 +97,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private IEnumerable<ItemStackAction> GetActions()
         {
-            var primaryItemNullable = _primaryItemContainer.Get(_primaryContainerSlot);
+            var primaryItemNullable = _primaryContainer.Get(_primaryContainerSlot);
             if (primaryItemNullable == null)
             {
-                SLog.Error($"Trying to get actions for item that is not found in {_primaryItemContainer} in slot {_primaryContainerSlot}");
+                SLog.Error($"Trying to get actions for item that is not found in {_primaryContainer} in slot {_primaryContainerSlot}");
                 return Array.Empty<ItemStackAction>();
             }
 
@@ -109,9 +110,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 new(ItemStackActionType.Drop, "Drop")
             };
 
-            if (_primaryItemContainer is InventoryModel &&
-                _secondaryItemContainer is InventoryModel &&
-                _secondaryItemContainer.PreviewAdd(primaryItem) > 0)
+            if (_primaryContainer is InventoryModel &&
+                _secondaryContainer is InventoryModel &&
+                _secondaryContainer.PreviewAdd(primaryItem) > 0)
             {
                 if (primaryItem.Amount > 1)
                 {
@@ -119,7 +120,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 }
             }
 
-            if ((_primaryItemContainer is EquipmentModel equipmentModel) &&
+            if ((_primaryContainer is EquipmentModel equipmentModel) &&
                 equipmentModel == _equipmentModel &&
                 _equipmentModel.Has(primaryItem.Key, 1))
             {
@@ -139,15 +140,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void ProcessAction(ItemStackActionType actionType)
         {
-            var item = _primaryItemContainer.Get(_primaryContainerSlot);
-            var primarySlot = ContainerSlotConverter.ToInt64(_primaryContainerSlot);
+            var item = _primaryContainer.Get(_primaryContainerSlot);
 
             switch (actionType)
             {
                 case ItemStackActionType.Drop:
                     if (item != null)
                     {
-                        PublishItemCommand(new DropItemCommand(_primaryContainerId, primarySlot, item.Value.Amount));
+                        PublishItemCommand(new DropItemCommand(_primaryContainerId, _primaryContainerSlot, item.Value.Amount));
                     }
                     break;
                 case ItemStackActionType.Transfer:
@@ -156,7 +156,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                         // If there's only one item, transfer it directly, otherwise show amount picker
                         if (item.Value.Amount == 1)
                         {
-                            PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, 1));
+                            PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, 1));
                         }
                         else
                         {
@@ -166,20 +166,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                                     item.Value.Amount,
                                     amount =>
                                     {
-                                        PublishItemCommand(new TransferItemCommand(_primaryContainerId, primarySlot, _secondaryContainerId, amount));
+                                        PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, amount));
                                         _windowManager.CloseWindow(amountPickerWindow);
                                     }));
                         }
                     }
                     break;
                 case ItemStackActionType.Equip:
-                    PublishItemCommand(new EquipFromContainerCommand(_primaryContainerId, primarySlot, _equipmentSlot.Value.ToInt64()));
+                    PublishItemCommand(new EquipFromContainerCommand(_primaryContainerId, _primaryContainerSlot, _equipmentSlot.Value.ToInt64()));
                     break;
                 case ItemStackActionType.Unequip:
-                    PublishItemCommand(new UnequipToContainerCommand(_secondaryContainerId, primarySlot));
+                    PublishItemCommand(new UnequipToContainerCommand(_secondaryContainerId, _primaryContainerSlot));
                     break;
                 case ItemStackActionType.Use:
-                    PublishItemCommand(new UseItemCommand(_primaryContainerId, primarySlot, true));
+                    PublishItemCommand(new UseItemCommand(_primaryContainerId, _primaryContainerSlot, true));
                     break;
             }
         }

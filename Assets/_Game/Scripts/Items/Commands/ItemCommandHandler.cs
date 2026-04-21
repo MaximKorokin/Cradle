@@ -15,10 +15,12 @@ namespace Assets._Game.Scripts.Items.Commands
     public class ItemCommandHandler
     {
         private readonly IGlobalEventBus _globalEventBus;
+        private readonly ItemContainerResolver _itemContainerResolver;
 
-        public ItemCommandHandler(IGlobalEventBus globalEventBus)
+        public ItemCommandHandler(IGlobalEventBus globalEventBus, ItemContainerResolver itemContainerResolver)
         {
             _globalEventBus = globalEventBus;
+            _itemContainerResolver = itemContainerResolver;
         }
 
         public bool Handle(Entity entity, IItemCommand command)
@@ -34,21 +36,6 @@ namespace Assets._Game.Scripts.Items.Commands
             };
         }
 
-        private InventoryModel ResolveInventory(Entity entity, ItemContainerId id)
-        {
-            return id switch
-            {
-                ItemContainerId.Inventory => entity.GetModule<InventoryModule>().Inventory,
-                ItemContainerId.Storage => entity.GetModule<StorageModule>().Storage,
-                _ => throw new NotSupportedException($"Container {id} is not an inventory."),
-            };
-        }
-
-        private EquipmentModel ResolveEquipment(Entity entity)
-        {
-            return entity.GetModule<EquipmentModule>().Equipment;
-        }
-
         private ItemUseSettings ResolveItemUseSettings(Entity entity, bool isManual)
         {
             var equipmentModule = entity.GetModule<EquipmentModule>();
@@ -57,17 +44,17 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleTransfer(Entity entity, TransferItemCommand c)
         {
-            var from = ResolveInventory(entity, c.FromContainer);
-            var to = ResolveInventory(entity, c.ToContainer);
+            var from = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
+            var to = _itemContainerResolver.ResolveContainer(entity, c.ToContainer);
             return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
         }
 
         private bool HandleEquip(Entity entity, EquipFromContainerCommand c)
         {
-            var fromContainer = ResolveInventory(entity, c.FromContainer);
+            var fromContainer = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
             var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
             var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
-            var equipmentModel = ResolveEquipment(entity);
+            var equipmentModel = _itemContainerResolver.ResolveEquipment(entity);
 
             var fromItemNullable = fromContainer.Get(fromSlot);
             if (fromItemNullable == null)
@@ -153,8 +140,8 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleUnequip(Entity entity, UnequipToContainerCommand c)
         {
-            var equipmentModel = ResolveEquipment(entity);
-            var toContainer = ResolveInventory(entity, c.ToContainer);
+            var equipmentModel = _itemContainerResolver.ResolveEquipment(entity);
+            var toContainer = _itemContainerResolver.ResolveInventory(entity, c.ToContainer);
             var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
 
             var item = equipmentModel.Get(equipmentSlot);
@@ -171,7 +158,7 @@ namespace Assets._Game.Scripts.Items.Commands
 
             if (c.FromContainer == ItemContainerId.Equipment)
             {
-                var equipment = ResolveEquipment(entity);
+                var equipment = _itemContainerResolver.ResolveEquipment(entity);
                 var slot = ContainerSlotConverter.ToEquipmentSlot(c.FromSlot);
                 item = equipment.Get(slot);
                 if (item == null) return false;
@@ -179,7 +166,7 @@ namespace Assets._Game.Scripts.Items.Commands
             }
             else
             {
-                var from = ResolveInventory(entity, c.FromContainer);
+                var from = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
                 var slot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
                 item = from.Get(slot);
                 if (item == null) return false;
@@ -200,12 +187,12 @@ namespace Assets._Game.Scripts.Items.Commands
 
             if (c.Container == ItemContainerId.Equipment)
             {
-                var equipment = ResolveEquipment(entity);
+                var equipment = _itemContainerResolver.ResolveEquipment(entity);
                 item = equipment.Get(ContainerSlotConverter.ToEquipmentSlot(c.Slot));
             }
             else
             {
-                var container = ResolveInventory(entity, c.Container);
+                var container = _itemContainerResolver.ResolveInventory(entity, c.Container);
                 item = container.Get(ContainerSlotConverter.ToInventorySlot(c.Slot));
             }
 
@@ -241,12 +228,12 @@ namespace Assets._Game.Scripts.Items.Commands
             {
                 if (c.Container == ItemContainerId.Equipment)
                 {
-                    var equipment = ResolveEquipment(entity);
+                    var equipment = _itemContainerResolver.ResolveEquipment(entity);
                     equipment.RemoveFromSlot(ContainerSlotConverter.ToEquipmentSlot(c.Slot), 1);
                 }
                 else
                 {
-                    var container = ResolveInventory(entity, c.Container);
+                    var container = _itemContainerResolver.ResolveInventory(entity, c.Container);
                     container.RemoveFromSlot(ContainerSlotConverter.ToInventorySlot(c.Slot), 1);
                 }
             }
