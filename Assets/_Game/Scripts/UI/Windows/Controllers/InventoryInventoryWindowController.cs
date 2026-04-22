@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Items.Commands;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
@@ -9,20 +10,24 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, EmptyWindowControllerArguments>
     {
         private InventoryInventoryWindow _window;
+
+        private readonly InventoryViewController _firstInventoryViewController;
+        private readonly InventoryViewController _secondInventoryViewController;
         private readonly InventoryHudData _inventoryHudData;
         private readonly StorageHudData _storageHudData;
 
         private readonly ItemStacksPreviewInputProcessor<InventorySlot, InventorySlot> _previewProcessor;
 
-        private InventoryViewController _firstInventoryViewController;
-        private InventoryViewController _secondInventoryViewController;
-
         public InventoryInventoryWindowController(
+            InventoryViewController firstInventoryViewController,
+            InventoryViewController secondInventoryViewController,
             InventoryHudData inventoryHudData,
             StorageHudData storageHudData,
             EquipmentHudData equipmentHudData,
             WindowManager windowManager)
         {
+            _firstInventoryViewController = firstInventoryViewController;
+            _secondInventoryViewController = secondInventoryViewController;
             _inventoryHudData = inventoryHudData;
             _storageHudData = storageHudData;
 
@@ -32,9 +37,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(InventoryInventoryWindow window)
         {
             _window = window;
-            _firstInventoryViewController = new InventoryViewController(_window.FirstInventoryView);
+            _firstInventoryViewController.Initialize(_window.FirstInventoryView);
             _firstInventoryViewController.Bind(_inventoryHudData);
-            _secondInventoryViewController = new InventoryViewController(_window.SecondInventoryView);
+            _secondInventoryViewController.Initialize(_window.SecondInventoryView);
             _secondInventoryViewController.Bind(_storageHudData);
 
             _firstInventoryViewController.SlotClick += _previewProcessor.OnFirstItemContainerSlotClick;

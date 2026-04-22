@@ -110,6 +110,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AttackModifierSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EquipmentSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<InventorySystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ItemSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InteractionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityPlacementSystem>(Lifetime.Singleton).AsImplementedInterfaces();

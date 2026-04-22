@@ -752,14 +752,12 @@ MonoBehaviour:
   _weightText: {fileID: 2741803189995133390}
   _goldText: {fileID: 8258046584640950528}
   _slotsAmountText: {fileID: 8161590091688760021}
-  _filterByArmorToggle: {fileID: 785846239413291356}
+  _filterByClothingToggle: {fileID: 785846239413291356}
   _filterByWeaponToggle: {fileID: 8116898194784301333}
   _filterByConsumableToggle: {fileID: 7629291264068007601}
   _filterByResourceToggle: {fileID: 4424839634649606930}
   _orderByNameButton: {fileID: 1887031941369414638}
-  _orderByTypeButton: {fileID: 3811192741210768545}
-  _togglesActiveColor: {r: 0, g: 0, b: 0, a: 0}
-  _togglesInactiveColor: {r: 0, g: 0, b: 0, a: 0}
+  _orderByPurposeButton: {fileID: 3811192741210768545}
 --- !u!1 &4488153924184546358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,7 +1044,7 @@ GameObject:
   - component: {fileID: 7514187260441592688}
   - component: {fileID: 3811192741210768545}
   m_Layer: 5
-  m_Name: OrderByTypeButton
+  m_Name: OrderByPurposeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1511,7 +1509,7 @@ GameObject:
   - component: {fileID: 5141804699895829845}
   - component: {fileID: 785846239413291356}
   m_Layer: 5
-  m_Name: ArmorFilterToggle
+  m_Name: ClothingFilterToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,19 +10,23 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public class InventoryEquipmentWindowController : WindowControllerBase<InventoryEquipmentWindow, EmptyWindowControllerArguments>
     {
         private InventoryEquipmentWindow _window;
+
+        private readonly InventoryViewController _inventoryViewController;
+        private readonly EquipmentViewController _equipmentViewController;
         private readonly IInventoryHudData _inventoryHudData;
         private readonly IEquipmentHudData _equipmentHudData;
 
         private readonly ItemStacksPreviewInputProcessor<InventorySlot, EquipmentSlotKey> _previewProcessor;
 
-        private InventoryViewController _inventoryViewController;
-        private EquipmentViewController _equipmentViewController;
-
         public InventoryEquipmentWindowController(
+            InventoryViewController inventoryViewController,
+            EquipmentViewController equipmentViewController,
             InventoryHudData inventoryHudData,
             EquipmentHudData equipmentHudData,
             WindowManager windowManager)
         {
+            _inventoryViewController = inventoryViewController;
+            _equipmentViewController = equipmentViewController;
             _inventoryHudData = inventoryHudData;
             _equipmentHudData = equipmentHudData;
 
@@ -32,9 +36,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(InventoryEquipmentWindow window)
         {
             _window = window;
-            _inventoryViewController = new InventoryViewController(_window.InventoryView);
+            _inventoryViewController.Initialize(_window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
-            _equipmentViewController = new EquipmentViewController(_window.EquipmentView);
+            _equipmentViewController.Initialize(_window.EquipmentView);
             _equipmentViewController.Bind(_equipmentHudData);
 
             _inventoryViewController.SlotClick += _previewProcessor.OnFirstItemContainerSlotClick;

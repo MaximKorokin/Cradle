@@ -59,5 +59,39 @@ namespace Assets._Game.Scripts.Shared.Extensions
         {
             return string.Equals(item.Definition.Id, id, StringComparison.OrdinalIgnoreCase);
         }
+
+        public static ItemStackPurpose GetPurpose(this ItemStackSnapshot itemStack)
+        {
+            if (itemStack.IsEquippable())
+            {
+                var slotType = itemStack.GetEquipmentSlotType();
+                return slotType switch
+                {
+                    EquipmentSlotType.Weapon => ItemStackPurpose.Weapon,
+                    EquipmentSlotType.Armor => ItemStackPurpose.Clothing,
+                    EquipmentSlotType.Helmet => ItemStackPurpose.Clothing,
+                    EquipmentSlotType.Gloves => ItemStackPurpose.Clothing,
+                    EquipmentSlotType.Boots => ItemStackPurpose.Clothing,
+                    EquipmentSlotType.Ring => ItemStackPurpose.Clothing,
+                    EquipmentSlotType.Necklace => ItemStackPurpose.Clothing,
+                    EquipmentSlotType.Consumable => ItemStackPurpose.Consumable,
+                    _ => ItemStackPurpose.None
+                };
+            }
+            else if (itemStack.Definition.Traits.Length == 0)
+            {
+                return ItemStackPurpose.Resource;
+            }
+            return ItemStackPurpose.None;
+        }
+    }
+
+    public enum ItemStackPurpose
+    {
+        None,
+        Weapon = 10,
+        Clothing = 20,
+        Consumable = 30,
+        Resource = 40
     }
 }

@@ -23,7 +23,7 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _slotsAmountText;
         [Space]
         [SerializeField]
-        private Toggle _filterByArmorToggle;
+        private Toggle _filterByClothingToggle;
         [SerializeField]
         private Toggle _filterByWeaponToggle;
         [SerializeField]
@@ -34,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private Button _orderByNameButton;
         [SerializeField]
-        private Button _orderByTypeButton;
+        private Button _orderByPurposeButton;
 
         private readonly List<InventorySlotView> _slots = new();
 
@@ -42,34 +42,34 @@ namespace Assets._Game.Scripts.UI.Views
 
         public event Action<InventorySlot> SlotClick;
 
-        public event Action<bool> FilterByArmorButtonClicked;
+        public event Action<bool> FilterByClothingButtonClicked;
         public event Action<bool> FilterByWeaponButtonClicked;
         public event Action<bool> FilterByConsumableButtonClicked;
         public event Action<bool> FilterByResourceButtonClicked;
 
         public event Action OrderByNameButtonClicked;
-        public event Action OrderByTypeButtonClicked;
+        public event Action OrderByPurposeButtonClicked;
 
         private void OnEnable()
         {
-            _filterByArmorToggle.onValueChanged.AddListener(isOn => FilterByArmorButtonClicked?.Invoke(isOn));
+            _filterByClothingToggle.onValueChanged.AddListener(isOn => FilterByClothingButtonClicked?.Invoke(isOn));
             _filterByWeaponToggle.onValueChanged.AddListener(isOn => FilterByWeaponButtonClicked?.Invoke(isOn));
             _filterByConsumableToggle.onValueChanged.AddListener(isOn => FilterByConsumableButtonClicked?.Invoke(isOn));
             _filterByResourceToggle.onValueChanged.AddListener(isOn => FilterByResourceButtonClicked?.Invoke(isOn));
 
             _orderByNameButton.onClick.AddListener(() => OrderByNameButtonClicked?.Invoke());
-            _orderByTypeButton.onClick.AddListener(() => OrderByTypeButtonClicked?.Invoke());
+            _orderByPurposeButton.onClick.AddListener(() => OrderByPurposeButtonClicked?.Invoke());
         }
 
         private void OnDisable()
         {
-            _filterByArmorToggle.onValueChanged.RemoveAllListeners();
+            _filterByClothingToggle.onValueChanged.RemoveAllListeners();
             _filterByWeaponToggle.onValueChanged.RemoveAllListeners();
             _filterByConsumableToggle.onValueChanged.RemoveAllListeners();
             _filterByResourceToggle.onValueChanged.RemoveAllListeners();
 
             _orderByNameButton.onClick.RemoveAllListeners();
-            _orderByTypeButton.onClick.RemoveAllListeners();
+            _orderByPurposeButton.onClick.RemoveAllListeners();
         }
 
         public void Render(IInventoryHudData inventoryHudData)

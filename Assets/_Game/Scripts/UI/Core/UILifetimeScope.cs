@@ -47,6 +47,7 @@ namespace Assets._Game.Scripts.UI.Core
             RegisterSystems(builder);
             RegisterWindows(builder);
             RegisterHud(builder);
+            RegisterItemContainers(builder);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -94,6 +95,12 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
 
             builder.RegisterComponentInHierarchy<PlayerReviveView>();
+        }
+
+        private void RegisterItemContainers(IContainerBuilder builder)
+        {
+            builder.Register<InventoryViewController>(Lifetime.Transient);
+            builder.Register<EquipmentViewController>(Lifetime.Transient);
         }
     }
 }

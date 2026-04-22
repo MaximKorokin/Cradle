@@ -1,45 +1,53 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Inventory;
-using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class InventoryViewController : IDisposable
+    public sealed class InventoryViewController : ViewControllerBase<InventoryView>
     {
-        private readonly InventoryView _inventoryView;
+        private readonly IGlobalEventBus _globalEventBus;
 
         private IInventoryHudData _inventoryHudData;
 
         public event Action<InventorySlot> SlotClick
         {
-            add => _inventoryView.SlotClick += value;
-            remove => _inventoryView.SlotClick -= value;
+            add => View.SlotClick += value;
+            remove => View.SlotClick -= value;
         }
 
-        public InventoryViewController(InventoryView inventoryView)
+        public InventoryViewController(IGlobalEventBus globalEventBus)
         {
-            _inventoryView = inventoryView;
-
-            _inventoryView.FilterByArmorButtonClicked += OnFilterByArmorButtonClicked;
-            _inventoryView.FilterByWeaponButtonClicked += OnFilterByWeaponButtonClicked;
-            _inventoryView.FilterByConsumableButtonClicked += OnFilterByConsumableButtonClicked;
-            _inventoryView.FilterByResourceButtonClicked += OnFilterByResourceButtonClicked;
-
-            _inventoryView.OrderByNameButtonClicked += OnOrderByNameButtonClicked;
-            _inventoryView.OrderByTypeButtonClicked += OnOrderByTypeButtonClicked;
+            _globalEventBus = globalEventBus;
         }
 
-        public void Dispose()
+        public override void Initialize(InventoryView view)
         {
-            _inventoryView.FilterByArmorButtonClicked -= OnFilterByArmorButtonClicked;
-            _inventoryView.FilterByWeaponButtonClicked -= OnFilterByWeaponButtonClicked;
-            _inventoryView.FilterByConsumableButtonClicked -= OnFilterByConsumableButtonClicked;
-            _inventoryView.FilterByResourceButtonClicked -= OnFilterByResourceButtonClicked;
+            base.Initialize(view);
 
-            _inventoryView.OrderByNameButtonClicked -= OnOrderByNameButtonClicked;
-            _inventoryView.OrderByTypeButtonClicked -= OnOrderByTypeButtonClicked;
+            View.FilterByClothingButtonClicked += OnFilterByClothingButtonClicked;
+            View.FilterByWeaponButtonClicked += OnFilterByWeaponButtonClicked;
+            View.FilterByConsumableButtonClicked += OnFilterByConsumableButtonClicked;
+            View.FilterByResourceButtonClicked += OnFilterByResourceButtonClicked;
+
+            View.OrderByNameButtonClicked += OnOrderByNameButtonClicked;
+            View.OrderByPurposeButtonClicked += OnOrderByPurposeButtonClicked;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            View.FilterByClothingButtonClicked -= OnFilterByClothingButtonClicked;
+            View.FilterByWeaponButtonClicked -= OnFilterByWeaponButtonClicked;
+            View.FilterByConsumableButtonClicked -= OnFilterByConsumableButtonClicked;
+            View.FilterByResourceButtonClicked -= OnFilterByResourceButtonClicked;
+
+            View.OrderByNameButtonClicked -= OnOrderByNameButtonClicked;
+            View.OrderByPurposeButtonClicked -= OnOrderByPurposeButtonClicked;
         }
 
         public void Bind(IInventoryHudData inventoryHudData)
@@ -57,60 +65,29 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Redraw()
         {
-            _inventoryView.Render(_inventoryHudData);
+            View.Render(_inventoryHudData);
         }
 
-        private void OnFilterByArmorButtonClicked(bool isOn)
+        private void OnFilterButtonClicked(bool isOn, ItemStackPurpose purpose)
         {
-            _inventoryHudData.SetEnumerationFilter(!isOn ? null : item =>
-            {
-                if (item == null || !item.Value.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait))
-                    return false;
-
-                return equippableTrait.Slot is EquipmentSlotType.Armor or EquipmentSlotType.Helmet or EquipmentSlotType.Gloves or EquipmentSlotType.Boots;
-            });
+            _inventoryHudData.SetEnumerationFilter(!isOn
+                ? null
+                : item => item != null && item.Value.GetPurpose() == purpose);
         }
 
-        private void OnFilterByWeaponButtonClicked(bool isOn)
-        {
-            _inventoryHudData.SetEnumerationFilter(!isOn ? null : item =>
-            {
-                if (item == null || !item.Value.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait))
-                    return false;
-
-                return equippableTrait.Slot is EquipmentSlotType.Weapon;
-            });
-        }
-
-        private void OnFilterByConsumableButtonClicked(bool isOn)
-        {
-            _inventoryHudData.SetEnumerationFilter(!isOn ? null : item =>
-            {
-                if (item == null || !item.Value.Definition.TryGetTrait<UsableTrait>(out var consumableTrait) || !consumableTrait.Consumable)
-                    return false;
-
-                return true;
-            });
-        }
-
-        private void OnFilterByResourceButtonClicked(bool isOn)
-        {
-            _inventoryHudData.SetEnumerationFilter(!isOn ? null : item =>
-            {
-                if (item == null)
-                    return false;
-
-                // todo: add "ResourceTrait" or something similar to mark resource items instead of checking for the absence of traits
-                return item.Value.Definition.Traits.Length == 0;
-            });
-        }
+        private void OnFilterByClothingButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Clothing);
+        private void OnFilterByWeaponButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Weapon);
+        private void OnFilterByConsumableButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Consumable);
+        private void OnFilterByResourceButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Resource);
 
         private void OnOrderByNameButtonClicked()
         {
+            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByName, _inventoryHudData.InventoryModel));
         }
 
-        private void OnOrderByTypeButtonClicked()
+        private void OnOrderByPurposeButtonClicked()
         {
+            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByPurpose, _inventoryHudData.InventoryModel));
         }
     }
 }

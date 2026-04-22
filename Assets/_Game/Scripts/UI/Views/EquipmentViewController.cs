@@ -4,21 +4,14 @@ using System;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentViewController
+    public sealed class EquipmentViewController : ViewControllerBase<EquipmentView>
     {
-        private readonly EquipmentView _equipmentView;
-
         private IEquipmentHudData _equipmentHudData;
 
         public event Action<EquipmentSlotKey> SlotClick
         {
-            add => _equipmentView.SlotClick += value;
-            remove => _equipmentView.SlotClick -= value;
-        }
-
-        public EquipmentViewController(EquipmentView equipmentView)
-        {
-            _equipmentView = equipmentView;
+            add => View.SlotClick += value;
+            remove => View.SlotClick -= value;
         }
 
         public void Bind(IEquipmentHudData equipmentHudData)
@@ -26,12 +19,12 @@ namespace Assets._Game.Scripts.UI.Views
             _equipmentHudData = equipmentHudData;
             _equipmentHudData.Changed += Redraw;
 
-            _equipmentView.Bind();
+            View.Bind();
         }
 
         public void Unbind()
         {
-            _equipmentView.Unbind();
+            View.Unbind();
 
             if (_equipmentHudData != null)
                 _equipmentHudData.Changed -= Redraw;
@@ -40,7 +33,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Redraw()
         {
-            _equipmentView.Render(_equipmentHudData);
+            View.Render(_equipmentHudData);
         }
     }
 }
