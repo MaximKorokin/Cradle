@@ -63,7 +63,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _primaryContainer.Changed -= Redraw;
             _secondaryContainer.Changed -= Redraw;
@@ -114,10 +114,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 _secondaryContainer is InventoryModel &&
                 _secondaryContainer.PreviewAdd(primaryItem) > 0)
             {
-                if (primaryItem.Amount > 1)
-                {
-                    actions.Add(new ItemStackAction(ItemStackActionType.Transfer, "Transfer"));
-                }
+                actions.Add(new ItemStackAction(ItemStackActionType.Transfer, "Transfer"));
             }
 
             if ((_primaryContainer is EquipmentModel equipmentModel) &&

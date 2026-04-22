@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _statsModule.Stats.Changed -= Redraw;
         }

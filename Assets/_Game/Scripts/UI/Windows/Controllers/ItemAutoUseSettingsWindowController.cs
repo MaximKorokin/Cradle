@@ -37,7 +37,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.Render(_equipmentHudData);
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _window.Changed -= OnChanged;
         }

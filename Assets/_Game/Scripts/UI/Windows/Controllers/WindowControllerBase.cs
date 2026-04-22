@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Commands;
+﻿using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 
@@ -10,9 +9,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         where TArguments : IWindowControllerArguments
     {
         public abstract void Bind(TWindow window);
+        public virtual void Unbind() { }
         public virtual void Initialize(TArguments arguments) { }
 
-        public abstract void Dispose();
+        public virtual void Dispose()
+        {
+            Unbind();
+        }
     }
 
     public interface IWindowController<TWindow, TArguments> : IDisposable

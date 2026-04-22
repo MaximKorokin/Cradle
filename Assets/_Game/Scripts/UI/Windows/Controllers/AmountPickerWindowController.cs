@@ -23,7 +23,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.AmountSelected += OnAmountSelected;
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _window.AmountSelected -= OnAmountSelected;
         }

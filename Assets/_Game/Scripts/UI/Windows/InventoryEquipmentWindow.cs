@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Views;
+﻿using Assets._Game.Scripts.UI.Views;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
@@ -13,20 +12,5 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public InventoryView InventoryView => _inventoryView;
         public EquipmentView EquipmentView => _equipmentView;
-
-        public override void OnHide()
-        {
-            base.OnHide();
-
-            _inventoryView.Unbind();
-            _equipmentView.Unbind();
-        }
-
-        public void Render(IInventoryHudData inventoryHudData, IEquipmentHudData equipmentHudData)
-        {
-            _inventoryView.Render(inventoryHudData);
-            _equipmentView.Render(equipmentHudData);
-            _equipmentView.Bind();
-        }
     }
 }

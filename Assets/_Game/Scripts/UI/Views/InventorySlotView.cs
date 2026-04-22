@@ -20,7 +20,9 @@ namespace Assets._Game.Scripts.UI.Views
 
         private CooldownCounter _itemCooldownCounter;
 
-        public void Render(ItemStackSnapshot? itemStack)
+        public void Render(ItemStackSnapshot? itemStack) => Render(itemStack, Color.white);
+
+        public void Render(ItemStackSnapshot? itemStack, Color color)
         {
             _itemCooldownCounter = null;
             if (itemStack == null)
@@ -33,6 +35,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             _itemImage.enabled = true;
             _itemImage.sprite = itemStack.Value.Definition.Icon;
+            _itemImage.color = color;
 
             if (itemStack.Value.Definition.MaxAmount > 1)
             {
@@ -43,6 +46,8 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 _amountText.enabled = false;
             }
+
+            _amountText.color = new() { r = _amountText.color.r, g = _amountText.color.g, b = _amountText.color.b, a = color.a };
 
             // If the item has cooldown data, we want to show the cooldown fill bar and update it in Update()
             _itemCooldownCounter = (itemStack.Value.InstanceData as CooldownInstanceData)?.CooldownCounter;

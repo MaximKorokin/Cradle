@@ -29,12 +29,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window = window;
             window.ItemDefinitionClicked += OnItemDefinitionClicked;
             window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
+
             _window.Render(_cheatsHudData);
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _window.ItemDefinitionClicked -= OnItemDefinitionClicked;
+            _window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
         }
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)

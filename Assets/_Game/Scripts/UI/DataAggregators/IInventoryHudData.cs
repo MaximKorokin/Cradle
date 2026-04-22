@@ -2,8 +2,10 @@
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Inventory;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
@@ -24,41 +26,43 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         int SlotsMax { get; }
 
         event Action Changed;
+
+        IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate();
+        void SetEnumerationFilter(Func<ItemStackSnapshot?, bool> filter);
     }
 
-    public class InventoryHudData : DataAggregatorBase, IInventoryHudData
+    public abstract class InventoryHudDataBase : DataAggregatorBase, IInventoryHudData
     {
         private readonly InventoryModel _inventoryModel;
-        private readonly IStatsReadOnly _statsController;
         private readonly ItemsConfig _itemsConfig;
 
-        public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
+        private Func<ItemStackSnapshot?, bool> _enumerationFilter;
+
+        public InventoryHudDataBase(InventoryModel inventoryModel, ItemsConfig itemsConfig)
         {
-            _inventoryModel = playerContext.GetModule<InventoryModule>().Inventory;
-            _statsController = playerContext.GetModule<StatModule>().Stats;
+            _inventoryModel = inventoryModel;
             _itemsConfig = itemsConfig;
 
             _inventoryModel.Changed += OnInventoryChanged;
-            _statsController.StatChanged += OnStatsChanged;
-
             OnInventoryChanged();
-            OnStatsChanged(StatId.CarryWeight);
         }
 
         public InventoryModel InventoryModel => _inventoryModel;
 
-        public bool ViewGold => true;
+        public abstract bool ViewGold { get; }
         public int Gold { get; private set; }
 
-        public bool ViewWeight => true;
-        public float WeightCurrent { get; private set; }
-        public float WeightMax { get; private set; }
+        public abstract bool ViewWeight { get; }
+        public abstract float WeightCurrent { get; }
+        public abstract float WeightMax { get; }
 
-        public bool ViewSlotsAmount => true;
+        public abstract bool ViewSlotsAmount { get; }
         public int SlotsUsed { get; private set; }
         public int SlotsMax { get; private set; }
 
         public event Action Changed;
+
+        protected void NotifyChanged() => Changed?.Invoke();
 
         private void OnInventoryChanged()
         {
@@ -66,70 +70,90 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(_inventoryModel);
             SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(_inventoryModel);
 
-            Changed?.Invoke();
+            NotifyChanged();
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _inventoryModel.Changed -= OnInventoryChanged;
+        }
+
+        public IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate()
+        {
+            var slotIndex = 0;
+            foreach (var (_, snapshot) in _inventoryModel.Enumerate())
+            {
+                if (_enumerationFilter == null || _enumerationFilter(snapshot))
+                {
+                    yield return (InventorySlot.FromInt64(slotIndex), snapshot);
+                    slotIndex++;
+                }
+            }
+        }
+
+        public void SetEnumerationFilter(Func<ItemStackSnapshot?, bool> filter)
+        {
+            _enumerationFilter = filter;
+            NotifyChanged();
+        }
+    }
+
+    public class InventoryHudData : InventoryHudDataBase
+    {
+        private readonly IStatsReadOnly _statsController;
+
+        private float _weightCurrent;
+        private float _weightMax;
+
+        public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig) : base(playerContext.GetModule<InventoryModule>().Inventory, itemsConfig)
+        {
+            _statsController = playerContext.GetModule<StatModule>().Stats;
+
+            _statsController.StatChanged += OnStatsChanged;
+
+            OnStatsChanged(StatId.CarryWeight);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _statsController.StatChanged -= OnStatsChanged;
+        }
+
+        public override bool ViewGold => true;
+
+        public override bool ViewWeight => true;
+        public override float WeightCurrent => _weightCurrent;
+        public override float WeightMax => _weightMax;
+
+        public override bool ViewSlotsAmount => true;
 
         private void OnStatsChanged(StatId statId)
         {
             if (statId == StatId.CarryWeight || statId == StatId.CarryWeightMax)
             {
-                WeightCurrent = _statsController.Get(StatId.CarryWeight);
-                WeightMax = _statsController.Get(StatId.CarryWeightMax);
-                Changed?.Invoke();
+                _weightCurrent = _statsController.Get(StatId.CarryWeight);
+                _weightMax = _statsController.Get(StatId.CarryWeightMax);
+                NotifyChanged();
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _inventoryModel.Changed -= OnInventoryChanged;
-            _statsController.StatChanged -= OnStatsChanged;
         }
     }
 
-    public class StorageHudData : DataAggregatorBase, IInventoryHudData
+    public class StorageHudData : InventoryHudDataBase
     {
-        private readonly InventoryModel _inventoryModel;
-        private readonly ItemsConfig _itemsConfig;
-
-        public StorageHudData(PlayerContext playerContext, ItemsConfig itemsConfig)
+        public StorageHudData(PlayerContext playerContext, ItemsConfig itemsConfig) : base(playerContext.GetModule<StorageModule>().Storage, itemsConfig)
         {
-            _inventoryModel = playerContext.GetModule<StorageModule>().Storage;
-            _itemsConfig = itemsConfig;
-
-            _inventoryModel.Changed += OnInventoryChanged;
-            OnInventoryChanged();
         }
 
-        public InventoryModel InventoryModel => _inventoryModel;
+        public override bool ViewGold => true;
 
-        public bool ViewGold => true;
-        public int Gold { get; private set; }
+        public override bool ViewWeight => false;
+        public override float WeightCurrent => 0;
+        public override float WeightMax => 0;
 
-        public bool ViewWeight => false;
-        public float WeightCurrent => 0;
-        public float WeightMax => 0;
-
-        public bool ViewSlotsAmount => true;
-        public int SlotsUsed { get; private set; }
-        public int SlotsMax { get; private set; }
-
-        public event Action Changed;
-
-        private void OnInventoryChanged()
-        {
-            Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, _inventoryModel);
-            SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(_inventoryModel);
-            SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(_inventoryModel);
-
-            Changed?.Invoke();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _inventoryModel.Changed -= OnInventoryChanged;
-        }
+        public override bool ViewSlotsAmount => true;
     }
 
     public static class InventoryHudDataUtils

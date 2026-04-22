@@ -32,8 +32,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(InventoryEquipmentWindow window)
         {
             _window = window;
-            _inventoryViewController = new InventoryViewController(_window.InventoryView, _inventoryHudData.InventoryModel);
+            _inventoryViewController = new InventoryViewController(_window.InventoryView);
+            _inventoryViewController.Bind(_inventoryHudData);
             _equipmentViewController = new EquipmentViewController(_window.EquipmentView);
+            _equipmentViewController.Bind(_equipmentHudData);
 
             _inventoryViewController.SlotClick += _previewProcessor.OnFirstItemContainerSlotClick;
             _equipmentViewController.SlotClick += _previewProcessor.OnSecondItemContainerSlotClick;
@@ -41,15 +43,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _inventoryViewController.SlotClick -= _previewProcessor.OnFirstItemContainerSlotClick;
             _equipmentViewController.SlotClick -= _previewProcessor.OnSecondItemContainerSlotClick;
+
+            _inventoryViewController.Unbind();
+            _equipmentViewController.Unbind();
+
+            _window = null;
         }
 
         private void Redraw()
         {
-            _window.Render(_inventoryHudData, _equipmentHudData);
+            _inventoryViewController.Redraw();
+            _equipmentViewController.Redraw();
         }
     }
 }

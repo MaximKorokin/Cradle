@@ -26,12 +26,7 @@ namespace Assets._Game.Scripts.UI.Views
         public void Render(IEquipmentHudData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
-            _equipmentHudData.Changed += OnEquipmentHudDataChanged;
-            OnEquipmentHudDataChanged();
-        }
 
-        private void OnEquipmentHudDataChanged()
-        {
             var slotTypeCounts = new Dictionary<EquipmentSlotType, int>();
             foreach (var slot in _slots)
             {
@@ -53,11 +48,7 @@ namespace Assets._Game.Scripts.UI.Views
                 slot.PointerClick -= OnSlotPointerClick;
             }
 
-            if (_equipmentHudData != null)
-            {
-                _equipmentHudData.Changed -= OnEquipmentHudDataChanged;
-                _equipmentHudData = null;
-            }
+            _equipmentHudData = null;
         }
 
         private void OnSlotPointerClick(EquipmentSlotKey slot)

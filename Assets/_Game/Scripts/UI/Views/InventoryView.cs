@@ -23,18 +23,18 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _slotsAmountText;
         [Space]
         [SerializeField]
-        private Button _filterByArmorButton;
+        private Toggle _filterByArmorToggle;
         [SerializeField]
-        private Button _filterByWeaponButton;
+        private Toggle _filterByWeaponToggle;
         [SerializeField]
-        private Button _filterByConsumableButton;
+        private Toggle _filterByConsumableToggle;
         [SerializeField]
-        private Button _filterByResourceButton;
+        private Toggle _filterByResourceToggle;
         [Space]
         [SerializeField]
-        private Button _OrderByNameButton;
+        private Button _orderByNameButton;
         [SerializeField]
-        private Button _OrderByTypeButton;
+        private Button _orderByTypeButton;
 
         private readonly List<InventorySlotView> _slots = new();
 
@@ -42,34 +42,34 @@ namespace Assets._Game.Scripts.UI.Views
 
         public event Action<InventorySlot> SlotClick;
 
-        public event Action FilterByArmorButtonClicked;
-        public event Action FilterByWeaponButtonClicked;
-        public event Action FilterByConsumableButtonClicked;
-        public event Action FilterByResourceButtonClicked;
+        public event Action<bool> FilterByArmorButtonClicked;
+        public event Action<bool> FilterByWeaponButtonClicked;
+        public event Action<bool> FilterByConsumableButtonClicked;
+        public event Action<bool> FilterByResourceButtonClicked;
 
         public event Action OrderByNameButtonClicked;
         public event Action OrderByTypeButtonClicked;
 
         private void OnEnable()
         {
-            _filterByArmorButton.onClick.AddListener(() => FilterByArmorButtonClicked?.Invoke());
-            _filterByWeaponButton.onClick.AddListener(() => FilterByWeaponButtonClicked?.Invoke());
-            _filterByConsumableButton.onClick.AddListener(() => FilterByConsumableButtonClicked?.Invoke());
-            _filterByResourceButton.onClick.AddListener(() => FilterByResourceButtonClicked?.Invoke());
+            _filterByArmorToggle.onValueChanged.AddListener(isOn => FilterByArmorButtonClicked?.Invoke(isOn));
+            _filterByWeaponToggle.onValueChanged.AddListener(isOn => FilterByWeaponButtonClicked?.Invoke(isOn));
+            _filterByConsumableToggle.onValueChanged.AddListener(isOn => FilterByConsumableButtonClicked?.Invoke(isOn));
+            _filterByResourceToggle.onValueChanged.AddListener(isOn => FilterByResourceButtonClicked?.Invoke(isOn));
 
-            _OrderByNameButton.onClick.AddListener(() => OrderByNameButtonClicked?.Invoke());
-            _OrderByTypeButton.onClick.AddListener(() => OrderByTypeButtonClicked?.Invoke());
+            _orderByNameButton.onClick.AddListener(() => OrderByNameButtonClicked?.Invoke());
+            _orderByTypeButton.onClick.AddListener(() => OrderByTypeButtonClicked?.Invoke());
         }
 
         private void OnDisable()
         {
-            _filterByArmorButton.onClick.RemoveAllListeners();
-            _filterByWeaponButton.onClick.RemoveAllListeners();
-            _filterByConsumableButton.onClick.RemoveAllListeners();
-            _filterByResourceButton.onClick.RemoveAllListeners();
+            _filterByArmorToggle.onValueChanged.RemoveAllListeners();
+            _filterByWeaponToggle.onValueChanged.RemoveAllListeners();
+            _filterByConsumableToggle.onValueChanged.RemoveAllListeners();
+            _filterByResourceToggle.onValueChanged.RemoveAllListeners();
 
-            _OrderByNameButton.onClick.RemoveAllListeners();
-            _OrderByTypeButton.onClick.RemoveAllListeners();
+            _orderByNameButton.onClick.RemoveAllListeners();
+            _orderByTypeButton.onClick.RemoveAllListeners();
         }
 
         public void Render(IInventoryHudData inventoryHudData)
@@ -77,18 +77,13 @@ namespace Assets._Game.Scripts.UI.Views
             _inventorySlotTemplate.gameObject.SetActive(false);
 
             _inventoryHudData = inventoryHudData;
-            inventoryHudData.Changed += OnInventoryHudDataChanged;
-            OnInventoryHudDataChanged();
-        }
-
-        private void OnInventoryHudDataChanged()
-        {
             foreach (var slot in _slots)
             {
                 slot.gameObject.SetActive(false);
             }
 
-            foreach (var (inventorySlot, stack) in _inventoryHudData.InventoryModel.Enumerate())
+            // Render inventory slots
+            foreach (var (inventorySlot, stack) in _inventoryHudData.Enumerate())
             {
                 if (_slots.Count > inventorySlot.Index)
                 {
@@ -98,14 +93,16 @@ namespace Assets._Game.Scripts.UI.Views
                     continue;
                 }
 
-                var slotView = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                slotView.Bind(inventorySlot);
-                slotView.PointerClick += OnSlotPointerClick;
-                _slots.Add(slotView);
-                slotView.gameObject.SetActive(true);
-                slotView.Render(stack);
+                // Instantiate new slot if there are not enough in the pool
+                var newSlot = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
+                newSlot.Bind(inventorySlot);
+                newSlot.PointerClick += OnSlotPointerClick;
+                _slots.Add(newSlot);
+                newSlot.gameObject.SetActive(true);
+                newSlot.Render(stack);
             }
 
+            // Update text fields
             _weightText.text = _inventoryHudData.ViewWeight ? $"{_inventoryHudData.WeightCurrent}kg / {_inventoryHudData.WeightMax}kg" : "";
             _goldText.text = _inventoryHudData.ViewGold ? $"{_inventoryHudData.Gold} gold" : "";
             _slotsAmountText.text = _inventoryHudData.ViewSlotsAmount ? $"{_inventoryHudData.SlotsUsed} / {_inventoryHudData.SlotsMax} slots" : "";
@@ -113,11 +110,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Unbind()
         {
-            if (_inventoryHudData != null)
-            {
-                _inventoryHudData.Changed -= OnInventoryHudDataChanged;
-                _inventoryHudData = null;
-            }
+            _inventoryHudData = null;
         }
 
         private void OnSlotPointerClick(InventorySlot slotIndex)

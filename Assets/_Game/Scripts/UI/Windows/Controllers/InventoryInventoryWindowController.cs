@@ -32,8 +32,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(InventoryInventoryWindow window)
         {
             _window = window;
-            _firstInventoryViewController = new InventoryViewController(_window.FirstInventoryView, _inventoryHudData.InventoryModel);
-            _secondInventoryViewController = new InventoryViewController(_window.SecondInventoryView, _storageHudData.InventoryModel);
+            _firstInventoryViewController = new InventoryViewController(_window.FirstInventoryView);
+            _firstInventoryViewController.Bind(_inventoryHudData);
+            _secondInventoryViewController = new InventoryViewController(_window.SecondInventoryView);
+            _secondInventoryViewController.Bind(_storageHudData);
 
             _firstInventoryViewController.SlotClick += _previewProcessor.OnFirstItemContainerSlotClick;
             _secondInventoryViewController.SlotClick += _previewProcessor.OnSecondItemContainerSlotClick;
@@ -41,15 +43,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Dispose()
+        public override void Unbind()
         {
             _firstInventoryViewController.SlotClick -= _previewProcessor.OnFirstItemContainerSlotClick;
             _secondInventoryViewController.SlotClick -= _previewProcessor.OnSecondItemContainerSlotClick;
+
+            _firstInventoryViewController.Unbind();
+            _secondInventoryViewController.Unbind();
+
+            _window = null;
         }
 
         private void Redraw()
         {
-            _window.Render(_inventoryHudData, _storageHudData);
+            _firstInventoryViewController.Redraw();
+            _secondInventoryViewController.Redraw();
         }
     }
 }
