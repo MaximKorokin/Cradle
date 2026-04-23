@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: AdventurerBoots
+  m_EditorClassIdentifier: 
+  _id: 4f78949dd7304b1d9d8c4750afc749ac
+  <Name>k__BackingField: Adventurer Boots
+  <Icon>k__BackingField: {fileID: 76971067967935887, guid: 4a5a2b590ea89df41aae3828d66dd94b, type: 3}
+  <Sprite>k__BackingField: {fileID: -1989785997, guid: a1a087c604dd2314a92ccefa47553a58, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 111
+  <Traits>k__BackingField:
+  - rid: 2155386372002676736
+  - rid: 2155386372002676738
+  references:
+    version: 2
+    RefIds:
+    - rid: 2155386372002676736
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 50
+    - rid: 2155386372002676738
+      type: {class: StatModifiersTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <Modifiers>k__BackingField:
+        - <Stat>k__BackingField: 300
+          <Stage>k__BackingField: 20
+          <Operation>k__BackingField: 10
+          <Value>k__BackingField: 0.5
+          <Priority>k__BackingField: 0
