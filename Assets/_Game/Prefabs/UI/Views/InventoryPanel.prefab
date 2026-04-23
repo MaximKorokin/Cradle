@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 5726095265973628089}
   - component: {fileID: 7629291264068007601}
   m_Layer: 5
-  m_Name: ConsumableFilterToggle
+  m_Name: UtilityFilterToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -754,7 +754,7 @@ MonoBehaviour:
   _slotsAmountText: {fileID: 8161590091688760021}
   _filterByClothingToggle: {fileID: 785846239413291356}
   _filterByWeaponToggle: {fileID: 8116898194784301333}
-  _filterByConsumableToggle: {fileID: 7629291264068007601}
+  _filterByUtilityToggle: {fileID: 7629291264068007601}
   _filterByResourceToggle: {fileID: 4424839634649606930}
   _orderByNameButton: {fileID: 1887031941369414638}
   _orderByPurposeButton: {fileID: 3811192741210768545}

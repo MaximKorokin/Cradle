@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             View.FilterByClothingButtonClicked += OnFilterByClothingButtonClicked;
             View.FilterByWeaponButtonClicked += OnFilterByWeaponButtonClicked;
-            View.FilterByConsumableButtonClicked += OnFilterByConsumableButtonClicked;
+            View.FilterByUtilityButtonClicked += OnFilterByUtilityButtonClicked;
             View.FilterByResourceButtonClicked += OnFilterByResourceButtonClicked;
 
             View.OrderByNameButtonClicked += OnOrderByNameButtonClicked;
@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             View.FilterByClothingButtonClicked -= OnFilterByClothingButtonClicked;
             View.FilterByWeaponButtonClicked -= OnFilterByWeaponButtonClicked;
-            View.FilterByConsumableButtonClicked -= OnFilterByConsumableButtonClicked;
+            View.FilterByUtilityButtonClicked -= OnFilterByUtilityButtonClicked;
             View.FilterByResourceButtonClicked -= OnFilterByResourceButtonClicked;
 
             View.OrderByNameButtonClicked -= OnOrderByNameButtonClicked;
@@ -77,7 +77,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void OnFilterByClothingButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Clothing);
         private void OnFilterByWeaponButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Weapon);
-        private void OnFilterByConsumableButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Consumable);
+        private void OnFilterByUtilityButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Utility);
         private void OnFilterByResourceButtonClicked(bool isOn) => OnFilterButtonClicked(isOn, ItemStackPurpose.Resource);
 
         private void OnOrderByNameButtonClicked()

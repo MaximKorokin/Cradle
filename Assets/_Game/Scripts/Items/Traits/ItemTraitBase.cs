@@ -18,6 +18,11 @@ namespace Assets._Game.Scripts.Items
         {
             return (Triggers & context.Trigger) != 0;
         }
+
+        public virtual string GetDescription()
+        {
+            return "Description not implemented";
+        }
     }
 
     [Flags]

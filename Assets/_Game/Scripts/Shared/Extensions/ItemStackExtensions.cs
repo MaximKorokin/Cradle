@@ -74,7 +74,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
                     EquipmentSlotType.Boots => ItemStackPurpose.Clothing,
                     EquipmentSlotType.Ring => ItemStackPurpose.Clothing,
                     EquipmentSlotType.Necklace => ItemStackPurpose.Clothing,
-                    EquipmentSlotType.Consumable => ItemStackPurpose.Consumable,
+                    EquipmentSlotType.Utility => ItemStackPurpose.Utility,
                     _ => ItemStackPurpose.None
                 };
             }
@@ -91,7 +91,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
         None,
         Weapon = 10,
         Clothing = 20,
-        Consumable = 30,
+        Utility = 30,
         Resource = 40
     }
 }

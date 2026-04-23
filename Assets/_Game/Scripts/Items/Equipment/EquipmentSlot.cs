@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.Items.Equipment
         Boots = 50,
         Ring = 60,
         Necklace = 70,
-        Consumable = 1000,
+        Utility = 1000,
     }
 
     public struct EquipmentSlotKey : IContainerSlot

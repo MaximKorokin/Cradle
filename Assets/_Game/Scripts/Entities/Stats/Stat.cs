@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -110,56 +111,79 @@ namespace Assets._Game.Scripts.Entities.Stats
 
     public enum StatId
     {
+        [EnumDescription("Vision Range")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         VisionRange = 100,
 
+        [EnumDescription("Maximum HP")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         HpMax = 200,
         //[StatRestriction(StatRestrictionType.NonNegative)]
         //[StatRestriction(StatRestrictionType.ForbidModifiers)]
         //[StatRestriction(StatRestrictionType.NotGreaterThan, StatId.HpMax)]
         //HpCurrent = 210,
+        [EnumDescription("HP Regeneration")]
         HpRegeneration = 220,
 
+        [EnumDescription("Movement Speed")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         MoveSpeed = 300,
 
+        [EnumDescription("Physical Attack")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalAttack = 310,
+        [EnumDescription("Physical Crit Chance")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         [StatRestriction(StatRestrictionType.NotGreaterThan, 1)]
         PhysicalCritChance = 315,
+        [EnumDescription("Physical Crit Multiplier")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalCritMultiplier = 316,
+        [EnumDescription("Physical Attack Speed")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalAttackSpeed = 320,
+        [EnumDescription("Physical Action Delay")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalActionDelay = 325,
+        [EnumDescription("Physical Range Multiplier")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         PhysicalRangeMultiplier = 327,
-        PhysicalArmor = 330,
+        [EnumDescription("Physical Armor")]
+        PhysicalDefence = 330,
 
+        [EnumDescription("Magical Attack")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         MagicalAttack = 360,
+        [EnumDescription("Magical Crit Chance")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         [StatRestriction(StatRestrictionType.NotGreaterThan, 1)]
         MagicalCritChance = 365,
+        [EnumDescription("Magical Crit Multiplier")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         MagicalCritMultiplier = 366,
+        [EnumDescription("Magical Attack Speed")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         MagicalAttackSpeed = 370,
+        [EnumDescription("Magical Action Delay")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         MagicalActionDelay = 375,
-        MagicalArmor = 380,
+        [EnumDescription("Magical Armor")]
+        [StatRestriction(StatRestrictionType.NonNegative)]
+        MagicalDefence = 380,
 
+        [EnumDescription("Strength")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         Strength = 400,
+        [EnumDescription("Agility")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         Agility = 410,
 
+        [EnumDescription("Carry Weight")]
         CarryWeight = 500,
+        [EnumDescription("Carry Weight Max")]
         CarryWeightMax = 510,
 
+        [EnumDescription("Size Scale")]
         [StatRestriction(StatRestrictionType.NonNegative)]
         SizeScale = 1000,
     }

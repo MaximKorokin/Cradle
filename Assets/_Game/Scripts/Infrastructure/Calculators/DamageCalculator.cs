@@ -48,7 +48,7 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
             if (!target.TryGetModule(out StatModule targetStats)) return 0;
 
             var attack = sourceStats.Stats.Get(StatId.PhysicalAttack);
-            var armor = targetStats.Stats.Get(StatId.PhysicalArmor);
+            var armor = targetStats.Stats.Get(StatId.PhysicalDefence);
 
             var rawDamage = spec.Flat + attack * spec.AttackScale;
 

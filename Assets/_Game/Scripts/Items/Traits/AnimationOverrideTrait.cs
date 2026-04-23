@@ -9,5 +9,10 @@ namespace Assets._Game.Scripts.Items.Traits
     {
         [field: SerializeField]
         public AnimationOverrideProfile AnimationOverrideProfile { get; private set; }
+
+        public override string GetDescription()
+        {
+            return string.Empty;
+        }
     }
 }

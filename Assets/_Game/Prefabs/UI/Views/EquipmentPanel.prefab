@@ -630,7 +630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6336858044883863395}
   m_Layer: 5
-  m_Name: ConsumablesSettingsButton
+  m_Name: UsablesSettingsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -756,7 +756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Name
-      value: ConsumableSlot
+      value: UtilitySlot
       objectReference: {fileID: 0}
     - target: {fileID: 8149385159732471927, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: <SlotType>k__BackingField
@@ -1038,7 +1038,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Name
-      value: ConsumableSlot
+      value: UtilitySlot
       objectReference: {fileID: 0}
     - target: {fileID: 8149385159732471927, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: <SlotType>k__BackingField
@@ -1179,7 +1179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Name
-      value: ConsumableSlot
+      value: UtilitySlot
       objectReference: {fileID: 0}
     - target: {fileID: 8149385159732471927, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: <SlotType>k__BackingField
@@ -2307,7 +2307,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Name
-      value: ConsumableSlot
+      value: UtilitySlot
       objectReference: {fileID: 0}
     - target: {fileID: 8149385159732471927, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: <SlotType>k__BackingField

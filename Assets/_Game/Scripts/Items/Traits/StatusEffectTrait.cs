@@ -23,5 +23,10 @@ namespace Assets._Game.Scripts.Items.Traits
             return context.User.TryGetModule<StatusEffectModule>(out var statusEffectModule)
                 && !statusEffectModule.StatusEffects.GetStatusEffects().Any(se => se.Definition == StatusEffect);
         }
+
+        public override string GetDescription()
+        {
+            return $"Applies {StatusEffect.Name} status effect";
+        }
     }
 }

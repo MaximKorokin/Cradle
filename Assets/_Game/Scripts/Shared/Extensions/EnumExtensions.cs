@@ -21,5 +21,11 @@ namespace Assets._Game.Scripts.Shared.Extensions
             }
             return Array.Empty<T>();
         }
+
+        public static string GetDescription(this Enum enumValue)
+        {
+            var descriptionAttribute = enumValue.GetAttributes<Attributes.EnumDescriptionAttribute>().FirstOrDefault();
+            return descriptionAttribute != null ? descriptionAttribute.Description : enumValue.ToString();
+        }
     }
 }

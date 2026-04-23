@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private Toggle _filterByWeaponToggle;
         [SerializeField]
-        private Toggle _filterByConsumableToggle;
+        private Toggle _filterByUtilityToggle;
         [SerializeField]
         private Toggle _filterByResourceToggle;
         [Space]
@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         public event Action<bool> FilterByClothingButtonClicked;
         public event Action<bool> FilterByWeaponButtonClicked;
-        public event Action<bool> FilterByConsumableButtonClicked;
+        public event Action<bool> FilterByUtilityButtonClicked;
         public event Action<bool> FilterByResourceButtonClicked;
 
         public event Action OrderByNameButtonClicked;
@@ -54,7 +54,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             _filterByClothingToggle.onValueChanged.AddListener(isOn => FilterByClothingButtonClicked?.Invoke(isOn));
             _filterByWeaponToggle.onValueChanged.AddListener(isOn => FilterByWeaponButtonClicked?.Invoke(isOn));
-            _filterByConsumableToggle.onValueChanged.AddListener(isOn => FilterByConsumableButtonClicked?.Invoke(isOn));
+            _filterByUtilityToggle.onValueChanged.AddListener(isOn => FilterByUtilityButtonClicked?.Invoke(isOn));
             _filterByResourceToggle.onValueChanged.AddListener(isOn => FilterByResourceButtonClicked?.Invoke(isOn));
 
             _orderByNameButton.onClick.AddListener(() => OrderByNameButtonClicked?.Invoke());
@@ -65,7 +65,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             _filterByClothingToggle.onValueChanged.RemoveAllListeners();
             _filterByWeaponToggle.onValueChanged.RemoveAllListeners();
-            _filterByConsumableToggle.onValueChanged.RemoveAllListeners();
+            _filterByUtilityToggle.onValueChanged.RemoveAllListeners();
             _filterByResourceToggle.onValueChanged.RemoveAllListeners();
 
             _orderByNameButton.onClick.RemoveAllListeners();
