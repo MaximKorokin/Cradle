@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -78,7 +79,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             var traits = itemStack.GetFunctionalTraits<FunctionalItemTraitBase>(itemTrigger).ToArray();
             if (traits.Length == 0) return string.Empty;
 
-            return string.Join("\n\n", traits.Select(effect => _functionalItemTraitFormatter.FormatData(effect)));
+            return string.Join($"{Environment.NewLine}{Environment.NewLine}", traits.Select(effect => _functionalItemTraitFormatter.FormatData(effect)));
         }
     }
 

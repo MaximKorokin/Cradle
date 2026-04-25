@@ -110,6 +110,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ItemStackFormatter>(Lifetime.Singleton);
             builder.Register<FunctionalItemTraitFormatter>(Lifetime.Singleton);
             builder.Register<StatModifiersFormatter>(Lifetime.Singleton);
+            builder.Register<AttackModifiersFormatter>(Lifetime.Singleton);
             builder.Register<StatusEffectFormatter>(Lifetime.Singleton);
             builder.Register<InteractionDefinitionFormatter>(Lifetime.Singleton);
         }

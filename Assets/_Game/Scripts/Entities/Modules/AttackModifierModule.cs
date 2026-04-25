@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Shared.Attributes;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         None = 0,
         Vampiric = 10,
+        [EnumDescription("Bonus Damage")]
         MultipliedRepeatDamage = 20,
         Chilling = 30,
         Heating = 40,
