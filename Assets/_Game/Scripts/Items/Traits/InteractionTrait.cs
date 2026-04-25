@@ -24,10 +24,5 @@ namespace Assets._Game.Scripts.Items.Traits
             return context.User.TryGetModule<HealthModule>(out var healthModule)
                 && healthModule.HealthRatio < (itemUseSettings.HpPercent / 100f);
         }
-
-        public override string GetDescription()
-        {
-            return $"Applies interaction";
-        }
     }
 }

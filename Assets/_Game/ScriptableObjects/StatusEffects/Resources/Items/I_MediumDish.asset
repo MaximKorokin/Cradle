@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: I_MediumDish
   m_EditorClassIdentifier: 
   _id: f0932b0ccd5449fc970fbbb1ea2129d2
-  <Name>k__BackingField: Damage Salve
+  <Name>k__BackingField: Medium Dish
   <Icon>k__BackingField: {fileID: -7951491290743021505, guid: 05bbc83f544c57745860545592ccc07e, type: 3}
   <Category>k__BackingField: 0
   <Behaviour>k__BackingField: 1

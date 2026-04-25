@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using System;
@@ -38,16 +39,18 @@ namespace Assets._Game.Scripts.UI.Windows
             Clear();
         }
 
-        public void Render(ItemStackSnapshot? primaryItemStack, ItemStackSnapshot? secondaryItemStack, IEnumerable<ItemStackAction> actions)
+        public void Render(ItemStackDisplayData primaryItemStack, IEnumerable<ItemStackAction> actions) => Render(primaryItemStack, default, actions);
+
+        public void Render(ItemStackDisplayData primaryItemStack, ItemStackDisplayData secondaryItemStack, IEnumerable<ItemStackAction> actions)
         {
             Clear();
-            if (primaryItemStack != null)
+            if (primaryItemStack.HasData)
             {
-                _primaryItemPreviewView.Render(primaryItemStack.Value);
+                _primaryItemPreviewView.Render(primaryItemStack);
             }
-            if (secondaryItemStack != null)
+            if (secondaryItemStack.HasData)
             {
-                _secondaryItemPreviewView.Render(secondaryItemStack.Value);
+                _secondaryItemPreviewView.Render(secondaryItemStack);
             }
 
             foreach (var action in actions)

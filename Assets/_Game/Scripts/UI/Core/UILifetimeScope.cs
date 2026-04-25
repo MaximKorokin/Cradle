@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
@@ -48,6 +49,7 @@ namespace Assets._Game.Scripts.UI.Core
             RegisterWindows(builder);
             RegisterHud(builder);
             RegisterItemContainers(builder);
+            RegisterDataFormatters(builder);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -101,6 +103,15 @@ namespace Assets._Game.Scripts.UI.Core
         {
             builder.Register<InventoryViewController>(Lifetime.Transient);
             builder.Register<EquipmentViewController>(Lifetime.Transient);
+        }
+
+        private void RegisterDataFormatters(IContainerBuilder builder)
+        {
+            builder.Register<ItemStackFormatter>(Lifetime.Singleton);
+            builder.Register<FunctionalItemTraitFormatter>(Lifetime.Singleton);
+            builder.Register<StatModifiersFormatter>(Lifetime.Singleton);
+            builder.Register<StatusEffectFormatter>(Lifetime.Singleton);
+            builder.Register<InteractionDefinitionFormatter>(Lifetime.Singleton);
         }
     }
 }

@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.Shared.Utils;
+using Assets._Game.Scripts.UI.DataFormatters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly WindowManager _windowManager;
         private readonly IPlayerProvider _playerProvider;
         private readonly ItemContainerResolver _itemContainerResolver;
+        private readonly ItemStackFormatter _itemStackFormatter;
 
         private ItemStacksPreviewWindow _window;
         private EquipmentSlotKey? _equipmentSlot;
@@ -31,11 +33,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public ItemStacksPreviewWindowController(
             WindowManager windowManager,
             IPlayerProvider playerProvider,
-            ItemContainerResolver itemContainerResolver)
+            ItemContainerResolver itemContainerResolver,
+            ItemStackFormatter itemStackFormatter)
         {
             _windowManager = windowManager;
             _playerProvider = playerProvider;
             _itemContainerResolver = itemContainerResolver;
+            _itemStackFormatter = itemStackFormatter;
         }
 
         public override void Bind(ItemStacksPreviewWindow window)
@@ -84,7 +88,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             var equipmentItem = _equipmentSlot != null ? _equipmentModel.Get(_equipmentSlot.Value) : null;
             var actions = GetActions();
-            _window.Render(primaryItem, equipmentItem, actions);
+
+            if (equipmentItem != null)
+                _window.Render(_itemStackFormatter.FormatData(primaryItem.Value), _itemStackFormatter.FormatData(equipmentItem.Value), actions);
+            else 
+                _window.Render(_itemStackFormatter.FormatData(primaryItem.Value), actions);
         }
 
         private void PublishItemCommand(IItemCommand command)

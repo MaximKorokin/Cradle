@@ -10,10 +10,5 @@ namespace Assets._Game.Scripts.Items.Traits
         public SpecialActionKind Kind { get; private set; }
         [field: SerializeField]
         public ActionDefinition Action { get; private set; }
-
-        public override string GetDescription()
-        {
-            return string.Empty;
-        }
     }
 }

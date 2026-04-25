@@ -1,8 +1,5 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Traits;
-using Assets._Game.Scripts.Shared.Extensions;
+﻿using Assets._Game.Scripts.UI.DataFormatters;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,7 +50,7 @@ namespace Assets._Game.Scripts.UI.Views
             _usableEffectTextTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(ItemStackSnapshot itemStack)
+        public void Render(ItemStackDisplayData itemStack)
         {
             Clear();
 
@@ -65,87 +62,70 @@ namespace Assets._Game.Scripts.UI.Views
             gameObject.SetActive(true);
         }
 
-        private void RenderHeader(ItemStackSnapshot itemStack)
+        private void RenderHeader(ItemStackDisplayData itemStack)
         {
-            _titleText.text = itemStack.Definition.Name;
-            _iconView.sprite = itemStack.Definition.Icon;
+            _titleText.text = itemStack.Name;
+            _iconView.sprite = itemStack.Icon;
 
-            if (itemStack.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait))
+            if (itemStack.IsEquippable)
             {
                 _slotText.gameObject.SetActive(true);
-                _slotText.text = $"{equippableTrait.Slot}";
+                _slotText.text = itemStack.EquipmentSlotName;
             }
         }
 
-        private void RenderEquippableInfo(ItemStackSnapshot itemStack)
+        private void RenderEquippableInfo(ItemStackDisplayData itemStack)
         {
             // If the item is not equippable, we don't need to show the equippable info section.
-            if (!itemStack.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait)) return;
+            if (!itemStack.IsEquippable) return;
 
-            if (!TryVisualizeFunctionalTraits(itemStack, ItemTrigger.OnEquipmentChange, _equippableEffectsContainer)) return;
+            if (!TryVisualizeDescription(itemStack.EquippableEffectsDescription, _equippableEffectTextTemplate, _equippableEffectsContainer)) return;
 
             _equippableInfo.gameObject.SetActive(true);
         }
 
-        private void RenderUsableInfo(ItemStackSnapshot itemStack)
+        private void RenderUsableInfo(ItemStackDisplayData itemStack)
         {
             // If the item is not usable, we don't need to show the usable info section.
-            if (!itemStack.Definition.TryGetTrait<UsableTrait>(out var usableTrait)) return;
+            if (!itemStack.IsUsable) return;
 
-            if (!TryVisualizeFunctionalTraits(itemStack, ItemTrigger.OnUse, _usableEffectsContainer)) return;
+            if (!TryVisualizeDescription(itemStack.UsableEffectsDescription, _usableEffectTextTemplate, _usableEffectsContainer)) return;
 
-            _usableConsumableInfo.gameObject.SetActive(usableTrait.Consumable);
+            _usableConsumableInfo.gameObject.SetActive(itemStack.IsConsumable);
 
-            _usableCooldownInfo.gameObject.SetActive(usableTrait.Cooldown > 0);
-            _usableCooldownText.text = $"{usableTrait.Cooldown}s";
+            _usableCooldownInfo.gameObject.SetActive(!string.IsNullOrEmpty(itemStack.UsableCooldownDescription));
+            _usableCooldownText.text = itemStack.UsableCooldownDescription;
 
             _usableInfo.gameObject.SetActive(true);
         }
 
-        private void RenderCommonInfo(ItemStackSnapshot itemStack)
+        private void RenderCommonInfo(ItemStackDisplayData itemStack)
         {
             // If the item has no weight and is not stackable, we don't need to show the common info section.
-            var hasWeight = itemStack.Definition.Weight > 0;
-            var isStackable = itemStack.Definition.MaxAmount > 1;
+            var hasWeight = !string.IsNullOrEmpty(itemStack.WeightDescription);
+            var isStackable = !string.IsNullOrEmpty(itemStack.AmountDescription);
             if (!hasWeight && !isStackable) return;
 
-            _amountText.text = isStackable ? $"Amount: {itemStack.Amount}" : string.Empty;
-            if (hasWeight)
-            {
-                if (isStackable && itemStack.Amount > 1)
-                    _weightText.text = $"Weight: {itemStack.Definition.Weight * itemStack.Amount} ({itemStack.Definition.Weight} each)";
-                else
-                    _weightText.text = $"Weight: {itemStack.Definition.Weight}";
-            }
-            else
-            {
-                _weightText.text = string.Empty;
-            }
+            _amountText.gameObject.SetActive(isStackable);
+            _amountText.text = itemStack.AmountDescription;
+
+            _weightText.gameObject.SetActive(hasWeight);
+            _weightText.text = itemStack.WeightDescription;
 
             _commonInfo.gameObject.SetActive(true);
         }
 
-        private bool TryVisualizeFunctionalTraits(ItemStackSnapshot itemStack, ItemTrigger itemTrigger, RectTransform container)
+        private bool TryVisualizeDescription(string description, TMP_Text template, RectTransform container)
         {
-            // If the item has no traits for the given trigger, we don't need to show anything.
-            var traits = itemStack.GetFunctionalTraits<FunctionalItemTraitBase>(itemTrigger).ToArray();
-            if (traits.Length == 0) return false;
+            if (string.IsNullOrEmpty(description)) return false;
 
-            // Visualize the traits. If none of the traits have a description, we don't need to show anything.
-            var visualizedEffectsCount = 0;
-            for (int i = 0; i < traits.Length; i++)
-            {
-                var description = traits[i].GetDescription();
-                if (string.IsNullOrEmpty(description)) continue;
-                
-                visualizedEffectsCount++;
-                var effectView = Instantiate(_equippableEffectTextTemplate, container);
-                effectView.text = description;
-                effectView.gameObject.SetActive(true);
-                _instantiatedEffectViews.Add(effectView.gameObject);
-            }
+            var effectView = Instantiate(template, container);
+            effectView.text = description;
+            effectView.gameObject.SetActive(true);
 
-            return visualizedEffectsCount > 0;
+            _instantiatedEffectViews.Add(effectView.gameObject);
+
+            return true;
         }
 
         public void Clear()

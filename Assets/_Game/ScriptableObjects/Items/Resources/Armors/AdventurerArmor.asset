@@ -44,9 +44,9 @@ MonoBehaviour:
           <Value>k__BackingField: 0.1
           <Priority>k__BackingField: 0
         - <Stat>k__BackingField: 320
-          <Stage>k__BackingField: 20
-          <Operation>k__BackingField: 10
-          <Value>k__BackingField: 0
+          <Stage>k__BackingField: 30
+          <Operation>k__BackingField: 20
+          <Value>k__BackingField: 0.1
           <Priority>k__BackingField: 0
         - <Stat>k__BackingField: 300
           <Stage>k__BackingField: 20

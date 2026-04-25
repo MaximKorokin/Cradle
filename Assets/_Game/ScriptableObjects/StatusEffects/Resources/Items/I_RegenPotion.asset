@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: I_RegenPotion
   m_EditorClassIdentifier: 
   _id: 7eb30ef2ed644654ba0eb71ba25a3004
-  <Name>k__BackingField: Damage Salve
+  <Name>k__BackingField: Regeneration Potion
   <Icon>k__BackingField: {fileID: -5060692187931261751, guid: 36c061f7f6944534380734307273b73f, type: 3}
   <Category>k__BackingField: 0
   <Behaviour>k__BackingField: 1
