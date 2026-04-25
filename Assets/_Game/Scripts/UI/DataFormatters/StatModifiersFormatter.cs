@@ -13,23 +13,24 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             for (int i = 0; i < data.Length; i++)
             {
                 var modifier = data[i];
+                var name = modifier.Stat.GetDescription();
                 var sign = modifier.Value > 0 ? "+" : "";
                 switch (modifier.Operation)
                 {
                     case StatOperation.Add:
-                        stringBuilder.Append($"{modifier.Stat.GetDescription()}: {sign}{modifier.Value:0.##}");
+                        stringBuilder.Append($"{name}: {sign}{modifier.Value:0.##}");
                         break;
                     case StatOperation.Multiply:
-                        stringBuilder.Append($"{modifier.Stat.GetDescription()}: {sign}{modifier.Value * 100:0.##}%");
+                        stringBuilder.Append($"{name}: {sign}{modifier.Value * 100:0.##}%");
                         break;
                     case StatOperation.Override:
-                        stringBuilder.Append($"{modifier.Stat.GetDescription()}: set to {modifier.Value:0.##}");
+                        stringBuilder.Append($"{name}: set to {modifier.Value:0.##}");
                         break;
                     case StatOperation.ClampMin:
-                        stringBuilder.Append($"{modifier.Stat.GetDescription()}: min to {modifier.Value:0.##}");
+                        stringBuilder.Append($"{name}: min to {modifier.Value:0.##}");
                         break;
                     case StatOperation.ClampMax:
-                        stringBuilder.Append($"{modifier.Stat.GetDescription()}: max to {modifier.Value:0.##}");
+                        stringBuilder.Append($"{name}: max to {modifier.Value:0.##}");
                         break;
                     default:
                         stringBuilder.Append($"{Environment.NewLine}(Unknown operation){Environment.NewLine}");

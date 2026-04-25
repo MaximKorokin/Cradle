@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                         damageValue = $"{scaleText}";
 
                     var critText = damageData.Spec.CanCrit ? "(can crit)" : "";
-                    stringBuilder.AppendLine($"Damage: {damageValue} {damageTypeText} {critText}");
+                    stringBuilder.AppendLine($"{damageTypeText}: {damageValue} {critText}");
                     break;
 
                 case InteractionDefinition.HealData healData:

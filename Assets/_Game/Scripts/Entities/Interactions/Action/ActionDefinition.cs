@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets._Game.Scripts.Shared.Attributes;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Interactions.Action
@@ -50,7 +51,9 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
     public enum ActionExecutionSpeedMultiplier
     {
         None = 0,
+        [EnumDescription("P. Speed")]
         PhysicalAttackSpeed = 1,
+        [EnumDescription("M. Speed")]
         MagicalAttackSpeed = 2,
     }
 

@@ -113,6 +113,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<AttackModifiersFormatter>(Lifetime.Singleton);
             builder.Register<StatusEffectFormatter>(Lifetime.Singleton);
             builder.Register<InteractionDefinitionFormatter>(Lifetime.Singleton);
+            builder.Register<ActionDefinitionFormatter>(Lifetime.Singleton);
         }
     }
 }

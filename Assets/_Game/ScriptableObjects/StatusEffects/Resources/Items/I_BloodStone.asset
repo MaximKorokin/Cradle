@@ -29,7 +29,7 @@ MonoBehaviour:
   <AttackModifiers>k__BackingField:
   - <Type>k__BackingField: 10
     <Value>k__BackingField: 0.2
-    <Chance>k__BackingField: 1
+    <Chance>k__BackingField: 0.7
   <ControlProvider>k__BackingField:
     rid: -2
   references:

@@ -63,7 +63,7 @@ MonoBehaviour:
           Type: 10
           Flat: 0
           AttackScale: 0.5
-          CanCrit: 0
+          CanCrit: 1
     - rid: 3412048928327073891
       type: {class: InteractionDefinition/WaitData, ns: Assets._Game.Scripts.Entities.Interactions, asm: Assembly-CSharp}
       data:

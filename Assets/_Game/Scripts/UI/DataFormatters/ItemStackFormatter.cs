@@ -79,7 +79,11 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             var traits = itemStack.GetFunctionalTraits<FunctionalItemTraitBase>(itemTrigger).ToArray();
             if (traits.Length == 0) return string.Empty;
 
-            return string.Join($"{Environment.NewLine}{Environment.NewLine}", traits.Select(effect => _functionalItemTraitFormatter.FormatData(effect)));
+            return string.Join(
+                $"{Environment.NewLine}{Environment.NewLine}",
+                traits
+                    .Select(effect => _functionalItemTraitFormatter.FormatData(effect))
+                    .Where(text => !string.IsNullOrEmpty(text)));
         }
     }
 

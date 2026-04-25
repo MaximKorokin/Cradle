@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Entities.Interactions.Steps;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Shared.Attributes;
 using System;
 using UnityEngine;
 
@@ -10,8 +11,11 @@ namespace Assets._Game.Scripts.Infrastructure.Calculators
     public enum DamageType
     {
         None = 0,
+        [EnumDescription("P.Dmg.")]
         Physical = 10,
+        [EnumDescription("M.Dmg.")]
         Magical = 20,
+        [EnumDescription("True")]
         True = 30
     }
 
