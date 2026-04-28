@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: WolfFangDagger
+  m_Name: Assassin Dagger
   m_EditorClassIdentifier: 
-  _id: 9390478919cd4031bdb513c0db4bf3f3
-  <Name>k__BackingField: Wolf Fang Dagger
-  <Icon>k__BackingField: {fileID: 1021184004093599166, guid: 1b736c21ef29649459f8dbabb1c71c6e, type: 3}
-  <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+  _id: 5846d944da0f41f5aa5ee17c2e2ce88c
+  <Name>k__BackingField: Assassin Dagger
+  <Icon>k__BackingField: {fileID: -4738412266119780931, guid: f533c66d386a405408dc0344389d0b7e, type: 3}
+  <Sprite>k__BackingField: {fileID: -3087264978319007404, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 200
   <Traits>k__BackingField:

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: NobleKnuckles
+  m_EditorClassIdentifier: 
+  _id: ea5edbdcce3147b5b43bf08bbdd34065
+  <Name>k__BackingField: Noble Knuckles
+  <Icon>k__BackingField: {fileID: -245133025207972798, guid: 9e9d08c21f2050d42b12ad9687f652c7, type: 3}
+  <Sprite>k__BackingField: {fileID: 7834802711767081893, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 200
+  <Traits>k__BackingField:
+  - rid: 2859158637052690515
+  references:
+    version: 2
+    RefIds:
+    - rid: 2859158637052690515
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 10

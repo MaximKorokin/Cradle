@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: Sword
+  m_Name: PretorianSword
   m_EditorClassIdentifier: 
-  _id: 780db064-ca6a-4b9d-bc23-64e34a86403a
-  <Name>k__BackingField: Sword
-  <Icon>k__BackingField: {fileID: -7727811773610990791, guid: b304dad9fbacac44ebf4fdab2513e341, type: 3}
-  <Sprite>k__BackingField: {fileID: -1663444524, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+  _id: ee2b7bc3554e42ab8764088ac4eb2c90
+  <Name>k__BackingField: Pretorian Sword
+  <Icon>k__BackingField: {fileID: 1218416773719571229, guid: 35a28de7b7888bb419551f6b7d06cf82, type: 3}
+  <Sprite>k__BackingField: {fileID: -21522807587195298, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 80
   <Traits>k__BackingField:

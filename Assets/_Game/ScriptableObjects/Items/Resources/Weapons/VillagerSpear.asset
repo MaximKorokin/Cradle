@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: Spear
+  m_Name: VillagerSpear
   m_EditorClassIdentifier: 
   _id: bc3b6314-c1ad-40d3-bbd7-2b5d8fdc2338
-  <Name>k__BackingField: Spear
+  <Name>k__BackingField: Villager Spear
   <Icon>k__BackingField: {fileID: -2773593466412431158, guid: bf3d8dc71955519468ccbb3420936ef3, type: 3}
-  <Sprite>k__BackingField: {fileID: 1496440014, guid: c29fae9acbf91a349b53661d89df5f0a, type: 3}
+  <Sprite>k__BackingField: {fileID: 5601323976189978565, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 100
   <Traits>k__BackingField:
