@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52f5c390e91f1144ea45c5bf3875049d, type: 3}
-  m_Name: BareMAA
+  m_Name: DaggerMAA
   m_EditorClassIdentifier: 
-  _id: 521a4bd8c58044ba91ed357a98b1097f
+  _id: 616da68a43864a2b8c8c7e2a2029303f
   <Name>k__BackingField: Physical Attack
   <Description>k__BackingField: 
   <Icon>k__BackingField: {fileID: 6689699355126921553, guid: 692ce18cf22f2934ab8a66d461037786, type: 3}
-  <Interaction>k__BackingField: {fileID: 11400000, guid: 0826e281f8f680e43b620aea4b71b61c, type: 2}
+  <Interaction>k__BackingField: {fileID: 11400000, guid: 7cef256fe0131f34f9e3e483113b99c2, type: 2}
   <ManaCost>k__BackingField: 0
   <ConsumesCharges>k__BackingField: 1
   <PreparationTime>k__BackingField: 0
   <MaxChannelingTime>k__BackingField: 5
   <Cooldown>k__BackingField: 0
-  <Range>k__BackingField: 0.4
+  <Range>k__BackingField: 0.5
   <SpeedMultiplier>k__BackingField: 1
   <EntityQueryData>k__BackingField:
     ExcludedRestrictions: 3

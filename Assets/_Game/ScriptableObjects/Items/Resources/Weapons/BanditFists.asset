@@ -10,19 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: BanditKnuckles
+  m_Name: BanditFists
   m_EditorClassIdentifier: 
   _id: 9390478919cd4031bdb513c0db4bf3f3
-  <Name>k__BackingField: Bandit Knuckles
+  <Name>k__BackingField: Bandit Fists
   <Icon>k__BackingField: {fileID: -4475383642248805965, guid: c00f79ee568dced44b78e78a61a0fdd1, type: 3}
   <Sprite>k__BackingField: {fileID: -3776783329477156521, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 200
   <Traits>k__BackingField:
   - rid: 2859158637052690515
+  - rid: 2155386487893655640
+  - rid: 2155386487893655641
   references:
     version: 2
     RefIds:
+    - rid: 2155386487893655640
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: d32390f565e05ec4da413174f8a1a72e, type: 2}
+    - rid: 2155386487893655641
+      type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 0
+        <Kind>k__BackingField: 0
+        <Action>k__BackingField: {fileID: 11400000, guid: 37c3f91c1662b434786a55e333513bee, type: 2}
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

@@ -290,7 +290,7 @@ TextureImporter:
         width: 64
         height: 128
       alignment: 9
-      pivot: {x: 0.5034952, y: 0.22912884}
+      pivot: {x: 0.5003661, y: 0.093007565}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -356,7 +356,7 @@ TextureImporter:
         width: 64
         height: 128
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -365,6 +365,28 @@ TextureImporter:
       bones: []
       spriteID: de759d26e9258ab4c9898def47902a1a
       internalID: 2129446207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Weapons_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 64
+        height: 128
+      alignment: 9
+      pivot: {x: 0.506259, y: 0.13544464}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 147ddc169adafc14bac2ddd1f846b623
+      internalID: -2039780932
       vertices: []
       indices: 
       edges: []
@@ -390,6 +412,7 @@ TextureImporter:
       Weapons_20: -5082318553336741150
       Weapons_21: -3087264978319007404
       Weapons_22: 2129446207
+      Weapons_30: -2039780932
       Weapons_31: -21522807587195298
       Weapons_40: -3776783329477156521
       Weapons_41: 7834802711767081893

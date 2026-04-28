@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5f0efd704e83da4e985673a2859f4cb, type: 3}
+  m_Name: THSwordAOP
+  m_EditorClassIdentifier: 
+  _animationOverrides:
+  - _animationKey: 11
+    _animationClip: {fileID: 7400000, guid: efe41c93e0866734b99a0645e5e7ea84, type: 2}
+  - _animationKey: 21
+    _animationClip: {fileID: 7400000, guid: 03dd47527fc9d0e4b91943c2b20e9dd8, type: 2}
+  - _animationKey: 31
+    _animationClip: {fileID: 7400000, guid: 021cf438b7f11d24a9941b3088d19e89, type: 2}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7db4a0ceb99525a4d8ce490ab1fd0904, type: 3}
-  m_Name: MA_OneHanded
+  m_Name: MA_DaggerSword
   m_EditorClassIdentifier: 
   Root:
     rid: 3412048633303400590

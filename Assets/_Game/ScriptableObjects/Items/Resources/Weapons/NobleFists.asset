@@ -10,19 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
-  m_Name: NobleKnuckles
+  m_Name: NobleFists
   m_EditorClassIdentifier: 
   _id: ea5edbdcce3147b5b43bf08bbdd34065
-  <Name>k__BackingField: Noble Knuckles
+  <Name>k__BackingField: Noble Fists
   <Icon>k__BackingField: {fileID: -245133025207972798, guid: 9e9d08c21f2050d42b12ad9687f652c7, type: 3}
   <Sprite>k__BackingField: {fileID: 7834802711767081893, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 200
   <Traits>k__BackingField:
   - rid: 2859158637052690515
+  - rid: 2155386487893655642
+  - rid: 2155386487893655643
   references:
     version: 2
     RefIds:
+    - rid: 2155386487893655642
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: d32390f565e05ec4da413174f8a1a72e, type: 2}
+    - rid: 2155386487893655643
+      type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <Kind>k__BackingField: 0
+        <Action>k__BackingField: {fileID: 11400000, guid: 37c3f91c1662b434786a55e333513bee, type: 2}
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
