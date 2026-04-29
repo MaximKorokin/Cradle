@@ -6,6 +6,7 @@ namespace Assets._Game.Scripts.Items.Equipment
     {
         None = 0,
         Weapon = 10,
+        OffHand = 15,
         Helmet = 20,
         Armor = 30,
         Gloves = 40,

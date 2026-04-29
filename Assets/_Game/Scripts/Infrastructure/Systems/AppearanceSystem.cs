@@ -60,15 +60,22 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
+            if (e.Item == null)
+            {
+                SLog.Warn($"Received {nameof(EquipmentChangedEvent)} for entity {entity.Definition.Id} with null item. Slot: {e.Slot.SlotType}, Kind: {e.Kind}");
+                return;
+            }
+
             var appearance = entity.GetModule<AppearanceModule>();
 
             // Change units
+            // Find all units that should be changed based on the equipment slot
             foreach (var entityUnitVisualModel in entity.Definition.VisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
             {
                 var path = $"{entityUnitVisualModel.Path}/{e.Slot.SlotType}";
                 if (e.Kind == EquipmentChangeKind.Equipped)
                 {
-                    var relativeOrderInLayer = e.Slot.SlotType == EquipmentSlotType.Weapon ? -1 : 1;
+                    var relativeOrderInLayer = GetItemOrderInLayer(e);
                     appearance.RequestEnsureUnit(path, relativeOrderInLayer);
                     appearance.RequestSetUnitSprite(path, e.Item.Value.Definition.Sprite);
                 }
@@ -91,6 +98,27 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     appearance.RequestSetAnimation(animationOverride.AnimationKey, animationClip);
                 }
             }
+        }
+
+        private static int GetItemOrderInLayer(EquipmentChangedEvent e)
+        {
+            OrderInLayerOverrideKind kind;
+            if (e.Item.Value.Definition.TryGetTrait<OrderInLayerOverrideTrait>(out var trait))
+            {
+                kind = trait.Kind;
+            }
+            else
+            {
+                kind = e.Slot.SlotType == EquipmentSlotType.Weapon ? OrderInLayerOverrideKind.Weapon : OrderInLayerOverrideKind.Clothing;
+            }
+
+            return kind switch
+            {
+                OrderInLayerOverrideKind.Weapon => -1,
+                OrderInLayerOverrideKind.Clothing => 1,
+                OrderInLayerOverrideKind.Overlay => 2,
+                _ => 0
+            }; ;
         }
 
         private void OnStatChanged(Entity entity, StatChangedEvent e)

@@ -68,6 +68,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
                 return slotType switch
                 {
                     EquipmentSlotType.Weapon => ItemStackPurpose.Weapon,
+                    EquipmentSlotType.OffHand => ItemStackPurpose.Weapon,
                     EquipmentSlotType.Armor => ItemStackPurpose.Clothing,
                     EquipmentSlotType.Helmet => ItemStackPurpose.Clothing,
                     EquipmentSlotType.Gloves => ItemStackPurpose.Clothing,

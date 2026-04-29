@@ -34,6 +34,7 @@ MonoBehaviour:
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 10
+        <SecondarySlots>k__BackingField: 
     - rid: 3412048928327073882
       type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

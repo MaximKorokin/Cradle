@@ -42,7 +42,7 @@ MonoBehaviour:
       type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        EquipmentSlots: 0a000000140000001e00000028000000320000003c0000003c00000046000000e8030000e8030000e8030000e8030000
+        EquipmentSlots: 0a0000000f000000140000001e00000028000000320000003c0000003c000000e8030000e8030000e8030000e8030000
         ManualItemUseSettings:
           HpPercent: 100
           OverrideStatusEffects: 1

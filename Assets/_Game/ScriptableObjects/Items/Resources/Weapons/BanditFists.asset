@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 2859158637052690515
   - rid: 2155386487893655640
   - rid: 2155386487893655641
+  - rid: 2155386512087449681
   references:
     version: 2
     RefIds:
@@ -36,7 +37,12 @@ MonoBehaviour:
         <Triggers>k__BackingField: 0
         <Kind>k__BackingField: 0
         <Action>k__BackingField: {fileID: 11400000, guid: 37c3f91c1662b434786a55e333513bee, type: 2}
+    - rid: 2155386512087449681
+      type: {class: OrderInLayerOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Kind>k__BackingField: 30
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 10
+        <SecondarySlots>k__BackingField: 

@@ -31,7 +31,7 @@ MonoBehaviour:
     <EquipmentSlots>k__BackingField: 1e000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 400
-    <EquipmentSlots>k__BackingField: 28000000
+    <EquipmentSlots>k__BackingField: 280000000f000000
     <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 450
     <EquipmentSlots>k__BackingField: 280000000a000000

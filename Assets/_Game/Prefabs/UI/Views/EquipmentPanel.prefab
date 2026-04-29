@@ -1442,7 +1442,7 @@ PrefabInstance:
     - target: {fileID: 2707188167007320446, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -6476455363869543764, guid: 40bf3482d4206a143b91eb6942393747, type: 3}
+      objectReference: {fileID: 2876175099691672032, guid: 96b74fbf79806e84f92096d647c8f36c, type: 3}
     - target: {fileID: 2707188167007320446, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Color.a
       value: 0.09411765
@@ -1461,11 +1461,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Name
-      value: RingSlot
+      value: OffHandSlot
       objectReference: {fileID: 0}
     - target: {fileID: 8149385159732471927, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: <SlotType>k__BackingField
-      value: 60
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8225245422971773904, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Pivot.x
@@ -1865,7 +1865,7 @@ PrefabInstance:
     - target: {fileID: 2707188167007320446, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -3510681972579592260, guid: 96b74fbf79806e84f92096d647c8f36c, type: 3}
+      objectReference: {fileID: -6476455363869543764, guid: 40bf3482d4206a143b91eb6942393747, type: 3}
     - target: {fileID: 2707188167007320446, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Color.a
       value: 0.09411765
@@ -1884,11 +1884,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Name
-      value: NecklaceSlot
+      value: RingSlot
       objectReference: {fileID: 0}
     - target: {fileID: 8149385159732471927, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: <SlotType>k__BackingField
-      value: 70
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8225245422971773904, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
       propertyPath: m_Pivot.x

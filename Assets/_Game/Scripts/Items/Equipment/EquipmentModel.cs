@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                     if (remaining <= 0) break;
                     var s = _slots[slot];
                     if (s is null) continue;
-                    if (!_rules.CanPlace(slot, snapshot)) continue;
+                    if (!_rules.CanPlace(slot, snapshot, this)) continue;
                     if (!s.CanStackWith(key)) continue;
 
                     int a = s.AddUpTo(remaining);
@@ -106,7 +106,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             {
                 if (remaining <= 0) break;
                 if (_slots[slot] is not null) continue;
-                if (!_rules.CanPlace(slot, snapshot)) continue;
+                if (!_rules.CanPlace(slot, snapshot, this)) continue;
 
                 int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
                 _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
@@ -125,7 +125,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
             if (snapshot.Amount <= 0) return 0;
             if (!IsValidSlot(slot)) return 0;
-            if (!_rules.CanPlace(slot, snapshot)) return 0;
+            if (!_rules.CanPlace(slot, snapshot, this)) return 0;
 
             var existing = _slots[slot];
             var key = ItemKey.From(snapshot.Definition, snapshot.InstanceData);
@@ -235,7 +235,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                     if (s is null) continue;
 
                     // Must be allowed in this equipment slot (rule may depend on slot/type)
-                    if (!_rules.CanPlace(slot, snapshot)) continue;
+                    if (!_rules.CanPlace(slot, snapshot, this)) continue;
 
                     // Must be same stack key
                     if (!s.CanStackWith(key)) continue;
@@ -261,7 +261,7 @@ namespace Assets._Game.Scripts.Items.Equipment
 
                     if (_slots[slot] is not null) continue;
 
-                    if (!_rules.CanPlace(slot, snapshot)) continue;
+                    if (!_rules.CanPlace(slot, snapshot, this)) continue;
 
                     int take = Math.Min(snapshot.Definition.MaxAmount, remaining);
                     remaining -= take;
@@ -278,7 +278,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
             if (snapshot.Amount <= 0) return 0;
             if (!IsValidSlot(slot)) return 0;
-            if (!_rules.CanPlace(slot, snapshot)) return 0;
+            if (!_rules.CanPlace(slot, snapshot, this)) return 0;
 
             var existing = _slots[slot];
             if (existing is null)
