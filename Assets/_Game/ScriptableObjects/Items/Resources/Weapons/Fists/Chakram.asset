@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: Chakram
+  m_EditorClassIdentifier: 
+  _id: 285d00a01efc47b4974313c5d20e0d37
+  <Name>k__BackingField: Chakram
+  <Icon>k__BackingField: {fileID: -4977731608978355, guid: ef09da0fc9f8b4642acea67517803a23, type: 3}
+  <Sprite>k__BackingField: {fileID: 322450627, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 200
+  <Traits>k__BackingField:
+  - rid: 2859158637052690515
+  - rid: 2155386487893655642
+  - rid: 2155386487893655643
+  - rid: 2155386512087449680
+  - rid: 2155386514830000226
+  references:
+    version: 2
+    RefIds:
+    - rid: 2155386487893655642
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: d32390f565e05ec4da413174f8a1a72e, type: 2}
+    - rid: 2155386487893655643
+      type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <Kind>k__BackingField: 0
+        <Action>k__BackingField: {fileID: 11400000, guid: 37c3f91c1662b434786a55e333513bee, type: 2}
+    - rid: 2155386512087449680
+      type: {class: OrderInLayerOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Kind>k__BackingField: 30
+    - rid: 2155386514830000226
+      type: {class: EquippableVisualTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slots>k__BackingField: 0f000000
+        <Rule>k__BackingField: 10
+    - rid: 2859158637052690515
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 10
+        <SecondarySlots>k__BackingField: 0f000000

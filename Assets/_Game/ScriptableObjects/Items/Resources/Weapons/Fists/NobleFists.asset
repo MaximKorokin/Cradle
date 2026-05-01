@@ -24,7 +24,6 @@ MonoBehaviour:
   - rid: 2155386487893655643
   - rid: 2155386512087449680
   - rid: 2155386514830000226
-  - rid: 2155386514830000228
   references:
     version: 2
     RefIds:
@@ -48,11 +47,6 @@ MonoBehaviour:
       data:
         <Slots>k__BackingField: 0f000000
         <Rule>k__BackingField: 10
-    - rid: 2155386514830000228
-      type: {class: EquippableVisualTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
-      data:
-        <Slots>k__BackingField: 28000000
-        <Rule>k__BackingField: 20
     - rid: 2859158637052690515
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

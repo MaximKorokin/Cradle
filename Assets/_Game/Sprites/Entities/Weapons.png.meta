@@ -355,8 +355,8 @@ TextureImporter:
         y: 640
         width: 64
         height: 128
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38341856}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -413,6 +413,72 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Weapons_42
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 384
+        width: 64
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 040455e3e51803c478854e34e45c416f
+      internalID: 322450627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Weapons_12
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 768
+        width: 64
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.27716637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdbd3ac26a600144e9e306e6bef45901
+      internalID: -1313661880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Weapons_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 896
+        width: 64
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5027077, y: 0.19537878}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b29e9c38eae55c64293e8b56c2b44707
+      internalID: 1450068543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -431,6 +497,8 @@ TextureImporter:
       Weapons_1: -761887118410055393
       Weapons_10: 9147546874185701050
       Weapons_11: -8951780388439148649
+      Weapons_12: -1313661880
+      Weapons_2: 1450068543
       Weapons_20: -5082318553336741150
       Weapons_21: -3087264978319007404
       Weapons_22: 2129446207
@@ -439,6 +507,7 @@ TextureImporter:
       Weapons_32: -474731701
       Weapons_40: -3776783329477156521
       Weapons_41: 7834802711767081893
+      Weapons_42: 322450627
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

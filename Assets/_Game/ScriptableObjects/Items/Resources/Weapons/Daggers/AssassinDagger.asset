@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: AssassinDagger
+  m_EditorClassIdentifier: 
+  _id: 5846d944da0f41f5aa5ee17c2e2ce88c
+  <Name>k__BackingField: Assassin Dagger
+  <Icon>k__BackingField: {fileID: -4738412266119780931, guid: f533c66d386a405408dc0344389d0b7e, type: 3}
+  <Sprite>k__BackingField: {fileID: -3087264978319007404, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 200
+  <Traits>k__BackingField:
+  - rid: 2859158637052690515
+  - rid: 1349792509003825562
+  - rid: 3412048928327073884
+  references:
+    version: 2
+    RefIds:
+    - rid: 1349792509003825562
+      type: {class: AnimationOverrideTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <AnimationOverrideProfile>k__BackingField: {fileID: 11400000, guid: 02a7aeba30134b4499084122d86bbd45, type: 2}
+    - rid: 2859158637052690515
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 10
+    - rid: 3412048928327073884
+      type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <Kind>k__BackingField: 0
+        <Action>k__BackingField: {fileID: 11400000, guid: d4b9865814cdb9d4394c007744fb6281, type: 2}

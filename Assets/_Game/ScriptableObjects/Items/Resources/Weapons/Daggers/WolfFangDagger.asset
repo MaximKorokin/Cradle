@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: e17cc18297cf48bc9489914e86a13447
   <Name>k__BackingField: Wolf Fang Dagger
-  <Icon>k__BackingField: {fileID: -2541084865063492615, guid: 0d0ff80e3ba80054e852a1567ccea426, type: 3}
+  <Icon>k__BackingField: {fileID: 7467051161303339875, guid: 683fe41c168dcbc48be02d633a69116f, type: 3}
   <Sprite>k__BackingField: {fileID: -5082318553336741150, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 200
@@ -34,6 +34,7 @@ MonoBehaviour:
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 10
+        <SecondarySlots>k__BackingField: 
     - rid: 3412048928327073884
       type: {class: SpecialActionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
