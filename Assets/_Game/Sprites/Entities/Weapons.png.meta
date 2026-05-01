@@ -391,6 +391,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Weapons_32
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 512
+        width: 64
+        height: 128
+      alignment: 9
+      pivot: {x: 0.28181505, y: 0.22870445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54afcdcd8b0143a49a453611797cb0bc
+      internalID: -474731701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -414,6 +436,7 @@ TextureImporter:
       Weapons_22: 2129446207
       Weapons_30: -2039780932
       Weapons_31: -21522807587195298
+      Weapons_32: -474731701
       Weapons_40: -3776783329477156521
       Weapons_41: 7834802711767081893
   mipmapLimitGroupName: 

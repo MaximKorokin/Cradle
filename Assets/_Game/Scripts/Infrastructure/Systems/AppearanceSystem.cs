@@ -8,12 +8,13 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
-using System.Linq;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     public sealed class AppearanceSystem : EntitySystemBase, ITickSystem
     {
+        private readonly EquipmentVisualHandler _equipmentVisualHandler;
+
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled,
@@ -24,6 +25,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IGlobalEventBus globalEventBus,
             EntityRepository repository) : base(globalEventBus, repository)
         {
+            _equipmentVisualHandler = new EquipmentVisualHandler();
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
@@ -66,25 +68,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 return;
             }
 
+            // Handle equipment visuals
+            _equipmentVisualHandler.RefreshEquipmentVisuals(entity);
+
             var appearance = entity.GetModule<AppearanceModule>();
-
-            // Change units
-            // Find all units that should be changed based on the equipment slot
-            foreach (var entityUnitVisualModel in entity.Definition.VisualModel.Units.Where(u => u.EquipmentSlots.Contains(e.Slot.SlotType)))
-            {
-                var path = $"{entityUnitVisualModel.Path}/{e.Slot.SlotType}";
-                if (e.Kind == EquipmentChangeKind.Equipped)
-                {
-                    var relativeOrderInLayer = GetItemOrderInLayer(e);
-                    appearance.RequestEnsureUnit(path, relativeOrderInLayer);
-                    appearance.RequestSetUnitSprite(path, e.Item.Value.Definition.Sprite);
-                }
-                else if (e.Kind == EquipmentChangeKind.Unequipped)
-                {
-                    appearance.RequestRemoveUnit(path);
-                }
-            }
-
+            
             // Check for animation overrides
             var context = new ItemTriggerContext(entity, ItemTrigger.OnEquipmentChange, e.Item.Value);
             foreach (var animationOverrideTrait in e.Item.Value.GetFunctionalTraits<AnimationOverrideTrait>(ItemTrigger.OnEquipmentChange))
@@ -98,27 +86,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     appearance.RequestSetAnimation(animationOverride.AnimationKey, animationClip);
                 }
             }
-        }
-
-        private static int GetItemOrderInLayer(EquipmentChangedEvent e)
-        {
-            OrderInLayerOverrideKind kind;
-            if (e.Item.Value.Definition.TryGetTrait<OrderInLayerOverrideTrait>(out var trait))
-            {
-                kind = trait.Kind;
-            }
-            else
-            {
-                kind = e.Slot.SlotType == EquipmentSlotType.Weapon ? OrderInLayerOverrideKind.Weapon : OrderInLayerOverrideKind.Clothing;
-            }
-
-            return kind switch
-            {
-                OrderInLayerOverrideKind.Weapon => -1,
-                OrderInLayerOverrideKind.Clothing => 1,
-                OrderInLayerOverrideKind.Overlay => 2,
-                _ => 0
-            }; ;
         }
 
         private void OnStatChanged(Entity entity, StatChangedEvent e)

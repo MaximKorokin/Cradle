@@ -8,7 +8,7 @@ namespace Assets._Game.Scripts.Items.Traits
         [field: SerializeField]
         public EquipmentSlotType[] Slots { get; private set; }
 
-        // The visual rule determines how the slots will change
+        // The visual rule determines how the slots will change visually when the item is equipped
         [field: SerializeField]
         public EquipVisualRule Rule { get; private set; }
     }

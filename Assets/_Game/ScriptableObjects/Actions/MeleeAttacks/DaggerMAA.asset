@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5c390e91f1144ea45c5bf3875049d, type: 3}
   m_Name: DaggerMAA
   m_EditorClassIdentifier: 
-  _id: 616da68a43864a2b8c8c7e2a2029303f
+  _id: 81cb1e61d04a47d7bde4279b8c881b23
   <Name>k__BackingField: Physical Attack
   <Description>k__BackingField: 
   <Icon>k__BackingField: {fileID: 6689699355126921553, guid: 692ce18cf22f2934ab8a66d461037786, type: 3}
