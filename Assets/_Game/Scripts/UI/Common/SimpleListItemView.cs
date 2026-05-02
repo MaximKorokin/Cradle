@@ -14,13 +14,13 @@ namespace Assets._Game.Scripts.UI.Common
         [SerializeField]
         private Button _button1;
 
-        private object _identifierObject;
+        private string _identifier;
 
-        public event Action<object> Button1Clicked;
+        public event Action<string> Button1Clicked;
 
-        public void Render(SimpleListItemDefinition definition)
+        public void Render(SimpleListItemData definition)
         {
-            _identifierObject = definition.Identifier;
+            _identifier = definition.Identifier;
             _image.sprite = definition.Sprite;
             _text.text = definition.Text;
             _button1.onClick.AddListener(OnButton1Clicked);
@@ -28,19 +28,19 @@ namespace Assets._Game.Scripts.UI.Common
 
         public void Clear()
         {
-            _identifierObject = null;
+            _identifier = null;
             _button1.onClick.RemoveListener(OnButton1Clicked);
         }
 
         private void OnButton1Clicked()
         {
-            Button1Clicked?.Invoke(_identifierObject);
+            Button1Clicked?.Invoke(_identifier);
         }
     }
 
-    public struct SimpleListItemDefinition
+    public struct SimpleListItemData
     {
-        public object Identifier;
+        public string Identifier;
         public Sprite Sprite;
         public string Text;
     }

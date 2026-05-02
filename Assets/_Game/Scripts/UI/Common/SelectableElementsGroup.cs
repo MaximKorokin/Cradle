@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.UI.Common
     {
         private readonly HashSet<T> _selectableElements = new();
 
-        public IEnumerable<T> SelectableElements => _selectableElements;
+        public IReadOnlyCollection<T> SelectableElements => _selectableElements;
 
         public event Action<T> SelectedChanged;
 
@@ -23,6 +23,16 @@ namespace Assets._Game.Scripts.UI.Common
         {
             _selectableElements.Remove(selectableElement);
             selectableElement.SelectionChanged -= OnSelectableElementSelectionChanged;
+        }
+
+        public void Select(T selectableElement)
+        {
+            if (!_selectableElements.Contains(selectableElement))
+            {
+                SLog.Error($"Trying to select an element that is not part of the group: {selectableElement}");
+                return;
+            }
+            selectableElement.SetSelection(true, false);
         }
 
         private void OnSelectableElementSelectionChanged(SelectableElement selectableElement, bool selected) => OnSelectableElementSelectionChanged((T)selectableElement, selected);

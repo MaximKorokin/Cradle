@@ -165,15 +165,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                         }
                         else
                         {
-                            AmountPickerWindow amountPickerWindow = null;
-                            amountPickerWindow = _windowManager.InstantiateWindow<AmountPickerWindow, AmountPickerWindowControllerArguments>(
-                                new(1,
-                                    item.Value.Amount,
-                                    amount =>
-                                    {
-                                        PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, amount));
-                                        _windowManager.CloseWindow(amountPickerWindow);
-                                    }));
+                            _windowManager.ShowAmountPicker(1, item.Value.Amount, amount =>
+                            {
+                                PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, amount));
+                            });
                         }
                     }
                     break;

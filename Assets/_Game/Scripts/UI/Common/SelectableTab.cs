@@ -1,4 +1,5 @@
 ﻿using Assets.CoreScripts;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,9 @@ namespace Assets._Game.Scripts.UI.Common
         [SerializeField]
         private Image _image;
         [SerializeField]
-        private GameObject[] _tabElements;
+        private TMP_Text _title;
+        [SerializeField]
+        private RectTransform[] _tabElements;
 
         private Color _initialColor;
 
@@ -24,7 +27,15 @@ namespace Assets._Game.Scripts.UI.Common
         {
             base.SetSelection(selection, silent);
             _image.color = selection ? _selectedColor : _initialColor;
-            _tabElements.ForEach(x => x.SetActive(selection));
+            _tabElements.ForEach(x => x.gameObject.SetActive(selection));
+        }
+
+        public void Initialize(string title, params RectTransform[] tabElements)
+        {
+            _title.text = title;
+
+            _tabElements = tabElements;
+            _tabElements.ForEach(x => x.gameObject.SetActive(false));
         }
     }
 }

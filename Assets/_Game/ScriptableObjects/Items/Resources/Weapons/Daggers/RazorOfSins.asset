@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 2dad5fb32659488da00b1beb74fdf745
   <Name>k__BackingField: Razor Of Sins
   <Icon>k__BackingField: {fileID: 2804789507733518281, guid: 26f3fbb489fb2924cb832f17511a74af, type: 3}
-  <Sprite>k__BackingField: {fileID: -5082318553336741150, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
+  <Sprite>k__BackingField: {fileID: 2129446207, guid: afeb16c2fa213c545ad85dfa6ad8bfc0, type: 3}
   <MaxAmount>k__BackingField: 1
   <Weight>k__BackingField: 200
   <Traits>k__BackingField:

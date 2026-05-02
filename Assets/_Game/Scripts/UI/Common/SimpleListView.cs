@@ -13,14 +13,14 @@ namespace Assets._Game.Scripts.UI.Common
 
         private readonly List<SimpleListItemView> _items = new();
 
-        public event Action<object> ElementClicked;
+        public event Action<string> ElementClicked;
 
         private void Awake()
         {
             _itemTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(IEnumerable<SimpleListItemDefinition> itemDefinitions)
+        public void Render(IEnumerable<SimpleListItemData> itemDefinitions)
         {
             Clear();
             foreach (var itemDefinition in itemDefinitions)
@@ -46,9 +46,9 @@ namespace Assets._Game.Scripts.UI.Common
             _items.Clear();
         }
 
-        private void OnItemClicked(object obj)
+        private void OnItemClicked(string identifier)
         {
-            ElementClicked?.Invoke(obj);
+            ElementClicked?.Invoke(identifier);
         }
     }
 }

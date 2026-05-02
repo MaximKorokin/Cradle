@@ -485,6 +485,7 @@ MonoBehaviour:
   _selectionType: 0
   _selectedColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   _image: {fileID: 1703296816123537327}
+  _title: {fileID: 0}
   _tabElements:
   - {fileID: 7539065100504715433}
 --- !u!1 &687028549232416995
@@ -564,6 +565,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d517211110eed4da70a732d4e508a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _tabsContainer: {fileID: 0}
+  _tabTemplate: {fileID: 0}
+  _tabContentsContainer: {fileID: 0}
   _tabs:
   - {fileID: 6579645275697974408}
   - {fileID: 498816309778385947}
@@ -1398,6 +1402,7 @@ MonoBehaviour:
   _selectionType: 0
   _selectedColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   _image: {fileID: 8472837064267566130}
+  _title: {fileID: 0}
   _tabElements:
   - {fileID: 3557171259240177294}
 --- !u!1 &3533510850607893862
@@ -2370,6 +2375,7 @@ MonoBehaviour:
   _selectionType: 0
   _selectedColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   _image: {fileID: 3063564962849177616}
+  _title: {fileID: 0}
   _tabElements:
   - {fileID: 3533510850607893862}
 --- !u!1 &5736277628746440126

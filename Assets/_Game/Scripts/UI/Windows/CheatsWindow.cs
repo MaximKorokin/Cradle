@@ -12,45 +12,66 @@ namespace Assets._Game.Scripts.UI.Windows
     public sealed class CheatsWindow : UIWindowBase
     {
         [SerializeField]
+        private SelectableTabsController _cheatsTabsController;
+        [SerializeField]
+        private SimpleListView _cheatsTabContentTemplate;
+
         private SimpleListView _itemsListView;
-        [SerializeField]
         private SimpleListView _buffsListView;
-        [SerializeField]
         private SimpleListView _debuffsListView;
 
-        private Dictionary<object, ItemDefinition> _itemDefinitions;
-        private Dictionary<object, StatusEffectDefinition> _statusEffectDefinitions;
+        private Dictionary<string, ItemDefinition> _itemDefinitions;
+        private Dictionary<string, StatusEffectDefinition> _statusEffectDefinitions;
 
         public event Action<ItemDefinition> ItemDefinitionClicked;
         public event Action<StatusEffectDefinition> StatusEffectDefinitionClicked;
 
+        public override void OnShow()
+        {
+            base.OnShow();
+
+            _cheatsTabContentTemplate.gameObject.SetActive(false);
+        }
+
         public void Render(CheatsHudData data)
         {
-            _itemDefinitions = data.ItemDefinitions.ToDictionary(d => (object)d.Id, d => d);
-            _itemsListView.Render(data.ItemDefinitions.Select(d => new SimpleListItemDefinition()
+            _itemDefinitions = data.ItemDefinitions.ToDictionary(d => d.Id, d => d);
+            _statusEffectDefinitions = data.StatusEffectDefinitions.ToDictionary(d => d.Id, d => d);
+
+            // Items
+            _itemsListView = Instantiate(_cheatsTabContentTemplate);
+            _itemsListView.Render(data.ItemDefinitions.Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = d.Icon,
                 Text = d.Name
             }));
+            _cheatsTabsController.AddTab(new TabData("Items", _itemsListView.transform as RectTransform));
             _itemsListView.ElementClicked += OnItemDefinitionClicked;
 
-            _statusEffectDefinitions = data.StatusEffectDefinitions.ToDictionary(d => (object)d.Id, d => d);
-            _buffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Buff).Select(d => new SimpleListItemDefinition()
+            // Buffs
+            _buffsListView = Instantiate(_cheatsTabContentTemplate);
+            _buffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Buff).Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = d.Icon,
                 Text = d.Name
             }));
+            _cheatsTabsController.AddTab(new TabData("Buffs", _buffsListView.transform as RectTransform));
             _buffsListView.ElementClicked += OnStatusEffectDefinitionClicked;
 
-            _debuffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Debuff).Select(d => new SimpleListItemDefinition()
+            // Debuffs
+            _debuffsListView = Instantiate(_cheatsTabContentTemplate);
+            _debuffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Debuff).Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = d.Icon,
                 Text = d.Name
             }));
+            _cheatsTabsController.AddTab(new TabData("Debuffs", _debuffsListView.transform as RectTransform));
             _debuffsListView.ElementClicked += OnStatusEffectDefinitionClicked;
+
+            _cheatsTabsController.SelectTab(0);
         }
 
         public void Clear()
@@ -58,20 +79,25 @@ namespace Assets._Game.Scripts.UI.Windows
             _itemsListView.ElementClicked -= OnItemDefinitionClicked;
             _buffsListView.ElementClicked -= OnStatusEffectDefinitionClicked;
             _debuffsListView.ElementClicked -= OnStatusEffectDefinitionClicked;
+
             _itemsListView.Clear();
+            _buffsListView.Clear();
+            _debuffsListView.Clear();
+
+            _cheatsTabsController.ClearTabs();
         }
 
-        private void OnItemDefinitionClicked(object obj)
+        private void OnItemDefinitionClicked(string identifier)
         {
-            if (_itemDefinitions.TryGetValue(obj, out var itemDefinition))
+            if (_itemDefinitions.TryGetValue(identifier, out var itemDefinition))
             {
                 ItemDefinitionClicked?.Invoke(itemDefinition);
             }
         }
 
-        private void OnStatusEffectDefinitionClicked(object obj)
+        private void OnStatusEffectDefinitionClicked(string identifier)
         {
-            if (_statusEffectDefinitions.TryGetValue(obj, out var statusEffectDefinition))
+            if (_statusEffectDefinitions.TryGetValue(identifier, out var statusEffectDefinition))
             {
                 StatusEffectDefinitionClicked?.Invoke(statusEffectDefinition);
             }
