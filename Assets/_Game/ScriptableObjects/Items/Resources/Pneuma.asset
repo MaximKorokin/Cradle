@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pneuma
   m_EditorClassIdentifier: 
   _id: 3bde99adcab644b380ea13cbca99bad5
-  <Name>k__BackingField: Pneuma Fragment
+  <Name>k__BackingField: Pneuma
   <Icon>k__BackingField: {fileID: 2021805545967286056, guid: 8b90e10eb6f58bc4bba0cec6b5d758db, type: 3}
   <Sprite>k__BackingField: {fileID: 2021805545967286056, guid: 8b90e10eb6f58bc4bba0cec6b5d758db, type: 3}
   <MaxAmount>k__BackingField: 2147483647

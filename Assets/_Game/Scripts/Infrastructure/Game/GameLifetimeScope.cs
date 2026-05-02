@@ -16,6 +16,7 @@ using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Locations;
@@ -208,6 +209,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EquipmentModelFactory>(Lifetime.Singleton);
 
             builder.Register<ItemContainerResolver>(Lifetime.Singleton);
+
+            builder.Register<CraftingRecipeDefinitionCatalog>(Lifetime.Singleton);
         }
     }
 }

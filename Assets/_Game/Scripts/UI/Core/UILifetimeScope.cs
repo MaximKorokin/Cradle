@@ -43,6 +43,8 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<EquipmentHudData>(Lifetime.Transient);
             builder.Register<InventoryHudData>(Lifetime.Transient);
             builder.Register<StorageHudData>(Lifetime.Transient);
+            builder.Register<CraftingHudData>(Lifetime.Transient);
+
             builder.Register<CheatsHudData>(Lifetime.Transient);
 
             RegisterSystems(builder);
@@ -71,9 +73,10 @@ namespace Assets._Game.Scripts.UI.Core
                 // Primary windows
                 new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController)),
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
-                new(WindowId.InventoryInventory, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
+                new(WindowId.Storage, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
                 new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
+                new(WindowId.Crafting, typeof(CraftingWindow), typeof(CraftingWindowController)),
 
                 // Service windows
                 new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4abb98880cd871498f4e5891842ea18, type: 3}
+  m_Name: WolfFangDagger
+  m_EditorClassIdentifier: 
+  _id: ba8129c508ad4caea4e3443f219928bb
+  <Name>k__BackingField: Wolf Fang Dagger
+  <Icon>k__BackingField: {fileID: -626077865497939283, guid: 404c38e24dad7954cb3095f4eb5340b3, type: 3}
+  <Ingredients>k__BackingField:
+  - <Item>k__BackingField: {fileID: 11400000, guid: bc930d976e31aab4e8df68ea9f434ba7, type: 2}
+    <Amount>k__BackingField: 5
+  - <Item>k__BackingField: {fileID: 11400000, guid: 8ade05461f4c7564c81775d06715caf1, type: 2}
+    <Amount>k__BackingField: 3
+  <Result>k__BackingField:
+    <Item>k__BackingField: {fileID: 11400000, guid: c2a7571418be3d345856276a2ff668b7, type: 2}
+    <Amount>k__BackingField: 1
