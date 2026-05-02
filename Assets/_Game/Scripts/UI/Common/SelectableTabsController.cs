@@ -24,7 +24,21 @@ namespace Assets._Game.Scripts.UI.Common
 
         public void SelectTab(int index)
         {
-            _tabsGroup.Select(_tabsGroup.SelectableElements.ElementAt(index));
+            if (index >= 0 && index < _tabsGroup.SelectableElements.Count)
+            {
+                _tabsGroup.Select(_tabsGroup.SelectableElements.ElementAt(index));
+            }
+        }
+
+        public int GetSelectedTabIndex()
+        {
+            var tabs = _tabsGroup.SelectableElements.ToArray();
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (tabs[i].IsSelected)
+                    return i;
+            }
+            return 0;
         }
 
         public void AddTab(TabData tabData)

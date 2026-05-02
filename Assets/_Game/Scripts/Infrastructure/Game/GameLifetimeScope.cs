@@ -12,6 +12,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Items;
@@ -74,6 +75,7 @@ namespace Assets._Game.Scripts.Infrastructure
             RegisterEntityFeature(builder);
             RegisterEntityModuleFactories(builder);
             RegisterItemFeature(builder);
+            RegisterCraftingFeature(builder);
 
             RegisterCalculators(builder);
         }
@@ -119,6 +121,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<CameraFollowSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<FloatingTextSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityReviveSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -209,8 +212,12 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EquipmentModelFactory>(Lifetime.Singleton);
 
             builder.Register<ItemContainerResolver>(Lifetime.Singleton);
+        }
 
+        private void RegisterCraftingFeature(IContainerBuilder builder)
+        {
             builder.Register<CraftingRecipeDefinitionCatalog>(Lifetime.Singleton);
+            builder.Register<CraftingService>(Lifetime.Singleton);
         }
     }
 }

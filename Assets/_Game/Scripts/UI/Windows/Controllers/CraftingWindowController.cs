@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Infrastructure.Services;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
@@ -11,27 +12,31 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private CraftingWindow _window;
 
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly WindowManager _windowManager;
         private readonly CraftingHudData _craftingHudData;
-        private readonly PlayerContext _playerContext;
-        private readonly ItemStackFactory _itemStackFactory;
+        private readonly IPlayerProvider _playerProvider;
+        private readonly CraftingService _craftingService;
 
         public CraftingWindowController(
+            IGlobalEventBus globalEventBus,
             WindowManager windowManager,
             CraftingHudData craftingHudData,
-            PlayerContext playerContext,
-            ItemStackFactory itemStackFactory)
+            IPlayerProvider playerProvider,
+            CraftingService craftingService)
         {
+            _globalEventBus = globalEventBus;
             _windowManager = windowManager;
             _craftingHudData = craftingHudData;
-            _playerContext = playerContext;
-            _itemStackFactory = itemStackFactory;
+            _playerProvider = playerProvider;
+            _craftingService = craftingService;
         }
 
         public override void Bind(CraftingWindow window)
         {
             _window = window;
-            window.RecipeClicked += OnRecipeClicked;
+            _window.RecipeClicked += OnRecipeClicked;
+            _craftingHudData.Changed += OnCraftingDataChanged;
 
             _window.Render(_craftingHudData);
         }
@@ -39,15 +44,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Unbind()
         {
             _window.RecipeClicked -= OnRecipeClicked;
+            _craftingHudData.Changed -= OnCraftingDataChanged;
             _window.Clear();
+        }
+
+        private void OnCraftingDataChanged()
+        {
+            _window.Render(_craftingHudData);
         }
 
         private void OnRecipeClicked(CraftingRecipeDefinition recipe)
         {
-            if (!_playerContext.Player.TryGetModule<InventoryModule>(out var inventoryModule))
+            if (!_playerProvider.Player.TryGetModule<InventoryModule>(out var inventoryModule))
                 return;
 
-            var maxCraftable = CalculateMaxCraftable(recipe, inventoryModule);
+            var maxCraftable = _craftingService.CalculateMaxCraftable(recipe, inventoryModule);
             if (maxCraftable == 0)
                 return;
 
@@ -56,48 +67,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             if (maxAmount == 1)
             {
-                CraftRecipe(recipe, 1, inventoryModule);
+                _globalEventBus.Publish(new CraftRequest(recipe.Id, 1));
             }
             else
             {
                 _windowManager.ShowAmountPicker(1, maxAmount, amount =>
                 {
-                    CraftRecipe(recipe, amount, inventoryModule);
+                    _globalEventBus.Publish(new CraftRequest(recipe.Id, amount));
                 });
             }
-        }
-
-        private int CalculateMaxCraftable(CraftingRecipeDefinition recipe, InventoryModule inventoryModule)
-        {
-            if (recipe.Ingredients.Length == 0)
-                return int.MaxValue;
-
-            var maxCraftable = int.MaxValue;
-            foreach (var ingredient in recipe.Ingredients)
-            {
-                var key = ItemKey.From(ingredient.Item, null);
-                var available = inventoryModule.Inventory.Count(key);
-                var possibleCrafts = available / ingredient.Amount;
-                maxCraftable = System.Math.Min(maxCraftable, possibleCrafts);
-            }
-
-            return maxCraftable;
-        }
-
-        private void CraftRecipe(CraftingRecipeDefinition recipe, int craftCount, InventoryModule inventoryModule)
-        {
-            // Remove ingredients
-            foreach (var ingredient in recipe.Ingredients)
-            {
-                var key = ItemKey.From(ingredient.Item, null);
-                var totalToRemove = ingredient.Amount * craftCount;
-                inventoryModule.Inventory.Remove(key, totalToRemove);
-            }
-
-            // Add result
-            var totalResultAmount = recipe.Result.Amount * craftCount;
-            var resultSnapshot = _itemStackFactory.Create(recipe.Result.Item.Id, totalResultAmount).Snapshot;
-            inventoryModule.Inventory.Add(resultSnapshot);
         }
     }
 }

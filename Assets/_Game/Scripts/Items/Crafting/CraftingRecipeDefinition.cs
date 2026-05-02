@@ -8,10 +8,6 @@ namespace Assets._Game.Scripts.Items.Crafting
     public class CraftingRecipeDefinition : GuidScriptableObject
     {
         [field: SerializeField]
-        public string Name { get; private set; }
-        [field: SerializeField]
-        public Sprite Icon { get; private set; }
-        [field: SerializeField]
         public RecipeIngredient[] Ingredients { get; private set; } = Array.Empty<RecipeIngredient>();
         [field: SerializeField]
         public RecipeResult Result { get; private set; }

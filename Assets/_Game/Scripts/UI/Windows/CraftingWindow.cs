@@ -4,6 +4,7 @@ using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows
@@ -31,6 +32,9 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public void Render(CraftingHudData data)
         {
+            int currentTabIndex = _craftingTabsController.GetSelectedTabIndex();
+            Clear();
+
             var availableRecipes = data.AvailableRecipes.ToArray();
             var unavailableRecipes = data.UnavailableRecipes.ToArray();
 
@@ -41,33 +45,72 @@ namespace Assets._Game.Scripts.UI.Windows
             _availableRecipesListView.Render(availableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
-                Sprite = r.Icon,
-                Text = r.Name
+                Sprite = r.Result.Item.Icon,
+                Text = FormatRecipeWithIngredients(r, true)
             }));
             _craftingTabsController.AddTab(new TabData("Available", _availableRecipesListView.transform as RectTransform));
             _availableRecipesListView.ElementClicked += OnRecipeClicked;
 
-            // Unavailable Recipes
+            // Unavailable Recipes - use rich text for styling
             _unavailableRecipesListView = Instantiate(_craftingTabContentTemplate);
             _unavailableRecipesListView.Render(unavailableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
-                Sprite = r.Icon,
-                Text = $"{r.Name} (Unavailable)"
+                Sprite = r.Result.Item.Icon,
+                Text = FormatRecipeWithIngredients(r, false)
             }));
             _craftingTabsController.AddTab(new TabData("Unavailable", _unavailableRecipesListView.transform as RectTransform));
             _unavailableRecipesListView.ElementClicked += OnRecipeClicked;
 
-            _craftingTabsController.SelectTab(0);
+            _craftingTabsController.SelectTab(currentTabIndex);
+        }
+
+        private string FormatRecipeWithIngredients(CraftingRecipeDefinition recipe, bool isAvailable)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append($"<b>{recipe.Result.Item.Name}</b> <size=80%>x{recipe.Result.Amount}</size>");
+            // Recipe name
+            if (!isAvailable)
+            {
+                sb.Append($" <color=#888888><size=80%>(Unavailable)</color>");
+            }
+
+            // Ingredients
+            if (recipe.Ingredients.Length > 0)
+            {
+                sb.Append("\n<size=80%><color=#333333>");
+                for (int i = 0; i < recipe.Ingredients.Length; i++)
+                {
+                    var ingredient = recipe.Ingredients[i];
+                    if (i > 0)
+                        sb.Append(", ");
+
+                    sb.Append($"{ingredient.Item.Name} x{ingredient.Amount}");
+                }
+                sb.Append("</color></size>");
+            }
+
+            return sb.ToString();
         }
 
         public void Clear()
         {
-            _availableRecipesListView.ElementClicked -= OnRecipeClicked;
-            _unavailableRecipesListView.ElementClicked -= OnRecipeClicked;
+            if (_availableRecipesListView != null)
+            {
+                _availableRecipesListView.ElementClicked -= OnRecipeClicked;
+                _availableRecipesListView.Clear();
+                Destroy(_availableRecipesListView.gameObject);
+                _availableRecipesListView = null;
+            }
 
-            _availableRecipesListView.Clear();
-            _unavailableRecipesListView.Clear();
+            if (_unavailableRecipesListView != null)
+            {
+                _unavailableRecipesListView.ElementClicked -= OnRecipeClicked;
+                _unavailableRecipesListView.Clear();
+                Destroy(_unavailableRecipesListView.gameObject);
+                _unavailableRecipesListView = null;
+            }
 
             _craftingTabsController.ClearTabs();
         }

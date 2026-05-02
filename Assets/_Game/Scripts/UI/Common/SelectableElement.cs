@@ -11,6 +11,8 @@ namespace Assets._Game.Scripts.UI.Common
 
         private bool _isSelected;
 
+        public bool IsSelected => _isSelected;
+
         public event Action<SelectableElement, bool> SelectionChanged;
 
         public void OnPointerDown(PointerEventData eventData)
