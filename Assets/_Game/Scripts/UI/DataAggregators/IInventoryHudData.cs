@@ -14,6 +14,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         InventoryModel InventoryModel { get; }
 
+        bool ViewPneuma { get; }
+        int Pneuma { get; }
+
         bool ViewGold { get; }
         int Gold { get; }
 
@@ -49,6 +52,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public InventoryModel InventoryModel => _inventoryModel;
 
+        public abstract bool ViewPneuma { get; }
+        public int Pneuma { get; private set; }
+
         public abstract bool ViewGold { get; }
         public int Gold { get; private set; }
 
@@ -66,6 +72,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private void OnInventoryChanged()
         {
+            Pneuma = InventoryHudDataUtils.CalculatePneuma(_itemsConfig, _inventoryModel);
             Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, _inventoryModel);
             SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(_inventoryModel);
             SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(_inventoryModel);
@@ -122,6 +129,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _statsController.StatChanged -= OnStatsChanged;
         }
 
+        public override bool ViewPneuma => true;
+
         public override bool ViewGold => true;
 
         public override bool ViewWeight => true;
@@ -147,7 +156,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
         }
 
-        public override bool ViewGold => true;
+        public override bool ViewPneuma => false;
+
+        public override bool ViewGold => false;
 
         public override bool ViewWeight => false;
         public override float WeightCurrent => 0;
@@ -158,6 +169,26 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public static class InventoryHudDataUtils
     {
+        public static int CalculatePneuma(ItemsConfig itemsConfig, InventoryModel inventoryModel)
+        {
+            var pneuma = 0;
+
+            var pneumaDefinition = itemsConfig.GetSpecialItemDefinition(SpecialItemId.Pneuma);
+            if (pneumaDefinition == null) return 0;
+
+            foreach (var (_, snapshot) in inventoryModel.Enumerate())
+            {
+                if (snapshot == null) continue;
+
+                var itemSnapshot = snapshot.Value;
+                if (itemSnapshot.Definition.Id == pneumaDefinition.Id)
+                {
+                    pneuma += itemSnapshot.Amount;
+                }
+            }
+
+            return pneuma;
+        }
         public static int CalculateGold(ItemsConfig itemsConfig, InventoryModel inventoryModel)
         {
             var gold = 0;

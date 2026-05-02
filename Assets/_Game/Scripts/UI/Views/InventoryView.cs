@@ -20,6 +20,8 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _goldText;
         [SerializeField]
+        private TMP_Text _pneumaText;
+        [SerializeField]
         private TMP_Text _slotsAmountText;
         [Space]
         [SerializeField]
@@ -103,9 +105,10 @@ namespace Assets._Game.Scripts.UI.Views
             }
 
             // Update text fields
-            _weightText.text = _inventoryHudData.ViewWeight ? $"{_inventoryHudData.WeightCurrent}kg / {_inventoryHudData.WeightMax}kg" : "";
-            _goldText.text = _inventoryHudData.ViewGold ? $"{_inventoryHudData.Gold} gold" : "";
-            _slotsAmountText.text = _inventoryHudData.ViewSlotsAmount ? $"{_inventoryHudData.SlotsUsed} / {_inventoryHudData.SlotsMax} slots" : "";
+            _pneumaText.text = _inventoryHudData.ViewPneuma ? $"Pneuma: {_inventoryHudData.Pneuma}" : "";
+            _goldText.text = _inventoryHudData.ViewGold ? $"Gold: {_inventoryHudData.Gold}" : "";
+            _slotsAmountText.text = _inventoryHudData.ViewSlotsAmount ? $"Slots: {_inventoryHudData.SlotsUsed} / {_inventoryHudData.SlotsMax}" : "";
+            _weightText.text = _inventoryHudData.ViewWeight ? $"Weight: {_inventoryHudData.WeightCurrent} / {_inventoryHudData.WeightMax}" : "";
         }
 
         public void Unbind()

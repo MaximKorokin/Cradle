@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7708325079765345592}
-  - component: {fileID: 4623452112733648134}
+  - component: {fileID: 1160368618116096346}
   m_Layer: 5
-  m_Name: CheatsWindow
+  m_Name: ShopWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4623452112733648134
+--- !u!114 &1160368618116096346
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,11 +46,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4236470503915288397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7cca6e45e50f244ca3a1f42f9bd907d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4cdc25c9a8e8e6046b9d8f242979d50c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cheatsTabsController: {fileID: 566815028787110615}
-  _cheatsTabContentTemplate: {fileID: 1636886766859924931}
+  _shopTabsController: {fileID: 566815028787110615}
+  _shopTabContentTemplate: {fileID: 1636886766859924931}
 --- !u!1 &4447772413310357908
 GameObject:
   m_ObjectHideFlags: 0

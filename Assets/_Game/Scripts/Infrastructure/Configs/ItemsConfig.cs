@@ -32,6 +32,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
 
     public enum SpecialItemId
     {
-        Gold = 10
+        Gold = 10,
+        Pneuma = 20,
     }
 }
