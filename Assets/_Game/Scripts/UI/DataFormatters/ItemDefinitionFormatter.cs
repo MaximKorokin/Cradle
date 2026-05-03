@@ -20,6 +20,12 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             var icon = definition.Icon;
             var amount = string.Empty;
             var weight = definition.Weight == 0 ? string.Empty : $"Weight: {definition.Weight}";
+            var price = string.Empty;
+
+            if (definition.TryGetTrait<PriceTrait>(out var priceTrait))
+            {
+                price = $"Price: {priceTrait.BasePrice}g";
+            }
 
             var isEquippable = false;
             var equipmentSlotName = string.Empty;
@@ -50,6 +56,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 icon,
                 amount,
                 weight,
+                price,
                 isEquippable,
                 equipmentSlotName,
                 equippableEffectsDescription,

@@ -1,5 +1,7 @@
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.UI.DataFormatters;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
@@ -52,6 +54,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
         private IItemStacksPreviewStrategy CreateStrategy(ItemStacksPreviewWindowControllerArguments arguments)
         {
+            // Use custom strategy if provided
+            if (arguments.CustomStrategy != null)
+                return arguments.CustomStrategy;
+
             return arguments.Mode switch
             {
                 ItemStacksPreviewMode.Container => new ContainerItemStacksPreviewStrategy(
@@ -97,5 +103,68 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         Equip,
         Unequip,
         Use,
+        Buy,
+        Sell,
+    }
+
+    public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments
+    {
+        public readonly ItemStacksPreviewMode Mode;
+        public readonly EquipmentSlotKey? EquipmentSlot;
+        public readonly long PrimaryContainerSlot;
+        public readonly ItemContainerId PrimaryContainerId;
+        public readonly ItemContainerId SecondaryContainerId;
+        public readonly ItemDefinition ItemDefinition;
+        public readonly IItemStacksPreviewStrategy CustomStrategy;
+
+        public ItemStacksPreviewWindowControllerArguments(
+            EquipmentSlotKey? equipmentSlot,
+            long primaryContainerSlot,
+            ItemContainerId primaryContainerId,
+            ItemContainerId secondaryContainerId)
+        {
+            Mode = ItemStacksPreviewMode.Container;
+            EquipmentSlot = equipmentSlot;
+            PrimaryContainerSlot = primaryContainerSlot;
+            PrimaryContainerId = primaryContainerId;
+            SecondaryContainerId = secondaryContainerId;
+            ItemDefinition = null;
+            CustomStrategy = null;
+        }
+
+        public ItemStacksPreviewWindowControllerArguments(ItemDefinition itemDefinition)
+        {
+            Mode = ItemStacksPreviewMode.Definition;
+            ItemDefinition = itemDefinition;
+            EquipmentSlot = null;
+            PrimaryContainerSlot = default;
+            PrimaryContainerId = default;
+            SecondaryContainerId = default;
+            CustomStrategy = null;
+        }
+
+        public ItemStacksPreviewWindowControllerArguments(
+            EquipmentSlotKey? equipmentSlot,
+            long primaryContainerSlot,
+            ItemContainerId primaryContainerId,
+            ItemContainerId secondaryContainerId,
+            ItemStacksPreviewMode mode,
+            IItemStacksPreviewStrategy customStrategy)
+        {
+            Mode = mode;
+            EquipmentSlot = equipmentSlot;
+            PrimaryContainerSlot = primaryContainerSlot;
+            PrimaryContainerId = primaryContainerId;
+            SecondaryContainerId = secondaryContainerId;
+            ItemDefinition = null;
+            CustomStrategy = customStrategy;
+        }
+    }
+
+    public enum ItemStacksPreviewMode
+    {
+        Container,
+        Definition,
+        Shop
     }
 }

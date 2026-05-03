@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Items.Shop;
 using System;
 
 namespace Assets._Game.Scripts.Items
@@ -24,6 +25,11 @@ namespace Assets._Game.Scripts.Items
             return entity.GetModule<EquipmentModule>().Equipment;
         }
 
+        public ShopModel ResolveShop(Entity entity)
+        {
+            return entity.GetModule<ShopModule>()?.Shop;
+        }
+
         public IItemContainer ResolveContainer(Entity entity, ItemContainerId id)
         {
             return id switch
@@ -31,7 +37,8 @@ namespace Assets._Game.Scripts.Items
                 ItemContainerId.Inventory => ResolveInventory(entity, id),
                 ItemContainerId.Equipment => ResolveEquipment(entity),
                 ItemContainerId.Storage => ResolveInventory(entity, id),
-                _ => throw new NotSupportedException($"Container {id} is not supported."),
+                ItemContainerId.Shop => ResolveShop(entity),
+                _ => throw new ArgumentException($"Container {id} is not supported."),
             };
         }
     }

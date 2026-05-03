@@ -193,6 +193,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<LevelingModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<StatusEffectModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<ShopModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
 
         private void RegisterCalculators(IContainerBuilder builder)

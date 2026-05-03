@@ -4,6 +4,7 @@ namespace Assets._Game.Scripts.Items.Commands
     {
         Inventory,
         Storage,
-        Equipment
+        Equipment,
+        Shop
     }
 }

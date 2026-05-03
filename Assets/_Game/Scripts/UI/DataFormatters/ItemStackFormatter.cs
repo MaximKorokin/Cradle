@@ -37,6 +37,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 definitionData.Icon,
                 amount,
                 weight,
+                definitionData.PriceDescription,
                 definitionData.IsEquippable,
                 definitionData.EquipmentSlotName,
                 definitionData.EquippableEffectsDescription,
@@ -55,6 +56,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public Sprite Icon { get; }
         public string AmountDescription { get; }
         public string WeightDescription { get; }
+        public string PriceDescription { get; }
 
         public bool IsEquippable { get; }
         public string EquipmentSlotName { get; }
@@ -70,6 +72,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             Sprite icon,
             string amount,
             string weight,
+            string price,
             bool isEquippable,
             string equipmentSlotName,
             string equippableEffectsDescription,
@@ -84,6 +87,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             Icon = icon;
             AmountDescription = amount;
             WeightDescription = weight;
+            PriceDescription = price;
             IsEquippable = isEquippable;
             EquipmentSlotName = equipmentSlotName;
             EquippableEffectsDescription = equippableEffectsDescription;

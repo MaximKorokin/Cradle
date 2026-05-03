@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: DamageSalve
   m_EditorClassIdentifier: 
   _id: 2e813dabd185441f9d584df94380b3d5
-  <Name>k__BackingField: Damage Salve 123
-  <Icon>k__BackingField: {fileID: 5807367746513092223, guid: 92a4a48f3385e1a46bbed831c497cd64, type: 3}
   <Ingredients>k__BackingField:
   - <Item>k__BackingField: {fileID: 11400000, guid: 9d11b5ca4dd65b244bac0d3f06e40810, type: 2}
     <Amount>k__BackingField: 1
   - <Item>k__BackingField: {fileID: 11400000, guid: 8def6da0c958e1c41ba548b4b206f9ba, type: 2}
     <Amount>k__BackingField: 100
   <Result>k__BackingField:
-    <Item>k__BackingField: {fileID: 11400000, guid: 5d4009f65e0875e42915c4c8868ffb7e, type: 2}
+    <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 5d4009f65e0875e42915c4c8868ffb7e, type: 2}
     <Amount>k__BackingField: 300

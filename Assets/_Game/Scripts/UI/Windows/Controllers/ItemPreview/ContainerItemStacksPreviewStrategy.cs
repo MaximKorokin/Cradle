@@ -149,10 +149,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             }
 
             var primaryItem = primaryItemNullable.Value;
-            var actions = new List<ItemStackAction>
-            {
-                new(ItemStackActionType.Drop, "Drop")
-            };
+            var actions = new List<ItemStackAction>();
+
+            // Standard actions
+            actions.Add(new(ItemStackActionType.Drop, "Drop"));
 
             if (_primaryContainer is InventoryModel &&
                 _secondaryContainer is InventoryModel &&

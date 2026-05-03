@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
+using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 using System;
 
 namespace Assets._Game.Scripts.Shared.Extensions

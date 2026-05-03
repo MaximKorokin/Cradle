@@ -19,5 +19,5 @@ MonoBehaviour:
   - <Item>k__BackingField: {fileID: 11400000, guid: 8ade05461f4c7564c81775d06715caf1, type: 2}
     <Amount>k__BackingField: 3
   <Result>k__BackingField:
-    <Item>k__BackingField: {fileID: 11400000, guid: c2a7571418be3d345856276a2ff668b7, type: 2}
+    <ItemDefinition>k__BackingField: {fileID: 11400000, guid: c2a7571418be3d345856276a2ff668b7, type: 2}
     <Amount>k__BackingField: 1

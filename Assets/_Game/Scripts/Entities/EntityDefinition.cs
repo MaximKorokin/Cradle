@@ -6,6 +6,7 @@ using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Infrastructure.Storage;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Loot;
+using Assets._Game.Scripts.Items.Shop;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -116,5 +117,11 @@ namespace Assets._Game.Scripts.Entities
     public class LevelingModuleDefinition : EntityModuleDefinition
     {
         public int Level;
+    }
+
+    public sealed class ShopModuleDefinition : EntityModuleDefinition
+    {
+        [field: SerializeField]
+        public ShopDefinition ShopDefinition { get; private set; }
     }
 }

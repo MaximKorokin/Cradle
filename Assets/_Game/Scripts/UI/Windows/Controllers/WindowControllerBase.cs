@@ -1,7 +1,4 @@
-﻿using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Equipment;
-using System;
+﻿using System;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -30,58 +27,4 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public interface IWindowControllerArguments { }
 
     public readonly struct EmptyWindowControllerArguments : IWindowControllerArguments { }
-
-    public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments
-    {
-        public readonly ItemStacksPreviewMode Mode;
-        public readonly EquipmentSlotKey? EquipmentSlot;
-        public readonly long PrimaryContainerSlot;
-        public readonly ItemContainerId PrimaryContainerId;
-        public readonly ItemContainerId SecondaryContainerId;
-        public readonly ItemDefinition ItemDefinition;
-
-        public ItemStacksPreviewWindowControllerArguments(
-            EquipmentSlotKey? equipmentSlot,
-            long primaryContainerSlot,
-            ItemContainerId primaryContainerId,
-            ItemContainerId secondaryContainerId)
-        {
-            Mode = ItemStacksPreviewMode.Container;
-            EquipmentSlot = equipmentSlot;
-            PrimaryContainerSlot = primaryContainerSlot;
-            PrimaryContainerId = primaryContainerId;
-            SecondaryContainerId = secondaryContainerId;
-            ItemDefinition = null;
-        }
-
-        public ItemStacksPreviewWindowControllerArguments(ItemDefinition itemDefinition)
-        {
-            Mode = ItemStacksPreviewMode.Definition;
-            ItemDefinition = itemDefinition;
-            EquipmentSlot = null;
-            PrimaryContainerSlot = default;
-            PrimaryContainerId = default;
-            SecondaryContainerId = default;
-        }
-    }
-
-    public enum ItemStacksPreviewMode
-    {
-        Container,
-        Definition
-    }
-
-    public readonly struct AmountPickerWindowControllerArguments : IWindowControllerArguments
-    {
-        public readonly int MinAmount;
-        public readonly int MaxAmount;
-        public readonly Action<int> OnAmountPickedCallback;
-
-        public AmountPickerWindowControllerArguments(int minAmount, int maxAmount, Action<int> onAmountPicked)
-        {
-            MinAmount = minAmount;
-            MaxAmount = maxAmount;
-            OnAmountPickedCallback = onAmountPicked;
-        }
-    }
 }

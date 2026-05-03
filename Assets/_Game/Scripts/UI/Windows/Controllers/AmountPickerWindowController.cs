@@ -33,4 +33,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _onAmountPickedCallback?.Invoke(amount);
         }
     }
+
+    public readonly struct AmountPickerWindowControllerArguments : IWindowControllerArguments
+    {
+        public readonly int MinAmount;
+        public readonly int MaxAmount;
+        public readonly Action<int> OnAmountPickedCallback;
+
+        public AmountPickerWindowControllerArguments(int minAmount, int maxAmount, Action<int> onAmountPicked)
+        {
+            MinAmount = minAmount;
+            MaxAmount = maxAmount;
+            OnAmountPickedCallback = onAmountPicked;
+        }
+    }
 }
