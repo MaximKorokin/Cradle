@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
             return data is EmptyInstanceData;
         }
 
-        public object Decode(EncodedSaveData save)
+        public object Decode(EncodedSaveData save, object payload)
         {
             return JsonConvert.DeserializeObject<EmptyInstanceData>(save.Json);
         }

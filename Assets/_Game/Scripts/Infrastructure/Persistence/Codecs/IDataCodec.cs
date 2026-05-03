@@ -5,6 +5,6 @@
         string Type { get; }
         bool CanEncode(object data);
         EncodedSaveData Encode(object data);
-        object Decode(EncodedSaveData save);
+        object Decode(EncodedSaveData save, object payload);
     }
 }

@@ -14,8 +14,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
         public EncodedSaveData EncodeOrNull(object data)
             => data == null ? null : FindEncoder(data).Encode(data);
 
-        public object DecodeOrNull(EncodedSaveData save)
-            => save == null ? null : _byType[save.Type].Decode(save);
+        public object DecodeOrNull(EncodedSaveData save, object payload = null)
+            => save == null ? null : _byType[save.Type].Decode(save, payload);
 
         private IDataCodec FindEncoder(object data)
         {

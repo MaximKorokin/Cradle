@@ -29,7 +29,7 @@ namespace Assets._Game.Scripts.Items
             var definition = _itemCatalog.Get(save.ItemDefinitionId);
             itemStack.Definition = definition;
             itemStack.Amount = save.Amount;
-            itemStack.InstanceData = _instanceDataFactory.Apply(save.InstanceData);
+            itemStack.InstanceData = _instanceDataFactory.Apply(save.InstanceData, definition);
             return itemStack;
         }
 

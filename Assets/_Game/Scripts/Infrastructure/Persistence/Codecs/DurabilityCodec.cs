@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
             };
         }
 
-        public object Decode(EncodedSaveData save)
+        public object Decode(EncodedSaveData save, object payload)
             => JsonConvert.DeserializeObject<DurabilityInstanceData>(save.Json);
     }
 }

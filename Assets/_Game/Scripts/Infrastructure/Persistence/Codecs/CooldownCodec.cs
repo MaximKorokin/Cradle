@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Traits;
 using Newtonsoft.Json;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
@@ -15,11 +16,20 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
             return new EncodedSaveData
             {
                 Type = Type,
-                Json = JsonConvert.SerializeObject(d.CooldownCounter.Cooldown)
+                Json = JsonConvert.SerializeObject(d.CooldownCounter.TimeSinceReset)
             };
         }
 
-        public object Decode(EncodedSaveData save)
-            => new CooldownInstanceData(JsonConvert.DeserializeObject<float>(save.Json));
+        public object Decode(EncodedSaveData save, object payload)
+        {
+            if (payload is ItemDefinition itemDefinition && itemDefinition.TryGetTrait<UsableTrait>(out var usableTrait))
+            {
+                var timeSinceReset = JsonConvert.DeserializeObject<float>(save.Json);
+                var cooldownInstanceData = new CooldownInstanceData(usableTrait.Cooldown);
+                cooldownInstanceData.CooldownCounter.TimeSinceReset = timeSinceReset;
+                return cooldownInstanceData;
+            }
+            return null;
+        }
     }
 }

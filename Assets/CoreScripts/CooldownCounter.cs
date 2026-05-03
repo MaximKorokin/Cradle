@@ -23,8 +23,11 @@ namespace Assets.CoreScripts
             }
         }
 
-        public float TimeSinceReset => Time.time - _lastUsedTime;
-
+        public float TimeSinceReset
+        {
+            get => Time.time - _lastUsedTime;
+            set => _lastUsedTime = Time.time - value;
+        }
 
         public CooldownCounter(float cooldown = 0)
         {

@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.Items
             var definition = _itemCatalog.Get(definitionId);
             if (definition == null)
             {
-                SLog.Error("");
+                SLog.Error($"Item definition with ID '{definitionId}' not found.");
                 return null;
             }
 
@@ -32,9 +32,9 @@ namespace Assets._Game.Scripts.Items
             return new EmptyInstanceData();
         }
 
-        public IItemInstanceData Apply(EncodedSaveData save)
+        public IItemInstanceData Apply(EncodedSaveData save, ItemDefinition itemDefinition)
         {
-            return _codecRegistry.DecodeOrNull(save) as IItemInstanceData;
+            return _codecRegistry.DecodeOrNull(save, itemDefinition) as IItemInstanceData;
         }
 
         public EncodedSaveData Save(IItemInstanceData instanceData)
