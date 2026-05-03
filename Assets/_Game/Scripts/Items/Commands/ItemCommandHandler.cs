@@ -384,7 +384,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // Check cooldown and reset it if the item can be used.
-            if (usableTrait.Cooldown <= 0 || item.Value.InstanceData is not CooldownInstanceData cooldownTrait || !cooldownTrait.CooldownCounter.IsOver())
+            if (item.Value.InstanceData is not CooldownInstanceData cooldownTrait || !cooldownTrait.CooldownCounter.IsOver())
                 return false;
 
             // Check for allowed and limiting RestrictionState

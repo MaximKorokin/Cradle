@@ -224,10 +224,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
             else
             {
+                // null entrance id means that player will be placed in the location based on coordinates, not on specific entrance
                 _globalEventBus.Publish(new LocationTransitionRequest(_gameSave.PlayerLocationSave.LocationId, null));
 
-                var position = new Vector2(_gameSave.PlayerLocationSave.PositionX, _gameSave.PlayerLocationSave.PositionY);
-                entity.Publish(new EntityRepositionRequest(position));
+                entity.SubscribeOnce<EntityBoundEvent>(_ =>
+                {
+                    var position = new Vector2(_gameSave.PlayerLocationSave.PositionX, _gameSave.PlayerLocationSave.PositionY);
+                    entity.Publish(new EntityRepositionRequest(position));
+                });
             }
         }
     }

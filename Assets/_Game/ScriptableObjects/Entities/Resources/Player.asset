@@ -79,7 +79,7 @@ MonoBehaviour:
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        Level: 5
+        Level: 1
     - rid: 7990781616137175140
       type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

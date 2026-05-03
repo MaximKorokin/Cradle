@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: WolfFangDagger
   m_EditorClassIdentifier: 
   _id: ba8129c508ad4caea4e3443f219928bb
-  <Name>k__BackingField: Wolf Fang Dagger
-  <Icon>k__BackingField: {fileID: -626077865497939283, guid: 404c38e24dad7954cb3095f4eb5340b3, type: 3}
   <Ingredients>k__BackingField:
   - <Item>k__BackingField: {fileID: 11400000, guid: bc930d976e31aab4e8df68ea9f434ba7, type: 2}
     <Amount>k__BackingField: 5

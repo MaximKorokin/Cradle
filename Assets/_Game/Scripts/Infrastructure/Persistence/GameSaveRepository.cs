@@ -40,6 +40,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     public sealed class LocationSave
     {
         public string LocationId;
+        public string EntranceId;
         public float PositionX;
         public float PositionY;
     }

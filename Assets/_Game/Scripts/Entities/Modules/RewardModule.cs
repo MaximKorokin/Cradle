@@ -4,13 +4,11 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class RewardModule : EntityModuleBase
     {
-        public int PreferredLevel { get; }
         public long Experience { get; }
         public LootTable LootTable { get; }
 
-        public RewardModule(int preferredLevel, int experience, LootTable lootTable)
+        public RewardModule(int experience, LootTable lootTable)
         {
-            PreferredLevel = preferredLevel;
             Experience = experience;
             LootTable = lootTable;
         }
@@ -21,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (entityDefinition.TryGetModuleDefinition<RewardModuleDefinition>(out var moduleDefinition))
-                return new RewardModule(moduleDefinition.PreferredLevel, moduleDefinition.Experience, moduleDefinition.LootTable);
+                return new RewardModule(moduleDefinition.Experience, moduleDefinition.LootTable);
             return null;
         }
     }

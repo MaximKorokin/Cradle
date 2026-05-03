@@ -71,7 +71,6 @@ namespace Assets._Game.Scripts.Locations
             try
             {
                 var nextLocation = _locationCatalog.Get(locationId);
-                var nextLocationEntrance = _locationEntranceCatalog.Get(entranceId);
 
                 _globalEventBus.Publish(new LocationChangingEvent(_currentLocationId, locationId));
 
@@ -88,7 +87,7 @@ namespace Assets._Game.Scripts.Locations
                 _currentScene = scene;
                 _currentLocationId = nextLocation.Id;
                 CurrentLocation = nextLocation;
-                CurrentEntrance = nextLocationEntrance;
+                CurrentEntrance = entranceId != null ? _locationEntranceCatalog.Get(entranceId) : null;
 
                 _globalEventBus.Publish(new LocationChangedEvent(locationId, entranceId));
             }

@@ -20,9 +20,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             Application.targetFrameRate = 60;
 
-            _saveService.LoadGame();
-
             SceneManager.LoadScene("UIRoot", LoadSceneMode.Additive);
+
+            _saveService.LoadGame();
         }
     }
 }

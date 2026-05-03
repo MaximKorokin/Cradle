@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public abstract class SystemRunnerBase : IStartable, IDisposable
+    public abstract class SystemRunnerBase : IInitializable, IDisposable
     {
         private readonly DispatcherService _dispatcherService;
         private readonly IReadOnlyList<IStartSystem> _startSystems;
@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _fixedTickSystems = systems.OfType<IFixedTickSystem>().ToArray();
         }
 
-        public void Start()
+        public void Initialize()
         {
             _dispatcherService.OnTick += OnTick;
             _dispatcherService.OnFixedTick += OnFixedTick;

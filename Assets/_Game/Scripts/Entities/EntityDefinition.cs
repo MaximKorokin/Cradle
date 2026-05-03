@@ -91,7 +91,6 @@ namespace Assets._Game.Scripts.Entities
 
     public class RewardModuleDefinition : EntityModuleDefinition
     {
-        public int PreferredLevel;
         public int Experience;
         public LootTable LootTable;
     }

@@ -16,7 +16,7 @@ MonoBehaviour:
   <Name>k__BackingField: Medium Dish
   <Icon>k__BackingField: {fileID: -7951491290743021505, guid: 05bbc83f544c57745860545592ccc07e, type: 3}
   <Sprite>k__BackingField: {fileID: -7951491290743021505, guid: 05bbc83f544c57745860545592ccc07e, type: 3}
-  <MaxAmount>k__BackingField: 64
+  <MaxAmount>k__BackingField: 6400
   <Weight>k__BackingField: 20
   <Traits>k__BackingField:
   - rid: 7990781638785105998
@@ -41,7 +41,10 @@ MonoBehaviour:
       data:
         <Consumable>k__BackingField: 1
         <Cooldown>k__BackingField: 10
+        <RequiredRestrictionState>k__BackingField: 0
+        <LimitingRestrictionState>k__BackingField: 3
     - rid: 7990781638785105998
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 1000
+        <SecondarySlots>k__BackingField: 

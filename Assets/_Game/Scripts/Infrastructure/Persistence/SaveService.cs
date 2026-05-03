@@ -40,6 +40,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             var playerLocationSave = new LocationSave
             {
                 LocationId = _locationContext.CurrentLocation != null ? _locationContext.CurrentLocation.Id : "",
+                EntranceId = _locationContext.CurrentEntrance != null ? _locationContext.CurrentEntrance.Id : "",
                 PositionX = playerPosition.x,
                 PositionY = playerPosition.y
             };
@@ -55,7 +56,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
         public void LoadGame()
         {
-            ResetLocationSave();
+            //ResetLevelSave();
+            //ResetLocationSave();
             //ResetSave();
 
             var gameSave = _gameSaveRepository.Load(SaveKey);
@@ -76,6 +78,13 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         {
             var save = _gameSaveRepository.Load(SaveKey);
             save.PlayerLocationSave = null;
+            _gameSaveRepository.Save(SaveKey, save);
+        }
+
+        public void ResetLevelSave()
+        {
+            var save = _gameSaveRepository.Load(SaveKey);
+            save.PlayerSave.LevelingSave = null;
             _gameSaveRepository.Save(SaveKey, save);
         }
 
