@@ -21,7 +21,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private Dictionary<string, CraftingRecipeDefinition> _recipeDefinitions;
 
-        public event Action<CraftingRecipeDefinition> RecipeClicked;
+        public event Action<CraftingRecipeDefinition> RecipeInfoClicked;
+        public event Action<CraftingRecipeDefinition> RecipeActionClicked;
 
         public override void OnShow()
         {
@@ -45,22 +46,24 @@ namespace Assets._Game.Scripts.UI.Windows
             _availableRecipesListView.Render(availableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
-                Sprite = r.Result.Item.Icon,
+                Sprite = r.Result.ItemDefinition.Icon,
                 Text = FormatRecipeWithIngredients(r, true)
             }));
             _craftingTabsController.AddTab(new TabData("Available", _availableRecipesListView.transform as RectTransform));
-            _availableRecipesListView.ElementClicked += OnRecipeClicked;
+            _availableRecipesListView.ElementInfoClicked += OnRecipeInfoClicked;
+            _availableRecipesListView.ElementActionClicked += OnRecipeActionClicked;
 
             // Unavailable Recipes - use rich text for styling
             _unavailableRecipesListView = Instantiate(_craftingTabContentTemplate);
             _unavailableRecipesListView.Render(unavailableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
-                Sprite = r.Result.Item.Icon,
+                Sprite = r.Result.ItemDefinition.Icon,
                 Text = FormatRecipeWithIngredients(r, false)
             }));
             _craftingTabsController.AddTab(new TabData("Unavailable", _unavailableRecipesListView.transform as RectTransform));
-            _unavailableRecipesListView.ElementClicked += OnRecipeClicked;
+            _unavailableRecipesListView.ElementInfoClicked += OnRecipeInfoClicked;
+            _unavailableRecipesListView.ElementActionClicked += OnRecipeActionClicked;
 
             _craftingTabsController.SelectTab(currentTabIndex);
         }
@@ -69,7 +72,7 @@ namespace Assets._Game.Scripts.UI.Windows
         {
             var sb = new StringBuilder();
 
-            sb.Append($"<b>{recipe.Result.Item.Name}</b> <size=80%>x{recipe.Result.Amount}</size>");
+            sb.Append($"<b>{recipe.Result.ItemDefinition.Name}</b> <size=80%>x{recipe.Result.Amount}</size>");
             // Recipe name
             if (!isAvailable)
             {
@@ -98,7 +101,8 @@ namespace Assets._Game.Scripts.UI.Windows
         {
             if (_availableRecipesListView != null)
             {
-                _availableRecipesListView.ElementClicked -= OnRecipeClicked;
+                _availableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
+                _availableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
                 _availableRecipesListView.Clear();
                 Destroy(_availableRecipesListView.gameObject);
                 _availableRecipesListView = null;
@@ -106,7 +110,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
             if (_unavailableRecipesListView != null)
             {
-                _unavailableRecipesListView.ElementClicked -= OnRecipeClicked;
+                _unavailableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
+                _unavailableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
                 _unavailableRecipesListView.Clear();
                 Destroy(_unavailableRecipesListView.gameObject);
                 _unavailableRecipesListView = null;
@@ -115,11 +120,19 @@ namespace Assets._Game.Scripts.UI.Windows
             _craftingTabsController.ClearTabs();
         }
 
-        private void OnRecipeClicked(string identifier)
+        private void OnRecipeInfoClicked(string identifier)
         {
             if (_recipeDefinitions.TryGetValue(identifier, out var recipeDefinition))
             {
-                RecipeClicked?.Invoke(recipeDefinition);
+                RecipeInfoClicked?.Invoke(recipeDefinition);
+            }
+        }
+
+        private void OnRecipeActionClicked(string identifier)
+        {
+            if (_recipeDefinitions.TryGetValue(identifier, out var recipeDefinition))
+            {
+                RecipeActionClicked?.Invoke(recipeDefinition);
             }
         }
     }

@@ -23,7 +23,8 @@ namespace Assets._Game.Scripts.UI.Windows
         private Dictionary<string, ItemDefinition> _itemDefinitions;
         private Dictionary<string, StatusEffectDefinition> _statusEffectDefinitions;
 
-        public event Action<ItemDefinition> ItemDefinitionClicked;
+        public event Action<ItemDefinition> ItemDefinitionInfoClicked;
+        public event Action<ItemDefinition> ItemDefinitionActionClicked;
         public event Action<StatusEffectDefinition> StatusEffectDefinitionClicked;
 
         public override void OnShow()
@@ -47,7 +48,8 @@ namespace Assets._Game.Scripts.UI.Windows
                 Text = d.Name
             }));
             _cheatsTabsController.AddTab(new TabData("Items", _itemsListView.transform as RectTransform));
-            _itemsListView.ElementClicked += OnItemDefinitionClicked;
+            _itemsListView.ElementInfoClicked += OnItemDefinitionInfoClicked;
+            _itemsListView.ElementActionClicked += OnItemDefinitionActionClicked;
 
             // Buffs
             _buffsListView = Instantiate(_cheatsTabContentTemplate);
@@ -58,7 +60,7 @@ namespace Assets._Game.Scripts.UI.Windows
                 Text = d.Name
             }));
             _cheatsTabsController.AddTab(new TabData("Buffs", _buffsListView.transform as RectTransform));
-            _buffsListView.ElementClicked += OnStatusEffectDefinitionClicked;
+            _buffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
 
             // Debuffs
             _debuffsListView = Instantiate(_cheatsTabContentTemplate);
@@ -69,16 +71,17 @@ namespace Assets._Game.Scripts.UI.Windows
                 Text = d.Name
             }));
             _cheatsTabsController.AddTab(new TabData("Debuffs", _debuffsListView.transform as RectTransform));
-            _debuffsListView.ElementClicked += OnStatusEffectDefinitionClicked;
+            _debuffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
 
             _cheatsTabsController.SelectTab(0);
         }
 
         public void Clear()
         {
-            _itemsListView.ElementClicked -= OnItemDefinitionClicked;
-            _buffsListView.ElementClicked -= OnStatusEffectDefinitionClicked;
-            _debuffsListView.ElementClicked -= OnStatusEffectDefinitionClicked;
+            _itemsListView.ElementActionClicked -= OnItemDefinitionActionClicked;
+            _itemsListView.ElementInfoClicked -= OnItemDefinitionInfoClicked;
+            _buffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
+            _debuffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
 
             _itemsListView.Clear();
             _buffsListView.Clear();
@@ -87,11 +90,19 @@ namespace Assets._Game.Scripts.UI.Windows
             _cheatsTabsController.ClearTabs();
         }
 
-        private void OnItemDefinitionClicked(string identifier)
+        private void OnItemDefinitionInfoClicked(string identifier)
         {
             if (_itemDefinitions.TryGetValue(identifier, out var itemDefinition))
             {
-                ItemDefinitionClicked?.Invoke(itemDefinition);
+                ItemDefinitionInfoClicked?.Invoke(itemDefinition);
+            }
+        }
+
+        private void OnItemDefinitionActionClicked(string identifier)
+        {
+            if (_itemDefinitions.TryGetValue(identifier, out var itemDefinition))
+            {
+                ItemDefinitionActionClicked?.Invoke(itemDefinition);
             }
         }
 

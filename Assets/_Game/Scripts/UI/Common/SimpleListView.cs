@@ -13,7 +13,8 @@ namespace Assets._Game.Scripts.UI.Common
 
         private readonly List<SimpleListItemView> _items = new();
 
-        public event Action<string> ElementClicked;
+        public event Action<string> ElementInfoClicked;
+        public event Action<string> ElementActionClicked;
 
         private void Awake()
         {
@@ -29,7 +30,8 @@ namespace Assets._Game.Scripts.UI.Common
                 _items.Add(item);
                 item.transform.SetParent(_itemsParent, false);
                 item.Render(itemDefinition);
-                item.Button1Clicked += OnItemClicked;
+                item.InfoButtonClicked += OnItemInfoClicked;
+                item.ActionButtonClicked += OnItemClicked;
                 item.gameObject.SetActive(true);
             }
         }
@@ -38,7 +40,8 @@ namespace Assets._Game.Scripts.UI.Common
         {
             foreach (var item in _items)
             {
-                item.Button1Clicked -= OnItemClicked;
+                item.InfoButtonClicked -= OnItemInfoClicked;
+                item.ActionButtonClicked -= OnItemClicked;
                 item.Clear();
                 Destroy(item);
             }
@@ -46,9 +49,14 @@ namespace Assets._Game.Scripts.UI.Common
             _items.Clear();
         }
 
+        private void OnItemInfoClicked(string identifier)
+        {
+            ElementInfoClicked?.Invoke(identifier);
+        }
+
         private void OnItemClicked(string identifier)
         {
-            ElementClicked?.Invoke(identifier);
+            ElementActionClicked?.Invoke(identifier);
         }
     }
 }

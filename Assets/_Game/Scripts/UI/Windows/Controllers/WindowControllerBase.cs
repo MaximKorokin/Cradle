@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 
@@ -32,10 +33,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments
     {
+        public readonly ItemStacksPreviewMode Mode;
         public readonly EquipmentSlotKey? EquipmentSlot;
         public readonly long PrimaryContainerSlot;
         public readonly ItemContainerId PrimaryContainerId;
         public readonly ItemContainerId SecondaryContainerId;
+        public readonly ItemDefinition ItemDefinition;
 
         public ItemStacksPreviewWindowControllerArguments(
             EquipmentSlotKey? equipmentSlot,
@@ -43,11 +46,29 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             ItemContainerId primaryContainerId,
             ItemContainerId secondaryContainerId)
         {
+            Mode = ItemStacksPreviewMode.Container;
             EquipmentSlot = equipmentSlot;
             PrimaryContainerSlot = primaryContainerSlot;
             PrimaryContainerId = primaryContainerId;
             SecondaryContainerId = secondaryContainerId;
+            ItemDefinition = null;
         }
+
+        public ItemStacksPreviewWindowControllerArguments(ItemDefinition itemDefinition)
+        {
+            Mode = ItemStacksPreviewMode.Definition;
+            ItemDefinition = itemDefinition;
+            EquipmentSlot = null;
+            PrimaryContainerSlot = default;
+            PrimaryContainerId = default;
+            SecondaryContainerId = default;
+        }
+    }
+
+    public enum ItemStacksPreviewMode
+    {
+        Container,
+        Definition
     }
 
     public readonly struct AmountPickerWindowControllerArguments : IWindowControllerArguments

@@ -34,7 +34,7 @@ MonoBehaviour:
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Consumable>k__BackingField: 1
-        <Cooldown>k__BackingField: 3
+        <Cooldown>k__BackingField: 0.3
         <RequiredRestrictionState>k__BackingField: 0
         <LimitingRestrictionState>k__BackingField: 3
     - rid: 7990781638785105997

@@ -35,7 +35,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(CraftingWindow window)
         {
             _window = window;
-            _window.RecipeClicked += OnRecipeClicked;
+            _window.RecipeInfoClicked += OnRecipeInfoClicked;
+            _window.RecipeActionClicked += OnRecipeActionClicked;
             _craftingHudData.Changed += OnCraftingDataChanged;
 
             _window.Render(_craftingHudData);
@@ -43,7 +44,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public override void Unbind()
         {
-            _window.RecipeClicked -= OnRecipeClicked;
+            _window.RecipeInfoClicked -= OnRecipeInfoClicked;
+            _window.RecipeActionClicked -= OnRecipeActionClicked;
             _craftingHudData.Changed -= OnCraftingDataChanged;
             _window.Clear();
         }
@@ -53,7 +55,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.Render(_craftingHudData);
         }
 
-        private void OnRecipeClicked(CraftingRecipeDefinition recipe)
+        private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)
+        {
+            _windowManager.ShowItemDefinitionPreview(recipe.Result.ItemDefinition);
+        }
+
+        private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)
         {
             if (!_playerProvider.Player.TryGetModule<InventoryModule>(out var inventoryModule))
                 return;
@@ -62,7 +69,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             if (maxCraftable == 0)
                 return;
 
-            var maxResultAmount = recipe.Result.Item.MaxAmount;
+            var maxResultAmount = recipe.Result.ItemDefinition.MaxAmount;
             var maxAmount = System.Math.Min(maxCraftable, maxResultAmount);
 
             if (maxAmount == 1)

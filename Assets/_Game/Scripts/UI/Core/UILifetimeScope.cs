@@ -4,6 +4,7 @@ using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
+using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System.Collections.Generic;
 using UnityEngine;
@@ -111,6 +112,7 @@ namespace Assets._Game.Scripts.UI.Core
         private void RegisterDataFormatters(IContainerBuilder builder)
         {
             builder.Register<ItemStackFormatter>(Lifetime.Singleton);
+            builder.Register<ItemDefinitionFormatter>(Lifetime.Singleton);
             builder.Register<FunctionalItemTraitFormatter>(Lifetime.Singleton);
             builder.Register<StatModifiersFormatter>(Lifetime.Singleton);
             builder.Register<AttackModifiersFormatter>(Lifetime.Singleton);

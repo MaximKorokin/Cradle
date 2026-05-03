@@ -12,29 +12,39 @@ namespace Assets._Game.Scripts.UI.Common
         [SerializeField]
         private TMP_Text _text;
         [SerializeField]
-        private Button _button1;
+        private Button _infoButton;
+        [SerializeField]
+        private Button _actionButton;
 
         private string _identifier;
 
-        public event Action<string> Button1Clicked;
+        public event Action<string> InfoButtonClicked;
+        public event Action<string> ActionButtonClicked;
 
         public void Render(SimpleListItemData definition)
         {
             _identifier = definition.Identifier;
             _image.sprite = definition.Sprite;
             _text.text = definition.Text;
-            _button1.onClick.AddListener(OnButton1Clicked);
+            _infoButton.onClick.AddListener(OnInfoButtonClicked);
+            _actionButton.onClick.AddListener(OnActionButtonClicked);
         }
 
         public void Clear()
         {
             _identifier = null;
-            _button1.onClick.RemoveListener(OnButton1Clicked);
+            _infoButton.onClick.RemoveListener(OnInfoButtonClicked);
+            _actionButton.onClick.RemoveListener(OnActionButtonClicked);
         }
 
-        private void OnButton1Clicked()
+        private void OnInfoButtonClicked()
         {
-            Button1Clicked?.Invoke(_identifier);
+            InfoButtonClicked?.Invoke(_identifier);
+        }
+
+        private void OnActionButtonClicked()
+        {
+            ActionButtonClicked?.Invoke(_identifier);
         }
     }
 

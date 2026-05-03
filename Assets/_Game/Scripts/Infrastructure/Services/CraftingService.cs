@@ -31,7 +31,7 @@ namespace Assets._Game.Scripts.Infrastructure.Services
 
             // Check if there's enough space for the result
             var totalResultAmount = recipe.Result.Amount * craftCount;
-            var resultSnapshot = _itemStackFactory.Create(recipe.Result.Item.Id, totalResultAmount).Snapshot;
+            var resultSnapshot = _itemStackFactory.Create(recipe.Result.ItemDefinition.Id, totalResultAmount).Snapshot;
             var canAddAmount = inventoryModule.Inventory.PreviewAdd(resultSnapshot);
 
             if (canAddAmount < totalResultAmount)
@@ -76,7 +76,7 @@ namespace Assets._Game.Scripts.Infrastructure.Services
 
         private int CalculateMaxCraftableBySpace(CraftingRecipeDefinition recipe, InventoryModule inventoryModule)
         {
-            var resultItem = recipe.Result.Item;
+            var resultItem = recipe.Result.ItemDefinition;
             var resultAmountPerCraft = recipe.Result.Amount;
             var maxStackSize = resultItem.MaxAmount;
             var resultKey = ItemKey.From(resultItem, null);
@@ -127,7 +127,7 @@ namespace Assets._Game.Scripts.Infrastructure.Services
 
             // Add result
             var totalResultAmount = recipe.Result.Amount * craftCount;
-            var resultSnapshot = _itemStackFactory.Create(recipe.Result.Item.Id, totalResultAmount).Snapshot;
+            var resultSnapshot = _itemStackFactory.Create(recipe.Result.ItemDefinition.Id, totalResultAmount).Snapshot;
             inventoryModule.Inventory.Add(resultSnapshot);
         }
     }

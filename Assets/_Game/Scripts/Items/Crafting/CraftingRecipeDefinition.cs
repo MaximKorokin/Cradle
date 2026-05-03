@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.Items.Crafting
     public struct RecipeResult
     {
         [field: SerializeField]
-        public ItemDefinition Item { get; private set; }
+        public ItemDefinition ItemDefinition { get; private set; }
         [field: SerializeField]
         public int Amount { get; private set; }
     }

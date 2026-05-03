@@ -1,36 +1,23 @@
 ﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Traits;
-using Assets._Game.Scripts.Shared.Extensions;
-using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
     public sealed class ItemStackFormatter : IDataFormatter<ItemStackSnapshot, ItemStackDisplayData>
     {
-        private readonly FunctionalItemTraitFormatter _functionalItemTraitFormatter;
+        private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
 
-        public ItemStackFormatter(FunctionalItemTraitFormatter functionalItemTraitFormatter)
+        public ItemStackFormatter(ItemDefinitionFormatter itemDefinitionFormatter)
         {
-            _functionalItemTraitFormatter = functionalItemTraitFormatter;
+            _itemDefinitionFormatter = itemDefinitionFormatter;
         }
 
         public ItemStackDisplayData FormatData(ItemStackSnapshot data)
         {
-            var name = data.Definition.Name;
-            var icon = data.Definition.Icon;
+            var definitionData = _itemDefinitionFormatter.FormatData(data.Definition);
+
             var amount = data.Definition.MaxAmount > 1 ? $"Amount: {data.Amount}" : string.Empty;
             var weight = string.Empty;
-
-            var isEquippable = false;
-            var equipmentSlotName = string.Empty;
-            var equippableEffectsDescription = string.Empty;
-
-            var isUsable = false;
-            var isConsumable = false;
-            var usableCooldownDescription = string.Empty;
-            var usableEffectsDescription = string.Empty;
 
             if (data.Definition.Weight == 0)
             {
@@ -45,45 +32,18 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 weight = $"Weight: {data.Definition.Weight}";
             }
 
-            if (data.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait))
-            {
-                isEquippable = true;
-                equipmentSlotName = equippableTrait.Slot.ToString();
-                equippableEffectsDescription = GetFunctionalTraitsDescription(data, ItemTrigger.OnEquipmentChange);
-            }
-
-            if (data.Definition.TryGetTrait<UsableTrait>(out var usableTrait))
-            {
-                isUsable = true;
-                isConsumable = usableTrait.Consumable;
-                usableCooldownDescription = $"{usableTrait.Cooldown}s";
-                usableEffectsDescription = GetFunctionalTraitsDescription(data, ItemTrigger.OnUse);
-            }
-
             return new ItemStackDisplayData(
-                name,
-                icon,
+                definitionData.Name,
+                definitionData.Icon,
                 amount,
                 weight,
-                isEquippable,
-                equipmentSlotName,
-                equippableEffectsDescription,
-                isUsable,
-                isConsumable,
-                usableCooldownDescription,
-                usableEffectsDescription);
-        }
-
-        private string GetFunctionalTraitsDescription(ItemStackSnapshot itemStack, ItemTrigger itemTrigger)
-        {
-            var traits = itemStack.GetFunctionalTraits<FunctionalItemTraitBase>(itemTrigger).ToArray();
-            if (traits.Length == 0) return string.Empty;
-
-            return string.Join(
-                $"{Environment.NewLine}{Environment.NewLine}",
-                traits
-                    .Select(effect => _functionalItemTraitFormatter.FormatData(effect))
-                    .Where(text => !string.IsNullOrEmpty(text)));
+                definitionData.IsEquippable,
+                definitionData.EquipmentSlotName,
+                definitionData.EquippableEffectsDescription,
+                definitionData.IsUsable,
+                definitionData.IsConsumable,
+                definitionData.UsableCooldownDescription,
+                definitionData.UsableEffectsDescription);
         }
     }
 

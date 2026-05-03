@@ -31,15 +31,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Bind(CheatsWindow window)
         {
             _window = window;
-            window.ItemDefinitionClicked += OnItemDefinitionClicked;
-            window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
+            _window.ItemDefinitionInfoClicked += OnItemDefinitionInfoClicked;
+            _window.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
+            _window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
 
             _window.Render(_cheatsHudData);
         }
 
         public override void Unbind()
         {
-            _window.ItemDefinitionClicked -= OnItemDefinitionClicked;
+            _window.ItemDefinitionInfoClicked -= OnItemDefinitionInfoClicked;
+            _window.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
             _window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
         }
 
@@ -52,7 +54,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             }
         }
 
-        private void OnItemDefinitionClicked(ItemDefinition itemDefinition)
+        private void OnItemDefinitionInfoClicked(ItemDefinition itemDefinition)
+        {
+            _windowManager.ShowItemDefinitionPreview(itemDefinition);
+        }
+
+        private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)
         {
             if (_playerContext.Player.TryGetModule<InventoryModule>(out var inventoryModule))
             {

@@ -1,7 +1,6 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.UI.DataFormatters;
+﻿using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Views;
-using Assets._Game.Scripts.UI.Windows.Controllers;
+using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 using System;
 using System.Collections.Generic;
 using TMPro;
