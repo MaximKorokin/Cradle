@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {

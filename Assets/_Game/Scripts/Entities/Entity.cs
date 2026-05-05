@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Entities
     {
         string IEntry.Id { get; set; }
 
+        public string Id => ((IEntry)this).Id;
+
         private readonly Dictionary<Type, IEntityModule> _modules = new();
         private readonly EventBusCore _bus = new();
 

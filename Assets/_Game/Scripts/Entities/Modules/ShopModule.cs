@@ -5,13 +5,15 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class ShopModule : EntityModuleBase
     {
+        public float Radius { get; }
         public ShopModel Shop { get; }
         public ShopDefinition Definition { get; }
 
-        public ShopModule(ShopModel shop, ShopDefinition definition)
+        public ShopModule(ShopModel shop, ShopDefinition definition, float radius)
         {
             Shop = shop;
             Definition = definition;
+            Radius = radius;
         }
 
         public override void Dispose()
@@ -52,7 +54,7 @@ namespace Assets._Game.Scripts.Entities.Modules
                 }
             }
 
-            return new ShopModule(shop, shopDefinition);
+            return new ShopModule(shop, shopDefinition, shopModuleDefinition.Radius);
         }
     }
 }

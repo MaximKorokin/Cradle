@@ -122,6 +122,8 @@ namespace Assets._Game.Scripts.Entities
     public sealed class ShopModuleDefinition : EntityModuleDefinition
     {
         [field: SerializeField]
+        public float Radius { get; private set; }
+        [field: SerializeField]
         public ShopDefinition ShopDefinition { get; private set; }
     }
 }

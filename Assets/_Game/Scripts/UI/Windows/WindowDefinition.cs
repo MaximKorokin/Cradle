@@ -30,6 +30,7 @@ namespace Assets._Game.Scripts.UI.Windows
         ItemStacksPreview = 40,
         LocationTransitionList = 50,
         Crafting = 60,
+        Shop = 70,
 
         ItemUseSettings = 1100,
 

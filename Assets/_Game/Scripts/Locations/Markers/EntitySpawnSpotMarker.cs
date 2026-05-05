@@ -6,7 +6,5 @@ namespace Assets._Game.Scripts.Locations.Markers
     {
         [field: SerializeField]
         public EntitySpawnSpotDefinition Definition { get; private set; }
-        [field: SerializeField]
-        public bool SpawnOnLocationLoad { get; private set; } = true;
     }
 }

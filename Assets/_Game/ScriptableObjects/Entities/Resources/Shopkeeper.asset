@@ -12,76 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
   m_Name: Shopkeeper
   m_EditorClassIdentifier: 
-  _id: d5855ca383df4ddd8c615e51609dc812
-  <VisualModel>k__BackingField: {fileID: 11400000, guid: 58de46050ff02bb4fad6d51101aaa25f, type: 2}
-  <VariantName>k__BackingField: Wolf
+  _id: e9998e56dd1d40afb06b7d49dc2b2903
+  <VisualModel>k__BackingField: {fileID: 11400000, guid: 1ee04069484c23c4eb367251bdab556f, type: 2}
+  <VariantName>k__BackingField: Shopkeeper
   _modules:
-  - rid: 1349792692413661260
   - rid: 1349792714110271691
-  - rid: 1349792944121708627
   - rid: 3412048633303400550
-  - rid: 3412048685788037207
-  - rid: 3412048734163566710
-  - rid: 3412048748974702677
-  - rid: 3412048909577486425
   - rid: 2155386242765160615
+  - rid: 3564180267895619730
+  - rid: 3564180267895619758
   references:
     version: 2
     RefIds:
-    - rid: 1349792692413661260
-      type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        Stats: {fileID: 11400000, guid: b3fba593a273813468f5678debc9389b, type: 2}
     - rid: 1349792714110271691
       type: {class: StatusEffectModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-    - rid: 1349792944121708627
-      type: {class: ControlModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        ControlProvider:
-          rid: 3412048594719473768
     - rid: 2155386242765160615
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        Level: 3
-    - rid: 3412048594719473768
-      type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
-      data:
-        <AiBehaviours>k__BackingField: 5
+        Level: 30
     - rid: 3412048633303400550
       type: {class: FactionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        Faction: {fileID: 11400000, guid: ab42b80c0a34ebe4397143adc4591be5, type: 2}
-    - rid: 3412048685788037207
-      type: {class: RewardModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+        Faction: {fileID: 11400000, guid: fbaa0ad9ac3f70c4b81095f04e3a349c, type: 2}
+    - rid: 3564180267895619730
+      type: {class: ShopModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        PreferredLevel: 0
-        Experience: 11
-        LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}
-    - rid: 3412048734163566710
-      type: {class: DespawnModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+        <Radius>k__BackingField: 1
+        <ShopDefinition>k__BackingField: {fileID: 11400000, guid: fc423adb93c22844c90b5b1fb898a7ab, type: 2}
+    - rid: 3564180267895619758
+      type: {class: ControlModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        DespawnDelay: 5
-        Trigger: 1
-    - rid: 3412048748974702677
-      type: {class: ActionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+        ControlProvider:
+          rid: 3564180267895619759
+    - rid: 3564180267895619759
+      type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
-        Enabled: 1
-        SpecialActions:
-        - Kind: 0
-          Action: {fileID: 11400000, guid: 652e0a937eccc3b4eaa020f529c4c65b, type: 2}
-        Actions: []
-    - rid: 3412048909577486425
-      type: {class: WanderBehaviourModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        MinIdleTime: 3
-        MaxIdleTime: 8
-        WanderRadius: 3
+        <AiBehaviours>k__BackingField: 10

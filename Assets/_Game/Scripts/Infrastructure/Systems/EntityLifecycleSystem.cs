@@ -220,7 +220,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // Load the location
             if (_gameSave?.PlayerLocationSave == null || string.IsNullOrWhiteSpace(_gameSave?.PlayerLocationSave.LocationId))
             {
-                _globalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.Location.Id, _newGameDefinition.LocationEntrance.Id));
+                _globalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.LocationTransitionData.LocationDefinition.Id, _newGameDefinition.LocationTransitionData.EntranceDefinition.Id));
             }
             else
             {

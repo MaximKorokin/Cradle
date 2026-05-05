@@ -29,15 +29,12 @@ namespace Assets._Game.Scripts.UI.Core
         [SerializeField]
         private LocationAnnounceView _locationAnnounceView;
         [SerializeField]
-        private LocationTransitionView _locationTransitionView;
+        private InteractionPromptView _interactionPromptView;
 
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance(_entityNameplateView);
             builder.RegisterInstance(_rootReferences);
-
-            builder.RegisterComponent(_locationAnnounceView);
-            builder.RegisterComponent(_locationTransitionView);
 
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
 
@@ -59,9 +56,10 @@ namespace Assets._Game.Scripts.UI.Core
         {
             builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
             builder.RegisterComponentInHierarchy<LocationAnnounceUISystem>();
-            builder.RegisterComponentInHierarchy<LocationTransitionUISystem>();
+            builder.RegisterComponentInHierarchy<InteractionPromptUISystem>();
             builder.RegisterComponentInHierarchy<FloatingTextUISystem>();
             builder.RegisterComponentInHierarchy<PlayerReviveUISystem>();
+            builder.RegisterComponentInHierarchy<ShopUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -78,6 +76,7 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
                 new(WindowId.Crafting, typeof(CraftingWindow), typeof(CraftingWindowController)),
+                new(WindowId.Shop, typeof(InventoryShopWindow), typeof(InventoryShopWindowController)),
 
                 // Service windows
                 new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),
@@ -100,13 +99,15 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
 
-            builder.RegisterComponentInHierarchy<PlayerReviveView>();
+            builder.RegisterComponent(_locationAnnounceView);
+            builder.RegisterComponent(_interactionPromptView);
         }
 
         private void RegisterItemContainers(IContainerBuilder builder)
         {
             builder.Register<InventoryViewController>(Lifetime.Transient);
             builder.Register<EquipmentViewController>(Lifetime.Transient);
+            builder.Register<ShopViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)

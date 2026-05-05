@@ -283,7 +283,6 @@ GameObject:
   - component: {fileID: 5591779205402875711}
   - component: {fileID: 5791942212707849818}
   - component: {fileID: 4809317970958881323}
-  - component: {fileID: 8177940573223214620}
   - component: {fileID: -6216627071960061956}
   m_Layer: 5
   m_Name: ShopSlotTemplate
@@ -352,21 +351,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8177940573223214620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5849863851863775822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 209b43ccea58512488e9ca11a56de706, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemImage: {fileID: 3303605791828048243}
-  _amountText: {fileID: 6510217835642191272}
-  _cooldownFillBar: {fileID: 0}
 --- !u!114 &-6216627071960061956
 MonoBehaviour:
   m_ObjectHideFlags: 0

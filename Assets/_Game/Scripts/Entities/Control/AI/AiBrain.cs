@@ -45,5 +45,6 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         Wander = 1,
         StandStill = 2,
         Action = 4,
+        Shop = 8,
     }
 }

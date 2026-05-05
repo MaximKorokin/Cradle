@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private ShopModel _shopModel;
 
-        public event Action<ShopSlot> SlotClick;
+        public event Action<ShopSlot> SlotClicked;
 
         public void Render(ShopModel shopModel, string shopName, int playerGold)
         {
@@ -63,7 +63,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void OnSlotPointerClick(ShopSlot slotIndex)
         {
-            SlotClick?.Invoke(slotIndex);
+            SlotClicked?.Invoke(slotIndex);
         }
     }
 }

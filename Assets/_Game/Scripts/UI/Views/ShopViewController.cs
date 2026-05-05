@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public void Bind()
         {
-            _view.SlotClick += OnSlotClick;
+            _view.SlotClicked += OnSlotClick;
             _shopModel.Changed += OnShopChanged;
         }
 
@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             if (_view != null)
             {
-                _view.SlotClick -= OnSlotClick;
+                _view.SlotClicked -= OnSlotClick;
                 _view.Unbind();
             }
 
