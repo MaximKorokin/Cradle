@@ -1,7 +1,5 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.UI.Windows;
+﻿using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
-using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 using System;
 
 namespace Assets._Game.Scripts.Shared.Extensions
@@ -19,12 +17,6 @@ namespace Assets._Game.Scripts.Shared.Extensions
                         onAmountSelected?.Invoke(amount);
                         windowManager.CloseWindow(amountPickerWindow);
                     }));
-        }
-
-        public static ItemStacksPreviewWindow ShowItemDefinitionPreview(this WindowManager windowManager, ItemDefinition itemDefinition)
-        {
-            return windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
-                new ItemStacksPreviewWindowControllerArguments(itemDefinition));
         }
     }
 }

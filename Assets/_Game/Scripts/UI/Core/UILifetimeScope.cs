@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
@@ -50,6 +51,12 @@ namespace Assets._Game.Scripts.UI.Core
             RegisterHud(builder);
             RegisterItemContainers(builder);
             RegisterDataFormatters(builder);
+            RegisterServices(builder);
+        }
+
+        private void RegisterServices(IContainerBuilder builder)
+        {
+            builder.Register<ItemPreviewService>(Lifetime.Singleton);
         }
 
         private void RegisterSystems(IContainerBuilder builder)

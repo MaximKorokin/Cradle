@@ -7,19 +7,22 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private AmountPickerWindow _window;
 
         private Action<int> _onAmountPickedCallback;
+        private int _minAmount;
+        private int _maxAmount;
 
         public override void Initialize(AmountPickerWindowControllerArguments arguments)
         {
             base.Initialize(arguments);
 
             _onAmountPickedCallback = arguments.OnAmountPickedCallback;
-            _window.Render(arguments.MinAmount, arguments.MaxAmount);
+            _minAmount = arguments.MinAmount;
+            _maxAmount = arguments.MaxAmount;
         }
 
         public override void Bind(AmountPickerWindow window)
         {
             _window = window;
-
+            _window.Render(_minAmount, _maxAmount);
             _window.AmountSelected += OnAmountSelected;
         }
 

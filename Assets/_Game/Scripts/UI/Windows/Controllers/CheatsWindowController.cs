@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Services;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -15,17 +16,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly CheatsHudData _cheatsHudData;
         private readonly PlayerContext _playerContext;
         private readonly ItemStackFactory _itemStackAssembler;
+        private readonly ItemPreviewService _itemPreviewService;
 
         public CheatsWindowController(
             WindowManager windowManager,
             CheatsHudData cheatsHudData,
             PlayerContext playerContext,
-            ItemStackFactory itemStackAssembler)
+            ItemStackFactory itemStackAssembler,
+            ItemPreviewService itemPreviewService)
         {
             _windowManager = windowManager;
             _cheatsHudData = cheatsHudData;
             _playerContext = playerContext;
             _itemStackAssembler = itemStackAssembler;
+            _itemPreviewService = itemPreviewService;
         }
 
         public override void Bind(CheatsWindow window)
@@ -56,7 +60,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnItemDefinitionInfoClicked(ItemDefinition itemDefinition)
         {
-            _windowManager.ShowItemDefinitionPreview(itemDefinition);
+            _itemPreviewService.ShowItemDefinitionPreview(itemDefinition);
         }
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)

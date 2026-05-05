@@ -1,8 +1,11 @@
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
@@ -19,9 +22,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly WindowManager _windowManager;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
+        private readonly ItemPreviewService _itemPreviewService;
 
-        private ShopPreviewInputProcessor _previewProcessor;
+        private ShopItemStacksPreviewInputProcessor _previewProcessor;
         private ShopModel _shopModel;
+        private InventoryModel _inventoryModel;
 
         public InventoryShopWindowController(
             InventoryViewController inventoryViewController,
@@ -30,7 +35,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             IPlayerProvider playerProvider,
             WindowManager windowManager,
             ItemContainerResolver itemContainerResolver,
-            ItemStackFormatter itemStackFormatter)
+            ItemStackFormatter itemStackFormatter,
+            ItemPreviewService itemPreviewService)
         {
             _inventoryViewController = inventoryViewController;
             _shopViewController = shopViewController;
@@ -39,6 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _windowManager = windowManager;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
+            _itemPreviewService = itemPreviewService;
         }
 
         public override void Initialize(InventoryShopWindowControllerArguments arguments)
@@ -46,12 +53,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.Initialize(arguments);
             _shopModel = arguments.ShopModel;
 
-            // Create shop preview processor with the shop model and coefficients from arguments
-            _previewProcessor = new ShopPreviewInputProcessor(
-                _windowManager,
-                _playerProvider,
-                _itemContainerResolver,
-                _itemStackFormatter,
+            var player = _playerProvider.Player;
+            _inventoryModel = _itemContainerResolver.ResolveInventory(player, ItemContainerId.Inventory);
+
+            _previewProcessor = new ShopItemStacksPreviewInputProcessor(
+                _itemPreviewService,
+                _inventoryModel,
                 _shopModel,
                 arguments.BuyCoefficient,
                 arguments.SellCoefficient);

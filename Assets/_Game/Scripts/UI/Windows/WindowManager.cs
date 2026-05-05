@@ -70,11 +70,11 @@ namespace Assets._Game.Scripts.UI.Windows
             var controller = _resolver.Resolve(controllerType);
             var window = _resolver.Instantiate(prefab, _windowsRoot);
 
-            // call controller Bind method
-            controllerType.GetMethod("Bind").Invoke(controller, new object[] { window });
-
-            // call callback (e.g. for controller Initialize method)
+            // call callback (e.g. for controller Initialize method) BEFORE Bind
             instantiatedCallback?.Invoke(window, controller);
+
+            // call controller Bind method AFTER Initialize
+            controllerType.GetMethod("Bind").Invoke(controller, new object[] { window });
 
             GameObject modalRoot = null;
             if (prefab.IsModal)

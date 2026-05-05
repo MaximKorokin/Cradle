@@ -31,17 +31,22 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             _itemDefinitionFormatter = itemDefinitionFormatter;
         }
 
-        public override void Bind(ItemStacksPreviewWindow window)
-        {
-            _window = window;
-            _window.ActionButtonClicked += ProcessAction;
-        }
-
         public override void Initialize(ItemStacksPreviewWindowControllerArguments arguments)
         {
             base.Initialize(arguments);
 
-            _strategy = CreateStrategy(arguments);
+            _strategy = arguments.CustomStrategy;
+            if (_strategy == null)
+            {
+                throw new System.ArgumentException("CustomStrategy must be provided");
+            }
+        }
+
+        public override void Bind(ItemStacksPreviewWindow window)
+        {
+            _window = window;
+            _window.ActionButtonClicked += ProcessAction;
+
             _strategy.Initialize(_window);
             _strategy.Redraw(_window);
         }
@@ -50,32 +55,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         {
             _strategy.Cleanup(_window);
             _window.ActionButtonClicked -= ProcessAction;
-        }
-
-        private IItemStacksPreviewStrategy CreateStrategy(ItemStacksPreviewWindowControllerArguments arguments)
-        {
-            // Use custom strategy if provided
-            if (arguments.CustomStrategy != null)
-                return arguments.CustomStrategy;
-
-            return arguments.Mode switch
-            {
-                ItemStacksPreviewMode.Container => new ContainerItemStacksPreviewStrategy(
-                    _windowManager,
-                    _playerProvider,
-                    _itemContainerResolver,
-                    _itemStackFormatter,
-                    arguments.EquipmentSlot,
-                    arguments.PrimaryContainerSlot,
-                    arguments.PrimaryContainerId,
-                    arguments.SecondaryContainerId),
-
-                ItemStacksPreviewMode.Definition => new DefinitionItemStacksPreviewStrategy(
-                    arguments.ItemDefinition,
-                    _itemDefinitionFormatter),
-
-                _ => throw new System.ArgumentException(nameof(arguments.Mode))
-            };
         }
 
         private void ProcessAction(ItemStackActionType actionType)
@@ -109,62 +88,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
     public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly ItemStacksPreviewMode Mode;
-        public readonly EquipmentSlotKey? EquipmentSlot;
-        public readonly long PrimaryContainerSlot;
-        public readonly ItemContainerId PrimaryContainerId;
-        public readonly ItemContainerId SecondaryContainerId;
-        public readonly ItemDefinition ItemDefinition;
         public readonly IItemStacksPreviewStrategy CustomStrategy;
 
-        public ItemStacksPreviewWindowControllerArguments(
-            EquipmentSlotKey? equipmentSlot,
-            long primaryContainerSlot,
-            ItemContainerId primaryContainerId,
-            ItemContainerId secondaryContainerId)
+        public ItemStacksPreviewWindowControllerArguments(IItemStacksPreviewStrategy customStrategy)
         {
-            Mode = ItemStacksPreviewMode.Container;
-            EquipmentSlot = equipmentSlot;
-            PrimaryContainerSlot = primaryContainerSlot;
-            PrimaryContainerId = primaryContainerId;
-            SecondaryContainerId = secondaryContainerId;
-            ItemDefinition = null;
-            CustomStrategy = null;
-        }
-
-        public ItemStacksPreviewWindowControllerArguments(ItemDefinition itemDefinition)
-        {
-            Mode = ItemStacksPreviewMode.Definition;
-            ItemDefinition = itemDefinition;
-            EquipmentSlot = null;
-            PrimaryContainerSlot = default;
-            PrimaryContainerId = default;
-            SecondaryContainerId = default;
-            CustomStrategy = null;
-        }
-
-        public ItemStacksPreviewWindowControllerArguments(
-            EquipmentSlotKey? equipmentSlot,
-            long primaryContainerSlot,
-            ItemContainerId primaryContainerId,
-            ItemContainerId secondaryContainerId,
-            ItemStacksPreviewMode mode,
-            IItemStacksPreviewStrategy customStrategy)
-        {
-            Mode = mode;
-            EquipmentSlot = equipmentSlot;
-            PrimaryContainerSlot = primaryContainerSlot;
-            PrimaryContainerId = primaryContainerId;
-            SecondaryContainerId = secondaryContainerId;
-            ItemDefinition = null;
             CustomStrategy = customStrategy;
         }
-    }
-
-    public enum ItemStacksPreviewMode
-    {
-        Container,
-        Definition,
-        Shop
     }
 }

@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
@@ -23,14 +24,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             EquipmentViewController equipmentViewController,
             InventoryHudData inventoryHudData,
             EquipmentHudData equipmentHudData,
-            WindowManager windowManager)
+            ItemPreviewService itemPreviewService)
         {
             _inventoryViewController = inventoryViewController;
             _equipmentViewController = equipmentViewController;
             _inventoryHudData = inventoryHudData;
             _equipmentHudData = equipmentHudData;
 
-            _previewProcessor = new(windowManager, _equipmentHudData.EquipmentModel, _inventoryHudData.InventoryModel, _equipmentHudData.EquipmentModel, ItemContainerId.Inventory, ItemContainerId.Equipment);
+            _previewProcessor = new(
+                itemPreviewService,
+                _equipmentHudData.EquipmentModel,
+                _inventoryHudData.InventoryModel,
+                _equipmentHudData.EquipmentModel,
+                ItemContainerId.Inventory,
+                ItemContainerId.Equipment);
         }
 
         public override void Bind(InventoryEquipmentWindow window)

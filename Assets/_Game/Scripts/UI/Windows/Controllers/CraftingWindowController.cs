@@ -5,6 +5,7 @@ using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Services;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -17,19 +18,22 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly CraftingHudData _craftingHudData;
         private readonly IPlayerProvider _playerProvider;
         private readonly CraftingService _craftingService;
+        private readonly ItemPreviewService _itemPreviewService;
 
         public CraftingWindowController(
             IGlobalEventBus globalEventBus,
             WindowManager windowManager,
             CraftingHudData craftingHudData,
             IPlayerProvider playerProvider,
-            CraftingService craftingService)
+            CraftingService craftingService,
+            ItemPreviewService itemPreviewService)
         {
             _globalEventBus = globalEventBus;
             _windowManager = windowManager;
             _craftingHudData = craftingHudData;
             _playerProvider = playerProvider;
             _craftingService = craftingService;
+            _itemPreviewService = itemPreviewService;
         }
 
         public override void Bind(CraftingWindow window)
@@ -57,7 +61,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)
         {
-            _windowManager.ShowItemDefinitionPreview(recipe.Result.ItemDefinition);
+            _itemPreviewService.ShowItemDefinitionPreview(recipe.Result.ItemDefinition);
         }
 
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)

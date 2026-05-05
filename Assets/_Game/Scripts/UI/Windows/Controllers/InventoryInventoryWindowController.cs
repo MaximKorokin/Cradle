@@ -1,7 +1,7 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items.Commands;
+﻿using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows.Shared;
 
@@ -24,14 +24,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             InventoryHudData inventoryHudData,
             StorageHudData storageHudData,
             EquipmentHudData equipmentHudData,
-            WindowManager windowManager)
+            ItemPreviewService itemPreviewService)
         {
             _firstInventoryViewController = firstInventoryViewController;
             _secondInventoryViewController = secondInventoryViewController;
             _inventoryHudData = inventoryHudData;
             _storageHudData = storageHudData;
 
-            _previewProcessor = new(windowManager, equipmentHudData.EquipmentModel, inventoryHudData.InventoryModel, storageHudData.InventoryModel, ItemContainerId.Inventory, ItemContainerId.Storage);
+            _previewProcessor = new(
+                itemPreviewService,
+                equipmentHudData.EquipmentModel,
+                inventoryHudData.InventoryModel,
+                storageHudData.InventoryModel,
+                ItemContainerId.Inventory,
+                ItemContainerId.Storage);
         }
 
         public override void Bind(InventoryInventoryWindow window)
