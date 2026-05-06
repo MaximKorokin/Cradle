@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         public void Tick(Entity entity, float delta)
         {
             IAiBehaviour bestBehaviour = null;
-            ActionContext bestContext = default;
+            IBehaviourContext bestContext = null;
             float bestScore = float.MinValue;
 
             var behaviours = _behaviours;

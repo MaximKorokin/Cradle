@@ -4,12 +4,12 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 {
     internal class StandStillBehaviour : IAiBehaviour
     {
-        public ActionEvaluation Evaluate(Entity entity)
+        public BehaviourEvaluation Evaluate(Entity entity)
         {
-            return new ActionEvaluation(0.01f, default);
+            return new BehaviourEvaluation(0.01f, null);
         }
 
-        public void Tick(Entity entity, ActionContext context, float delta)
+        public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
             var intent = entity.GetModule<IntentModule>();
             intent.ClearAct();

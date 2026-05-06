@@ -16,23 +16,23 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             _entitySensor = entitySensor;
         }
 
-        public ActionEvaluation Evaluate(Entity entity)
+        public BehaviourEvaluation Evaluate(Entity entity)
         {
             if (entity.TryGetModule<ShopModule>(out var shopModule) &&
                 _entitySensor.TryGetFirstInRange(entity, shopModule.Radius, Faction.FactionRelation.Ally, default, out var foundEntity))
             {
-                var context = new ActionContext(null, foundEntity);
-                return new ActionEvaluation(1, context);
+                var context = new TargetBehaviourContext(foundEntity);
+                return new BehaviourEvaluation(1, context);
             }
 
-            return new ActionEvaluation(0, default);
+            return new BehaviourEvaluation(0, null);
         }
 
-        public void Tick(Entity entity, ActionContext context, float delta)
+        public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
-            if (entity.TryGetModule<ShopModule>(out var shopModule))
+            if (entity.TryGetModule<ShopModule>(out var shopModule) && context is TargetBehaviourContext targetContext)
             {
-                _globalEventBus.Publish(InteractionPromptViewRequest.ShowRequest(shopModule.Definition.ShopName, "Open", () => _globalEventBus.Publish(new ShopWindowOpenRequest(entity.Id, context.Target.Id))));
+                _globalEventBus.Publish(InteractionPromptViewRequest.ShowRequest(shopModule.Definition.ShopName, "Open", () => _globalEventBus.Publish(new ShopWindowOpenRequest(entity.Id, targetContext.Target.Id))));
             }
         }
     }

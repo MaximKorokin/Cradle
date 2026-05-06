@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities.Control.Intents;
+using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Shared.Extensions;
 using UnityEngine;
@@ -14,35 +15,35 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             _actionEvaluator = actionEvaluator;
         }
 
-        public ActionEvaluation Evaluate(Entity entity)
+        public BehaviourEvaluation Evaluate(Entity entity)
         {
             return _actionEvaluator.Evaluate(entity);
         }
 
-        public void Tick(Entity entity, ActionContext context, float delta)
+        public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
             var intentModule = entity.GetModule<IntentModule>();
 
-            if (context.ActionInstance == null)
+            if (context is not ActionBehaviourContext actionContext || actionContext.ActionInstance == null)
             {
                 intentModule.ClearMove();
                 return;
             }
 
-            var targetPosition = context.Target.GetPosition();
+            var targetPosition = actionContext.Target.GetPosition();
 
             intentModule.SetAim(new(targetPosition));
 
-            if (ApproachActionRange(entity, intentModule, targetPosition, context))
+            if (ApproachActionRange(entity, intentModule, targetPosition, actionContext))
             {
-                intentModule.SetAct(new ActionIntent(context.ActionInstance, context.Target, targetPosition));
+                intentModule.SetAct(new ActionIntent(actionContext.ActionInstance, actionContext.Target, targetPosition));
             }
         }
 
         /// <summary>
         /// Returns true if the entity is within preparation range, otherwise sets the move intent towards the target and returns false
         /// </summary>
-        private bool ApproachActionRange(Entity entity, IntentModule intentModule, Vector2 targetPosition, ActionContext context)
+        private bool ApproachActionRange(Entity entity, IntentModule intentModule, Vector2 targetPosition, ActionBehaviourContext context)
         {
             var direction = targetPosition - entity.GetPosition();
 
@@ -55,6 +56,18 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
             intentModule.SetMove(new(direction));
             return false;
+        }
+    }
+
+    public sealed class ActionBehaviourContext : IBehaviourContext
+    {
+        public readonly ActionInstance ActionInstance;
+        public readonly Entity Target;
+
+        public ActionBehaviourContext(ActionInstance actionInstance, Entity target)
+        {
+            ActionInstance = actionInstance;
+            Target = target;
         }
     }
 }

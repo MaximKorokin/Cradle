@@ -1,33 +1,33 @@
-﻿using Assets._Game.Scripts.Entities.Interactions.Action;
-
-namespace Assets._Game.Scripts.Entities.Control.AI
+﻿namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public interface IAiBehaviour
     {
-        ActionEvaluation Evaluate(Entity entity);
-        void Tick(Entity entity, ActionContext context, float delta);
+        BehaviourEvaluation Evaluate(Entity entity);
+        void Tick(Entity entity, IBehaviourContext context, float delta);
     }
 
-    public readonly struct ActionEvaluation
+    public readonly struct BehaviourEvaluation
     {
         public readonly float Score;
-        public readonly ActionContext Context;
+        public readonly IBehaviourContext Context;
 
-        public ActionEvaluation(float score, ActionContext context)
+        public BehaviourEvaluation(float score, IBehaviourContext context)
         {
             Score = score;
             Context = context;
         }
     }
 
-    public readonly struct ActionContext
+    public interface IBehaviourContext
     {
-        public readonly ActionInstance ActionInstance;
+    }
+
+    public class TargetBehaviourContext : IBehaviourContext
+    {
         public readonly Entity Target;
 
-        public ActionContext(ActionInstance actionInstance, Entity target)
+        public TargetBehaviourContext(Entity target)
         {
-            ActionInstance = actionInstance;
             Target = target;
         }
     }

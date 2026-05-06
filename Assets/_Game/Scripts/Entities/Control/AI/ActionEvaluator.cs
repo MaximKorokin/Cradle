@@ -8,7 +8,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 {
     public sealed class ActionEvaluator
     {
-        private readonly ActionEvaluation _defaultActionEvaluation = new(float.NegativeInfinity, default);
+        private readonly BehaviourEvaluation _defaultActionEvaluation = new(float.NegativeInfinity, null);
 
         private readonly IEntitySensor _sensor;
 
@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             _sensor = entitySensor;
         }
 
-        public ActionEvaluation Evaluate(Entity entity)
+        public BehaviourEvaluation Evaluate(Entity entity)
         {
             if (!entity.TryGetModule<ActionModule>(out var actionModule))
                 return _defaultActionEvaluation;
@@ -39,7 +39,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             return bestEvaluation;
         }
 
-        private ActionEvaluation EvaluateAction(Entity entity, ActionInstance actionInstance)
+        private BehaviourEvaluation EvaluateAction(Entity entity, ActionInstance actionInstance)
         {
             var range = 0f;
             if (entity.TryGetModule<StatModule>(out var statModule))
@@ -55,9 +55,9 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                 return _defaultActionEvaluation;
 
             var score = actionInstance.Definition.BaseScore - actionInstance.Definition.DistanceScorePenalty * distance;
-            return new ActionEvaluation(
+            return new BehaviourEvaluation(
                 score,
-                new ActionContext(actionInstance, target)
+                new ActionBehaviourContext(actionInstance, target)
             );
         }
     }
