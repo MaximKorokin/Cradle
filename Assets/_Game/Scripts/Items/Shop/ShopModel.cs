@@ -5,18 +5,32 @@ namespace Assets._Game.Scripts.Items.Shop
 {
     public sealed class ShopModel : IItemContainer<ShopSlot>
     {
-        private readonly List<ItemStack> _slots;
+        private readonly List<ShopSlotData> _slots;
         private readonly ItemStackFactory _itemStackFactory;
+
         public int Capacity => _slots.Count;
 
         public event Action<ShopChange> ShopChanged;
         public event Action<ShopSlot> SlotChanged;
         public event Action Changed;
 
-        public ShopModel(ItemStackFactory itemStackFactory)
+        public ShopModel(ItemStackFactory itemStackFactory, IEnumerable<ItemDefinition> initialItems = null)
         {
-            _slots = new List<ItemStack>();
+            _slots = new List<ShopSlotData>();
             _itemStackFactory = itemStackFactory;
+
+            // Add initial items (these have infinite stock and always return MaxAmount)
+            if (initialItems != null)
+            {
+                foreach (var itemDef in initialItems)
+                {
+                    if (itemDef != null)
+                    {
+                        var stack = _itemStackFactory.Create(itemDef.Id, null, itemDef.MaxAmount);
+                        _slots.Add(new ShopSlotData(stack, isInfinite: true));
+                    }
+                }
+            }
         }
 
         public bool IsValidSlot(ShopSlot slot) => slot.Index >= 0 && slot.Index < _slots.Count;
@@ -24,9 +38,20 @@ namespace Assets._Game.Scripts.Items.Shop
         public ItemStackSnapshot? Get(ShopSlot slot)
         {
             if (!IsValidSlot(slot)) return null;
-            var s = _slots[slot.Index];
-            if (s is null) return null;
-            return s.Snapshot;
+            var slotData = _slots[slot.Index];
+            if (slotData?.Stack is null) return null;
+
+            // For infinite items, always return MaxAmount
+            if (slotData.IsInfinite)
+            {
+                var stack = slotData.Stack;
+                return new ItemStackSnapshot(
+                    stack.Definition,
+                    stack.InstanceData,
+                    stack.Definition.MaxAmount);
+            }
+
+            return slotData.Stack.Snapshot;
         }
 
         public ItemStackSnapshot? Get(long slot)
@@ -38,8 +63,7 @@ namespace Assets._Game.Scripts.Items.Shop
         {
             for (int i = 0; i < _slots.Count; i++)
             {
-                var s = _slots[i];
-                yield return (new ShopSlot(i), s?.Snapshot);
+                yield return (new ShopSlot(i), Get(new ShopSlot(i)));
             }
         }
 
@@ -57,10 +81,9 @@ namespace Assets._Game.Scripts.Items.Shop
             if (snapshot.Definition == null) throw new ArgumentNullException(nameof(snapshot.Definition));
             if (snapshot.Amount <= 0) return 0;
 
-            // Shop doesn't stack items - each item goes to a new slot
-            // Add the entire stack as-is to a single new slot
+            // When adding items (from player selling), they are finite (not infinite)
             var newStack = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, snapshot.Amount);
-            _slots.Add(newStack);
+            _slots.Add(new ShopSlotData(newStack, isInfinite: false));
 
             var slot = new ShopSlot(_slots.Count - 1);
             ShopChanged?.Invoke(new(slot, ShopChangeKind.Added, newStack.Snapshot));
@@ -78,35 +101,51 @@ namespace Assets._Game.Scripts.Items.Shop
 
             for (int i = _slots.Count - 1; i >= 0 && remaining > 0; i--)
             {
-                var s = _slots[i];
-                if (s is null) continue;
-                if (!s.Key.Equals(key)) continue;
+                var slotData = _slots[i];
+                if (slotData?.Stack is null) continue;
+                if (!slotData.Stack.Key.Equals(key)) continue;
 
-                int r = s.RemoveUpTo(remaining);
+                // For infinite items, we don't actually remove anything
+                if (slotData.IsInfinite)
+                {
+                    int toRemove = Math.Min(remaining, slotData.Stack.Definition.MaxAmount);
+                    remaining -= toRemove;
+                    removed += toRemove;
+
+                    var slot = new ShopSlot(i);
+                    // Notify updated but item stays at MaxAmount
+                    ShopChanged?.Invoke(new(slot, ShopChangeKind.Updated, Get(slot)));
+                    SlotChanged?.Invoke(slot);
+                    Changed?.Invoke();
+                    continue;
+                }
+
+                // For finite items, remove normally
+                int r = slotData.Stack.RemoveUpTo(remaining);
                 remaining -= r;
                 removed += r;
 
-                var slot = new ShopSlot(i);
+                var finiteSlot = new ShopSlot(i);
 
-                if (s.Amount <= 0)
+                if (slotData.Stack.Amount <= 0)
                 {
                     _slots.RemoveAt(i);
-                    ShopChanged?.Invoke(new(slot, ShopChangeKind.Removed, null));
+                    ShopChanged?.Invoke(new(finiteSlot, ShopChangeKind.Removed, null));
 
                     // Notify that all subsequent slots have shifted down
                     for (int j = i; j < _slots.Count; j++)
                     {
                         var shiftedSlot = new ShopSlot(j);
-                        ShopChanged?.Invoke(new(shiftedSlot, ShopChangeKind.Updated, _slots[j]?.Snapshot));
+                        ShopChanged?.Invoke(new(shiftedSlot, ShopChangeKind.Updated, Get(shiftedSlot)));
                         SlotChanged?.Invoke(shiftedSlot);
                     }
                 }
                 else
                 {
-                    ShopChanged?.Invoke(new(slot, ShopChangeKind.Updated, s.Snapshot));
+                    ShopChanged?.Invoke(new(finiteSlot, ShopChangeKind.Updated, slotData.Stack.Snapshot));
                 }
 
-                SlotChanged?.Invoke(slot);
+                SlotChanged?.Invoke(finiteSlot);
                 Changed?.Invoke();
             }
 
@@ -124,13 +163,14 @@ namespace Assets._Game.Scripts.Items.Shop
                 _slots.Add(null);
             }
 
-            var s = _slots[slot.Index];
+            var slotData = _slots[slot.Index];
 
-            if (s is null)
+            if (slotData?.Stack is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
-                _slots[slot.Index] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
-                ShopChanged?.Invoke(new(slot, ShopChangeKind.Added, _slots[slot.Index].Snapshot));
+                var newStack = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
+                _slots[slot.Index] = new ShopSlotData(newStack, isInfinite: false);
+                ShopChanged?.Invoke(new(slot, ShopChangeKind.Added, _slots[slot.Index].Stack.Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
                 return put;
@@ -145,13 +185,25 @@ namespace Assets._Game.Scripts.Items.Shop
             if (!IsValidSlot(slot)) return 0;
             if (amount <= 0) return 0;
 
-            var s = _slots[slot.Index];
-            if (s is null) return 0;
+            var slotData = _slots[slot.Index];
+            if (slotData?.Stack is null) return 0;
 
-            int removed = s.RemoveUpTo(amount);
-            if (removed <= 0) return 0;
+            // For infinite items, we don't actually remove anything
+            if (slotData.IsInfinite)
+            {
+                int removed = Math.Min(amount, slotData.Stack.Definition.MaxAmount);
+                // Notify updated but item stays at MaxAmount
+                ShopChanged?.Invoke(new(slot, ShopChangeKind.Updated, Get(slot)));
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
+                return removed;
+            }
 
-            if (s.Amount <= 0)
+            // For finite items, remove normally
+            int actualRemoved = slotData.Stack.RemoveUpTo(amount);
+            if (actualRemoved <= 0) return 0;
+
+            if (slotData.Stack.Amount <= 0)
             {
                 _slots.RemoveAt(slot.Index);
                 ShopChanged?.Invoke(new(slot, ShopChangeKind.Removed, null));
@@ -160,18 +212,18 @@ namespace Assets._Game.Scripts.Items.Shop
                 for (int i = slot.Index; i < _slots.Count; i++)
                 {
                     var shiftedSlot = new ShopSlot(i);
-                    ShopChanged?.Invoke(new(shiftedSlot, ShopChangeKind.Updated, _slots[i]?.Snapshot));
+                    ShopChanged?.Invoke(new(shiftedSlot, ShopChangeKind.Updated, Get(shiftedSlot)));
                     SlotChanged?.Invoke(shiftedSlot);
                 }
             }
             else
             {
-                ShopChanged?.Invoke(new(slot, ShopChangeKind.Updated, s.Snapshot));
+                ShopChanged?.Invoke(new(slot, ShopChangeKind.Updated, slotData.Stack.Snapshot));
             }
 
             SlotChanged?.Invoke(slot);
             Changed?.Invoke();
-            return removed;
+            return actualRemoved;
         }
 
         public int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty)
@@ -189,7 +241,7 @@ namespace Assets._Game.Scripts.Items.Shop
             if (snapshot.Amount <= 0) return 0;
 
             // If slot exists and is occupied, can't add
-            if (IsValidSlot(slot) && _slots[slot.Index] != null)
+            if (IsValidSlot(slot) && _slots[slot.Index]?.Stack != null)
                 return 0;
 
             // Otherwise can add full amount
@@ -198,9 +250,11 @@ namespace Assets._Game.Scripts.Items.Shop
 
         public void Clear()
         {
+            // Only clear finite (player-sold) items, not infinite items
             for (int i = _slots.Count - 1; i >= 0; i--)
             {
-                if (_slots[i] is not null)
+                var slotData = _slots[i];
+                if (slotData?.Stack is not null && !slotData.IsInfinite)
                 {
                     var slot = new ShopSlot(i);
                     _slots.RemoveAt(i);
@@ -209,6 +263,18 @@ namespace Assets._Game.Scripts.Items.Shop
                 }
             }
             Changed?.Invoke();
+        }
+
+        private sealed class ShopSlotData
+        {
+            public ItemStack Stack { get; }
+            public bool IsInfinite { get; }
+
+            public ShopSlotData(ItemStack stack, bool isInfinite)
+            {
+                Stack = stack;
+                IsInfinite = isInfinite;
+            }
         }
     }
 

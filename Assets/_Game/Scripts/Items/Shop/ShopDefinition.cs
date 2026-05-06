@@ -30,9 +30,5 @@ namespace Assets._Game.Scripts.Items.Shop
     {
         [field: SerializeField]
         public ItemDefinition ItemDefinition { get; private set; }
-
-        [field: SerializeField]
-        [field: Range(1, 999)]
-        public int Amount { get; private set; } = 1;
     }
 }

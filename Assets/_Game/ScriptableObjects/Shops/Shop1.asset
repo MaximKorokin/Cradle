@@ -17,18 +17,11 @@ MonoBehaviour:
   <SellCoefficient>k__BackingField: 0.5
   <InitialItems>k__BackingField:
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 1ddc73ae1dee4434d870e9a11e9efb81, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 1f9ae7ca36e9e85478e4efe500850f24, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 9a4b43b665d6b0f44985561bdb68eaa7, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 7fc0cfaa9237bf64b9d31860ccde14c7, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 2553f7c280d74064998c49651134c581, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 0e7a39cfa0aa7b5408c2e24658cc6f85, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 6017c12a5c2959f4ca9fa82246381ac7, type: 2}
-    <Amount>k__BackingField: 0
   - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 7e6075d7f12fe8a4781f9c63083ffd1f, type: 2}
-    <Amount>k__BackingField: 0
+  - <ItemDefinition>k__BackingField: {fileID: 11400000, guid: 8ade05461f4c7564c81775d06715caf1, type: 2}

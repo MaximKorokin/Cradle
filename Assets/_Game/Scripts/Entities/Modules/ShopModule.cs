@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -40,19 +41,22 @@ namespace Assets._Game.Scripts.Entities.Modules
                 return null;
 
             var shopDefinition = shopModuleDefinition.ShopDefinition;
-            var shop = new ShopModel(_itemStackFactory);
 
-            // Populate shop with initial items
+            // Prepare initial item definitions (infinite stock items)
+            List<ItemDefinition> initialItemDefinitions = null;
             if (shopDefinition.InitialItems != null)
             {
+                initialItemDefinitions = new List<ItemDefinition>();
                 foreach (var item in shopDefinition.InitialItems)
                 {
-                    if (item.ItemDefinition != null && item.Amount > 0)
+                    if (item.ItemDefinition != null)
                     {
-                        shop.Add(new ItemStackSnapshot(item.ItemDefinition, null, item.Amount));
+                        initialItemDefinitions.Add(item.ItemDefinition);
                     }
                 }
             }
+
+            var shop = new ShopModel(_itemStackFactory, initialItemDefinitions);
 
             return new ShopModule(shop, shopDefinition, shopModuleDefinition.Radius);
         }
