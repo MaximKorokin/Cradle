@@ -102,7 +102,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _entityViewService.DespawnEntityView(request.Entity);
             // For now entity does not exist if it does not have view
             // There will be a big TODO in the future if this will change
-            EntityRepository.Remove(((IEntry)request.Entity).Id);
+            EntityRepository.Remove(request.Entity.Id);
         }
     }
 

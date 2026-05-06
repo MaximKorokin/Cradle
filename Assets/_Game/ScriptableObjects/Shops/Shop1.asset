@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2affba2a601e914ab629bda6e686d43, type: 3}
   m_Name: Shop1
   m_EditorClassIdentifier: 
-  <ShopName>k__BackingField: Shop
+  <ShopName>k__BackingField: Shop 1
   <BuyCoefficient>k__BackingField: 1.5
   <SellCoefficient>k__BackingField: 0.5
   <InitialItems>k__BackingField:

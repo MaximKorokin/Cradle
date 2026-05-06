@@ -1,10 +1,11 @@
 ﻿using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
-using Assets._Game.Scripts.UI.Windows.Shared;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -16,8 +17,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly EquipmentViewController _equipmentViewController;
         private readonly IInventoryHudData _inventoryHudData;
         private readonly IEquipmentHudData _equipmentHudData;
-
-        private readonly ItemStacksPreviewInputProcessor<InventorySlot, EquipmentSlotKey> _previewProcessor;
+        private readonly ItemPreviewService _itemPreviewService;
 
         public InventoryEquipmentWindowController(
             InventoryViewController inventoryViewController,
@@ -30,14 +30,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _equipmentViewController = equipmentViewController;
             _inventoryHudData = inventoryHudData;
             _equipmentHudData = equipmentHudData;
-
-            _previewProcessor = new(
-                itemPreviewService,
-                _equipmentHudData.EquipmentModel,
-                _inventoryHudData.InventoryModel,
-                _equipmentHudData.EquipmentModel,
-                ItemContainerId.Inventory,
-                ItemContainerId.Equipment);
+            _itemPreviewService = itemPreviewService;
         }
 
         public override void Bind(InventoryEquipmentWindow window)
@@ -48,21 +41,54 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _equipmentViewController.Initialize(_window.EquipmentView);
             _equipmentViewController.Bind(_equipmentHudData);
 
-            _inventoryViewController.SlotClick += _previewProcessor.OnFirstItemContainerSlotClick;
-            _equipmentViewController.SlotClick += _previewProcessor.OnSecondItemContainerSlotClick;
+            _inventoryViewController.SlotClick += OnInventorySlotClick;
+            _equipmentViewController.SlotClick += OnEquipmentSlotClick;
 
             Redraw();
         }
 
         public override void Unbind()
         {
-            _inventoryViewController.SlotClick -= _previewProcessor.OnFirstItemContainerSlotClick;
-            _equipmentViewController.SlotClick -= _previewProcessor.OnSecondItemContainerSlotClick;
+            _inventoryViewController.SlotClick -= OnInventorySlotClick;
+            _equipmentViewController.SlotClick -= OnEquipmentSlotClick;
 
             _inventoryViewController.Unbind();
             _equipmentViewController.Unbind();
 
             _window = null;
+        }
+
+        private void OnInventorySlotClick(InventorySlot slot)
+        {
+            var item = _inventoryHudData.InventoryModel.Get(slot);
+            if (item == null) return;
+
+            var equipmentSlotType = item.Value.GetEquipmentSlotType();
+            EquipmentSlotKey? equipmentSlotToCompare = null;
+
+            if (equipmentSlotType != EquipmentSlotType.None)
+            {
+                equipmentSlotToCompare = _equipmentHudData.EquipmentModel.Enumerate()
+                    .FirstOrDefault(x => x.Slot.SlotType == equipmentSlotType && x.Snapshot != null).Slot;
+            }
+
+            _itemPreviewService.ShowItemStackPreview(
+                slot.ToInt64(),
+                ItemContainerId.Inventory,
+                ItemContainerId.Equipment,
+                equipmentSlotToCompare);
+        }
+
+        private void OnEquipmentSlotClick(EquipmentSlotKey slot)
+        {
+            var item = _equipmentHudData.EquipmentModel.Get(slot);
+            if (item == null) return;
+
+            _itemPreviewService.ShowItemStackPreview(
+                slot.ToInt64(),
+                ItemContainerId.Equipment,
+                ItemContainerId.Inventory,
+                null);
         }
 
         private void Redraw()

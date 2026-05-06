@@ -1,13 +1,8 @@
-using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
-using Assets._Game.Scripts.UI.Windows.Shared;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -18,50 +13,29 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly InventoryViewController _inventoryViewController;
         private readonly ShopViewController _shopViewController;
         private readonly InventoryHudData _inventoryHudData;
-        private readonly IPlayerProvider _playerProvider;
-        private readonly WindowManager _windowManager;
-        private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly ItemStackFormatter _itemStackFormatter;
         private readonly ItemPreviewService _itemPreviewService;
 
-        private ShopItemStacksPreviewInputProcessor _previewProcessor;
         private ShopModel _shopModel;
-        private InventoryModel _inventoryModel;
+        private float _buyCoefficient;
+        private float _sellCoefficient;
 
         public InventoryShopWindowController(
             InventoryViewController inventoryViewController,
             ShopViewController shopViewController,
             InventoryHudData inventoryHudData,
-            IPlayerProvider playerProvider,
-            WindowManager windowManager,
-            ItemContainerResolver itemContainerResolver,
-            ItemStackFormatter itemStackFormatter,
             ItemPreviewService itemPreviewService)
         {
             _inventoryViewController = inventoryViewController;
             _shopViewController = shopViewController;
             _inventoryHudData = inventoryHudData;
-            _playerProvider = playerProvider;
-            _windowManager = windowManager;
-            _itemContainerResolver = itemContainerResolver;
-            _itemStackFormatter = itemStackFormatter;
             _itemPreviewService = itemPreviewService;
         }
 
         public override void Initialize(InventoryShopWindowControllerArguments arguments)
         {
-            base.Initialize(arguments);
             _shopModel = arguments.ShopModel;
-
-            var player = _playerProvider.Player;
-            _inventoryModel = _itemContainerResolver.ResolveInventory(player, ItemContainerId.Inventory);
-
-            _previewProcessor = new ShopItemStacksPreviewInputProcessor(
-                _itemPreviewService,
-                _inventoryModel,
-                _shopModel,
-                arguments.BuyCoefficient,
-                arguments.SellCoefficient);
+            _buyCoefficient = arguments.BuyCoefficient;
+            _sellCoefficient = arguments.SellCoefficient;
         }
 
         public override void Bind(InventoryShopWindow window)
@@ -73,21 +47,37 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _shopViewController.Initialize(_window.ShopView, _shopModel);
             _shopViewController.Bind();
 
-            _inventoryViewController.SlotClick += _previewProcessor.OnInventorySlotClick;
-            _shopViewController.SlotClick += _previewProcessor.OnShopSlotClick;
+            _inventoryViewController.SlotClick += OnInventorySlotClick;
+            _shopViewController.SlotClick += OnShopSlotClick;
 
             Redraw();
         }
 
         public override void Unbind()
         {
-            _inventoryViewController.SlotClick -= _previewProcessor.OnInventorySlotClick;
-            _shopViewController.SlotClick -= _previewProcessor.OnShopSlotClick;
+            _inventoryViewController.SlotClick -= OnInventorySlotClick;
+            _shopViewController.SlotClick -= OnShopSlotClick;
 
             _inventoryViewController.Unbind();
             _shopViewController.Unbind();
 
             _window = null;
+        }
+
+        private void OnInventorySlotClick(InventorySlot slot)
+        {
+            _itemPreviewService.ShowInventoryItemForSellPreview(
+                slot.ToInt64(),
+                _shopModel,
+                _sellCoefficient);
+        }
+
+        private void OnShopSlotClick(ShopSlot slot)
+        {
+            _itemPreviewService.ShowShopItemPreview(
+                slot.ToInt64(),
+                _shopModel,
+                _buyCoefficient);
         }
 
         private void Redraw()

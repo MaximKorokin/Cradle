@@ -1,44 +1,18 @@
-using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.UI.DataFormatters;
-
 namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 {
     public sealed class ItemStacksPreviewWindowController : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
     {
-        private readonly WindowManager _windowManager;
-        private readonly IPlayerProvider _playerProvider;
-        private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly ItemStackFormatter _itemStackFormatter;
-        private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
-
         private ItemStacksPreviewWindow _window;
         private IItemStacksPreviewStrategy _strategy;
-
-        public ItemStacksPreviewWindowController(
-            WindowManager windowManager,
-            IPlayerProvider playerProvider,
-            ItemContainerResolver itemContainerResolver,
-            ItemStackFormatter itemStackFormatter,
-            ItemDefinitionFormatter itemDefinitionFormatter)
-        {
-            _windowManager = windowManager;
-            _playerProvider = playerProvider;
-            _itemContainerResolver = itemContainerResolver;
-            _itemStackFormatter = itemStackFormatter;
-            _itemDefinitionFormatter = itemDefinitionFormatter;
-        }
 
         public override void Initialize(ItemStacksPreviewWindowControllerArguments arguments)
         {
             base.Initialize(arguments);
 
-            _strategy = arguments.CustomStrategy;
+            _strategy = arguments.Strategy;
             if (_strategy == null)
             {
-                throw new System.ArgumentException("CustomStrategy must be provided");
+                throw new System.ArgumentException("Strategy must be provided");
             }
         }
 
@@ -88,11 +62,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
     public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly IItemStacksPreviewStrategy CustomStrategy;
+        public readonly IItemStacksPreviewStrategy Strategy;
 
-        public ItemStacksPreviewWindowControllerArguments(IItemStacksPreviewStrategy customStrategy)
+        public ItemStacksPreviewWindowControllerArguments(IItemStacksPreviewStrategy strategy)
         {
-            CustomStrategy = customStrategy;
+            Strategy = strategy;
         }
     }
 }
