@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items.Equipment;
@@ -18,11 +19,16 @@ namespace Assets._Game.Scripts.Items.Commands
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
+        private readonly ItemsConfig _itemsConfig;
 
-        public ItemCommandHandler(IGlobalEventBus globalEventBus, ItemContainerResolver itemContainerResolver)
+        public ItemCommandHandler(
+            IGlobalEventBus globalEventBus,
+            ItemContainerResolver itemContainerResolver,
+            ItemsConfig itemsConfig)
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
+            _itemsConfig = itemsConfig;
         }
 
         public bool Handle(Entity entity, IItemCommand command)
@@ -34,8 +40,8 @@ namespace Assets._Game.Scripts.Items.Commands
                 UnequipToContainerCommand c => HandleUnequip(entity, c),
                 DropItemCommand c => HandleDrop(entity, c),
                 UseItemCommand c => HandleUse(entity, c),
-                BuyFromShopCommand c => HandleBuyCommand(entity, c),
-                SellToShopCommand c => HandleSellCommand(entity, c),
+                BuyFromShopCommand c => HandleBuy(entity, c),
+                SellToShopCommand c => HandleSell(entity, c),
                 _ => throw new NotSupportedException(command.GetType().Name),
             };
         }
@@ -427,7 +433,7 @@ namespace Assets._Game.Scripts.Items.Commands
             return true;
         }
 
-        private bool HandleBuyCommand(Entity entity, BuyFromShopCommand command)
+        private bool HandleBuy(Entity entity, BuyFromShopCommand command)
         {
             if (!entity.TryGetModule<InventoryModule>(out var inventoryModule)) return false;
             if (command.ShopModel == null) return false;
@@ -435,19 +441,22 @@ namespace Assets._Game.Scripts.Items.Commands
             var itemSnapshot = command.ShopModel.Get(ShopSlot.FromInt64(command.ShopSlot));
             if (!itemSnapshot.HasValue) return false;
 
-            // TODO: Check if player has enough gold
-            // For now, skip gold check
+            var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
+            var goldKey = ItemKey.From(goldDefinition, null);
+            if (inventoryModule.Inventory.Count(goldKey) < command.Price)
+                return false;
 
             // Try to add to inventory
-            var amountToTransfer = System.Math.Min(command.Amount, itemSnapshot.Value.Amount);
+            var amountToTransfer = Math.Min(command.Amount, itemSnapshot.Value.Amount);
             var preview = inventoryModule.Inventory.PreviewAdd(new ItemStackSnapshot(
                 itemSnapshot.Value.Definition,
                 itemSnapshot.Value.InstanceData,
                 amountToTransfer));
 
-            if (preview <= 0) return false;
+            if (preview != amountToTransfer) return false;
 
-            // TODO: Remove gold from inventory when gold system is implemented
+            // Remove gold from inventory
+            inventoryModule.Inventory.Remove(goldKey, command.Price);
 
             // Remove item from shop
             command.ShopModel.RemoveFromSlot(ShopSlot.FromInt64(command.ShopSlot), preview);
@@ -461,7 +470,7 @@ namespace Assets._Game.Scripts.Items.Commands
             return true;
         }
 
-        private bool HandleSellCommand(Entity entity, SellToShopCommand command)
+        private bool HandleSell(Entity entity, SellToShopCommand command)
         {
             if (!entity.TryGetModule<InventoryModule>(out var inventoryModule)) return false;
             if (command.ShopModel == null) return false;
@@ -473,14 +482,14 @@ namespace Assets._Game.Scripts.Items.Commands
             var removed = inventoryModule.Inventory.RemoveFromSlot(InventorySlot.FromInt64(command.InventorySlot), command.Amount);
             if (removed <= 0) return false;
 
-            // TODO: Add gold to inventory when gold system is implemented
-            // For now, just remove the item from player inventory
+            var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
+            inventoryModule.Inventory.Add(new ItemStackSnapshot(goldDefinition, null, command.Price));
 
             // Optionally add item back to shop (buyback feature)
-            // command.ShopModel.Add(new ItemStackSnapshot(
-            //     itemSnapshot.Value.Definition,
-            //     itemSnapshot.Value.InstanceData,
-            //     removed));
+            command.ShopModel.Add(new ItemStackSnapshot(
+                itemSnapshot.Value.Definition,
+                itemSnapshot.Value.InstanceData,
+                removed));
 
             return true;
         }

@@ -5,6 +5,7 @@ using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataFormatters;
 using System.Collections.Generic;
 
@@ -83,8 +84,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Sell:
                     if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
                     {
-                        int price = (int)(priceTrait.BasePrice * _sellCoefficient);
-                        PublishItemCommand(new SellToShopCommand(_shopModel, _inventorySlot, item.Value.Amount, price));
+                        if (item.Value.Definition.MaxAmount == 1)
+                        {
+                            int price = (int)(priceTrait.BasePrice * _sellCoefficient);
+                            PublishItemCommand(new SellToShopCommand(_shopModel, _inventorySlot, 1, price));
+                        }
+                        else
+                        {
+                            _windowManager.ShowAmountPicker(1, item.Value.Amount, amount => {
+                                int price = (int)(priceTrait.BasePrice * _sellCoefficient * amount);
+                                PublishItemCommand(new SellToShopCommand(_shopModel, _inventorySlot, amount, price));
+                            });
+                        }
                     }
                     break;
                 case ItemStackActionType.Drop:
