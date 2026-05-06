@@ -21,6 +21,7 @@ MonoBehaviour:
   <Traits>k__BackingField:
   - rid: 2859158637052690515
   - rid: 1349792551833698424
+  - rid: 3564180343019798622
   references:
     version: 2
     RefIds:
@@ -38,3 +39,8 @@ MonoBehaviour:
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 40
+        <SecondarySlots>k__BackingField: 
+    - rid: 3564180343019798622
+      type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <BasePrice>k__BackingField: 4000

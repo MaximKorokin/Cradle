@@ -23,6 +23,7 @@ MonoBehaviour:
   - rid: 7990781616137175118
   - rid: 3412049108851753065
   - rid: 3412049108851753066
+  - rid: 3564180343019798662
   references:
     version: 2
     RefIds:
@@ -36,6 +37,10 @@ MonoBehaviour:
       data:
         <Triggers>k__BackingField: 192
         <StatusEffect>k__BackingField: {fileID: 11400000, guid: c3d85fbe447da7d40bdf63515ac0cbe2, type: 2}
+    - rid: 3564180343019798662
+      type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <BasePrice>k__BackingField: 50
     - rid: 7990781616137175118
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

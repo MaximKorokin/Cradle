@@ -23,6 +23,7 @@ MonoBehaviour:
   - rid: 3412049108851753208
   - rid: 3412049108851753209
   - rid: 2155386242765160585
+  - rid: 3564180343019798665
   references:
     version: 2
     RefIds:
@@ -40,6 +41,7 @@ MonoBehaviour:
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 20
+        <SecondarySlots>k__BackingField: 
     - rid: 3412049108851753208
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
@@ -52,3 +54,7 @@ MonoBehaviour:
       data:
         <Triggers>k__BackingField: 64
         <Interaction>k__BackingField: {fileID: 11400000, guid: 0da0eb5339f860b44bac6c64eacd813e, type: 2}
+    - rid: 3564180343019798665
+      type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <BasePrice>k__BackingField: 1000

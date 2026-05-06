@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             if (definition.TryGetTrait<PriceTrait>(out var priceTrait))
             {
-                price = $"Price: {priceTrait.BasePrice}g";
+                price = $"Base Price: {priceTrait.BasePrice}g";
             }
 
             var isEquippable = false;

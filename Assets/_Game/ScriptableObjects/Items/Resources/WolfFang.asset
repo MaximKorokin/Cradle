@@ -18,7 +18,12 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: -3212882744364061700, guid: 198a99c34dcd5794180a2514ddd792c0, type: 3}
   <MaxAmount>k__BackingField: 640
   <Weight>k__BackingField: 80
-  <Traits>k__BackingField: []
+  <Traits>k__BackingField:
+  - rid: 3564180343019798643
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3564180343019798643
+      type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <BasePrice>k__BackingField: 2

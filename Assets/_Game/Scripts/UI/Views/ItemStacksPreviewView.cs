@@ -41,6 +41,8 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _amountText;
         [SerializeField]
         private TMP_Text _weightText;
+        [SerializeField]
+        private TMP_Text _priceText;
 
         private List<GameObject> _instantiatedEffectViews = new();
 
@@ -101,16 +103,19 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void RenderCommonInfo(ItemStackDisplayData itemStack)
         {
-            // If the item has no weight and is not stackable, we don't need to show the common info section.
             var hasWeight = !string.IsNullOrEmpty(itemStack.WeightDescription);
             var isStackable = !string.IsNullOrEmpty(itemStack.AmountDescription);
-            if (!hasWeight && !isStackable) return;
+            var hasPrice = !string.IsNullOrEmpty(itemStack.PriceDescription);
+            if (!hasWeight && !isStackable && !hasPrice) return;
 
             _amountText.gameObject.SetActive(isStackable);
             _amountText.text = itemStack.AmountDescription;
 
             _weightText.gameObject.SetActive(hasWeight);
             _weightText.text = itemStack.WeightDescription;
+
+            _priceText.gameObject.SetActive(hasPrice);
+            _priceText.text = itemStack.PriceDescription;
 
             _commonInfo.gameObject.SetActive(true);
         }
