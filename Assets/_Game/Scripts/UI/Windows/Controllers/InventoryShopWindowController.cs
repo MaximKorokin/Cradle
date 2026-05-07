@@ -16,6 +16,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly ItemPreviewService _itemPreviewService;
 
         private ShopModel _shopModel;
+        private string _shopName;
         private float _buyCoefficient;
         private float _sellCoefficient;
 
@@ -34,6 +35,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Initialize(InventoryShopWindowControllerArguments arguments)
         {
             _shopModel = arguments.ShopModel;
+            _shopName = arguments.ShopName;
             _buyCoefficient = arguments.BuyCoefficient;
             _sellCoefficient = arguments.SellCoefficient;
         }
@@ -44,7 +46,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryViewController.Initialize(_window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
 
-            _shopViewController.Initialize(_window.ShopView, _shopModel);
+            _shopViewController.Initialize(_window.ShopView, _shopModel, _shopName, _buyCoefficient, _sellCoefficient);
             _shopViewController.Bind();
 
             _inventoryViewController.SlotClick += OnInventorySlotClick;
@@ -77,7 +79,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemPreviewService.ShowShopItemPreview(
                 slot.ToInt64(),
                 _shopModel,
-                _buyCoefficient);
+                _buyCoefficient,
+                _sellCoefficient);
         }
 
         private void Redraw()
@@ -90,12 +93,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class InventoryShopWindowControllerArguments : IWindowControllerArguments
     {
         public ShopModel ShopModel { get; }
+        public string ShopName { get; }
         public float BuyCoefficient { get; }
         public float SellCoefficient { get; }
 
-        public InventoryShopWindowControllerArguments(ShopModel shopModel, float buyCoefficient, float sellCoefficient)
+        public InventoryShopWindowControllerArguments(ShopModel shopModel, string shopName, float buyCoefficient, float sellCoefficient)
         {
             ShopModel = shopModel;
+            ShopName = shopName;
             BuyCoefficient = buyCoefficient;
             SellCoefficient = sellCoefficient;
         }

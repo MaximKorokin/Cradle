@@ -265,6 +265,13 @@ namespace Assets._Game.Scripts.Items.Shop
             Changed?.Invoke();
         }
 
+        public bool IsInfinite(ShopSlot slot)
+        {
+            if (!IsValidSlot(slot)) return false;
+            var slotData = _slots[slot.Index];
+            return slotData?.IsInfinite == true;
+        }
+
         private sealed class ShopSlotData
         {
             public ItemStack Stack { get; }

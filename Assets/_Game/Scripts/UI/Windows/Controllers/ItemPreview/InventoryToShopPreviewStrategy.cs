@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Sell:
                     if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
                     {
-                        if (item.Value.Definition.MaxAmount == 1)
+                        if (item.Value.Definition.MaxAmount == 1 || item.Value.Amount == 1)
                         {
                             int price = (int)(priceTrait.BasePrice * _sellCoefficient);
                             PublishItemCommand(new SellToShopCommand(_shopModel, _inventorySlot, 1, price));

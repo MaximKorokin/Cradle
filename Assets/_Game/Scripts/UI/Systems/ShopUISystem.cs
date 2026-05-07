@@ -1,7 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using VContainer;
@@ -33,7 +32,7 @@ namespace Assets._Game.Scripts.UI.Systems
             if (shopEntity.TryGetModule<ShopModule>(out var shopModule))
             {
                 _windowManager.InstantiateWindow<InventoryShopWindow, InventoryShopWindowControllerArguments>(
-                    new(shopModule.Shop, shopModule.Definition.BuyCoefficient, shopModule.Definition.SellCoefficient));
+                    new(shopModule.Shop, shopModule.Definition.ShopName, shopModule.Definition.BuyCoefficient, shopModule.Definition.SellCoefficient));
             }
         }
     }

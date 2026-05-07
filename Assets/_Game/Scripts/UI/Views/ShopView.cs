@@ -16,49 +16,45 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _shopNameText;
         [SerializeField]
-        private TMP_Text _goldText;
+        private TMP_Text _buyCoefficientText;
+        [SerializeField]
+        private TMP_Text _sellCoefficientText;
 
         private readonly List<ShopSlotView> _slots = new();
 
-        private ShopModel _shopModel;
-
         public event Action<ShopSlot> SlotClicked;
 
-        public void Render(ShopModel shopModel, string shopName, int playerGold)
+        public void Render(IReadOnlyList<ShopSlotViewData> shopSlots, string shopName, float buyCoefficient, float sellCoefficient)
         {
             _shopSlotTemplate.gameObject.SetActive(false);
 
-            _shopModel = shopModel;
             _shopNameText.text = shopName;
-            _goldText.text = $"Gold: {playerGold}";
+            _buyCoefficientText.text = $"Buy: {buyCoefficient:0.#}x";
+            _sellCoefficientText.text = $"Sell: {sellCoefficient:0.#}x";
 
             foreach (var slot in _slots)
             {
                 slot.gameObject.SetActive(false);
             }
 
-            foreach (var (shopSlot, stack) in _shopModel.Enumerate())
+            for (int i = 0; i < shopSlots.Count; i++)
             {
-                if (_slots.Count > shopSlot.Index)
+                var shopSlot = shopSlots[i];
+                if (_slots.Count > i)
                 {
-                    var slot = _slots[shopSlot.Index];
-                    slot.Render(stack);
+                    var slot = _slots[i];
+                    slot.Render(shopSlot);
                     slot.gameObject.SetActive(true);
                     continue;
                 }
 
                 var newSlot = Instantiate(_shopSlotTemplate, _shopSlotsParent);
-                newSlot.Bind(shopSlot);
+                newSlot.Bind(shopSlot.Slot);
                 newSlot.PointerClick += OnSlotPointerClick;
                 _slots.Add(newSlot);
                 newSlot.gameObject.SetActive(true);
-                newSlot.Render(stack);
+                newSlot.Render(shopSlot);
             }
-        }
-
-        public void Unbind()
-        {
-            _shopModel = null;
         }
 
         private void OnSlotPointerClick(ShopSlot slotIndex)

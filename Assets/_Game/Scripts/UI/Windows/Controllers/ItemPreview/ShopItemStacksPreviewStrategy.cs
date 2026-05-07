@@ -19,6 +19,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         private readonly long _shopSlot;
         private readonly bool _isBuying;
         private readonly float _buyCoefficient;
+        private readonly float _sellCoefficient;
 
         private ItemStacksPreviewWindow _window;
 
@@ -29,7 +30,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             ShopModel shopModel,
             long shopSlot,
             bool isBuying,
-            float buyCoefficient)
+            float buyCoefficient,
+            float sellCoefficient)
         {
             _windowManager = windowManager;
             _playerProvider = playerProvider;
@@ -38,6 +40,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             _shopSlot = shopSlot;
             _isBuying = isBuying;
             _buyCoefficient = buyCoefficient;
+            _sellCoefficient = sellCoefficient;
         }
 
         public void Initialize(ItemStacksPreviewWindow window)
@@ -80,15 +83,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Buy:
                     if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
                     {
-                        if (item.Value.Definition.MaxAmount == 1)
+                        if (item.Value.Definition.MaxAmount == 1 || item.Value.Amount == 1)
                         {
-                            int price = (int)(priceTrait.BasePrice * _buyCoefficient);
+                            int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice : 0;
                             PublishItemCommand(new BuyFromShopCommand(_shopModel, _shopSlot, 1, price));
                         }
                         else
                         {
                             _windowManager.ShowAmountPicker(1, item.Value.Amount, amount => {
-                                int price = (int)(priceTrait.BasePrice * _buyCoefficient * amount);
+                                int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * amount : 0;
                                 PublishItemCommand(new BuyFromShopCommand(_shopModel, _shopSlot, amount, price));
                             });
                         }
@@ -111,8 +114,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
             if (_isBuying && item.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
             {
-                int buyPrice = (int)(priceTrait.BasePrice * _buyCoefficient);
-                actions.Add(new ItemStackAction(ItemStackActionType.Buy, $"Buy ({buyPrice}g)"));
+                int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice : 0;
+                actions.Add(new ItemStackAction(ItemStackActionType.Buy, $"Buy ({price}g)"));
             }
 
             return actions;

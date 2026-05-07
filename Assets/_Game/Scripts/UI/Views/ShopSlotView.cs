@@ -1,6 +1,4 @@
-using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
-using Assets._Game.Scripts.Items.Traits;
 using System;
 using TMPro;
 using UnityEngine;
@@ -27,9 +25,9 @@ namespace Assets._Game.Scripts.UI.Views
             _slot = slot;
         }
 
-        public void Render(ItemStackSnapshot? snapshot)
+        public void Render(ShopSlotViewData data)
         {
-            if (!snapshot.HasValue)
+            if (!data.HasItem)
             {
                 _icon.enabled = false;
                 _amountText.text = string.Empty;
@@ -38,23 +36,32 @@ namespace Assets._Game.Scripts.UI.Views
             }
 
             _icon.enabled = true;
-            _icon.sprite = snapshot.Value.Definition.Icon;
-            _amountText.text = snapshot.Value.Amount > 1 ? snapshot.Value.Amount.ToString() : string.Empty;
-
-            // Display price if item has PriceTrait
-            if (snapshot.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
-            {
-                _priceText.text = $"{priceTrait.BasePrice}g";
-            }
-            else
-            {
-                _priceText.text = string.Empty;
-            }
+            _icon.sprite = data.Icon;
+            _amountText.text = data.AmountText;
+            _priceText.text = data.PriceText;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             PointerClick?.Invoke(_slot);
+        }
+    }
+
+    public readonly struct ShopSlotViewData
+    {
+        public ShopSlot Slot { get; }
+        public bool HasItem { get; }
+        public Sprite Icon { get; }
+        public string AmountText { get; }
+        public string PriceText { get; }
+
+        public ShopSlotViewData(ShopSlot slot, bool hasItem, Sprite icon, string amountText, string priceText)
+        {
+            Slot = slot;
+            HasItem = hasItem;
+            Icon = icon;
+            AmountText = amountText;
+            PriceText = priceText;
         }
     }
 }

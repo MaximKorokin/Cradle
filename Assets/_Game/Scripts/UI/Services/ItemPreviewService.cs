@@ -60,7 +60,8 @@ namespace Assets._Game.Scripts.UI.Services
         public void ShowShopItemPreview(
             long shopSlot,
             ShopModel shopModel,
-            float buyCoefficient)
+            float buyCoefficient,
+            float sellCoefficient)
         {
             var strategy = new ShopItemStacksPreviewStrategy(
                 _windowManager,
@@ -69,7 +70,8 @@ namespace Assets._Game.Scripts.UI.Services
                 shopModel,
                 shopSlot,
                 isBuying: true,
-                buyCoefficient);
+                buyCoefficient,
+                sellCoefficient);
 
             _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
                 new ItemStacksPreviewWindowControllerArguments(strategy));
