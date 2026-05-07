@@ -1,11 +1,9 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Commands;
+﻿using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
-using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -66,11 +64,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var item = _inventoryHudData.InventoryModel.Get(slot);
             if (item == null) return;
 
+            var equipmentSlotToCompare = _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(item.Value);
+
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),
                 ItemContainerId.Inventory,
                 ItemContainerId.Storage,
-                GetEquipmentSlotToCompare(item.Value));
+                equipmentSlotToCompare);
         }
 
         private void OnSecondInventorySlotClick(InventorySlot slot)
@@ -78,22 +78,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var item = _storageHudData.InventoryModel.Get(slot);
             if (item == null) return;
 
+            var equipmentSlotToCompare = _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(item.Value);
+
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),
                 ItemContainerId.Storage,
                 ItemContainerId.Inventory,
-                GetEquipmentSlotToCompare(item.Value));
-        }
-
-        private Items.Equipment.EquipmentSlotKey? GetEquipmentSlotToCompare(ItemStackSnapshot item)
-        {
-            var equipmentSlotType = item.GetEquipmentSlotType();
-            if (equipmentSlotType == Items.Equipment.EquipmentSlotType.None)
-                return null;
-
-            var itemSlotToCompare = _equipmentHudData.EquipmentModel.Enumerate()
-                .FirstOrDefault(x => x.Slot.SlotType == equipmentSlotType && x.Snapshot != null).Slot;
-            return itemSlotToCompare;
+                equipmentSlotToCompare);
         }
 
         private void Redraw()

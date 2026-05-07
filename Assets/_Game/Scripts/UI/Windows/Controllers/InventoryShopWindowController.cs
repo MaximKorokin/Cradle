@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
@@ -13,6 +14,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly InventoryViewController _inventoryViewController;
         private readonly ShopViewController _shopViewController;
         private readonly InventoryHudData _inventoryHudData;
+        private readonly EquipmentHudData _equipmentHudData;
         private readonly ItemPreviewService _itemPreviewService;
 
         private ShopModel _shopModel;
@@ -24,11 +26,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             InventoryViewController inventoryViewController,
             ShopViewController shopViewController,
             InventoryHudData inventoryHudData,
+            EquipmentHudData equipmentHudData,
             ItemPreviewService itemPreviewService)
         {
             _inventoryViewController = inventoryViewController;
             _shopViewController = shopViewController;
             _inventoryHudData = inventoryHudData;
+            _equipmentHudData = equipmentHudData;
             _itemPreviewService = itemPreviewService;
         }
 
@@ -68,19 +72,31 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnInventorySlotClick(InventorySlot slot)
         {
+            var item = _inventoryHudData.InventoryModel.Get(slot);
+            if (item == null) return;
+
+            var equipmentSlotToCompare = _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(item.Value);
+
             _itemPreviewService.ShowInventoryItemForSellPreview(
                 slot.ToInt64(),
                 _shopModel,
-                _sellCoefficient);
+                _sellCoefficient,
+                equipmentSlotToCompare);
         }
 
         private void OnShopSlotClick(ShopSlot slot)
         {
+            var item = _shopModel.Get(slot);
+            if (item == null) return;
+
+            var equipmentSlotToCompare = _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(item.Value);
+
             _itemPreviewService.ShowShopItemPreview(
                 slot.ToInt64(),
                 _shopModel,
                 _buyCoefficient,
-                _sellCoefficient);
+                _sellCoefficient,
+                equipmentSlotToCompare);
         }
 
         private void Redraw()

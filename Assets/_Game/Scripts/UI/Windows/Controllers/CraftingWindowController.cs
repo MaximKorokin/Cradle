@@ -16,6 +16,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IGlobalEventBus _globalEventBus;
         private readonly WindowManager _windowManager;
         private readonly CraftingHudData _craftingHudData;
+        private readonly EquipmentHudData _equipmentHudData;
         private readonly IPlayerProvider _playerProvider;
         private readonly CraftingService _craftingService;
         private readonly ItemPreviewService _itemPreviewService;
@@ -24,6 +25,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             IGlobalEventBus globalEventBus,
             WindowManager windowManager,
             CraftingHudData craftingHudData,
+            EquipmentHudData equipmentHudData,
             IPlayerProvider playerProvider,
             CraftingService craftingService,
             ItemPreviewService itemPreviewService)
@@ -31,6 +33,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _globalEventBus = globalEventBus;
             _windowManager = windowManager;
             _craftingHudData = craftingHudData;
+            _equipmentHudData = equipmentHudData;
             _playerProvider = playerProvider;
             _craftingService = craftingService;
             _itemPreviewService = itemPreviewService;
@@ -61,7 +64,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)
         {
-            _itemPreviewService.ShowItemDefinitionPreview(recipe.Result.ItemDefinition);
+            _itemPreviewService.ShowItemDefinitionPreview(
+                recipe.Result.ItemDefinition,
+                _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(recipe.Result.ItemDefinition));
         }
 
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)

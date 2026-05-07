@@ -63,14 +63,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var item = _inventoryHudData.InventoryModel.Get(slot);
             if (item == null) return;
 
-            var equipmentSlotType = item.Value.GetEquipmentSlotType();
-            EquipmentSlotKey? equipmentSlotToCompare = null;
-
-            if (equipmentSlotType != EquipmentSlotType.None)
-            {
-                equipmentSlotToCompare = _equipmentHudData.EquipmentModel.Enumerate()
-                    .FirstOrDefault(x => x.Slot.SlotType == equipmentSlotType && x.Snapshot != null).Slot;
-            }
+            var equipmentSlotToCompare = _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(item.Value);
 
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),

@@ -61,17 +61,20 @@ namespace Assets._Game.Scripts.UI.Services
             long shopSlot,
             ShopModel shopModel,
             float buyCoefficient,
-            float sellCoefficient)
+            float sellCoefficient,
+            EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new ShopItemStacksPreviewStrategy(
                 _windowManager,
                 _playerProvider,
+                _itemContainerResolver,
                 _itemStackFormatter,
                 shopModel,
                 shopSlot,
                 isBuying: true,
                 buyCoefficient,
-                sellCoefficient);
+                sellCoefficient,
+                equipmentSlotToCompare);
 
             _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
                 new ItemStacksPreviewWindowControllerArguments(strategy));
@@ -83,7 +86,8 @@ namespace Assets._Game.Scripts.UI.Services
         public void ShowInventoryItemForSellPreview(
             long inventorySlot,
             ShopModel shopModel,
-            float sellCoefficient)
+            float sellCoefficient,
+            EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new InventoryToShopPreviewStrategy(
                 _windowManager,
@@ -92,7 +96,8 @@ namespace Assets._Game.Scripts.UI.Services
                 _itemStackFormatter,
                 shopModel,
                 inventorySlot,
-                sellCoefficient);
+                sellCoefficient,
+                equipmentSlotToCompare);
 
             _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
                 new ItemStacksPreviewWindowControllerArguments(strategy));
@@ -101,11 +106,15 @@ namespace Assets._Game.Scripts.UI.Services
         /// <summary>
         /// Shows a preview window for an item definition.
         /// </summary>
-        public void ShowItemDefinitionPreview(ItemDefinition itemDefinition)
+        public void ShowItemDefinitionPreview(ItemDefinition itemDefinition, EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new DefinitionItemStacksPreviewStrategy(
                 itemDefinition,
-                _itemDefinitionFormatter);
+                _itemDefinitionFormatter,
+                _playerProvider,
+                _itemContainerResolver,
+                _itemStackFormatter,
+                equipmentSlotToCompare);
 
             _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
                 new ItemStacksPreviewWindowControllerArguments(strategy));

@@ -2,6 +2,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Items.Traits;
@@ -20,8 +21,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         private readonly ShopModel _shopModel;
         private readonly long _inventorySlot;
         private readonly float _sellCoefficient;
+        private readonly EquipmentSlotKey? _equipmentSlot;
 
         private InventoryModel _inventoryModel;
+        private EquipmentModel _equipmentModel;
         private ItemStacksPreviewWindow _window;
 
         public InventoryToShopPreviewStrategy(
@@ -31,7 +34,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             ItemStackFormatter itemStackFormatter,
             ShopModel shopModel,
             long inventorySlot,
-            float sellCoefficient)
+            float sellCoefficient,
+            EquipmentSlotKey? equipmentSlot)
         {
             _windowManager = windowManager;
             _playerProvider = playerProvider;
@@ -40,22 +44,31 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             _shopModel = shopModel;
             _inventorySlot = inventorySlot;
             _sellCoefficient = sellCoefficient;
+            _equipmentSlot = equipmentSlot;
         }
 
         public void Initialize(ItemStacksPreviewWindow window)
         {
             _window = window;
             _inventoryModel = _itemContainerResolver.ResolveInventory(_playerProvider.Player, ItemContainerId.Inventory);
+            _equipmentModel = _itemContainerResolver.ResolveEquipment(_playerProvider.Player);
 
             _inventoryModel.Changed += OnInventoryChanged;
+            _equipmentModel.Changed += OnEquipmentChanged;
         }
 
         public void Cleanup(ItemStacksPreviewWindow window)
         {
             _inventoryModel.Changed -= OnInventoryChanged;
+            _equipmentModel.Changed -= OnEquipmentChanged;
         }
 
         private void OnInventoryChanged()
+        {
+            Redraw(_window);
+        }
+
+        private void OnEquipmentChanged()
         {
             Redraw(_window);
         }
@@ -71,7 +84,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             }
 
             var actions = GetActions(item.Value);
-            window.Render(_itemStackFormatter.FormatData(item.Value), actions);
+
+            var equippedItem = _equipmentSlot != null ? _equipmentModel.Get(_equipmentSlot.Value) : null;
+
+            if (equippedItem.HasValue)
+                window.Render(_itemStackFormatter.FormatData(item.Value), _itemStackFormatter.FormatData(equippedItem.Value), actions);
+            else
+                window.Render(_itemStackFormatter.FormatData(item.Value), actions);
         }
 
         public void ProcessAction(ItemStackActionType actionType)
