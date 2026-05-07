@@ -105,18 +105,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Buy:
                     if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
                     {
-                        if (item.Value.Definition.MaxAmount == 1 || item.Value.Amount == 1)
-                        {
-                            int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice : 0;
-                            PublishItemCommand(new BuyFromShopCommand(_shopModel, _shopSlot, 1, price));
-                        }
-                        else
-                        {
-                            _windowManager.ShowAmountPicker(1, item.Value.Amount, amount => {
-                                int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * amount : 0;
-                                PublishItemCommand(new BuyFromShopCommand(_shopModel, _shopSlot, amount, price));
-                            });
-                        }
+                        _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount => {
+                             int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * amount : 0;
+                             PublishItemCommand(new BuyFromShopCommand(_shopModel, _shopSlot, amount, price));
+                        });
                     }
                     break;
             }

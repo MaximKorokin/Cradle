@@ -106,17 +106,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Transfer:
                     if (item != null)
                     {
-                        if (item.Value.Amount == 1)
+                        _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
                         {
-                            PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, 1));
-                        }
-                        else
-                        {
-                            _windowManager.ShowAmountPicker(1, item.Value.Amount, amount =>
-                            {
-                                PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, amount));
-                            });
-                        }
+                            PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, amount));
+                        });
                     }
                     break;
                 case ItemStackActionType.Equip:

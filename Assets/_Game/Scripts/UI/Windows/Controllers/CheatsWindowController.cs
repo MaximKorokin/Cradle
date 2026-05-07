@@ -14,6 +14,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private readonly WindowManager _windowManager;
         private readonly CheatsHudData _cheatsHudData;
+        private readonly EquipmentHudData _equipmentHudData;
         private readonly PlayerContext _playerContext;
         private readonly ItemStackFactory _itemStackAssembler;
         private readonly ItemPreviewService _itemPreviewService;
@@ -21,12 +22,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public CheatsWindowController(
             WindowManager windowManager,
             CheatsHudData cheatsHudData,
+            EquipmentHudData equipmentHudData,
             PlayerContext playerContext,
             ItemStackFactory itemStackAssembler,
             ItemPreviewService itemPreviewService)
         {
             _windowManager = windowManager;
             _cheatsHudData = cheatsHudData;
+            _equipmentHudData = equipmentHudData;
             _playerContext = playerContext;
             _itemStackAssembler = itemStackAssembler;
             _itemPreviewService = itemPreviewService;
@@ -60,24 +63,19 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnItemDefinitionInfoClicked(ItemDefinition itemDefinition)
         {
-            _itemPreviewService.ShowItemDefinitionPreview(itemDefinition);
+            _itemPreviewService.ShowItemDefinitionPreview(
+                itemDefinition,
+                _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(itemDefinition));
         }
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)
         {
             if (_playerContext.Player.TryGetModule<InventoryModule>(out var inventoryModule))
             {
-                if (itemDefinition.MaxAmount == 1)
+                _windowManager.ShowAmountPickerIfNeeded(itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
                 {
-                    inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, 1).Snapshot);
-                }
-                else
-                {
-                    _windowManager.ShowAmountPicker(1, itemDefinition.MaxAmount, amount =>
-                    {
-                        inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, amount).Snapshot);
-                    });
-                }
+                    inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, amount).Snapshot);
+                });
             }
         }
     }

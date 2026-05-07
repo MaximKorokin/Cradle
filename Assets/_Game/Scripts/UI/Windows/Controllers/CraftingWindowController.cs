@@ -81,17 +81,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var maxResultAmount = recipe.Result.ItemDefinition.MaxAmount;
             var maxAmount = System.Math.Min(maxCraftable, maxResultAmount);
 
-            if (maxAmount == 1)
+            _windowManager.ShowAmountPickerIfNeeded(maxAmount, maxAmount, amount =>
             {
-                _globalEventBus.Publish(new CraftRequest(recipe.Id, 1));
-            }
-            else
-            {
-                _windowManager.ShowAmountPicker(1, maxAmount, amount =>
-                {
-                    _globalEventBus.Publish(new CraftRequest(recipe.Id, amount));
-                });
-            }
+                _globalEventBus.Publish(new CraftRequest(recipe.Id, amount));
+            });
         }
     }
 }

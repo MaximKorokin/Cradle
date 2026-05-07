@@ -18,5 +18,17 @@ namespace Assets._Game.Scripts.Shared.Extensions
                         windowManager.CloseWindow(amountPickerWindow);
                     }));
         }
+
+        public static void ShowAmountPickerIfNeeded(this WindowManager windowManager, int amount, int maxAmount, Action<int> onAmountSelected)
+        {
+            if (maxAmount > 1 && amount > 1)
+            {
+                ShowAmountPicker(windowManager, 1, maxAmount, onAmountSelected);
+            }
+            else
+            {
+                onAmountSelected?.Invoke(1);
+            }
+        }
     }
 }
