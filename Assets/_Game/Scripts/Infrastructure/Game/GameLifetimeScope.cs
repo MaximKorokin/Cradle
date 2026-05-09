@@ -195,6 +195,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<StatusEffectModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<ShopModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<QuestModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
 
         private void RegisterCalculators(IContainerBuilder builder)

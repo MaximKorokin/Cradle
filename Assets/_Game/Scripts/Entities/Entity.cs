@@ -81,7 +81,5 @@ namespace Assets._Game.Scripts.Entities
         }
     }
 
-    public interface IEntityEvent
-    {
-    }
+    public interface IEntityEvent : IEvent { }
 }

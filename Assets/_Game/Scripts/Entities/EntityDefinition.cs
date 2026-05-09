@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Infrastructure.Storage;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Loot;
 using Assets._Game.Scripts.Items.Shop;
+using Assets._Game.Scripts.Quests;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -125,5 +126,11 @@ namespace Assets._Game.Scripts.Entities
         public float Radius { get; private set; }
         [field: SerializeField]
         public ShopDefinition ShopDefinition { get; private set; }
+    }
+
+    public sealed class QuestModuleDefinition : EntityModuleDefinition
+    {
+        [field: SerializeField]
+        public QuestDefinition[] InitialQuests { get; private set; }
     }
 }

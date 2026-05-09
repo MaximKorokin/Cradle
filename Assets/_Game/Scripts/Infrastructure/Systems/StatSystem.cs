@@ -80,7 +80,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 foreach (var (slot, item) in inventoryModule.Inventory.Enumerate())
                 {
                     if (item == null) continue;
-                    var inventoryChangedEvent = new InventoryChangedEvent(slot, item.Value, InventoryChangeKind.Added);
+                    var inventoryChangedEvent = new InventoryChangedEvent(inventoryModule.Inventory, slot, item.Value, InventoryChangeKind.Added);
                     OnInventoryChanged(entity, inventoryChangedEvent);
                 }
             }

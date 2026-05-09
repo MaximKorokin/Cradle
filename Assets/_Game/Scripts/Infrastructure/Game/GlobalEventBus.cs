@@ -2,7 +2,9 @@
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    public interface IGlobalEvent { }
+    public interface IEvent { }
+
+    public interface IGlobalEvent : IEvent { }
 
     public interface IGlobalEventBus
     {

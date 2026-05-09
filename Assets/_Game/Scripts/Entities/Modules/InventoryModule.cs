@@ -24,25 +24,28 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         private void OnInventorySlotChanged(InventoryChange inventoryChange)
         {
-            Publish(new InventoryChangedEvent(inventoryChange));
+            Publish(new InventoryChangedEvent(Inventory, inventoryChange));
         }
     }
 
     public readonly struct InventoryChangedEvent : IEntityEvent
     {
+        public readonly InventoryModel Inventory;
         public readonly InventorySlot Slot;
         public readonly ItemStackSnapshot? Item;
         public readonly InventoryChangeKind Kind;
 
-        public InventoryChangedEvent(InventorySlot slot, ItemStackSnapshot? item, InventoryChangeKind kind)
+        public InventoryChangedEvent(InventoryModel inventoryModel, InventorySlot slot, ItemStackSnapshot? item, InventoryChangeKind kind)
         {
+            Inventory = inventoryModel;
             Slot = slot;
             Item = item;
             Kind = kind;
         }
 
-        public InventoryChangedEvent(InventoryChange inventoryChange)
+        public InventoryChangedEvent(InventoryModel inventoryModel, InventoryChange inventoryChange)
         {
+            Inventory = inventoryModel;
             Slot = inventoryChange.Slot;
             Item = inventoryChange.Item;
             Kind = inventoryChange.Kind;
