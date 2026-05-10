@@ -21,6 +21,7 @@ using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Locations;
+using Assets._Game.Scripts.Quests;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -68,6 +69,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<LocationManager>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<LocationCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<LocationEntranceCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<QuestDefinitionCatalog>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             RegisterConfigs(builder);
             RegisterSystems(builder);

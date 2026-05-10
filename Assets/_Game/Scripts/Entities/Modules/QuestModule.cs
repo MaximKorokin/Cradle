@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Quests.Objectives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,11 +14,20 @@ namespace Assets._Game.Scripts.Entities.Modules
         private readonly List<QuestState> _activeQuests = new();
         public IReadOnlyList<QuestState> ActiveQuests => _activeQuests;
 
+        public event Action<QuestState> QuestAdded;
+        public event Action<QuestState> QuestUpdated;
+        public event Action<QuestState> QuestCompleted;
+        public event Action<QuestState> QuestRemoved;
+
         public void AddQuest(QuestState questState)
         {
             _activeQuests.Add(questState);
             questState.Updated += OnQuestUpdated;
             questState.Completed += OnQuestCompleted;
+
+            QuestAdded?.Invoke(questState);
+            // todo: add a list that will publish all events once attached
+            //Publish(new QuestAddedEvent(questState));
         }
 
         public void RemoveQuest(QuestState questState)
@@ -25,15 +35,19 @@ namespace Assets._Game.Scripts.Entities.Modules
             _activeQuests.Remove(questState);
             questState.Updated -= OnQuestUpdated;
             questState.Completed -= OnQuestCompleted;
+
+            QuestRemoved?.Invoke(questState);
         }
 
         private void OnQuestUpdated(QuestState questState)
         {
+            QuestUpdated?.Invoke(questState);
             Entity.Publish(new QuestUpdatedEvent(questState));
         }
 
         private void OnQuestCompleted(QuestState questState)
         {
+            QuestCompleted?.Invoke(questState);
             Entity.Publish(new QuestCompletedEvent(questState));
         }
     }

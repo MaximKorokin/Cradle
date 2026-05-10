@@ -24,8 +24,12 @@ namespace Assets._Game.Scripts.UI.Common
         public void Render(SimpleListItemData definition)
         {
             _identifier = definition.Identifier;
+
+            _image.gameObject.SetActive(definition.Sprite != null);
             _image.sprite = definition.Sprite;
+
             _text.text = definition.Text;
+
             _infoButton.onClick.AddListener(OnInfoButtonClicked);
             _actionButton.onClick.AddListener(OnActionButtonClicked);
         }

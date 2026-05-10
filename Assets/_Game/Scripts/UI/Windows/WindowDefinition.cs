@@ -31,6 +31,7 @@ namespace Assets._Game.Scripts.UI.Windows
         LocationTransitionList = 50,
         Crafting = 60,
         Shop = 70,
+        Quests = 80,
 
         ItemUseSettings = 1100,
 

@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using System;
@@ -19,13 +20,16 @@ namespace Assets._Game.Scripts.UI.Windows
         private SimpleListView _itemsListView;
         private SimpleListView _buffsListView;
         private SimpleListView _debuffsListView;
+        private SimpleListView _questsListView;
 
         private Dictionary<string, ItemDefinition> _itemDefinitions;
         private Dictionary<string, StatusEffectDefinition> _statusEffectDefinitions;
+        private Dictionary<string, QuestDefinition> _questDefinitions;
 
         public event Action<ItemDefinition> ItemDefinitionInfoClicked;
         public event Action<ItemDefinition> ItemDefinitionActionClicked;
         public event Action<StatusEffectDefinition> StatusEffectDefinitionClicked;
+        public event Action<QuestDefinition> QuestDefinitionClicked;
 
         public override void OnShow()
         {
@@ -38,6 +42,7 @@ namespace Assets._Game.Scripts.UI.Windows
         {
             _itemDefinitions = data.ItemDefinitions.ToDictionary(d => d.Id, d => d);
             _statusEffectDefinitions = data.StatusEffectDefinitions.ToDictionary(d => d.Id, d => d);
+            _questDefinitions = data.QuestDefinitions.ToDictionary(d => d.Id, d => d);
 
             // Items
             _itemsListView = Instantiate(_cheatsTabContentTemplate);
@@ -73,6 +78,17 @@ namespace Assets._Game.Scripts.UI.Windows
             _cheatsTabsController.AddTab(new TabData("Debuffs", _debuffsListView.transform as RectTransform));
             _debuffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
 
+            // Quests
+            _questsListView = Instantiate(_cheatsTabContentTemplate);
+            _questsListView.Render(data.QuestDefinitions.Select(d => new SimpleListItemData()
+            {
+                Identifier = d.Id,
+                Sprite = null,
+                Text = d.Title
+            }));
+            _cheatsTabsController.AddTab(new TabData("Quests", _questsListView.transform as RectTransform));
+            _questsListView.ElementActionClicked += OnQuestDefinitionClicked;
+
             _cheatsTabsController.SelectTab(0);
         }
 
@@ -82,10 +98,12 @@ namespace Assets._Game.Scripts.UI.Windows
             _itemsListView.ElementInfoClicked -= OnItemDefinitionInfoClicked;
             _buffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
             _debuffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
+            _questsListView.ElementActionClicked -= OnQuestDefinitionClicked;
 
             _itemsListView.Clear();
             _buffsListView.Clear();
             _debuffsListView.Clear();
+            _questsListView.Clear();
 
             _cheatsTabsController.ClearTabs();
         }
@@ -113,5 +131,14 @@ namespace Assets._Game.Scripts.UI.Windows
                 StatusEffectDefinitionClicked?.Invoke(statusEffectDefinition);
             }
         }
+
+        private void OnQuestDefinitionClicked(string identifier)
+        {
+            if (_questDefinitions.TryGetValue(identifier, out var questDefinition))
+            {
+                QuestDefinitionClicked?.Invoke(questDefinition);
+            }
+        }
     }
 }
+

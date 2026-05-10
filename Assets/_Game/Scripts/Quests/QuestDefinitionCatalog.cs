@@ -2,7 +2,7 @@
 
 namespace Assets._Game.Scripts.Quests
 {
-    public sealed class QuestDefinitionCatalogue : DefinitionCatalogBase<QuestDefinition>
+    public sealed class QuestDefinitionCatalog : DefinitionCatalogBase<QuestDefinition>
     {
     }
 }
