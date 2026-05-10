@@ -51,6 +51,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public InventorySave InventorySave;
         public EquipmentSave EquipmentSave;
         public LevelingSave LevelingSave;
+        public QuestStateSave[] QuestSaves;
     }
 
     public sealed class LevelingSave
@@ -94,6 +95,12 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public string ItemDefinitionId;
         public int Amount;
         public EncodedSaveData InstanceData;
+    }
+
+    public class QuestStateSave
+    {
+        public string DefinitionId;
+        public EncodedSaveData[] ProgressSaves;
     }
 
     public class EncodedSaveData

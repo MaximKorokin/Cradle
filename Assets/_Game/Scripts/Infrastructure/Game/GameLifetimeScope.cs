@@ -122,6 +122,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<FloatingTextSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityReviveSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<QuestSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)
@@ -132,8 +133,10 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Singleton);
 
             builder.Register<IDataCodec, CooldownCodec>(Lifetime.Singleton);
-            builder.Register<IDataCodec, DurabilityCodec>(Lifetime.Singleton);
             builder.Register<IDataCodec, EmptyCodec>(Lifetime.Singleton);
+
+            builder.Register<IDataCodec, EntityKillsObjectiveCodec>(Lifetime.Singleton);
+
             builder.Register<CodecRegistry>(Lifetime.Singleton);
         }
 

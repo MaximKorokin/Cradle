@@ -25,6 +25,7 @@ MonoBehaviour:
   - rid: 3412048633303400551
   - rid: 3412048748974702678
   - rid: 3412048868230037656
+  - rid: 3564180410443759729
   references:
     version: 2
     RefIds:
@@ -80,6 +81,12 @@ MonoBehaviour:
       data:
         Enabled: 1
         Level: 1
+    - rid: 3564180410443759729
+      type: {class: QuestModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        <InitialQuests>k__BackingField:
+        - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
     - rid: 7990781616137175140
       type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

@@ -13,4 +13,25 @@ MonoBehaviour:
   m_Name: Quest1
   m_EditorClassIdentifier: 
   _id: 30f6b3f8463447bbb8edd9b6a0f671ef
-  <Title>k__BackingField: Wolfs
+  <Title>k__BackingField: Wolves
+  <Objectives>k__BackingField:
+  - rid: 3564180410443759731
+  - rid: 3564180427547345043
+  - rid: 3564180427547345044
+  references:
+    version: 2
+    RefIds:
+    - rid: 3564180410443759731
+      type: {class: EntityKillsObjectiveDefinition, ns: Assets._Game.Scripts.Quests.Objectives, asm: Assembly-CSharp}
+      data:
+        <RequiredAmount>k__BackingField: 3
+        <Entity>k__BackingField: {fileID: 11400000, guid: d52724609bd1c004c9df88bdb5afe673, type: 2}
+    - rid: 3564180427547345043
+      type: {class: LevelObjectiveDefinition, ns: Assets._Game.Scripts.Quests.Objectives, asm: Assembly-CSharp}
+      data:
+        <RequiredAmount>k__BackingField: 3
+    - rid: 3564180427547345044
+      type: {class: ItemsInInventoryObjectiveDefinition, ns: Assets._Game.Scripts.Quests.Objectives, asm: Assembly-CSharp}
+      data:
+        <RequiredAmount>k__BackingField: 1000
+        <Item>k__BackingField: {fileID: 11400000, guid: 8def6da0c958e1c41ba548b4b206f9ba, type: 2}

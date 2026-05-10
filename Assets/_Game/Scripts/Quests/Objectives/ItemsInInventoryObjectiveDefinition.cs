@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using UnityEngine;
@@ -20,6 +21,18 @@ namespace Assets._Game.Scripts.Quests.Objectives
     {
         public ItemsInInventoryObjectiveProgress(ItemsInInventoryObjectiveDefinition definition) : base(definition)
         {
+        }
+
+        public override void Initialize(Entity entity)
+        {
+            base.Initialize(entity);
+
+            if (entity.TryGetModule<InventoryModule>(out var inventory))
+            {
+                var key = ItemKey.From(Definition.Item, null);
+                int itemCount = inventory.Inventory.Count(key);
+                SetProgress(itemCount);
+            }
         }
 
         public override void HandleEvent(IEvent e)

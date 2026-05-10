@@ -1,6 +1,10 @@
-﻿using Assets._Game.Scripts.Infrastructure.Systems;
+﻿using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Quests;
+using Assets._Game.Scripts.Quests.Objectives;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -13,12 +17,14 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             _activeQuests.Add(questState);
             questState.Updated += OnQuestUpdated;
+            questState.Completed += OnQuestCompleted;
         }
 
         public void RemoveQuest(QuestState questState)
         {
             _activeQuests.Remove(questState);
             questState.Updated -= OnQuestUpdated;
+            questState.Completed -= OnQuestCompleted;
         }
 
         private void OnQuestUpdated(QuestState questState)
@@ -32,8 +38,15 @@ namespace Assets._Game.Scripts.Entities.Modules
         }
     }
 
-    public sealed class QuestModuleFactory : IEntityModuleFactory
+    public sealed class QuestModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
+        private readonly CodecRegistry _codecRegistry;
+
+        public QuestModuleFactory(CodecRegistry codecRegistry)
+        {
+            _codecRegistry = codecRegistry;
+        }
+
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (!entityDefinition.TryGetModuleDefinition<QuestModuleDefinition>(out var questModuleDefinition))
@@ -49,6 +62,49 @@ namespace Assets._Game.Scripts.Entities.Modules
             }
 
             return questModule;
+        }
+
+        public void Apply(Entity entity, EntitySave entitySave)
+        {
+            if (!entity.TryGetModule<QuestModule>(out var questModule) || entitySave.QuestSaves == null) return;
+
+            for (int i = 0; i < entitySave.QuestSaves.Length; i++)
+            {
+                var questSave = entitySave.QuestSaves[i];
+                var questState = questModule.ActiveQuests.FirstOrDefault(x => x.Definition.Id == questSave.DefinitionId);
+                if (questState == null) continue;
+
+                for (int j = 0; j < questSave.ProgressSaves.Length; j++)
+                {
+                    var progressSave = questSave.ProgressSaves[j];
+                    if (progressSave == null) continue;
+                    var data = _codecRegistry.DecodeOrNull(progressSave);
+                    if (data == null) continue;
+                    foreach (var objective in questState.Objectives.OfType<ISaveableObjectiveProgress>())
+                        if (objective.TryLoad(data))
+                            break;
+                }
+            }
+        }
+
+        public void Save(Entity entity, EntitySave entitySave)
+        {
+            if (!entity.TryGetModule<QuestModule>(out var questModule)) return;
+
+            entitySave.QuestSaves = new QuestStateSave[questModule.ActiveQuests.Count];
+            for (int i = 0; i < questModule.ActiveQuests.Count; i++)
+            {
+                var questState = questModule.ActiveQuests[i];
+                entitySave.QuestSaves[i] = new QuestStateSave
+                {
+                    DefinitionId = questState.Definition.Id,
+                    ProgressSaves = questState.Objectives
+                        .OfType<ISaveableObjectiveProgress>()
+                        .Select(x => _codecRegistry.EncodeOrNull(x.Save()))
+                        .Where(x => x != null)
+                        .ToArray()
+                };
+            }
         }
     }
 }

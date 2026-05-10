@@ -6,6 +6,7 @@ namespace Assets._Game.Scripts.Quests
 {
     public sealed class QuestState
     {
+        public QuestDefinition Definition { get; }
         public string Title { get; }
         public ObjectiveProgress[] Objectives { get; set; }
         public bool IsCompleted { get; private set; }
@@ -15,6 +16,7 @@ namespace Assets._Game.Scripts.Quests
 
         public QuestState(QuestDefinition definition)
         {
+            Definition = definition;
             Title = definition.Title;
 
             Objectives = definition.Objectives.Select(o => o.CreateProgress()).ToArray();

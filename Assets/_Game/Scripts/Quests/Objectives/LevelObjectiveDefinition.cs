@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 
 namespace Assets._Game.Scripts.Quests.Objectives
@@ -15,6 +16,16 @@ namespace Assets._Game.Scripts.Quests.Objectives
     {
         public LevelObjectiveProgress(LevelObjectiveDefinition definition) : base(definition)
         {
+        }
+
+        public override void Initialize(Entity entity)
+        {
+            base.Initialize(entity);
+
+            if (entity.TryGetModule<LevelingModule>(out var levelingModule))
+            {
+                SetProgress(levelingModule.Level);
+            }
         }
 
         public override void HandleEvent(IEvent e)

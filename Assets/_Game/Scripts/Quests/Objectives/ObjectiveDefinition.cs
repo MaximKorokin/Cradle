@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Infrastructure.Game;
 using System;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ namespace Assets._Game.Scripts.Quests.Objectives
             RequiredAmount = definition.RequiredAmount;
         }
 
+        public virtual void Initialize(Entity entity) { }
+
         protected void NotifyUpdated()
         {
             Updated?.Invoke();
@@ -54,5 +57,11 @@ namespace Assets._Game.Scripts.Quests.Objectives
         {
             Definition = definition;
         }
+    }
+
+    public interface ISaveableObjectiveProgress
+    {
+        object Save();
+        bool TryLoad(object state);
     }
 }

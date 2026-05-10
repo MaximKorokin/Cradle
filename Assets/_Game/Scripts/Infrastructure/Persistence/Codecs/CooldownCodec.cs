@@ -4,13 +4,11 @@ using Newtonsoft.Json;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
 {
-    public sealed class CooldownCodec : IDataCodec
+    public sealed class CooldownCodec : DataCodecBase<CooldownInstanceData>
     {
-        public string Type => "Cooldown";
+        public override string Type => "Cooldown";
 
-        public bool CanEncode(object data) => data is CooldownInstanceData;
-
-        public EncodedSaveData Encode(object data)
+        public override EncodedSaveData Encode(object data)
         {
             var d = (CooldownInstanceData)data;
             return new EncodedSaveData
@@ -20,7 +18,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
             };
         }
 
-        public object Decode(EncodedSaveData save, object payload)
+        public override object Decode(EncodedSaveData save, object payload)
         {
             if (payload is ItemDefinition itemDefinition && itemDefinition.TryGetTrait<UsableTrait>(out var usableTrait))
             {
