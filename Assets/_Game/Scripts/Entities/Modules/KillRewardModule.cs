@@ -2,24 +2,24 @@
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class RewardModule : EntityModuleBase
+    public sealed class KillRewardModule : EntityModuleBase
     {
         public long Experience { get; }
         public LootTable LootTable { get; }
 
-        public RewardModule(int experience, LootTable lootTable)
+        public KillRewardModule(int experience, LootTable lootTable)
         {
             Experience = experience;
             LootTable = lootTable;
         }
     }
 
-    public sealed class RewardModuleFactory : IEntityModuleFactory
+    public sealed class KillRewardModuleFactory : IEntityModuleFactory
     {
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            if (entityDefinition.TryGetModuleDefinition<RewardModuleDefinition>(out var moduleDefinition))
-                return new RewardModule(moduleDefinition.Experience, moduleDefinition.LootTable);
+            if (entityDefinition.TryGetModuleDefinition<KillRewardModuleDefinition>(out var moduleDefinition))
+                return new KillRewardModule(moduleDefinition.Experience, moduleDefinition.LootTable);
             return null;
         }
     }

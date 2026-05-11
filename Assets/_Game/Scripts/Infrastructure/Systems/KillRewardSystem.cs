@@ -4,9 +4,9 @@ using Assets._Game.Scripts.Infrastructure.Game;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
-    public class RewardSystem : SystemBase
+    public class KillRewardSystem : SystemBase
     {
-        public RewardSystem(IGlobalEventBus globalEventBus) : base(globalEventBus)
+        public KillRewardSystem(IGlobalEventBus globalEventBus) : base(globalEventBus)
         {
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
         }
@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (e.Victim.TryGetModule(out RestrictionStateModule restrictionStateModule) && restrictionStateModule.Has(RestrictionState.Disabled))
                 return;
 
-            if (!e.Victim.TryGetModule(out RewardModule rewardModule))
+            if (!e.Victim.TryGetModule(out KillRewardModule rewardModule))
                 return;
 
             GlobalEventBus.Publish(new AddExperienceRequestEvent(e.Victim, e.Killer, rewardModule.Experience));

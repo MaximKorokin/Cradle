@@ -110,7 +110,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ActionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ControlSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StatusEffectSystem>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<RewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<KillRewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityLifecycleSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LevelingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -190,7 +190,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<ActionModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<RewardModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<KillRewardModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<DespawnModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 

@@ -91,7 +91,7 @@ namespace Assets._Game.Scripts.Entities
         public Faction.Faction Faction;
     }
 
-    public class RewardModuleDefinition : EntityModuleDefinition
+    public class KillRewardModuleDefinition : EntityModuleDefinition
     {
         public int Experience;
         public LootTable LootTable;
