@@ -21,10 +21,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             {
                 _questModule = questsModule;
 
-                _questModule.QuestAdded += OnQuestModuleUpdated;
-                _questModule.QuestRemoved += OnQuestModuleUpdated;
-                _questModule.QuestUpdated += OnQuestModuleUpdated;
-                _questModule.QuestCompleted += OnQuestModuleUpdated;
+                _questModule.Updated += OnQuestModuleUpdated;
             }
 
             UpdateData();
@@ -38,12 +35,12 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 return;
             }
 
-            ActiveQuests = _questModule.ActiveQuests.ToArray();
+            ActiveQuests = _questModule.AllQuests.ToArray();
 
             Changed?.Invoke();
         }
 
-        private void OnQuestModuleUpdated(QuestState questState)
+        private void OnQuestModuleUpdated()
         {
             UpdateData();
         }
@@ -54,10 +51,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             if (_questModule != null)
             {
-                _questModule.QuestAdded -= OnQuestModuleUpdated;
-                _questModule.QuestRemoved -= OnQuestModuleUpdated;
-                _questModule.QuestUpdated -= OnQuestModuleUpdated;
-                _questModule.QuestCompleted -= OnQuestModuleUpdated;
+                _questModule.Updated -= OnQuestModuleUpdated;
             }
         }
     }

@@ -22,6 +22,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackEntityEvent<QuestAddedEvent>(OnQuestAdded);
             TrackEntityEvent<QuestUpdatedEvent>(OnQuestUpdated);
+            TrackEntityEvent<QuestObjectivesCompletedEvent>(OnQuestObjectivesCompleted);
             TrackEntityEvent<QuestCompletedEvent>(OnQuestCompleted);
         }
 
@@ -32,18 +33,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!EntityQuery.Match(entity)) return;
 
             var questModule = entity.GetModule<QuestModule>();
-            for (int i = 0; i < questModule.ActiveQuests.Count; i++)
+            for (int i = 0; i < questModule.AllQuests.Count; i++)
             {
-                var quest = questModule.ActiveQuests[i];
+                var quest = questModule.AllQuests[i];
 
-                InitilaizeQuest(quest, entity);
-
-                // If the quest is completed, remove it from the active quests
-                if (quest.IsCompleted)
-                {
-                    questModule.RemoveQuest(quest);
-                    i--;
-                }
+                InitializeQuest(quest, entity);
             }
         }
 
@@ -71,22 +65,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void HandleEvent(QuestModule questModule, IEvent e)
         {
-            for (int i = 0; i < questModule.ActiveQuests.Count; i++)
+            for (int i = 0; i < questModule.AllQuests.Count; i++)
             {
-                var quest = questModule.ActiveQuests[i];
+                var quest = questModule.AllQuests[i];
+
+                if (quest.IsCompleted) continue;
 
                 // Handle the event for each objective in the quest
                 for (int j = 0; j < quest.Objectives.Length; j++)
                 {
                     var objective = quest.Objectives[j];
                     objective.HandleEvent(e);
-                }
-
-                // If the quest is completed, remove it from the active quests
-                if (quest.IsCompleted)
-                {
-                    questModule.RemoveQuest(quest);
-                    i--;
                 }
             }
         }
@@ -96,11 +85,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             SLog.Info($"Quest added: {e.QuestState.Title}");
 
             var questModule = entity.GetModule<QuestModule>();
-            InitilaizeQuest(e.QuestState, entity);
-            if (e.QuestState.IsCompleted)
-            {
-                questModule.RemoveQuest(e.QuestState);
-            }
+            InitializeQuest(e.QuestState, entity);
         }
 
         private void OnQuestUpdated(Entity entity, QuestUpdatedEvent e)
@@ -110,14 +95,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             var questModule = entity.GetModule<QuestModule>();
         }
 
+        private void OnQuestObjectivesCompleted(Entity entity, QuestObjectivesCompletedEvent e)
+        {
+            SLog.Info($"Quest objectives completed: {e.QuestState.Title}");
+
+            e.QuestState.SetCompleted(true);
+        }
+
         private void OnQuestCompleted(Entity entity, QuestCompletedEvent e)
         {
             SLog.Info($"Quest completed: {e.QuestState.Title}");
-
-            var questModule = entity.GetModule<QuestModule>();
         }
 
-        private void InitilaizeQuest(QuestState questState, Entity entity)
+        private void InitializeQuest(QuestState questState, Entity entity)
         {
             foreach (var objective in questState.Objectives)
             {
@@ -136,11 +126,31 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         }
     }
 
+    public readonly struct QuestRemovedEvent : IEntityEvent
+    {
+        public QuestState QuestState { get; }
+
+        public QuestRemovedEvent(QuestState questState)
+        {
+            QuestState = questState;
+        }
+    }
+
     public readonly struct QuestUpdatedEvent : IEntityEvent
     {
         public QuestState QuestState { get; }
 
         public QuestUpdatedEvent(QuestState questState)
+        {
+            QuestState = questState;
+        }
+    }
+
+    public readonly struct QuestObjectivesCompletedEvent : IEntityEvent
+    {
+        public QuestState QuestState { get; }
+
+        public QuestObjectivesCompletedEvent(QuestState questState)
         {
             QuestState = questState;
         }

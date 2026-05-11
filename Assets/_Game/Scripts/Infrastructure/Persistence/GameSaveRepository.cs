@@ -101,6 +101,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     {
         public string DefinitionId;
         public EncodedSaveData[] ProgressSaves;
+        public bool IsCompleted;
     }
 
     public class EncodedSaveData
