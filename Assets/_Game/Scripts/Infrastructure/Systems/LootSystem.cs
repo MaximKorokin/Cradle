@@ -39,7 +39,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (!EntityQuery.Match(entity)) return;
 
-            entity.SubscribeOnce<EntityBoundEvent>(e =>
+            entity.SubscribeOnce<EntityViewBoundEvent>(e =>
             {
                 // Set the loot item's sprite based on its item definition
                 if (entity.TryGetModule<AppearanceModule>(out var appearanceModule))

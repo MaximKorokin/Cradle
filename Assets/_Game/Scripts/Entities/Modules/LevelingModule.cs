@@ -74,14 +74,14 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             var e = new ExperienceChangedEvent(oldExperience, newExperience);
             ExperienceChanged?.Invoke(e);
-            Entity.Publish(e);
+            Publish(e);
         }
 
         private void InvokeLevelChanged(int oldLevel, int newLevel)
         {
             var e = new LevelChangedEvent(oldLevel, newLevel);
             LevelChanged?.Invoke(e);
-            Entity.Publish(e);
+            Publish(e);
         }
 
         private void InvokeChanged(long oldExperience, long newExperience, int oldLevel, int newLevel)

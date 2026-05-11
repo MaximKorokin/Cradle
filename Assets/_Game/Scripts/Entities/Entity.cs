@@ -12,6 +12,8 @@ namespace Assets._Game.Scripts.Entities
 
         public string Id => ((IEntry)this).Id;
 
+        public bool IsCreated { get; private set; }
+
         private readonly Dictionary<Type, IEntityModule> _modules = new();
         private readonly EventBusCore _bus = new();
 
@@ -21,6 +23,12 @@ namespace Assets._Game.Scripts.Entities
         public Entity(EntityDefinition definition)
         {
             Definition = definition;
+        }
+
+        public void MarkCreated()
+        {
+            IsCreated = true;
+            Publish(new EntityCreatedEvent());
         }
 
         public void AddModule<T>(T module) where T : class, IEntityModule
@@ -82,4 +90,8 @@ namespace Assets._Game.Scripts.Entities
     }
 
     public interface IEntityEvent : IEvent { }
+
+    public readonly struct EntityCreatedEvent : IEntityEvent
+    {
+    }
 }

@@ -30,8 +30,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
             QuestAdded?.Invoke(questState);
             Updated?.Invoke();
-            // todo: add a list that will publish all events once attached
-            //Publish(new QuestAddedEvent(questState));
+            Publish(new QuestAddedEvent(questState));
         }
 
         public void RemoveQuest(QuestState questState)

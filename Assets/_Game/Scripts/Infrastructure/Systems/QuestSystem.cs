@@ -26,21 +26,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<QuestCompletedEvent>(OnQuestCompleted);
         }
 
-        protected override void OnEntityAdded(Entity entity)
-        {
-            base.OnEntityAdded(entity);
-
-            if (!EntityQuery.Match(entity)) return;
-
-            var questModule = entity.GetModule<QuestModule>();
-            for (int i = 0; i < questModule.AllQuests.Count; i++)
-            {
-                var quest = questModule.AllQuests[i];
-
-                InitializeQuest(quest, entity);
-            }
-        }
-
         private void OnLevelChanged(Entity entity, LevelChangedEvent e)
         {
             var questModule = entity.GetModule<QuestModule>();
@@ -84,15 +69,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             SLog.Info($"Quest added: {e.QuestState.Title}");
 
-            var questModule = entity.GetModule<QuestModule>();
             InitializeQuest(e.QuestState, entity);
         }
 
         private void OnQuestUpdated(Entity entity, QuestUpdatedEvent e)
         {
             SLog.Info($"Quest updated: {e.QuestState.Title} - {e.QuestState.Objectives[0].CurrentAmount}");
-
-            var questModule = entity.GetModule<QuestModule>();
         }
 
         private void OnQuestObjectivesCompleted(Entity entity, QuestObjectivesCompletedEvent e)

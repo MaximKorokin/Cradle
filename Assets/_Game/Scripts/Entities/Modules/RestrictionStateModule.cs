@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (_counts[index] == 1)
                 _state |= state;
 
-            Entity.Publish(new RestrictionStateChangedEvent(State));
+            Publish(new RestrictionStateChangedEvent(State));
         }
 
         public void Remove(RestrictionState state)
@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (_counts[index] == 0)
                 _state &= ~state;
 
-            Entity.Publish(new RestrictionStateChangedEvent(State));
+            Publish(new RestrictionStateChangedEvent(State));
         }
 
         private static int BitIndex(RestrictionState state)

@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!EntityQuery.Match(entity)) return;
 
             // Set initial visuals when the entity view created
-            entity.SubscribeOnce<EntityBoundEvent>(e =>
+            entity.SubscribeOnce<EntityViewBoundEvent>(e =>
             {
                 var appearance = entity.GetModule<AppearanceModule>();
                 var stats = entity.GetModule<StatModule>();

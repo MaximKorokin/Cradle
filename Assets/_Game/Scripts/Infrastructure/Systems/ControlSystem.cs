@@ -37,7 +37,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (!EntityQuery.Match(entity)) return;
 
-            entity.SubscribeOnce<EntityBoundEvent>(e =>
+            entity.SubscribeOnce<EntityViewBoundEvent>(e =>
             {
                 if (entity.TryGetModule<WanderBehaviourModule>(out var wanderModule))
                     wanderModule.AnchorPoint = entity.GetModule<SpatialModule>().Position;
