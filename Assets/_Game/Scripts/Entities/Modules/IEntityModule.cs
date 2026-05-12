@@ -46,7 +46,7 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         protected void Publish<TEvent>(TEvent evt) where TEvent : struct, IEntityEvent
         {
-            if (Entity != null)
+            if (Entity != null && Entity.IsCreated)
             {
                 Entity.Publish(evt);
             }

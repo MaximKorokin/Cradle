@@ -39,7 +39,6 @@ namespace Assets._Game.Scripts.Items.Commands
             return command switch
             {
                 TransferItemCommand c => HandleTransfer(entity, c),
-                EquipCommand c => HandleEquip(entity, c),
                 EquipFromContainerCommand c => HandleEquip(entity, c),
                 UnequipToContainerCommand c => HandleUnequip(entity, c),
                 DropItemCommand c => HandleDrop(entity, c),
@@ -91,14 +90,6 @@ namespace Assets._Game.Scripts.Items.Commands
             var from = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
             var to = _itemContainerResolver.ResolveContainer(entity, c.ToContainer);
             return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
-        }
-
-        private bool HandleEquip(Entity entity, EquipCommand c)
-        {
-            var equipment = _itemContainerResolver.ResolveEquipment(entity);
-            var item = _itemStackFactory.Create(c.ItemDefinition.Id, 1);
-            var amountEquipped = equipment.Add(item.Snapshot);
-            return amountEquipped > 0;
         }
 
         private bool HandleEquip(Entity entity, EquipFromContainerCommand c)

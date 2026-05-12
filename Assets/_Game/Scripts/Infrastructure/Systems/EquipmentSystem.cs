@@ -11,13 +11,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class EquipmentSystem : EntitySystemBase, ITickSystem
     {
         private readonly Dictionary<ItemDefinition, long> _autoUsedItems = new();
+        private readonly ItemStackFactory _itemStackFactory;
 
         protected override EntityQuery EntityQuery { get; } = new(RestrictionState.Disabled, new[] { typeof(EquipmentModule) });
 
         public EquipmentSystem(
             IGlobalEventBus globalEventBus,
-            EntityRepository repository) : base(globalEventBus, repository)
+            EntityRepository repository,
+            ItemStackFactory itemStackFactory) : base(globalEventBus, repository)
         {
+            _itemStackFactory = itemStackFactory;
             TrackEntityEvent<ItemUseSettingsUpdateRequest>(OnItemUseSettingsUpdateRequested);
         }
 
@@ -29,9 +32,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             entity.SubscribeOnce<EntityCreatedEvent>(_ =>
             {
-                foreach (var item in defaultEquipment.DefaultItems)
+                var equipmentModule = entity.GetModule<EquipmentModule>();
+                foreach (var itemDefinition in defaultEquipment.DefaultItems)
                 {
-                    entity.Publish(new ItemCommandRequest(new EquipCommand(item)));
+                    var itemStack = _itemStackFactory.Create(itemDefinition.Id, 1);
+                    equipmentModule.Equipment.Add(itemStack.Snapshot);
                 }
             });
         }

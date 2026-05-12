@@ -144,7 +144,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private static void AddWeightModifierFromItem(ItemStackSnapshot item, StatModule stats, StatModifierSource source)
         {
-            stats.AddModifiers(source, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, item.Definition.Weight).Yield());
+            stats.AddModifiers(source, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, item.Definition.Weight * item.Amount).Yield());
         }
 
         private void OnStatChanged(Entity entity, StatChangedEvent e)

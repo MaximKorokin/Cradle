@@ -70,10 +70,12 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class QuestModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
         private readonly CodecRegistry _codecRegistry;
+        private readonly QuestDefinitionCatalog _questDefinitionCatalog;
 
-        public QuestModuleFactory(CodecRegistry codecRegistry)
+        public QuestModuleFactory(CodecRegistry codecRegistry, QuestDefinitionCatalog questDefinitionCatalog)
         {
             _codecRegistry = codecRegistry;
+            _questDefinitionCatalog = questDefinitionCatalog;
         }
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
@@ -101,7 +103,13 @@ namespace Assets._Game.Scripts.Entities.Modules
             {
                 var questSave = entitySave.QuestSaves[i];
                 var questState = questModule.AllQuests.FirstOrDefault(x => x.Definition.Id == questSave.DefinitionId);
-                if (questState == null) continue;
+
+                if (questState == null)
+                {
+                    if (!_questDefinitionCatalog.TryGet(questSave.DefinitionId, out var questDefinition)) continue;
+                    questState = new QuestState(questDefinition);
+                    questModule.AddQuest(questState);
+                }
 
                 // If quest is completed, we should not raise Completed event
                 questState.SetCompleted(questSave.IsCompleted, raiseEvents: false);
