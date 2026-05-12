@@ -610,7 +610,7 @@ GameObject:
   - component: {fileID: 1299263624}
   - component: {fileID: 1299263625}
   m_Layer: 0
-  m_Name: ShopkeeperSpawnPoint
+  m_Name: MerchantSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

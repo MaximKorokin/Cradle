@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
-  m_Name: ShopkeeperVisualModel
+  m_Name: MerchantVisualModel
   m_EditorClassIdentifier: 
   _id: 9fbd88f45ba648c4be411ffae5964ee0
-  <Name>k__BackingField: Shopkeeper
+  <Name>k__BackingField: Merchant
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 46163ed6fc6ef5444a5ed7b5e5665362, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
   <SwapOrderInLayerForDirection>k__BackingField: 1

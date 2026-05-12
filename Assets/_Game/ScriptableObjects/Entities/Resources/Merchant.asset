@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
-  m_Name: Shopkeeper
+  m_Name: Merchant
   m_EditorClassIdentifier: 
   _id: e9998e56dd1d40afb06b7d49dc2b2903
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 1ee04069484c23c4eb367251bdab556f, type: 2}
-  <VariantName>k__BackingField: Shopkeeper
+  <VariantName>k__BackingField: Merchant
   _modules:
   - rid: 1349792714110271691
   - rid: 3412048633303400550

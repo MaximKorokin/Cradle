@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8165201c216a5104385007faa191843d, type: 3}
-  m_Name: Shopkeeper
+  m_Name: Merchant
   m_EditorClassIdentifier: 
   _id: 2fa0b613802449a4a77851ee80fc34e3
   <Entities>k__BackingField:
