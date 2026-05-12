@@ -159,6 +159,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 OrderInLayerOverrideKind.Weapon => -1,
                 OrderInLayerOverrideKind.Clothing => 1,
                 OrderInLayerOverrideKind.Overlay => 2,
+                OrderInLayerOverrideKind.Background => -2,
                 _ => 0
             };
         }

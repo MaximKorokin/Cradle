@@ -46,9 +46,6 @@ namespace Assets._Game.Scripts.Entities.Units
             unitView.RelativeOrderInLayer = entityUnitVisualModel.RelativeOrderInLayer;
 
             var unitVariantSprite = unitVariants.GetVariant(variantName)?.Sprites.GetRandomElement(_entityUnitConfig.NotFoundVariantSprite);
-            if (unitVariantSprite == null)
-                unitVariantSprite = _entityUnitConfig.NotFoundVariantSprite;
-
             unitView.SpriteRenderer.sprite = unitVariantSprite;
             unitView.SpriteRenderer.color = color;
 

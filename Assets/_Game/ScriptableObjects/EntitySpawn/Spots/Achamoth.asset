@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8165201c216a5104385007faa191843d, type: 3}
-  m_Name: Shopkeeper
+  m_Name: Achamoth
   m_EditorClassIdentifier: 
-  _id: 2fa0b613802449a4a77851ee80fc34e3
+  _id: fe6b3986ea454f04a34a5c1477bccc97
   <Entities>k__BackingField:
-  - EntityDefinition: {fileID: 11400000, guid: b045704cf788a7a45a228b371df7fb11, type: 2}
+  - EntityDefinition: {fileID: 11400000, guid: ab214886e61416e4da0c0b48c8e8b24f, type: 2}
     RespawnTime: 0
     Count: 1
   <Radius>k__BackingField: 0

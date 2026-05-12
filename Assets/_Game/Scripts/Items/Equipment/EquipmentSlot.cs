@@ -13,6 +13,7 @@ namespace Assets._Game.Scripts.Items.Equipment
         Boots = 50,
         Ring = 60,
         Necklace = 70,
+        Back = 80,
         Utility = 1000,
     }
 

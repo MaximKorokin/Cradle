@@ -11,5 +11,7 @@ namespace Assets._Game.Scripts.Quests
         public string Title { get; private set; }
         [field: SerializeReference]
         public ObjectiveDefinition[] Objectives { get; private set; }
+        [field: SerializeField]
+        public QuestReward Reward { get; private set; }
     }
 }

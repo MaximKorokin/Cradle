@@ -34,3 +34,6 @@ MonoBehaviour:
   - <Name>k__BackingField: Shopkeeper
     <Sprites>k__BackingField:
     - {fileID: -1731781037224537961, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+  - <Name>k__BackingField: Achamoth
+    <Sprites>k__BackingField:
+    - {fileID: -9147069183463846165, guid: 8d65e01f0a390a446a17d9b7e9e8d8c8, type: 3}

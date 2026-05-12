@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc06abe581b1bbd4ba4b607379168d28, type: 3}
+  m_Name: StaticEntityStatsDefinition
+  m_EditorClassIdentifier: 
+  <Stats>k__BackingField:
+  - <Id>k__BackingField: 100
+    <DefaultBase>k__BackingField: 5
+  - <Id>k__BackingField: 200
+    <DefaultBase>k__BackingField: 1000
+  - <Id>k__BackingField: 220
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 300
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 310
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 315
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 316
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 320
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 325
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 327
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 330
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 360
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 365
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 366
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 370
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 375
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 380
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 400
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 410
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 500
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 510
+    <DefaultBase>k__BackingField: 0
+  - <Id>k__BackingField: 1000
+    <DefaultBase>k__BackingField: 1

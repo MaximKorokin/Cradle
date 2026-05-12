@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
                     self == null ||
                     self.TryGetModule<InventoryModule>(out var inventoryModule) &&
                     entity.TryGetModule<LootItemModule>(out var lootItemModule) &&
-                    inventoryModule.Inventory.PreviewAdd(new(lootItemModule.ItemDefinition, new EmptyInstanceData(), lootItemModule.Amount)) > 0);
+                    inventoryModule.Inventory.PreviewAdd(new(lootItemModule.ItemDefinition, null, lootItemModule.Amount)) > 0);
             }
             _requiredModules = includedModules.ToArray();
         }

@@ -21,6 +21,21 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<ItemUseSettingsUpdateRequest>(OnItemUseSettingsUpdateRequested);
         }
 
+        protected override void OnEntityAdded(Entity entity)
+        {
+            base.OnEntityAdded(entity);
+
+            if (!EntityQuery.Match(entity) || !entity.Definition.TryGetModuleDefinition<DefaultEquipmentModuleDefinition>(out var defaultEquipment)) return;
+
+            entity.SubscribeOnce<EntityCreatedEvent>(_ =>
+            {
+                foreach (var item in defaultEquipment.DefaultItems)
+                {
+                    entity.Publish(new ItemCommandRequest(new EquipCommand(item)));
+                }
+            });
+        }
+
         private void OnItemUseSettingsUpdateRequested(Entity entity, ItemUseSettingsUpdateRequest request)
         {
             if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;

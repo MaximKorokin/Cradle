@@ -20,7 +20,7 @@ MonoBehaviour:
   - rid: 1349792714110271691
   - rid: 1349792944121708627
   - rid: 3412048633303400550
-  - rid: 3412048685788037207
+  - rid: 3564180457264775318
   - rid: 3412048734163566710
   - rid: 3412048748974702677
   - rid: 3412048909577486425
@@ -57,13 +57,6 @@ MonoBehaviour:
       data:
         Enabled: 1
         Faction: {fileID: 11400000, guid: ab42b80c0a34ebe4397143adc4591be5, type: 2}
-    - rid: 3412048685788037207
-      type: {class: RewardModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        PreferredLevel: 0
-        Experience: 11
-        LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}
     - rid: 3412048734163566710
       type: {class: DespawnModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -85,3 +78,9 @@ MonoBehaviour:
         MinIdleTime: 3
         MaxIdleTime: 8
         WanderRadius: 3
+    - rid: 3564180457264775318
+      type: {class: KillRewardModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Experience: 11
+        LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}

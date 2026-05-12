@@ -8,11 +8,11 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
     public sealed class LootItemPickupStep : IInteractionStep
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly ItemInstanceDataFactory _itemInstanceDataFactory;
+        private readonly ItemStackFactory _itemInstanceDataFactory;
 
         private bool _done;
 
-        public LootItemPickupStep(IGlobalEventBus globalEventBus, ItemInstanceDataFactory itemInstanceDataFactory)
+        public LootItemPickupStep(IGlobalEventBus globalEventBus, ItemStackFactory itemInstanceDataFactory)
         {
             _globalEventBus = globalEventBus;
             _itemInstanceDataFactory = itemInstanceDataFactory;
@@ -28,7 +28,8 @@ namespace Assets._Game.Scripts.Entities.Interactions.Steps
 
             var lootItemModule = context.Target.GetModule<LootItemModule>();
             var inventory = context.Source.GetModule<InventoryModule>().Inventory;
-            var added = inventory.Add(new(lootItemModule.ItemDefinition, _itemInstanceDataFactory.Create(lootItemModule.ItemDefinition.Id), lootItemModule.Amount));
+            var item = _itemInstanceDataFactory.Create(lootItemModule.ItemDefinition.Id, lootItemModule.Amount);
+            var added = inventory.Add(item.Snapshot);
 
             if (added <= 0)
             {

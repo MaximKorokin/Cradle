@@ -35,6 +35,8 @@ namespace Assets._Game.Scripts.Entities.Units
 
     public enum EntityVisualModelUnitPath
     {
+        Floating = 100,
+
         Body = 200,
 
         Head = 300,

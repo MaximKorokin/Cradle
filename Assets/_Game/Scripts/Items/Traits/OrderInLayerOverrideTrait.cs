@@ -14,5 +14,6 @@ namespace Assets._Game.Scripts.Items.Traits
         Weapon = 10,
         Clothing = 20,
         Overlay = 30,
+        Background = 40,
     }
 }

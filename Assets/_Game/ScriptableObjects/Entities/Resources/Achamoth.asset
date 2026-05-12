@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
-  m_Name: Shopkeeper
+  m_Name: Achamoth
   m_EditorClassIdentifier: 
-  _id: e9998e56dd1d40afb06b7d49dc2b2903
-  <VisualModel>k__BackingField: {fileID: 11400000, guid: 1ee04069484c23c4eb367251bdab556f, type: 2}
-  <VariantName>k__BackingField: Shopkeeper
+  _id: 5ad9374803e54455a6e9a8dd6b8a37ac
+  <VisualModel>k__BackingField: {fileID: 11400000, guid: ba8374181e2309944a9ed65bef7b002d, type: 2}
+  <VariantName>k__BackingField: Achamoth
   _modules:
   - rid: 1349792714110271691
   - rid: 3412048633303400550
   - rid: 2155386242765160615
-  - rid: 3564180267895619730
   - rid: 3564180267895619758
-  - rid: 3564180477885808755
+  - rid: 3564180477885808724
+  - rid: 3564180477885808742
+  - rid: 3564180477885808756
   references:
     version: 2
     RefIds:
@@ -33,18 +34,12 @@ MonoBehaviour:
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        Level: 30
+        Level: 300
     - rid: 3412048633303400550
       type: {class: FactionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
         Faction: {fileID: 11400000, guid: fbaa0ad9ac3f70c4b81095f04e3a349c, type: 2}
-    - rid: 3564180267895619730
-      type: {class: ShopModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        <Radius>k__BackingField: 1
-        <ShopDefinition>k__BackingField: {fileID: 11400000, guid: fc423adb93c22844c90b5b1fb898a7ab, type: 2}
     - rid: 3564180267895619758
       type: {class: ControlModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -54,8 +49,24 @@ MonoBehaviour:
     - rid: 3564180267895619759
       type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
-        <AiBehaviours>k__BackingField: 10
-    - rid: 3564180477885808755
+        <AiBehaviours>k__BackingField: 2
+    - rid: 3564180477885808724
+      type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        EquipmentSlots: 500000001e00000014000000
+        ManualItemUseSettings:
+          HpPercent: 0
+          OverrideStatusEffects: 0
+    - rid: 3564180477885808742
+      type: {class: DefaultEquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        DefaultItems:
+        - {fileID: 11400000, guid: 82a9c7b7845f5a34c84f6db1d886e4ed, type: 2}
+        - {fileID: 11400000, guid: 2e1acb10835da964d833bf9d4590d813, type: 2}
+        - {fileID: 11400000, guid: fd0c5f6c5c2204542ae7813e2a4f7200, type: 2}
+    - rid: 3564180477885808756
       type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
