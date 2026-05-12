@@ -5,7 +5,7 @@ namespace Assets._Game.Scripts.Items
 {
     public interface IItemInstanceData
     {
-
+        IItemInstanceData Clone();
     }
 
     public interface IImmutableItemInstanceData : IItemInstanceData
@@ -16,17 +16,8 @@ namespace Assets._Game.Scripts.Items
     [Serializable]
     public class EmptyInstanceData : IImmutableItemInstanceData
     {
-        public string GetStackingKey()
-        {
-            return "";
-        }
-    }
-
-    [Serializable]
-    public class DurabilityInstanceData : IItemInstanceData
-    {
-        public int Current;
-        public int Max;
+        public string GetStackingKey() => "";
+        public IItemInstanceData Clone() => new EmptyInstanceData();
     }
 
     [Serializable]
@@ -39,9 +30,7 @@ namespace Assets._Game.Scripts.Items
             CooldownCounter = new CooldownCounter(cooldown);
         }
 
-        public string GetStackingKey()
-        {
-            return "";
-        }
+        public string GetStackingKey() => "";
+        public IItemInstanceData Clone() => new CooldownInstanceData(CooldownCounter.Cooldown);
     }
 }

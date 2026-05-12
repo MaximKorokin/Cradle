@@ -15,13 +15,14 @@ namespace Assets._Game.Scripts.Items
 
         public ItemStack Create(string definitionId, int amount)
         {
-            return Create(definitionId, _instanceDataFactory.Create(definitionId), amount);
+            var definition = _itemCatalog.Get(definitionId);
+            return new ItemStack(definition, _instanceDataFactory.Create(definitionId), amount);
         }
 
         public ItemStack Create(string definitionId, IItemInstanceData itemInstanceData, int amount)
         {
             var definition = _itemCatalog.Get(definitionId);
-            return new ItemStack(definition, itemInstanceData, amount);
+            return new ItemStack(definition, itemInstanceData?.Clone(), amount);
         }
 
         public ItemStack Apply(ItemStack itemStack, ItemStackSave save)
