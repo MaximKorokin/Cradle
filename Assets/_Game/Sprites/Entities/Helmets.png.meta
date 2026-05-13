@@ -372,6 +372,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Helmets_10
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 944
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94aad063cb1e7e74e910ad6880fd1f16
+      internalID: -1514364825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -388,6 +410,7 @@ TextureImporter:
     nameFileIdTable:
       Helmets_0: -8285773504889700863
       Helmets_1: -867696522777932473
+      Helmets_10: -1514364825
       Helmets_2: 4217637359650165115
       Helmets_3: 5973168979162390250
       Helmets_4: -2181531001292581395

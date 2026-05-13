@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: MerchantPoncho
+  m_EditorClassIdentifier: 
+  _id: d8bf3a0234a04157bc51481417c4ca09
+  <Name>k__BackingField: Achamoth Dress
+  <Icon>k__BackingField: {fileID: -2239954216375100083, guid: 5c05dcc7afc6fd948bfa6c964069d44b, type: 3}
+  <Sprite>k__BackingField: {fileID: 1520845475, guid: a1a087c604dd2314a92ccefa47553a58, type: 3}
+  <MaxAmount>k__BackingField: 1
+  <Weight>k__BackingField: 111
+  <Traits>k__BackingField:
+  - rid: 3412048633303400687
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412048633303400687
+      type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Slot>k__BackingField: 30
+        <SecondarySlots>k__BackingField: 

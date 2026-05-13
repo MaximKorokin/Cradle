@@ -37,6 +37,14 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
             bestBehaviour?.Tick(entity, bestContext, delta);
         }
+
+        public void Reset()
+        {
+            for (int i = 0; i < _behaviours.Count; i++)
+            {
+                _behaviours[i].Reset();
+            }
+        }
     }
 
     [Flags]

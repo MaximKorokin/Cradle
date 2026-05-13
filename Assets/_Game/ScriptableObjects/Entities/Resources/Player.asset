@@ -87,6 +87,7 @@ MonoBehaviour:
         Enabled: 1
         <InitialQuests>k__BackingField:
         - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
+        - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
     - rid: 7990781616137175140
       type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

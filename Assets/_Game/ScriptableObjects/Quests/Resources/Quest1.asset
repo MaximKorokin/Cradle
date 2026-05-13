@@ -19,7 +19,7 @@ MonoBehaviour:
   - rid: 3564180427547345043
   - rid: 3564180427547345044
   <Reward>k__BackingField:
-    _experience: 0
+    _experience: 1111111111
     _itemRewards:
     - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
     - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}

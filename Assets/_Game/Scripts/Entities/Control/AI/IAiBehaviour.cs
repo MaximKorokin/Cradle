@@ -4,6 +4,7 @@
     {
         BehaviourEvaluation Evaluate(Entity entity);
         void Tick(Entity entity, IBehaviourContext context, float delta);
+        void Reset();
     }
 
     public readonly struct BehaviourEvaluation

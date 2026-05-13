@@ -9,6 +9,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IEntitySensor _entitySensor;
+        private bool _isPromptShowing;
 
         public ShopBehaviour(IGlobalEventBus globalEventBus, IEntitySensor entitySensor)
         {
@@ -25,14 +26,30 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                 return new BehaviourEvaluation(1, context);
             }
 
+            // Not found any target, hide the prompt if it was showing
+            Reset();
+
             return new BehaviourEvaluation(0, null);
+        }
+
+        public void Reset()
+        {
+            if (_isPromptShowing)
+            {
+                _isPromptShowing = false;
+                _globalEventBus.Publish(InteractionPromptViewRequest.HideRequest());
+            }
         }
 
         public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
             if (entity.TryGetModule<ShopModule>(out var shopModule) && context is TargetBehaviourContext targetContext)
             {
-                _globalEventBus.Publish(InteractionPromptViewRequest.ShowRequest(shopModule.Definition.ShopName, "Open", () => _globalEventBus.Publish(new ShopWindowOpenRequest(entity.Id, targetContext.Target.Id))));
+                _isPromptShowing = true;
+                _globalEventBus.Publish(InteractionPromptViewRequest.ShowRequest(
+                    shopModule.Definition.ShopName,
+                    "Open",
+                    () => _globalEventBus.Publish(new ShopWindowOpenRequest(entity.Id, targetContext.Target.Id))));
             }
         }
     }

@@ -22,6 +22,8 @@ MonoBehaviour:
   - rid: 3564180267895619730
   - rid: 3564180267895619758
   - rid: 3564180477885808755
+  - rid: 3564180500505952256
+  - rid: 3564180500505952335
   references:
     version: 2
     RefIds:
@@ -33,7 +35,7 @@ MonoBehaviour:
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        Level: 30
+        Level: 15
     - rid: 3412048633303400550
       type: {class: FactionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -60,3 +62,19 @@ MonoBehaviour:
       data:
         Enabled: 1
         Stats: {fileID: 11400000, guid: 3a29b7bb73df0114a8eba5be22eccf60, type: 2}
+    - rid: 3564180500505952256
+      type: {class: DefaultEquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        DefaultItems:
+        - {fileID: 11400000, guid: 88a1df8346789ad44ab3fcc6a492b6ba, type: 2}
+        - {fileID: 11400000, guid: 7b6cfd1c46d79bf4da066e9c0ca1d319, type: 2}
+        - {fileID: 11400000, guid: 1ddc73ae1dee4434d870e9a11e9efb81, type: 2}
+    - rid: 3564180500505952335
+      type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        EquipmentSlots: 140000001e00000032000000
+        ManualItemUseSettings:
+          HpPercent: 0
+          OverrideStatusEffects: 0

@@ -20,6 +20,8 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             return _actionEvaluator.Evaluate(entity);
         }
 
+        public void Reset() { }
+
         public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
             var intentModule = entity.GetModule<IntentModule>();

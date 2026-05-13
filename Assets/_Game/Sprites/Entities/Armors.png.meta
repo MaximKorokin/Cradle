@@ -659,6 +659,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Armors_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 944
+        width: 64
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1a7c6617ebc9ae4898b7f6f3eba08f2
+      internalID: 1520845475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -697,6 +719,7 @@ TextureImporter:
       Armors_5: -244246594
       Armors_6: 435909982
       Armors_7: -1255328424
+      Armors_8: 1520845475
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

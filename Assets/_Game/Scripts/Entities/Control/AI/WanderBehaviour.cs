@@ -16,6 +16,8 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             return new BehaviourEvaluation(0.01f, null);
         }
 
+        public void Reset() { }
+
         public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
             if (!_wanderCooldown.IsOver())

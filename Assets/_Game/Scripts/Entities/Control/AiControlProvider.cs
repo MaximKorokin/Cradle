@@ -22,6 +22,11 @@ namespace Assets._Game.Scripts.Entities.Control
         {
             _brain.Tick(Entity, delta);
         }
+
+        public override void Reset()
+        {
+            _brain.Reset();
+        }
     }
 
     [Serializable]

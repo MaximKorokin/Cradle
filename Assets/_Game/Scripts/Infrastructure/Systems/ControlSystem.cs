@@ -26,6 +26,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _resolver = resolver;
 
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<EntityDespawningEvent>(OnEntityDespawning);
 
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
@@ -111,6 +112,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private void OnEntityDied(EntityDiedEvent e)
         {
             ResetControl(e.Victim);
+        }
+
+        private void OnEntityDespawning(EntityDespawningEvent e)
+        {
+            ResetControl(e.Entity);
         }
 
         private void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
