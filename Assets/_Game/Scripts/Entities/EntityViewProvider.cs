@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Entities
             var entityView = _poolService.Take(prefab, Vector3.zero, Quaternion.identity);
             entityView.name = $"{entityDefinition.VisualModel} ({++_entitiesCounter})";
 
-            var unitsController = _unitsControllerFactory.Create(entityView.UnitsRoot, entityDefinition.VisualModel, entityDefinition.VariantName);
+            var unitsController = _unitsControllerFactory.Create(entityView.UnitsRoot, entityDefinition.VisualModel);
 
             entityView.Initialize(unitsController);
 

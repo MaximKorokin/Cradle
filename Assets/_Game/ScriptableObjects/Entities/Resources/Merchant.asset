@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: e9998e56dd1d40afb06b7d49dc2b2903
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 1ee04069484c23c4eb367251bdab556f, type: 2}
-  <VariantName>k__BackingField: Merchant
+  <DisplayName>k__BackingField: Merchant
   _modules:
   - rid: 1349792714110271691
   - rid: 3412048633303400550

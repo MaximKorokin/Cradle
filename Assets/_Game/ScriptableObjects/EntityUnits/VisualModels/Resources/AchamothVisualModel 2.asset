@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
-  m_Name: AchamothVisualModel
+  m_Name: AchamothVisualModel 2
   m_EditorClassIdentifier: 
   _id: 86b81a5d73854bc6a3a4f1cf7ed05b77
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 46163ed6fc6ef5444a5ed7b5e5665362, type: 3}

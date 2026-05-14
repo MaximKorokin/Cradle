@@ -12,14 +12,14 @@ namespace Assets._Game.Scripts.Entities.Units
             _unitViewProvider = unitViewProvider;
         }
 
-        public UnitsController Create(Transform unitsRoot, EntityVisualModel entityVisualModel, string variantName)
+        public UnitsController Create(Transform unitsRoot, EntityVisualModel entityVisualModel)
         {
             var unitsController = new UnitsController(unitsRoot, _unitViewProvider, entityVisualModel.SwapOrderInLayerForDirection);
             var colorVariant = entityVisualModel.ColorVariants.GetRandomElement(Color.white);
 
             foreach (var unitVisualModel in entityVisualModel.Units)
             {
-                unitsController.AddUnit(_unitViewProvider.Create(unitVisualModel, variantName, colorVariant));
+                unitsController.AddUnit(_unitViewProvider.Create(unitVisualModel, colorVariant));
             }
 
             unitsController.UpdateOrderInLayer();

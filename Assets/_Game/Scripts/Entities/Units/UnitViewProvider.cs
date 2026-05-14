@@ -8,18 +8,15 @@ namespace Assets._Game.Scripts.Entities.Units
     public sealed class UnitViewProvider
     {
         private readonly PoolService _poolService;
-        private readonly UnitVariantsCatalog _entityUnitVariantsCatalog;
         private readonly DefaultPrefabReferences _defaultPrefabReferences;
         private readonly EntityUnitConfig _entityUnitConfig;
 
         public UnitViewProvider(
             PoolService poolService,
-            UnitVariantsCatalog entityUnitVariantsCatalog,
             DefaultPrefabReferences defaultPrefabReferences,
             EntityUnitConfig entityUnitConfig)
         {
             _poolService = poolService;
-            _entityUnitVariantsCatalog = entityUnitVariantsCatalog;
             _defaultPrefabReferences = defaultPrefabReferences;
             _entityUnitConfig = entityUnitConfig;
         }
@@ -32,20 +29,13 @@ namespace Assets._Game.Scripts.Entities.Units
             return unitView;
         }
 
-        public UnitView Create(EntityUnitVisualModel entityUnitVisualModel, string variantName, Color color)
+        public UnitView Create(EntityUnitVisualModel entityUnitVisualModel, Color color)
         {
-            var unitVariants = _entityUnitVariantsCatalog.GetByPath(entityUnitVisualModel.Path);
-            if (unitVariants == null)
-            {
-                SLog.Error($"Cannot find unit variants by path: {entityUnitVisualModel.Path}");
-                return null;
-            }
-
             var unitView = CreateUnit(entityUnitVisualModel.Path.ToString());
             unitView.Path = entityUnitVisualModel.Path.ToString();
             unitView.RelativeOrderInLayer = entityUnitVisualModel.RelativeOrderInLayer;
 
-            var unitVariantSprite = unitVariants.GetVariant(variantName)?.Sprites.GetRandomElement(_entityUnitConfig.NotFoundVariantSprite);
+            var unitVariantSprite = entityUnitVisualModel.SpriteVariants.GetRandomElement(_entityUnitConfig.NotFoundVariantSprite);
             unitView.SpriteRenderer.sprite = unitVariantSprite;
             unitView.SpriteRenderer.color = color;
 

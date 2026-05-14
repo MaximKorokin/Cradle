@@ -10,27 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
-  m_Name: AchamothVisualModel
+  m_Name: CraftingAnvilVisualModel
   m_EditorClassIdentifier: 
   _id: 86b81a5d73854bc6a3a4f1cf7ed05b77
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 46163ed6fc6ef5444a5ed7b5e5665362, type: 3}
-  <Animator>k__BackingField: {fileID: 22100000, guid: 64a3dd769af4e2641b898fc3b1b76682, type: 2}
+  <Animator>k__BackingField: {fileID: 0}
   <SwapOrderInLayerForDirection>k__BackingField: 0
   <ColorVariants>k__BackingField:
   - {r: 1, g: 1, b: 1, a: 1}
   <Units>k__BackingField:
-  - <Path>k__BackingField: 300
-    <SpriteVariants>k__BackingField:
-    - {fileID: -9147069183463846165, guid: 8d65e01f0a390a446a17d9b7e9e8d8c8, type: 3}
-    <EquipmentSlots>k__BackingField: 14000000
-    <RelativeOrderInLayer>k__BackingField: 5
   - <Path>k__BackingField: 200
     <SpriteVariants>k__BackingField:
-    - {fileID: 4288707482374143246, guid: 8d65e01f0a390a446a17d9b7e9e8d8c8, type: 3}
-    <EquipmentSlots>k__BackingField: 1e000000
-    <RelativeOrderInLayer>k__BackingField: 0
-  - <Path>k__BackingField: 100
-    <SpriteVariants>k__BackingField:
-    - {fileID: 0}
-    <EquipmentSlots>k__BackingField: 50000000
+    - {fileID: 2430428536178243209, guid: de9724eb5ec03104c87807798069cd9a, type: 3}
+    <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: edc70223a05e4ce9b82c63d025372dd8
   <VisualModel>k__BackingField: {fileID: 11400000, guid: db190890e5a0ec5428242edaf3082ac8, type: 2}
-  <VariantName>k__BackingField: Player
+  <DisplayName>k__BackingField: Player
   _modules:
   - rid: 1349792692413661261
   - rid: 7990781616137175140
@@ -85,9 +85,7 @@ MonoBehaviour:
       type: {class: QuestModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        <InitialQuests>k__BackingField:
-        - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
-        - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
+        <InitialQuests>k__BackingField: []
     - rid: 7990781616137175140
       type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

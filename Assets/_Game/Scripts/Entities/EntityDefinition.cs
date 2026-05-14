@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Entities
         [field: SerializeField]
         public EntityVisualModel VisualModel { get; private set; }
         [field: SerializeField]
-        public string VariantName { get; private set; }
+        public string DisplayName { get; private set; }
 
         [SerializeReference]
         [SerializeField]

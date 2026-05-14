@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: HumanoidVisualModel
   m_EditorClassIdentifier: 
   _id: 3aef2ec1f26b4e6687888ec7ae33028c
-  <Name>k__BackingField: Humanoid
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 5c1dd5d51ad8f664ca859916cd9ed528, type: 2}
   <SwapOrderInLayerForDirection>k__BackingField: 1
@@ -25,20 +24,37 @@ MonoBehaviour:
   - {r: 0.2924528, g: 0.21793787, b: 0.020692414, a: 1}
   <Units>k__BackingField:
   - <Path>k__BackingField: 300
+    <SpriteVariants>k__BackingField:
+    - {fileID: 6307129163795187510, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -1731781037224537961, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -813537590555114946, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: 3392571801789239441, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
     <EquipmentSlots>k__BackingField: 14000000
     <RelativeOrderInLayer>k__BackingField: 5
   - <Path>k__BackingField: 200
+    <SpriteVariants>k__BackingField:
+    - {fileID: -5504484496649349667, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -7382400056747157653, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
+    - {fileID: -6668446189047372956, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
     <EquipmentSlots>k__BackingField: 1e000000
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 400
+    <SpriteVariants>k__BackingField:
+    - {fileID: -8935676055993544010, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
     <EquipmentSlots>k__BackingField: 280000000f000000
     <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 450
+    <SpriteVariants>k__BackingField:
+    - {fileID: -8935676055993544010, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
     <EquipmentSlots>k__BackingField: 280000000a000000
     <RelativeOrderInLayer>k__BackingField: 10
   - <Path>k__BackingField: 500
+    <SpriteVariants>k__BackingField:
+    - {fileID: 4364421176935254655, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
     <EquipmentSlots>k__BackingField: 32000000
     <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 550
+    <SpriteVariants>k__BackingField:
+    - {fileID: 4364421176935254655, guid: 35658b706735d5c4ab3fdee0a875a553, type: 3}
     <EquipmentSlots>k__BackingField: 32000000
     <RelativeOrderInLayer>k__BackingField: 10

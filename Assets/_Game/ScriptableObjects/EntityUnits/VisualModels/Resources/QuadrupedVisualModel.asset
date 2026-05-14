@@ -13,29 +13,59 @@ MonoBehaviour:
   m_Name: QuadrupedVisualModel
   m_EditorClassIdentifier: 
   _id: 3c43adddbc6c476e8f583cba3e0fd303
-  <Name>k__BackingField: Quadruped
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 1c453e5f31f45d6429000e14b05ad5f3, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 96ad2e14e0944f943af4f9ba299469bb, type: 2}
+  <SwapOrderInLayerForDirection>k__BackingField: 0
   <ColorVariants>k__BackingField:
   - {r: 0.56078434, g: 0.3372549, b: 0.23137255, a: 1}
   - {r: 0.8301887, g: 0.576955, b: 0.4503382, a: 1}
   - {r: 0.3584906, g: 0.34979406, b: 0.34327164, a: 1}
   <Units>k__BackingField:
   - <Path>k__BackingField: 300
+    <SpriteVariants>k__BackingField:
+    - {fileID: 1690722556, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 932852225, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 1765645653, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 1821998810, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: 5
   - <Path>k__BackingField: 200
+    <SpriteVariants>k__BackingField:
+    - {fileID: 4592720289143835018, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 426013388, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 656039261, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: -314207970, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: 0
   - <Path>k__BackingField: 1500
+    <SpriteVariants>k__BackingField:
+    - {fileID: 9173402735476556308, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 1080468472, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: -702077541, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 572408901, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 1520
+    <SpriteVariants>k__BackingField:
+    - {fileID: 9173402735476556308, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 1080468472, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: -702077541, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 572408901, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: 10
   - <Path>k__BackingField: 1540
+    <SpriteVariants>k__BackingField:
+    - {fileID: 9173402735476556308, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 1080468472, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: -702077541, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 572408901, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: -5
   - <Path>k__BackingField: 1560
+    <SpriteVariants>k__BackingField:
+    - {fileID: 9173402735476556308, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 1080468472, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: -702077541, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
+    - {fileID: 572408901, guid: 1be0b5dce98b60f428cd16570e609975, type: 3}
     <EquipmentSlots>k__BackingField: 
     <RelativeOrderInLayer>k__BackingField: 10

@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _healthModule = entity.GetModule<HealthModule>();
 
             Level = entity.TryGetModule<LevelingModule>(out var levelingModule) ? levelingModule.Level.ToString() : "";
-            Name = entity.Definition.VariantName;
+            Name = entity.Definition.DisplayName;
             HealthRatio = _healthModule.HealthRatio;
 
             _healthModule.Changed += OnHealthChanged;

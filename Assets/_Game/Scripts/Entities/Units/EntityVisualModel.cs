@@ -9,8 +9,6 @@ namespace Assets._Game.Scripts.Entities.Units
     public class EntityVisualModel : GuidScriptableObject
     {
         [field: SerializeField]
-        public string Name { get; private set; }
-        [field: SerializeField]
         public EntityView BasePrefab { get; private set; }
         [field: SerializeField]
         public AnimatorOverrideController Animator { get; private set; }
@@ -27,6 +25,8 @@ namespace Assets._Game.Scripts.Entities.Units
     {
         [field: SerializeField]
         public EntityVisualModelUnitPath Path { get; private set; }
+        [field: SerializeField]
+        public Sprite[] SpriteVariants { get; private set; }
         [field: SerializeField]
         public EquipmentSlotType[] EquipmentSlots { get; private set; }
         [field: SerializeField]

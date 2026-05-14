@@ -155,7 +155,6 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<EntityViewProvider>(Lifetime.Singleton);
             builder.Register<EntityVisualModelCatalog>(Lifetime.Singleton);
-            builder.Register<UnitVariantsCatalog>(Lifetime.Singleton);
 
             builder.Register<FactionRelationResolver>(Lifetime.Singleton);
             builder.RegisterInstance(_factionRelations);
