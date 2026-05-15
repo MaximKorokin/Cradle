@@ -139,4 +139,8 @@ namespace Assets._Game.Scripts.Entities
         [field: SerializeField]
         public QuestDefinition[] InitialQuests { get; private set; }
     }
+
+    public sealed class CreatureModuleDefinition : EntityModuleDefinition
+    {
+    }
 }

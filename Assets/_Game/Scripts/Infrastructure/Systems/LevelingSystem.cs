@@ -14,7 +14,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
                 RestrictionState.Disabled | RestrictionState.Dead,
-                new[] { typeof(StatModule), typeof(LevelingModule) }
+                new[] { typeof(LevelingModule) }
             );
 
         public LevelingSystem(

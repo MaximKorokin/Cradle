@@ -42,7 +42,7 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnEntitySpawned(EntitySpawnedEvent e)
         {
-            if (!e.Entity.TryGetModule<StatModule>(out _)) return;
+            if (!e.Entity.TryGetModule<CreatureModule>(out _)) return;
 
             var view = _entityViewService.GetEntityView(e.Entity);
             if (view != null)

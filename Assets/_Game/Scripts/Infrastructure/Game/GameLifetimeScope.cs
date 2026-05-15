@@ -202,6 +202,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ShopModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<QuestModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<CreatureModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
 
         private void RegisterCalculators(IContainerBuilder builder)

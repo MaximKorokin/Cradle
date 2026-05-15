@@ -44,12 +44,11 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             base.Initialize();
 
-            if (!Entity.TryGetModule<StatModule>(out var statModule))
+            if (!Entity.TryGetModule<StatModule>(out _statModule))
             {
                 SLog.Error($"No {typeof(StatModule)} found on entity {Entity} but {typeof(HealthModule)} requires it");
                 return;
             }
-            _statModule = statModule;
 
             _statModule.Stats.StatChanged += OnStatChanged;
             OnStatChanged(StatId.HpMax);
@@ -90,7 +89,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            if (!entityDefinition.TryGetModuleDefinition<StatsModuleDefinition>(out var statsModuleDefinition)) return null;
+            if (!entityDefinition.TryGetModuleDefinition<StatsModuleDefinition>(out _)) return null;
 
             return new HealthModule();
         }

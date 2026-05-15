@@ -1,6 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Items;
 using System;
 using System.Collections.Generic;
 
@@ -34,7 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure.Querying
             var includedModules = new List<Type>();
             if (data.IncludedTargetDeclarations.HasFlag(TargetDeclaration.Creature))
             {
-                includedModules.Add(typeof(StatModule));
+                includedModules.Add(typeof(CreatureModule));
             }
             if (data.IncludedTargetDeclarations.HasFlag(TargetDeclaration.LootItem))
             {

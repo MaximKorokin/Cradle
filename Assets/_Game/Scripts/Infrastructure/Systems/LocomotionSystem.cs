@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (!intent.TryConsumeMove(out var move)) return;
 
-            float moveSpeed = stat.Stats.Get(StatId.MoveSpeed);
+            var moveSpeed = stat.Stats.Get(StatId.MoveSpeed);
 
             var direction = move.NormalizedDirection;
             var multiplier = move.SpeedMultiplier;

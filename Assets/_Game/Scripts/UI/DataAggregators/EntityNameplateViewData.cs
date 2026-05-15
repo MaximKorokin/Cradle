@@ -12,29 +12,38 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public string Name { get; private set; }
         public float HealthRatio { get; private set; }
 
+        public bool ShouldViewHealthBar => _healthModule != null;
+
         public event Action Changed;
 
         public EntityNameplateViewData(Entity entity)
         {
-            _healthModule = entity.GetModule<HealthModule>();
+            if (entity.TryGetModule<HealthModule>(out _healthModule))
+            {
+                HealthRatio = _healthModule.HealthRatio;
+                _healthModule.Changed += OnHealthChanged;
+            }
 
             Level = entity.TryGetModule<LevelingModule>(out var levelingModule) ? levelingModule.Level.ToString() : "";
             Name = entity.Definition.DisplayName;
-            HealthRatio = _healthModule.HealthRatio;
-
-            _healthModule.Changed += OnHealthChanged;
         }
 
         public override void Dispose()
         {
             base.Dispose();
 
-            _healthModule.Changed -= OnHealthChanged;
+            if (_healthModule != null)
+            {
+                _healthModule.Changed -= OnHealthChanged;
+            }
         }
 
         private void OnHealthChanged(float previous, float current)
         {
-            HealthRatio = _healthModule.HealthRatio;
+            if (_healthModule != null)
+            {
+                HealthRatio = _healthModule.HealthRatio;
+            }
 
             Changed?.Invoke();
         }

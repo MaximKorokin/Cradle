@@ -41,7 +41,10 @@ namespace Assets._Game.Scripts.UI.Views
         {
             _levelText.text = data.Level;
             _nameText.text = data.Name;
-            _healthFillBar.SetFillRatio(data.HealthRatio);
+            if (data.ShouldViewHealthBar)
+            {
+                _healthFillBar.SetFillRatio(data.HealthRatio);
+            }
         }
     }
 }
