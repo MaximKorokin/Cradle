@@ -56,10 +56,6 @@ namespace Assets._Game.Scripts.Entities
     {
         public EquipmentSlotType[] EquipmentSlots;
         public ItemUseSettings ManualItemUseSettings;
-    }
-
-    public class DefaultEquipmentModuleDefinition : EntityModuleDefinition
-    {
         public ItemDefinition[] DefaultItems;
     }
 

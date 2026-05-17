@@ -26,6 +26,7 @@ MonoBehaviour:
   - rid: 3412048748974702678
   - rid: 3412048868230037656
   - rid: 3564180410443759729
+  - rid: 3564180544770801745
   references:
     version: 2
     RefIds:
@@ -86,6 +87,10 @@ MonoBehaviour:
       data:
         Enabled: 1
         <InitialQuests>k__BackingField: []
+    - rid: 3564180544770801745
+      type: {class: CreatureModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
     - rid: 7990781616137175140
       type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

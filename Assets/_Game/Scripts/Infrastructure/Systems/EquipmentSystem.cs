@@ -28,7 +28,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             base.OnEntityAdded(entity);
 
-            if (!EntityQuery.Match(entity) || !entity.Definition.TryGetModuleDefinition<DefaultEquipmentModuleDefinition>(out var defaultEquipment)) return;
+            if (!EntityQuery.Match(entity) ||
+                !entity.Definition.TryGetModuleDefinition<EquipmentModuleDefinition>(out var defaultEquipment) ||
+                defaultEquipment.DefaultItems == null ||
+                defaultEquipment.DefaultItems.Length == 0) return;
 
             entity.SubscribeOnce<EntityCreatedEvent>(_ =>
             {

@@ -16,21 +16,16 @@ MonoBehaviour:
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 1ee04069484c23c4eb367251bdab556f, type: 2}
   <DisplayName>k__BackingField: Merchant
   _modules:
-  - rid: 1349792714110271691
   - rid: 3412048633303400550
   - rid: 2155386242765160615
   - rid: 3564180267895619730
   - rid: 3564180267895619758
-  - rid: 3564180477885808755
-  - rid: 3564180500505952256
   - rid: 3564180500505952335
+  - rid: 3564180544770801744
+  - rid: 3564180544770801763
   references:
     version: 2
     RefIds:
-    - rid: 1349792714110271691
-      type: {class: StatusEffectModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
     - rid: 2155386242765160615
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -57,19 +52,6 @@ MonoBehaviour:
       type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
         <AiBehaviours>k__BackingField: 10
-    - rid: 3564180477885808755
-      type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        Stats: {fileID: 11400000, guid: 3a29b7bb73df0114a8eba5be22eccf60, type: 2}
-    - rid: 3564180500505952256
-      type: {class: DefaultEquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
-        DefaultItems:
-        - {fileID: 11400000, guid: 88a1df8346789ad44ab3fcc6a492b6ba, type: 2}
-        - {fileID: 11400000, guid: 7b6cfd1c46d79bf4da066e9c0ca1d319, type: 2}
-        - {fileID: 11400000, guid: 1ddc73ae1dee4434d870e9a11e9efb81, type: 2}
     - rid: 3564180500505952335
       type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -78,3 +60,16 @@ MonoBehaviour:
         ManualItemUseSettings:
           HpPercent: 0
           OverrideStatusEffects: 0
+        DefaultItems:
+        - {fileID: 11400000, guid: 88a1df8346789ad44ab3fcc6a492b6ba, type: 2}
+        - {fileID: 11400000, guid: 7b6cfd1c46d79bf4da066e9c0ca1d319, type: 2}
+        - {fileID: 11400000, guid: debb587e079754b46b341fe72addcfeb, type: 2}
+    - rid: 3564180544770801744
+      type: {class: CreatureModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+    - rid: 3564180544770801763
+      type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Stats: {fileID: 11400000, guid: 3a29b7bb73df0114a8eba5be22eccf60, type: 2}

@@ -16,20 +16,15 @@ MonoBehaviour:
   <VisualModel>k__BackingField: {fileID: 11400000, guid: ba8374181e2309944a9ed65bef7b002d, type: 2}
   <DisplayName>k__BackingField: Achamoth
   _modules:
-  - rid: 1349792714110271691
   - rid: 3412048633303400550
   - rid: 2155386242765160615
   - rid: 3564180267895619758
   - rid: 3564180477885808724
-  - rid: 3564180477885808742
-  - rid: 3564180477885808756
+  - rid: 3564180544770801743
+  - rid: 3564180544770801762
   references:
     version: 2
     RefIds:
-    - rid: 1349792714110271691
-      type: {class: StatusEffectModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
     - rid: 2155386242765160615
       type: {class: LevelingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -58,15 +53,15 @@ MonoBehaviour:
         ManualItemUseSettings:
           HpPercent: 0
           OverrideStatusEffects: 0
-    - rid: 3564180477885808742
-      type: {class: DefaultEquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
-      data:
-        Enabled: 1
         DefaultItems:
         - {fileID: 11400000, guid: 82a9c7b7845f5a34c84f6db1d886e4ed, type: 2}
         - {fileID: 11400000, guid: 2e1acb10835da964d833bf9d4590d813, type: 2}
         - {fileID: 11400000, guid: fd0c5f6c5c2204542ae7813e2a4f7200, type: 2}
-    - rid: 3564180477885808756
+    - rid: 3564180544770801743
+      type: {class: CreatureModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+    - rid: 3564180544770801762
       type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1

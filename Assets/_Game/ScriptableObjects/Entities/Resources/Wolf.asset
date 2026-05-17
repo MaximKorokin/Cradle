@@ -25,6 +25,7 @@ MonoBehaviour:
   - rid: 3412048748974702677
   - rid: 3412048909577486425
   - rid: 2155386242765160615
+  - rid: 3564180544770801746
   references:
     version: 2
     RefIds:
@@ -84,3 +85,7 @@ MonoBehaviour:
         Enabled: 1
         Experience: 11
         LootTable: {fileID: 11400000, guid: 1c23f13fa1671864f8541337d71c4d2f, type: 2}
+    - rid: 3564180544770801746
+      type: {class: CreatureModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
