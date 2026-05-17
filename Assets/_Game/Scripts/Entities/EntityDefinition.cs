@@ -45,6 +45,7 @@ namespace Assets._Game.Scripts.Entities
     public class StorageModuleDefinition : EntityModuleDefinition
     {
         public int SlotsAmount;
+        public float Radius;
     }
 
     public class InventoryModuleDefinition : EntityModuleDefinition
@@ -125,15 +126,31 @@ namespace Assets._Game.Scripts.Entities
     public sealed class ShopModuleDefinition : EntityModuleDefinition
     {
         [field: SerializeField]
-        public float Radius { get; private set; }
-        [field: SerializeField]
         public ShopDefinition ShopDefinition { get; private set; }
+        [field: SerializeField]
+        public float Radius { get; private set; }
     }
 
     public sealed class QuestModuleDefinition : EntityModuleDefinition
     {
         [field: SerializeField]
         public QuestDefinition[] InitialQuests { get; private set; }
+    }
+
+    public sealed class QuestGiverModuleDefinition : EntityModuleDefinition
+    {
+        [field: SerializeField]
+        public QuestDefinition[] OfferedQuests { get; private set; }
+        [field: SerializeField]
+        public float Radius { get; private set; }
+    }
+
+    public sealed class CraftingModuleDefinition : EntityModuleDefinition
+    {
+        [field: SerializeField]
+        public string CrafterName { get; private set; }
+        [field: SerializeField]
+        public float Radius { get; private set; }
     }
 
     public sealed class CreatureModuleDefinition : EntityModuleDefinition

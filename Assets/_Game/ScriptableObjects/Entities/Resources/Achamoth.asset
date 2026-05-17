@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 3564180477885808724
   - rid: 3564180544770801743
   - rid: 3564180544770801762
+  - rid: 3564180595475218522
   references:
     version: 2
     RefIds:
@@ -44,7 +45,7 @@ MonoBehaviour:
     - rid: 3564180267895619759
       type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
-        <AiBehaviours>k__BackingField: 2
+        <AiBehaviours>k__BackingField: 10
     - rid: 3564180477885808724
       type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
@@ -66,3 +67,10 @@ MonoBehaviour:
       data:
         Enabled: 1
         Stats: {fileID: 11400000, guid: 3a29b7bb73df0114a8eba5be22eccf60, type: 2}
+    - rid: 3564180595475218522
+      type: {class: QuestGiverModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        <OfferedQuests>k__BackingField:
+        - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
+        <Radius>k__BackingField: 1

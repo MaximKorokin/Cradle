@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 3412048633303400550
   - rid: 3564180267895619758
   - rid: 3564180477885808756
+  - rid: 3564180595475218516
   references:
     version: 2
     RefIds:
@@ -36,9 +37,15 @@ MonoBehaviour:
     - rid: 3564180267895619759
       type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
-        <AiBehaviours>k__BackingField: 2
+        <AiBehaviours>k__BackingField: 10
     - rid: 3564180477885808756
       type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
         Stats: {fileID: 11400000, guid: 3a29b7bb73df0114a8eba5be22eccf60, type: 2}
+    - rid: 3564180595475218516
+      type: {class: CraftingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        <CrafterName>k__BackingField: test123
+        <Radius>k__BackingField: 1

@@ -203,6 +203,12 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<QuestModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
+            builder.Register<QuestGiverModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<CraftingModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
+            builder.Register<InteractionBehaviourModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
             builder.Register<CreatureModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
 

@@ -6,10 +6,12 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class StorageModule : EntityModuleBase
     {
         public InventoryModel Storage { get; private set; }
+        public float Radius { get; }
 
-        public StorageModule(InventoryModel storage)
+        public StorageModule(InventoryModel storage, float radius)
         {
             Storage = storage;
+            Radius = radius;
 
             if (Storage != null) Storage.InventoryChanged += OnInventorySlotChanged;
         }
@@ -42,7 +44,7 @@ namespace Assets._Game.Scripts.Entities.Modules
                 return null;
 
             var inventoryModel = _inventoryModelAssembler.Create(storageModuleDefinition.SlotsAmount);
-            return new StorageModule(inventoryModel);
+            return new StorageModule(inventoryModel, storageModuleDefinition.Radius);
         }
 
         public void Apply(Entity entity, EntitySave entitySave)

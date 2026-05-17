@@ -67,7 +67,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<InteractionPromptUISystem>();
             builder.RegisterComponentInHierarchy<FloatingTextUISystem>();
             builder.RegisterComponentInHierarchy<PlayerReviveUISystem>();
-            builder.RegisterComponentInHierarchy<ShopUISystem>();
+            builder.RegisterComponentInHierarchy<InteractionUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)
