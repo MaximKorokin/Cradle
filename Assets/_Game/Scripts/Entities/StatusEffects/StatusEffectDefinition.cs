@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
-using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Attributes;
 using System;
 using UnityEngine;

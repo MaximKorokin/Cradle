@@ -1,9 +1,9 @@
-﻿using Assets._Game.Scripts.Shared.Attributes;
 using System;
+using Assets._Game.Scripts.Shared.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.Infrastructure.Storage
+namespace Assets._Game.Scripts.Shared
 {
     public abstract class GuidScriptableObject : ScriptableObject
     {

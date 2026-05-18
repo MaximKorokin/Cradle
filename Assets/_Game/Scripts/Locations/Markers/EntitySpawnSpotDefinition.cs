@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Infrastructure.Storage;
+using Assets._Game.Scripts.Shared;
 using Assets.CoreScripts;
 using System;
 using System.Collections.Generic;

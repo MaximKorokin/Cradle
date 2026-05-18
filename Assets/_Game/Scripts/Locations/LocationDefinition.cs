@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Infrastructure.Storage;
+﻿using Assets._Game.Scripts.Shared;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Locations
