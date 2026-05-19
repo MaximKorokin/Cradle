@@ -13,37 +13,44 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 {
     public sealed class ShopItemStacksPreviewStrategy : IItemStacksPreviewStrategy
     {
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly WindowManager _windowManager;
-        private readonly IPlayerProvider _playerProvider;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
-        private readonly ShopModel _shopModel;
+        private readonly ItemContainerPath _shopContainerPath;
+        private readonly ItemContainerPath _inventoryContainerPath;
+        private readonly ItemContainerPath _equipmentContainerPath;
         private readonly long _shopSlot;
         private readonly bool _isBuying;
         private readonly float _buyCoefficient;
         private readonly float _sellCoefficient;
         private readonly EquipmentSlotKey? _equipmentSlot;
 
+        private ShopModel _shopModel;
         private EquipmentModel _equipmentModel;
         private ItemStacksPreviewWindow _window;
 
         public ShopItemStacksPreviewStrategy(
+            IGlobalEventBus globalEventBus,
             WindowManager windowManager,
-            IPlayerProvider playerProvider,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
-            ShopModel shopModel,
+            ItemContainerPath shopContainerPath,
+            ItemContainerPath inventoryContainerPath,
+            ItemContainerPath equipmentContainerPath,
             long shopSlot,
             bool isBuying,
             float buyCoefficient,
             float sellCoefficient,
             EquipmentSlotKey? equipmentSlot)
         {
+            _globalEventBus = globalEventBus;
             _windowManager = windowManager;
-            _playerProvider = playerProvider;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
-            _shopModel = shopModel;
+            _shopContainerPath = shopContainerPath;
+            _inventoryContainerPath = inventoryContainerPath;
+            _equipmentContainerPath = equipmentContainerPath;
             _shopSlot = shopSlot;
             _isBuying = isBuying;
             _buyCoefficient = buyCoefficient;
@@ -54,7 +61,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         public void Initialize(ItemStacksPreviewWindow window)
         {
             _window = window;
-            _equipmentModel = _itemContainerResolver.ResolveEquipment(_playerProvider.Player);
+            _equipmentModel = _itemContainerResolver.ResolveEquipment(_equipmentContainerPath);
+            _shopModel = _itemContainerResolver.ResolveShop(_shopContainerPath);
             _shopModel.Changed += OnShopChanged;
             _equipmentModel.Changed += OnEquipmentChanged;
         }
@@ -107,7 +115,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                     {
                         _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount => {
                              int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * amount : 0;
-                             PublishItemCommand(new BuyFromShopCommand(_shopModel, _shopSlot, amount, price));
+                             PublishItemCommand(new BuyFromShopCommand(_shopContainerPath, _inventoryContainerPath, _shopSlot, amount, price));
                         });
                     }
                     break;
@@ -118,8 +126,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         {
             _windowManager.CloseWindow(_window);
 
-            var entity = _playerProvider.Player;
-            entity.Publish(new ItemCommandRequest(command));
+            _globalEventBus.Publish(new ItemCommandRequest(command));
         }
 
         private IEnumerable<ItemStackAction> GetActions(ItemStackSnapshot item)

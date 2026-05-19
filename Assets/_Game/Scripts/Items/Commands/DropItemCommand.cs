@@ -2,11 +2,11 @@
 {
     public readonly struct DropItemCommand : IItemCommand
     {
-        public readonly ItemContainerId FromContainer;
+        public readonly ItemContainerPath FromContainer;
         public readonly long FromSlot;
         public readonly int Amount;
 
-        public DropItemCommand(ItemContainerId fromContainer, long fromSlot, int amount)
+        public DropItemCommand(ItemContainerPath fromContainer, long fromSlot, int amount)
         {
             FromContainer = fromContainer;
             FromSlot = fromSlot;

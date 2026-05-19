@@ -11,21 +11,21 @@ namespace Assets._Game.Scripts.UI.Services
 {
     public sealed class ItemPreviewService
     {
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly WindowManager _windowManager;
-        private readonly IPlayerProvider _playerProvider;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
         private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
 
         public ItemPreviewService(
+            IGlobalEventBus globalEventBus,
             WindowManager windowManager,
-            IPlayerProvider playerProvider,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
             ItemDefinitionFormatter itemDefinitionFormatter)
         {
+            _globalEventBus = globalEventBus;
             _windowManager = windowManager;
-            _playerProvider = playerProvider;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
             _itemDefinitionFormatter = itemDefinitionFormatter;
@@ -36,19 +36,21 @@ namespace Assets._Game.Scripts.UI.Services
         /// </summary>
         public void ShowItemStackPreview(
             long containerSlot,
-            ItemContainerId containerId,
-            ItemContainerId secondaryContainerId = ItemContainerId.Inventory,
+            ItemContainerPath containerPath,
+            ItemContainerPath secondaryContainerPath,
+            ItemContainerPath equipmentContainerPath,
             EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new ContainerItemStacksPreviewStrategy(
+                _globalEventBus,
                 _windowManager,
-                _playerProvider,
                 _itemContainerResolver,
                 _itemStackFormatter,
                 equipmentSlotToCompare,
                 containerSlot,
-                containerId,
-                secondaryContainerId);
+                equipmentContainerPath,
+                containerPath,
+                secondaryContainerPath);
 
             _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
                 new ItemStacksPreviewWindowControllerArguments(strategy));
@@ -59,17 +61,21 @@ namespace Assets._Game.Scripts.UI.Services
         /// </summary>
         public void ShowShopItemPreview(
             long shopSlot,
-            ShopModel shopModel,
+            ItemContainerPath shopContainerPath,
+            ItemContainerPath inventoryContainerPath,
+            ItemContainerPath equipmentContainerPath,
             float buyCoefficient,
             float sellCoefficient,
             EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new ShopItemStacksPreviewStrategy(
+                _globalEventBus,
                 _windowManager,
-                _playerProvider,
                 _itemContainerResolver,
                 _itemStackFormatter,
-                shopModel,
+                shopContainerPath,
+                inventoryContainerPath,
+                equipmentContainerPath,
                 shopSlot,
                 isBuying: true,
                 buyCoefficient,
@@ -85,16 +91,20 @@ namespace Assets._Game.Scripts.UI.Services
         /// </summary>
         public void ShowInventoryItemForSellPreview(
             long inventorySlot,
-            ShopModel shopModel,
+            ItemContainerPath shopContainerPath,
+            ItemContainerPath inventoryContainerPath,
+            ItemContainerPath equipmentContainerPath,
             float sellCoefficient,
             EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new InventoryToShopPreviewStrategy(
+                _globalEventBus,
                 _windowManager,
-                _playerProvider,
                 _itemContainerResolver,
                 _itemStackFormatter,
-                shopModel,
+                shopContainerPath,
+                inventoryContainerPath,
+                equipmentContainerPath,
                 inventorySlot,
                 sellCoefficient,
                 equipmentSlotToCompare);
@@ -106,14 +116,17 @@ namespace Assets._Game.Scripts.UI.Services
         /// <summary>
         /// Shows a preview window for an item definition.
         /// </summary>
-        public void ShowItemDefinitionPreview(ItemDefinition itemDefinition, EquipmentSlotKey? equipmentSlotToCompare = null)
+        public void ShowItemDefinitionPreview(
+            ItemDefinition itemDefinition,
+            ItemContainerPath equipmentContainerPath,
+            EquipmentSlotKey? equipmentSlotToCompare = null)
         {
             var strategy = new DefinitionItemStacksPreviewStrategy(
                 itemDefinition,
                 _itemDefinitionFormatter,
-                _playerProvider,
                 _itemContainerResolver,
                 _itemStackFormatter,
+                equipmentContainerPath,
                 equipmentSlotToCompare);
 
             _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(

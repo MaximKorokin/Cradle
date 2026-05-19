@@ -3,12 +3,12 @@ using Assets._Game.Scripts.Entities.Interactions.Action;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
-using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Loot;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Quests;
+using Assets._Game.Scripts.Shared;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -40,6 +40,11 @@ namespace Assets._Game.Scripts.Entities
     public abstract class EntityModuleDefinition
     {
         public bool Enabled = true;
+    }
+
+    public class PersistenceModuleDefinition : EntityModuleDefinition
+    {
+        public string PersistenceKey;
     }
 
     public class StorageModuleDefinition : EntityModuleDefinition

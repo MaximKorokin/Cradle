@@ -18,33 +18,33 @@ namespace Assets._Game.Scripts.Items.Commands
     public class ItemCommandHandler
     {
         private readonly IGlobalEventBus _globalEventBus;
+        private readonly EntityRepository _entityRepository;
         private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly ItemStackFactory _itemStackFactory;
         private readonly ItemsConfig _itemsConfig;
 
         public ItemCommandHandler(
             IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository,
             ItemContainerResolver itemContainerResolver,
-            ItemStackFactory itemStackFactory,
             ItemsConfig itemsConfig)
         {
             _globalEventBus = globalEventBus;
+            _entityRepository = entityRepository;
             _itemContainerResolver = itemContainerResolver;
-            _itemStackFactory = itemStackFactory;
             _itemsConfig = itemsConfig;
         }
 
-        public bool Handle(Entity entity, IItemCommand command)
+        public bool Handle(IItemCommand command)
         {
             return command switch
             {
-                TransferItemCommand c => HandleTransfer(entity, c),
-                EquipFromContainerCommand c => HandleEquip(entity, c),
-                UnequipToContainerCommand c => HandleUnequip(entity, c),
-                DropItemCommand c => HandleDrop(entity, c),
-                UseItemCommand c => HandleUse(entity, c),
-                BuyFromShopCommand c => HandleBuy(entity, c),
-                SellToShopCommand c => HandleSell(entity, c),
+                TransferItemCommand c => HandleTransfer(c),
+                EquipFromContainerCommand c => HandleEquip(c),
+                UnequipToContainerCommand c => HandleUnequip(c),
+                DropItemCommand c => HandleDrop(c),
+                UseItemCommand c => HandleUse(c),
+                BuyFromShopCommand c => HandleBuy(c),
+                SellToShopCommand c => HandleSell(c),
                 _ => throw new NotSupportedException(command.GetType().Name),
             };
         }
@@ -58,8 +58,8 @@ namespace Assets._Game.Scripts.Items.Commands
         private List<EquipmentSlotKey> GetSecondarySlotKeys(ItemStackSnapshot item, EquipmentModel equipmentModel)
         {
             var secondarySlotKeys = new List<EquipmentSlotKey>();
-            if (!item.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait) || 
-                equippableTrait.SecondarySlots == null || 
+            if (!item.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait) ||
+                equippableTrait.SecondarySlots == null ||
                 equippableTrait.SecondarySlots.Length == 0)
                 return secondarySlotKeys;
 
@@ -85,19 +85,19 @@ namespace Assets._Game.Scripts.Items.Commands
             return items;
         }
 
-        private bool HandleTransfer(Entity entity, TransferItemCommand c)
+        private bool HandleTransfer(TransferItemCommand c)
         {
-            var from = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
-            var to = _itemContainerResolver.ResolveContainer(entity, c.ToContainer);
+            var from = _itemContainerResolver.ResolveInventory(c.FromContainer);
+            var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
             return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
         }
 
-        private bool HandleEquip(Entity entity, EquipFromContainerCommand c)
+        private bool HandleEquip(EquipFromContainerCommand c)
         {
-            var fromContainer = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
+            var fromContainer = _itemContainerResolver.ResolveInventory(c.FromContainer);
             var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+            var equipmentModel = _itemContainerResolver.ResolveEquipment(c.Equipment);
             var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
-            var equipmentModel = _itemContainerResolver.ResolveEquipment(entity);
 
             var fromItemNullable = fromContainer.Get(fromSlot);
             if (fromItemNullable == null)
@@ -329,10 +329,10 @@ namespace Assets._Game.Scripts.Items.Commands
             }
         }
 
-        private bool HandleUnequip(Entity entity, UnequipToContainerCommand c)
+        private bool HandleUnequip(UnequipToContainerCommand c)
         {
-            var equipmentModel = _itemContainerResolver.ResolveEquipment(entity);
-            var toContainer = _itemContainerResolver.ResolveInventory(entity, c.ToContainer);
+            var equipmentModel = _itemContainerResolver.ResolveEquipment(c.FromEquipment);
+            var toContainer = _itemContainerResolver.ResolveInventory(c.ToContainer);
             var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
 
             var item = equipmentModel.Get(equipmentSlot);
@@ -343,25 +343,26 @@ namespace Assets._Game.Scripts.Items.Commands
             return ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount) > 0;
         }
 
-        private bool HandleDrop(Entity entity, DropItemCommand c)
+        private bool HandleDrop(DropItemCommand c)
         {
+            var entity = _entityRepository.Get(c.FromContainer.EntityId);
             if (!entity.TryGetModule<SpatialModule>(out var spatialModule)) return false;
 
             ItemStackSnapshot? item;
             int removedAmount;
 
-            if (c.FromContainer == ItemContainerId.Equipment)
+            if (c.FromContainer.ContainerId == ItemContainerId.Equipment)
             {
-                var equipment = _itemContainerResolver.ResolveEquipment(entity);
+                var equipmentModel = _itemContainerResolver.ResolveEquipment(c.FromContainer);
                 var slot = ContainerSlotConverter.ToEquipmentSlot(c.FromSlot);
-                item = equipment.Get(slot);
+                item = equipmentModel.Get(slot);
                 if (item == null) return false;
                 // Secondary slots are automatically unblocked once the item is removed
-                removedAmount = ItemContainerUtils.RemoveAmount(equipment, slot, c.Amount);
+                removedAmount = ItemContainerUtils.RemoveAmount(equipmentModel, slot, c.Amount);
             }
             else
             {
-                var from = _itemContainerResolver.ResolveInventory(entity, c.FromContainer);
+                var from = _itemContainerResolver.ResolveInventory(c.FromContainer);
                 var slot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
                 item = from.Get(slot);
                 if (item == null) return false;
@@ -376,18 +377,18 @@ namespace Assets._Game.Scripts.Items.Commands
             return false;
         }
 
-        private bool HandleUse(Entity entity, UseItemCommand c)
+        private bool HandleUse(UseItemCommand c)
         {
             ItemStackSnapshot? item;
 
-            if (c.Container == ItemContainerId.Equipment)
+            if (c.Container.ContainerId == ItemContainerId.Equipment)
             {
-                var equipment = _itemContainerResolver.ResolveEquipment(entity);
+                var equipment = _itemContainerResolver.ResolveEquipment(c.Container);
                 item = equipment.Get(ContainerSlotConverter.ToEquipmentSlot(c.Slot));
             }
             else
             {
-                var container = _itemContainerResolver.ResolveInventory(entity, c.Container);
+                var container = _itemContainerResolver.ResolveInventory(c.Container);
                 item = container.Get(ContainerSlotConverter.ToInventorySlot(c.Slot));
             }
 
@@ -400,6 +401,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // Check for allowed and limiting RestrictionState
+            var entity = _entityRepository.Get(c.Container.EntityId);
             if (entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule))
             {
                 if (usableTrait.LimitingRestrictionState != RestrictionState.None &&
@@ -421,14 +423,14 @@ namespace Assets._Game.Scripts.Items.Commands
             // If the item is consumable, remove one from the stack.
             if (usableTrait.Consumable)
             {
-                if (c.Container == ItemContainerId.Equipment)
+                if (c.Container.ContainerId == ItemContainerId.Equipment)
                 {
-                    var equipment = _itemContainerResolver.ResolveEquipment(entity);
+                    var equipment = _itemContainerResolver.ResolveEquipment(c.Container);
                     equipment.RemoveFromSlot(ContainerSlotConverter.ToEquipmentSlot(c.Slot), 1);
                 }
                 else
                 {
-                    var container = _itemContainerResolver.ResolveInventory(entity, c.Container);
+                    var container = _itemContainerResolver.ResolveInventory(c.Container);
                     container.RemoveFromSlot(ContainerSlotConverter.ToInventorySlot(c.Slot), 1);
                 }
             }
@@ -436,22 +438,22 @@ namespace Assets._Game.Scripts.Items.Commands
             return true;
         }
 
-        private bool HandleBuy(Entity entity, BuyFromShopCommand command)
+        private bool HandleBuy(BuyFromShopCommand c)
         {
-            if (!entity.TryGetModule<InventoryModule>(out var inventoryModule)) return false;
-            if (command.ShopModel == null) return false;
+            var inventoryModel = _itemContainerResolver.ResolveInventory(c.InventoryModelPath);
+            var shopModel = _itemContainerResolver.ResolveShop(c.ShopModelPath);
 
-            var itemSnapshot = command.ShopModel.Get(ShopSlot.FromInt64(command.ShopSlot));
+            var itemSnapshot = shopModel.Get(ShopSlot.FromInt64(c.ShopSlot));
             if (!itemSnapshot.HasValue) return false;
 
             var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
             var goldKey = ItemKey.From(goldDefinition, null);
-            if (inventoryModule.Inventory.Count(goldKey) < command.Price)
+            if (inventoryModel.Count(goldKey) < c.Price)
                 return false;
 
             // Try to add to inventory
-            var amountToTransfer = Math.Min(command.Amount, itemSnapshot.Value.Amount);
-            var preview = inventoryModule.Inventory.PreviewAdd(new ItemStackSnapshot(
+            var amountToTransfer = Math.Min(c.Amount, itemSnapshot.Value.Amount);
+            var preview = inventoryModel.PreviewAdd(new ItemStackSnapshot(
                 itemSnapshot.Value.Definition,
                 itemSnapshot.Value.InstanceData,
                 amountToTransfer));
@@ -459,13 +461,13 @@ namespace Assets._Game.Scripts.Items.Commands
             if (preview != amountToTransfer) return false;
 
             // Remove gold from inventory
-            inventoryModule.Inventory.Remove(goldKey, command.Price);
+            inventoryModel.Remove(goldKey, c.Price);
 
             // Remove item from shop
-            command.ShopModel.RemoveFromSlot(ShopSlot.FromInt64(command.ShopSlot), preview);
+            shopModel.RemoveFromSlot(ShopSlot.FromInt64(c.ShopSlot), preview);
 
             // Add item to inventory
-            inventoryModule.Inventory.Add(new ItemStackSnapshot(
+            inventoryModel.Add(new ItemStackSnapshot(
                 itemSnapshot.Value.Definition,
                 itemSnapshot.Value.InstanceData,
                 preview));
@@ -473,23 +475,23 @@ namespace Assets._Game.Scripts.Items.Commands
             return true;
         }
 
-        private bool HandleSell(Entity entity, SellToShopCommand command)
+        private bool HandleSell(SellToShopCommand c)
         {
-            if (!entity.TryGetModule<InventoryModule>(out var inventoryModule)) return false;
-            if (command.ShopModel == null) return false;
+            var inventoryModel = _itemContainerResolver.ResolveInventory(c.InventoryModelPath);
+            var shopModel = _itemContainerResolver.ResolveShop(c.ShopModelPath);
 
-            var itemSnapshot = inventoryModule.Inventory.Get(InventorySlot.FromInt64(command.InventorySlot));
+            var itemSnapshot = inventoryModel.Get(InventorySlot.FromInt64(c.InventorySlot));
             if (!itemSnapshot.HasValue) return false;
 
             // Remove item from inventory
-            var removed = inventoryModule.Inventory.RemoveFromSlot(InventorySlot.FromInt64(command.InventorySlot), command.Amount);
+            var removed = inventoryModel.RemoveFromSlot(InventorySlot.FromInt64(c.InventorySlot), c.Amount);
             if (removed <= 0) return false;
 
             var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
-            inventoryModule.Inventory.Add(new ItemStackSnapshot(goldDefinition, null, command.Price));
+            inventoryModel.Add(new ItemStackSnapshot(goldDefinition, null, c.Price));
 
             // Add item back to shop (buyback feature)
-            command.ShopModel.Add(new ItemStackSnapshot(
+            shopModel.Add(new ItemStackSnapshot(
                 itemSnapshot.Value.Definition,
                 itemSnapshot.Value.InstanceData,
                 removed));

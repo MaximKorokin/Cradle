@@ -4,14 +4,16 @@ namespace Assets._Game.Scripts.Items.Commands
 {
     public readonly struct BuyFromShopCommand : IItemCommand
     {
-        public ShopModel ShopModel { get; }
+        public ItemContainerPath ShopModelPath { get; }
+        public ItemContainerPath InventoryModelPath { get; }
         public long ShopSlot { get; }
         public int Amount { get; }
         public int Price { get; }
 
-        public BuyFromShopCommand(ShopModel shopModel, long shopSlot, int amount, int price)
+        public BuyFromShopCommand(ItemContainerPath shopModelPath, ItemContainerPath inventoryModelPath, long shopSlot, int amount, int price)
         {
-            ShopModel = shopModel;
+            ShopModelPath = shopModelPath;
+            InventoryModelPath = inventoryModelPath;
             ShopSlot = shopSlot;
             Amount = amount;
             Price = price;
@@ -20,14 +22,16 @@ namespace Assets._Game.Scripts.Items.Commands
 
     public readonly struct SellToShopCommand : IItemCommand
     {
-        public ShopModel ShopModel { get; }
+        public ItemContainerPath ShopModelPath { get; }
+        public ItemContainerPath InventoryModelPath { get; }
         public long InventorySlot { get; }
         public int Amount { get; }
         public int Price { get; }
 
-        public SellToShopCommand(ShopModel shopModel, long inventorySlot, int amount, int price)
+        public SellToShopCommand(ItemContainerPath shopModelPath, ItemContainerPath inventoryModelPath, long inventorySlot, int amount, int price)
         {
-            ShopModel = shopModel;
+            ShopModelPath = shopModelPath;
+            InventoryModelPath = inventoryModelPath;
             InventorySlot = inventorySlot;
             Amount = amount;
             Price = price;

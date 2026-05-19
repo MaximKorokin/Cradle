@@ -2,11 +2,11 @@
 {
     public readonly struct UseItemCommand : IItemCommand
     {
-        public readonly ItemContainerId Container;
+        public readonly ItemContainerPath Container;
         public readonly long Slot;
         public readonly bool IsManual;
 
-        public UseItemCommand(ItemContainerId container, long slot, bool isManual)
+        public UseItemCommand(ItemContainerPath container, long slot, bool isManual)
         {
             Container = container;
             Slot = slot;

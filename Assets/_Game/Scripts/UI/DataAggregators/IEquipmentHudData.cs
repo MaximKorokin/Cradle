@@ -1,5 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 
@@ -10,23 +10,44 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         EquipmentModel EquipmentModel { get; }
 
         event Action Changed;
+
+        void SetEquipmentEntity(string equipmentEntityId);
     }
 
     public class EquipmentHudData : DataAggregatorBase, IEquipmentHudData
     {
-        private readonly EquipmentModule _equipmentModule;
+        private readonly EntityRepository _entityRepository;
 
-        public EquipmentHudData(PlayerContext playerContext)
+        private EquipmentModule _equipmentModule;
+
+        public EquipmentHudData(EntityRepository entityRepository)
         {
-            _equipmentModule = playerContext.GetModule<EquipmentModule>();
-            _equipmentModule.Equipment.Changed += OnEquipmentChanged;
-            OnEquipmentChanged();
+            _entityRepository = entityRepository;
         }
 
         public EquipmentModel EquipmentModel => _equipmentModule.Equipment;
         public ItemUseSettings ItemUseSettings => _equipmentModule.AutoItemUseSettings;
 
         public event Action Changed;
+
+        public void SetEquipmentEntity(string equipmentEntityId)
+        {
+            var entity = _entityRepository.Get(equipmentEntityId);
+            var equipmentModule = entity.GetModule<EquipmentModule>();
+            if (_equipmentModule != equipmentModule)
+            {
+                if (_equipmentModule != null)
+                {
+                    _equipmentModule.Equipment.Changed -= OnEquipmentChanged;
+                }
+                _equipmentModule = equipmentModule;
+                if (_equipmentModule != null)
+                {
+                    _equipmentModule.Equipment.Changed += OnEquipmentChanged;
+                }
+                OnEquipmentChanged();
+            }
+        }
 
         private void OnEquipmentChanged()
         {

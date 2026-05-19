@@ -104,6 +104,7 @@ namespace Assets._Game.Scripts.Infrastructure
         {
             builder.RegisterEntryPoint<SystemRunner>();
 
+            builder.Register<PersistenceSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LocomotionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AppearanceSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StatSystem>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -164,6 +165,8 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterEntityModuleFactories(IContainerBuilder builder)
         {
+            builder.Register<PersistenceModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
             builder.Register<StatsControllerAssembler>(Lifetime.Singleton);
             builder.Register<StatModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<HealthModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();

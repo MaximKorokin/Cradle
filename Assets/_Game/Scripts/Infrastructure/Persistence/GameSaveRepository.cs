@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Items.Equipment;
+using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
@@ -32,8 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     {
         public int Version;
         public long SavedAtUtc;
-        public EntitySave PlayerSave;
-        public LocationSave PlayerLocationSave;
+        public Dictionary<string, EntitySave> EntitySaves;
     }
 
     public sealed class LocationSave
@@ -52,6 +52,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public EquipmentSave EquipmentSave;
         public LevelingSave LevelingSave;
         public QuestStateSave[] QuestSaves;
+        public LocationSave LocationSave;
     }
 
     public sealed class LevelingSave

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Locations;
@@ -9,7 +10,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
     public sealed class SaveService
     {
-        private const string SaveKey = "Player";
+        private const string SaveKey = "Save_0";
 
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ILocationContext _locationContext;
@@ -17,6 +18,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
         private readonly EntityFactory _entityFactory;
+
+        private GameSave _currentSave;
 
         public SaveService(
             IGlobalEventBus globalEventBus,
@@ -34,8 +37,47 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
             _entityFactory = entityFactory;
         }
 
+        public EntitySave GetEntitySave(Entity entity)
+        {
+            var persistenceKey = entity.GetModule<PersistenceModule>().PersistenceKey;
+
+            if (_currentSave.EntitySaves.TryGetValue(persistenceKey, out var entitySave))
+            {
+                return entitySave;
+            }
+            return null;
+        }
+
+        public void SaveEntity(Entity entity)
+        {
+            var persistenceKey = entity.GetModule<PersistenceModule>().PersistenceKey;
+
+            var entitySave = _entityFactory.Save(entity);
+            _currentSave.EntitySaves[persistenceKey] = entitySave;
+
+            _gameSaveRepository.Save(persistenceKey, _currentSave);
+        }
+
+        public void LoadEntity(Entity entity)
+        {
+            var entitySave = GetEntitySave(entity);
+            if (entitySave != null)
+            {
+                _entityFactory.Apply(entity, entitySave);
+            }
+        }
+
         public void SaveGame()
         {
+            // Ensure player save exists
+            var playerSave = GetEntitySave(_playerContext.Player);
+            if (playerSave == null)
+            {
+                SLog.Warn($"No player save found for player {_playerContext.Player.Id}, cannot save game.");
+                return;
+            }
+
+            // Save player position and location
             var playerPosition = _playerContext.Player.GetPosition();
             var playerLocationSave = new LocationSave
             {
@@ -44,48 +86,47 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
                 PositionX = playerPosition.x,
                 PositionY = playerPosition.y
             };
-            var save = new GameSave
-            {
-                PlayerSave = _entityFactory.Save(_playerContext.Player),
-                PlayerLocationSave = playerLocationSave,
-                Version = 1,
-                SavedAtUtc = System.DateTime.UtcNow.Ticks
-            };
-            _gameSaveRepository.Save(SaveKey, save);
+
+            // Save player data
+            playerSave.LocationSave = playerLocationSave;
+
+            // Save the game
+            _currentSave.Version = 1;
+            _currentSave.SavedAtUtc = System.DateTime.UtcNow.Ticks;
+
+            _gameSaveRepository.Save(SaveKey, _currentSave);
         }
 
         public void LoadGame()
         {
-            //ResetLevelSave();
-            //ResetLocationSave();
-            //ResetSave();
-
-            var gameSave = _gameSaveRepository.Load(SaveKey);
+            _currentSave = _gameSaveRepository.Load(SaveKey);
+            if (_currentSave == null || _currentSave.EntitySaves == null || _currentSave.EntitySaves.Count == 0)
+            {
+                Debug.Log("No save found, starting new game.");
+                _currentSave = new GameSave
+                {
+                    EntitySaves = new(),
+                    Version = 1,
+                    SavedAtUtc = System.DateTime.UtcNow.Ticks
+                };
+            }
 
             _globalEventBus.Publish(new SpawnEntityRequest(
                 _newGameDefinition.PlayerEntityDefinition,
                 Vector2.zero,
-                new[] { new PlayerEntitySpawnInitializer(
-                    _globalEventBus,
-                    _newGameDefinition,
-                    _playerContext,
-                    _entityFactory,
-                    gameSave)
-                }));
+                new[] { new PlayerEntitySpawnInitializer(_playerContext) }));
         }
 
-        public void ResetLocationSave()
+        public void ResetPlayerLocationSave()
         {
-            var save = _gameSaveRepository.Load(SaveKey);
-            save.PlayerLocationSave = null;
-            _gameSaveRepository.Save(SaveKey, save);
+            var playerSave = GetEntitySave(_playerContext.Player);
+            playerSave.LocationSave = null;
         }
 
-        public void ResetLevelSave()
+        public void ResetPlayerLevelSave()
         {
-            var save = _gameSaveRepository.Load(SaveKey);
-            save.PlayerSave.LevelingSave = null;
-            _gameSaveRepository.Save(SaveKey, save);
+            var playerSave = GetEntitySave(_playerContext.Player);
+            playerSave.LevelingSave = null;
         }
 
         public void ResetSave()

@@ -1,15 +1,14 @@
-﻿using Assets._Game.Scripts.Items.Commands;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Views;
-using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public class InventoryEquipmentWindowController : WindowControllerBase<InventoryEquipmentWindow, EmptyWindowControllerArguments>
+    public class InventoryEquipmentWindowController : WindowControllerBase<InventoryEquipmentWindow, InventoryEquipmentWindowControllerArguments>
     {
         private InventoryEquipmentWindow _window;
 
@@ -31,6 +30,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryHudData = inventoryHudData;
             _equipmentHudData = equipmentHudData;
             _itemPreviewService = itemPreviewService;
+        }
+
+        public override void Initialize(InventoryEquipmentWindowControllerArguments arguments)
+        {
+            base.Initialize(arguments);
+
+            _inventoryHudData.SetInventoryEntity(Arguments.InventoryEntityId);
+            _equipmentHudData.SetEquipmentEntity(Arguments.EquipmentEntityId);
         }
 
         public override void Bind(InventoryEquipmentWindow window)
@@ -67,8 +74,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),
-                ItemContainerId.Inventory,
-                ItemContainerId.Equipment,
+                ItemContainerPath.Inventory(Arguments.InventoryEntityId),
+                ItemContainerPath.Equipment(Arguments.EquipmentEntityId),
+                ItemContainerPath.Equipment(Arguments.EquipmentEntityId),
                 equipmentSlotToCompare);
         }
 
@@ -79,8 +87,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),
-                ItemContainerId.Equipment,
-                ItemContainerId.Inventory,
+                ItemContainerPath.Equipment(Arguments.EquipmentEntityId),
+                ItemContainerPath.Inventory(Arguments.InventoryEntityId),
+                ItemContainerPath.Equipment(Arguments.EquipmentEntityId),
                 null);
         }
 
@@ -88,6 +97,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _inventoryViewController.Redraw();
             _equipmentViewController.Redraw();
+        }
+    }
+
+    public readonly struct InventoryEquipmentWindowControllerArguments : IWindowControllerArguments
+    {
+        public string InventoryEntityId { get; }
+        public string EquipmentEntityId { get; }
+
+        public InventoryEquipmentWindowControllerArguments(string inventoryEntityId, string equipmentEntityId)
+        {
+            InventoryEntityId = inventoryEntityId;
+            EquipmentEntityId = equipmentEntityId;
         }
     }
 }

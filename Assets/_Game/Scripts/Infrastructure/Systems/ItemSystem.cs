@@ -20,16 +20,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _itemCommandHandler = itemCommandHandler;
 
-            TrackEntityEvent<ItemCommandRequest>(OnItemCommandRequested);
+            TrackGlobalEvent<ItemCommandRequest>(OnItemCommandRequested);
         }
 
-        private void OnItemCommandRequested(Entity entity, ItemCommandRequest e)
+        private void OnItemCommandRequested(ItemCommandRequest e)
         {
-            _itemCommandHandler.Handle(entity, e.Command);
+            _itemCommandHandler.Handle(e.Command);
         }
     }
 
-    public readonly struct ItemCommandRequest : IEntityEvent
+    public readonly struct ItemCommandRequest : IGlobalEvent
     {
         public readonly IItemCommand Command;
 

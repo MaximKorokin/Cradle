@@ -5,7 +5,7 @@ using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ItemUseSettingsWindowController : WindowControllerBase<ItemUseSettingsWindow, EmptyWindowControllerArguments>
+    public sealed class ItemUseSettingsWindowController : WindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>
     {
         private ItemUseSettingsWindow _window;
 
@@ -18,6 +18,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _playerProvider = playerProvider;
             _equipmentHudData = equipmentHudData;
+        }
+
+        public override void Initialize(ItemUseSettingsWindowControllerArguments arguments)
+        {
+            base.Initialize(arguments);
+
+            _equipmentHudData.SetEquipmentEntity(arguments.EquipmentEntityId);
         }
 
         public override void Bind(ItemUseSettingsWindow window)
@@ -40,6 +47,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Unbind()
         {
             _window.Changed -= OnChanged;
+        }
+    }
+
+    public readonly struct ItemUseSettingsWindowControllerArguments : IWindowControllerArguments
+    {
+        public string EquipmentEntityId { get; }
+
+        public ItemUseSettingsWindowControllerArguments(string equipmentEntityId)
+        {
+            EquipmentEntityId = equipmentEntityId;
         }
     }
 }

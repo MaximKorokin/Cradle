@@ -1,4 +1,3 @@
-using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.UI.DataFormatters;
@@ -10,9 +9,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
     {
         private readonly ItemDefinition _itemDefinition;
         private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
-        private readonly IPlayerProvider _playerProvider;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
+        private readonly ItemContainerPath _equipmentPath;
         private readonly EquipmentSlotKey? _equipmentSlot;
 
         private EquipmentModel _equipmentModel;
@@ -21,14 +20,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         public DefinitionItemStacksPreviewStrategy(
             ItemDefinition itemDefinition,
             ItemDefinitionFormatter itemDefinitionFormatter,
-            IPlayerProvider playerProvider,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
+            ItemContainerPath equipmentPath,
             EquipmentSlotKey? equipmentSlot)
         {
             _itemDefinition = itemDefinition;
             _itemDefinitionFormatter = itemDefinitionFormatter;
-            _playerProvider = playerProvider;
+            _equipmentPath = equipmentPath;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
             _equipmentSlot = equipmentSlot;
@@ -37,7 +36,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         public void Initialize(ItemStacksPreviewWindow window)
         {
             _window = window;
-            _equipmentModel = _itemContainerResolver.ResolveEquipment(_playerProvider.Player);
+            _equipmentModel = _itemContainerResolver.ResolveEquipment(_equipmentPath);
             _equipmentModel.Changed += OnEquipmentChanged;
         }
 

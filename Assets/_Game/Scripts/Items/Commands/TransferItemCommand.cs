@@ -2,12 +2,12 @@
 {
     public readonly struct TransferItemCommand : IItemCommand
     {
-        public readonly ItemContainerId FromContainer;
+        public readonly ItemContainerPath FromContainer;
         public readonly long FromSlot;
-        public readonly ItemContainerId ToContainer;
+        public readonly ItemContainerPath ToContainer;
         public readonly int Amount;
 
-        public TransferItemCommand(ItemContainerId fromContainer, long fromSlot, ItemContainerId toContainer, int amount)
+        public TransferItemCommand(ItemContainerPath fromContainer, long fromSlot, ItemContainerPath toContainer, int amount)
         {
             FromContainer = fromContainer;
             FromSlot = fromSlot;

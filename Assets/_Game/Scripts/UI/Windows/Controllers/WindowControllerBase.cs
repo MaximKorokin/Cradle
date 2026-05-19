@@ -6,9 +6,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         where TWindow : UIWindowBase
         where TArguments : IWindowControllerArguments
     {
+        protected TArguments Arguments { get; private set; }
+
         public abstract void Bind(TWindow window);
         public virtual void Unbind() { }
-        public virtual void Initialize(TArguments arguments) { }
+        public virtual void Initialize(TArguments arguments) => Arguments = arguments;
 
         public virtual void Dispose()
         {

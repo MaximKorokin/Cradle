@@ -1,7 +1,8 @@
+using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Items.Crafting;
+using Assets._Game.Scripts.Items.Inventory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,35 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class CraftingHudData : DataAggregatorBase
     {
+        private readonly EntityRepository _entityRepository;
         private readonly CraftingRecipeDefinitionCatalog _recipeDefinitionCatalog;
-        private readonly IPlayerProvider _playerProvider;
         private readonly CraftingService _craftingService;
+
+        private InventoryModel _inventoryModel;
 
         public event Action Changed;
 
         public CraftingHudData(
+            EntityRepository entityRepository,
             CraftingRecipeDefinitionCatalog recipeDefinitionCatalog,
-            IPlayerProvider playerProvider,
             CraftingService craftingService)
         {
+            _entityRepository = entityRepository;
             _recipeDefinitionCatalog = recipeDefinitionCatalog;
-            _playerProvider = playerProvider;
             _craftingService = craftingService;
+        }
 
-            // Subscribe to inventory changes
-            if (_playerProvider.Player.TryGetModule<InventoryModule>(out var inventoryModule))
+        public void SetInventoryEntity(string inventoryEntityId)
+        {
+            if (_entityRepository.Get(inventoryEntityId).TryGetModule<InventoryModule>(out var inventoryModule))
             {
-                inventoryModule.Inventory.Changed += OnInventoryChanged;
+                if (_inventoryModel != null)
+                {
+                    _inventoryModel.Changed -= OnInventoryChanged;
+                }
+                _inventoryModel = inventoryModule.Inventory;
+                _inventoryModel.Changed += OnInventoryChanged;
+                Changed?.Invoke();
             }
         }
 
@@ -36,10 +47,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             get
             {
-                if (!_playerProvider.Player.TryGetModule<InventoryModule>(out var inventoryModule))
+                if (_inventoryModel == null)
                     return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _recipeDefinitionCatalog.Where(recipe => _craftingService.CanCraftAny(recipe, inventoryModule));
+                return _recipeDefinitionCatalog.Where(recipe => _craftingService.CanCraftAny(recipe, _inventoryModel));
             }
         }
 
@@ -47,10 +58,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             get
             {
-                if (!_playerProvider.Player.TryGetModule<InventoryModule>(out var inventoryModule))
+                if (_inventoryModel == null)
                     return _recipeDefinitionCatalog;
 
-                return _recipeDefinitionCatalog.Where(recipe => !_craftingService.CanCraftAny(recipe, inventoryModule));
+                return _recipeDefinitionCatalog.Where(recipe => !_craftingService.CanCraftAny(recipe, _inventoryModel));
             }
         }
 
@@ -63,9 +74,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             base.Dispose();
 
-            if (_playerProvider.Player.TryGetModule<InventoryModule>(out var inventoryModule))
+            if (_inventoryModel != null)
             {
-                inventoryModule.Inventory.Changed -= OnInventoryChanged;
+                _inventoryModel.Changed -= OnInventoryChanged;
             }
         }
     }

@@ -1,5 +1,5 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
 using System;
 using System.Collections.Generic;
@@ -9,18 +9,32 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class QuestsHudData : DataAggregatorBase
     {
-        private readonly QuestModule _questModule;
+        private readonly EntityRepository _entityRepository;
+
+        private QuestModule _questModule;
 
         public IEnumerable<QuestState> ActiveQuests { get; private set; }
 
         public event Action Changed;
 
-        public QuestsHudData(PlayerContext playerContext)
+        public QuestsHudData(EntityRepository entityRepository)
         {
-            if (playerContext.Player != null && playerContext.TryGetModule<QuestModule>(out var questsModule))
+            _entityRepository = entityRepository;
+            UpdateData();
+        }
+
+        public void SetQuestModuleEntity(string questModuleEntityId)
+        {
+            var entity = _entityRepository.Get(questModuleEntityId);
+
+            if (_questModule != null)
+            {
+                _questModule.Updated -= OnQuestModuleUpdated;
+            }
+
+            if (entity != null && entity.TryGetModule<QuestModule>(out var questsModule))
             {
                 _questModule = questsModule;
-
                 _questModule.Updated += OnQuestModuleUpdated;
             }
 

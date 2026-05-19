@@ -190,51 +190,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public class PlayerEntitySpawnInitializer : IEntitySpawnInitializer
     {
-        private readonly IGlobalEventBus _globalEventBus;
-        private readonly NewGameDefinition _newGameDefinition;
         private readonly PlayerContext _playerContext;
-        private readonly EntityFactory _entityFactory;
-        private readonly GameSave _gameSave;
+        private readonly EntitySave _playerSave;
 
-        public PlayerEntitySpawnInitializer(
-            IGlobalEventBus globalEventBus,
-            NewGameDefinition newGameDefinition,
-            PlayerContext playerContext,
-            EntityFactory entityFactory,
-            GameSave gameSave)
+        public PlayerEntitySpawnInitializer(PlayerContext playerContext)
         {
-            _globalEventBus = globalEventBus;
-            _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
-            _entityFactory = entityFactory;
-            _gameSave = gameSave;
         }
 
         public void Initialize(Entity entity)
         {
-            // Apply player save data if it exists, otherwise the player will be in a default state.
-            if (_gameSave?.PlayerSave != null)
-            {
-                _entityFactory.Apply(entity, _gameSave.PlayerSave);
-            }
             _playerContext.SetPlayer(entity);
-
-            // Load the location
-            if (_gameSave?.PlayerLocationSave == null || string.IsNullOrWhiteSpace(_gameSave?.PlayerLocationSave.LocationId))
-            {
-                _globalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.LocationTransitionData.LocationDefinition.Id, _newGameDefinition.LocationTransitionData.EntranceDefinition.Id));
-            }
-            else
-            {
-                // null entrance id means that player will be placed in the location based on coordinates, not on specific entrance
-                _globalEventBus.Publish(new LocationTransitionRequest(_gameSave.PlayerLocationSave.LocationId, null));
-
-                entity.SubscribeOnce<EntityViewBoundEvent>(_ =>
-                {
-                    var position = new Vector2(_gameSave.PlayerLocationSave.PositionX, _gameSave.PlayerLocationSave.PositionY);
-                    entity.Publish(new EntityRepositionRequest(position));
-                });
-            }
         }
     }
 }

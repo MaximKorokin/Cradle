@@ -49,3 +49,4 @@ MonoBehaviour:
         Enabled: 1
         SlotsAmount: 100
         Radius: 1
+        PersistenceKey: PlayerStorage_1

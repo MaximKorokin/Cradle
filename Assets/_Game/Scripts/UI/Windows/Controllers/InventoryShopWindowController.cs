@@ -1,3 +1,4 @@
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -11,24 +12,24 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private InventoryShopWindow _window;
 
+        private readonly ItemContainerResolver _itemContainerResolver;
         private readonly InventoryViewController _inventoryViewController;
         private readonly ShopViewController _shopViewController;
         private readonly InventoryHudData _inventoryHudData;
         private readonly EquipmentHudData _equipmentHudData;
         private readonly ItemPreviewService _itemPreviewService;
 
-        private ShopModel _shopModel;
-        private string _shopName;
-        private float _buyCoefficient;
-        private float _sellCoefficient;
+        private ShopModel ShopModel => _itemContainerResolver.ResolveShop(Arguments.ShopContainerPath);
 
         public InventoryShopWindowController(
+            ItemContainerResolver itemContainerResolver,
             InventoryViewController inventoryViewController,
             ShopViewController shopViewController,
             InventoryHudData inventoryHudData,
             EquipmentHudData equipmentHudData,
             ItemPreviewService itemPreviewService)
         {
+            _itemContainerResolver = itemContainerResolver;
             _inventoryViewController = inventoryViewController;
             _shopViewController = shopViewController;
             _inventoryHudData = inventoryHudData;
@@ -38,19 +39,25 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public override void Initialize(InventoryShopWindowControllerArguments arguments)
         {
-            _shopModel = arguments.ShopModel;
-            _shopName = arguments.ShopName;
-            _buyCoefficient = arguments.BuyCoefficient;
-            _sellCoefficient = arguments.SellCoefficient;
+            base.Initialize(arguments);
+
+            _inventoryHudData.SetInventoryEntity(Arguments.InventoryContainerPath.EntityId);
+            _equipmentHudData.SetEquipmentEntity(Arguments.EquipmentContainerPath.EntityId);
         }
 
         public override void Bind(InventoryShopWindow window)
         {
             _window = window;
+
             _inventoryViewController.Initialize(_window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
 
-            _shopViewController.Initialize(_window.ShopView, _shopModel, _shopName, _buyCoefficient, _sellCoefficient);
+            _shopViewController.Initialize(
+                _window.ShopView,
+                ShopModel,
+                Arguments.ShopName,
+                Arguments.BuyCoefficient,
+                Arguments.SellCoefficient);
             _shopViewController.Bind();
 
             _inventoryViewController.SlotClick += OnInventorySlotClick;
@@ -79,23 +86,27 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _itemPreviewService.ShowInventoryItemForSellPreview(
                 slot.ToInt64(),
-                _shopModel,
-                _sellCoefficient,
+                Arguments.ShopContainerPath,
+                Arguments.InventoryContainerPath,
+                Arguments.EquipmentContainerPath,
+                Arguments.SellCoefficient,
                 equipmentSlotToCompare);
         }
 
         private void OnShopSlotClick(ShopSlot slot)
         {
-            var item = _shopModel.Get(slot);
+            var item = ShopModel.Get(slot);
             if (item == null) return;
 
             var equipmentSlotToCompare = _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(item.Value);
 
             _itemPreviewService.ShowShopItemPreview(
                 slot.ToInt64(),
-                _shopModel,
-                _buyCoefficient,
-                _sellCoefficient,
+                Arguments.ShopContainerPath,
+                Arguments.InventoryContainerPath,
+                Arguments.EquipmentContainerPath,
+                Arguments.BuyCoefficient,
+                Arguments.SellCoefficient,
                 equipmentSlotToCompare);
         }
 
@@ -106,16 +117,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         }
     }
 
-    public sealed class InventoryShopWindowControllerArguments : IWindowControllerArguments
+    public readonly struct InventoryShopWindowControllerArguments : IWindowControllerArguments
     {
-        public ShopModel ShopModel { get; }
+        public ItemContainerPath ShopContainerPath { get; }
+        public ItemContainerPath InventoryContainerPath { get; }
+        public ItemContainerPath EquipmentContainerPath { get; }
         public string ShopName { get; }
         public float BuyCoefficient { get; }
         public float SellCoefficient { get; }
 
-        public InventoryShopWindowControllerArguments(ShopModel shopModel, string shopName, float buyCoefficient, float sellCoefficient)
+        public InventoryShopWindowControllerArguments(ItemContainerPath shopModelPath, ItemContainerPath inventoryContainerPath, ItemContainerPath equipmentContainerPath, string shopName, float buyCoefficient, float sellCoefficient)
         {
-            ShopModel = shopModel;
+            ShopContainerPath = shopModelPath;
+            InventoryContainerPath = inventoryContainerPath;
+            EquipmentContainerPath = equipmentContainerPath;
             ShopName = shopName;
             BuyCoefficient = buyCoefficient;
             SellCoefficient = sellCoefficient;

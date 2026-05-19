@@ -16,14 +16,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 {
     public sealed class ContainerItemStacksPreviewStrategy : IItemStacksPreviewStrategy
     {
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly WindowManager _windowManager;
-        private readonly IPlayerProvider _playerProvider;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
         private readonly EquipmentSlotKey? _equipmentSlot;
         private readonly long _primaryContainerSlot;
-        private readonly ItemContainerId _primaryContainerId;
-        private readonly ItemContainerId _secondaryContainerId;
+        private readonly ItemContainerPath _equipmentContainerPath;
+        private readonly ItemContainerPath _primaryContainerPath;
+        private readonly ItemContainerPath _secondaryContainerPath;
 
         private IItemContainer _primaryContainer;
         private IItemContainer _secondaryContainer;
@@ -31,31 +32,33 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         private ItemStacksPreviewWindow _window;
 
         public ContainerItemStacksPreviewStrategy(
+            IGlobalEventBus globalEventBus,
             WindowManager windowManager,
-            IPlayerProvider playerProvider,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
             EquipmentSlotKey? equipmentSlot,
             long primaryContainerSlot,
-            ItemContainerId primaryContainerId,
-            ItemContainerId secondaryContainerId)
+            ItemContainerPath equipmentContainerPath,
+            ItemContainerPath primaryContainerPath,
+            ItemContainerPath secondaryContainerPath)
         {
+            _globalEventBus = globalEventBus;
             _windowManager = windowManager;
-            _playerProvider = playerProvider;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
             _equipmentSlot = equipmentSlot;
             _primaryContainerSlot = primaryContainerSlot;
-            _primaryContainerId = primaryContainerId;
-            _secondaryContainerId = secondaryContainerId;
+            _equipmentContainerPath = equipmentContainerPath;
+            _primaryContainerPath = primaryContainerPath;
+            _secondaryContainerPath = secondaryContainerPath;
         }
 
         public void Initialize(ItemStacksPreviewWindow window)
         {
             _window = window;
-            _primaryContainer = _itemContainerResolver.ResolveContainer(_playerProvider.Player, _primaryContainerId);
-            _secondaryContainer = _itemContainerResolver.ResolveContainer(_playerProvider.Player, _secondaryContainerId);
-            _equipmentModel = _itemContainerResolver.ResolveEquipment(_playerProvider.Player);
+            _primaryContainer = _itemContainerResolver.ResolveContainer(_primaryContainerPath);
+            _secondaryContainer = _itemContainerResolver.ResolveContainer(_secondaryContainerPath);
+            _equipmentModel = _itemContainerResolver.ResolveEquipment(_equipmentContainerPath);
 
             _primaryContainer.Changed += OnContainerChanged;
             _secondaryContainer.Changed += OnContainerChanged;
@@ -100,7 +103,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Drop:
                     if (item != null)
                     {
-                        PublishItemCommand(new DropItemCommand(_primaryContainerId, _primaryContainerSlot, item.Value.Amount));
+                        PublishItemCommand(new DropItemCommand(_primaryContainerPath, _primaryContainerSlot, item.Value.Amount));
                     }
                     break;
                 case ItemStackActionType.Transfer:
@@ -108,18 +111,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                     {
                         _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
                         {
-                            PublishItemCommand(new TransferItemCommand(_primaryContainerId, _primaryContainerSlot, _secondaryContainerId, amount));
+                            PublishItemCommand(new TransferItemCommand(_primaryContainerPath, _primaryContainerSlot, _secondaryContainerPath, amount));
                         });
                     }
                     break;
                 case ItemStackActionType.Equip:
-                    PublishItemCommand(new EquipFromContainerCommand(_primaryContainerId, _primaryContainerSlot, _equipmentSlot.Value.ToInt64()));
+                    PublishItemCommand(new EquipFromContainerCommand(_primaryContainerPath, _primaryContainerSlot, _equipmentContainerPath, _equipmentSlot.Value.ToInt64()));
                     break;
                 case ItemStackActionType.Unequip:
-                    PublishItemCommand(new UnequipToContainerCommand(_secondaryContainerId, _primaryContainerSlot));
+                    PublishItemCommand(new UnequipToContainerCommand(_secondaryContainerPath, _equipmentContainerPath, _primaryContainerSlot));
                     break;
                 case ItemStackActionType.Use:
-                    PublishItemCommand(new UseItemCommand(_primaryContainerId, _primaryContainerSlot, true));
+                    PublishItemCommand(new UseItemCommand(_primaryContainerPath, _primaryContainerSlot, true));
                     break;
             }
         }
@@ -128,8 +131,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         {
             _windowManager.CloseWindow(_window);
 
-            var entity = _playerProvider.Player;
-            entity.Publish(new ItemCommandRequest(command));
+            _globalEventBus.Publish(new ItemCommandRequest(command));
         }
 
         private IEnumerable<ItemStackAction> GetActions()

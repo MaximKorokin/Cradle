@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Items.Commands;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
@@ -7,7 +7,7 @@ using Assets._Game.Scripts.UI.Views;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, EmptyWindowControllerArguments>
+    public class InventoryInventoryWindowController : WindowControllerBase<InventoryInventoryWindow, InventoryStorageWindowControllerArguments>
     {
         private InventoryInventoryWindow _window;
 
@@ -32,6 +32,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _storageHudData = storageHudData;
             _equipmentHudData = equipmentHudData;
             _itemPreviewService = itemPreviewService;
+        }
+
+        public override void Initialize(InventoryStorageWindowControllerArguments arguments)
+        {
+            base.Initialize(arguments);
+
+            _storageHudData.SetInventoryEntity(Arguments.StorageEntityId);
+            _inventoryHudData.SetInventoryEntity(Arguments.InventoryEntityId);
+            _equipmentHudData.SetEquipmentEntity(Arguments.EquipmentEntityId);
         }
 
         public override void Bind(InventoryInventoryWindow window)
@@ -68,8 +77,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),
-                ItemContainerId.Inventory,
-                ItemContainerId.Storage,
+                ItemContainerPath.Inventory(Arguments.InventoryEntityId),
+                ItemContainerPath.Storage(Arguments.StorageEntityId),
+                ItemContainerPath.Equipment(Arguments.InventoryEntityId),
                 equipmentSlotToCompare);
         }
 
@@ -82,8 +92,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _itemPreviewService.ShowItemStackPreview(
                 slot.ToInt64(),
-                ItemContainerId.Storage,
-                ItemContainerId.Inventory,
+                ItemContainerPath.Storage(Arguments.StorageEntityId),
+                ItemContainerPath.Inventory(Arguments.InventoryEntityId),
+                ItemContainerPath.Equipment(Arguments.InventoryEntityId),
                 equipmentSlotToCompare);
         }
 
@@ -91,6 +102,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _firstInventoryViewController.Redraw();
             _secondInventoryViewController.Redraw();
+        }
+    }
+
+    public readonly struct InventoryStorageWindowControllerArguments : IWindowControllerArguments
+    {
+        public string StorageEntityId { get; }
+        public string InventoryEntityId { get; }
+        public string EquipmentEntityId { get; }
+
+        public InventoryStorageWindowControllerArguments(string storageEntityId, string inventoryEntityId, string equipmentEntityId)
+        {
+            InventoryEntityId = inventoryEntityId;
+            StorageEntityId = storageEntityId;
+            EquipmentEntityId = equipmentEntityId;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class QuestsWindowController : WindowControllerBase<QuestsWindow, EmptyWindowControllerArguments>
+    public sealed class QuestsWindowController : WindowControllerBase<QuestsWindow, QuestsWindowControllerArguments>
     {
         private QuestsWindow _window;
 
@@ -11,6 +11,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public QuestsWindowController(QuestsHudData questsHudData)
         {
             _questsHudData = questsHudData;
+        }
+
+        public override void Initialize(QuestsWindowControllerArguments arguments)
+        {
+            base.Initialize(arguments);
+
+            _questsHudData.SetQuestModuleEntity(arguments.QuestModuleEntityId);
         }
 
         public override void Bind(QuestsWindow window)
@@ -28,6 +35,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void Redraw()
         {
             _window.Render(_questsHudData);
+        }
+    }
+
+    public readonly struct QuestsWindowControllerArguments : IWindowControllerArguments
+    {
+        public string QuestModuleEntityId { get; }
+
+        public QuestsWindowControllerArguments(string questModuleEntityId)
+        {
+            QuestModuleEntityId = questModuleEntityId;
         }
     }
 }

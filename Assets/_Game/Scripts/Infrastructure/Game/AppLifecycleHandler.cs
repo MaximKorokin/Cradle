@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Configs;
-using Assets._Game.Scripts.Infrastructure.Persistence;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets.CoreScripts;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
@@ -14,17 +14,17 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
     public class AppLifecycleHandler : IAppLifecycleHandler
     {
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly SaveConfig _saveConfig;
-        private readonly SaveService _saveService;
 
         private readonly CooldownCounter _autosaveCooldownCounter;
 
         public AppLifecycleHandler(
-            SaveConfig saveConfig,
-            SaveService saveService)
+            IGlobalEventBus globalEventBus,
+            SaveConfig saveConfig)
         {
+            _globalEventBus = globalEventBus;
             _saveConfig = saveConfig;
-            _saveService = saveService;
 
             _autosaveCooldownCounter = new(_saveConfig.AutosaveTime);
         }
@@ -33,23 +33,28 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         {
             if (_autosaveCooldownCounter.TryReset())
             {
-                _saveService.SaveGame();
+                PublishSaveGameRequest();
             }
         }
 
         public void OnPause()
         {
-            _saveService.SaveGame();
+            PublishSaveGameRequest();
         }
 
         public void OnFocusLost()
         {
-            _saveService.SaveGame();
+            PublishSaveGameRequest();
         }
 
         public void OnQuit()
         {
-            _saveService.SaveGame();
+            PublishSaveGameRequest();
+        }
+
+        private void PublishSaveGameRequest()
+        {
+            _globalEventBus.Publish(new SaveGameRequest());
         }
     }
 }

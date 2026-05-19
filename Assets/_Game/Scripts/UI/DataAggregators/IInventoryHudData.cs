@@ -32,22 +32,22 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate();
         void SetEnumerationFilter(Func<ItemStackSnapshot?, bool> filter);
+        void SetInventoryEntity(string inventoryEntityId);
     }
 
     public abstract class InventoryHudDataBase : DataAggregatorBase, IInventoryHudData
     {
-        private readonly InventoryModel _inventoryModel;
+        private InventoryModel _inventoryModel;
+
         private readonly ItemsConfig _itemsConfig;
+        private readonly ItemContainerResolver _itemContainerResolver;
 
         private Func<ItemStackSnapshot?, bool> _enumerationFilter;
 
-        public InventoryHudDataBase(InventoryModel inventoryModel, ItemsConfig itemsConfig)
+        public InventoryHudDataBase(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver)
         {
-            _inventoryModel = inventoryModel;
             _itemsConfig = itemsConfig;
-
-            _inventoryModel.Changed += OnInventoryChanged;
-            OnInventoryChanged();
+            _itemContainerResolver = itemContainerResolver;
         }
 
         public InventoryModel InventoryModel => _inventoryModel;
@@ -68,6 +68,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public event Action Changed;
 
+        protected abstract ItemContainerPath GetInventoryPath(string entityId);
+
         protected void NotifyChanged() => Changed?.Invoke();
 
         private void OnInventoryChanged()
@@ -85,6 +87,18 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             base.Dispose();
 
             _inventoryModel.Changed -= OnInventoryChanged;
+        }
+
+        public void SetInventoryEntity(string inventoryEntityId)
+        {
+            var inventoryModel = _itemContainerResolver.ResolveInventory(GetInventoryPath(inventoryEntityId));
+            if (_inventoryModel != inventoryModel)
+            {
+                _inventoryModel = inventoryModel;
+                _inventoryModel.Changed -= OnInventoryChanged;
+                inventoryModel.Changed += OnInventoryChanged;
+                OnInventoryChanged();
+            }
         }
 
         public IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate()
@@ -114,7 +128,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private float _weightCurrent;
         private float _weightMax;
 
-        public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig) : base(playerContext.GetModule<InventoryModule>().Inventory, itemsConfig)
+        // todo: refactor to not require player context here
+        public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
         {
             _statsController = playerContext.GetModule<StatModule>().Stats;
 
@@ -128,6 +143,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             base.Dispose();
             _statsController.StatChanged -= OnStatsChanged;
         }
+
+        protected override ItemContainerPath GetInventoryPath(string entityId) => ItemContainerPath.Inventory(entityId);
 
         public override bool ViewPneuma => true;
 
@@ -152,9 +169,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public class StorageHudData : InventoryHudDataBase
     {
-        public StorageHudData(PlayerContext playerContext, ItemsConfig itemsConfig) : base(playerContext.GetModule<StorageModule>().Storage, itemsConfig)
+        public StorageHudData(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
         {
         }
+
+        protected override ItemContainerPath GetInventoryPath(string entityId) => ItemContainerPath.Storage(entityId);
 
         public override bool ViewPneuma => false;
 

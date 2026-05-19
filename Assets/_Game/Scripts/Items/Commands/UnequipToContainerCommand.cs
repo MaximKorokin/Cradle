@@ -2,12 +2,14 @@
 {
     public readonly struct UnequipToContainerCommand : IItemCommand
     {
-        public readonly ItemContainerId ToContainer;
+        public readonly ItemContainerPath ToContainer;
+        public readonly ItemContainerPath FromEquipment;
         public readonly long EquipmentSlot;
 
-        public UnequipToContainerCommand(ItemContainerId toContainer, long equipmentSlot)
+        public UnequipToContainerCommand(ItemContainerPath toContainer, ItemContainerPath fromEquipment, long equipmentSlot)
         {
             ToContainer = toContainer;
+            FromEquipment = fromEquipment;
             EquipmentSlot = equipmentSlot;
         }
     }

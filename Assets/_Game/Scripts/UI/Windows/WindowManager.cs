@@ -36,6 +36,7 @@ namespace Assets._Game.Scripts.UI.Windows
             _resolver = resolver;
         }
 
+        /// <summary> Provides empty arguments to the controller </summary>
         public UIWindowBase InstantiateWindow(WindowId windowId)
         {
             var windowType = _windowDefinitions.FirstOrDefault(d => d.Id == windowId).WindowType;
@@ -62,18 +63,18 @@ namespace Assets._Game.Scripts.UI.Windows
                 return _windowStack.First(w => w.Window.GetType() == windowType).Window;
             }
 
-            // find controller type
+            // 1. Find controller type
             var controllerType = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType).ControllerType
                 ?? throw new InvalidOperationException($"No controller for window of type {windowType} registered.");
 
-            // create window and controller
+            // 2. Create window and controller
             var controller = _resolver.Resolve(controllerType);
             var window = _resolver.Instantiate(prefab, _windowsRoot);
 
-            // call callback (e.g. for controller Initialize method) BEFORE Bind
+            // 3. Initialize
             instantiatedCallback?.Invoke(window, controller);
 
-            // call controller Bind method AFTER Initialize
+            // 4. Bind
             controllerType.GetMethod("Bind").Invoke(controller, new object[] { window });
 
             GameObject modalRoot = null;

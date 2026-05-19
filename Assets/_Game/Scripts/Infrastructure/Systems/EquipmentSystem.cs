@@ -72,9 +72,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // Publish use item commands for auto used items
             foreach (var slot in _autoUsedItems.Values)
             {
-                var command = new UseItemCommand(ItemContainerId.Equipment, slot, false);
+                var command = new UseItemCommand(ItemContainerPath.Equipment(entity.Id), slot, false);
                 var request = new ItemCommandRequest(command);
-                entity.Publish(request);
+                GlobalEventBus.Publish(request);
             }
         }
     }
