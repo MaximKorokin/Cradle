@@ -53,7 +53,7 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnStorageWindowOpenRequest(StorageWindowOpenRequest request)
         {
-            _windowManager.InstantiateWindow<InventoryInventoryWindow, InventoryStorageWindowControllerArguments>(
+            _windowManager.InstantiateWindow<InventoryStorageWindow, InventoryStorageWindowControllerArguments>(
                 new(request.StorageEntityId, request.InventoryEntityId, request.InventoryEntityId));
         }
 

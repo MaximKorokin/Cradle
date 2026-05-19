@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Quests, typeof(QuestsWindow), typeof(QuestsWindowController), typeof(QuestsWindowOpenStrategy)),
 
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
-                new(WindowId.Storage, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
+                new(WindowId.Storage, typeof(InventoryStorageWindow), typeof(InventoryStorageWindowController)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
                 new(WindowId.Crafting, typeof(CraftingWindow), typeof(CraftingWindowController)),
                 new(WindowId.Shop, typeof(InventoryShopWindow), typeof(InventoryShopWindowController)),

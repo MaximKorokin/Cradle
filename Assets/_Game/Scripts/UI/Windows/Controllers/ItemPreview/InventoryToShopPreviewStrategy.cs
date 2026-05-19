@@ -4,7 +4,6 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
-using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataFormatters;
 using System.Collections.Generic;
@@ -107,12 +106,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             switch (actionType)
             {
                 case ItemStackActionType.Sell:
-                    if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
+                    if (item.Value.Definition.TryGetSellPrice(_sellCoefficient, out var sellPricePerUnit))
                     {
                         _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
                         {
-                            int price = (int)(priceTrait.BasePrice * _sellCoefficient * amount);
-                            PublishItemCommand(new SellToShopCommand(_shopContainerPath, _inventoryContainerPath, _inventorySlot, amount, price));
+                            PublishItemCommand(new SellToShopCommand(_shopContainerPath, _inventoryContainerPath, _inventorySlot, amount, sellPricePerUnit * amount));
                         });
                     }
                     break;
@@ -134,9 +132,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             var actions = new List<ItemStackAction>();
 
             // Selling to shop
-            if (item.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
+            if (item.Definition.TryGetSellPrice(_sellCoefficient, out var sellPrice))
             {
-                int sellPrice = (int)(priceTrait.BasePrice * _sellCoefficient);
                 actions.Add(new ItemStackAction(ItemStackActionType.Sell, $"Sell ({sellPrice}g)"));
             }
 
