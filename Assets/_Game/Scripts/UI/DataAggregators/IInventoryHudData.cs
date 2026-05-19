@@ -1,7 +1,7 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Infrastructure.Configs;
-using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Inventory;
 using System;
@@ -89,7 +89,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _inventoryModel.Changed -= OnInventoryChanged;
         }
 
-        public void SetInventoryEntity(string inventoryEntityId)
+        public virtual void SetInventoryEntity(string inventoryEntityId)
         {
             var inventoryModel = _itemContainerResolver.ResolveInventory(GetInventoryPath(inventoryEntityId));
             if (_inventoryModel != inventoryModel)
@@ -123,25 +123,38 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public class InventoryHudData : InventoryHudDataBase
     {
-        private readonly IStatsReadOnly _statsController;
+        private readonly EntityRepository _entityRepository;
 
+        private IStatsReadOnly _statsController;
         private float _weightCurrent;
         private float _weightMax;
 
-        // todo: refactor to not require player context here
-        public InventoryHudData(PlayerContext playerContext, ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
+        public InventoryHudData(EntityRepository entityRepository, ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
         {
-            _statsController = playerContext.GetModule<StatModule>().Stats;
+            _entityRepository = entityRepository;
+        }
 
-            _statsController.StatChanged += OnStatsChanged;
+        public override void SetInventoryEntity(string inventoryEntityId)
+        {
+            base.SetInventoryEntity(inventoryEntityId);
 
-            OnStatsChanged(StatId.CarryWeight);
+            var newStats = _entityRepository.Get(inventoryEntityId).GetModule<StatModule>().Stats;
+            if (_statsController != newStats)
+            {
+                if (_statsController != null)
+                    _statsController.StatChanged -= OnStatsChanged;
+
+                _statsController = newStats;
+                _statsController.StatChanged += OnStatsChanged;
+                OnStatsChanged(StatId.CarryWeight);
+            }
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            _statsController.StatChanged -= OnStatsChanged;
+            if (_statsController != null)
+                _statsController.StatChanged -= OnStatsChanged;
         }
 
         protected override ItemContainerPath GetInventoryPath(string entityId) => ItemContainerPath.Inventory(entityId);
