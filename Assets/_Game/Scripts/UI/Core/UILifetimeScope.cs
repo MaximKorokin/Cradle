@@ -1,3 +1,4 @@
+using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Services;
@@ -78,24 +79,28 @@ namespace Assets._Game.Scripts.UI.Core
             var windows = new WindowDefinition[]
             {
                 // Primary windows
-                new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController)),
+                new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController), typeof(CheatsWindowOpenStrategy)),
+                new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),
+                new(WindowId.Quests, typeof(QuestsWindow), typeof(QuestsWindowController), typeof(QuestsWindowOpenStrategy)),
+
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
                 new(WindowId.Storage, typeof(InventoryInventoryWindow), typeof(InventoryInventoryWindowController)),
-                new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
                 new(WindowId.Crafting, typeof(CraftingWindow), typeof(CraftingWindowController)),
                 new(WindowId.Shop, typeof(InventoryShopWindow), typeof(InventoryShopWindowController)),
-                new(WindowId.Quests, typeof(QuestsWindow), typeof(QuestsWindowController)),
 
                 // Service windows
+                new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController), typeof(ItemUseSettingsWindowOpenStrategy)),
+
                 new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),
-                new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController)),
                 new(WindowId.AmountPicker, typeof(AmountPickerWindow), typeof(AmountPickerWindowController)),
             };
 
             foreach (var windowDefinition in windows)
             {
                 builder.Register(windowDefinition.ControllerType, Lifetime.Transient);
+                if (windowDefinition.StrategyType != null)
+                    builder.Register(windowDefinition.StrategyType, Lifetime.Singleton);
             }
 
             builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);

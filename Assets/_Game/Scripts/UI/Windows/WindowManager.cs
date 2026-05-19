@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.UI.Core;
+﻿using Assets._Game.Scripts.UI.Common;
+using Assets._Game.Scripts.UI.Core;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System;
@@ -36,13 +37,16 @@ namespace Assets._Game.Scripts.UI.Windows
             _resolver = resolver;
         }
 
-        /// <summary> Provides empty arguments to the controller </summary>
+        /// <summary> Uses OpenStrategy if available, otherwise provides empty arguments to the controller </summary>
         public UIWindowBase InstantiateWindow(WindowId windowId)
         {
-            var windowType = _windowDefinitions.FirstOrDefault(d => d.Id == windowId).WindowType;
-            if (windowType == null) throw new InvalidOperationException($"No definition for window of type {windowType} registered.");
+            var definition = _windowDefinitions.FirstOrDefault(d => d.Id == windowId)
+                ?? throw new InvalidOperationException($"No definition for window {windowId} registered.");
 
-            return InstantiateWindow(windowType);
+            if (definition.StrategyType != null)
+                return ((PlayerWindowOpenStrategy)_resolver.Resolve(definition.StrategyType)).Open();
+
+            return InstantiateWindow(definition.WindowType);
         }
 
         public T InstantiateWindow<T, K>(K controllerArguments)

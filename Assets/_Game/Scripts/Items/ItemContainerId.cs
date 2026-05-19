@@ -1,4 +1,4 @@
-namespace Assets._Game.Scripts.Items.Commands
+namespace Assets._Game.Scripts.Items
 {
     public enum ItemContainerId
     {

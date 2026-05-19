@@ -11,12 +11,15 @@ namespace Assets._Game.Scripts.UI.Windows
         public Type WindowType { get; private set; }
         [field: SerializeField]
         public Type ControllerType { get; set; }
+        [field: SerializeField]
+        public Type StrategyType { get; private set; }
 
-        public WindowDefinition(WindowId id, Type windowType, Type controllerType)
+        public WindowDefinition(WindowId id, Type windowType, Type controllerType, Type strategyType = null)
         {
             Id = id;
             WindowType = windowType;
             ControllerType = controllerType;
+            StrategyType = strategyType;
         }
     }
 

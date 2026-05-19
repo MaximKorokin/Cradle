@@ -1,6 +1,4 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.UI.Windows;
-using Assets._Game.Scripts.UI.Windows.Controllers;
+﻿using Assets._Game.Scripts.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -13,43 +11,21 @@ namespace Assets._Game.Scripts.UI.Common
         [SerializeField] private WindowId _windowId;
 
         private WindowManager _windowManager;
-        private IPlayerProvider _playerProvider;
 
         [Inject]
-        private void Construct(
-            WindowManager windowManager,
-            IPlayerProvider playerProvider)
+        private void Construct(WindowManager windowManager)
         {
             _windowManager = windowManager;
-            _playerProvider = playerProvider;
         }
 
         private void Awake()
         {
-            GetComponent<Button>().onClick.AddListener(InstantiateWindow);
+            GetComponent<Button>().onClick.AddListener(OnButtonClick);
         }
 
-        private void InstantiateWindow()
+        private void OnButtonClick()
         {
-            var playerEntityId = _playerProvider.Player.Id;
-            switch (_windowId)
-            {
-                case WindowId.InventoryEquipment:
-                    _windowManager.InstantiateWindow<InventoryEquipmentWindow, InventoryEquipmentWindowControllerArguments>(new(playerEntityId, playerEntityId));
-                    break;
-                case WindowId.ItemUseSettings:
-                    _windowManager.InstantiateWindow<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>(new(playerEntityId));
-                    break;
-                case WindowId.Cheats:
-                    _windowManager.InstantiateWindow<CheatsWindow, CheatsWindowControllerArguments>(new(playerEntityId, playerEntityId));
-                    break;
-                case WindowId.Quests:
-                    _windowManager.InstantiateWindow<QuestsWindow, QuestsWindowControllerArguments>(new(playerEntityId));
-                    break;
-                default:
-                    _windowManager.InstantiateWindow(_windowId);
-                    return;
-            }
+            _windowManager.InstantiateWindow(_windowId);
         }
     }
 }
