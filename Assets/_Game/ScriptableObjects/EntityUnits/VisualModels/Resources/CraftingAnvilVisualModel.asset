@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
   m_Name: CraftingAnvilVisualModel
   m_EditorClassIdentifier: 
-  _id: 86b81a5d73854bc6a3a4f1cf7ed05b77
+  _id: 3e1f309ba7f44139ab424318859fe0c6
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 46163ed6fc6ef5444a5ed7b5e5665362, type: 3}
   <Animator>k__BackingField: {fileID: 0}
   <SwapOrderInLayerForDirection>k__BackingField: 0

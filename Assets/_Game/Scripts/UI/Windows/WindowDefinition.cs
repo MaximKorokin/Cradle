@@ -29,7 +29,7 @@ namespace Assets._Game.Scripts.UI.Windows
         Cheats = 10,
         Stats = 20,
         Storage = 30,
-        InventoryEquipment = 31,
+        Equipment = 31,
         ItemStacksPreview = 40,
         LocationTransitionList = 50,
         Crafting = 60,

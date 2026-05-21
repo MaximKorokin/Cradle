@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
   m_Name: StorageChest
   m_EditorClassIdentifier: 
-  _id: 5ad9374803e54455a6e9a8dd6b8a37ac
+  _id: 1940c88685c64b6cbb4aadf43f8b1d5d
   <VisualModel>k__BackingField: {fileID: 11400000, guid: f27e7fac3abae124cba7ffb598532f8c, type: 2}
   <DisplayName>k__BackingField: Storage Chest
   _modules:
@@ -20,6 +20,7 @@ MonoBehaviour:
   - rid: 3564180267895619758
   - rid: 3564180477885808756
   - rid: 3564180595475218514
+  - rid: 3564180635766489211
   references:
     version: 2
     RefIds:
@@ -49,4 +50,8 @@ MonoBehaviour:
         Enabled: 1
         SlotsAmount: 100
         Radius: 1
-        PersistenceKey: PlayerStorage_1
+    - rid: 3564180635766489211
+      type: {class: PersistenceModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        PersistenceKey: Storage_0

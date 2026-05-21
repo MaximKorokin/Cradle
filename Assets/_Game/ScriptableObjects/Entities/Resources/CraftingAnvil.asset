@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
   m_Name: CraftingAnvil
   m_EditorClassIdentifier: 
-  _id: 5ad9374803e54455a6e9a8dd6b8a37ac
+  _id: 3fef68b843764d0590129f1be135a585
   <VisualModel>k__BackingField: {fileID: 11400000, guid: 6337688d75f801c42a56dcef7b1d5d40, type: 2}
   <DisplayName>k__BackingField: Crafting Anvil
   _modules:

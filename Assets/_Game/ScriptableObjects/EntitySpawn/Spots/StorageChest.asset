@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8165201c216a5104385007faa191843d, type: 3}
   m_Name: StorageChest
   m_EditorClassIdentifier: 
-  _id: 2fa0b613802449a4a77851ee80fc34e3
+  _id: 1d156b304f9b4412a60637f8856c031c
   <Entities>k__BackingField:
   - EntityDefinition: {fileID: 11400000, guid: 28ff1597f1fb17843b056d6dabcd0143, type: 2}
     RespawnTime: 0

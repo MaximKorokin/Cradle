@@ -80,7 +80,7 @@ namespace Assets._Game.Scripts.UI.Core
             {
                 // Primary windows
                 new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController), typeof(CheatsWindowOpenStrategy)),
-                new(WindowId.InventoryEquipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),
+                new(WindowId.Equipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),
                 new(WindowId.Quests, typeof(QuestsWindow), typeof(QuestsWindowController), typeof(QuestsWindowOpenStrategy)),
 
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),

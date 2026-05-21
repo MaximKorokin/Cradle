@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b343491cc167d344bfe4fd61890d9ca, type: 3}
   m_Name: AchamothVisualModel 2
   m_EditorClassIdentifier: 
-  _id: 86b81a5d73854bc6a3a4f1cf7ed05b77
+  _id: fcc32cad09e04049b13f92c66dd513c6
   <BasePrefab>k__BackingField: {fileID: 9119207556145364085, guid: 46163ed6fc6ef5444a5ed7b5e5665362, type: 3}
   <Animator>k__BackingField: {fileID: 22100000, guid: 64a3dd769af4e2641b898fc3b1b76682, type: 2}
   <SwapOrderInLayerForDirection>k__BackingField: 0

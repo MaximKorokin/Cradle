@@ -2167,7 +2167,7 @@ MonoBehaviour:
   _entityNameplateView: {fileID: 3037742340099991746, guid: 7ca1b21890d64af4fbaa3e4279dda09b, type: 3}
   _windowPrefabs:
   - {fileID: -1430181448580419976, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
-  - {fileID: 3432427399423377628, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
+  - {fileID: 80786669936262798, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
   - {fileID: 9128174536294733404, guid: 85bdbaa33bf0fb04297762b35f52ce0d, type: 3}
   - {fileID: 5518000423211942906, guid: cf1dd061d23ea9d48ae9ecfa3a7a039c, type: 3}
   - {fileID: 4623452112733648134, guid: b822161b34f14264a8216d9d273e5189, type: 3}

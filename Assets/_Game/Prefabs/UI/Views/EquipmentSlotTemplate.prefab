@@ -92,6 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventorySlotView: {fileID: 6994597014495606804}
   _placeholderImage: {fileID: 2707188167007320446}
+  _blockedSlotColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
   <SlotType>k__BackingField: 0
 --- !u!1 &8042369078703071076
 GameObject:
