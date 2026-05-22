@@ -104,6 +104,7 @@ namespace Assets._Game.Scripts.Infrastructure
         {
             builder.RegisterEntryPoint<SystemRunner>();
 
+            builder.Register<GameInputSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<PersistenceSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LocomotionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AppearanceSystem>(Lifetime.Singleton).AsImplementedInterfaces();

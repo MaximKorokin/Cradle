@@ -32,6 +32,8 @@ namespace Assets._Game.Scripts.UI.Core
         private LocationAnnounceView _locationAnnounceView;
         [SerializeField]
         private InteractionPromptView _interactionPromptView;
+        [SerializeField]
+        private ClickEffectView _clickEffectView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -69,6 +71,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<FloatingTextUISystem>();
             builder.RegisterComponentInHierarchy<PlayerReviveUISystem>();
             builder.RegisterComponentInHierarchy<InteractionUISystem>();
+            builder.RegisterComponentInHierarchy<ClickEffectUISystem>();
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -115,6 +118,7 @@ namespace Assets._Game.Scripts.UI.Core
 
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
+            builder.RegisterComponent(_clickEffectView);
         }
 
         private void RegisterItemContainers(IContainerBuilder builder)
