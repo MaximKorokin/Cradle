@@ -18,7 +18,13 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: 2101020862250108484, guid: 906f871905777b5458b6e65874b97458, type: 3}
   <MaxAmount>k__BackingField: 2147483647
   <Weight>k__BackingField: 0
-  <Traits>k__BackingField: []
+  <Traits>k__BackingField:
+  - rid: 3564180708408164437
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3564180708408164437
+      type: {class: DescriptionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Description>k__BackingField: Currency of civilizations long gone and yet
+          to come.

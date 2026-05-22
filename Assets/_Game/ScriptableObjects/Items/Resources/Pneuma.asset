@@ -18,7 +18,12 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: 2021805545967286056, guid: 8b90e10eb6f58bc4bba0cec6b5d758db, type: 3}
   <MaxAmount>k__BackingField: 2147483647
   <Weight>k__BackingField: 0
-  <Traits>k__BackingField: []
+  <Traits>k__BackingField:
+  - rid: 3564180708408164438
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 3564180708408164438
+      type: {class: DescriptionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Description>k__BackingField: A minor fragment of the true soul.

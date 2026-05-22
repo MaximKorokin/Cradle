@@ -43,8 +43,13 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _weightText;
         [SerializeField]
         private TMP_Text _priceText;
+        [Space]
+        [SerializeField]
+        private RectTransform _descriptionInfo;
+        [SerializeField]
+        private TMP_Text _descriptionText;
 
-        private List<GameObject> _instantiatedEffectViews = new();
+        private readonly List<GameObject> _instantiatedEffectViews = new();
 
         private void Awake()
         {
@@ -60,6 +65,7 @@ namespace Assets._Game.Scripts.UI.Views
             RenderEquippableInfo(itemStack);
             RenderUsableInfo(itemStack);
             RenderCommonInfo(itemStack);
+            RenderDescription(itemStack);
 
             gameObject.SetActive(true);
         }
@@ -81,7 +87,7 @@ namespace Assets._Game.Scripts.UI.Views
             // If the item is not equippable, we don't need to show the equippable info section.
             if (!itemStack.IsEquippable) return;
 
-            if (!TryVisualizeDescription(itemStack.EquippableEffectsDescription, _equippableEffectTextTemplate, _equippableEffectsContainer)) return;
+            if (!TryVisualizeText(itemStack.EquippableEffectsText, _equippableEffectTextTemplate, _equippableEffectsContainer)) return;
 
             _equippableInfo.gameObject.SetActive(true);
         }
@@ -91,41 +97,52 @@ namespace Assets._Game.Scripts.UI.Views
             // If the item is not usable, we don't need to show the usable info section.
             if (!itemStack.IsUsable) return;
 
-            if (!TryVisualizeDescription(itemStack.UsableEffectsDescription, _usableEffectTextTemplate, _usableEffectsContainer)) return;
+            if (!TryVisualizeText(itemStack.UsableEffectsText, _usableEffectTextTemplate, _usableEffectsContainer)) return;
 
             _usableConsumableInfo.gameObject.SetActive(itemStack.IsConsumable);
 
-            _usableCooldownInfo.gameObject.SetActive(!string.IsNullOrEmpty(itemStack.UsableCooldownDescription));
-            _usableCooldownText.text = itemStack.UsableCooldownDescription;
+            _usableCooldownInfo.gameObject.SetActive(!string.IsNullOrEmpty(itemStack.UsableCooldownText));
+            _usableCooldownText.text = itemStack.UsableCooldownText;
 
             _usableInfo.gameObject.SetActive(true);
         }
 
+        private void RenderDescription(ItemStackDisplayData itemStack)
+        {
+            if (_descriptionText == null) return;
+
+            var hasDescription = !string.IsNullOrEmpty(itemStack.Description);
+            _descriptionText.gameObject.SetActive(hasDescription);
+            _descriptionText.text = itemStack.Description;
+
+            _descriptionInfo.gameObject.SetActive(hasDescription);
+        }
+
         private void RenderCommonInfo(ItemStackDisplayData itemStack)
         {
-            var hasWeight = !string.IsNullOrEmpty(itemStack.WeightDescription);
-            var isStackable = !string.IsNullOrEmpty(itemStack.AmountDescription);
-            var hasPrice = !string.IsNullOrEmpty(itemStack.PriceDescription);
+            var hasWeight = !string.IsNullOrEmpty(itemStack.WeightText);
+            var isStackable = !string.IsNullOrEmpty(itemStack.AmountText);
+            var hasPrice = !string.IsNullOrEmpty(itemStack.PriceText);
             if (!hasWeight && !isStackable && !hasPrice) return;
 
             _amountText.gameObject.SetActive(isStackable);
-            _amountText.text = itemStack.AmountDescription;
+            _amountText.text = itemStack.AmountText;
 
             _weightText.gameObject.SetActive(hasWeight);
-            _weightText.text = itemStack.WeightDescription;
+            _weightText.text = itemStack.WeightText;
 
             _priceText.gameObject.SetActive(hasPrice);
-            _priceText.text = itemStack.PriceDescription;
+            _priceText.text = itemStack.PriceText;
 
             _commonInfo.gameObject.SetActive(true);
         }
 
-        private bool TryVisualizeDescription(string description, TMP_Text template, RectTransform container)
+        private bool TryVisualizeText(string text, TMP_Text template, RectTransform container)
         {
-            if (string.IsNullOrEmpty(description)) return false;
+            if (string.IsNullOrEmpty(text)) return false;
 
             var effectView = Instantiate(template, container);
-            effectView.text = description;
+            effectView.text = text;
             effectView.gameObject.SetActive(true);
 
             _instantiatedEffectViews.Add(effectView.gameObject);
@@ -152,6 +169,8 @@ namespace Assets._Game.Scripts.UI.Views
             _usableInfo.gameObject.SetActive(false);
 
             _commonInfo.gameObject.SetActive(false);
+
+            _descriptionInfo.gameObject.SetActive(false);
         }
     }
 }

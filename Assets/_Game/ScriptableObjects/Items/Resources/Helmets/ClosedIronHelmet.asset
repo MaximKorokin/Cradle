@@ -24,6 +24,7 @@ MonoBehaviour:
   - rid: 3412049108851753209
   - rid: 2155386242765160585
   - rid: 3564180343019798665
+  - rid: 3564180708408164444
   references:
     version: 2
     RefIds:
@@ -58,3 +59,8 @@ MonoBehaviour:
       type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <BasePrice>k__BackingField: 1000
+    - rid: 3564180708408164444
+      type: {class: DescriptionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Description>k__BackingField: Is it actual symbiosis when an entity makes
+          you stronger but slowly kills?

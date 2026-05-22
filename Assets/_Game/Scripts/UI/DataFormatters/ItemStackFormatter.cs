@@ -37,14 +37,15 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 definitionData.Icon,
                 amount,
                 weight,
-                definitionData.PriceDescription,
+                definitionData.PriceText,
                 definitionData.IsEquippable,
                 definitionData.EquipmentSlotName,
-                definitionData.EquippableEffectsDescription,
+                definitionData.EquippableEffectsText,
                 definitionData.IsUsable,
                 definitionData.IsConsumable,
-                definitionData.UsableCooldownDescription,
-                definitionData.UsableEffectsDescription);
+                definitionData.UsableCooldownText,
+                definitionData.UsableEffectsText,
+                definitionData.Description);
         }
     }
 
@@ -54,18 +55,20 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
         public string Name { get; }
         public Sprite Icon { get; }
-        public string AmountDescription { get; }
-        public string WeightDescription { get; }
-        public string PriceDescription { get; }
+        public string AmountText { get; }
+        public string WeightText { get; }
+        public string PriceText { get; }
 
         public bool IsEquippable { get; }
         public string EquipmentSlotName { get; }
-        public string EquippableEffectsDescription { get; }
+        public string EquippableEffectsText { get; }
 
         public bool IsUsable { get; }
         public bool IsConsumable { get; }
-        public string UsableCooldownDescription { get; }
-        public string UsableEffectsDescription { get; }
+        public string UsableCooldownText { get; }
+        public string UsableEffectsText { get; }
+
+        public string Description { get; }
 
         public ItemStackDisplayData(
             string name,
@@ -75,26 +78,28 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             string price,
             bool isEquippable,
             string equipmentSlotName,
-            string equippableEffectsDescription,
+            string equippableEffectsText,
             bool isUsable,
             bool isConsumable,
-            string usableCooldownDescription,
-            string usableEffectsDescription)
+            string usableCooldownText,
+            string usableEffectsText,
+            string description = null)
         {
             HasData = true;
 
             Name = name;
             Icon = icon;
-            AmountDescription = amount;
-            WeightDescription = weight;
-            PriceDescription = price;
+            AmountText = amount;
+            WeightText = weight;
+            PriceText = price;
             IsEquippable = isEquippable;
             EquipmentSlotName = equipmentSlotName;
-            EquippableEffectsDescription = equippableEffectsDescription;
+            EquippableEffectsText = equippableEffectsText;
             IsUsable = isUsable;
             IsConsumable = isConsumable;
-            UsableCooldownDescription = usableCooldownDescription;
-            UsableEffectsDescription = usableEffectsDescription;
+            UsableCooldownText = usableCooldownText;
+            UsableEffectsText = usableEffectsText;
+            Description = description;
         }
     }
 }

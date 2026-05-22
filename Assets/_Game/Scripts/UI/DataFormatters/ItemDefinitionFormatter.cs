@@ -29,26 +29,32 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             var isEquippable = false;
             var equipmentSlotName = string.Empty;
-            var equippableEffectsDescription = string.Empty;
+            var equippableEffectsText = string.Empty;
 
             var isUsable = false;
             var isConsumable = false;
-            var usableCooldownDescription = string.Empty;
-            var usableEffectsDescription = string.Empty;
+            var usableCooldownText = string.Empty;
+            var usableEffectsText = string.Empty;
 
             if (definition.TryGetTrait<EquippableTrait>(out var equippableTrait))
             {
                 isEquippable = true;
                 equipmentSlotName = equippableTrait.Slot.ToString();
-                equippableEffectsDescription = GetFunctionalTraitsDescription(definition, ItemTrigger.OnEquipmentChange);
+                equippableEffectsText = GetFunctionalTraitsText(definition, ItemTrigger.OnEquipmentChange);
             }
 
             if (definition.TryGetTrait<UsableTrait>(out var usableTrait))
             {
                 isUsable = true;
                 isConsumable = usableTrait.Consumable;
-                usableCooldownDescription = $"{usableTrait.Cooldown}s";
-                usableEffectsDescription = GetFunctionalTraitsDescription(definition, ItemTrigger.OnUse);
+                usableCooldownText = $"{usableTrait.Cooldown}s";
+                usableEffectsText = GetFunctionalTraitsText(definition, ItemTrigger.OnUse);
+            }
+
+            var description = string.Empty;
+            if (definition.TryGetTrait<DescriptionTrait>(out var descriptionTrait))
+            {
+                description = descriptionTrait.Description;
             }
 
             return new ItemStackDisplayData(
@@ -59,14 +65,15 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 price,
                 isEquippable,
                 equipmentSlotName,
-                equippableEffectsDescription,
+                equippableEffectsText,
                 isUsable,
                 isConsumable,
-                usableCooldownDescription,
-                usableEffectsDescription);
+                usableCooldownText,
+                usableEffectsText,
+                description);
         }
 
-        private string GetFunctionalTraitsDescription(ItemDefinition definition, ItemTrigger itemTrigger)
+        private string GetFunctionalTraitsText(ItemDefinition definition, ItemTrigger itemTrigger)
         {
             var traits = definition.GetTraits<FunctionalItemTraitBase>()
                 .Where(t => t.Triggers.HasFlag(itemTrigger))
