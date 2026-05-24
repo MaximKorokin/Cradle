@@ -98,6 +98,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.LocationConfig);
             builder.RegisterInstance(_configReferences.FloatingTextConfig);
             builder.RegisterInstance(_configReferences.ReviveConfig);
+            builder.RegisterInstance(_configReferences.MoveTargetIndicatorConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -128,6 +129,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityReviveSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<QuestSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<MoveTargetIndicatorSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

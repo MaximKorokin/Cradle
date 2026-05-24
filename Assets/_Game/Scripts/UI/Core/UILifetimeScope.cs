@@ -1,3 +1,4 @@
+using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
@@ -28,6 +29,8 @@ namespace Assets._Game.Scripts.UI.Core
         [Header("MonoBehaviours")]
         [SerializeField]
         private UIRootReferences _rootReferences;
+        [SerializeField]
+        private PlayerClickInputReader _playerClickInputReader;
         [SerializeField]
         private LocationAnnounceView _locationAnnounceView;
         [SerializeField]
@@ -116,6 +119,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
 
+            builder.RegisterComponent(_playerClickInputReader);
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
             builder.RegisterComponent(_clickEffectView);

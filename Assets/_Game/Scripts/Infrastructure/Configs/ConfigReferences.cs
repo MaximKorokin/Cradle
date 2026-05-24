@@ -30,5 +30,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public FloatingTextConfig FloatingTextConfig { get; private set; }
         [field: SerializeField]
         public EntityReviveConfig ReviveConfig { get; private set; }
+        [field: SerializeField]
+        public MoveTargetIndicatorConfig MoveTargetIndicatorConfig { get; private set; }
     }
 }

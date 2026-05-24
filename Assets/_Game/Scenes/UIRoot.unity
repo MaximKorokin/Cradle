@@ -2294,6 +2294,7 @@ MonoBehaviour:
   - {fileID: 8338047808824368401, guid: 13042890050a7944d9858e05fc7f983d, type: 3}
   _modalWrapperPrefab: {fileID: 6672623485598299162, guid: 07c0dcd38f73336478d67649dd80d0d2, type: 3}
   _rootReferences: {fileID: 1058341463}
+  _playerClickInputReader: {fileID: 22532042}
   _locationAnnounceView: {fileID: 1466126398}
   _interactionPromptView: {fileID: 418775798}
   _clickEffectView: {fileID: 1171793408}

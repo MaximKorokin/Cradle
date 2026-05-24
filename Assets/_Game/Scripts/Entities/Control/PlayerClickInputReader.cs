@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using VContainer;
@@ -11,18 +12,21 @@ namespace Assets._Game.Scripts.Entities.Control
 
         private ICameraService _cameraService;
         private PlayerControlProvider _playerControlProvider;
+        private IGlobalEventBus _globalEventBus;
 
         [Inject]
-        public void Construct(ICameraService cameraService, PlayerControlProvider playerControlProvider)
+        public void Construct(ICameraService cameraService, PlayerControlProvider playerControlProvider, IGlobalEventBus globalEventBus)
         {
             _cameraService = cameraService;
             _playerControlProvider = playerControlProvider;
+            _globalEventBus = globalEventBus;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            var clickPosition = _cameraService.Camera.ScreenToWorldPoint(eventData.position);
-            _playerControlProvider.SetMoveTarget((Vector2)clickPosition);
+            var worldPosition = (Vector2)_cameraService.Camera.ScreenToWorldPoint(eventData.position);
+            _playerControlProvider.SetMoveTarget(worldPosition);
+            _globalEventBus.Publish(new PlayerMoveTargetIndicatorRequest(worldPosition));
         }
     }
 }
