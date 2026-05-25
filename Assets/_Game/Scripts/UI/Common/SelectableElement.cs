@@ -4,31 +4,17 @@ using UnityEngine.EventSystems;
 
 namespace Assets._Game.Scripts.UI.Common
 {
-    public abstract class SelectableElement : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public abstract class SelectableElement : MonoBehaviour, IPointerClickHandler
     {
-        [SerializeField]
-        private SelectionType _selectionType;
-
         private bool _isSelected;
 
         public bool IsSelected => _isSelected;
 
         public event Action<SelectableElement, bool> SelectionChanged;
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            if (_selectionType == SelectionType.PointerDown)
-            {
-                SetSelection(!_isSelected, false);
-            }
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            if (_selectionType == SelectionType.PointerUp && !eventData.dragging)
-            {
-                SetSelection(!_isSelected, false);
-            }
+            SetSelection(!_isSelected, false);
         }
 
         public virtual void SetSelection(bool selection, bool silent)
@@ -39,12 +25,6 @@ namespace Assets._Game.Scripts.UI.Common
             {
                 SelectionChanged?.Invoke(this, _isSelected);
             }
-        }
-
-        private enum SelectionType
-        {
-            PointerDown,
-            PointerUp,
         }
     }
 }
