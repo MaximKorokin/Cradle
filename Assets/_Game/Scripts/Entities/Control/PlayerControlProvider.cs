@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Entities.Control
     {
         public override ControlPriority Priority => ControlPriority.BasePlayer;
         public override ControlMask Mask => _hasMoveTarget ? ControlMask.All : ControlMask.None;
-        public override bool IsActive => true;
+        public override bool IsPersisted => true;
 
         private bool _hasMoveTarget;
         private Vector2 _moveTarget;

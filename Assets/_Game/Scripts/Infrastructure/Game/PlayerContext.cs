@@ -30,6 +30,21 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         public bool TryGetModule<T>(out T module) where T : class, IEntityModule
             => Player.TryGetModule(out module);
 
+        public void SetPlayerAiEnabled(bool enabled)
+        {
+            if (Player == null || !Player.TryGetModule<ControlModule>(out var controlModule))
+                return;
+
+            foreach (var provider in controlModule.Providers)
+            {
+                if (provider is AiControlProvider aiProvider)
+                {
+                    aiProvider.SetEnabled(enabled);
+                    return;
+                }
+            }
+        }
+
         public void SetPlayer(Entity player)
         {
             PlayerChanging?.Invoke();

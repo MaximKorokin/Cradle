@@ -64,7 +64,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             for (int i = 0; i < controlModule.Providers.Count; i++)
             {
-                if (!controlModule.Providers[i].IsActive)
+                if (!controlModule.Providers[i].IsPersisted)
                 {
                     controlModule.RemoveProvider(controlModule.Providers[i]);
                 }
@@ -95,7 +95,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             for (int i = 0; i < controlModule.Providers.Count; i++)
             {
                 var provider = controlModule.Providers[i];
-                if (!provider.IsActive) continue;
+                if (!provider.IsPersisted) continue;
                 if ((provider.Mask & mask) == 0) continue;
 
                 var priority = (int)provider.Priority;

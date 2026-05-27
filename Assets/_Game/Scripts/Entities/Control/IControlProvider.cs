@@ -7,7 +7,12 @@ namespace Assets._Game.Scripts.Entities.Control
     {
         ControlPriority Priority { get; }
         ControlMask Mask { get; }
-        bool IsActive { get; }
+        /// <summary>
+        /// When false, the provider is removed from the <see cref="ControlModule"/> on the next tick.
+        /// Use this for providers that expire naturally (e.g. timed stun/fear).
+        /// Providers that should remain registered but temporarily yield control should keep this true and return <see cref="ControlMask.None"/> instead.
+        /// </summary>
+        bool IsPersisted { get; }
         void Initialize(Entity entity);
         void Tick(float delta);
         void Reset();

@@ -2,7 +2,7 @@
 {
     public abstract class TimedControlProvider : ControlProviderBase
     {
-        public override bool IsActive => _timeLeft > 0f;
+        public override bool IsPersisted => _timeLeft > 0f;
 
         private float _timeLeft;
 
@@ -14,7 +14,7 @@
         public override void Tick(float delta)
         {
             _timeLeft -= delta;
-            if (IsActive) OnTick(delta);
+            if (IsPersisted) OnTick(delta);
             else OnComplete();
         }
 

@@ -4,7 +4,7 @@
     {
         public abstract ControlPriority Priority { get; }
         public abstract ControlMask Mask { get; }
-        public abstract bool IsActive { get; }
+        public abstract bool IsPersisted { get; }
 
         protected Entity Entity { get; private set; }
 

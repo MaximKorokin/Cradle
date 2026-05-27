@@ -119,6 +119,9 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
             builder.Register<PlayerStateViewData>(Lifetime.Transient);
 
+            builder.RegisterComponentInHierarchy<PlayerAiToggleView>();
+            builder.Register<PlayerAiToggleViewController>(Lifetime.Scoped);
+
             builder.RegisterComponent(_playerClickInputReader);
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
