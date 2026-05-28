@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
@@ -32,17 +33,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         public void SetPlayerAiEnabled(bool enabled)
         {
-            if (Player == null || !Player.TryGetModule<ControlModule>(out var controlModule))
-                return;
-
-            foreach (var provider in controlModule.Providers)
-            {
-                if (provider is AiControlProvider aiProvider)
-                {
-                    aiProvider.SetEnabled(enabled);
-                    return;
-                }
-            }
+            Player?.Publish(new EntityAiToggleRequest(enabled));
         }
 
         public void SetPlayer(Entity player)

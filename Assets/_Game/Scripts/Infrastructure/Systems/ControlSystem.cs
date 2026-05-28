@@ -30,6 +30,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
+            TrackEntityEvent<EntityAiToggleRequest>(OnEntityAiToggleRequested);
         }
 
         protected override void OnEntityAdded(Entity entity)
@@ -133,6 +134,23 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             ResetControl(entity);
         }
 
+        private static void OnEntityAiToggleRequested(Entity entity, EntityAiToggleRequest request)
+        {
+            ResetControl(entity);
+
+            if (!entity.TryGetModule<ControlModule>(out var controlModule))
+                return;
+
+            foreach (var provider in controlModule.Providers)
+            {
+                if (provider is AiControlProvider aiProvider)
+                {
+                    aiProvider.SetEnabled(request.Enabled);
+                    return;
+                }
+            }
+        }
+
         private static void ResetControl(Entity entity)
         {
             if (entity.TryGetModule<IntentModule>(out var intentModule))
@@ -140,6 +158,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (entity.TryGetModule<ControlModule>(out var controlModule))
                 controlModule.ResetProviders();
+        }
+    }
+
+    public readonly struct EntityAiToggleRequest : IEntityEvent
+    {
+        public readonly bool Enabled;
+
+        public EntityAiToggleRequest(bool enabled)
+        {
+            Enabled = enabled;
         }
     }
 }
