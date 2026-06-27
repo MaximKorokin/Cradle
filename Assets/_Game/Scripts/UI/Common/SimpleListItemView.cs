@@ -25,13 +25,20 @@ namespace Assets._Game.Scripts.UI.Common
         {
             _identifier = definition.Identifier;
 
-            _image.gameObject.SetActive(definition.Sprite != null);
-            _image.sprite = definition.Sprite;
+            if (_image != null)
+            {
+                _image.gameObject.SetActive(definition.Sprite != null);
+                _image.sprite = definition.Sprite;
+            }
 
-            _text.text = definition.Text;
+            if (_text != null)
+                _text.text = definition.Text;
 
-            _infoButton.onClick.AddListener(OnInfoButtonClicked);
-            _actionButton.onClick.AddListener(OnActionButtonClicked);
+            if (_infoButton != null)
+                _infoButton.onClick.AddListener(OnInfoButtonClicked);
+
+            if (_actionButton != null)
+                _actionButton.onClick.AddListener(OnActionButtonClicked);
         }
 
         public void Clear()

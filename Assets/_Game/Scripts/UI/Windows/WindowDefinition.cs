@@ -35,6 +35,8 @@ namespace Assets._Game.Scripts.UI.Windows
         Crafting = 60,
         Shop = 70,
         Quests = 80,
+        QuestGiver = 81,
+        QuestDescription = 82,
 
         ItemUseSettings = 1100,
 

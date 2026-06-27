@@ -28,6 +28,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
 
+            TrackEntityEvent<QuestAddRequest>(OnQuestAddRequested);
             TrackEntityEvent<QuestAddedEvent>(OnQuestAdded);
             TrackEntityEvent<QuestUpdatedEvent>(OnQuestUpdated);
             TrackEntityEvent<QuestObjectivesCompletedEvent>(OnQuestObjectivesCompleted);
@@ -71,6 +72,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     objective.HandleEvent(e);
                 }
             }
+        }
+
+        private void OnQuestAddRequested(Entity entity, QuestAddRequest e)
+        {
+            SLog.Info($"Quest add request: {e.QuestState.Title}");
+
+            entity.GetModule<QuestModule>().AddQuest(e.QuestState);
         }
 
         private void OnQuestAdded(Entity entity, QuestAddedEvent e)
@@ -130,6 +138,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 objective.Initialize(entity);
             }
+        }
+    }
+
+    public readonly struct QuestAddRequest : IEntityEvent
+    {
+        public QuestState QuestState { get; }
+
+        public QuestAddRequest(QuestState questState)
+        {
+            QuestState = questState;
         }
     }
 

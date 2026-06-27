@@ -52,5 +52,15 @@ namespace Assets._Game.Scripts.Shared.Extensions
         {
             return first.IntersectByCount(second.Select(selector), selector);
         }
+
+        public static T FindById<T>(this IEnumerable<T> objects, string id) where T : GuidScriptableObject
+        {
+            foreach (var obj in objects)
+            {
+                if (obj.Id == id)
+                    return obj;
+            }
+            return null;
+        }
     }
 }

@@ -50,6 +50,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<StorageHudData>(Lifetime.Transient);
             builder.Register<CraftingHudData>(Lifetime.Transient);
             builder.Register<QuestsHudData>(Lifetime.Transient);
+            builder.Register<QuestGiverHudData>(Lifetime.Transient);
 
             builder.Register<CheatsHudData>(Lifetime.Transient);
 
@@ -88,6 +89,8 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController), typeof(CheatsWindowOpenStrategy)),
                 new(WindowId.Equipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),
                 new(WindowId.Quests, typeof(QuestsWindow), typeof(QuestsWindowController), typeof(QuestsWindowOpenStrategy)),
+                new(WindowId.QuestGiver, typeof(QuestGiverWindow), typeof(QuestGiverWindowController)),
+                new(WindowId.QuestDescription, typeof(QuestDescriptionWindow), typeof(QuestDescriptionWindowController)),
 
                 new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
                 new(WindowId.Storage, typeof(InventoryStorageWindow), typeof(InventoryStorageWindowController)),

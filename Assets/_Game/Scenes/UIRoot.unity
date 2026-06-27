@@ -1972,7 +1972,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 40, y: 40, z: 40, w: 40}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2284,7 +2284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2493,6 +2493,8 @@ MonoBehaviour:
   - {fileID: 7834438720461584134, guid: b2352d516e124604cb376fad142e0887, type: 3}
   - {fileID: 1909695251109514574, guid: 3e9703e483f771a4e8fce015be3fadae, type: 3}
   - {fileID: 8338047808824368401, guid: 13042890050a7944d9858e05fc7f983d, type: 3}
+  - {fileID: 7027877310660834485, guid: a628892f59ccc8c408dd14da57ed0fee, type: 3}
+  - {fileID: 2043012421350710110, guid: 8013a15cace628f48ba1964d2fd44b76, type: 3}
   _modalWrapperPrefab: {fileID: 6672623485598299162, guid: 07c0dcd38f73336478d67649dd80d0d2, type: 3}
   _rootReferences: {fileID: 1058341463}
   _playerClickInputReader: {fileID: 22532042}

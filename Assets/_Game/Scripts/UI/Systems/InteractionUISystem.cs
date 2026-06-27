@@ -59,7 +59,8 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnQuestGiverWindowOpenRequest(QuestGiverWindowOpenRequest request)
         {
-            SLog.Log("Quest giver window open request recieved");
+            _windowManager.InstantiateWindow<QuestGiverWindow, QuestGiverWindowControllerArguments>(
+                new(request.GiverEntityId, request.TargetEntityId));
         }
     }
 
