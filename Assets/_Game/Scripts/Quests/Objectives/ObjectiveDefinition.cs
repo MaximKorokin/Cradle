@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
 
     public abstract class ObjectiveProgress<T> : ObjectiveProgress where T : ObjectiveDefinition
     {
-        protected T Definition { get; }
+        public T Definition { get; }
 
         protected ObjectiveProgress(T definition) : base(definition)
         {

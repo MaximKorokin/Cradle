@@ -50,7 +50,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnQuestInfoClicked(string questId)
         {
-            var quest = _questsHudData.ActiveQuests.Select(x => x.Definition).FindById(questId);
+            var quest = _questsHudData.ActiveQuests.FirstOrDefault(q => q.Definition.Id == questId);
             if (quest == null) return;
 
             _windowManager.InstantiateWindow<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>(new(quest));

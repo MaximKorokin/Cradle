@@ -7,7 +7,6 @@ namespace Assets._Game.Scripts.Quests
     public sealed class QuestState
     {
         public QuestDefinition Definition { get; }
-        public string Title { get; }
         public ObjectiveProgress[] Objectives { get; set; }
         /// <summary> Gets a value indicating whether all objectives have been completed. </summary>
         public bool AreObjectivesCompleted { get; private set; }
@@ -21,7 +20,6 @@ namespace Assets._Game.Scripts.Quests
         public QuestState(QuestDefinition definition)
         {
             Definition = definition;
-            Title = definition.Title;
 
             Objectives = definition.Objectives.Select(o => o.CreateProgress()).ToArray();
             foreach (var objective in Objectives)
@@ -42,12 +40,16 @@ namespace Assets._Game.Scripts.Quests
 
         private void OnObjectiveUpdated()
         {
-            Updated?.Invoke(this);
             if (Objectives.All(o => o.IsCompleted))
             {
                 AreObjectivesCompleted = true;
                 ObjectivesCompleted?.Invoke(this);
             }
+            else
+            {
+                AreObjectivesCompleted = false;
+            }
+            Updated?.Invoke(this);
         }
     }
 }

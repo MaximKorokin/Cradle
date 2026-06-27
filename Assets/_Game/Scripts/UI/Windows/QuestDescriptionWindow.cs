@@ -1,5 +1,4 @@
-using Assets._Game.Scripts.Quests;
-using System.Text;
+using Assets._Game.Scripts.UI.DataFormatters;
 using TMPro;
 using UnityEngine;
 
@@ -10,52 +9,62 @@ namespace Assets._Game.Scripts.UI.Windows
         [SerializeField]
         private TMP_Text _titleText;
         [SerializeField]
+        private RectTransform _descriptionInfo;
+        [SerializeField]
         private TMP_Text _descriptionText;
+        [SerializeField]
+        private RectTransform _objectivesInfo;
         [SerializeField]
         private TMP_Text _objectivesText;
         [SerializeField]
-        private TMP_Text _rewardText;
+        private RectTransform _rewardsInfo;
+        [SerializeField]
+        private TMP_Text _experienceRewardText;
+        [SerializeField]
+        private TMP_Text _itemRewardsText;
 
-        public void Render(QuestDefinition quest)
+        public void Render(QuestStateDisplayData quest)
         {
             if (_titleText != null)
                 _titleText.text = quest.Title;
 
-            if (_objectivesText != null)
-                _objectivesText.text = BuildObjectivesText(quest);
-
-            if (_rewardText != null)
-                _rewardText.text = BuildRewardText(quest);
+            RenderDescription(quest);
+            RenderObjectives(quest);
+            RenderRewards(quest);
         }
 
-        private string BuildObjectivesText(QuestDefinition quest)
+        private void RenderDescription(QuestStateDisplayData quest)
         {
-            if (quest.Objectives == null || quest.Objectives.Length == 0)
-                return string.Empty;
+            var hasDescription = _descriptionText != null && !string.IsNullOrWhiteSpace(quest.Description);
 
-            var sb = new StringBuilder();
-            foreach (var objective in quest.Objectives)
-            {
-                sb.AppendLine($"- {objective.GetType().Name.Replace("ObjectiveDefinition", string.Empty)} x{objective.RequiredAmount}");
-            }
-            return sb.ToString().TrimEnd();
+            _descriptionInfo.gameObject.SetActive(hasDescription);
+
+            if (hasDescription)
+                _descriptionText.text = quest.Description;
         }
 
-        private string BuildRewardText(QuestDefinition quest)
+        private void RenderObjectives(QuestStateDisplayData quest)
         {
-            if (quest.Reward == null) return string.Empty;
+            var hasObjectives = _objectivesText != null && !string.IsNullOrWhiteSpace(quest.ObjectivesText);
 
-            var sb = new StringBuilder();
-            if (quest.Reward.Experience > 0)
-                sb.AppendLine($"Experience: {quest.Reward.Experience}");
+            _objectivesInfo.gameObject.SetActive(hasObjectives);
 
-            if (quest.Reward.ItemRewards != null && quest.Reward.ItemRewards.Length > 0)
-            {
-                foreach (var item in quest.Reward.ItemRewards)
-                    sb.AppendLine($"Item: {item.name}");
-            }
+            if (hasObjectives)
+                _objectivesText.text = quest.ObjectivesText;
+        }
 
-            return sb.ToString().TrimEnd();
+        private void RenderRewards(QuestStateDisplayData quest)
+        {
+            var hasExperienceRewards = _experienceRewardText != null && !string.IsNullOrWhiteSpace(quest.ExperienceRewardText);
+            var hasItemsRewards = _itemRewardsText != null && !string.IsNullOrWhiteSpace(quest.ItemRewardsText);
+
+            _objectivesInfo.gameObject.SetActive(hasExperienceRewards || hasItemsRewards);
+
+            if (hasExperienceRewards)
+                _experienceRewardText.text = quest.ExperienceRewardText;
+
+            if (hasItemsRewards)
+                _itemRewardsText.text = quest.ItemRewardsText;
         }
     }
 }

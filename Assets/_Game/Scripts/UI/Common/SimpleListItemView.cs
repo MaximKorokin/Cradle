@@ -44,8 +44,12 @@ namespace Assets._Game.Scripts.UI.Common
         public void Clear()
         {
             _identifier = null;
-            _infoButton.onClick.RemoveListener(OnInfoButtonClicked);
-            _actionButton.onClick.RemoveListener(OnActionButtonClicked);
+
+            if (_infoButton != null)
+                _infoButton.onClick.RemoveListener(OnInfoButtonClicked);
+
+            if (_actionButton != null)
+                _actionButton.onClick.RemoveListener(OnActionButtonClicked);
         }
 
         private void OnInfoButtonClicked()

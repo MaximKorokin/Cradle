@@ -34,7 +34,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _questGiverModule = null;
             _questModule = null;
 
-            giverEntity?.TryGetModule(out _questGiverModule);
+            if (giverEntity != null && giverEntity.TryGetModule<QuestGiverModule>(out var questGiverModule))
+            {
+                _questGiverModule = questGiverModule;
+            }
 
             if (targetEntity != null && targetEntity.TryGetModule<QuestModule>(out var questModule))
             {
@@ -49,6 +52,18 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             if (_questModule == null) return false;
             return _questModule.AllQuests.Any(q => q.Definition.Id == questId);
+        }
+
+        public bool CanCompleteQuest(string questId)
+        {
+            if (_questModule == null) return false;
+            return _questModule.AllQuests.Any(q => q.Definition.Id == questId && q.AreObjectivesCompleted && !q.IsCompleted);
+        }
+
+        public QuestState GetQuestState(string questId)
+        {
+            if (_questModule == null) return null;
+            return _questModule.AllQuests.FirstOrDefault(q => q.Definition.Id == questId);
         }
 
         private void UpdateData()

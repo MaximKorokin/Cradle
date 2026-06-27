@@ -17,8 +17,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             var definitionData = _itemDefinitionFormatter.FormatData(data.Definition);
 
             var amount = data.Definition.MaxAmount > 1 ? $"Amount: {data.Amount}" : string.Empty;
-            var weight = string.Empty;
 
+            string weight;
             if (data.Definition.Weight == 0)
             {
                 weight = string.Empty;

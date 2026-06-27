@@ -49,7 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d337b4584880daa4eb2cd5f067c1740f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _questsListView: {fileID: 1636886766859924931}
+  _questsTabsController: {fileID: 566815028787110615}
+  _questsListViewTemplate: {fileID: 1636886766859924931}
 --- !u!1 &4447772413310357908
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,6 +684,17 @@ PrefabInstance:
       addedObject: {fileID: 8508595623923771272}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93353e965b15a13458ea0af585576965, type: 3}
+--- !u!114 &566815028787110615 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8311747411003470031, guid: 93353e965b15a13458ea0af585576965, type: 3}
+  m_PrefabInstance: {fileID: 8396109900921901592}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d517211110eed4da70a732d4e508a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2469621618710397956 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6251315963569690140, guid: 93353e965b15a13458ea0af585576965, type: 3}

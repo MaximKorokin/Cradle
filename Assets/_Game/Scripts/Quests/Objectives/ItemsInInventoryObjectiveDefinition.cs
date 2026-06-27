@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
             if (entity.TryGetModule<InventoryModule>(out var inventory))
             {
                 var key = ItemKey.From(Definition.Item, null);
-                int itemCount = inventory.Inventory.Count(key);
+                var itemCount = inventory.Inventory.Count(key);
                 SetProgress(itemCount);
             }
         }
@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
             if (e is InventoryChangedEvent inventoryChangedEvent && inventoryChangedEvent.Item.HasValue && inventoryChangedEvent.Item.Value.Definition == Definition.Item)
             {
                 var key = ItemKey.From(Definition.Item, null);
-                int itemCount = inventoryChangedEvent.Inventory.Count(key);
+                var itemCount = inventoryChangedEvent.Inventory.Count(key);
                 SetProgress(itemCount);
             }
         }

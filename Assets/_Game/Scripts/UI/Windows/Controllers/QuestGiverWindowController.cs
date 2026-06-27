@@ -40,6 +40,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window = window;
             _window.QuestInfoClicked += OnQuestInfoClicked;
             _window.QuestAcceptClicked += OnQuestAcceptClicked;
+            _window.QuestCompleteClicked += OnQuestCompleteClicked;
 
             Redraw();
         }
@@ -52,6 +53,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             {
                 _window.QuestInfoClicked -= OnQuestInfoClicked;
                 _window.QuestAcceptClicked -= OnQuestAcceptClicked;
+                _window.QuestCompleteClicked -= OnQuestCompleteClicked;
                 _window = null;
             }
         }
@@ -73,7 +75,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var quest = _questGiverHudData.OfferedQuests.FindById(questId);
             if (quest == null) return;
 
-            _windowManager.InstantiateWindow<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>(new(quest));
+            var questState = _questGiverHudData.IsQuestAccepted(questId) ? _questGiverHudData.GetQuestState(questId) : new(quest);
+
+            _windowManager.InstantiateWindow<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>(new(questState));
         }
 
         private void OnQuestAcceptClicked(string questId)
@@ -85,6 +89,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             var targetEntity = _entityRepository.Get(_targetEntityId);
             targetEntity.Publish(new QuestAddRequest(new QuestState(quest)));
+        }
+
+        private void OnQuestCompleteClicked(string questId)
+        {
+            if (!_questGiverHudData.IsQuestAccepted(questId) || !_questGiverHudData.CanCompleteQuest(questId)) return;
+
+            var targetEntity = _entityRepository.Get(_targetEntityId);
+            targetEntity.Publish(new QuestCompleteRequest(_questGiverHudData.GetQuestState(questId)));
         }
     }
 

@@ -9,6 +9,9 @@ namespace Assets._Game.Scripts.Quests
     {
         [field: SerializeField]
         public string Title { get; private set; }
+        [field: SerializeField]
+        [field: TextArea]
+        public string Description { get; private set; }
         [field: SerializeReference]
         public ObjectiveDefinition[] Objectives { get; private set; }
         [field: SerializeField]

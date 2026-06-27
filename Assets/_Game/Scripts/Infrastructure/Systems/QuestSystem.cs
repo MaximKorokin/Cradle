@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Quests;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
@@ -29,6 +30,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
 
             TrackEntityEvent<QuestAddRequest>(OnQuestAddRequested);
+            TrackEntityEvent<QuestCompleteRequest>(OnQuestCompleteRequested);
             TrackEntityEvent<QuestAddedEvent>(OnQuestAdded);
             TrackEntityEvent<QuestUpdatedEvent>(OnQuestUpdated);
             TrackEntityEvent<QuestObjectivesCompletedEvent>(OnQuestObjectivesCompleted);
@@ -76,34 +78,34 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnQuestAddRequested(Entity entity, QuestAddRequest e)
         {
-            SLog.Info($"Quest add request: {e.QuestState.Title}");
-
             entity.GetModule<QuestModule>().AddQuest(e.QuestState);
+        }
+
+        private void OnQuestCompleteRequested(Entity entity, QuestCompleteRequest e)
+        {
+            if (!entity.GetModule<QuestModule>().AllQuests.Contains(e.QuestState))
+            {
+                SLog.Error($"Cannot complete quest with name {e.QuestState.Definition.Title} because entity {entity} does not contain it");
+            }
+
+            e.QuestState.SetCompleted(true);
         }
 
         private void OnQuestAdded(Entity entity, QuestAddedEvent e)
         {
-            SLog.Info($"Quest added: {e.QuestState.Title}");
-
             InitializeQuest(e.QuestState, entity);
         }
 
         private void OnQuestUpdated(Entity entity, QuestUpdatedEvent e)
         {
-            SLog.Info($"Quest updated: {e.QuestState.Title} - {e.QuestState.Objectives[0].CurrentAmount}");
         }
 
         private void OnQuestObjectivesCompleted(Entity entity, QuestObjectivesCompletedEvent e)
         {
-            SLog.Info($"Quest objectives completed: {e.QuestState.Title}");
-
-            e.QuestState.SetCompleted(true);
         }
 
         private void OnQuestCompleted(Entity entity, QuestCompletedEvent e)
         {
-            SLog.Info($"Quest completed: {e.QuestState.Title}");
-
             var reward = e.QuestState.Definition.Reward;
             if (reward == null) return;
 
@@ -146,6 +148,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public QuestState QuestState { get; }
 
         public QuestAddRequest(QuestState questState)
+        {
+            QuestState = questState;
+        }
+    }
+
+    public readonly struct QuestCompleteRequest : IEntityEvent
+    {
+        public QuestState QuestState { get; }
+
+        public QuestCompleteRequest(QuestState questState)
         {
             QuestState = questState;
         }
