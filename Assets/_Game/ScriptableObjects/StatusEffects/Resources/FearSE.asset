@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FearSE
   m_EditorClassIdentifier: 
   _id: fa2ac2c8dc1d47aaa6ffebae921d3bc9
-  <Name>k__BackingField: Stun
+  <Name>k__BackingField: Fear
   <Icon>k__BackingField: {fileID: 5674045359778475710, guid: 14f4d8085dae9c44b9711d92914372da, type: 3}
   <Category>k__BackingField: 1
   <Behaviour>k__BackingField: 1

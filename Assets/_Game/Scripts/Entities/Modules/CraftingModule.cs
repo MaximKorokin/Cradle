@@ -2,13 +2,11 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class CraftingModule : EntityModuleBase
     {
-        public float Radius { get; }
         public CraftingModuleDefinition Definition { get; }
 
         public CraftingModule(CraftingModuleDefinition definition)
         {
             Definition = definition;
-            Radius = definition.Radius;
         }
     }
 

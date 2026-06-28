@@ -18,6 +18,8 @@ namespace Assets._Game.Scripts.UI.Common
 
         private Color _initialColor;
 
+        public string Id { get; private set; }
+
         private void Awake()
         {
             _initialColor = _image.color;
@@ -30,8 +32,10 @@ namespace Assets._Game.Scripts.UI.Common
             _tabElements.ForEach(x => x.gameObject.SetActive(selection));
         }
 
-        public void Initialize(string title, params RectTransform[] tabElements)
+        public void Initialize(string id, string title, params RectTransform[] tabElements)
         {
+            Id = id;
+
             _title.text = title;
 
             _tabElements = tabElements;

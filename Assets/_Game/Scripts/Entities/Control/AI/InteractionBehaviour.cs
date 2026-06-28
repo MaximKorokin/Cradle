@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
                 return new BehaviourEvaluation(1, new TargetBehaviourContext(foundEntity));
             }
 
-            // Not found any target, hide the prompt if it was showing
+            // Did not found any target, hide the prompt if it was showing
             Reset();
 
             return new BehaviourEvaluation(0, null);

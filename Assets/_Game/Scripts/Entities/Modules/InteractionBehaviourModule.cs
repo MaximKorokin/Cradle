@@ -34,20 +34,20 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
-            if (entityDefinition.TryGetModuleDefinition<ShopModuleDefinition>(out var shopDefinition))
+            if (entityDefinition.TryGetModuleDefinition<ShopModuleDefinition>(out var shopDefinition) && shopDefinition.Radius > 0)
                 return new InteractionBehaviourModule(shopDefinition.Radius, shopDefinition.ShopDefinition.ShopName ?? "Shop", "Open",
                     (entityId, targetId) => _globalEventBus.Publish(new ShopWindowOpenRequest(entityId, targetId)));
 
-            if (entityDefinition.TryGetModuleDefinition<CraftingModuleDefinition>(out var craftDefinition))
+            if (entityDefinition.TryGetModuleDefinition<CraftingModuleDefinition>(out var craftDefinition) && craftDefinition.Radius > 0)
                 return new InteractionBehaviourModule(craftDefinition.Radius, craftDefinition.CrafterName, "Craft",
                     (entityId, targetId) => _globalEventBus.Publish(new CraftingWindowOpenRequest(entityId, targetId)));
 
             if (entityDefinition.TryGetModuleDefinition<StorageModuleDefinition>(out var storageDefinition) && storageDefinition.Radius > 0)
-                return new InteractionBehaviourModule(storageDefinition.Radius, "Storage", "Open",
+                return new InteractionBehaviourModule(storageDefinition.Radius, entityDefinition.DisplayName, "Open",
                     (entityId, targetId) => _globalEventBus.Publish(new StorageWindowOpenRequest(entityId, targetId)));
 
-            if (entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var questGiverDefinition))
-                return new InteractionBehaviourModule(questGiverDefinition.Radius, "Quests", "Talk",
+            if (entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var questGiverDefinition) && questGiverDefinition.Radius > 0)
+                return new InteractionBehaviourModule(questGiverDefinition.Radius, entityDefinition.DisplayName, "Talk",
                     (entityId, targetId) => _globalEventBus.Publish(new QuestGiverWindowOpenRequest(entityId, targetId)));
 
             return null;

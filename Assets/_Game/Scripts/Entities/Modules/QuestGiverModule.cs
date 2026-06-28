@@ -6,12 +6,10 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class QuestGiverModule : EntityModuleBase
     {
         public IReadOnlyList<QuestDefinition> OfferedQuests { get; }
-        public float Radius { get; }
 
-        public QuestGiverModule(IReadOnlyList<QuestDefinition> offeredQuests, float radius)
+        public QuestGiverModule(IReadOnlyList<QuestDefinition> offeredQuests)
         {
             OfferedQuests = offeredQuests;
-            Radius = radius;
         }
     }
 
@@ -22,7 +20,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (!entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var definition))
                 return null;
 
-            return new QuestGiverModule(definition.OfferedQuests, definition.Radius);
+            return new QuestGiverModule(definition.OfferedQuests);
         }
     }
 }

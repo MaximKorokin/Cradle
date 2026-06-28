@@ -10,6 +10,11 @@ namespace Assets._Game.Scripts.Entities.Modules
         void Initialize();
     }
 
+    public interface IResettableModule : IEntityModule
+    {
+        void Reset();
+    }
+
     public abstract class EntityModuleBase : IEntityModule
     {
         private readonly Queue<Action> _pendingPublishes = new();

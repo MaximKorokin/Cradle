@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class QuestModule : EntityModuleBase
+    public sealed class QuestModule : EntityModuleBase, IResettableModule
     {
         private readonly List<QuestState> _allQuests = new();
         public IReadOnlyList<QuestState> AllQuests => _allQuests;
@@ -64,6 +64,14 @@ namespace Assets._Game.Scripts.Entities.Modules
             QuestCompleted?.Invoke(questState);
             Updated?.Invoke();
             Publish(new QuestCompletedEvent(questState));
+        }
+
+        public void Reset()
+        {
+            foreach (var quests in _allQuests.ToArray())
+            {
+                RemoveQuest(quests);
+            }
         }
     }
 

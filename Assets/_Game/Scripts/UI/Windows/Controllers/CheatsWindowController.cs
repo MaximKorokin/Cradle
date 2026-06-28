@@ -1,6 +1,8 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
@@ -12,6 +14,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private CheatsWindow _window;
 
+        private readonly IGlobalEventBus _globalEventBus;
+        private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
         private readonly WindowManager _windowManager;
         private readonly CheatsHudData _cheatsHudData;
@@ -20,6 +24,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly ItemPreviewService _itemPreviewService;
 
         public CheatsWindowController(
+            IGlobalEventBus globalEventBus,
+            IPlayerProvider playerProvider,
             EntityRepository entityRepository,
             WindowManager windowManager,
             CheatsHudData cheatsHudData,
@@ -27,6 +33,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             ItemStackFactory itemStackAssembler,
             ItemPreviewService itemPreviewService)
         {
+            _globalEventBus = globalEventBus;
+            _playerProvider = playerProvider;
             _entityRepository = entityRepository;
             _windowManager = windowManager;
             _cheatsHudData = cheatsHudData;
@@ -49,6 +57,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
             _window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
 
+            _window.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
+            _window.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
+
             _window.Render(_cheatsHudData);
         }
 
@@ -57,6 +68,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _window.ItemDefinitionInfoClicked -= OnItemDefinitionInfoClicked;
             _window.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
             _window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
+
+            _window.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
+            _window.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
+
         }
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
@@ -85,6 +100,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                     inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, amount).Snapshot);
                 });
             }
+        }
+
+        private void OnResetPlayerQuestsButtonClicked()
+        {
+            _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(QuestModule)));
+        }
+
+        private void OnResetPlayerLevelButtonClicked()
+        {
+            _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(LevelingModule)));
         }
     }
 

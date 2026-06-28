@@ -60,6 +60,15 @@ namespace Assets._Game.Scripts.Entities
             throw new InvalidOperationException($"Entity does not have a module of type {typeof(T).Name}");
         }
 
+        public IEntityModule GetModule(Type moduleType)
+        {
+            if (_modules.TryGetValue(moduleType, out var module))
+            {
+                return module;
+            }
+            throw new InvalidOperationException($"Entity does not have a module of type {moduleType.Name}");
+        }
+
         public bool HasModule<T>() where T : class, IEntityModule
             => _modules.ContainsKey(typeof(T));
 

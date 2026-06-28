@@ -130,6 +130,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<QuestSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<MoveTargetIndicatorSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<ResetSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

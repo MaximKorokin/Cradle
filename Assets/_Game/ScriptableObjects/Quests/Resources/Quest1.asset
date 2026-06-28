@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 30f6b3f8463447bbb8edd9b6a0f671ef
   <Title>k__BackingField: Wolves
+  <Description>k__BackingField: 
   <Objectives>k__BackingField:
   - rid: 3564180410443759731
   - rid: 3564180427547345043
   - rid: 3564180427547345044
   <Reward>k__BackingField:
-    _experience: 1111111111
+    _experience: 1111
     _itemRewards:
     - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
     - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}

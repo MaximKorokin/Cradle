@@ -4,9 +4,10 @@ using System;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class LevelingModule : EntityModuleBase
+    public sealed class LevelingModule : EntityModuleBase, IResettableModule
     {
         private readonly ExperienceTable _experienceTable;
+        private readonly int _initialLevel;
 
         public int Level { get; private set; }
         // Experience towards the next level. Resets to 0 on level up.
@@ -19,6 +20,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         public LevelingModule(int level, ExperienceTable experienceTable)
         {
             Level = level;
+            _initialLevel = level;
 
             _experienceTable = experienceTable;
         }
@@ -68,6 +70,11 @@ namespace Assets._Game.Scripts.Entities.Modules
             Experience = 0;
 
             InvokeChanged(oldExperience, Experience, oldLevel, Level);
+        }
+
+        public void Reset()
+        {
+            SetLevel(_initialLevel);
         }
 
         private void InvokeExperienceChanged(long oldExperience, long newExperience)
