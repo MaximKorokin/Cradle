@@ -12,20 +12,18 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     public sealed class CraftingHudData : DataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
-        private readonly CraftingRecipeDefinitionCatalog _recipeDefinitionCatalog;
         private readonly CraftingService _craftingService;
 
         private InventoryModel _inventoryModel;
+        private CraftingModule _crafterCraftingModule;
 
         public event Action Changed;
 
         public CraftingHudData(
             EntityRepository entityRepository,
-            CraftingRecipeDefinitionCatalog recipeDefinitionCatalog,
             CraftingService craftingService)
         {
             _entityRepository = entityRepository;
-            _recipeDefinitionCatalog = recipeDefinitionCatalog;
             _craftingService = craftingService;
         }
 
@@ -43,14 +41,23 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
         }
 
+        public void SetCrafterEntity(string crafterEntityId)
+        {
+            if (_entityRepository.Get(crafterEntityId).TryGetModule<CraftingModule>(out var craftingModule))
+            {
+                _crafterCraftingModule = craftingModule;
+                Changed?.Invoke();
+            }
+        }
+
         public IEnumerable<CraftingRecipeDefinition> AvailableRecipes
         {
             get
             {
-                if (_inventoryModel == null)
+                if (_inventoryModel == null || _crafterCraftingModule == null)
                     return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _recipeDefinitionCatalog.Where(recipe => _craftingService.CanCraftAny(recipe, _inventoryModel));
+                return _crafterCraftingModule.Recipes.Where(recipe => _craftingService.CanCraftAny(recipe, _inventoryModel));
             }
         }
 
@@ -58,10 +65,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             get
             {
-                if (_inventoryModel == null)
-                    return _recipeDefinitionCatalog;
+                if (_inventoryModel == null || _crafterCraftingModule == null)
+                    return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _recipeDefinitionCatalog.Where(recipe => !_craftingService.CanCraftAny(recipe, _inventoryModel));
+                return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, _inventoryModel));
             }
         }
 

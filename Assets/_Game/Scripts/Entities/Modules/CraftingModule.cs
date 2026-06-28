@@ -1,12 +1,16 @@
+using Assets._Game.Scripts.Items.Crafting;
+using System;
+using System.Collections.Generic;
+
 namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class CraftingModule : EntityModuleBase
     {
-        public CraftingModuleDefinition Definition { get; }
+        public IEnumerable<CraftingRecipeDefinition> Recipes { get; }
 
-        public CraftingModule(CraftingModuleDefinition definition)
+        public CraftingModule(CraftingRecipeDefinition[] recipes)
         {
-            Definition = definition;
+            Recipes = recipes ?? Array.Empty<CraftingRecipeDefinition>();
         }
     }
 
@@ -17,7 +21,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (!entityDefinition.TryGetModuleDefinition<CraftingModuleDefinition>(out var craftingModuleDefinition))
                 return null;
 
-            return new CraftingModule(craftingModuleDefinition);
+            return new CraftingModule(craftingModuleDefinition.Recipes);
         }
     }
 }

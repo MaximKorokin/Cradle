@@ -43,6 +43,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
+            _craftingHudData.SetCrafterEntity(arguments.CrafterEntityId);
             _craftingHudData.SetInventoryEntity(arguments.InventoryEntityId);
             _equipmentHudData.SetEquipmentEntity(arguments.EquipmentEntityId);
         }

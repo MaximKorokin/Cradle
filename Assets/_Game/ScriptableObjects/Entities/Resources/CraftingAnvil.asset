@@ -47,5 +47,8 @@ MonoBehaviour:
       type: {class: CraftingModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        <CrafterName>k__BackingField: test123
+        <CrafterName>k__BackingField: Crafting Anvil
         <Radius>k__BackingField: 1
+        <Recipes>k__BackingField:
+        - {fileID: 11400000, guid: 1098ee1cd614fd24091a5df56f7c9be4, type: 2}
+        - {fileID: 11400000, guid: 1b35695ff1fe2804b97476c5b266c2b3, type: 2}

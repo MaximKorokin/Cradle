@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.Units;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Loot;
 using Assets._Game.Scripts.Items.Shop;
@@ -156,6 +157,8 @@ namespace Assets._Game.Scripts.Entities
         public string CrafterName { get; private set; }
         [field: SerializeField]
         public float Radius { get; private set; }
+        [field: SerializeField]
+        public CraftingRecipeDefinition[] Recipes { get; private set; }
     }
 
     public sealed class CreatureModuleDefinition : EntityModuleDefinition
