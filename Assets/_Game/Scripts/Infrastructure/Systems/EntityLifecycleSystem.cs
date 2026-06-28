@@ -3,8 +3,6 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Querying;
-using Assets._Game.Scripts.Infrastructure.Storage;
-using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Items;
 using UnityEngine;
 
