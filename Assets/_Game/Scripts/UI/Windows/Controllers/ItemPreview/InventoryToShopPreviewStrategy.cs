@@ -108,10 +108,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Sell:
                     if (item.Value.Definition.TryGetSellPrice(_sellCoefficient, out var sellPricePerUnit))
                     {
-                        _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
-                        {
-                            PublishItemCommand(new SellToShopCommand(_shopContainerPath, _inventoryContainerPath, _inventorySlot, amount, sellPricePerUnit * amount));
-                        });
+                        _windowManager.ShowAmountPickerThenConfirmation(
+                            item.Value.Amount,
+                            item.Value.Amount,
+                            "Confirm Sale",
+                            amount =>
+                            {
+                                int totalPrice = sellPricePerUnit * amount;
+                                return $"Sell {amount}x {item.Value.Definition.Name} for {totalPrice}g?";
+                            },
+                            selectedAmount =>
+                            {
+                                int totalPrice = sellPricePerUnit * selectedAmount;
+                                PublishItemCommand(new SellToShopCommand(_shopContainerPath, _inventoryContainerPath, _inventorySlot, selectedAmount, totalPrice));
+                            });
                     }
                     break;
                 case ItemStackActionType.Drop:

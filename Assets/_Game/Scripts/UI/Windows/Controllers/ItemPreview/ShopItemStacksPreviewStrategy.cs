@@ -113,10 +113,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Buy:
                     if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
                     {
-                        _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount => {
-                             int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * amount : 0;
-                             PublishItemCommand(new BuyFromShopCommand(_shopContainerPath, _inventoryContainerPath, _shopSlot, amount, price));
-                        });
+                        _windowManager.ShowAmountPickerThenConfirmation(
+                            item.Value.Amount,
+                            item.Value.Amount,
+                            "Confirm Purchase",
+                            amount =>
+                            {
+                                int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * amount : 0;
+                                return $"Buy {amount}x {item.Value.Definition.Name} for {price}g?";
+                            },
+                            selectedAmount =>
+                            {
+                                int price = _shopModel.TryGetBuyPrice(ShopSlot.FromInt64(_shopSlot), _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice * selectedAmount : 0;
+                                PublishItemCommand(new BuyFromShopCommand(_shopContainerPath, _inventoryContainerPath, _shopSlot, selectedAmount, price));
+                            });
                     }
                     break;
             }

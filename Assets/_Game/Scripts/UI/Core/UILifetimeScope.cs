@@ -100,9 +100,10 @@ namespace Assets._Game.Scripts.UI.Core
 
                 // Service windows
                 new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController), typeof(ItemUseSettingsWindowOpenStrategy)),
-
                 new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),
+
                 new(WindowId.AmountPicker, typeof(AmountPickerWindow), typeof(AmountPickerWindowController)),
+                new(WindowId.Confirmation, typeof(ConfirmationWindow), typeof(ConfirmationWindowController)),
             };
 
             foreach (var windowDefinition in windows)

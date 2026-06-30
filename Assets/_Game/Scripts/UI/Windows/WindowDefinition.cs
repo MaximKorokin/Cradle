@@ -41,5 +41,6 @@ namespace Assets._Game.Scripts.UI.Windows
         ItemUseSettings = 1100,
 
         AmountPicker = 2100,
+        Confirmation = 2200,
     }
 }
