@@ -1,18 +1,19 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Shared.Extensions;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public sealed class AttackModifiersFormatter : IDataFormatter<AttackModifierDefinition[], string>
+    public sealed class AttackModifiersFormatter : IDataFormatter<IReadOnlyList<AttackModifierDefinition>, string>
     {
-        public string FormatData(AttackModifierDefinition[] data)
+        public string FormatData(IReadOnlyList<AttackModifierDefinition> data)
         {
-            if (data == null || data.Length == 0)
+            if (data == null || data.Count == 0)
                 return string.Empty;
 
             var stringBuilder = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < data.Count; i++)
             {
                 var modifier = data[i];
                 var typeDescription = modifier.Type.GetDescription();
@@ -22,7 +23,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
                 stringBuilder.Append($"{typeDescription}: {valueText}{chanceText}");
 
-                if (i < data.Length - 1)
+                if (i < data.Count - 1)
                     stringBuilder.AppendLine();
             }
             return stringBuilder.ToString();

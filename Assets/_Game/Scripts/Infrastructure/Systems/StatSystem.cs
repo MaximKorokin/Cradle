@@ -23,6 +23,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private readonly StatTickController _tickController;
         private readonly DerivedStatsCalculator _derivedStatsCalculator;
         private readonly LevelingConfig _levelingConfig;
+        private readonly ItemSetDefinitionCatalog _itemSetCatalog;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -35,11 +36,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             EntityRepository repository,
             DerivedStatsCalculator derivedStatsCalculator,
             StatsConfig statsConfig,
-            LevelingConfig levelingConfig) : base(globalEventBus, repository)
+            LevelingConfig levelingConfig,
+            ItemSetDefinitionCatalog itemSetCatalog) : base(globalEventBus, repository)
         {
             _tickController = new(statsConfig);
             _derivedStatsCalculator = derivedStatsCalculator;
             _levelingConfig = levelingConfig;
+            _itemSetCatalog = itemSetCatalog;
 
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
@@ -102,7 +105,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private static void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
+        private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
             var stats = entity.GetModule<StatModule>();
 
@@ -126,6 +129,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 AddWeightModifierFromItem(e.Item.Value, stats, source);
             }
+
+            // Recalculate item set bonuses
+            if (e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Unequipped)
+            {
+                RecalculateItemSetBonuses(entity, stats);
+            }
         }
 
         private static List<StatModifier> ExtractStatModifiers(Entity entity, ItemStackSnapshot item, ItemTrigger trigger)
@@ -145,6 +154,38 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private static void AddWeightModifierFromItem(ItemStackSnapshot item, StatModule stats, StatModifierSource source)
         {
             stats.AddModifiers(source, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, item.Definition.Weight * item.Amount).Yield());
+        }
+
+        private void RecalculateItemSetBonuses(Entity entity, StatModule stats)
+        {
+            stats.RemoveModifiers(StatModifierSource.ItemSet);
+
+            if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule))
+                return;
+
+            var equippedItems = equipmentModule.Equipment
+                .Enumerate()
+                .Where(x => x.Snapshot != null)
+                .Select(item => item.Snapshot.Value)
+                .ToArray();
+
+            var equippedSets = equippedItems
+                .Select(item => _itemSetCatalog.GetSetByItem(item.Definition))
+                .Where(set => set != null)
+                .Distinct()
+                .ToArray();
+
+            foreach (var itemSet in equippedSets)
+            {
+                var bonuses = itemSet.GetItemsBonuses(equippedItems);
+                foreach (var bonus in bonuses)
+                {
+                    if (bonus.Modifiers.Count > 0)
+                    {
+                        stats.AddModifiers(StatModifierSource.ItemSet, bonus.Modifiers);
+                    }
+                }
+            }
         }
 
         private void OnStatChanged(Entity entity, StatChangedEvent e)

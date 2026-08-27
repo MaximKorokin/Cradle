@@ -8,10 +8,14 @@ namespace Assets._Game.Scripts.UI.DataFormatters
     public sealed class ItemDefinitionFormatter : IDataFormatter<ItemDefinition, ItemStackDisplayData>
     {
         private readonly FunctionalItemTraitFormatter _functionalItemTraitFormatter;
+        private readonly ItemSetFormatter _itemSetFormatter;
 
-        public ItemDefinitionFormatter(FunctionalItemTraitFormatter functionalItemTraitFormatter)
+        public ItemDefinitionFormatter(
+            FunctionalItemTraitFormatter functionalItemTraitFormatter,
+            ItemSetFormatter itemSetFormatter)
         {
             _functionalItemTraitFormatter = functionalItemTraitFormatter;
+            _itemSetFormatter = itemSetFormatter;
         }
 
         public ItemStackDisplayData FormatData(ItemDefinition definition)
@@ -57,6 +61,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 description = descriptionTrait.Description;
             }
 
+            var itemSetDisplayData = _itemSetFormatter.FormatData(definition);
+
             return new ItemStackDisplayData(
                 name,
                 icon,
@@ -70,6 +76,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 isConsumable,
                 usableCooldownText,
                 usableEffectsText,
+                itemSetDisplayData,
                 description);
         }
 

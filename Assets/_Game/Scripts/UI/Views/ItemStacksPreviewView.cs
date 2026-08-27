@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.UI.DataFormatters;
+﻿using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.UI.DataFormatters;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -36,6 +37,19 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _usableCooldownText;
         [Space]
         [SerializeField]
+        private RectTransform _setInfo;
+        [SerializeField]
+        private TMP_Text _setNameText;
+        [SerializeField]
+        private RectTransform _setItemsContainer;
+        [SerializeField]
+        private TMP_Text _setItemNameTextTemplate;
+        [SerializeField]
+        private RectTransform _setEffectsContainer;
+        [SerializeField]
+        private TMP_Text _setEffectTextTemplate;
+        [Space]
+        [SerializeField]
         private RectTransform _commonInfo;
         [SerializeField]
         private TMP_Text _amountText;
@@ -49,12 +63,14 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _descriptionText;
 
-        private readonly List<GameObject> _instantiatedEffectViews = new();
+        private readonly List<GameObject> _instantiatedTemplates = new();
 
         private void Awake()
         {
             _equippableEffectTextTemplate.gameObject.SetActive(false);
             _usableEffectTextTemplate.gameObject.SetActive(false);
+            _setItemNameTextTemplate.gameObject.SetActive(false);
+            _setEffectTextTemplate.gameObject.SetActive(false);
         }
 
         public void Render(ItemStackDisplayData itemStack)
@@ -64,6 +80,7 @@ namespace Assets._Game.Scripts.UI.Views
             RenderHeader(itemStack);
             RenderEquippableInfo(itemStack);
             RenderUsableInfo(itemStack);
+            RenderSetInfo(itemStack);
             RenderCommonInfo(itemStack);
             RenderDescription(itemStack);
 
@@ -87,7 +104,7 @@ namespace Assets._Game.Scripts.UI.Views
             // If the item is not equippable, we don't need to show the equippable info section.
             if (!itemStack.IsEquippable) return;
 
-            if (!TryVisualizeText(itemStack.EquippableEffectsText, _equippableEffectTextTemplate, _equippableEffectsContainer)) return;
+            if (!TryVisualizeText(_equippableEffectTextTemplate, _equippableEffectsContainer, itemStack.EquippableEffectsText)) return;
 
             _equippableInfo.gameObject.SetActive(true);
         }
@@ -97,7 +114,7 @@ namespace Assets._Game.Scripts.UI.Views
             // If the item is not usable, we don't need to show the usable info section.
             if (!itemStack.IsUsable) return;
 
-            if (!TryVisualizeText(itemStack.UsableEffectsText, _usableEffectTextTemplate, _usableEffectsContainer)) return;
+            if (!TryVisualizeText(_usableEffectTextTemplate, _usableEffectsContainer, itemStack.UsableEffectsText)) return;
 
             _usableConsumableInfo.gameObject.SetActive(itemStack.IsConsumable);
 
@@ -105,6 +122,25 @@ namespace Assets._Game.Scripts.UI.Views
             _usableCooldownText.text = itemStack.UsableCooldownText;
 
             _usableInfo.gameObject.SetActive(true);
+        }
+
+        private void RenderSetInfo(ItemStackDisplayData itemStack)
+        {
+            if (!itemStack.ItemSetDisplayData.HasData) return;
+
+            _setNameText.text = itemStack.ItemSetDisplayData.Name;
+            
+            foreach (var itemName in itemStack.ItemSetDisplayData.ItemNames)
+            {
+                if (!TryVisualizeText(_setItemNameTextTemplate, _setItemsContainer, itemName)) continue;
+            }
+
+            foreach (var bonus in itemStack.ItemSetDisplayData.Bonuses)
+            {
+                if (!TryVisualizeFormattedText(_setEffectTextTemplate, _setEffectsContainer, bonus.RequiredItemCount.ToString(), bonus.ModifiersText)) continue;
+            }
+
+            _setInfo.gameObject.SetActive(true);
         }
 
         private void RenderDescription(ItemStackDisplayData itemStack)
@@ -137,28 +173,39 @@ namespace Assets._Game.Scripts.UI.Views
             _commonInfo.gameObject.SetActive(true);
         }
 
-        private bool TryVisualizeText(string text, TMP_Text template, RectTransform container)
+        private bool TryVisualizeFormattedText(TMP_Text template, RectTransform container, params string[] arguments)
+        {
+            if (arguments == null || arguments.Length == 0) return false;
+            var text = template.text.FormatSafe(arguments);
+            VisualizeText(template, container, text);
+            return true;
+        }
+
+        private bool TryVisualizeText(TMP_Text template, RectTransform container, string text)
         {
             if (string.IsNullOrEmpty(text)) return false;
-
-            var effectView = Instantiate(template, container);
-            effectView.text = text;
-            effectView.gameObject.SetActive(true);
-
-            _instantiatedEffectViews.Add(effectView.gameObject);
-
+            VisualizeText(template, container, text);
             return true;
+        }
+
+        private void VisualizeText(TMP_Text template, RectTransform container, string text)
+        {
+            var textTemplateInstance = Instantiate(template, container);
+            textTemplateInstance.text = text;
+            textTemplateInstance.gameObject.SetActive(true);
+
+            _instantiatedTemplates.Add(textTemplateInstance.gameObject);
         }
 
         public void Clear()
         {
             gameObject.SetActive(false);
 
-            for (int i = 0; i < _instantiatedEffectViews.Count; i++)
+            for (int i = 0; i < _instantiatedTemplates.Count; i++)
             {
-                Destroy(_instantiatedEffectViews[i]);
+                Destroy(_instantiatedTemplates[i]);
             }
-            _instantiatedEffectViews.Clear();
+            _instantiatedTemplates.Clear();
 
             _titleText.text = string.Empty;
             _slotText.text = string.Empty;
@@ -167,6 +214,8 @@ namespace Assets._Game.Scripts.UI.Views
             _equippableInfo.gameObject.SetActive(false);
 
             _usableInfo.gameObject.SetActive(false);
+
+            _setInfo.gameObject.SetActive(false);
 
             _commonInfo.gameObject.SetActive(false);
 

@@ -254,6 +254,9 @@ namespace Assets._Game.Scripts.Entities.Stats
         public static StatModifierSource FromStatusEffect(string effectId)
             => new(StatModifierSourceType.StatusEffect, effectId);
 
+        public static StatModifierSource ItemSet { get; }
+            = new(StatModifierSourceType.ItemSet, 0);
+
         public static StatModifierSource Derived { get; }
             = new(StatModifierSourceType.Derived, 0);
 
@@ -289,6 +292,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         EquipmentSlot,
         InventorySlot,
         StatusEffect,
+        ItemSet,
         Derived,
         Level,
     }

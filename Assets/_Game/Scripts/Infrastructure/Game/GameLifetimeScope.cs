@@ -230,6 +230,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ItemInstanceDataFactory>(Lifetime.Singleton);
             builder.Register<ItemStackFactory>(Lifetime.Singleton);
             builder.Register<ItemDefinitionCatalog>(Lifetime.Singleton);
+            builder.Register<ItemSetDefinitionCatalog>(Lifetime.Singleton);
             builder.Register<ItemCommandHandler>(Lifetime.Singleton);
 
             builder.Register<InventoryModelFactory>(Lifetime.Singleton);

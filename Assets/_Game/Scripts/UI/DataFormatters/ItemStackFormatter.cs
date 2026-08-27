@@ -45,7 +45,15 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 definitionData.IsConsumable,
                 definitionData.UsableCooldownText,
                 definitionData.UsableEffectsText,
+                definitionData.ItemSetDisplayData,
                 definitionData.Description);
+        }
+
+        private string FormatActiveSetBonuses(ItemStackSnapshot data)
+        {
+            // This will be populated by the UI layer when it has entity context
+            // Format: highlight active bonuses in different color
+            return string.Empty;
         }
     }
 
@@ -68,6 +76,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public string UsableCooldownText { get; }
         public string UsableEffectsText { get; }
 
+        public ItemSetDisplayData ItemSetDisplayData { get; }
+
         public string Description { get; }
 
         public ItemStackDisplayData(
@@ -83,7 +93,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             bool isConsumable,
             string usableCooldownText,
             string usableEffectsText,
-            string description = null)
+            ItemSetDisplayData itemSetDisplayData,
+            string description)
         {
             HasData = true;
 
@@ -99,6 +110,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             IsConsumable = isConsumable;
             UsableCooldownText = usableCooldownText;
             UsableEffectsText = usableEffectsText;
+            ItemSetDisplayData = itemSetDisplayData;
             Description = description;
         }
     }
