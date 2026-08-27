@@ -45,9 +45,13 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _setItemNameTextTemplate;
         [SerializeField]
+        private TMP_Text _setDisabledItemNameTextTemplate;
+        [SerializeField]
         private RectTransform _setEffectsContainer;
         [SerializeField]
         private TMP_Text _setEffectTextTemplate;
+        [SerializeField]
+        private TMP_Text _setDisabledEffectTextTemplate;
         [Space]
         [SerializeField]
         private RectTransform _commonInfo;
@@ -68,9 +72,14 @@ namespace Assets._Game.Scripts.UI.Views
         private void Awake()
         {
             _equippableEffectTextTemplate.gameObject.SetActive(false);
+
             _usableEffectTextTemplate.gameObject.SetActive(false);
+
             _setItemNameTextTemplate.gameObject.SetActive(false);
+            _setDisabledItemNameTextTemplate.gameObject.SetActive(false);
+
             _setEffectTextTemplate.gameObject.SetActive(false);
+            _setDisabledEffectTextTemplate.gameObject.SetActive(false);
         }
 
         public void Render(ItemStackDisplayData itemStack)
@@ -130,14 +139,16 @@ namespace Assets._Game.Scripts.UI.Views
 
             _setNameText.text = itemStack.ItemSetDisplayData.Name;
             
-            foreach (var itemName in itemStack.ItemSetDisplayData.ItemNames)
+            foreach (var item in itemStack.ItemSetDisplayData.Items)
             {
-                if (!TryVisualizeText(_setItemNameTextTemplate, _setItemsContainer, itemName)) continue;
+                var textTemplate = item.IsEquipped ? _setItemNameTextTemplate : _setDisabledItemNameTextTemplate;
+                TryVisualizeText(textTemplate, _setItemsContainer, item.Name);
             }
 
             foreach (var bonus in itemStack.ItemSetDisplayData.Bonuses)
             {
-                if (!TryVisualizeFormattedText(_setEffectTextTemplate, _setEffectsContainer, bonus.RequiredItemCount.ToString(), bonus.ModifiersText)) continue;
+                var textTemplate = bonus.IsEnabled ? _setEffectTextTemplate : _setDisabledEffectTextTemplate;
+                TryVisualizeFormattedText(textTemplate, _setEffectsContainer, bonus.RequiredItemCount.ToString(), bonus.ModifiersText);
             }
 
             _setInfo.gameObject.SetActive(true);

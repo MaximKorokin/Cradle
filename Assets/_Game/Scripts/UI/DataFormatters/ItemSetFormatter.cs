@@ -1,11 +1,12 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Equipment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public class ItemSetFormatter : IDataFormatter<ItemDefinition, ItemSetDisplayData>
+    public class ItemSetFormatter : IDataFormatter<(ItemDefinition, EquipmentModel), ItemSetDisplayData>
     {
         private readonly StatModifiersFormatter _statModifiersFormatter;
         private readonly ItemSetDefinitionCatalog _itemSetCatalog;
@@ -18,20 +19,37 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             _itemSetCatalog = itemSetCatalog;
         }
 
-        public ItemSetDisplayData FormatData(ItemDefinition data)
+        public ItemSetDisplayData FormatData((ItemDefinition, EquipmentModel) data)
         {
-            var set = _itemSetCatalog.GetSetByItem(data);
+            var (itemDefinition, equipmentModel) = data;
+
+            var set = _itemSetCatalog.GetSetByItem(itemDefinition);
             if (set == null) return new();
 
-            var setBonusEntries = new ItemSetBonusesEntry[set.Bonuses.Count];
-            for (int i = 0; i < set.Bonuses.Count; i++)
+            var setItems = set.SetItems.Select(item => new ItemSetItemDisplayData(item.Name, false)).ToArray();
+            if (equipmentModel != null)
             {
-                var bonus = set.Bonuses[i];
-                var modifiersText = _statModifiersFormatter.FormatData(bonus.Modifiers);
-                setBonusEntries[i] = new ItemSetBonusesEntry(bonus.RequiredItemCount, modifiersText);
+                foreach (var (_, snapshot) in equipmentModel.Enumerate())
+                {
+                    if (!snapshot.HasValue) continue;
+                    var index = Array.FindIndex(setItems, item => item.Name == snapshot.Value.Definition.Name);
+                    if (index >= 0)
+                    {
+                        setItems[index] = new ItemSetItemDisplayData(snapshot.Value.Definition.Name, true);
+                    }
+                }
             }
 
-            return new(set.DisplayName, set.SetItems.Select(item => item.Name).ToArray(), setBonusEntries);
+            var equippedItemCount = setItems.Count(item => item.IsEquipped);
+            var setBonuses = set.Bonuses
+                .Select(bonus => new ItemSetBonusesDisplayData(
+                    bonus.RequiredItemCount,
+                    _statModifiersFormatter.FormatData(bonus.Modifiers),
+                    equippedItemCount >= bonus.RequiredItemCount))
+                .OrderBy(bonus => bonus.RequiredItemCount)
+                .ToArray();
+
+            return new(set.DisplayName, setItems, setBonuses);
         }
     }
 
@@ -40,31 +58,45 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public readonly bool HasData;
 
         public readonly string Name;
-        public readonly string[] ItemNames;
-        public readonly ItemSetBonusesEntry[] Bonuses;
+        public readonly ItemSetItemDisplayData[] Items;
+        public readonly ItemSetBonusesDisplayData[] Bonuses;
 
         public ItemSetDisplayData(
             string name,
-            string[] itemNames,
-            ItemSetBonusesEntry[] bonuses)
+            ItemSetItemDisplayData[] items,
+            ItemSetBonusesDisplayData[] bonuses)
         {
             HasData = true;
 
             Name = name;
-            ItemNames = itemNames;
+            Items = items;
             Bonuses = bonuses;
         }
     }
 
-    public readonly struct ItemSetBonusesEntry
+    public readonly struct ItemSetBonusesDisplayData
     {
         public readonly int RequiredItemCount;
         public readonly string ModifiersText;
+        public readonly bool IsEnabled;
 
-        public ItemSetBonusesEntry(int requiredItemCount, string modifiersText)
+        public ItemSetBonusesDisplayData(int requiredItemCount, string modifiersText, bool isEnabled)
         {
             RequiredItemCount = requiredItemCount;
             ModifiersText = modifiersText;
+            IsEnabled = isEnabled;
+        }
+    }
+
+    public readonly struct ItemSetItemDisplayData
+    {
+        public readonly string Name;
+        public readonly bool IsEquipped;
+
+        public ItemSetItemDisplayData(string name, bool isEquipped)
+        {
+            Name = name;
+            IsEquipped = isEquipped;
         }
     }
 }

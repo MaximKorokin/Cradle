@@ -57,7 +57,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             var equippedItem = _equipmentSlot != null ? _equipmentModel.Get(_equipmentSlot.Value) : null;
 
             if (equippedItem.HasValue)
-                window.Render(displayData, _itemStackFormatter.FormatData(equippedItem.Value), Array.Empty<ItemStackAction>());
+                window.Render(displayData, _itemStackFormatter.FormatData((equippedItem.Value, _equipmentModel)), Array.Empty<ItemStackAction>());
             else
                 window.Render(displayData, Array.Empty<ItemStackAction>());
         }

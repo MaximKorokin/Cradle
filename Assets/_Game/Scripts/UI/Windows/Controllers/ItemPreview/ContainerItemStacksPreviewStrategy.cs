@@ -89,9 +89,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             var actions = GetActions();
 
             if (equipmentItem != null)
-                window.Render(_itemStackFormatter.FormatData(primaryItem.Value), _itemStackFormatter.FormatData(equipmentItem.Value), actions);
+                window.Render(_itemStackFormatter.FormatData((primaryItem.Value, _equipmentModel)), _itemStackFormatter.FormatData((equipmentItem.Value, _equipmentModel)), actions);
             else
-                window.Render(_itemStackFormatter.FormatData(primaryItem.Value), actions);
+                window.Render(_itemStackFormatter.FormatData((primaryItem.Value, _equipmentModel)), actions);
         }
 
         public void ProcessAction(ItemStackActionType actionType)

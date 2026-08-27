@@ -61,7 +61,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 description = descriptionTrait.Description;
             }
 
-            var itemSetDisplayData = _itemSetFormatter.FormatData(definition);
+            var itemSetDisplayData = _itemSetFormatter.FormatData((definition, null));
 
             return new ItemStackDisplayData(
                 name,

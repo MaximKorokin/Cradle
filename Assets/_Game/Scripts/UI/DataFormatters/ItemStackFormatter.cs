@@ -1,36 +1,45 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Equipment;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public sealed class ItemStackFormatter : IDataFormatter<ItemStackSnapshot, ItemStackDisplayData>
+    public sealed class ItemStackFormatter : IDataFormatter<(ItemStackSnapshot, EquipmentModel), ItemStackDisplayData>
     {
         private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
+        private readonly ItemSetFormatter _itemSetFormatter;
 
-        public ItemStackFormatter(ItemDefinitionFormatter itemDefinitionFormatter)
+        public ItemStackFormatter(
+            ItemDefinitionFormatter itemDefinitionFormatter,
+            ItemSetFormatter itemSetFormatter)
         {
             _itemDefinitionFormatter = itemDefinitionFormatter;
+            _itemSetFormatter = itemSetFormatter;
         }
 
-        public ItemStackDisplayData FormatData(ItemStackSnapshot data)
+        public ItemStackDisplayData FormatData((ItemStackSnapshot, EquipmentModel) data)
         {
-            var definitionData = _itemDefinitionFormatter.FormatData(data.Definition);
+            var (itemStackSnapshot, equipmentModel) = data;
 
-            var amount = data.Definition.MaxAmount > 1 ? $"Amount: {data.Amount}" : string.Empty;
+            var definitionData = _itemDefinitionFormatter.FormatData(itemStackSnapshot.Definition);
+
+            var amount = itemStackSnapshot.Definition.MaxAmount > 1 ? $"Amount: {itemStackSnapshot.Amount}" : string.Empty;
 
             string weight;
-            if (data.Definition.Weight == 0)
+            if (itemStackSnapshot.Definition.Weight == 0)
             {
                 weight = string.Empty;
             }
-            else if (data.Definition.MaxAmount > 1 && data.Amount > 1)
+            else if (itemStackSnapshot.Definition.MaxAmount > 1 && itemStackSnapshot.Amount > 1)
             {
-                weight = $"Weight: {data.Definition.Weight * data.Amount} ({data.Definition.Weight} each)";
+                weight = $"Weight: {itemStackSnapshot.Definition.Weight * itemStackSnapshot.Amount} ({itemStackSnapshot.Definition.Weight} each)";
             }
             else
             {
-                weight = $"Weight: {data.Definition.Weight}";
+                weight = $"Weight: {itemStackSnapshot.Definition.Weight}";
             }
+
+            var itemSetDisplayData = equipmentModel != null ? _itemSetFormatter.FormatData((itemStackSnapshot.Definition, equipmentModel)) : definitionData.ItemSetDisplayData;
 
             return new ItemStackDisplayData(
                 definitionData.Name,
@@ -45,15 +54,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 definitionData.IsConsumable,
                 definitionData.UsableCooldownText,
                 definitionData.UsableEffectsText,
-                definitionData.ItemSetDisplayData,
+                itemSetDisplayData,
                 definitionData.Description);
-        }
-
-        private string FormatActiveSetBonuses(ItemStackSnapshot data)
-        {
-            // This will be populated by the UI layer when it has entity context
-            // Format: highlight active bonuses in different color
-            return string.Empty;
         }
     }
 
