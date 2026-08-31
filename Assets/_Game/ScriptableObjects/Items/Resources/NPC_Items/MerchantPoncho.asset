@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MerchantPoncho
   m_EditorClassIdentifier: 
   _id: d8bf3a0234a04157bc51481417c4ca09
-  <Name>k__BackingField: Achamoth Dress
+  <Name>k__BackingField: Merchant Poncho
   <Icon>k__BackingField: {fileID: -2239954216375100083, guid: 5c05dcc7afc6fd948bfa6c964069d44b, type: 3}
   <Sprite>k__BackingField: {fileID: 1520845475, guid: a1a087c604dd2314a92ccefa47553a58, type: 3}
   <MaxAmount>k__BackingField: 1

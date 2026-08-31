@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MerchantHat
   m_EditorClassIdentifier: 
   _id: 35e546ea23c8471b86539c7f9772d34e
-  <Name>k__BackingField: Achamoth Hair
+  <Name>k__BackingField: Merchant Hat
   <Icon>k__BackingField: {fileID: -2239954216375100083, guid: 5c05dcc7afc6fd948bfa6c964069d44b, type: 3}
   <Sprite>k__BackingField: {fileID: -1514364825, guid: b6e6023625bc48b42bbe7f1d06ab7d02, type: 3}
   <MaxAmount>k__BackingField: 1

@@ -23,9 +23,14 @@ MonoBehaviour:
   - rid: 3412049091508568172
   - rid: 3412049108851753159
   - rid: 3564180343019798658
+  - rid: 422930070491103232
   references:
     version: 2
     RefIds:
+    - rid: 422930070491103232
+      type: {class: EnchantableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <ItemEnchantingDefinition>k__BackingField: {fileID: 11400000, guid: 681e5abaadaf3224b9e470dce1eda7a1, type: 2}
     - rid: 3412049091508568172
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

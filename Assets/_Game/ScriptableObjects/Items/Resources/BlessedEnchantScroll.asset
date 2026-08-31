@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e737d3c8e7508f45b197dd327972b0b, type: 3}
+  m_Name: BlessedEnchantScroll
+  m_EditorClassIdentifier: 
+  _id: 026f21c118e7462e91102da48a334ab4
+  <Name>k__BackingField: Blessed Enchant Scroll
+  <Icon>k__BackingField: {fileID: -6447478666064608376, guid: e3d3b1cddce41094f872ab4060d92499, type: 3}
+  <Sprite>k__BackingField: {fileID: -6447478666064608376, guid: e3d3b1cddce41094f872ab4060d92499, type: 3}
+  <MaxAmount>k__BackingField: 64
+  <Weight>k__BackingField: 10
+  <Traits>k__BackingField:
+  - rid: 3412049091508568175
+  - rid: 3564180343019798671
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412049091508568175
+      type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Consumable>k__BackingField: 1
+        <Cooldown>k__BackingField: 0
+        <RequiredRestrictionState>k__BackingField: 0
+        <LimitingRestrictionState>k__BackingField: 3
+    - rid: 3564180343019798671
+      type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <BasePrice>k__BackingField: 3000
