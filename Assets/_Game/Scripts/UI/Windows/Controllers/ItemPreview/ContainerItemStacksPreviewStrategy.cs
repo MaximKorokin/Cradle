@@ -98,22 +98,31 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         {
             var item = _primaryContainer.Get(_primaryContainerSlot);
 
+            if (item == null)
+            {
+                SLog.Error($"Trying to process action for item that is not found in {_primaryContainer} in slot {_primaryContainerSlot}");
+                return;
+            }
+
             switch (actionType)
             {
-                case ItemStackActionType.Drop:
-                    if (item != null)
+                case ItemStackActionType.Destroy:
+                    _windowManager.ShowConfirmationOrAmountPicker(item.Value.Amount, item.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {item.Value.Definition.Name}?", amount =>
                     {
-                        PublishItemCommand(new DropItemCommand(_primaryContainerPath, _primaryContainerSlot, item.Value.Amount));
-                    }
+                        PublishItemCommand(new DestroyItemCommand(_primaryContainerPath, _primaryContainerSlot, amount));
+                    });
+                    break;
+                case ItemStackActionType.Drop:
+                    _windowManager.ShowConfirmationOrAmountPicker(item.Value.Amount, item.Value.Amount, "Drop Item", $"Are you sure you want to drop {item.Value.Definition.Name}?", amount =>
+                    {
+                        PublishItemCommand(new DropItemCommand(_primaryContainerPath, _primaryContainerSlot, amount));
+                    });
                     break;
                 case ItemStackActionType.Transfer:
-                    if (item != null)
+                    _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
                     {
-                        _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
-                        {
-                            PublishItemCommand(new TransferItemCommand(_primaryContainerPath, _primaryContainerSlot, _secondaryContainerPath, amount));
-                        });
-                    }
+                        PublishItemCommand(new TransferItemCommand(_primaryContainerPath, _primaryContainerSlot, _secondaryContainerPath, amount));
+                    });
                     break;
                 case ItemStackActionType.Equip:
                     PublishItemCommand(new EquipFromContainerCommand(_primaryContainerPath, _primaryContainerSlot, _equipmentContainerPath, _equipmentSlot.Value.ToInt64()));
@@ -123,6 +132,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                     break;
                 case ItemStackActionType.Use:
                     PublishItemCommand(new UseItemCommand(_primaryContainerPath, _primaryContainerSlot, true));
+                    break;
+                case ItemStackActionType.Enchant:
+                    var enchantableTrait = item.Value.GetTrait<EnchantableTrait>();
+                    _windowManager.ShowConfirmation("Enchant Item", $"Are you sure you want to enchant {item.Value.Definition.Name}?\n", confirmed =>
+                    {
+                        if (confirmed) PublishItemCommand(new EnchantItemCommand(_primaryContainerPath, _primaryContainerSlot));
+                    });
                     break;
             }
         }
@@ -144,11 +160,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             }
 
             var primaryItem = primaryItemNullable.Value;
-            var actions = new List<ItemStackAction>();
+            var actions = new List<ItemStackAction>
+            {
+                new(ItemStackActionType.Drop, "Drop"),
+                new(ItemStackActionType.Destroy, "Destroy")
+            };
 
-            // Standard actions
-            actions.Add(new(ItemStackActionType.Drop, "Drop"));
-
+            // Inventory to inventory scenario
             if (_primaryContainer is InventoryModel &&
                 _secondaryContainer is InventoryModel &&
                 _secondaryContainer.PreviewAdd(primaryItem) > 0)
@@ -156,6 +174,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 actions.Add(new ItemStackAction(ItemStackActionType.Transfer, "Transfer"));
             }
 
+            // Equipment to inventory scenario
             if ((_primaryContainer is EquipmentModel equipmentModel) &&
                 equipmentModel == _equipmentModel &&
                 _equipmentModel.Has(primaryItem.Key, 1))
@@ -167,10 +186,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 actions.Add(new ItemStackAction(ItemStackActionType.Equip, "Equip"));
             }
 
+            // Usable item scenario
             if (primaryItem.GetTrait<UsableTrait>() != null && primaryItem.GetTraits<FunctionalItemTraitBase>().Any(t => t.Triggers.HasFlag(ItemTrigger.OnUse)))
             {
                 actions.Add(new ItemStackAction(ItemStackActionType.Use, "Use"));
             }
+
+            // Enchantable item scenario
+            if (primaryItem.GetTrait<EnchantableTrait>() != null)
+            {
+                actions.Add(new ItemStackAction(ItemStackActionType.Enchant, "Enchant"));
+            }
+
             return actions;
         }
     }

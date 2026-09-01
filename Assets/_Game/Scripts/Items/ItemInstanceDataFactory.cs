@@ -1,6 +1,8 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Items.Traits;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Items
 {
@@ -24,22 +26,87 @@ namespace Assets._Game.Scripts.Items
                 return null;
             }
 
+            // Create and fill instance data based on the traits of the item definition
+            var instanceDataList = new List<IItemInstanceData>();
+
             if (definition.TryGetTrait<UsableTrait>(out var usableTrait))
             {
-                return new CooldownInstanceData(usableTrait.Cooldown);
+                instanceDataList.Add(new CooldownInstanceData(usableTrait.Cooldown));
             }
 
-            return new EmptyInstanceData();
+            if (definition.TryGetTrait<EnchantableTrait>(out var enchantableTrait))
+            {
+                instanceDataList.Add(new EnchantInstanceData(0));
+            }
+
+            // Return instance data
+            if (instanceDataList.Count > 0)
+            {
+                return new CompositeInstanceData(instanceDataList);
+            }
+            else
+            {
+                return new EmptyInstanceData();
+            }
         }
 
-        public IItemInstanceData Apply(EncodedSaveData save, ItemDefinition itemDefinition)
+        public IItemInstanceData Apply(EncodedSaveData[] save, ItemDefinition itemDefinition)
         {
-            return _codecRegistry.DecodeOrNull(save, itemDefinition) as IItemInstanceData;
+            var defaultInstanceData = Create(itemDefinition.Id);
+
+            if (defaultInstanceData == null)
+            {
+                return null;
+            }
+
+            if (save == null || save.Length == 0)
+            {
+                return defaultInstanceData;
+            }
+
+            if (defaultInstanceData is not CompositeInstanceData compositeDefaultInstanceData)
+            {
+                return defaultInstanceData;
+            }
+
+            // Decode the saved data into instance data objects
+            var instanceDataList = new List<IItemInstanceData>();
+            foreach (var item in save)
+            {
+                if (_codecRegistry.DecodeOrNull(item, itemDefinition) is IItemInstanceData decodedData)
+                {
+                    instanceDataList.Add(decodedData);
+                }
+                else
+                {
+                    SLog.Warn($"Failed to decode instance data of type '{item.Type}' for item definition '{itemDefinition.Id}'.");
+                }
+            }
+
+            // Add any default instance data that was not present in the saved data
+            var nonSavedInstanceData = compositeDefaultInstanceData.Children
+                .Where(defaultChild => !instanceDataList.Any(savedChild => savedChild.GetType() == defaultChild.GetType()))
+                .ToList();
+
+            instanceDataList.AddRange(nonSavedInstanceData);
+
+            return new CompositeInstanceData(instanceDataList);
         }
 
-        public EncodedSaveData Save(IItemInstanceData instanceData)
+        public EncodedSaveData[] Save(IItemInstanceData instanceData)
         {
-            return _codecRegistry.EncodeOrNull(instanceData);
+            if (instanceData is CompositeInstanceData composite)
+            {
+                return composite.Children
+                    .Select(child => _codecRegistry.EncodeOrNull(child))
+                    .Where(encoded => encoded != null)
+                    .ToArray();
+            }
+            else
+            {
+                var encoded = _codecRegistry.EncodeOrNull(instanceData);
+                return encoded != null ? new[] { encoded } : new EncodedSaveData[0];
+            }
         }
     }
 }

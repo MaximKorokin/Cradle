@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3dfd7b7b1aea6c4da7553816a00a2f1, type: 3}
-  m_Name: Set1
+  m_Name: SetAdventurersGlory
   m_EditorClassIdentifier: 
   _id: 78d82fff526b44c5b5bb30d0eb732e42
   <DisplayName>k__BackingField: Adventurer's Glory
   _setItems:
   - {fileID: 11400000, guid: 9a4b43b665d6b0f44985561bdb68eaa7, type: 2}
-  - {fileID: 11400000, guid: 1ddc73ae1dee4434d870e9a11e9efb81, type: 2}
   - {fileID: 11400000, guid: 1f9ae7ca36e9e85478e4efe500850f24, type: 2}
+  - {fileID: 11400000, guid: 1ddc73ae1dee4434d870e9a11e9efb81, type: 2}
   _bonuses:
   - <RequiredItemCount>k__BackingField: 2
     _modifiers:

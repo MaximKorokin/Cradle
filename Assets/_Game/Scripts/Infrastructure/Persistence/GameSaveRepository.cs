@@ -1,6 +1,8 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Items.Equipment;
+using Assets._Game.Scripts.Shared;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
@@ -95,7 +97,8 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     {
         public string ItemDefinitionId;
         public int Amount;
-        public EncodedSaveData InstanceData;
+        [JsonConverter(typeof(SingleOrArrayJsonConverter<EncodedSaveData>))]
+        public EncodedSaveData[] InstanceData;
     }
 
     public class QuestStateSave

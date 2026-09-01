@@ -72,7 +72,7 @@ namespace Assets._Game.Scripts.Items
 
         public static ItemKey From(ItemDefinition definition, IItemInstanceData instanceData)
         {
-            var key = (instanceData as IImmutableItemInstanceData)?.GetStackingKey();
+            var key = instanceData?.GetStackingKey();
             if (string.IsNullOrEmpty(key)) key = null;
             return new ItemKey(definition.Id, key);
         }

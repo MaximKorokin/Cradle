@@ -397,7 +397,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // Check cooldown and reset it if the item can be used.
-            if (item.Value.InstanceData is not CooldownInstanceData cooldownTrait || !cooldownTrait.CooldownCounter.IsOver())
+            if (!item.Value.InstanceData.TryGet<CooldownInstanceData>(out var cooldownData) || !cooldownData.CooldownCounter.IsOver())
                 return false;
 
             // Check for allowed and limiting RestrictionState
@@ -417,7 +417,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 return false;
 
             // All checks passed, trigger the item use.
-            cooldownTrait.CooldownCounter.Reset();
+            cooldownData.CooldownCounter.Reset();
             entity.Publish(new ItemUseStartedEvent(item.Value, itemUseSettings));
 
             // If the item is consumable, remove one from the stack.

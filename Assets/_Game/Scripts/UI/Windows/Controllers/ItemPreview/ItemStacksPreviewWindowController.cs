@@ -49,6 +49,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
     public enum ItemStackActionType
     {
+        Destroy,
         Drop,
         Transfer,
         Equip,
@@ -56,6 +57,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         Use,
         Buy,
         Sell,
+        Enchant,
     }
 
     public readonly struct ItemStacksPreviewWindowControllerArguments : IWindowControllerArguments

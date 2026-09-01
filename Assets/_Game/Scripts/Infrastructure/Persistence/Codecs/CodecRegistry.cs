@@ -8,22 +8,37 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
 
         public CodecRegistry(IEnumerable<IDataCodec> codecs)
         {
-            foreach (var c in codecs) _byType[c.Type] = c;
+            foreach (var c in codecs)
+            {
+                if (_byType.ContainsKey(c.Type))
+                {
+                    SLog.Error($"Duplicate codec type '{c.Type}' found in registry.");
+                    continue;
+                }
+                _byType[c.Type] = c;
+            }
         }
 
         public EncodedSaveData EncodeOrNull(object data)
-            => data == null ? null : FindEncoder(data).Encode(data);
+        {
+            if (data == null) return null;
+
+            foreach (var c in _byType.Values)
+            {
+                if (c.CanEncode(data))
+                {
+                    return c.Encode(data);
+                }
+            }
+
+            return null;
+        }
 
         public object DecodeOrNull(EncodedSaveData save, object payload = null)
-            => save == null ? null : _byType[save.Type].Decode(save, payload);
-
-        private IDataCodec FindEncoder(object data)
         {
-            foreach (var c in _byType.Values)
-                if (c.CanEncode(data))
-                    return c;
+            if (save == null || !_byType.TryGetValue(save.Type, out var codec)) return null;
 
-            throw new KeyNotFoundException($"No codec for data type {data.GetType().Name}");
+            return codec.Decode(save, payload);
         }
     }
 }
