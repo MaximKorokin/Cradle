@@ -117,7 +117,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // Apply new modifiers if something is equipped now
             if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
             {
-                var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.OnEquipmentChange);
+                var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileEquipped);
                 if (modifiers.Count > 0)
                 {
                     stats.AddModifiers(source, modifiers);
@@ -140,12 +140,25 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private static List<StatModifier> ExtractStatModifiers(Entity entity, ItemStackSnapshot item, ItemTrigger trigger)
         {
             var result = new List<StatModifier>();
+            var triggerContext = new ItemTriggerContext(entity, trigger, item);
 
-            var triggerContext = new ItemTriggerContext(entity, ItemTrigger.OnEquipmentChange, item);
+            // Extract stat modifiers from StatModifiersTrait
             foreach (var trait in item.GetFunctionalTraits<StatModifiersTrait>(trigger))
             {
                 if (trait.CanTrigger(triggerContext))
                     result.AddRange(trait.Modifiers);
+            }
+
+            // Extract stat modifiers from EnchantableTrait
+            if (item.InstanceData != null && item.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData))
+            {
+                foreach (var trait in item.GetFunctionalTraits<EnchantableTrait>(trigger))
+                {
+                    if (trait.CanTrigger(triggerContext))
+                        result.AddRange(trait.ItemEnchantingDefinition.Levels
+                            .Take(enchantInstanceData.Level)
+                            .SelectMany(level => level.Bonuses));
+                }
             }
 
             return result;

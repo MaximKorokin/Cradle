@@ -23,7 +23,8 @@ namespace Assets._Game.Scripts.Items
     [Flags]
     public enum ItemTrigger
     {
-        OnEquipmentChange = 1,
+        WhileEquipped = 1,
+        WhileInInventory = 8,
         OnUse = 64,
     }
 

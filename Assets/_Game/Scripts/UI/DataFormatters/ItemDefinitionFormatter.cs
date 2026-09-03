@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             {
                 isEquippable = true;
                 equipmentSlotName = equippableTrait.Slot.ToString();
-                equippableEffectsText = GetFunctionalTraitsText(definition, ItemTrigger.OnEquipmentChange);
+                equippableEffectsText = GetFunctionalTraitsText(definition, ItemTrigger.WhileEquipped);
             }
 
             if (definition.TryGetTrait<UsableTrait>(out var usableTrait))

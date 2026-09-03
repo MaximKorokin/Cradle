@@ -64,9 +64,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var actionModule = entity.GetModule<ActionModule>();
             var isEquipping = e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Replaced;
-            var context = new ItemTriggerContext(entity, ItemTrigger.OnEquipmentChange, e.Item.Value);
+            var context = new ItemTriggerContext(entity, ItemTrigger.WhileEquipped, e.Item.Value);
 
-            foreach (var specialActionTrait in e.Item.Value.GetFunctionalTraits<SpecialActionTrait>(ItemTrigger.OnEquipmentChange))
+            foreach (var specialActionTrait in e.Item.Value.GetFunctionalTraits<SpecialActionTrait>(ItemTrigger.WhileEquipped))
             {
                 if (specialActionTrait == null || !specialActionTrait.CanTrigger(context)) continue;
 

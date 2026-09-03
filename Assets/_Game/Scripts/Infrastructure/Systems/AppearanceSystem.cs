@@ -74,8 +74,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             var appearance = entity.GetModule<AppearanceModule>();
             
             // Check for animation overrides
-            var context = new ItemTriggerContext(entity, ItemTrigger.OnEquipmentChange, e.Item.Value);
-            foreach (var animationOverrideTrait in e.Item.Value.GetFunctionalTraits<AnimationOverrideTrait>(ItemTrigger.OnEquipmentChange))
+            var context = new ItemTriggerContext(entity, ItemTrigger.WhileEquipped, e.Item.Value);
+            foreach (var animationOverrideTrait in e.Item.Value.GetFunctionalTraits<AnimationOverrideTrait>(ItemTrigger.WhileEquipped))
             {
                 if (animationOverrideTrait == null || !animationOverrideTrait.CanTrigger(context)) continue;
 
