@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence.Codecs
 {
-    public sealed class CooldownCodec : DataCodecBase<CooldownInstanceData>
+    public sealed class CooldownDataCodec : DataCodecBase<CooldownInstanceData>
     {
         public override string Type => "Cooldown";
 

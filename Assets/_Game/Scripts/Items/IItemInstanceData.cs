@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.Items
     [Serializable]
     public class EmptyInstanceData : IItemInstanceData
     {
-        public event Action<IItemInstanceData> Changed;
+        public event Action<IItemInstanceData> Changed { add { } remove { } }
         public string GetStackingKey() => "";
         public IItemInstanceData Clone() => new EmptyInstanceData();
     }
@@ -78,7 +78,7 @@ namespace Assets._Game.Scripts.Items
     public class CooldownInstanceData : IItemInstanceData
     {
         public CooldownCounter CooldownCounter { get; private set; }
-        public event Action<IItemInstanceData> Changed;
+        public event Action<IItemInstanceData> Changed { add { } remove { } }
 
         public CooldownInstanceData(float cooldown)
         {

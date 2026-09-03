@@ -27,17 +27,7 @@ namespace Assets._Game.Scripts.Items
             }
 
             // Create and fill instance data based on the traits of the item definition
-            var instanceDataList = new List<IItemInstanceData>();
-
-            if (definition.TryGetTrait<UsableTrait>(out var usableTrait))
-            {
-                instanceDataList.Add(new CooldownInstanceData(usableTrait.Cooldown));
-            }
-
-            if (definition.TryGetTrait<EnchantableTrait>(out var enchantableTrait))
-            {
-                instanceDataList.Add(new EnchantInstanceData(0));
-            }
+            var instanceDataList = GetDefaultInstanceDataList(definition);
 
             // Return instance data
             if (instanceDataList.Count > 0)
@@ -107,6 +97,23 @@ namespace Assets._Game.Scripts.Items
                 var encoded = _codecRegistry.EncodeOrNull(instanceData);
                 return encoded != null ? new[] { encoded } : new EncodedSaveData[0];
             }
+        }
+
+        private List<IItemInstanceData> GetDefaultInstanceDataList(ItemDefinition itemDefinition)
+        {
+            var instanceDataList = new List<IItemInstanceData>();
+
+            if (itemDefinition.TryGetTrait<UsableTrait>(out var usableTrait))
+            {
+                instanceDataList.Add(new CooldownInstanceData(usableTrait.Cooldown));
+            }
+
+            if (itemDefinition.TryGetTrait<EnchantableTrait>(out var enchantableTrait))
+            {
+                instanceDataList.Add(new EnchantInstanceData(0));
+            }
+
+            return instanceDataList;
         }
     }
 }

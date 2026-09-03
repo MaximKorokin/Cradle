@@ -140,7 +140,8 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Singleton);
             builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Singleton);
 
-            builder.Register<IDataCodec, CooldownCodec>(Lifetime.Singleton);
+            builder.Register<IDataCodec, CooldownDataCodec>(Lifetime.Singleton);
+            builder.Register<IDataCodec, EnchantDataCodec>(Lifetime.Singleton);
             builder.Register<IDataCodec, EmptyCodec>(Lifetime.Singleton);
 
             builder.Register<IDataCodec, EntityKillsObjectiveCodec>(Lifetime.Singleton);
