@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.Items.Equipment
         private readonly IEquipmentRules _rules;
         private readonly ItemStackFactory _itemStackFactory;
 
+        private readonly Dictionary<EquipmentSlotKey, Action<ItemStack>> _instanceDataSubscriptions = new();
+
         private readonly EquipmentSlotKey[] _slotList;
         public IReadOnlyList<EquipmentSlotKey> Slots => _slotList;
 
@@ -109,7 +111,9 @@ namespace Assets._Game.Scripts.Items.Equipment
                 if (!_rules.CanPlace(slot, snapshot, this)) continue;
 
                 int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
+                UnsubscribeSlot(slot);
                 _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
+                SubscribeSlot(slot);
                 remaining -= put;
                 added += put;
                 EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Equipped, _slots[slot].Snapshot));
@@ -133,7 +137,9 @@ namespace Assets._Game.Scripts.Items.Equipment
             if (existing is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
+                UnsubscribeSlot(slot);
                 _slots[slot] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
+                SubscribeSlot(slot);
                 EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Equipped, _slots[slot].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
@@ -174,6 +180,7 @@ namespace Assets._Game.Scripts.Items.Equipment
 
                     if (s.Amount == 0)
                     {
+                        UnsubscribeSlot(slot);
                         _slots[slot] = null;
                         EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Unequipped, s.Snapshot));
                     }
@@ -202,6 +209,7 @@ namespace Assets._Game.Scripts.Items.Equipment
             {
                 if (s.Amount == 0)
                 {
+                    UnsubscribeSlot(slot);
                     _slots[slot] = null;
                     EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Unequipped, s.Snapshot));
                 }
@@ -270,6 +278,30 @@ namespace Assets._Game.Scripts.Items.Equipment
             }
 
             return canAdd;
+        }
+
+        private void SubscribeSlot(EquipmentSlotKey slot)
+        {
+            if (!_slots.TryGetValue(slot, out var s) || s is null) return;
+            UnsubscribeSlot(slot);
+            void Handler(ItemStack stack)
+            {
+                EquipmentChanged?.Invoke(new(slot, EquipmentChangeKind.Updated, stack.Snapshot));
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
+            }
+            s.InstanceDataChanged += Handler;
+            _instanceDataSubscriptions[slot] = Handler;
+        }
+
+        private void UnsubscribeSlot(EquipmentSlotKey slot)
+        {
+            if (_instanceDataSubscriptions.TryGetValue(slot, out var handler))
+            {
+                if (_slots.TryGetValue(slot, out var s) && s != null)
+                    s.InstanceDataChanged -= handler;
+                _instanceDataSubscriptions.Remove(slot);
+            }
         }
 
         // Optional: preview for a specific equipment slot (drag onto exact slot)

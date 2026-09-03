@@ -7,6 +7,8 @@ namespace Assets._Game.Scripts.Items
 {
     public interface IItemInstanceData
     {
+        event Action<IItemInstanceData> Changed;
+
         bool TryGet<T>(out T value) where T : class, IItemInstanceData
         {
             if (this is T t)
@@ -26,6 +28,7 @@ namespace Assets._Game.Scripts.Items
     [Serializable]
     public class EmptyInstanceData : IItemInstanceData
     {
+        public event Action<IItemInstanceData> Changed;
         public string GetStackingKey() => "";
         public IItemInstanceData Clone() => new EmptyInstanceData();
     }
@@ -35,6 +38,7 @@ namespace Assets._Game.Scripts.Items
     {
         private readonly List<IItemInstanceData> _children;
         public IReadOnlyList<IItemInstanceData> Children => _children;
+        public event Action<IItemInstanceData> Changed;
 
         bool IItemInstanceData.TryGet<T>(out T value)
         {
@@ -54,16 +58,27 @@ namespace Assets._Game.Scripts.Items
                 SLog.Error($"Children of {nameof(CompositeInstanceData)} cannot contain composite instance data.");
             }
             _children = new List<IItemInstanceData>(children);
+            foreach (var c in _children)
+            {
+                if (c != null)
+                    c.Changed += OnChildChanged;
+            }
         }
 
         public string GetStackingKey() => string.Join(",", Children.OrderBy(child => child.GetType().Name).Select(child => child.GetStackingKey()));
         public IItemInstanceData Clone() => new CompositeInstanceData(Children);
+
+        private void OnChildChanged(IItemInstanceData child)
+        {
+            Changed?.Invoke(this);
+        }
     }
 
     [Serializable]
     public class CooldownInstanceData : IItemInstanceData
     {
         public CooldownCounter CooldownCounter { get; private set; }
+        public event Action<IItemInstanceData> Changed;
 
         public CooldownInstanceData(float cooldown)
         {
@@ -82,11 +97,23 @@ namespace Assets._Game.Scripts.Items
     [Serializable]
     public class EnchantInstanceData : IItemInstanceData
     {
-        public int Level { get; private set; }
+        private int _level;
+        public event Action<IItemInstanceData> Changed;
+
+        public int Level
+        {
+            get => _level;
+            set
+            {
+                if (_level == value) return;
+                _level = value;
+                Changed?.Invoke(this);
+            }
+        }
 
         public EnchantInstanceData(int level)
         {
-            Level = level;
+            _level = level;
         }
 
         public string GetStackingKey() => Level.ToString();

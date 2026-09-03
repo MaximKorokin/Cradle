@@ -41,10 +41,12 @@ namespace Assets._Game.Scripts.Items.Commands
                 TransferItemCommand c => HandleTransfer(c),
                 EquipFromContainerCommand c => HandleEquip(c),
                 UnequipToContainerCommand c => HandleUnequip(c),
+                DestroyItemCommand c => HandleDestroy(c),
                 DropItemCommand c => HandleDrop(c),
                 UseItemCommand c => HandleUse(c),
                 BuyFromShopCommand c => HandleBuy(c),
                 SellToShopCommand c => HandleSell(c),
+                EnchantItemCommand c => HandleEnchant(c),
                 _ => throw new NotSupportedException(command.GetType().Name),
             };
         }
@@ -343,6 +345,22 @@ namespace Assets._Game.Scripts.Items.Commands
             return ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount) > 0;
         }
 
+        private bool HandleDestroy(DestroyItemCommand c)
+        {
+            if (c.FromContainer.ContainerId == ItemContainerId.Equipment)
+            {
+                var equipmentModel = _itemContainerResolver.ResolveEquipment(c.FromContainer);
+                var slot = ContainerSlotConverter.ToEquipmentSlot(c.FromSlot);
+                return ItemContainerUtils.RemoveAmount(equipmentModel, slot, c.Amount) > 0;
+            }
+            else
+            {
+                var container = _itemContainerResolver.ResolveInventory(c.FromContainer);
+                var slot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                return ItemContainerUtils.RemoveAmount(container, slot, c.Amount) > 0;
+            }
+        }
+
         private bool HandleDrop(DropItemCommand c)
         {
             var entity = _entityRepository.Get(c.FromContainer.EntityId);
@@ -496,6 +514,50 @@ namespace Assets._Game.Scripts.Items.Commands
                 itemSnapshot.Value.InstanceData,
                 removed));
 
+            return true;
+        }
+
+        private bool HandleEnchant(EnchantItemCommand c)
+        {
+            var containerModel = _itemContainerResolver.ResolveContainer(c.FromContainer);
+            var itemSnapshot = containerModel.Get(c.FromSlot);
+
+            if (!itemSnapshot.HasValue) return false;
+            if (!itemSnapshot.Value.Definition.TryGetTrait<EnchantableTrait>(out var enchantableTrait)) return false;
+            if (!itemSnapshot.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData)) return false;
+            if (enchantInstanceData.Level >= enchantableTrait.ItemEnchantingDefinition.Levels.Count) return false;
+
+            var inventoryPath = ItemContainerPath.Inventory(c.FromContainer.EntityId);
+            var enchantingItemKey = ItemKey.From(enchantableTrait.ItemEnchantingDefinition.Methods[0].Item, null);
+            var inventoryModel = _itemContainerResolver.ResolveInventory(inventoryPath);
+            if (!inventoryModel.Has(enchantingItemKey, 1)) return false;
+
+            // Checks passed, remove enchanting item from inventory and perform enchantment
+            inventoryModel.Remove(enchantingItemKey, 1);
+
+            var isEnchantSuccessful = enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance > UnityEngine.Random.value;
+            if (isEnchantSuccessful)
+            {
+                enchantInstanceData.Level++;
+                return true;
+            }
+
+            // Enchant failed, apply failure rules
+            switch (enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type)
+            {
+                case Enchanting.EnchantFailureType.None:
+                    break;
+                case Enchanting.EnchantFailureType.Downgrade:
+                    if (enchantInstanceData.Level > 0) enchantInstanceData.Level--;
+                    break;
+                case Enchanting.EnchantFailureType.Reset:
+                    enchantInstanceData.Level = 0;
+                    break;
+                case Enchanting.EnchantFailureType.Destroy:
+                    var itemKey = ItemKey.From(itemSnapshot.Value.Definition, itemSnapshot.Value.InstanceData);
+                    containerModel.Remove(itemKey, 1);
+                    break;
+            }
             return true;
         }
     }

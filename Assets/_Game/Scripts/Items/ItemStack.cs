@@ -5,7 +5,23 @@ namespace Assets._Game.Scripts.Items
     public class ItemStack
     {
         public ItemDefinition Definition { get; set; }
-        public IItemInstanceData InstanceData { get; set; }
+        private IItemInstanceData _instanceData;
+        public IItemInstanceData InstanceData
+        {
+            get => _instanceData;
+            set
+            {
+                if (_instanceData == value) return;
+                if (_instanceData != null)
+                    _instanceData.Changed -= OnInstanceDataChanged;
+                _instanceData = value;
+                if (_instanceData != null)
+                    _instanceData.Changed += OnInstanceDataChanged;
+                InstanceDataChanged?.Invoke(this);
+            }
+        }
+
+        public event Action<ItemStack> InstanceDataChanged;
         public int Amount { get; set; }
 
         public ItemKey Key => ItemKey.From(Definition, InstanceData);
@@ -56,6 +72,11 @@ namespace Assets._Game.Scripts.Items
             if (Definition.MaxAmount <= 0) throw new InvalidOperationException("MaxAmount <= 0");
             if (Amount > Definition.MaxAmount) throw new InvalidOperationException("Amount > MaxAmount");
             if (Definition.MaxAmount == 1 && Amount > 1) throw new InvalidOperationException("Unique item stack > 1");
+        }
+
+        private void OnInstanceDataChanged(IItemInstanceData d)
+        {
+            InstanceDataChanged?.Invoke(this);
         }
     }
 

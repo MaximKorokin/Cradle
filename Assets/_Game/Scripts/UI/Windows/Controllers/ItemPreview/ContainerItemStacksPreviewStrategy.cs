@@ -135,7 +135,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                     break;
                 case ItemStackActionType.Enchant:
                     var enchantableTrait = item.Value.GetTrait<EnchantableTrait>();
-                    _windowManager.ShowConfirmation("Enchant Item", $"Are you sure you want to enchant {item.Value.Definition.Name}?\n", confirmed =>
+                    item.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData);
+                    _windowManager.ShowConfirmation("Enchant Item", $"Are you sure you want to enchant {item.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
                     {
                         if (confirmed) PublishItemCommand(new EnchantItemCommand(_primaryContainerPath, _primaryContainerSlot));
                     });

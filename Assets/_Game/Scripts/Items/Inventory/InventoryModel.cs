@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Items.Inventory
@@ -9,6 +8,8 @@ namespace Assets._Game.Scripts.Items.Inventory
         private readonly ItemStack[] _slots;
         private readonly ItemStackFactory _itemStackFactory;
         public int Capacity => _slots.Length;
+
+        private readonly Dictionary<int, Action<ItemStack>> _instanceDataSubscriptions = new();
 
         public event Action<InventoryChange> InventoryChanged;
         public event Action<InventorySlot> SlotChanged;
@@ -93,7 +94,9 @@ namespace Assets._Game.Scripts.Items.Inventory
                     if (_slots[i] is not null) continue;
 
                     int put = Math.Min(snapshot.Definition.MaxAmount, remaining);
+                    UnsubscribeSlot(i);
                     _slots[i] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
+                    SubscribeSlot(i);
                     remaining -= put;
                     added += put;
                     var slot = new InventorySlot(i);
@@ -118,7 +121,9 @@ namespace Assets._Game.Scripts.Items.Inventory
             if (s is null)
             {
                 int put = Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
+                UnsubscribeSlot(slot.Index);
                 _slots[slot.Index] = _itemStackFactory.Create(snapshot.Definition.Id, snapshot.InstanceData, put);
+                SubscribeSlot(slot.Index);
                 InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Added, _slots[slot.Index].Snapshot));
                 SlotChanged?.Invoke(slot);
                 Changed?.Invoke();
@@ -159,6 +164,7 @@ namespace Assets._Game.Scripts.Items.Inventory
                     var slot = new InventorySlot(i);
                     if (s.Amount == 0)
                     {
+                        UnsubscribeSlot(i);
                         _slots[i] = null;
                         InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Removed, s.Snapshot));
                     }
@@ -187,6 +193,7 @@ namespace Assets._Game.Scripts.Items.Inventory
             {
                 if (s.Amount == 0)
                 {
+                    UnsubscribeSlot(slot.Index);
                     _slots[slot.Index] = null;
                     InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Removed, s.Snapshot));
                 }
@@ -271,13 +278,47 @@ namespace Assets._Game.Scripts.Items.Inventory
         public bool Swap(InventorySlot a, InventorySlot b)
         {
             if (!IsValidSlot(a) || !IsValidSlot(b) || a.Index == b.Index) return false;
+            // Unsubscribe old handlers, swap, then resubscribe so handlers report correct slot
+            UnsubscribeSlot(a.Index);
+            UnsubscribeSlot(b.Index);
             (_slots[a.Index], _slots[b.Index]) = (_slots[b.Index], _slots[a.Index]);
+            SubscribeSlot(a.Index);
+            SubscribeSlot(b.Index);
             InventoryChanged?.Invoke(new(a, InventoryChangeKind.Replaced, _slots[a.Index].Snapshot));
             InventoryChanged?.Invoke(new(b, InventoryChangeKind.Replaced, _slots[b.Index].Snapshot));
             SlotChanged?.Invoke(a);
             SlotChanged?.Invoke(b);
             Changed?.Invoke();
             return true;
+        }
+
+        private void SubscribeSlot(int index)
+        {
+            var slot = _slots[index];
+            if (slot is null) return;
+
+            UnsubscribeSlot(index);
+
+            void Handler(ItemStack stack)
+            {
+                var slot = new InventorySlot(index);
+                InventoryChanged?.Invoke(new(slot, InventoryChangeKind.Updated, stack.Snapshot));
+                SlotChanged?.Invoke(slot);
+                Changed?.Invoke();
+            }
+            slot.InstanceDataChanged += Handler;
+            _instanceDataSubscriptions[index] = Handler;
+        }
+
+        private void UnsubscribeSlot(int index)
+        {
+            if (_instanceDataSubscriptions.TryGetValue(index, out var handler))
+            {
+                var s = _slots[index];
+                if (s != null)
+                    s.InstanceDataChanged -= handler;
+                _instanceDataSubscriptions.Remove(index);
+            }
         }
     }
 
