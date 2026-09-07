@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.gemserk.selectionhistory": "https://github.com/acoppes/unity-history-window.git?path=/packages/com.gemserk.selectionhistory#v1.5.17",
     "com.unity.cinemachine": "3.1.6",
     "com.unity.collab-proxy": "2.9.3",
     "com.unity.feature.2d": "2.0.1",

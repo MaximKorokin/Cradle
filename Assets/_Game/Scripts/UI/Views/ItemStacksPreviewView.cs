@@ -10,6 +10,8 @@ namespace Assets._Game.Scripts.UI.Views
     public sealed class ItemStacksPreviewView : MonoBehaviour
     {
         [SerializeField]
+        private TMP_Text _prefixText;
+        [SerializeField]
         private TMP_Text _titleText;
         [SerializeField]
         private TMP_Text _slotText;
@@ -54,6 +56,17 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _setDisabledEffectTextTemplate;
         [Space]
         [SerializeField]
+        private RectTransform _enchantInfo;
+        [SerializeField]
+        private RectTransform _eligibleEnchantItemsContainer;
+        [SerializeField]
+        private TMP_Text _eligibleEnchantItemNameTextTemplate;
+        [SerializeField]
+        private RectTransform _enchantEffectsContainer;
+        [SerializeField]
+        private TMP_Text _enchantEffectTextTemplate;
+        [Space]
+        [SerializeField]
         private RectTransform _commonInfo;
         [SerializeField]
         private TMP_Text _amountText;
@@ -80,6 +93,9 @@ namespace Assets._Game.Scripts.UI.Views
 
             _setEffectTextTemplate.gameObject.SetActive(false);
             _setDisabledEffectTextTemplate.gameObject.SetActive(false);
+
+            _eligibleEnchantItemNameTextTemplate.gameObject.SetActive(false);
+            _enchantEffectTextTemplate.gameObject.SetActive(false);
         }
 
         public void Render(ItemStackDisplayData itemStack)
@@ -90,6 +106,7 @@ namespace Assets._Game.Scripts.UI.Views
             RenderEquippableInfo(itemStack);
             RenderUsableInfo(itemStack);
             RenderSetInfo(itemStack);
+            RenderEnchantInfo(itemStack);
             RenderCommonInfo(itemStack);
             RenderDescription(itemStack);
 
@@ -98,14 +115,14 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void RenderHeader(ItemStackDisplayData itemStack)
         {
+            _prefixText.text = itemStack.PrefixText;
+            _prefixText.gameObject.SetActive(!string.IsNullOrWhiteSpace(itemStack.PrefixText));
+
             _titleText.text = itemStack.Name;
             _iconView.sprite = itemStack.Icon;
 
-            if (itemStack.IsEquippable)
-            {
-                _slotText.gameObject.SetActive(true);
-                _slotText.text = itemStack.EquipmentSlotName;
-            }
+            _slotText.text = itemStack.EquipmentSlotName;
+            _slotText.gameObject.SetActive(itemStack.IsEquippable);
         }
 
         private void RenderEquippableInfo(ItemStackDisplayData itemStack)
@@ -152,6 +169,20 @@ namespace Assets._Game.Scripts.UI.Views
             }
 
             _setInfo.gameObject.SetActive(true);
+        }
+
+        private void RenderEnchantInfo(ItemStackDisplayData itemStack)
+        {
+            if (!itemStack.EnchantableDisplayData.HasData) return;
+
+            foreach (var item in itemStack.EnchantableDisplayData.EligibleItems)
+            {
+                TryVisualizeText(_eligibleEnchantItemNameTextTemplate, _eligibleEnchantItemsContainer, item);
+            }
+
+            TryVisualizeText(_enchantEffectTextTemplate, _enchantEffectsContainer, itemStack.EnchantableDisplayData.OverallStatModifiersText);
+
+            _enchantInfo.gameObject.SetActive(true);
         }
 
         private void RenderDescription(ItemStackDisplayData itemStack)
@@ -227,6 +258,8 @@ namespace Assets._Game.Scripts.UI.Views
             _usableInfo.gameObject.SetActive(false);
 
             _setInfo.gameObject.SetActive(false);
+
+            _enchantInfo.gameObject.SetActive(false);
 
             _commonInfo.gameObject.SetActive(false);
 

@@ -145,6 +145,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ItemDefinitionFormatter>(Lifetime.Singleton);
             builder.Register<ItemSetFormatter>(Lifetime.Singleton);
             builder.Register<FunctionalItemTraitFormatter>(Lifetime.Singleton);
+            builder.Register<EnchantableTraitFormatter>(Lifetime.Singleton);
             builder.Register<StatModifiersFormatter>(Lifetime.Singleton);
             builder.Register<AttackModifiersFormatter>(Lifetime.Singleton);
             builder.Register<StatusEffectFormatter>(Lifetime.Singleton);

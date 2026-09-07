@@ -222,13 +222,42 @@ namespace Assets._Game.Scripts.Entities.Stats
         [field: SerializeField]
         public int Priority { get; private set; }
 
-        public StatModifier(StatId stat, StatStage stage, StatOperation op, float value, int priority = 0)
+        public StatModifier(StatId stat, StatStage stage, StatOperation operation, float value, int priority = 0)
         {
             Stat = stat;
             Stage = stage;
-            Operation = op;
+            Operation = operation;
             Value = value;
             Priority = priority;
+        }
+
+        public override readonly string ToString() => $"StatModifier({Stat}, {Stage}, {Operation}, {Value}, {Priority})";
+
+        public readonly bool CanCombineWith(StatModifier other)
+        {
+            return Stat == other.Stat && Stage == other.Stage && Operation == other.Operation && Priority == other.Priority;
+        }
+
+        public static StatModifier operator +(StatModifier left, StatModifier right)
+        {
+            if (!left.CanCombineWith(right))
+            {
+                SLog.Warn($"Uncombinable stat modifiers: {left} and {right}. Returning {left}.");
+                return left;
+            }
+
+            return new(left.Stat, left.Stage, left.Operation, left.Value + right.Value, left.Priority);
+        }
+
+        public static StatModifier operator -(StatModifier left, StatModifier right)
+        {
+            if (!left.CanCombineWith(right))
+            {
+                SLog.Warn($"Uncombinable stat modifiers: {left} and {right}. Returning {left}.");
+                return left;
+            }
+
+            return new(left.Stat, left.Stage, left.Operation, left.Value - right.Value, left.Priority);
         }
     }
 

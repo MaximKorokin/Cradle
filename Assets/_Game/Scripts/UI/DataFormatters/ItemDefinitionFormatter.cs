@@ -9,13 +9,16 @@ namespace Assets._Game.Scripts.UI.DataFormatters
     {
         private readonly FunctionalItemTraitFormatter _functionalItemTraitFormatter;
         private readonly ItemSetFormatter _itemSetFormatter;
+        private readonly EnchantableTraitFormatter _enchantableTraitFormatter;
 
         public ItemDefinitionFormatter(
             FunctionalItemTraitFormatter functionalItemTraitFormatter,
-            ItemSetFormatter itemSetFormatter)
+            ItemSetFormatter itemSetFormatter,
+            EnchantableTraitFormatter enchantableTraitFormatter)
         {
             _functionalItemTraitFormatter = functionalItemTraitFormatter;
             _itemSetFormatter = itemSetFormatter;
+            _enchantableTraitFormatter = enchantableTraitFormatter;
         }
 
         public ItemStackDisplayData FormatData(ItemDefinition definition)
@@ -62,8 +65,10 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             }
 
             var itemSetDisplayData = _itemSetFormatter.FormatData((definition, null));
+            var enchantableDisplayData = _enchantableTraitFormatter.FormatData((definition, null));
 
             return new ItemStackDisplayData(
+                string.Empty,
                 name,
                 icon,
                 amount,
@@ -76,6 +81,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 isConsumable,
                 usableCooldownText,
                 usableEffectsText,
+                enchantableDisplayData,
                 itemSetDisplayData,
                 description);
         }

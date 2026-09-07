@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.gemserk.selectionhistory": {
+      "version": "https://github.com/acoppes/unity-history-window.git?path=/packages/com.gemserk.selectionhistory#v1.5.17",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "58de0d9721f3e92c6c3f9d7f45e67e64cd99d77a"
+    },
     "com.unity.2d.animation": {
       "version": "10.2.1",
       "depth": 1,
