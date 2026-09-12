@@ -1,5 +1,6 @@
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using System;
 using System.Linq;
 
@@ -38,6 +39,9 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             var equipmentSlotName = string.Empty;
             var equippableEffectsText = string.Empty;
 
+            var hasInInventoryEffects = false;
+            var inInventoryEffectsText = string.Empty;
+
             var isUsable = false;
             var isConsumable = false;
             var usableCooldownText = string.Empty;
@@ -48,6 +52,12 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 isEquippable = true;
                 equipmentSlotName = equippableTrait.Slot.ToString();
                 equippableEffectsText = GetFunctionalTraitsText(definition, ItemTrigger.WhileEquipped);
+            }
+
+            if (definition.GetFunctionalTraits<FunctionalItemTraitBase>(ItemTrigger.WhileInInventory).Any())
+            {
+                hasInInventoryEffects = true;
+                inInventoryEffectsText = GetFunctionalTraitsText(definition, ItemTrigger.WhileInInventory);
             }
 
             if (definition.TryGetTrait<UsableTrait>(out var usableTrait))
@@ -77,6 +87,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 isEquippable,
                 equipmentSlotName,
                 equippableEffectsText,
+                hasInInventoryEffects,
+                inInventoryEffectsText,
                 isUsable,
                 isConsumable,
                 usableCooldownText,
@@ -88,9 +100,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
         private string GetFunctionalTraitsText(ItemDefinition definition, ItemTrigger itemTrigger)
         {
-            var traits = definition.GetTraits<FunctionalItemTraitBase>()
-                .Where(t => t.Triggers.HasFlag(itemTrigger))
-                .ToArray();
+            var traits = definition.GetFunctionalTraits<FunctionalItemTraitBase>(itemTrigger).ToArray();
 
             if (traits.Length == 0) return string.Empty;
 

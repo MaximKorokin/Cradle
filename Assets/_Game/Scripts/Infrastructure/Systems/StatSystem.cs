@@ -77,7 +77,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 }
             }
 
-            // Apply weight modifiers from items in inventory (if any)
+            // Apply weight and stat modifiers from items in inventory (if any)
             if (entity.TryGetModule<InventoryModule>(out var inventoryModule))
             {
                 foreach (var (slot, item) in inventoryModule.Inventory.Enumerate())
@@ -114,20 +114,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // Always remove previous modifiers from this slot (covers unequip/replace/update)
             stats.RemoveModifiers(source);
 
-            // Apply new modifiers if something is equipped now
+            // Apply new modifiers if something is equipped now and change weight
             if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
             {
+                AddWeightModifierFromItem(e.Item.Value, stats, source);
+
                 var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileEquipped);
                 if (modifiers.Count > 0)
                 {
                     stats.AddModifiers(source, modifiers);
                 }
-            }
-
-            // Change weight
-            if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
-            {
-                AddWeightModifierFromItem(e.Item.Value, stats, source);
             }
 
             // Recalculate item set bonuses
@@ -227,6 +223,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (e.Kind != InventoryChangeKind.Removed && e.Item != null)
             {
                 AddWeightModifierFromItem(e.Item.Value, stats, source);
+
+                var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileInInventory);
+                if (modifiers.Count > 0)
+                {
+                    stats.AddModifiers(source, modifiers);
+                }
             }
         }
 

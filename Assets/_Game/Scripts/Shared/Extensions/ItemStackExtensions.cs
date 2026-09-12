@@ -24,14 +24,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
 
         public static IEnumerable<T> GetFunctionalTraits<T>(this ItemStackSnapshot itemStack, ItemTrigger trigger) where T : FunctionalItemTraitBase
         {
-            var traits = itemStack.Definition.GetTraits<T>();
-            foreach (var trait in traits)
-            {
-                if (trait.Triggers.HasFlag(trigger))
-                {
-                    yield return trait;
-                }
-            }
+            return itemStack.Definition.GetFunctionalTraits<T>(trigger);
         }
 
         public static IEnumerable<T> GetTraits<T>(this ItemStackSnapshot itemStack) where T : ItemTraitBase

@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Shop;
+﻿using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Items.Traits;
 using System;
 
@@ -20,16 +19,6 @@ namespace Assets._Game.Scripts.Shared.Extensions
 
             var price = (int)(priceTrait.BasePrice * coefficient);
             buyPrice = Math.Max(price, 1);
-            return true;
-        }
-
-        public static bool TryGetSellPrice(this ItemDefinition itemDefinition, float sellCoefficient, out int sellPrice)
-        {
-            sellPrice = 0;
-            if (!itemDefinition.TryGetTrait<PriceTrait>(out var priceTrait)) return false;
-
-            var price = (int)(priceTrait.BasePrice * sellCoefficient);
-            sellPrice = Math.Max(price, 1);
             return true;
         }
     }

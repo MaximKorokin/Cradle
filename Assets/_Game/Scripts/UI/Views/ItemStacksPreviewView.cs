@@ -26,6 +26,13 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _equippableEffectTextTemplate;
         [Space]
         [SerializeField]
+        private RectTransform _inInventoryInfo;
+        [SerializeField]
+        private RectTransform _inInventoryEffectsContainer;
+        [SerializeField]
+        private TMP_Text _inInventoryEffectTextTemplate;
+        [Space]
+        [SerializeField]
         private RectTransform _usableInfo;
         [SerializeField]
         private RectTransform _usableEffectsContainer;
@@ -86,6 +93,8 @@ namespace Assets._Game.Scripts.UI.Views
         {
             _equippableEffectTextTemplate.gameObject.SetActive(false);
 
+            _inInventoryEffectTextTemplate.gameObject.SetActive(false);
+
             _usableEffectTextTemplate.gameObject.SetActive(false);
 
             _setItemNameTextTemplate.gameObject.SetActive(false);
@@ -104,6 +113,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             RenderHeader(itemStack);
             RenderEquippableInfo(itemStack);
+            RenderInInventoryInfo(itemStack);
             RenderUsableInfo(itemStack);
             RenderSetInfo(itemStack);
             RenderEnchantInfo(itemStack);
@@ -127,12 +137,18 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void RenderEquippableInfo(ItemStackDisplayData itemStack)
         {
-            // If the item is not equippable, we don't need to show the equippable info section.
             if (!itemStack.IsEquippable) return;
 
             if (!TryVisualizeText(_equippableEffectTextTemplate, _equippableEffectsContainer, itemStack.EquippableEffectsText)) return;
 
             _equippableInfo.gameObject.SetActive(true);
+        }
+
+        private void RenderInInventoryInfo(ItemStackDisplayData itemStack)
+        {
+            if (!itemStack.HasInInventoryEffects) return;
+            if (!TryVisualizeText(_inInventoryEffectTextTemplate, _inInventoryEffectsContainer, itemStack.InInventoryEffectsText)) return;
+            _inInventoryInfo.gameObject.SetActive(true);
         }
 
         private void RenderUsableInfo(ItemStackDisplayData itemStack)
@@ -254,6 +270,8 @@ namespace Assets._Game.Scripts.UI.Views
             _iconView.sprite = null;
 
             _equippableInfo.gameObject.SetActive(false);
+
+            _inInventoryInfo.gameObject.SetActive(false);
 
             _usableInfo.gameObject.SetActive(false);
 

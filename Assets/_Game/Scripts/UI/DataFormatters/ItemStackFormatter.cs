@@ -45,6 +45,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 definitionData.IsEquippable,
                 definitionData.EquipmentSlotName,
                 definitionData.EquippableEffectsText,
+                definitionData.HasInInventoryEffects,
+                definitionData.InInventoryEffectsText,
                 definitionData.IsUsable,
                 definitionData.IsConsumable,
                 definitionData.UsableCooldownText,
@@ -99,6 +101,9 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public string EquipmentSlotName { get; }
         public string EquippableEffectsText { get; }
 
+        public bool HasInInventoryEffects { get; }
+        public string InInventoryEffectsText { get; }
+
         public bool IsUsable { get; }
         public bool IsConsumable { get; }
         public string UsableCooldownText { get; }
@@ -119,6 +124,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             bool isEquippable,
             string equipmentSlotName,
             string equippableEffectsText,
+            bool hasInInventoryEffects,
+            string inInventoryEffectsText,
             bool isUsable,
             bool isConsumable,
             string usableCooldownText,
@@ -138,6 +145,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             IsEquippable = isEquippable;
             EquipmentSlotName = equipmentSlotName;
             EquippableEffectsText = equippableEffectsText;
+            HasInInventoryEffects = hasInInventoryEffects;
+            InInventoryEffectsText = inInventoryEffectsText;
             IsUsable = isUsable;
             IsConsumable = isConsumable;
             UsableCooldownText = usableCooldownText;
