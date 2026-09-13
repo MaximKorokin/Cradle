@@ -112,6 +112,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<StatSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ActionSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ControlSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<PlayerControlSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<StatusEffectSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<KillRewardSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LootSystem>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -129,7 +130,6 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<EntityReviveSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<QuestSystem>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<MoveTargetIndicatorSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ResetSystem>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 

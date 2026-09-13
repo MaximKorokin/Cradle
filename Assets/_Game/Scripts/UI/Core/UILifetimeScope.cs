@@ -1,4 +1,3 @@
-using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
@@ -10,6 +9,7 @@ using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -18,6 +18,9 @@ namespace Assets._Game.Scripts.UI.Core
 {
     public class UILifetimeScope : LifetimeScope
     {
+        [Header("Systems")]
+        [SerializeField]
+        private Transform _uiSystemsRoot;
         [Header("Prefabs")]
         [SerializeField]
         private EntityNameplateView _entityNameplateView;
@@ -29,8 +32,6 @@ namespace Assets._Game.Scripts.UI.Core
         [Header("MonoBehaviours")]
         [SerializeField]
         private UIRootReferences _rootReferences;
-        [SerializeField]
-        private PlayerClickInputReader _playerClickInputReader;
         [SerializeField]
         private LocationAnnounceView _locationAnnounceView;
         [SerializeField]
@@ -69,13 +70,20 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterSystems(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<EntityNameplateUISystem>();
-            builder.RegisterComponentInHierarchy<LocationAnnounceUISystem>();
-            builder.RegisterComponentInHierarchy<InteractionPromptUISystem>();
-            builder.RegisterComponentInHierarchy<FloatingTextUISystem>();
-            builder.RegisterComponentInHierarchy<PlayerReviveUISystem>();
-            builder.RegisterComponentInHierarchy<InteractionUISystem>();
-            builder.RegisterComponentInHierarchy<ClickEffectUISystem>();
+            var uiSystems = _uiSystemsRoot.GetComponentsInChildren<UISystemBase>(true).ToArray();
+
+            foreach (var system in uiSystems)
+            {
+                builder.RegisterComponent(system).AsSelf().AsImplementedInterfaces();
+            }
+
+            builder.RegisterBuildCallback(container =>
+            {
+                foreach (var system in uiSystems)
+                {
+                    container.Resolve(system.GetType());
+                }
+            });
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -126,7 +134,6 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponentInHierarchy<PlayerAiToggleView>();
             builder.Register<PlayerAiToggleViewController>(Lifetime.Scoped);
 
-            builder.RegisterComponent(_playerClickInputReader);
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
             builder.RegisterComponent(_clickEffectView);

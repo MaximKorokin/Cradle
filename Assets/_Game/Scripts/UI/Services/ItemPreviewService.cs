@@ -1,8 +1,6 @@
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
