@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IInventoryHudData : IDisposable
+    public interface IInventoryHudData : IItemContainerDataAggregator
     {
         InventoryModel InventoryModel { get; }
 
@@ -28,29 +28,22 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         int SlotsUsed { get; }
         int SlotsMax { get; }
 
-        event Action Changed;
-
         IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate();
         void SetEnumerationFilter(Func<ItemStackSnapshot?, bool> filter);
-        void SetInventoryEntity(string inventoryEntityId);
     }
 
-    public abstract class InventoryHudDataBase : DataAggregatorBase, IInventoryHudData
+    public abstract class InventoryHudDataBase : ItemContainerDataAggregatorBase, IInventoryHudData
     {
-        private InventoryModel _inventoryModel;
-
         private readonly ItemsConfig _itemsConfig;
-        private readonly ItemContainerResolver _itemContainerResolver;
 
         private Func<ItemStackSnapshot?, bool> _enumerationFilter;
 
-        public InventoryHudDataBase(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver)
+        public InventoryHudDataBase(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
         {
             _itemsConfig = itemsConfig;
-            _itemContainerResolver = itemContainerResolver;
         }
 
-        public InventoryModel InventoryModel => _inventoryModel;
+        public InventoryModel InventoryModel {get; protected set; }
 
         public abstract bool ViewPneuma { get; }
         public int Pneuma { get; private set; }
@@ -66,45 +59,27 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public int SlotsUsed { get; private set; }
         public int SlotsMax { get; private set; }
 
-        public event Action Changed;
-
-        protected abstract ItemContainerPath GetInventoryPath(string entityId);
-
-        protected void NotifyChanged() => Changed?.Invoke();
-
-        private void OnInventoryChanged()
+        public override void SetContainerEntity(string entityId)
         {
-            Pneuma = InventoryHudDataUtils.CalculatePneuma(_itemsConfig, _inventoryModel);
-            Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, _inventoryModel);
-            SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(_inventoryModel);
-            SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(_inventoryModel);
+            base.SetContainerEntity(entityId);
 
-            NotifyChanged();
+            InventoryModel = ItemContainerResolver.ResolveInventory(ContainerPath);
         }
 
-        public override void Dispose()
+        protected override void OnContainerChanged()
         {
-            base.Dispose();
+            Pneuma = InventoryHudDataUtils.CalculatePneuma(_itemsConfig, InventoryModel);
+            Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, InventoryModel);
+            SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(InventoryModel);
+            SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(InventoryModel);
 
-            _inventoryModel.Changed -= OnInventoryChanged;
-        }
-
-        public virtual void SetInventoryEntity(string inventoryEntityId)
-        {
-            var inventoryModel = _itemContainerResolver.ResolveInventory(GetInventoryPath(inventoryEntityId));
-            if (_inventoryModel != inventoryModel)
-            {
-                _inventoryModel = inventoryModel;
-                _inventoryModel.Changed -= OnInventoryChanged;
-                inventoryModel.Changed += OnInventoryChanged;
-                OnInventoryChanged();
-            }
+            base.OnContainerChanged();
         }
 
         public IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate()
         {
             var slotIndex = 0;
-            foreach (var (_, snapshot) in _inventoryModel.Enumerate())
+            foreach (var (_, snapshot) in InventoryModel.Enumerate())
             {
                 if (_enumerationFilter == null || _enumerationFilter(snapshot))
                 {
@@ -134,9 +109,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _entityRepository = entityRepository;
         }
 
-        public override void SetInventoryEntity(string inventoryEntityId)
+        public override void SetContainerEntity(string inventoryEntityId)
         {
-            base.SetInventoryEntity(inventoryEntityId);
+            base.SetContainerEntity(inventoryEntityId);
 
             var newStats = _entityRepository.Get(inventoryEntityId).GetModule<StatModule>().Stats;
             if (_statsController != newStats)
@@ -157,7 +132,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 _statsController.StatChanged -= OnStatsChanged;
         }
 
-        protected override ItemContainerPath GetInventoryPath(string entityId) => ItemContainerPath.Inventory(entityId);
+        protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Inventory(entityId);
 
         public override bool ViewPneuma => true;
 
@@ -186,7 +161,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
         }
 
-        protected override ItemContainerPath GetInventoryPath(string entityId) => ItemContainerPath.Storage(entityId);
+        protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Storage(entityId);
 
         public override bool ViewPneuma => false;
 
@@ -221,6 +196,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             return pneuma;
         }
+
         public static int CalculateGold(ItemsConfig itemsConfig, InventoryModel inventoryModel)
         {
             var gold = 0;

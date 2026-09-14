@@ -27,10 +27,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 12708c68b119ad841ad46302b0117d98, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: 109e9bdd0fcc649c5bc59085c35bdc83, type: 3}
       sceneName: 
       scenePath: 
@@ -147,30 +143,22 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: UIRoot
-      scenePath: Assets/_Game/Scenes/UIRoot.unity
-      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-831708779-0
-    - reference: {fileID: 0}
-      sceneName: UIRoot
-      scenePath: Assets/_Game/Scenes/UIRoot.unity
-      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-1185863318-0
-    - reference: {fileID: 0}
-      sceneName: UIRoot
-      scenePath: Assets/_Game/Scenes/UIRoot.unity
-      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-898102879-0
-    - reference: {fileID: 0}
-      sceneName: UIRoot
-      scenePath: Assets/_Game/Scenes/UIRoot.unity
-      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-744211547-0
-    - reference: {fileID: 0}
-      sceneName: UIRoot
-      scenePath: Assets/_Game/Scenes/UIRoot.unity
-      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-1542851693-0
-    - reference: {fileID: 0}
-      sceneName: UIRoot
-      scenePath: Assets/_Game/Scenes/UIRoot.unity
-      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-706680302-0
+    - reference: {fileID: 102900000, guid: 12708c68b119ad841ad46302b0117d98, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 9a20291fd5a2dad4f8378142a4e79618, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 4236470503915288397, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
     - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
       sceneName: 
       scenePath: 

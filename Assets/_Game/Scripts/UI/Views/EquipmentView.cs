@@ -54,7 +54,7 @@ namespace Assets._Game.Scripts.UI.Views
                 else
                     slot.Render(itemStack, false);
 
-                slot.Bind(slotKey);
+                slot.Bind(default, slotKey);
                 slotTypeCounts[slot.SlotType] = count + 1;
             }
         }

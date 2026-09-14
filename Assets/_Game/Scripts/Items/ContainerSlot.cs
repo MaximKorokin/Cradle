@@ -10,11 +10,6 @@ namespace Assets._Game.Scripts.Items
 
     public static class ContainerSlotConverter
     {
-        public static long ToInt64<T>(T slot) where T : notnull, IContainerSlot
-        {
-            return slot.ToInt64();
-        }
-
         public static InventorySlot ToInventorySlot(long value) => InventorySlot.FromInt64(value);
 
         public static EquipmentSlotKey ToEquipmentSlot(long value) => EquipmentSlotKey.FromInt64(value);

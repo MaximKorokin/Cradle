@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _equipmentHudData.SetEquipmentEntity(arguments.EquipmentEntityId);
+            _equipmentHudData.SetContainerEntity(arguments.EquipmentEntityId);
         }
 
         public override void Bind(ItemUseSettingsWindow window)

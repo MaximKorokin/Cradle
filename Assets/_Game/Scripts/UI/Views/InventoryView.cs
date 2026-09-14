@@ -97,7 +97,7 @@ namespace Assets._Game.Scripts.UI.Views
 
                 // Instantiate new slot if there are not enough in the pool
                 var newSlot = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                newSlot.Bind(inventorySlot);
+                newSlot.Bind(default, inventorySlot);
                 newSlot.PointerClick += OnSlotPointerClick;
                 _slots.Add(newSlot);
                 newSlot.gameObject.SetActive(true);

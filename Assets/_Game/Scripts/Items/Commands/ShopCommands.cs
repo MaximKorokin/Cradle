@@ -1,5 +1,3 @@
-using Assets._Game.Scripts.Items.Shop;
-
 namespace Assets._Game.Scripts.Items.Commands
 {
     public readonly struct BuyFromShopCommand : IItemCommand

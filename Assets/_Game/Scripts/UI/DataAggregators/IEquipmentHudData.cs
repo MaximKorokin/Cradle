@@ -1,63 +1,38 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IEquipmentHudData
+    public interface IEquipmentHudData : IItemContainerDataAggregator
     {
         EquipmentModel EquipmentModel { get; }
-
-        event Action Changed;
-
-        void SetEquipmentEntity(string equipmentEntityId);
     }
 
-    public class EquipmentHudData : DataAggregatorBase, IEquipmentHudData
+    public class EquipmentHudData : ItemContainerDataAggregatorBase, IEquipmentHudData
     {
         private readonly EntityRepository _entityRepository;
 
         private EquipmentModule _equipmentModule;
 
-        public EquipmentHudData(EntityRepository entityRepository)
+        public EquipmentHudData(EntityRepository entityRepository, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
         {
             _entityRepository = entityRepository;
         }
 
         public EquipmentModel EquipmentModel => _equipmentModule.Equipment;
         public ItemUseSettings ItemUseSettings => _equipmentModule.AutoItemUseSettings;
-
-        public event Action Changed;
-
-        public void SetEquipmentEntity(string equipmentEntityId)
+        
+        public override void SetContainerEntity(string equipmentEntityId)
         {
+            base.SetContainerEntity(equipmentEntityId);
+
             var entity = _entityRepository.Get(equipmentEntityId);
-            var equipmentModule = entity.GetModule<EquipmentModule>();
-            if (_equipmentModule != equipmentModule)
-            {
-                if (_equipmentModule != null)
-                {
-                    _equipmentModule.Equipment.Changed -= OnEquipmentChanged;
-                }
-                _equipmentModule = equipmentModule;
-                if (_equipmentModule != null)
-                {
-                    _equipmentModule.Equipment.Changed += OnEquipmentChanged;
-                }
-                OnEquipmentChanged();
-            }
+            _equipmentModule = entity.GetModule<EquipmentModule>();
         }
 
-        private void OnEquipmentChanged()
-        {
-            Changed?.Invoke();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _equipmentModule.Equipment.Changed -= OnEquipmentChanged;
-        }
+        protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Equipment(entityId);
     }
 }

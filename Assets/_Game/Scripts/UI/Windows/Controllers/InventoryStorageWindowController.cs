@@ -38,9 +38,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _storageHudData.SetInventoryEntity(Arguments.StorageEntityId);
-            _inventoryHudData.SetInventoryEntity(Arguments.InventoryEntityId);
-            _equipmentHudData.SetEquipmentEntity(Arguments.EquipmentEntityId);
+            _storageHudData.SetContainerEntity(Arguments.StorageEntityId);
+            _inventoryHudData.SetContainerEntity(Arguments.InventoryEntityId);
+            _equipmentHudData.SetContainerEntity(Arguments.EquipmentEntityId);
         }
 
         public override void Bind(InventoryStorageWindow window)

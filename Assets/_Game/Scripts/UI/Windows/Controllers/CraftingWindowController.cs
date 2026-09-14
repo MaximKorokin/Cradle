@@ -45,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _craftingHudData.SetCrafterEntity(arguments.CrafterEntityId);
             _craftingHudData.SetInventoryEntity(arguments.InventoryEntityId);
-            _equipmentHudData.SetEquipmentEntity(arguments.EquipmentEntityId);
+            _equipmentHudData.SetContainerEntity(arguments.EquipmentEntityId);
         }
 
         public override void Bind(CraftingWindow window)
