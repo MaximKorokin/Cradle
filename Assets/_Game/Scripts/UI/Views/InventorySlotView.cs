@@ -2,7 +2,6 @@
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets.CoreScripts;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,12 +13,15 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private Image _itemImage;
         [SerializeField]
+        private Image _highlightImage;
+        [SerializeField]
         private TMP_Text _amountText;
         [SerializeField]
         private TMP_Text _enchantText;
         [SerializeField]
         private FillBar _cooldownFillBar;
 
+        private bool _containsData;
         private CooldownCounter _itemCooldownCounter;
 
         public void Render(ItemStackSnapshot? itemStack) => Render(itemStack, Color.white);
@@ -27,10 +29,12 @@ namespace Assets._Game.Scripts.UI.Views
         public void Render(ItemStackSnapshot? itemStack, Color color)
         {
             _itemCooldownCounter = null;
-            if (itemStack == null)
+            _containsData = itemStack != null;
+            if (!_containsData)
             {
                 _amountText.enabled = false;
                 _enchantText.enabled = false;
+                _itemImage.sprite = null;
                 _itemImage.enabled = false;
                 _cooldownFillBar.gameObject.SetActive(false);
                 return;
@@ -71,14 +75,6 @@ namespace Assets._Game.Scripts.UI.Views
             _cooldownFillBar.gameObject.SetActive(_itemCooldownCounter != null && _itemCooldownCounter.Cooldown > 0);
         }
 
-        public void SetRaycastTarget(bool isTarget)
-        {
-            foreach (var graphic in GetComponents<Graphic>().Union(GetComponentsInChildren<Graphic>()))
-            {
-                graphic.raycastTarget = isTarget;
-            }
-        }
-
         private void Update()
         {
             if (_itemCooldownCounter == null)
@@ -98,6 +94,11 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
+        public bool CanStartDrag()
+        {
+            return _containsData;
+        }
+
         public RectTransform CreateDragDropVisual()
         {
             var image = new GameObject().AddComponent<Image>();
@@ -109,8 +110,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void SetDragDropHighlight(bool highlighted)
         {
-            //SLog.Log(ContainerPath.ContainerId, SlotIndex);
-            SLog.Log("DragDrop Highlight");
+            _highlightImage.enabled = highlighted;
         }
     }
 }

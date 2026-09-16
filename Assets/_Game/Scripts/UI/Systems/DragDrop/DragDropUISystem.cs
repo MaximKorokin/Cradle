@@ -8,11 +8,13 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 {
     public sealed class DragDropUISystem : UISystemBase
     {
-        // todo
-        private const int StartDragThreshold = 30;
+        private const int DragStartThreshold = 30;
 
         private DragDropHandler _dragDropHandler;
         private DragDropView _dragDropView;
+
+        private Vector2 _dragStartPosition;
+        private bool _isDragging;
 
         private IDragDropSource _currentDragDropSource;
         private IDragDropTarget _dragDropTargetCandidate;
@@ -35,52 +37,58 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         private void OnPointerDown(PointerDownEvent e)
         {
-            if (e.Context.IsOverUI && TryResolveDragDropSource(e.Context.UnderlyingElement, out var source))
+            if (TryResolveDragDropSource(e.Context.UnderlyingElement, out var source) && source.CanStartDrag())
             {
-                var visual = source.CreateDragDropVisual();
-                _dragDropView.AttachVisual(visual);
                 _currentDragDropSource = source;
+                _dragStartPosition = e.Context.ScreenPosition;
             }
         }
 
         private void OnPointerUp(PointerUpEvent e)
         {
-            if (_currentDragDropSource == null) return;
+            if (_isDragging)
+            {
+                _dragDropHandler.Handle(_currentDragDropSource, _dragDropTargetCandidate);
+            }
 
-            _dragDropHandler.Handle(_currentDragDropSource, _dragDropTargetCandidate);
-
-            _dragDropView.ClearVisual();
             _currentDragDropSource = null;
+            _dragDropView.ClearVisual();
+            _isDragging = false;
+
+            _dragDropTargetCandidate?.SetDragDropHighlight(false);
+            _dragDropTargetCandidate = null;
         }
 
         private void OnPointerMove(PointerMoveEvent e)
         {
-            if (_dragDropView.IsActive)
+            // Start Drag
+            if (!_isDragging &&
+                _currentDragDropSource != null &&
+                e.Context.IsPressed &&
+                (e.Context.ScreenPosition - _dragStartPosition).magnitude >= DragStartThreshold)
             {
-                _dragDropView.transform.position = e.Context.ScreenPosition;
+                var visual = _currentDragDropSource.CreateDragDropVisual();
+                _dragDropView.AttachVisual(visual);
+                _isDragging = true;
             }
 
-            if (e.Context.IsOverUI && e.Context.IsPressed && TryResolveDragDropTarget(e.Context.UnderlyingElement, out var target))
-            {
-                if (_dragDropTargetCandidate != null && _dragDropTargetCandidate != target)
-                {
-                    target.SetDragDropHighlight(false);
-                }
+            if (!_isDragging) return;
 
-                _dragDropTargetCandidate = target;
-                _dragDropTargetCandidate?.SetDragDropHighlight(true);
-                SLog.Log(_dragDropTargetCandidate);
-            }
-            else
+            _dragDropView.transform.position = e.Context.ScreenPosition;
+
+            // Get Drop candidate and set highlight
+            TryResolveDragDropTarget(e.Context.UnderlyingElement, out var target);
+            if (_dragDropTargetCandidate != target)
             {
                 _dragDropTargetCandidate?.SetDragDropHighlight(false);
-                _dragDropTargetCandidate = null;
+                _dragDropTargetCandidate = target;
+                _dragDropTargetCandidate?.SetDragDropHighlight(true);
             }
         }
 
         private bool TryResolveDragDropSource(GameObject gameObject, out IDragDropSource dragDropSource)
         {
-            dragDropSource = gameObject.GetComponentInParent<IDragDropSource>();
+            dragDropSource = gameObject == null ? null : gameObject.GetComponentInParent<IDragDropSource>();
             return dragDropSource != null;
         }
 

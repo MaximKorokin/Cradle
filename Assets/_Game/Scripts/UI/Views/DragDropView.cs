@@ -10,8 +10,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         private RectTransform _currentVisual;
 
-        public bool IsActive { get; private set; }
-
         public void AttachVisual(RectTransform visual)
         {
             if (visual == null) return;
@@ -23,8 +21,6 @@ namespace Assets._Game.Scripts.UI.Views
             _currentVisual = visual;
 
             _nestedVisualParent.gameObject.SetActive(true);
-
-            IsActive = true;
         }
 
         public void ClearVisual()
@@ -36,8 +32,6 @@ namespace Assets._Game.Scripts.UI.Views
             }
 
             _nestedVisualParent.gameObject.SetActive(false);
-
-            IsActive = false;
         }
     }
 }
