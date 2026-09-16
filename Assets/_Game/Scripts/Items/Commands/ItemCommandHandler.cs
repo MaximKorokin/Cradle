@@ -38,7 +38,8 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             return command switch
             {
-                TransferItemCommand c => HandleTransfer(c),
+                TransferToContainerCommand c => HandleTransfer(c),
+                TransferToContainerSlotCommand c => HandleTransferToSlot(c),
                 EquipFromContainerCommand c => HandleEquip(c),
                 UnequipToContainerCommand c => HandleUnequip(c),
                 DestroyItemCommand c => HandleDestroy(c),
@@ -87,11 +88,23 @@ namespace Assets._Game.Scripts.Items.Commands
             return items;
         }
 
-        private bool HandleTransfer(TransferItemCommand c)
+        private bool HandleTransfer(TransferToContainerCommand c)
         {
             var from = _itemContainerResolver.ResolveInventory(c.FromContainer);
             var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
             return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
+        }
+
+        private bool HandleTransferToSlot(TransferToContainerSlotCommand c)
+        {
+            var from = _itemContainerResolver.ResolveContainer(c.FromContainer);
+            var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
+            return ItemContainerUtils.MoveAmount(
+                from,
+                c.FromSlot,
+                to,
+                c.ToSlot,
+                c.Amount) > 0;
         }
 
         private bool HandleEquip(EquipFromContainerCommand c)

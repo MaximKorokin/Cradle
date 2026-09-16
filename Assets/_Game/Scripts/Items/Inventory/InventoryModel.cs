@@ -141,6 +141,11 @@ namespace Assets._Game.Scripts.Items.Inventory
             return added;
         }
 
+        public int AddToSlot(long slot, ItemStackSnapshot snapshot)
+        {
+            return AddToSlot(InventorySlot.FromInt64(slot), snapshot);
+        }
+
         public int Remove(ItemKey key, int amount)
         {
             if (amount <= 0) return 0;
@@ -206,6 +211,11 @@ namespace Assets._Game.Scripts.Items.Inventory
             }
 
             return removed;
+        }
+
+        public int RemoveFromSlot(long slot, int amount)
+        {
+            return RemoveFromSlot(InventorySlot.FromInt64(slot), amount);
         }
 
         public int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty)

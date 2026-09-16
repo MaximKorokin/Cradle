@@ -6,7 +6,7 @@ using VContainer;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentSlotView : ContainerSlotView<EquipmentSlotKey>
+    public sealed class EquipmentSlotView : MonoBehaviour
     {
         [SerializeField]
         private InventorySlotView _inventorySlotView;
@@ -16,13 +16,10 @@ namespace Assets._Game.Scripts.UI.Views
         private Color _blockedSlotColor = new(0.3f, 0.3f, 0.3f, 1f);
 
         [field: SerializeField]
+        [field: Tooltip("Used to bind Model slot to UI")]
         public EquipmentSlotType SlotType { get; private set; }
 
-        [Inject]
-        public void Construct()
-        {
-            _inventorySlotView.SetRaycastTarget(false);
-        }
+        public InventorySlotView SlotView => _inventorySlotView;
 
         public void Render(ItemStackSnapshot? itemStack, bool isBlocked)
         {

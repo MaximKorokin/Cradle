@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.Shared.Extensions
 {
@@ -17,6 +18,12 @@ namespace Assets._Game.Scripts.Shared.Extensions
             if (parent == null) parent = transform;
 
             other.parent = parent;
+        }
+
+        public static void DisableRaycastTargets(this Transform root)
+        {
+            foreach (var graphic in root.GetComponentsInChildren<Graphic>(true))
+                graphic.raycastTarget = false;
         }
     }
 }

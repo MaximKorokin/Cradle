@@ -121,7 +121,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Transfer:
                     _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
                     {
-                        PublishItemCommand(new TransferItemCommand(_primaryContainerPath, _primaryContainerSlot, _secondaryContainerPath, amount));
+                        PublishItemCommand(new TransferToContainerCommand(_primaryContainerPath, _primaryContainerSlot, _secondaryContainerPath, amount));
                     });
                     break;
                 case ItemStackActionType.Equip:

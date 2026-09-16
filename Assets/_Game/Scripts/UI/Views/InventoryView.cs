@@ -97,7 +97,7 @@ namespace Assets._Game.Scripts.UI.Views
 
                 // Instantiate new slot if there are not enough in the pool
                 var newSlot = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                newSlot.Bind(default, inventorySlot);
+                newSlot.Bind(inventoryHudData.ContainerPath, inventorySlot.ToInt64());
                 newSlot.PointerClick += OnSlotPointerClick;
                 _slots.Add(newSlot);
                 newSlot.gameObject.SetActive(true);
@@ -116,9 +116,9 @@ namespace Assets._Game.Scripts.UI.Views
             _inventoryHudData = null;
         }
 
-        private void OnSlotPointerClick(InventorySlot slotIndex)
+        private void OnSlotPointerClick(long slotIndex)
         {
-            SlotClick?.Invoke(slotIndex);
+            SlotClick?.Invoke(InventorySlot.FromInt64(slotIndex));
         }
     }
 }

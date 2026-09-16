@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.Items.Equipment
                 foreach (var item in save.Items)
                 {
                     var itemStack = _itemStackFactory.CreateAndApply(item.Stack.ItemDefinitionId, item.Stack);
-                    model.AddToSlot(new(item.Type, item.Index), itemStack.Snapshot);
+                    model.AddToSlot(new EquipmentSlotKey(item.Type, item.Index), itemStack.Snapshot);
                 }
             }
 

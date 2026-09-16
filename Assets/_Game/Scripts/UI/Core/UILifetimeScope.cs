@@ -3,6 +3,7 @@ using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Systems;
+using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
@@ -38,6 +39,8 @@ namespace Assets._Game.Scripts.UI.Core
         private InteractionPromptView _interactionPromptView;
         [SerializeField]
         private ClickEffectView _clickEffectView;
+        [SerializeField]
+        private DragDropView _dragDropView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -66,6 +69,8 @@ namespace Assets._Game.Scripts.UI.Core
         private void RegisterServices(IContainerBuilder builder)
         {
             builder.Register<ItemPreviewService>(Lifetime.Singleton);
+
+            builder.Register<DragDropHandler>(Lifetime.Singleton);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -137,6 +142,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
             builder.RegisterComponent(_clickEffectView);
+            builder.RegisterComponent(_dragDropView);
         }
 
         private void RegisterItemContainers(IContainerBuilder builder)

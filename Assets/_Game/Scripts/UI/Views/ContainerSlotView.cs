@@ -5,14 +5,14 @@ using UnityEngine.EventSystems;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public abstract class ContainerSlotView<T> : MonoBehaviour, IPointerClickHandler where T : IContainerSlot
+    public abstract class ContainerSlotView : MonoBehaviour, IPointerClickHandler
     {
         public ItemContainerPath ContainerPath { get; private set; }
-        public T SlotIndex { get; private set; }
+        public long SlotIndex { get; private set; }
 
-        public event Action<T> PointerClick;
+        public event Action<long> PointerClick;
 
-        public virtual void Bind(ItemContainerPath containerPath, T slotIndex)
+        public virtual void Bind(ItemContainerPath containerPath, long slotIndex)
         {
             ContainerPath = containerPath;
             SlotIndex = slotIndex;

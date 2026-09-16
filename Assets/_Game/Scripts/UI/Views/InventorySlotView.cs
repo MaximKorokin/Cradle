@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.UI.Common;
+using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets.CoreScripts;
 using System.Linq;
 using TMPro;
@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class InventorySlotView : ContainerSlotView<InventorySlot>
+    public sealed class InventorySlotView : ContainerSlotView, IDragDropSource, IDragDropTarget
     {
         [SerializeField]
         private Image _itemImage;
@@ -96,6 +96,21 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 _cooldownFillBar.SetFillRatio(1 - _itemCooldownCounter.TimeSinceReset / _itemCooldownCounter.Cooldown);
             }
+        }
+
+        public RectTransform CreateDragDropVisual()
+        {
+            var image = new GameObject().AddComponent<Image>();
+            image.sprite = _itemImage.sprite;
+            image.color = new(0.8f, 0.8f, 0.8f);
+
+            return image.transform as RectTransform;
+        }
+
+        public void SetDragDropHighlight(bool highlighted)
+        {
+            //SLog.Log(ContainerPath.ContainerId, SlotIndex);
+            SLog.Log("DragDrop Highlight");
         }
     }
 }

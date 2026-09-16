@@ -12,8 +12,5 @@
         public long ToInt64() => Index;
 
         public static InventorySlot FromInt64(long value) => new((int)value);
-
-        public static implicit operator InventorySlot(int index) => new(index);
-        public static implicit operator int(InventorySlot slot) => slot.Index;
     }
 }

@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             foreach (var slot in _slots)
             {
-                slot.PointerClick += OnSlotPointerClick;
+                slot.SlotView.PointerClick += OnSlotPointerClick;
             }
         }
 
@@ -54,7 +54,7 @@ namespace Assets._Game.Scripts.UI.Views
                 else
                     slot.Render(itemStack, false);
 
-                slot.Bind(default, slotKey);
+                slot.SlotView.Bind(equipmentHudData.ContainerPath, slotKey.ToInt64());
                 slotTypeCounts[slot.SlotType] = count + 1;
             }
         }
@@ -63,15 +63,15 @@ namespace Assets._Game.Scripts.UI.Views
         {
             foreach (var slot in _slots)
             {
-                slot.PointerClick -= OnSlotPointerClick;
+                slot.SlotView.PointerClick -= OnSlotPointerClick;
             }
 
             _equipmentHudData = null;
         }
 
-        private void OnSlotPointerClick(EquipmentSlotKey slot)
+        private void OnSlotPointerClick(long slot)
         {
-            SlotClick?.Invoke(slot);
+            SlotClick?.Invoke(EquipmentSlotKey.FromInt64(slot));
         }
     }
 }

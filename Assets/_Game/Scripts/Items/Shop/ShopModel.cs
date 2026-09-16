@@ -180,6 +180,11 @@ namespace Assets._Game.Scripts.Items.Shop
             return 0;
         }
 
+        public int AddToSlot(long slot, ItemStackSnapshot snapshot)
+        {
+            return AddToSlot(ShopSlot.FromInt64(slot), snapshot);
+        }
+
         public int RemoveFromSlot(ShopSlot slot, int amount)
         {
             if (!IsValidSlot(slot)) return 0;
@@ -224,6 +229,11 @@ namespace Assets._Game.Scripts.Items.Shop
             SlotChanged?.Invoke(slot);
             Changed?.Invoke();
             return actualRemoved;
+        }
+
+        public int RemoveFromSlot(long slot, int amount)
+        {
+            return RemoveFromSlot(ShopSlot.FromInt64(slot), amount);
         }
 
         public int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty)

@@ -158,6 +158,11 @@ namespace Assets._Game.Scripts.Items.Equipment
             return added;
         }
 
+        public int AddToSlot(long slot, ItemStackSnapshot snapshot)
+        {
+            return AddToSlot(EquipmentSlotKey.FromInt64(slot), snapshot);
+        }
+
         public int Remove(ItemKey key, int amount)
         {
             if (amount <= 0) return 0;
@@ -221,6 +226,11 @@ namespace Assets._Game.Scripts.Items.Equipment
                 Changed?.Invoke();
             }
             return removed;
+        }
+
+        public int RemoveFromSlot(long slot, int amount)
+        {
+            return RemoveFromSlot(EquipmentSlotKey.FromInt64(slot), amount);
         }
 
         public int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty)

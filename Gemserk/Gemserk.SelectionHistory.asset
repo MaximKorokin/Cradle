@@ -19,10 +19,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 3288953471443083764, guid: 5fb474c8f5184514490ae6d1838be179, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 3288953471443083764, guid: 1af4d239bd4a88442a8b3c70b7c3303f, type: 3}
       sceneName: 
       scenePath: 
@@ -44,10 +40,6 @@ MonoBehaviour:
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 11400000, guid: 681e5abaadaf3224b9e470dce1eda7a1, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 5242694482221674520, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -135,7 +127,19 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+    - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 4236470503915288397, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 5849863851863775822, guid: a2e17962e7c401f409515996fa797591, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 3288953471443083764, guid: 5fb474c8f5184514490ae6d1838be179, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -151,11 +155,7 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 4236470503915288397, guid: e4f772bc2aba61c43a50a06bc92dfc0c, type: 3}
+    - reference: {fileID: 102900000, guid: e189c94fa2a6e4b4c966f66625d87e1f, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -163,3 +163,31 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
+    - reference: {fileID: 5242694482221674520, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 3880321814137415004, guid: bf40191eaabc31b4ea449cb4ea0fccb2, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 5240033170952888972, guid: 3a7c40c2de0184e45a75fdc53f905619, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 4681338851052056355, guid: 2714de7699b17404892e874126ed10d2, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 7216568992798090616, guid: ff3d0247f8421d947b2eb21d2e995740, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: EquipmentSlotTemplate
+      scenePath: 
+      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+    - reference: {fileID: 0}
+      sceneName: EquipmentSlotTemplate
+      scenePath: 
+      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0

@@ -24,6 +24,9 @@ namespace Assets._Game.Scripts.Items
 
         ItemStackSnapshot? Get(long slot);
 
+        int AddToSlot(long slot, ItemStackSnapshot snapshot);
+        int RemoveFromSlot(long slot, int amount);
+
         int Count(ItemKey key);
 
         int Add(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty);

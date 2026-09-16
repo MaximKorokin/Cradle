@@ -54,14 +54,12 @@ namespace Assets._Game.Scripts.Shared.Utils
         /// Move amount from specific slot to specific slot. If toSlot is null, target container chooses placement.
         /// Returns actually moved amount.
         /// </summary>
-        public static int MoveAmount<TFromSlot, TToSlot>(
-            IItemContainer<TFromSlot> from,
-            TFromSlot fromSlot,
-            IItemContainer<TToSlot> to,
-            TToSlot toSlot,
+        public static int MoveAmount(
+            IItemContainer from,
+            long fromSlot,
+            IItemContainer to,
+            long toSlot,
             int amount)
-            where TFromSlot : notnull, IContainerSlot
-            where TToSlot : notnull, IContainerSlot
         {
             if (amount <= 0) return 0;
 
@@ -78,7 +76,7 @@ namespace Assets._Game.Scripts.Shared.Utils
 
             // Phase 2: add to target
             int added;
-            if (toSlot is null)
+            if (toSlot < 0)
             {
                 added = to.Add(new(fromSnapshot.Definition, fromSnapshot.InstanceData, removed), AddPolicy.StackThenEmpty);
             }
@@ -105,12 +103,11 @@ namespace Assets._Game.Scripts.Shared.Utils
         }
 
         /// <summary>Move within same container (drag-drop), optional destination slot.</summary>
-        public static int MoveAmount<TSlot>(
-            IItemContainer<TSlot> container,
-            TSlot fromSlot,
-            TSlot toSlot,
+        public static int MoveAmount(
+            IItemContainer container,
+            long fromSlot,
+            long toSlot,
             int amount)
-            where TSlot : notnull, IContainerSlot
         {
             return MoveAmount(container, fromSlot, container, toSlot, amount);
         }
