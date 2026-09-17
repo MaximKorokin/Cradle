@@ -117,6 +117,23 @@ namespace Assets._Game.Scripts.Shared.Utils
             return MoveAmount(container, fromSlot, container, toSlot, amount);
         }
 
+        public static bool TryMoveAmountWithRollback(
+            IItemContainer fromContainer,
+            long fromSlot,
+            IItemContainer toContainer,
+            long toSlot,
+            int amount)
+        {
+            int moved = MoveAmount(fromContainer, fromSlot, toContainer, toSlot, amount);
+            if (moved == amount)
+                return true;
+
+            if (moved > 0 && MoveAmount(toContainer, toSlot, fromContainer, fromSlot, moved) != moved)
+                throw new InvalidOperationException("Rollback failed after a partial stack move.");
+
+            return false;
+        }
+
         public static bool TrySwapBetweenContainerSlots(
             IItemContainer fromContainer,
             long fromSlot,
@@ -130,20 +147,32 @@ namespace Assets._Game.Scripts.Shared.Utils
                 (ReferenceEquals(fromContainer, toContainer) && fromSlot == toSlot))
                 return false;
 
-            if (ReferenceEquals(fromContainer, toContainer) && fromContainer is InventoryModel inventoryModel)
-                return inventoryModel.Swap(InventorySlot.FromInt64(fromSlot), InventorySlot.FromInt64(toSlot));
-
             var fromSnapshot = fromContainer.Get(fromSlot);
             var toSnapshot = toContainer.Get(toSlot);
 
             if (fromSnapshot == null && toSnapshot == null)
                 return false;
 
+            if (fromSnapshot != null &&
+                toSnapshot != null &&
+                fromSnapshot.Value.Key.Equals(toSnapshot.Value.Key) &&
+                fromSnapshot.Value.Amount <= toSnapshot.Value.Definition.MaxAmount - toSnapshot.Value.Amount)
+            {
+                return TryMoveAmountWithRollback(fromContainer, fromSlot, toContainer, toSlot, fromSnapshot.Value.Amount);
+            }
+
+            if (ReferenceEquals(fromContainer, toContainer) && fromContainer is InventoryModel inventoryModel)
+                return inventoryModel.Swap(InventorySlot.FromInt64(fromSlot), InventorySlot.FromInt64(toSlot));
+
             if (fromSnapshot == null)
-                return MoveAmount(toContainer, toSlot, fromContainer, fromSlot, toSnapshot.Value.Amount) == toSnapshot.Value.Amount;
+            {
+                return TryMoveAmountWithRollback(toContainer, toSlot, fromContainer, fromSlot, toSnapshot.Value.Amount);
+            }
 
             if (toSnapshot == null)
-                return MoveAmount(fromContainer, fromSlot, toContainer, toSlot, fromSnapshot.Value.Amount) == fromSnapshot.Value.Amount;
+            {
+                return TryMoveAmountWithRollback(fromContainer, fromSlot, toContainer, toSlot, fromSnapshot.Value.Amount);
+            }
 
             int removedFrom = fromContainer.RemoveFromSlot(fromSlot, fromSnapshot.Value.Amount);
             if (removedFrom != fromSnapshot.Value.Amount)

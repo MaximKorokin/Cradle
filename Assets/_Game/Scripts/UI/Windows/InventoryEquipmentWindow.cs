@@ -12,5 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public InventoryView InventoryView => _inventoryView;
         public EquipmentView EquipmentView => _equipmentView;
+
+        public override bool IsModal => false;
     }
 }

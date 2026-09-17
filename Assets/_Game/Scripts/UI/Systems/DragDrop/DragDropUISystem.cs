@@ -48,7 +48,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
         {
             if (_isDragging)
             {
-                _dragDropHandler.Handle(_currentDragDropSource, _dragDropTargetCandidate);
+                _dragDropHandler.Handle(_currentDragDropSource, _dragDropTargetCandidate, e.Context);
             }
 
             _currentDragDropSource = null;
@@ -94,7 +94,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         private bool TryResolveDragDropTarget(GameObject gameObject, out IDragDropTarget dragDropTarget)
         {
-            dragDropTarget = gameObject.GetComponentInParent<IDragDropTarget>();
+            dragDropTarget = gameObject == null ? null : gameObject.GetComponentInParent<IDragDropTarget>();
             return dragDropTarget != null;
         }
     }

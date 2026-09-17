@@ -12,6 +12,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private readonly PlayerControlProvider _playerControlProvider;
         private readonly MoveTargetIndicatorView _moveTragetIndicatorView;
 
+        private bool _isMoving = false;
+
         public PlayerControlSystem(
             ICameraService cameraService,
             PlayerControlProvider playerControlProvider,
@@ -25,6 +27,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _moveTragetIndicatorView.gameObject.SetActive(false);
 
             TrackGlobalEvent<PointerDownEvent>(OnPointerDown);
+            TrackGlobalEvent<PointerUpEvent>(OnPointerUp);
             TrackGlobalEvent<PointerMoveEvent>(OnPointerMove);
         }
 
@@ -32,13 +35,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (e.Context.IsOverUI) return;
 
+            _isMoving = true;
             var worldPosition = (Vector2)_cameraService.Camera.ScreenToWorldPoint(e.Context.ScreenPosition);
             _moveTragetIndicatorView.PlayAt(worldPosition);
         }
 
+        private void OnPointerUp(PointerUpEvent e)
+        {
+            _isMoving = false;
+        }
+
         private void OnPointerMove(PointerMoveEvent e)
         {
-            if (e.Context.IsOverUI || !e.Context.IsPressed) return;
+            if (e.Context.IsOverUI || !e.Context.IsPressed || !_isMoving) return;
 
             var worldPosition = (Vector2)_cameraService.Camera.ScreenToWorldPoint(e.Context.ScreenPosition);
             _playerControlProvider.SetMoveTarget(worldPosition);
