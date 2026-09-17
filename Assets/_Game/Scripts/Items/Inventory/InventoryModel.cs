@@ -294,8 +294,8 @@ namespace Assets._Game.Scripts.Items.Inventory
             (_slots[a.Index], _slots[b.Index]) = (_slots[b.Index], _slots[a.Index]);
             SubscribeSlot(a.Index);
             SubscribeSlot(b.Index);
-            InventoryChanged?.Invoke(new(a, InventoryChangeKind.Replaced, _slots[a.Index].Snapshot));
-            InventoryChanged?.Invoke(new(b, InventoryChangeKind.Replaced, _slots[b.Index].Snapshot));
+            InventoryChanged?.Invoke(new(a, InventoryChangeKind.Replaced, _slots[a.Index]?.Snapshot));
+            InventoryChanged?.Invoke(new(b, InventoryChangeKind.Replaced, _slots[b.Index]?.Snapshot));
             SlotChanged?.Invoke(a);
             SlotChanged?.Invoke(b);
             Changed?.Invoke();

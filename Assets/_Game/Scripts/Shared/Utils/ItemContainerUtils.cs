@@ -117,6 +117,66 @@ namespace Assets._Game.Scripts.Shared.Utils
             return MoveAmount(container, fromSlot, container, toSlot, amount);
         }
 
+        public static bool TrySwapBetweenContainerSlots(
+            IItemContainer fromContainer,
+            long fromSlot,
+            IItemContainer toContainer,
+            long toSlot)
+        {
+            if (fromContainer == null ||
+                toContainer == null ||
+                fromSlot < 0 ||
+                toSlot < 0 ||
+                (ReferenceEquals(fromContainer, toContainer) && fromSlot == toSlot))
+                return false;
+
+            if (ReferenceEquals(fromContainer, toContainer) && fromContainer is InventoryModel inventoryModel)
+                return inventoryModel.Swap(InventorySlot.FromInt64(fromSlot), InventorySlot.FromInt64(toSlot));
+
+            var fromSnapshot = fromContainer.Get(fromSlot);
+            var toSnapshot = toContainer.Get(toSlot);
+
+            if (fromSnapshot == null && toSnapshot == null)
+                return false;
+
+            if (fromSnapshot == null)
+                return MoveAmount(toContainer, toSlot, fromContainer, fromSlot, toSnapshot.Value.Amount) == toSnapshot.Value.Amount;
+
+            if (toSnapshot == null)
+                return MoveAmount(fromContainer, fromSlot, toContainer, toSlot, fromSnapshot.Value.Amount) == fromSnapshot.Value.Amount;
+
+            int removedFrom = fromContainer.RemoveFromSlot(fromSlot, fromSnapshot.Value.Amount);
+            if (removedFrom != fromSnapshot.Value.Amount)
+            {
+                if (removedFrom > 0)
+                    fromContainer.AddToSlot(fromSlot, new(fromSnapshot.Value.Definition, fromSnapshot.Value.InstanceData, removedFrom));
+                return false;
+            }
+
+            int removedTo = toContainer.RemoveFromSlot(toSlot, toSnapshot.Value.Amount);
+            if (removedTo != toSnapshot.Value.Amount)
+            {
+                // We got here because we successfully removed from the first container so returning all
+                fromContainer.AddToSlot(fromSlot, fromSnapshot.Value);
+                if (removedTo > 0)
+                    toContainer.AddToSlot(toSlot, new(toSnapshot.Value.Definition, toSnapshot.Value.InstanceData, removedTo));
+                return false;
+            }
+
+            int addedTo = toContainer.AddToSlot(toSlot, fromSnapshot.Value);
+            int addedFrom = fromContainer.AddToSlot(fromSlot, toSnapshot.Value);
+            if (addedTo == fromSnapshot.Value.Amount && addedFrom == toSnapshot.Value.Amount)
+                return true;
+
+            if (addedTo > 0)
+                toContainer.RemoveFromSlot(toSlot, addedTo);
+            if (addedFrom > 0)
+                fromContainer.RemoveFromSlot(fromSlot, addedFrom);
+            fromContainer.AddToSlot(fromSlot, fromSnapshot.Value);
+            toContainer.AddToSlot(toSlot, toSnapshot.Value);
+            return false;
+        }
+
         /// <summary>
         /// Returns actually removed amount.
         /// </summary>

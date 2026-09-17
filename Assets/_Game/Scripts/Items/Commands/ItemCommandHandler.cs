@@ -61,6 +61,14 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             var from = _itemContainerResolver.ResolveContainer(c.FromContainer);
             var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
+
+            var item = from.Get(c.FromSlot);
+            if (item != null && item.Value.Amount == c.Amount)
+            {
+                // If the entire stack is being moved, try to swap the items instead of moving them
+                return ItemContainerUtils.TrySwapBetweenContainerSlots(from, c.FromSlot, to, c.ToSlot);
+            }
+
             return ItemContainerUtils.MoveAmount(
                 from,
                 c.FromSlot,
