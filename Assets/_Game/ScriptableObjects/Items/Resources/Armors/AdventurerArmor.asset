@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 3412048633303400687
   - rid: 3412048633303400688
   - rid: 3564180343019798613
+  - rid: 6179849484475040010
   references:
     version: 2
     RefIds:
@@ -59,3 +60,8 @@ MonoBehaviour:
       type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <BasePrice>k__BackingField: 500
+    - rid: 6179849484475040010
+      type: {class: EnchantableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Triggers>k__BackingField: 1
+        <ItemEnchantingDefinition>k__BackingField: {fileID: 11400000, guid: 61a05838351bb564a832e883ed35e051, type: 2}

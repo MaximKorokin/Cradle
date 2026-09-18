@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.UI.Common
 
         private void OnButtonClick()
         {
-            _windowManager.InstantiateWindow(_windowId);
+            _windowManager.ToggleWindow(_windowId);
         }
     }
 }

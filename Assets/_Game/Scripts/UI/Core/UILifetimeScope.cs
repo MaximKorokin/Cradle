@@ -28,6 +28,8 @@ namespace Assets._Game.Scripts.UI.Core
         [SerializeField]
         private UIWindowBase[] _windowPrefabs;
         [SerializeField]
+        private WindowWrapper _windowWrapperPrefab;
+        [SerializeField]
         private ModalWrapper _modalWrapperPrefab;
         [Space]
         [Header("MonoBehaviours")]
@@ -94,29 +96,30 @@ namespace Assets._Game.Scripts.UI.Core
         private void RegisterWindows(IContainerBuilder builder)
         {
             builder.Register<WindowManager>(Lifetime.Scoped);
+            builder.RegisterInstance(_windowWrapperPrefab);
             builder.RegisterInstance(_modalWrapperPrefab);
 
             var windows = new WindowDefinition[]
             {
                 // Primary windows
-                new(WindowId.Cheats, typeof(CheatsWindow), typeof(CheatsWindowController), typeof(CheatsWindowOpenStrategy)),
-                new(WindowId.Equipment, typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),
-                new(WindowId.Quests, typeof(QuestsWindow), typeof(QuestsWindowController), typeof(QuestsWindowOpenStrategy)),
-                new(WindowId.QuestGiver, typeof(QuestGiverWindow), typeof(QuestGiverWindowController)),
-                new(WindowId.QuestDescription, typeof(QuestDescriptionWindow), typeof(QuestDescriptionWindowController)),
+                new(WindowId.Cheats, new WindowConfiguration(true, false, true), typeof(CheatsWindow), typeof(CheatsWindowController), typeof(CheatsWindowOpenStrategy)),
+                new(WindowId.Equipment, new WindowConfiguration(true, false, true), typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),
+                new(WindowId.Quests, new WindowConfiguration(true, false, true), typeof(QuestsWindow), typeof(QuestsWindowController), typeof(QuestsWindowOpenStrategy)),
+                new(WindowId.QuestGiver, new WindowConfiguration(true, false, true), typeof(QuestGiverWindow), typeof(QuestGiverWindowController)),
+                new(WindowId.QuestDescription, new WindowConfiguration(true, false, true), typeof(QuestDescriptionWindow), typeof(QuestDescriptionWindowController)),
 
-                new(WindowId.Stats, typeof(StatsWindow), typeof(StatsWindowController)),
-                new(WindowId.Storage, typeof(InventoryStorageWindow), typeof(InventoryStorageWindowController)),
-                new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
-                new(WindowId.Crafting, typeof(CraftingWindow), typeof(CraftingWindowController)),
-                new(WindowId.Shop, typeof(InventoryShopWindow), typeof(InventoryShopWindowController)),
+                new(WindowId.Stats, new WindowConfiguration(true, false, true), typeof(StatsWindow), typeof(StatsWindowController)),
+                new(WindowId.Storage, new WindowConfiguration(true, false, true), typeof(InventoryStorageWindow), typeof(InventoryStorageWindowController)),
+                new(WindowId.LocationTransitionList, new WindowConfiguration(true, false, true), typeof(LocationTransitionListWindow), typeof(LocationTransitionListWindowController)),
+                new(WindowId.Crafting, new WindowConfiguration(true, false, true), typeof(CraftingWindow), typeof(CraftingWindowController)),
+                new(WindowId.Shop, new WindowConfiguration(true, false, true), typeof(InventoryShopWindow), typeof(InventoryShopWindowController)),
 
                 // Service windows
-                new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController), typeof(ItemUseSettingsWindowOpenStrategy)),
-                new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),
+                new(WindowId.ItemUseSettings, new WindowConfiguration(true, false, true), typeof(ItemUseSettingsWindow), typeof(ItemUseSettingsWindowController), typeof(ItemUseSettingsWindowOpenStrategy)),
+                new(WindowId.ItemStacksPreview, new WindowConfiguration(true, false, true), typeof(ItemStacksPreviewWindow), typeof(ItemStacksPreviewWindowController)),
 
-                new(WindowId.AmountPicker, typeof(AmountPickerWindow), typeof(AmountPickerWindowController)),
-                new(WindowId.Confirmation, typeof(ConfirmationWindow), typeof(ConfirmationWindowController)),
+                new(WindowId.AmountPicker, new WindowConfiguration(true, true, false), typeof(AmountPickerWindow), typeof(AmountPickerWindowController)),
+                new(WindowId.Confirmation, new WindowConfiguration(true, true, false), typeof(ConfirmationWindow), typeof(ConfirmationWindowController)),
             };
 
             foreach (var windowDefinition in windows)

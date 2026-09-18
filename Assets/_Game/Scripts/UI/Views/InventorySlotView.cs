@@ -104,6 +104,7 @@ namespace Assets._Game.Scripts.UI.Views
             var image = new GameObject().AddComponent<Image>();
             image.sprite = _itemImage.sprite;
             image.color = new(0.8f, 0.8f, 0.8f);
+            image.rectTransform.sizeDelta = _itemImage.rectTransform.rect.size;
 
             return image.transform as RectTransform;
         }

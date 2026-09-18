@@ -19,6 +19,7 @@ namespace Assets._Game.Scripts.UI.Windows
         private readonly RectTransform _modalsRoot;
         private readonly IEnumerable<UIWindowBase> _windowPrefabs;
         private readonly IEnumerable<WindowDefinition> _windowDefinitions;
+        private readonly WindowWrapper _windowWrapperPrefab;
         private readonly ModalWrapper _modalWrapperPrefab;
         private readonly IObjectResolver _resolver;
 
@@ -26,6 +27,7 @@ namespace Assets._Game.Scripts.UI.Windows
             UIRootReferences rootReferences,
             IEnumerable<UIWindowBase> windowPrefabs,
             IEnumerable<WindowDefinition> windowDefinitions,
+            WindowWrapper windowWrapperPrefab,
             ModalWrapper modalWrapperPrefab,
             IObjectResolver resolver)
         {
@@ -33,15 +35,28 @@ namespace Assets._Game.Scripts.UI.Windows
             _modalsRoot = rootReferences.ModalsRoot;
             _windowPrefabs = windowPrefabs;
             _windowDefinitions = windowDefinitions;
+            _windowWrapperPrefab = windowWrapperPrefab;
             _modalWrapperPrefab = modalWrapperPrefab;
             _resolver = resolver;
+        }
+
+        /// <summary> Opens a window if it is not already open, otherwise closes it if it is a singleton window. If the window is not a singleton, it will open a new instance of the window. </summary>
+        public void ToggleWindow(WindowId windowId)
+        {
+            var definition = FindWindowDefinition(windowId);
+            var existingWindow = _windowStack.FirstOrDefault(w => w.Window.GetType() == definition.WindowType);
+            if (existingWindow.Window != null && definition.Configuration.IsSingleton)
+            {
+                CloseWindowInternal(existingWindow);
+                return;
+            }
+            InstantiateWindow(windowId);
         }
 
         /// <summary> Uses OpenStrategy if available, otherwise provides empty arguments to the controller </summary>
         public UIWindowBase InstantiateWindow(WindowId windowId)
         {
-            var definition = _windowDefinitions.FirstOrDefault(d => d.Id == windowId)
-                ?? throw new InvalidOperationException($"No definition for window {windowId} registered.");
+            var definition = FindWindowDefinition(windowId);
 
             if (definition.StrategyType != null)
                 return ((PlayerWindowOpenStrategy)_resolver.Resolve(definition.StrategyType)).Open();
@@ -58,18 +73,20 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private UIWindowBase InstantiateWindow(Type windowType, Action<UIWindowBase, object> instantiatedCallback = null)
         {
+            // find definition
+            var definition = FindWindowDefinition(windowType);
+
             // find prefab
             var prefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == windowType);
             if (prefab == null) throw new InvalidOperationException($"No prefab for window of type {windowType} registered.");
-            if (prefab.IsSingleton && _windowStack.Any(w => w.Window.GetType() == windowType))
+            if (definition.Configuration.IsSingleton && _windowStack.Any(w => w.Window.GetType() == windowType))
             {
                 SLog.Warn($"Window of type {windowType} is a singleton and is already open. Returning existing instance.");
                 return _windowStack.First(w => w.Window.GetType() == windowType).Window;
             }
 
-            // 1. Find controller type
-            var controllerType = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType).ControllerType
-                ?? throw new InvalidOperationException($"No controller for window of type {windowType} registered.");
+            // 1. Get controller type
+            var controllerType = definition.ControllerType;
 
             // 2. Create window and controller
             var controller = _resolver.Resolve(controllerType);
@@ -82,11 +99,17 @@ namespace Assets._Game.Scripts.UI.Windows
             controllerType.GetMethod("Bind").Invoke(controller, new object[] { window });
 
             GameObject modalRoot = null;
-            if (prefab.IsModal)
+            if (definition.Configuration.IsModal)
             {
                 var modalWrapper = _resolver.Instantiate(_modalWrapperPrefab, _modalsRoot);
                 modalWrapper.SetWindow(window);
                 modalRoot = modalWrapper.gameObject;
+            }
+            else
+            {
+                var windowWrapper = _resolver.Instantiate(_windowWrapperPrefab, _windowsRoot);
+                windowWrapper.SetWindow(window);
+                modalRoot = windowWrapper.gameObject;
             }
 
             // push window and controller to stack that will be used to destroy everything correctly
@@ -96,6 +119,20 @@ namespace Assets._Game.Scripts.UI.Windows
             window.OnShow();
 
             return window;
+        }
+
+        private WindowDefinition FindWindowDefinition(WindowId windowId)
+        {
+            var definition = _windowDefinitions.FirstOrDefault(d => d.Id == windowId);
+            if (definition == null) throw new InvalidOperationException($"No definition for window {windowId} registered.");
+            return definition;
+        }
+
+        private WindowDefinition FindWindowDefinition(Type windowType)
+        {
+            var definition = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType);
+            if (definition == null) throw new InvalidOperationException($"No definition for window {windowType} registered.");
+            return definition;
         }
 
         private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller, GameObject ModalRoot) element)

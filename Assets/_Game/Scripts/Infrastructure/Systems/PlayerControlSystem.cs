@@ -35,6 +35,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (e.Context.IsOverUI) return;
 
+            var cameraViewport = _cameraService.Camera.ScreenToViewportPoint(e.Context.ScreenPosition);
+            if (cameraViewport.x < 0 || cameraViewport.x > 1 || cameraViewport.y < 0 || cameraViewport.y > 1) return;
+
             _isMoving = true;
             var worldPosition = (Vector2)_cameraService.Camera.ScreenToWorldPoint(e.Context.ScreenPosition);
             _moveTragetIndicatorView.PlayAt(worldPosition);

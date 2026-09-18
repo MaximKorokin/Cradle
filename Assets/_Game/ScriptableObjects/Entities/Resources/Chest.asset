@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9f35f49a53fe948b248d5d68c30172, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: 
+  _id: 1940c88685c64b6cbb4aadf43f8b1d5d
+  <VisualModel>k__BackingField: {fileID: 11400000, guid: f27e7fac3abae124cba7ffb598532f8c, type: 2}
+  <DisplayName>k__BackingField: Chest
+  _modules:
+  - rid: 3412048633303400550
+  - rid: 3564180267895619758
+  - rid: 3564180477885808756
+  - rid: 3564180595475218514
+  - rid: 3564180635766489211
+  references:
+    version: 2
+    RefIds:
+    - rid: 3412048633303400550
+      type: {class: FactionModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Faction: {fileID: 11400000, guid: fbaa0ad9ac3f70c4b81095f04e3a349c, type: 2}
+    - rid: 3564180267895619758
+      type: {class: ControlModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        ControlProvider:
+          rid: 3564180267895619759
+    - rid: 3564180267895619759
+      type: {class: AiControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
+      data:
+        <AiBehaviours>k__BackingField: 10
+    - rid: 3564180477885808756
+      type: {class: StatsModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        Stats: {fileID: 11400000, guid: 3a29b7bb73df0114a8eba5be22eccf60, type: 2}
+    - rid: 3564180595475218514
+      type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        SlotsAmount: 100
+        Radius: 1
+    - rid: 3564180635766489211
+      type: {class: PersistenceModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
+      data:
+        Enabled: 1
+        PersistenceKey: Chest_0
