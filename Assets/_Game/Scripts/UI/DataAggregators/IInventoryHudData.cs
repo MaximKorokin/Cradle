@@ -28,6 +28,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         int SlotsUsed { get; }
         int SlotsMax { get; }
 
+        bool ViewEnchantDropArea { get; }
+        bool ViewDestroyDropArea { get; }
+
         IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate();
         void SetEnumerationFilter(Func<ItemStackSnapshot?, bool> filter);
     }
@@ -58,6 +61,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public abstract bool ViewSlotsAmount { get; }
         public int SlotsUsed { get; private set; }
         public int SlotsMax { get; private set; }
+
+        public abstract bool ViewEnchantDropArea { get; }
+        public abstract bool ViewDestroyDropArea { get; }
 
         protected override void OnContainerChanged()
         {
@@ -137,6 +143,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public override bool ViewSlotsAmount => true;
 
+        public override bool ViewEnchantDropArea => true;
+
+        public override bool ViewDestroyDropArea => true;
+
         private void OnStatsChanged(StatId statId)
         {
             if (statId == StatId.CarryWeight || statId == StatId.CarryWeightMax)
@@ -165,6 +175,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public override float WeightMax => 0;
 
         public override bool ViewSlotsAmount => true;
+
+        public override bool ViewEnchantDropArea => false;
+
+        public override bool ViewDestroyDropArea => false;
     }
 
     public static class InventoryHudDataUtils

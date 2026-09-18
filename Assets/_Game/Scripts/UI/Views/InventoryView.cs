@@ -23,6 +23,10 @@ namespace Assets._Game.Scripts.UI.Views
         private TMP_Text _pneumaText;
         [SerializeField]
         private TMP_Text _slotsAmountText;
+        [SerializeField]
+        private RectTransform _enchantDropArea;
+        [SerializeField]
+        private RectTransform _destroyDropArea;
         [Space]
         [SerializeField]
         private Toggle _filterByClothingToggle;
@@ -104,11 +108,14 @@ namespace Assets._Game.Scripts.UI.Views
                 newSlot.Render(stack);
             }
 
-            // Update text fields
+            // Update text fields and drop areas visibility
             _pneumaText.text = _inventoryHudData.ViewPneuma ? $"Pneuma: {_inventoryHudData.Pneuma}" : "";
             _goldText.text = _inventoryHudData.ViewGold ? $"Gold: {_inventoryHudData.Gold}" : "";
             _slotsAmountText.text = _inventoryHudData.ViewSlotsAmount ? $"Slots: {_inventoryHudData.SlotsUsed} / {_inventoryHudData.SlotsMax}" : "";
             _weightText.text = _inventoryHudData.ViewWeight ? $"Weight: {_inventoryHudData.WeightCurrent} / {_inventoryHudData.WeightMax}" : "";
+
+            _enchantDropArea.gameObject.SetActive(_inventoryHudData.ViewEnchantDropArea);
+            _destroyDropArea.gameObject.SetActive(_inventoryHudData.ViewDestroyDropArea);
         }
 
         public void Unbind()

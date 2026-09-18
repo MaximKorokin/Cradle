@@ -2,7 +2,9 @@
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 
@@ -23,13 +25,20 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         public void Handle(IDragDropSource source, IDragDropTarget target, PointerContext pointerContext)
         {
-            if (source is InventorySlotView inventorySlot1 && target is InventorySlotView inventorySlot2)
+            if (source is InventorySlotView inventorySlot1)
             {
-                HandleInventorySlotToInventorySlotDrop(inventorySlot1, inventorySlot2);
-            }
-            else if (!pointerContext.IsOverUI && source is InventorySlotView inventorySlot)
-            {
-                HandleInventoryToNonUIDrop(inventorySlot);
+                if (target is InventorySlotView inventorySlot2)
+                {
+                    HandleInventorySlotToInventorySlotDrop(inventorySlot1, inventorySlot2);
+                }
+                else if (target is DropArea dropArea)
+                {
+                    HandleInventorySlotToDropAreaDrop(inventorySlot1, dropArea);
+                }
+                else if (!pointerContext.IsOverUI)
+                {
+                    HandleInventorySlotToNonUIDrop(inventorySlot1);
+                }
             }
         }
 
@@ -60,7 +69,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
         }
 
-        private void HandleInventoryToNonUIDrop(InventorySlotView inventorySlot)
+        private void HandleInventorySlotToNonUIDrop(InventorySlotView inventorySlot)
         {
             if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
 
@@ -71,6 +80,37 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     inventorySlot.SlotIndex,
                     selectedAmount));
             });
+        }
+
+        private void HandleInventorySlotToDropAreaDrop(InventorySlotView inventorySlot, DropArea dropArea)
+        {
+            if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
+            switch (dropArea.Type)
+            {
+                case DropAreaType.ItemDestroy:
+                    _windowManager.ShowConfirmationOrAmountPicker(itemStack.Value.Amount, itemStack.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {itemStack.Value.Definition.Name}?", (selectedAmount) =>
+                    {
+                        PublishCommand(new DestroyItemCommand(
+                            inventorySlot.ContainerPath,
+                            inventorySlot.SlotIndex,
+                            selectedAmount));
+                    });
+                    break;
+                case DropAreaType.ItemEnchant:
+                    var enchantableTrait = itemStack.Value.GetTrait<EnchantableTrait>();
+                    if (!itemStack.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData)) return;
+                    _windowManager.ShowConfirmation("Enchant Item", $"Are you sure you want to enchant {itemStack.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
+                    {
+                        if (!confirmed) return;
+                        PublishCommand(new EnchantItemCommand(
+                            inventorySlot.ContainerPath,
+                            inventorySlot.SlotIndex));
+                    });
+                    break;
+                default:
+                    SLog.Error($"Unhandled drop area type: {dropArea.Type}");
+                    break;
+            }
         }
 
         private bool TryGetContainerAndItemStack(InventorySlotView inventorySlot, out IItemContainer container, out ItemStackSnapshot? itemStack)
