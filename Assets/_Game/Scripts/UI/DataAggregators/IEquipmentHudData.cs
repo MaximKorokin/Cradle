@@ -27,10 +27,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         
         public override void SetContainerEntity(string equipmentEntityId)
         {
-            base.SetContainerEntity(equipmentEntityId);
-
             var entity = _entityRepository.Get(equipmentEntityId);
             _equipmentModule = entity.GetModule<EquipmentModule>();
+
+            base.SetContainerEntity(equipmentEntityId);
         }
 
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Equipment(entityId);

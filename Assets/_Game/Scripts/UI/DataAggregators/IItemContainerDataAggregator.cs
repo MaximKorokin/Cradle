@@ -47,7 +47,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 {
                     ItemContainer.Changed += OnContainerChanged;
                 }
-                NotifyChanged();
+                OnContainerChanged();
             }
         }
 

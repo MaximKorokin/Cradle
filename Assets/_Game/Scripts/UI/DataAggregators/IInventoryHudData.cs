@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _itemsConfig = itemsConfig;
         }
 
-        public InventoryModel InventoryModel {get; protected set; }
+        public InventoryModel InventoryModel => ItemContainer as InventoryModel;
 
         public abstract bool ViewPneuma { get; }
         public int Pneuma { get; private set; }
@@ -58,13 +58,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public abstract bool ViewSlotsAmount { get; }
         public int SlotsUsed { get; private set; }
         public int SlotsMax { get; private set; }
-
-        public override void SetContainerEntity(string entityId)
-        {
-            base.SetContainerEntity(entityId);
-
-            InventoryModel = ItemContainerResolver.ResolveInventory(ContainerPath);
-        }
 
         protected override void OnContainerChanged()
         {
