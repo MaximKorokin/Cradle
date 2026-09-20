@@ -3,16 +3,14 @@ using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IItemContainerDataAggregator : IDisposable
+    public interface IItemContainerDataAggregator : IEntityBoundDataAggregatorBase, IDisposable
     {
         ItemContainerPath ContainerPath { get; }
 
         event Action Changed;
-
-        void SetContainerEntity(string entityId);
     }
 
-    public abstract class ItemContainerDataAggregatorBase : DataAggregatorBase, IItemContainerDataAggregator
+    public abstract class ItemContainerDataAggregatorBase : EntityBoundDataAggregatorBase, IItemContainerDataAggregator
     {
         public ItemContainerDataAggregatorBase(ItemContainerResolver itemContainerResolver)
         {
@@ -31,7 +29,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             Changed?.Invoke();
         }
 
-        public virtual void SetContainerEntity(string entityId)
+        protected override void OnBoundEntityChanged(string entityId)
         {
             ContainerPath = GetContainerPath(entityId);
             var newItemContainer = ItemContainerResolver.ResolveContainer(ContainerPath);
@@ -51,6 +49,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
         }
 
+        protected virtual void OnContainerChanged()
+        {
+            NotifyChanged();
+        }
+
         public override void Dispose()
         {
             base.Dispose();
@@ -59,11 +62,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             {
                 ItemContainer.Changed -= OnContainerChanged;
             }
-        }
-
-        protected virtual void OnContainerChanged()
-        {
-            NotifyChanged();
         }
 
         protected abstract ItemContainerPath GetContainerPath(string entityId);

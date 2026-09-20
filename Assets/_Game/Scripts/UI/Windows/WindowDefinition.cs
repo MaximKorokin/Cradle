@@ -33,6 +33,7 @@ namespace Assets._Game.Scripts.UI.Windows
         Stats = 20,
         Storage = 30,
         Equipment = 31,
+        Inventory = 32,
         ItemStacksPreview = 40,
         LocationTransitionList = 50,
         Crafting = 60,

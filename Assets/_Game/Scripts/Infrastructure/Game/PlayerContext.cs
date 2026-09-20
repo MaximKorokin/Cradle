@@ -2,12 +2,14 @@
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Shared;
 using System;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
     public interface IPlayerProvider
     {
+        IReadOnlyObservableData<string> ObservablePlayerId { get; }
         Entity Player { get; }
     }
 
@@ -15,7 +17,11 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     {
         private readonly PlayerControlProvider _playerControlProvider;
 
+        private readonly ObservableData<string> _observablePlayerId = new(null);
+
         public Entity Player { get; private set; }
+
+        public IReadOnlyObservableData<string> ObservablePlayerId => _observablePlayerId;
 
         public event Action PlayerChanging;
         public event Action PlayerChanged;
@@ -47,6 +53,7 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
 
             Player = player;
+            _observablePlayerId.SetData(player.Id);
 
             // Add the control provider to the new player
             if (Player.TryGetModule(out controlModule))

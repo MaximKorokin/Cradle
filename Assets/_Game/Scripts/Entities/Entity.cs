@@ -23,6 +23,8 @@ namespace Assets._Game.Scripts.Entities
         public Entity(EntityDefinition definition)
         {
             Definition = definition;
+
+            (this as IEntry).GenerateId();
         }
 
         public void MarkCreated()

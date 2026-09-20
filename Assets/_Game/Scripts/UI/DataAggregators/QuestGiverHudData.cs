@@ -1,13 +1,14 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
+using Assets._Game.Scripts.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class QuestGiverHudData : DataAggregatorBase
+    public sealed class QuestGiverHudData : EntityBoundDataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
 
@@ -24,19 +25,31 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _entityRepository = entityRepository;
         }
 
-        public void SetEntities(string giverEntityId, string targetEntityId)
+        protected override void OnBoundEntityChanged(string entityId)
         {
-            var giverEntity = _entityRepository.Get(giverEntityId);
-            var targetEntity = _entityRepository.Get(targetEntityId);
+            var giverEntity = _entityRepository.Get(entityId);
 
             QuestGiverName = giverEntity.Definition.DisplayName;
 
             _questGiverModule = null;
-            _questModule = null;
 
             if (giverEntity != null && giverEntity.TryGetModule<QuestGiverModule>(out var questGiverModule))
             {
                 _questGiverModule = questGiverModule;
+            }
+
+            OfferedQuests = _questGiverModule == null ? new QuestDefinition[0] : _questGiverModule.OfferedQuests;
+            Changed?.Invoke();
+        }
+
+        public void SetTargetEntity(IReadOnlyObservableData<string> targetEntityId)
+        {
+            var targetEntity = _entityRepository.Get(targetEntityId.Value);
+            _questModule = null;
+
+            if (_questModule != null)
+            {
+                _questModule.Updated -= OnQuestModuleUpdated;
             }
 
             if (targetEntity != null && targetEntity.TryGetModule<QuestModule>(out var questModule))
@@ -44,8 +57,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 _questModule = questModule;
                 _questModule.Updated += OnQuestModuleUpdated;
             }
-
-            UpdateData();
+            Changed?.Invoke();
         }
 
         public bool IsQuestAccepted(string questId)
@@ -64,19 +76,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             if (_questModule == null) return null;
             return _questModule.AllQuests.FirstOrDefault(q => q.Definition.Id == questId);
-        }
-
-        private void UpdateData()
-        {
-            if (_questGiverModule == null)
-            {
-                OfferedQuests = new QuestDefinition[0];
-                Changed?.Invoke();
-                return;
-            }
-
-            OfferedQuests = _questGiverModule.OfferedQuests;
-            Changed?.Invoke();
         }
 
         private void OnQuestModuleUpdated()

@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 
@@ -6,7 +7,7 @@ namespace Assets._Game.Scripts.UI.Common
 {
     public interface IWindowOpenStrategy
     {
-        UIWindowBase Open(string entityId);
+        UIWindowBase Open(IReadOnlyObservableData<string> entityId);
     }
 
     public abstract class WindowOpenStrategy : IWindowOpenStrategy
@@ -18,7 +19,7 @@ namespace Assets._Game.Scripts.UI.Common
             WindowManager = windowManager;
         }
 
-        public abstract UIWindowBase Open(string entityId);
+        public abstract UIWindowBase Open(IReadOnlyObservableData<string> entityId);
     }
 
     public abstract class PlayerWindowOpenStrategy : WindowOpenStrategy
@@ -31,7 +32,18 @@ namespace Assets._Game.Scripts.UI.Common
             _playerProvider = playerProvider;
         }
 
-        public UIWindowBase Open() => Open(_playerProvider.Player.Id);
+        public UIWindowBase Open() => Open(_playerProvider.ObservablePlayerId);
+    }
+
+    public sealed class InventoryWindowOpenStrategy : PlayerWindowOpenStrategy
+    {
+        public InventoryWindowOpenStrategy(WindowManager windowManager, IPlayerProvider playerProvider) : base(windowManager, playerProvider) { }
+
+        public override UIWindowBase Open(IReadOnlyObservableData<string> entityId)
+        {
+            SLog.Log(123);
+            return WindowManager.InstantiateWindow<InventoryWindow, InventoryWindowControllerArguments>(new(entityId));
+        }
     }
 
     public sealed class InventoryEquipmentWindowOpenStrategy : PlayerWindowOpenStrategy
@@ -39,7 +51,7 @@ namespace Assets._Game.Scripts.UI.Common
         public InventoryEquipmentWindowOpenStrategy(WindowManager windowManager, IPlayerProvider playerProvider)
             : base(windowManager, playerProvider) { }
 
-        public override UIWindowBase Open(string entityId)
+        public override UIWindowBase Open(IReadOnlyObservableData<string> entityId)
         {
             return WindowManager.InstantiateWindow<InventoryEquipmentWindow, InventoryEquipmentWindowControllerArguments>(
                 new(entityId, entityId));
@@ -51,7 +63,7 @@ namespace Assets._Game.Scripts.UI.Common
         public ItemUseSettingsWindowOpenStrategy(WindowManager windowManager, IPlayerProvider playerProvider)
             : base(windowManager, playerProvider) { }
 
-        public override UIWindowBase Open(string entityId)
+        public override UIWindowBase Open(IReadOnlyObservableData<string> entityId)
         {
             return WindowManager.InstantiateWindow<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>(
                 new(entityId));
@@ -63,7 +75,7 @@ namespace Assets._Game.Scripts.UI.Common
         public CheatsWindowOpenStrategy(WindowManager windowManager, IPlayerProvider playerProvider)
             : base(windowManager, playerProvider) { }
 
-        public override UIWindowBase Open(string entityId)
+        public override UIWindowBase Open(IReadOnlyObservableData<string> entityId)
         {
             return WindowManager.InstantiateWindow<CheatsWindow, CheatsWindowControllerArguments>(
                 new(entityId, entityId));
@@ -75,7 +87,7 @@ namespace Assets._Game.Scripts.UI.Common
         public QuestsWindowOpenStrategy(WindowManager windowManager, IPlayerProvider playerProvider)
             : base(windowManager, playerProvider) { }
 
-        public override UIWindowBase Open(string entityId)
+        public override UIWindowBase Open(IReadOnlyObservableData<string> entityId)
         {
             return WindowManager.InstantiateWindow<QuestsWindow, QuestsWindowControllerArguments>(
                 new(entityId));

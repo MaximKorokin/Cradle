@@ -101,6 +101,8 @@ namespace Assets._Game.Scripts.UI.Core
 
             var windows = new WindowDefinition[]
             {
+                new(WindowId.Inventory, new(true, false, true), typeof(InventoryWindow), typeof(InventoryWindowController), typeof(InventoryWindowOpenStrategy)),
+
                 // Primary windows
                 new(WindowId.Cheats, new WindowConfiguration(true, false, true), typeof(CheatsWindow), typeof(CheatsWindowController), typeof(CheatsWindowOpenStrategy)),
                 new(WindowId.Equipment, new WindowConfiguration(true, false, true), typeof(InventoryEquipmentWindow), typeof(InventoryEquipmentWindowController), typeof(InventoryEquipmentWindowOpenStrategy)),

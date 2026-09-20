@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Quests;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 
@@ -30,8 +31,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _targetEntityId = arguments.TargetEntityId;
-            _questGiverHudData.SetEntities(arguments.GiverEntityId, arguments.TargetEntityId);
+            _targetEntityId = arguments.TargetEntityId.Value;
+            _questGiverHudData.SetEntityId(arguments.GiverEntityId);
+            _questGiverHudData.SetTargetEntity(arguments.TargetEntityId);
             _questGiverHudData.Changed += Redraw;
         }
 
@@ -102,10 +104,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct QuestGiverWindowControllerArguments : IWindowControllerArguments
     {
-        public string GiverEntityId { get; }
-        public string TargetEntityId { get; }
+        public IReadOnlyObservableData<string> GiverEntityId { get; }
+        public IReadOnlyObservableData<string> TargetEntityId { get; }
 
-        public QuestGiverWindowControllerArguments(string giverEntityId, string targetEntityId)
+        public QuestGiverWindowControllerArguments(IReadOnlyObservableData<string> giverEntityId, IReadOnlyObservableData<string> targetEntityId)
         {
             GiverEntityId = giverEntityId;
             TargetEntityId = targetEntityId;

@@ -9,10 +9,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private StatsWindow _window;
         private readonly StatModule _statsModule;
 
-        public StatsWindowController(
-            PlayerContext playerContext)
+        public StatsWindowController(IPlayerProvider playerContext)
         {
-            _statsModule = playerContext.GetModule<StatModule>();
+            _statsModule = playerContext.Player.GetModule<StatModule>();
 
             _statsModule.Stats.Changed += Redraw;
         }

@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
@@ -47,7 +48,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _equipmentHudData.SetContainerEntity(arguments.EquipmentEntityId);
+            _equipmentHudData.SetEntityId(arguments.EquipmentEntityId);
         }
 
         public override void Bind(CheatsWindow window)
@@ -76,7 +77,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
         {
-            if (_entityRepository.Get(Arguments.InventoryEntityId).TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            if (_entityRepository.Get(Arguments.InventoryEntityId.Value).TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
                 var statusEffect = new StatusEffect(statusEffectDefinition);
                 statusEffectModule.StatusEffects.AddStatusEffect(statusEffect);
@@ -87,13 +88,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _itemPreviewService.ShowItemDefinitionPreview(
                 itemDefinition,
-                ItemContainerPath.Equipment(Arguments.EquipmentEntityId),
+                ItemContainerPath.Equipment(Arguments.EquipmentEntityId.Value),
                 _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(itemDefinition));
         }
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)
         {
-            if (_entityRepository.Get(Arguments.InventoryEntityId).TryGetModule<InventoryModule>(out var inventoryModule))
+            if (_entityRepository.Get(Arguments.InventoryEntityId.Value).TryGetModule<InventoryModule>(out var inventoryModule))
             {
                 _windowManager.ShowAmountPickerIfNeeded(itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
                 {
@@ -115,10 +116,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct CheatsWindowControllerArguments : IWindowControllerArguments
     {
-        public string InventoryEntityId { get; }
-        public string EquipmentEntityId { get; }
+        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<string> EquipmentEntityId { get; }
 
-        public CheatsWindowControllerArguments(string inventoryEntityId, string equipmentEntityId)
+        public CheatsWindowControllerArguments(IReadOnlyObservableData<string> inventoryEntityId, IReadOnlyObservableData<string> equipmentEntityId)
         {
             InventoryEntityId = inventoryEntityId;
             EquipmentEntityId = equipmentEntityId;

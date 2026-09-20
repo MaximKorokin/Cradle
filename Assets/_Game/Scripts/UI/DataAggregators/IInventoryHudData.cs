@@ -103,14 +103,17 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private float _weightCurrent;
         private float _weightMax;
 
-        public InventoryHudData(EntityRepository entityRepository, ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
+        public InventoryHudData(
+            EntityRepository entityRepository,
+            ItemsConfig itemsConfig,
+            ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
         {
             _entityRepository = entityRepository;
         }
 
-        public override void SetContainerEntity(string inventoryEntityId)
+        protected override void OnBoundEntityChanged(string inventoryEntityId)
         {
-            base.SetContainerEntity(inventoryEntityId);
+            base.OnBoundEntityChanged(inventoryEntityId);
 
             var newStats = _entityRepository.Get(inventoryEntityId).GetModule<StatModule>().Stats;
             if (_statsController != newStats)

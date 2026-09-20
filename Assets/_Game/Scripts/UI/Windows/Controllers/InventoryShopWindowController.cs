@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
@@ -41,8 +42,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _inventoryHudData.SetContainerEntity(Arguments.InventoryContainerPath.EntityId);
-            _equipmentHudData.SetContainerEntity(Arguments.EquipmentContainerPath.EntityId);
+            _inventoryHudData.SetEntityId(Arguments.BuyerEntityId);
+            _equipmentHudData.SetEntityId(Arguments.BuyerEntityId);
         }
 
         public override void Bind(InventoryShopWindow window)
@@ -119,18 +120,27 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct InventoryShopWindowControllerArguments : IWindowControllerArguments
     {
-        public ItemContainerPath ShopContainerPath { get; }
-        public ItemContainerPath InventoryContainerPath { get; }
-        public ItemContainerPath EquipmentContainerPath { get; }
+        public IReadOnlyObservableData<string> ShopEntityId { get; }
+        public IReadOnlyObservableData<string> BuyerEntityId { get; }
+
         public string ShopName { get; }
         public float BuyCoefficient { get; }
         public float SellCoefficient { get; }
 
-        public InventoryShopWindowControllerArguments(ItemContainerPath shopModelPath, ItemContainerPath inventoryContainerPath, ItemContainerPath equipmentContainerPath, string shopName, float buyCoefficient, float sellCoefficient)
+        public ItemContainerPath ShopContainerPath => ItemContainerPath.Shop(ShopEntityId.Value);
+        public ItemContainerPath InventoryContainerPath => ItemContainerPath.Inventory(BuyerEntityId.Value);
+        public ItemContainerPath EquipmentContainerPath => ItemContainerPath.Equipment(BuyerEntityId.Value);
+
+        public InventoryShopWindowControllerArguments(
+            IReadOnlyObservableData<string> shopEntityId,
+            IReadOnlyObservableData<string> buyerEntityId,
+            string shopName,
+            float buyCoefficient,
+            float sellCoefficient)
         {
-            ShopContainerPath = shopModelPath;
-            InventoryContainerPath = inventoryContainerPath;
-            EquipmentContainerPath = equipmentContainerPath;
+            ShopEntityId = shopEntityId;
+            BuyerEntityId = buyerEntityId;
+
             ShopName = shopName;
             BuyCoefficient = buyCoefficient;
             SellCoefficient = sellCoefficient;

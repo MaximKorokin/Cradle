@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
@@ -24,7 +25,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _equipmentHudData.SetContainerEntity(arguments.EquipmentEntityId);
+            _equipmentHudData.SetEntityId(arguments.EquipmentEntityId);
         }
 
         public override void Bind(ItemUseSettingsWindow window)
@@ -52,9 +53,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct ItemUseSettingsWindowControllerArguments : IWindowControllerArguments
     {
-        public string EquipmentEntityId { get; }
+        public IReadOnlyObservableData<string> EquipmentEntityId { get; }
 
-        public ItemUseSettingsWindowControllerArguments(string equipmentEntityId)
+        public ItemUseSettingsWindowControllerArguments(IReadOnlyObservableData<string> equipmentEntityId)
         {
             EquipmentEntityId = equipmentEntityId;
         }

@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.Systems;
 using System;
 
@@ -36,19 +37,23 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             if (entityDefinition.TryGetModuleDefinition<ShopModuleDefinition>(out var shopDefinition) && shopDefinition.Radius > 0)
                 return new InteractionBehaviourModule(shopDefinition.Radius, shopDefinition.ShopDefinition.ShopName ?? "Shop", "Open",
-                    (entityId, targetId) => _globalEventBus.Publish(new ShopWindowOpenRequest(entityId, targetId)));
+                    (entityId, targetId) => _globalEventBus.Publish(
+                        new ShopWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<CraftingModuleDefinition>(out var craftDefinition) && craftDefinition.Radius > 0)
                 return new InteractionBehaviourModule(craftDefinition.Radius, craftDefinition.CrafterName, "Craft",
-                    (entityId, targetId) => _globalEventBus.Publish(new CraftingWindowOpenRequest(entityId, targetId)));
+                    (entityId, targetId) => _globalEventBus.Publish(
+                        new CraftingWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<StorageModuleDefinition>(out var storageDefinition) && storageDefinition.Radius > 0)
                 return new InteractionBehaviourModule(storageDefinition.Radius, entityDefinition.DisplayName, "Open",
-                    (entityId, targetId) => _globalEventBus.Publish(new StorageWindowOpenRequest(entityId, targetId)));
+                    (entityId, targetId) => _globalEventBus.Publish(
+                        new StorageWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var questGiverDefinition) && questGiverDefinition.Radius > 0)
                 return new InteractionBehaviourModule(questGiverDefinition.Radius, entityDefinition.DisplayName, "Talk",
-                    (entityId, targetId) => _globalEventBus.Publish(new QuestGiverWindowOpenRequest(entityId, targetId)));
+                    (entityId, targetId) => _globalEventBus.Publish(
+                        new QuestGiverWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             return null;
         }

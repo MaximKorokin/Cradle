@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using Assets._Game.Scripts.Shared.Extensions;
+﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -23,7 +23,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Initialize(arguments);
 
-            _questsHudData.SetQuestModuleEntity(arguments.QuestModuleEntityId);
+            _questsHudData.SetEntityId(arguments.QuestModuleEntityId);
         }
 
         public override void Bind(QuestsWindow window)
@@ -59,9 +59,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct QuestsWindowControllerArguments : IWindowControllerArguments
     {
-        public string QuestModuleEntityId { get; }
+        public IReadOnlyObservableData<string> QuestModuleEntityId { get; }
 
-        public QuestsWindowControllerArguments(string questModuleEntityId)
+        public QuestsWindowControllerArguments(IReadOnlyObservableData<string> questModuleEntityId)
         {
             QuestModuleEntityId = questModuleEntityId;
         }

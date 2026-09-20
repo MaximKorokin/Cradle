@@ -1,52 +1,39 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Services;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Items.Inventory;
-using System;
+using Assets._Game.Scripts.Shared;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CraftingHudData : DataAggregatorBase
+    public sealed class CraftingHudData : ItemContainerDataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
         private readonly CraftingService _craftingService;
 
-        private InventoryModel _inventoryModel;
         private CraftingModule _crafterCraftingModule;
 
-        public event Action Changed;
+        private InventoryModel InventoryModel => ItemContainer as InventoryModel;
 
         public CraftingHudData(
+            ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository,
-            CraftingService craftingService)
+            CraftingService craftingService) : base(itemContainerResolver)
         {
             _entityRepository = entityRepository;
             _craftingService = craftingService;
         }
 
-        public void SetInventoryEntity(string inventoryEntityId)
+        public void SetCrafterEntity(IReadOnlyObservableData<string> crafterEntityId)
         {
-            if (_entityRepository.Get(inventoryEntityId).TryGetModule<InventoryModule>(out var inventoryModule))
-            {
-                if (_inventoryModel != null)
-                {
-                    _inventoryModel.Changed -= OnInventoryChanged;
-                }
-                _inventoryModel = inventoryModule.Inventory;
-                _inventoryModel.Changed += OnInventoryChanged;
-                Changed?.Invoke();
-            }
-        }
-
-        public void SetCrafterEntity(string crafterEntityId)
-        {
-            if (_entityRepository.Get(crafterEntityId).TryGetModule<CraftingModule>(out var craftingModule))
+            if (_entityRepository.Get(crafterEntityId.Value).TryGetModule<CraftingModule>(out var craftingModule))
             {
                 _crafterCraftingModule = craftingModule;
-                Changed?.Invoke();
+                NotifyChanged();
             }
         }
 
@@ -54,10 +41,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             get
             {
-                if (_inventoryModel == null || _crafterCraftingModule == null)
+                if (InventoryModel == null || _crafterCraftingModule == null)
                     return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _crafterCraftingModule.Recipes.Where(recipe => _craftingService.CanCraftAny(recipe, _inventoryModel));
+                return _crafterCraftingModule.Recipes.Where(recipe => _craftingService.CanCraftAny(recipe, InventoryModel));
             }
         }
 
@@ -65,26 +52,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             get
             {
-                if (_inventoryModel == null || _crafterCraftingModule == null)
+                if (InventoryModel == null || _crafterCraftingModule == null)
                     return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, _inventoryModel));
+                return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, InventoryModel));
             }
         }
-
-        private void OnInventoryChanged()
-        {
-            Changed?.Invoke();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            if (_inventoryModel != null)
-            {
-                _inventoryModel.Changed -= OnInventoryChanged;
-            }
-        }
+        
+        protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Inventory(entityId);
     }
 }

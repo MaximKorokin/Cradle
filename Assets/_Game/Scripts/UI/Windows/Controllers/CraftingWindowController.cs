@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Crafting;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Services;
@@ -44,8 +45,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.Initialize(arguments);
 
             _craftingHudData.SetCrafterEntity(arguments.CrafterEntityId);
-            _craftingHudData.SetInventoryEntity(arguments.InventoryEntityId);
-            _equipmentHudData.SetContainerEntity(arguments.EquipmentEntityId);
+            _craftingHudData.SetEntityId(arguments.InventoryEntityId);
+            _equipmentHudData.SetEntityId(arguments.EquipmentEntityId);
         }
 
         public override void Bind(CraftingWindow window)
@@ -75,13 +76,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _itemPreviewService.ShowItemDefinitionPreview(
                 recipe.Result.ItemDefinition,
-                ItemContainerPath.Equipment(Arguments.EquipmentEntityId),
+                ItemContainerPath.Equipment(Arguments.EquipmentEntityId.Value),
                 _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(recipe.Result.ItemDefinition));
         }
 
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)
         {
-            var inventoryPath = ItemContainerPath.Inventory(Arguments.InventoryEntityId);
+            var inventoryPath = ItemContainerPath.Inventory(Arguments.InventoryEntityId.Value);
             var inventoryModel = _itemContainerResolver.ResolveInventory(inventoryPath);
 
             var maxCraftable = _craftingService.CalculateMaxCraftable(recipe, inventoryModel);
@@ -105,11 +106,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct CraftingWindowControllerArguments : IWindowControllerArguments
     {
-        public string CrafterEntityId { get; }
-        public string InventoryEntityId { get; }
-        public string EquipmentEntityId { get; }
+        public IReadOnlyObservableData<string> CrafterEntityId { get; }
+        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<string> EquipmentEntityId { get; }
 
-        public CraftingWindowControllerArguments(string crafterEntityId, string inventoryEntityId, string equipmentEntityId)
+        public CraftingWindowControllerArguments(
+            IReadOnlyObservableData<string> crafterEntityId,
+            IReadOnlyObservableData<string> inventoryEntityId,
+            IReadOnlyObservableData<string> equipmentEntityId)
         {
             CrafterEntityId = crafterEntityId;
             InventoryEntityId = inventoryEntityId;

@@ -2,6 +2,7 @@ using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using VContainer;
@@ -32,13 +33,12 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnShopWindowOpenRequest(ShopWindowOpenRequest request)
         {
-            var shopEntity = _entityRepository.Get(request.ShopEntityId);
+            var shopEntity = _entityRepository.Get(request.ShopEntityId.Value);
             if (shopEntity.TryGetModule<ShopModule>(out var shopModule))
             {
                 _windowManager.InstantiateWindow<InventoryShopWindow, InventoryShopWindowControllerArguments>(new(
-                    ItemContainerPath.Shop(request.ShopEntityId),
-                    ItemContainerPath.Inventory(request.InventoryEntityId),
-                    ItemContainerPath.Equipment(request.InventoryEntityId),
+                    request.ShopEntityId,
+                    request.InventoryEntityId,
                     shopModule.Definition.ShopName,
                     shopModule.Definition.BuyCoefficient,
                     shopModule.Definition.SellCoefficient));
@@ -66,10 +66,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct ShopWindowOpenRequest : IGlobalEvent
     {
-        public string ShopEntityId { get; }
-        public string InventoryEntityId { get; }
+        public IReadOnlyObservableData<string> ShopEntityId { get; }
+        public IReadOnlyObservableData<string> InventoryEntityId { get; }
 
-        public ShopWindowOpenRequest(string shopEntityId, string inventoryEntityId)
+        public ShopWindowOpenRequest(IReadOnlyObservableData<string> shopEntityId, IReadOnlyObservableData<string> inventoryEntityId)
         {
             ShopEntityId = shopEntityId;
             InventoryEntityId = inventoryEntityId;
@@ -78,10 +78,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct CraftingWindowOpenRequest : IGlobalEvent
     {
-        public string CrafterEntityId { get; }
-        public string InventoryEntityId { get; }
+        public IReadOnlyObservableData<string> CrafterEntityId { get; }
+        public IReadOnlyObservableData<string> InventoryEntityId { get; }
 
-        public CraftingWindowOpenRequest(string crafterEntityId, string inventoryEntityId)
+        public CraftingWindowOpenRequest(IReadOnlyObservableData<string> crafterEntityId, IReadOnlyObservableData<string> inventoryEntityId)
         {
             CrafterEntityId = crafterEntityId;
             InventoryEntityId = inventoryEntityId;
@@ -90,10 +90,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct StorageWindowOpenRequest : IGlobalEvent
     {
-        public string StorageEntityId { get; }
-        public string InventoryEntityId { get; }
+        public IReadOnlyObservableData<string> StorageEntityId { get; }
+        public IReadOnlyObservableData<string> InventoryEntityId { get; }
 
-        public StorageWindowOpenRequest(string storageEntityId, string inventoryEntityId)
+        public StorageWindowOpenRequest(IReadOnlyObservableData<string> storageEntityId, IReadOnlyObservableData<string> inventoryEntityId)
         {
             StorageEntityId = storageEntityId;
             InventoryEntityId = inventoryEntityId;
@@ -102,10 +102,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct QuestGiverWindowOpenRequest : IGlobalEvent
     {
-        public string GiverEntityId { get; }
-        public string TargetEntityId { get; }
+        public IReadOnlyObservableData<string> GiverEntityId { get; }
+        public IReadOnlyObservableData<string> TargetEntityId { get; }
 
-        public QuestGiverWindowOpenRequest(string giverEntityId, string targetEntityId)
+        public QuestGiverWindowOpenRequest(IReadOnlyObservableData<string> giverEntityId, IReadOnlyObservableData<string> targetEntityId)
         {
             GiverEntityId = giverEntityId;
             TargetEntityId = targetEntityId;
