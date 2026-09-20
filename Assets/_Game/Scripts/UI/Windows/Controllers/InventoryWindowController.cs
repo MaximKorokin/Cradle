@@ -17,15 +17,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryViewController = inventoryViewController;
         }
 
-        public override void Initialize(InventoryWindowControllerArguments arguments)
-        {
-            base.Initialize(arguments);
-
-            _inventoryHudData.SetEntityId(Arguments.InventoryEntityId);
-        }
-
         public override void Bind(InventoryWindow window)
         {
+            _inventoryHudData.SetEntityId(Arguments.InventoryEntityId);
+
             _inventoryViewController.Initialize(window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
             Redraw();

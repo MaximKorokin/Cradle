@@ -1,36 +1,16 @@
-﻿using UnityEngine;
-using VContainer;
+﻿using System;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows.Modal
 {
-    public sealed class ModalWrapper : MonoBehaviour
+    public sealed class ModalWrapper : WindowWrapperBase
     {
-        [SerializeField]
-        private RectTransform _windowParent;
         [SerializeField]
         private ModalOverlay _overlay;
 
-        private WindowManager _windowManager;
-
-        private UIWindowBase _window;
-
-        [Inject]
-        private void Construct(WindowManager windowManager)
+        private void Awake()
         {
-            _windowManager = windowManager;
-
-            _overlay.PointerDown += Close;
-        }
-
-        public void SetWindow(UIWindowBase window)
-        {
-            _window = window;
-            window.transform.SetParent(_windowParent, false);
-        }
-
-        public void Close()
-        {
-            _windowManager.CloseWindow(_window);
+            _overlay.PointerDown += RequestClose;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.UI.Windows
 {
     public class WindowManager
     {
-        private readonly List<(UIWindowBase Window, IDisposable Controller, GameObject ModalRoot)> _windowStack = new();
+        private readonly List<(UIWindowBase Window, IDisposable Controller, WindowWrapperBase WrapperRoot)> _windowStack = new();
 
         private readonly RectTransform _windowsRoot;
         private readonly RectTransform _modalsRoot;
@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.UI.Windows
         }
 
         /// <summary> Opens a window if it is not already open, otherwise closes it if it is a singleton window. If the window is not a singleton, it will open a new instance of the window. </summary>
-        public void ToggleWindow(WindowId windowId)
+        public void ToggleWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
             var definition = FindWindowDefinition(windowId);
             var existingWindow = _windowStack.FirstOrDefault(w => w.Window.GetType() == definition.WindowType);
@@ -50,11 +50,11 @@ namespace Assets._Game.Scripts.UI.Windows
                 CloseWindowInternal(existingWindow);
                 return;
             }
-            InstantiateWindow(windowId);
+            InstantiateWindow(windowId, arguments);
         }
 
         /// <summary> Uses OpenStrategy if available, otherwise provides empty arguments to the controller </summary>
-        public UIWindowBase InstantiateWindow(WindowId windowId)
+        public UIWindowBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
             var definition = FindWindowDefinition(windowId);
 
@@ -98,22 +98,14 @@ namespace Assets._Game.Scripts.UI.Windows
             // 4. Bind
             controllerType.GetMethod("Bind").Invoke(controller, new object[] { window });
 
-            GameObject modalRoot = null;
-            if (definition.Configuration.IsModal)
-            {
-                var modalWrapper = _resolver.Instantiate(_modalWrapperPrefab, _modalsRoot);
-                modalWrapper.SetWindow(window);
-                modalRoot = modalWrapper.gameObject;
-            }
-            else
-            {
-                var windowWrapper = _resolver.Instantiate(_windowWrapperPrefab, _windowsRoot);
-                windowWrapper.SetWindow(window);
-                modalRoot = windowWrapper.gameObject;
-            }
+            // 5. Wrap
+            WindowWrapperBase wrapperPrefab = definition.Configuration.IsModal ? _modalWrapperPrefab : _windowWrapperPrefab;
+            var wrapperRoot = _resolver.Instantiate(wrapperPrefab, _modalsRoot);
+            wrapperRoot.SetWindow(window);
+            wrapperRoot.WindowCloseRequested += CloseWindow;
 
             // push window and controller to stack that will be used to destroy everything correctly
-            _windowStack.Add((window, controller as IDisposable, modalRoot));
+            _windowStack.Add((window, controller as IDisposable, wrapperRoot));
 
             // initialize window
             window.OnShow();
@@ -135,16 +127,17 @@ namespace Assets._Game.Scripts.UI.Windows
             return definition;
         }
 
-        private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller, GameObject ModalRoot) element)
+        private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller, WindowWrapperBase WrapperRoot) element)
         {
             _windowStack.Remove(element);
 
-            var (window, controller, modalRoot) = element;
+            var (window, controller, wrapperRoot) = element;
             window.OnHide();
             
-            if (modalRoot != null)
+            if (wrapperRoot != null)
             {
-                UnityEngine.Object.Destroy(modalRoot);
+                wrapperRoot.WindowCloseRequested -= CloseWindow;
+                UnityEngine.Object.Destroy(wrapperRoot.gameObject);
             }
             else
             {

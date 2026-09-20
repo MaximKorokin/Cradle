@@ -41,7 +41,6 @@ namespace Assets._Game.Scripts.UI.Common
 
         public override UIWindowBase Open(IReadOnlyObservableData<string> entityId)
         {
-            SLog.Log(123);
             return WindowManager.InstantiateWindow<InventoryWindow, InventoryWindowControllerArguments>(new(entityId));
         }
     }
