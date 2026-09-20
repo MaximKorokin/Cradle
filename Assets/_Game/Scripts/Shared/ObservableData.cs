@@ -22,6 +22,19 @@ namespace Assets._Game.Scripts.Shared
             Value = value;
             ValueChanged?.Invoke(value);
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ObservableData<T> observableData && Value.Equals(observableData.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public static bool operator ==(ObservableData<T> left, ObservableData<T> right) => left.Equals(right);
+        public static bool operator !=(ObservableData<T> left, ObservableData<T> right) => !left.Equals(right);
     }
 
     public interface IObservableData<T> : IReadOnlyObservableData<T>

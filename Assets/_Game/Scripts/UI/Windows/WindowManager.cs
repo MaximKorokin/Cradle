@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.UI.Common;
-using Assets._Game.Scripts.UI.Core;
+﻿using Assets._Game.Scripts.UI.Core;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System;
@@ -13,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows
 {
     public class WindowManager
     {
-        private readonly List<(UIWindowBase Window, IDisposable Controller, WindowWrapperBase WrapperRoot)> _windowStack = new();
+        private readonly List<WindowStackEntry> _windowStack = new();
 
         private readonly RectTransform _windowsRoot;
         private readonly RectTransform _modalsRoot;
@@ -44,7 +43,7 @@ namespace Assets._Game.Scripts.UI.Windows
         public void ToggleWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
             var definition = FindWindowDefinition(windowId);
-            var existingWindow = _windowStack.FirstOrDefault(w => w.Window.GetType() == definition.WindowType);
+            var existingWindow = FindWindowStackEntry(windowId, arguments);
             if (existingWindow.Window != null && definition.Configuration.IsSingleton)
             {
                 CloseWindowInternal(existingWindow);
@@ -56,56 +55,41 @@ namespace Assets._Game.Scripts.UI.Windows
         /// <summary> Uses OpenStrategy if available, otherwise provides empty arguments to the controller </summary>
         public UIWindowBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
+            // find definition
             var definition = FindWindowDefinition(windowId);
 
-            if (definition.StrategyType != null)
-                return ((PlayerWindowOpenStrategy)_resolver.Resolve(definition.StrategyType)).Open();
-
-            return InstantiateWindow(definition.WindowType);
-        }
-
-        public T InstantiateWindow<T, K>(K controllerArguments)
-            where T : UIWindowBase
-            where K : IWindowControllerArguments
-        {
-            return (T)InstantiateWindow(typeof(T), (w, c) => ((IWindowController<T, K>)c).Initialize(controllerArguments));
-        }
-
-        private UIWindowBase InstantiateWindow(Type windowType, Action<UIWindowBase, object> instantiatedCallback = null)
-        {
-            // find definition
-            var definition = FindWindowDefinition(windowType);
-
-            // find prefab
-            var prefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == windowType);
-            if (prefab == null) throw new InvalidOperationException($"No prefab for window of type {windowType} registered.");
-            if (definition.Configuration.IsSingleton && _windowStack.Any(w => w.Window.GetType() == windowType))
+            // find existing window
+            var entry = FindWindowStackEntry(windowId, arguments);
+            if (definition.Configuration.IsSingleton && entry.HasData)
             {
-                SLog.Warn($"Window of type {windowType} is a singleton and is already open. Returning existing instance.");
-                return _windowStack.First(w => w.Window.GetType() == windowType).Window;
+                SLog.Warn($"Window {windowId} with arguments {arguments} is a singleton and is already open. Returning existing instance.");
+                return entry.Window;
             }
 
             // 1. Get controller type
             var controllerType = definition.ControllerType;
 
             // 2. Create window and controller
-            var controller = _resolver.Resolve(controllerType);
+            var controller = (IWindowController)_resolver.Resolve(controllerType);
+            var prefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == controller.WindowType);
+            if (prefab == null) throw new ArgumentException($"No prefab for window of type {controller.WindowType} registered.");
             var window = _resolver.Instantiate(prefab, _windowsRoot);
 
             // 3. Initialize
-            instantiatedCallback?.Invoke(window, controller);
+            controller.Initialize(arguments);
 
             // 4. Bind
-            controllerType.GetMethod("Bind").Invoke(controller, new object[] { window });
+            controller.Bind(window);
 
             // 5. Wrap
             WindowWrapperBase wrapperPrefab = definition.Configuration.IsModal ? _modalWrapperPrefab : _windowWrapperPrefab;
-            var wrapperRoot = _resolver.Instantiate(wrapperPrefab, _modalsRoot);
+            var wrapperParent = definition.Configuration.IsModal ? _modalsRoot : _windowsRoot;
+            var wrapperRoot = _resolver.Instantiate(wrapperPrefab, wrapperParent);
             wrapperRoot.SetWindow(window);
             wrapperRoot.WindowCloseRequested += CloseWindow;
 
             // push window and controller to stack that will be used to destroy everything correctly
-            _windowStack.Add((window, controller as IDisposable, wrapperRoot));
+            _windowStack.Add(new(windowId, window, controller, arguments, wrapperRoot));
 
             // initialize window
             window.OnShow();
@@ -120,30 +104,28 @@ namespace Assets._Game.Scripts.UI.Windows
             return definition;
         }
 
-        private WindowDefinition FindWindowDefinition(Type windowType)
+        private WindowStackEntry FindWindowStackEntry(WindowId windowId, IWindowControllerArguments arguments)
         {
-            var definition = _windowDefinitions.FirstOrDefault(d => d.WindowType == windowType);
-            if (definition == null) throw new InvalidOperationException($"No definition for window {windowType} registered.");
-            return definition;
+            var entry = _windowStack.FirstOrDefault(e => e.Id == windowId && e.Arguments.Equals(arguments));
+            return entry;
         }
 
-        private void CloseWindowInternal((UIWindowBase Window, IDisposable Controller, WindowWrapperBase WrapperRoot) element)
+        private void CloseWindowInternal(WindowStackEntry element)
         {
             _windowStack.Remove(element);
 
-            var (window, controller, wrapperRoot) = element;
-            window.OnHide();
+            element.Window.OnHide();
             
-            if (wrapperRoot != null)
+            if (element.WrapperRoot != null)
             {
-                wrapperRoot.WindowCloseRequested -= CloseWindow;
-                UnityEngine.Object.Destroy(wrapperRoot.gameObject);
+                element.WrapperRoot.WindowCloseRequested -= CloseWindow;
+                UnityEngine.Object.Destroy(element.WrapperRoot.gameObject);
             }
             else
             {
-                UnityEngine.Object.Destroy(window.gameObject);
+                UnityEngine.Object.Destroy(element.Window.gameObject);
             }
-            controller.Dispose();
+            element.Controller.Dispose();
         }
 
         public void CloseTopWindow()
@@ -158,13 +140,40 @@ namespace Assets._Game.Scripts.UI.Windows
         public void CloseWindow(UIWindowBase window)
         {
             var element = _windowStack.FirstOrDefault(e => e.Window == window);
-            if (element == default)
+            if (!element.HasData)
             {
                 SLog.Warn($"Trying to close window {window} wih name {window.name} that is not tracked inside WinowManager");
                 return;
             }
 
             CloseWindowInternal(element);
+        }
+
+        private readonly struct WindowStackEntry
+        {
+            public readonly bool HasData;
+
+            public readonly WindowId Id;
+            public readonly UIWindowBase Window;
+            public readonly IWindowController Controller;
+            public readonly IWindowControllerArguments Arguments;
+            public readonly WindowWrapperBase WrapperRoot;
+
+            public WindowStackEntry(
+                WindowId windowId,
+                UIWindowBase window,
+                IWindowController controller,
+                IWindowControllerArguments arguments,
+                WindowWrapperBase wrapperRoot)
+            {
+                HasData = true;
+
+                Id = windowId;
+                Window = window;
+                Controller = controller;
+                Arguments = arguments;
+                WrapperRoot = wrapperRoot;
+            }
         }
     }
 }

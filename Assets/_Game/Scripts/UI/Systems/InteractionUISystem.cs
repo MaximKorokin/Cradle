@@ -1,7 +1,6 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
@@ -11,18 +10,15 @@ namespace Assets._Game.Scripts.UI.Systems
 {
     public sealed class InteractionUISystem : UISystemBase
     {
-        private WindowManager _windowManager;
         private EntityRepository _entityRepository;
 
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
-            WindowManager windowManager,
             EntityRepository entityRepository)
         {
             BaseConstruct(globalEventBus);
 
-            _windowManager = windowManager;
             _entityRepository = entityRepository;
 
             TrackGlobalEvent<ShopWindowOpenRequest>(OnShopWindowOpenRequest);
@@ -36,31 +32,36 @@ namespace Assets._Game.Scripts.UI.Systems
             var shopEntity = _entityRepository.Get(request.ShopEntityId.Value);
             if (shopEntity.TryGetModule<ShopModule>(out var shopModule))
             {
-                _windowManager.InstantiateWindow<InventoryShopWindow, InventoryShopWindowControllerArguments>(new(
-                    request.ShopEntityId,
-                    request.InventoryEntityId,
-                    shopModule.Definition.ShopName,
-                    shopModule.Definition.BuyCoefficient,
-                    shopModule.Definition.SellCoefficient));
+                GlobalEventBus.Publish(new WindowToggleRequest(
+                    WindowId.Shop,
+                    new InventoryShopWindowControllerArguments(
+                        request.ShopEntityId,
+                        request.InventoryEntityId,
+                        shopModule.Definition.ShopName,
+                        shopModule.Definition.BuyCoefficient,
+                        shopModule.Definition.SellCoefficient)));
             }
         }
 
         private void OnCraftingWindowOpenRequest(CraftingWindowOpenRequest request)
         {
-            _windowManager.InstantiateWindow<CraftingWindow, CraftingWindowControllerArguments>(
-                new(request.CrafterEntityId, request.InventoryEntityId, request.InventoryEntityId));
+            GlobalEventBus.Publish(new WindowToggleRequest(
+                WindowId.Crafting,
+                new CraftingWindowControllerArguments(request.CrafterEntityId, request.InventoryEntityId, request.InventoryEntityId)));
         }
 
         private void OnStorageWindowOpenRequest(StorageWindowOpenRequest request)
         {
-            _windowManager.InstantiateWindow<InventoryStorageWindow, InventoryStorageWindowControllerArguments>(
-                new(request.StorageEntityId, request.InventoryEntityId, request.InventoryEntityId));
+            GlobalEventBus.Publish(new WindowToggleRequest(
+                WindowId.Storage,
+                new InventoryStorageWindowControllerArguments(request.StorageEntityId, request.InventoryEntityId, request.InventoryEntityId)));
         }
 
         private void OnQuestGiverWindowOpenRequest(QuestGiverWindowOpenRequest request)
         {
-            _windowManager.InstantiateWindow<QuestGiverWindow, QuestGiverWindowControllerArguments>(
-                new(request.GiverEntityId, request.TargetEntityId));
+            GlobalEventBus.Publish(new WindowToggleRequest(
+                WindowId.QuestGiver,
+                new QuestGiverWindowControllerArguments(request.GiverEntityId, request.TargetEntityId)));
         }
     }
 

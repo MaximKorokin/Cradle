@@ -53,7 +53,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var quest = _questsHudData.ActiveQuests.FirstOrDefault(q => q.Definition.Id == questId);
             if (quest == null) return;
 
-            _windowManager.InstantiateWindow<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>(new(quest));
+            _windowManager.InstantiateWindow(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest));
         }
     }
 

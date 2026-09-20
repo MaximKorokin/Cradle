@@ -6,6 +6,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         where TWindow : UIWindowBase
         where TArguments : IWindowControllerArguments
     {
+        public Type WindowType => typeof(TWindow);
+
         protected TArguments Arguments { get; private set; }
 
         public abstract void Bind(TWindow window);
@@ -16,14 +18,32 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             Unbind();
         }
+
+        public void Bind(UIWindowBase window)
+        {
+            if (window is TWindow w) Bind(w);
+        }
+
+        public void Initialize(IWindowControllerArguments arguments)
+        {
+            if (arguments is TArguments args) Initialize(args);
+        }
     }
 
-    public interface IWindowController<TWindow, TArguments> : IDisposable
+    public interface IWindowController<TWindow, TArguments> : IWindowController
         where TWindow : UIWindowBase
         where TArguments : IWindowControllerArguments
     {
         void Bind(TWindow window);
         void Initialize(TArguments arguments);
+    }
+
+    public interface IWindowController : IDisposable
+    {
+        Type WindowType { get; }
+
+        void Bind(UIWindowBase window);
+        void Initialize(IWindowControllerArguments arguments);
     }
 
     public interface IWindowControllerArguments { }

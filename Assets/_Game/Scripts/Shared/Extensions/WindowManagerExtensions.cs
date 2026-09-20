@@ -9,14 +9,16 @@ namespace Assets._Game.Scripts.Shared.Extensions
         public static void ShowAmountPicker(this WindowManager windowManager, int minAmount, int maxAmount, Action<int> onAmountSelected)
         {
             AmountPickerWindow amountPickerWindow = null;
-            amountPickerWindow = windowManager.InstantiateWindow<AmountPickerWindow, AmountPickerWindowControllerArguments>(
-                new(minAmount,
+            amountPickerWindow = windowManager.InstantiateWindow(
+                WindowId.AmountPicker,
+                new AmountPickerWindowControllerArguments(
+                    minAmount,
                     maxAmount,
                     amount =>
                     {
                         onAmountSelected?.Invoke(amount);
                         windowManager.CloseWindow(amountPickerWindow);
-                    }));
+                    })) as AmountPickerWindow;
         }
 
         public static void ShowAmountPickerIfNeeded(this WindowManager windowManager, int amount, int maxAmount, Action<int> onAmountSelected)
@@ -34,14 +36,16 @@ namespace Assets._Game.Scripts.Shared.Extensions
         public static void ShowConfirmation(this WindowManager windowManager, string title, string message, Action<bool> onDecision)
         {
             ConfirmationWindow confirmationWindow = null;
-            confirmationWindow = windowManager.InstantiateWindow<ConfirmationWindow, ConfirmationWindowControllerArguments>(
-                new(title,
+            confirmationWindow = windowManager.InstantiateWindow(
+                WindowId.Confirmation,
+                new ConfirmationWindowControllerArguments(
+                    title,
                     message,
                     confirmed =>
                     {
                         onDecision?.Invoke(confirmed);
                         windowManager.CloseWindow(confirmationWindow);
-                    }));
+                    })) as ConfirmationWindow;
         }
 
         public static void ShowConfirmationOrAmountPicker(this WindowManager windowManager, int amount, int maxAmount, string title, string message, Action<int> onAmountSelected)

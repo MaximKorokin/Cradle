@@ -1,4 +1,6 @@
-﻿using Assets._Game.Scripts.UI.Windows;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.UI.Systems;
+using Assets._Game.Scripts.UI.Windows;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
@@ -10,12 +12,17 @@ namespace Assets._Game.Scripts.UI.Common
     {
         [SerializeField] private WindowId _windowId;
 
-        private WindowManager _windowManager;
+        private IGlobalEventBus _globalEventBus;
+
+        private WindowControllerArgumentsProvider _controllerArgumentsProvider;
 
         [Inject]
-        private void Construct(WindowManager windowManager)
+        private void Construct(
+            IGlobalEventBus globalEventBus,
+            WindowControllerArgumentsProvider controllerArgumentsProvider)
         {
-            _windowManager = windowManager;
+            _controllerArgumentsProvider = controllerArgumentsProvider;
+            _globalEventBus = globalEventBus;
         }
 
         private void Awake()
@@ -25,7 +32,8 @@ namespace Assets._Game.Scripts.UI.Common
 
         private void OnButtonClick()
         {
-            _windowManager.ToggleWindow(_windowId);
+            var arguments = _controllerArgumentsProvider.GetPlayerArguments(_windowId);
+            _globalEventBus.Publish(new WindowToggleRequest(_windowId, arguments));
         }
     }
 }

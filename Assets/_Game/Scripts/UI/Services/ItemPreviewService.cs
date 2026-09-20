@@ -50,7 +50,8 @@ namespace Assets._Game.Scripts.UI.Services
                 containerPath,
                 secondaryContainerPath);
 
-            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
+            _windowManager.InstantiateWindow(
+                WindowId.ItemStacksPreview,
                 new ItemStacksPreviewWindowControllerArguments(strategy));
         }
 
@@ -80,7 +81,8 @@ namespace Assets._Game.Scripts.UI.Services
                 sellCoefficient,
                 equipmentSlotToCompare);
 
-            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
+            _windowManager.InstantiateWindow(
+                WindowId.ItemStacksPreview,
                 new ItemStacksPreviewWindowControllerArguments(strategy));
         }
 
@@ -107,7 +109,8 @@ namespace Assets._Game.Scripts.UI.Services
                 sellCoefficient,
                 equipmentSlotToCompare);
 
-            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
+            _windowManager.InstantiateWindow(
+                WindowId.ItemStacksPreview,
                 new ItemStacksPreviewWindowControllerArguments(strategy));
         }
 
@@ -127,7 +130,8 @@ namespace Assets._Game.Scripts.UI.Services
                 equipmentContainerPath,
                 equipmentSlotToCompare);
 
-            _windowManager.InstantiateWindow<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>(
+            _windowManager.InstantiateWindow(
+                WindowId.ItemStacksPreview,
                 new ItemStacksPreviewWindowControllerArguments(strategy));
         }
     }

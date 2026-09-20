@@ -2,11 +2,11 @@ using System;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ConfirmationWindowController : WindowControllerBase<Assets._Game.Scripts.UI.Windows.ConfirmationWindow, ConfirmationWindowControllerArguments>
+    public sealed class ConfirmationWindowController : WindowControllerBase<ConfirmationWindow, ConfirmationWindowControllerArguments>
     {
-        private Assets._Game.Scripts.UI.Windows.ConfirmationWindow _window;
+        private ConfirmationWindow _window;
 
-        public override void Bind(Assets._Game.Scripts.UI.Windows.ConfirmationWindow window)
+        public override void Bind(ConfirmationWindow window)
         {
             _window = window;
             _window.Render(Arguments.Title, Arguments.Message);

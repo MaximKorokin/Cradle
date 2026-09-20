@@ -1,23 +1,26 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.Shared;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class StatsWindowController : WindowControllerBase<StatsWindow, EmptyWindowControllerArguments>
+    public sealed class StatsWindowController : WindowControllerBase<StatsWindow, StatsWindowControllerArguments>
     {
         private StatsWindow _window;
-        private readonly StatModule _statsModule;
+        private StatModule _statModule;
+        private readonly EntityRepository _entityRepository;
 
-        public StatsWindowController(IPlayerProvider playerContext)
+        public StatsWindowController(EntityRepository entityRepository)
         {
-            _statsModule = playerContext.Player.GetModule<StatModule>();
-
-            _statsModule.Stats.Changed += Redraw;
+            _entityRepository = entityRepository;
         }
 
         public override void Bind(StatsWindow window)
         {
+            _statModule = _entityRepository.Get(Arguments.EntityId.Value).GetModule<StatModule>();
+            _statModule.Stats.Changed += Redraw;
+
             _window = window;
 
             Redraw();
@@ -25,12 +28,32 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public override void Unbind()
         {
-            _statsModule.Stats.Changed -= Redraw;
+            _statModule.Stats.Changed -= Redraw;
+            _statModule = null;
         }
 
         private void Redraw()
         {
-            _window.Render(_statsModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
+            _window.Render(_statModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (_statModule != null)
+            {
+                _statModule.Stats.Changed -= Redraw;
+            }
+        }
+    }
+
+    public readonly struct StatsWindowControllerArguments : IWindowControllerArguments
+    {
+        public IReadOnlyObservableData<string> EntityId { get; }
+        public StatsWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        {
+            EntityId = entityId;
         }
     }
 }

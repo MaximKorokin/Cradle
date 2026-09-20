@@ -79,7 +79,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             var questState = _questGiverHudData.IsQuestAccepted(questId) ? _questGiverHudData.GetQuestState(questId) : new(quest);
 
-            _windowManager.InstantiateWindow<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>(new(questState));
+            _windowManager.InstantiateWindow(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(questState));
         }
 
         private void OnQuestAcceptClicked(string questId)

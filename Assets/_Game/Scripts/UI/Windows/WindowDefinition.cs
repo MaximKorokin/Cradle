@@ -8,21 +8,15 @@ namespace Assets._Game.Scripts.UI.Windows
         [field: SerializeField]
         public WindowId Id { get; private set; }
         [field: SerializeField]
-        public WindowConfiguration Configuration { get; private set; }
-        [field: SerializeField]
-        public Type WindowType { get; private set; }
-        [field: SerializeField]
         public Type ControllerType { get; set; }
         [field: SerializeField]
-        public Type StrategyType { get; private set; }
+        public WindowConfiguration Configuration { get; private set; }
 
-        public WindowDefinition(WindowId id, WindowConfiguration configuration, Type windowType, Type controllerType, Type strategyType = null)
+        public WindowDefinition(WindowId id, Type controllerType, WindowConfiguration configuration)
         {
             Id = id;
-            Configuration = configuration;
-            WindowType = windowType;
             ControllerType = controllerType;
-            StrategyType = strategyType;
+            Configuration = configuration;
         }
     }
 
