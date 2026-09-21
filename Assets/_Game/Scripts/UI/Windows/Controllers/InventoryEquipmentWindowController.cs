@@ -11,8 +11,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public class InventoryEquipmentWindowController : WindowControllerBase<InventoryEquipmentWindow, InventoryEquipmentWindowControllerArguments>
     {
-        private InventoryEquipmentWindow _window;
-
         private readonly InventoryViewController _inventoryViewController;
         private readonly EquipmentViewController _equipmentViewController;
         private readonly IInventoryHudData _inventoryHudData;
@@ -33,20 +31,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemPreviewService = itemPreviewService;
         }
 
-        public override void Initialize(InventoryEquipmentWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
             _inventoryHudData.SetEntityId(Arguments.InventoryEntityId);
             _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        public override void Bind(InventoryEquipmentWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _inventoryViewController.Initialize(_window.InventoryView);
+            base.OnBind();
+
+            _inventoryViewController.Initialize(Window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
-            _equipmentViewController.Initialize(_window.EquipmentView);
+            _equipmentViewController.Initialize(Window.EquipmentView);
             _equipmentViewController.Bind(_equipmentHudData);
 
             _inventoryViewController.SlotClick += OnInventorySlotClick;
@@ -55,15 +54,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
+            base.OnUnbind();
+
             _inventoryViewController.SlotClick -= OnInventorySlotClick;
             _equipmentViewController.SlotClick -= OnEquipmentSlotClick;
 
             _inventoryViewController.Unbind();
             _equipmentViewController.Unbind();
-
-            _window = null;
         }
 
         private void OnInventorySlotClick(InventorySlot slot)

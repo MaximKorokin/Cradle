@@ -2,40 +2,47 @@
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public abstract class WindowControllerBase<TWindow, TArguments> : IWindowController<TWindow, TArguments>
+    public abstract class WindowControllerBase<TWindow, TArguments> : IWindowController
         where TWindow : UIWindowBase
         where TArguments : IWindowControllerArguments
     {
+        public TWindow Window { get; private set; }
         public Type WindowType => typeof(TWindow);
 
         protected TArguments Arguments { get; private set; }
 
-        public abstract void Bind(TWindow window);
-        public virtual void Unbind() { }
-        public virtual void Initialize(TArguments arguments) => Arguments = arguments;
-
-        public virtual void Dispose()
-        {
-            Unbind();
-        }
+        protected virtual void OnBind() { }
+        protected virtual void OnUnbind() { }
+        protected virtual void OnInitialize() { }
 
         public void Bind(UIWindowBase window)
         {
-            if (window is TWindow w) Bind(w);
+            if (window is TWindow w)
+            {
+                Window = w;
+                OnBind();
+            }
+        }
+
+        public void Unbind()
+        {
+            Window = null;
+            OnUnbind();
         }
 
         public void Initialize(IWindowControllerArguments arguments)
         {
-            if (arguments is TArguments args) Initialize(args);
+            if (arguments is TArguments args)
+            {
+                Arguments = args;
+                OnInitialize();
+            }
         }
-    }
 
-    public interface IWindowController<TWindow, TArguments> : IWindowController
-        where TWindow : UIWindowBase
-        where TArguments : IWindowControllerArguments
-    {
-        void Bind(TWindow window);
-        void Initialize(TArguments arguments);
+        public virtual void Dispose()
+        {
+            OnUnbind();
+        }
     }
 
     public interface IWindowController : IDisposable
@@ -43,6 +50,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         Type WindowType { get; }
 
         void Bind(UIWindowBase window);
+        void Unbind();
         void Initialize(IWindowControllerArguments arguments);
     }
 

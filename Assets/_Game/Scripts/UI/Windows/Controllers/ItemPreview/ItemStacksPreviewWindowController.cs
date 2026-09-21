@@ -2,11 +2,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 {
     public sealed class ItemStacksPreviewWindowController : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
     {
-        private ItemStacksPreviewWindow _window;
-
-        public override void Initialize(ItemStacksPreviewWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
             if (Arguments.Strategy == null)
             {
@@ -14,19 +12,22 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             }
         }
 
-        public override void Bind(ItemStacksPreviewWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.ActionButtonClicked += ProcessAction;
+            base.OnBind();
 
-            Arguments.Strategy.Initialize(_window);
-            Arguments.Strategy.Redraw(_window);
+            Window.ActionButtonClicked += ProcessAction;
+
+            Arguments.Strategy.Initialize(Window);
+            Arguments.Strategy.Redraw(Window);
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            Arguments.Strategy.Cleanup(_window);
-            _window.ActionButtonClicked -= ProcessAction;
+            base.OnUnbind();
+
+            Arguments.Strategy.Cleanup(Window);
+            Window.ActionButtonClicked -= ProcessAction;
         }
 
         private void ProcessAction(ItemStackActionType actionType)

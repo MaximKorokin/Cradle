@@ -7,7 +7,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class StatsWindowController : WindowControllerBase<StatsWindow, StatsWindowControllerArguments>
     {
-        private StatsWindow _window;
         private StatModule _statModule;
         private readonly EntityRepository _entityRepository;
 
@@ -16,25 +15,27 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _entityRepository = entityRepository;
         }
 
-        public override void Bind(StatsWindow window)
+        protected override void OnBind()
         {
+            base.OnBind();
+
             _statModule = _entityRepository.Get(Arguments.EntityId.Value).GetModule<StatModule>();
             _statModule.Stats.Changed += Redraw;
-
-            _window = window;
 
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
+            base.OnUnbind();
+
             _statModule.Stats.Changed -= Redraw;
             _statModule = null;
         }
 
         private void Redraw()
         {
-            _window.Render(_statModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
+            Window.Render(_statModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
         }
 
         public override void Dispose()

@@ -24,6 +24,7 @@ namespace Assets._Game.Scripts.UI.Windows
                 WindowId.Quests => new QuestsWindowControllerArguments(playerId),
                 WindowId.Stats => new StatsWindowControllerArguments(playerId),
                 WindowId.Cheats => new CheatsWindowControllerArguments(playerId, playerId),
+                WindowId.LocationTransitionList => new LocationTransitionListWindowControllerArguments(playerId),
                 _ => throw new ArgumentException($"Cannot provide default Player arguments for Window with id: {windowId}")
             };
         }

@@ -11,8 +11,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class InventoryShopWindowController : WindowControllerBase<InventoryShopWindow, InventoryShopWindowControllerArguments>
     {
-        private InventoryShopWindow _window;
-
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly InventoryViewController _inventoryViewController;
         private readonly ShopViewController _shopViewController;
@@ -38,23 +36,23 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemPreviewService = itemPreviewService;
         }
 
-        public override void Initialize(InventoryShopWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
             _inventoryHudData.SetEntityId(Arguments.BuyerEntityId);
             _equipmentHudData.SetEntityId(Arguments.BuyerEntityId);
         }
 
-        public override void Bind(InventoryShopWindow window)
+        protected override void OnBind()
         {
-            _window = window;
+            base.OnBind();
 
-            _inventoryViewController.Initialize(_window.InventoryView);
+            _inventoryViewController.Initialize(Window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
 
             _shopViewController.Initialize(
-                _window.ShopView,
+                Window.ShopView,
                 ShopModel,
                 Arguments.ShopName,
                 Arguments.BuyCoefficient,
@@ -67,15 +65,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
+            base.OnUnbind();
+
             _inventoryViewController.SlotClick -= OnInventorySlotClick;
             _shopViewController.SlotClick -= OnShopSlotClick;
 
             _inventoryViewController.Unbind();
             _shopViewController.Unbind();
-
-            _window = null;
         }
 
         private void OnInventorySlotClick(InventorySlot slot)

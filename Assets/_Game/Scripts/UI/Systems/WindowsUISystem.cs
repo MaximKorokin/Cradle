@@ -19,11 +19,23 @@ namespace Assets._Game.Scripts.UI.Systems
             _windowManager = windowManager;
 
             TrackGlobalEvent<WindowToggleRequest>(OnWindowToggleRequested);
+            TrackGlobalEvent<WindowOpenRequest>(OnWindowOpenRequested);
+            TrackGlobalEvent<WindowCloseRequest>(OnWindowCloseRequested);
         }
 
         private void OnWindowToggleRequested(WindowToggleRequest e)
         {
             _windowManager.ToggleWindow(e.WindowId, e.Arguments);
+        }
+
+        private void OnWindowOpenRequested(WindowOpenRequest e)
+        {
+            _windowManager.InstantiateWindow(e.WindowId, e.Arguments);
+        }
+
+        private void OnWindowCloseRequested(WindowCloseRequest e)
+        {
+            _windowManager.CloseWindow(e.Window);
         }
     }
 
@@ -36,6 +48,28 @@ namespace Assets._Game.Scripts.UI.Systems
         {
             WindowId = windowId;
             Arguments = arguments;
+        }
+    }
+
+    public readonly struct WindowOpenRequest : IGlobalEvent
+    {
+        public readonly WindowId WindowId;
+        public readonly IWindowControllerArguments Arguments;
+
+        public WindowOpenRequest(WindowId windowId, IWindowControllerArguments arguments)
+        {
+            WindowId = windowId;
+            Arguments = arguments;
+        }
+    }
+
+    public readonly struct WindowCloseRequest : IGlobalEvent
+    {
+        public readonly UIWindowBase Window;
+
+        public WindowCloseRequest(UIWindowBase window)
+        {
+            Window = window;
         }
     }
 }

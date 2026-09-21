@@ -17,18 +17,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryViewController = inventoryViewController;
         }
 
-        public override void Bind(InventoryWindow window)
+        protected override void OnBind()
         {
+            base.OnBind();
+
             _inventoryHudData.SetEntityId(Arguments.InventoryEntityId);
 
-            _inventoryViewController.Initialize(window.InventoryView);
+            _inventoryViewController.Initialize(Window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
+
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            base.Unbind();
+            base.OnUnbind();
 
             _inventoryViewController.Unbind();
         }

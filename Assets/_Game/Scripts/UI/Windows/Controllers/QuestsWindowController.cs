@@ -6,8 +6,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestsWindowController : WindowControllerBase<QuestsWindow, QuestsWindowControllerArguments>
     {
-        private QuestsWindow _window;
-
         private readonly QuestsHudData _questsHudData;
         private readonly WindowManager _windowManager;
 
@@ -19,33 +17,35 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _windowManager = windowManager;
         }
 
-        public override void Initialize(QuestsWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
-            _questsHudData.SetEntityId(arguments.QuestModuleEntityId);
+            _questsHudData.SetEntityId(Arguments.QuestModuleEntityId);
         }
 
-        public override void Bind(QuestsWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.QuestInfoClicked += OnQuestInfoClicked;
+            base.OnBind();
+
+            Window.QuestInfoClicked += OnQuestInfoClicked;
 
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            if (_window != null)
+            base.OnUnbind();
+
+            if (Window != null)
             {
-                _window.QuestInfoClicked -= OnQuestInfoClicked;
-                _window = null;
+                Window.QuestInfoClicked -= OnQuestInfoClicked;
             }
         }
 
         private void Redraw()
         {
-            _window.Render(_questsHudData);
+            Window.Render(_questsHudData);
         }
 
         private void OnQuestInfoClicked(string questId)

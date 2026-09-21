@@ -5,7 +5,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestDescriptionWindowController : WindowControllerBase<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>
     {
-        private QuestDescriptionWindow _window;
         private QuestState _quest;
 
         private readonly QuestStateFormatter _questStateFormatter;
@@ -15,11 +14,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _questStateFormatter = questStateFormatter;
         }
 
-        public override void Initialize(QuestDescriptionWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
-            _quest = arguments.Quest;
+            _quest = Arguments.Quest;
             _quest.Updated += OnQuestUpdated;
         }
 
@@ -28,25 +27,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Bind(QuestDescriptionWindow window)
+        protected override void OnBind()
         {
-            _window = window;
+            base.OnBind();
 
             Redraw();
         }
 
-        public override void Unbind()
-        {
-            if (_window != null)
-            {
-                _window = null;
-            }
-        }
-
         private void Redraw()
         {
-            if (_window == null) return;
-            _window.Render(_questStateFormatter.FormatData(_quest));
+            Window.Render(_questStateFormatter.FormatData(_quest));
         }
 
         public override void Dispose()

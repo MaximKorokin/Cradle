@@ -12,8 +12,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class CraftingWindowController : WindowControllerBase<CraftingWindow, CraftingWindowControllerArguments>
     {
-        private CraftingWindow _window;
-
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly WindowManager _windowManager;
@@ -40,36 +38,42 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemPreviewService = itemPreviewService;
         }
 
-        public override void Initialize(CraftingWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
-            _craftingHudData.SetCrafterEntity(arguments.CrafterEntityId);
-            _craftingHudData.SetEntityId(arguments.InventoryEntityId);
-            _equipmentHudData.SetEntityId(arguments.EquipmentEntityId);
+            _craftingHudData.SetCrafterEntity(Arguments.CrafterEntityId);
+            _craftingHudData.SetEntityId(Arguments.InventoryEntityId);
+            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        public override void Bind(CraftingWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.RecipeInfoClicked += OnRecipeInfoClicked;
-            _window.RecipeActionClicked += OnRecipeActionClicked;
+            base.OnBind();
+
             _craftingHudData.Changed += OnCraftingDataChanged;
 
-            _window.Render(_craftingHudData);
+            Window.RecipeInfoClicked += OnRecipeInfoClicked;
+            Window.RecipeActionClicked += OnRecipeActionClicked;
+
+            Window.Render(_craftingHudData);
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            _window.RecipeInfoClicked -= OnRecipeInfoClicked;
-            _window.RecipeActionClicked -= OnRecipeActionClicked;
+            base.OnUnbind();
+
             _craftingHudData.Changed -= OnCraftingDataChanged;
-            _window.Clear();
+
+            Window.RecipeInfoClicked -= OnRecipeInfoClicked;
+            Window.RecipeActionClicked -= OnRecipeActionClicked;
+
+            Window.Clear();
         }
 
         private void OnCraftingDataChanged()
         {
-            _window.Render(_craftingHudData);
+            Window.Render(_craftingHudData);
         }
 
         private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)

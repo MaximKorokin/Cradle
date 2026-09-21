@@ -1,56 +1,67 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Locations;
+using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.UI.Systems;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class LocationTransitionListWindowController : WindowControllerBase<LocationTransitionListWindow, EmptyWindowControllerArguments>
+    public sealed class LocationTransitionListWindowController : WindowControllerBase<LocationTransitionListWindow, LocationTransitionListWindowControllerArguments>
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly LocationConfig _locationConfig;
-        private readonly IPlayerProvider _playerProvider;
-        private readonly WindowManager _windowManager;
-
-        private LocationTransitionListWindow _window;
+        private readonly EntityRepository _entityRepository;
 
         public LocationTransitionListWindowController(
             IGlobalEventBus globalEventBus,
             LocationConfig locationConfig,
-            IPlayerProvider playerProvider,
-            WindowManager windowManager)
+            EntityRepository entityRepository)
         {
             _globalEventBus = globalEventBus;
             _locationConfig = locationConfig;
-            _playerProvider = playerProvider;
-            _windowManager = windowManager;
+            _entityRepository = entityRepository;
         }
 
-        public override void Bind(LocationTransitionListWindow window)
+        protected override void OnBind()
         {
-            _window = window;
+            base.OnBind();
 
-            _window.TransitionButtonClicked += OnTransitionButtonClicked;
+            Window.TransitionButtonClicked += OnTransitionButtonClicked;
+
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            _window.TransitionButtonClicked -= OnTransitionButtonClicked;
+            base.OnUnbind();
+
+            Window.TransitionButtonClicked -= OnTransitionButtonClicked;
         }
 
         private void OnTransitionButtonClicked(LocationTransitionData transitionData)
         {
-            _windowManager.CloseWindow(_window);
+            _globalEventBus.Publish(new WindowCloseRequest(Window));
             _globalEventBus.Publish(new LocationTransitionRequest(transitionData.LocationDefinition.Id, transitionData.EntranceDefinition.Id));
         }
 
         private void Redraw()
         {
-            var playerLevel = _playerProvider.Player.GetModule<LevelingModule>().Level;
+            var playerLevel = _entityRepository.Get(Arguments.EntityId.Value).GetModule<LevelingModule>().Level;
             var locations = _locationConfig.GetAvailableLocations(playerLevel);
-            _window.Render(locations);
+            Window.Render(locations);
+        }
+    }
+
+    public readonly struct LocationTransitionListWindowControllerArguments : IWindowControllerArguments
+    {
+        public readonly IReadOnlyObservableData<string> EntityId;
+
+        public LocationTransitionListWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        {
+            EntityId = entityId;
         }
     }
 }

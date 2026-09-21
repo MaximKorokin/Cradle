@@ -8,8 +8,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ItemUseSettingsWindowController : WindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>
     {
-        private ItemUseSettingsWindow _window;
-
         private readonly IPlayerProvider _playerProvider;
         private readonly EquipmentHudData _equipmentHudData;
 
@@ -21,18 +19,26 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _equipmentHudData = equipmentHudData;
         }
 
-        public override void Initialize(ItemUseSettingsWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
-            _equipmentHudData.SetEntityId(arguments.EquipmentEntityId);
+            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        public override void Bind(ItemUseSettingsWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.Changed += OnChanged;
+            base.OnBind();
+
+            Window.Changed += OnChanged;
             Redraw();
+        }
+
+        protected override void OnUnbind()
+        {
+            base.OnUnbind();
+
+            Window.Changed -= OnChanged;
         }
 
         private void OnChanged(ItemUseSettings settings)
@@ -42,12 +48,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void Redraw()
         {
-            _window.Render(_equipmentHudData);
-        }
-
-        public override void Unbind()
-        {
-            _window.Changed -= OnChanged;
+            Window.Render(_equipmentHudData);
         }
     }
 

@@ -4,18 +4,19 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ConfirmationWindowController : WindowControllerBase<ConfirmationWindow, ConfirmationWindowControllerArguments>
     {
-        private ConfirmationWindow _window;
-
-        public override void Bind(ConfirmationWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.Render(Arguments.Title, Arguments.Message);
-            _window.ConfirmationResult += OnConfirmationResult;
+            base.OnBind();
+
+            Window.Render(Arguments.Title, Arguments.Message);
+            Window.ConfirmationResult += OnConfirmationResult;
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            _window.ConfirmationResult -= OnConfirmationResult;
+            base.OnUnbind();
+
+            Window.ConfirmationResult -= OnConfirmationResult;
         }
 
         private void OnConfirmationResult(bool confirmed)

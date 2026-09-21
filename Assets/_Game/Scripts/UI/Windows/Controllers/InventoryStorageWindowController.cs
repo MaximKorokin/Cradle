@@ -10,8 +10,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public class InventoryStorageWindowController : WindowControllerBase<InventoryStorageWindow, InventoryStorageWindowControllerArguments>
     {
-        private InventoryStorageWindow _window;
-
         private readonly InventoryViewController _firstInventoryViewController;
         private readonly InventoryViewController _secondInventoryViewController;
         private readonly InventoryHudData _inventoryHudData;
@@ -35,21 +33,22 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemPreviewService = itemPreviewService;
         }
 
-        public override void Initialize(InventoryStorageWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
             _storageHudData.SetEntityId(Arguments.StorageEntityId);
             _inventoryHudData.SetEntityId(Arguments.InventoryEntityId);
             _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        public override void Bind(InventoryStorageWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _firstInventoryViewController.Initialize(_window.FirstInventoryView);
+            base.OnBind();
+
+            _firstInventoryViewController.Initialize(Window.FirstInventoryView);
             _firstInventoryViewController.Bind(_inventoryHudData);
-            _secondInventoryViewController.Initialize(_window.SecondInventoryView);
+            _secondInventoryViewController.Initialize(Window.SecondInventoryView);
             _secondInventoryViewController.Bind(_storageHudData);
 
             _firstInventoryViewController.SlotClick += OnFirstInventorySlotClick;
@@ -58,15 +57,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
+            base.OnUnbind();
+
             _firstInventoryViewController.SlotClick -= OnFirstInventorySlotClick;
             _secondInventoryViewController.SlotClick -= OnSecondInventorySlotClick;
 
             _firstInventoryViewController.Unbind();
             _secondInventoryViewController.Unbind();
-
-            _window = null;
         }
 
         private void OnFirstInventorySlotClick(InventorySlot slot)

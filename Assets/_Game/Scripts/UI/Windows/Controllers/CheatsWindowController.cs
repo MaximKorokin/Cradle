@@ -13,8 +13,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class CheatsWindowController : WindowControllerBase<CheatsWindow, CheatsWindowControllerArguments>
     {
-        private CheatsWindow _window;
-
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
@@ -44,35 +42,37 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemPreviewService = itemPreviewService;
         }
 
-        public override void Initialize(CheatsWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
-            _equipmentHudData.SetEntityId(arguments.EquipmentEntityId);
+            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        public override void Bind(CheatsWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.ItemDefinitionInfoClicked += OnItemDefinitionInfoClicked;
-            _window.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
-            _window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
+            base.OnBind();
 
-            _window.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
-            _window.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
+            Window.ItemDefinitionInfoClicked += OnItemDefinitionInfoClicked;
+            Window.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
+            Window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
 
-            _window.Render(_cheatsHudData);
+            Window.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
+            Window.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
+
+            Window.Render(_cheatsHudData);
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            _window.ItemDefinitionInfoClicked -= OnItemDefinitionInfoClicked;
-            _window.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
-            _window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
+            base.OnUnbind();
 
-            _window.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
-            _window.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
+            Window.ItemDefinitionInfoClicked -= OnItemDefinitionInfoClicked;
+            Window.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
+            Window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
 
+            Window.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
+            Window.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
         }
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)

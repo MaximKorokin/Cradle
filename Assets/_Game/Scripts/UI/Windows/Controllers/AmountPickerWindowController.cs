@@ -4,18 +4,19 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class AmountPickerWindowController : WindowControllerBase<AmountPickerWindow, AmountPickerWindowControllerArguments>
     {
-        private AmountPickerWindow _window;
-
-        public override void Bind(AmountPickerWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.Render(Arguments.MinAmount, Arguments.MaxAmount);
-            _window.AmountSelected += OnAmountSelected;
+            base.OnBind();
+
+            Window.Render(Arguments.MinAmount, Arguments.MaxAmount);
+            Window.AmountSelected += OnAmountSelected;
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
-            _window.AmountSelected -= OnAmountSelected;
+            base.OnUnbind();
+
+            Window.AmountSelected -= OnAmountSelected;
         }
 
         private void OnAmountSelected(int amount)

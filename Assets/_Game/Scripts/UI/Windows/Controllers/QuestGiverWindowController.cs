@@ -9,8 +9,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestGiverWindowController : WindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments>
     {
-        private QuestGiverWindow _window;
-
         private readonly QuestGiverHudData _questGiverHudData;
         private readonly EntityRepository _entityRepository;
         private readonly WindowManager _windowManager;
@@ -27,49 +25,50 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _windowManager = windowManager;
         }
 
-        public override void Initialize(QuestGiverWindowControllerArguments arguments)
+        protected override void OnInitialize()
         {
-            base.Initialize(arguments);
+            base.OnInitialize();
 
-            _targetEntityId = arguments.TargetEntityId.Value;
-            _questGiverHudData.SetEntityId(arguments.GiverEntityId);
-            _questGiverHudData.SetTargetEntity(arguments.TargetEntityId);
+            _targetEntityId = Arguments.TargetEntityId.Value;
+            _questGiverHudData.SetEntityId(Arguments.GiverEntityId);
+            _questGiverHudData.SetTargetEntity(Arguments.TargetEntityId);
             _questGiverHudData.Changed += Redraw;
         }
 
-        public override void Bind(QuestGiverWindow window)
+        protected override void OnBind()
         {
-            _window = window;
-            _window.QuestInfoClicked += OnQuestInfoClicked;
-            _window.QuestAcceptClicked += OnQuestAcceptClicked;
-            _window.QuestCompleteClicked += OnQuestCompleteClicked;
+            base.OnBind();
+
+            Window.QuestInfoClicked += OnQuestInfoClicked;
+            Window.QuestAcceptClicked += OnQuestAcceptClicked;
+            Window.QuestCompleteClicked += OnQuestCompleteClicked;
 
             Redraw();
         }
 
-        public override void Unbind()
+        protected override void OnUnbind()
         {
+            base.OnUnbind();
+
             _questGiverHudData.Changed -= Redraw;
 
-            if (_window != null)
+            if (Window != null)
             {
-                _window.QuestInfoClicked -= OnQuestInfoClicked;
-                _window.QuestAcceptClicked -= OnQuestAcceptClicked;
-                _window.QuestCompleteClicked -= OnQuestCompleteClicked;
-                _window = null;
+                Window.QuestInfoClicked -= OnQuestInfoClicked;
+                Window.QuestAcceptClicked -= OnQuestAcceptClicked;
+                Window.QuestCompleteClicked -= OnQuestCompleteClicked;
             }
         }
 
         public override void Dispose()
         {
-            Unbind();
+            OnUnbind();
             _questGiverHudData.Dispose();
         }
 
         private void Redraw()
         {
-            if (_window == null) return;
-            _window.Render(_questGiverHudData);
+            Window.Render(_questGiverHudData);
         }
 
         private void OnQuestInfoClicked(string questId)
