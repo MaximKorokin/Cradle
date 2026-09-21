@@ -12,7 +12,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             base.Dispose();
 
-            SetEntityId(null);
+            if (ObservableEntityId != null)
+            {
+                ObservableEntityId.ValueChanged -= OnBoundEntityChanged;
+            }
         }
 
         public void SetEntityId(IReadOnlyObservableData<string> observableEntityId)

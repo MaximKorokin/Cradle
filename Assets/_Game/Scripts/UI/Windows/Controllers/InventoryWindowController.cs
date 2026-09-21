@@ -38,6 +38,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _inventoryViewController.Redraw();
         }
+
+        public override void Dispose()
+        {
+            _inventoryHudData.Dispose();
+            _inventoryViewController.Dispose();
+
+            base.Dispose();
+        }
     }
 
     public readonly struct InventoryWindowControllerArguments : IWindowControllerArguments

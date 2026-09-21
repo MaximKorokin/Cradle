@@ -29,8 +29,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public void Unbind()
         {
-            Window = null;
             OnUnbind();
+            Window = null;
         }
 
         public void Initialize(IWindowControllerArguments arguments)
@@ -44,7 +44,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public virtual void Dispose()
         {
-            OnUnbind();
+            Unbind();
         }
     }
 

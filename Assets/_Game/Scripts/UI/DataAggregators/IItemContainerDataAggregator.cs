@@ -31,6 +31,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnBoundEntityChanged(string entityId)
         {
+            if (entityId == null) return;
+
             ContainerPath = GetContainerPath(entityId);
             var newItemContainer = ItemContainerResolver.ResolveContainer(ContainerPath);
 

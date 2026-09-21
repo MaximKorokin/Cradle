@@ -39,8 +39,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         public override void Dispose()
         {
-            base.Dispose();
-
             View.FilterByClothingButtonClicked -= OnFilterByClothingButtonClicked;
             View.FilterByWeaponButtonClicked -= OnFilterByWeaponButtonClicked;
             View.FilterByUtilityButtonClicked -= OnFilterByUtilityButtonClicked;
@@ -48,6 +46,8 @@ namespace Assets._Game.Scripts.UI.Views
 
             View.OrderByNameButtonClicked -= OnOrderByNameButtonClicked;
             View.OrderByPurposeButtonClicked -= OnOrderByPurposeButtonClicked;
+
+            base.Dispose();
         }
 
         public void Bind(IInventoryHudData inventoryHudData)

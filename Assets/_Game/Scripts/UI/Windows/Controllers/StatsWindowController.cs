@@ -35,16 +35,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             Window.Render(_statModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
         }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            if (_statModule != null)
-            {
-                _statModule.Stats.Changed -= Redraw;
-            }
-        }
     }
 
     public readonly struct StatsWindowControllerArguments : IWindowControllerArguments

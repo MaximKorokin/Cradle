@@ -19,7 +19,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnInitialize();
 
             _quest = Arguments.Quest;
+        }
+
+        protected override void OnBind()
+        {
+            base.OnBind();
+
             _quest.Updated += OnQuestUpdated;
+        }
+
+        protected override void OnUnbind()
+        {
+            base.OnUnbind();
+
+            _quest.Updated -= OnQuestUpdated;
         }
 
         private void OnQuestUpdated(QuestState quest)
@@ -30,13 +43,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         protected override void Redraw()
         {
             Window.Render(_questStateFormatter.FormatData(_quest));
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _quest.Updated -= OnQuestUpdated;
         }
     }
 
