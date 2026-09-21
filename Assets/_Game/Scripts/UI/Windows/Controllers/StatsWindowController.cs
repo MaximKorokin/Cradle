@@ -21,8 +21,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _statModule = _entityRepository.Get(Arguments.EntityId.Value).GetModule<StatModule>();
             _statModule.Stats.Changed += Redraw;
-
-            Redraw();
         }
 
         protected override void OnUnbind()
@@ -33,7 +31,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _statModule = null;
         }
 
-        private void Redraw()
+        protected override void Redraw()
         {
             Window.Render(_statModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
         }

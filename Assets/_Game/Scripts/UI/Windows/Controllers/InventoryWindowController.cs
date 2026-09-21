@@ -25,8 +25,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _inventoryViewController.Initialize(Window.InventoryView);
             _inventoryViewController.Bind(_inventoryHudData);
-
-            Redraw();
         }
 
         protected override void OnUnbind()
@@ -36,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _inventoryViewController.Unbind();
         }
 
-        private void Redraw()
+        protected override void Redraw()
         {
             _inventoryViewController.Redraw();
         }

@@ -93,7 +93,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 null);
         }
 
-        private void Redraw()
+        protected override void Redraw()
         {
             _inventoryViewController.Redraw();
             _equipmentViewController.Redraw();

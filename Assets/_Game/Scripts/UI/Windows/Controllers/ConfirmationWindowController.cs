@@ -8,7 +8,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            Window.Render(Arguments.Title, Arguments.Message);
             Window.ConfirmationResult += OnConfirmationResult;
         }
 
@@ -22,6 +21,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void OnConfirmationResult(bool confirmed)
         {
             Arguments.OnDecisionCallback?.Invoke(confirmed);
+        }
+
+        protected override void Redraw()
+        {
+            Window.Render(Arguments.Title, Arguments.Message);
         }
     }
 

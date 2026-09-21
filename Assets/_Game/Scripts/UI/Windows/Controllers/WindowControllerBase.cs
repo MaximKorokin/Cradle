@@ -11,6 +11,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected TArguments Arguments { get; private set; }
 
+        protected abstract void Redraw();
+
         protected virtual void OnBind() { }
         protected virtual void OnUnbind() { }
         protected virtual void OnInitialize() { }
@@ -21,6 +23,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             {
                 Window = w;
                 OnBind();
+                Redraw();
             }
         }
 

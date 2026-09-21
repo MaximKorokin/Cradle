@@ -31,10 +31,34 @@ namespace Assets._Game.Scripts.UI.Windows
             _craftingTabContentTemplate.gameObject.SetActive(false);
         }
 
+        public override void OnHide()
+        {
+            base.OnHide();
+
+            if (_availableRecipesListView != null)
+            {
+                _availableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
+                _availableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
+                _availableRecipesListView.Clear();
+                Destroy(_availableRecipesListView.gameObject);
+                _availableRecipesListView = null;
+            }
+
+            if (_unavailableRecipesListView != null)
+            {
+                _unavailableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
+                _unavailableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
+                _unavailableRecipesListView.Clear();
+                Destroy(_unavailableRecipesListView.gameObject);
+                _unavailableRecipesListView = null;
+            }
+
+            _craftingTabsController.ClearTabs();
+        }
+
         public void Render(CraftingHudData data)
         {
-            int currentTabIndex = _craftingTabsController.GetSelectedTabIndex();
-            Clear();
+            var currentTabIndex = _craftingTabsController.GetSelectedTabIndex();
 
             var availableRecipes = data.AvailableRecipes.ToArray();
             var unavailableRecipes = data.UnavailableRecipes.ToArray();
@@ -95,29 +119,6 @@ namespace Assets._Game.Scripts.UI.Windows
             }
 
             return sb.ToString();
-        }
-
-        public void Clear()
-        {
-            if (_availableRecipesListView != null)
-            {
-                _availableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
-                _availableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
-                _availableRecipesListView.Clear();
-                Destroy(_availableRecipesListView.gameObject);
-                _availableRecipesListView = null;
-            }
-
-            if (_unavailableRecipesListView != null)
-            {
-                _unavailableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
-                _unavailableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
-                _unavailableRecipesListView.Clear();
-                Destroy(_unavailableRecipesListView.gameObject);
-                _unavailableRecipesListView = null;
-            }
-
-            _craftingTabsController.ClearTabs();
         }
 
         private void OnRecipeInfoClicked(string identifier)

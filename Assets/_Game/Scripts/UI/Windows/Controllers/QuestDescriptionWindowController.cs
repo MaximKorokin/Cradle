@@ -27,14 +27,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Redraw();
         }
 
-        protected override void OnBind()
-        {
-            base.OnBind();
-
-            Redraw();
-        }
-
-        private void Redraw()
+        protected override void Redraw()
         {
             Window.Render(_questStateFormatter.FormatData(_quest));
         }
@@ -42,6 +35,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Dispose()
         {
             base.Dispose();
+
             _quest.Updated -= OnQuestUpdated;
         }
     }

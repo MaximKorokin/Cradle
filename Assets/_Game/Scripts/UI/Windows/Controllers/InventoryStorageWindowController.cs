@@ -53,8 +53,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _firstInventoryViewController.SlotClick += OnFirstInventorySlotClick;
             _secondInventoryViewController.SlotClick += OnSecondInventorySlotClick;
-
-            Redraw();
         }
 
         protected override void OnUnbind()
@@ -98,7 +96,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 equipmentSlotToCompare);
         }
 
-        private void Redraw()
+        protected override void Redraw()
         {
             _firstInventoryViewController.Redraw();
             _secondInventoryViewController.Redraw();

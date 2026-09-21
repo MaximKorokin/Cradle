@@ -59,8 +59,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             Window.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
             Window.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
-
-            Window.Render(_cheatsHudData);
         }
 
         protected override void OnUnbind()
@@ -111,6 +109,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void OnResetPlayerLevelButtonClicked()
         {
             _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(LevelingModule)));
+        }
+
+        protected override void Redraw()
+        {
+            Window.Render(_cheatsHudData);
         }
     }
 

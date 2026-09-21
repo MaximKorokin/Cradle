@@ -29,23 +29,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnBind();
 
             Window.QuestInfoClicked += OnQuestInfoClicked;
-
-            Redraw();
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            if (Window != null)
-            {
-                Window.QuestInfoClicked -= OnQuestInfoClicked;
-            }
-        }
-
-        private void Redraw()
-        {
-            Window.Render(_questsHudData);
+            Window.QuestInfoClicked -= OnQuestInfoClicked;
         }
 
         private void OnQuestInfoClicked(string questId)
@@ -54,6 +44,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             if (quest == null) return;
 
             _windowManager.InstantiateWindow(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest));
+        }
+
+        protected override void Redraw()
+        {
+            Window.Render(_questsHudData);
         }
     }
 

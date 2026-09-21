@@ -17,9 +17,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             base.OnBind();
 
             Window.ActionButtonClicked += ProcessAction;
-
-            Arguments.Strategy.Initialize(Window);
-            Arguments.Strategy.Redraw(Window);
         }
 
         protected override void OnUnbind()
@@ -33,6 +30,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
         private void ProcessAction(ItemStackActionType actionType)
         {
             Arguments.Strategy.ProcessAction(actionType);
+        }
+
+        protected override void Redraw()
+        {
+            Arguments.Strategy.Initialize(Window);
+            Arguments.Strategy.Redraw(Window);
         }
     }
 

@@ -8,7 +8,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            Window.Render(Arguments.MinAmount, Arguments.MaxAmount);
             Window.AmountSelected += OnAmountSelected;
         }
 
@@ -22,6 +21,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void OnAmountSelected(int amount)
         {
             Arguments.OnAmountPickedCallback?.Invoke(amount);
+        }
+
+        protected override void Redraw()
+        {
+            Window.Render(Arguments.MinAmount, Arguments.MaxAmount);
         }
     }
 

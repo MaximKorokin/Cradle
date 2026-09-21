@@ -42,8 +42,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             Window.QuestInfoClicked += OnQuestInfoClicked;
             Window.QuestAcceptClicked += OnQuestAcceptClicked;
             Window.QuestCompleteClicked += OnQuestCompleteClicked;
-
-            Redraw();
         }
 
         protected override void OnUnbind()
@@ -52,23 +50,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _questGiverHudData.Changed -= Redraw;
 
-            if (Window != null)
-            {
-                Window.QuestInfoClicked -= OnQuestInfoClicked;
-                Window.QuestAcceptClicked -= OnQuestAcceptClicked;
-                Window.QuestCompleteClicked -= OnQuestCompleteClicked;
-            }
-        }
-
-        public override void Dispose()
-        {
-            OnUnbind();
-            _questGiverHudData.Dispose();
-        }
-
-        private void Redraw()
-        {
-            Window.Render(_questGiverHudData);
+            Window.QuestInfoClicked -= OnQuestInfoClicked;
+            Window.QuestAcceptClicked -= OnQuestAcceptClicked;
+            Window.QuestCompleteClicked -= OnQuestCompleteClicked;
         }
 
         private void OnQuestInfoClicked(string questId)
@@ -98,6 +82,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             var targetEntity = _entityRepository.Get(_targetEntityId);
             targetEntity.Publish(new QuestCompleteRequest(_questGiverHudData.GetQuestState(questId)));
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _questGiverHudData.Dispose();
+        }
+
+        protected override void Redraw()
+        {
+            Window.Render(_questGiverHudData);
         }
     }
 

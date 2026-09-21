@@ -31,7 +31,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnBind();
 
             Window.Changed += OnChanged;
-            Redraw();
         }
 
         protected override void OnUnbind()
@@ -46,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _playerProvider.Player.Publish(new ItemUseSettingsUpdateRequest(settings));
         }
 
-        private void Redraw()
+        protected override void Redraw()
         {
             Window.Render(_equipmentHudData);
         }

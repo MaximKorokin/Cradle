@@ -30,8 +30,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnBind();
 
             Window.TransitionButtonClicked += OnTransitionButtonClicked;
-
-            Redraw();
         }
 
         protected override void OnUnbind()
@@ -47,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _globalEventBus.Publish(new LocationTransitionRequest(transitionData.LocationDefinition.Id, transitionData.EntranceDefinition.Id));
         }
 
-        private void Redraw()
+        protected override void Redraw()
         {
             var playerLevel = _entityRepository.Get(Arguments.EntityId.Value).GetModule<LevelingModule>().Level;
             var locations = _locationConfig.GetAvailableLocations(playerLevel);

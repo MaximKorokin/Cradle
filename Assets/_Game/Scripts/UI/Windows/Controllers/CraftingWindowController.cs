@@ -51,29 +51,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            _craftingHudData.Changed += OnCraftingDataChanged;
+            _craftingHudData.Changed += Redraw;
 
             Window.RecipeInfoClicked += OnRecipeInfoClicked;
             Window.RecipeActionClicked += OnRecipeActionClicked;
-
-            Window.Render(_craftingHudData);
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            _craftingHudData.Changed -= OnCraftingDataChanged;
+            _craftingHudData.Changed -= Redraw;
 
             Window.RecipeInfoClicked -= OnRecipeInfoClicked;
             Window.RecipeActionClicked -= OnRecipeActionClicked;
-
-            Window.Clear();
-        }
-
-        private void OnCraftingDataChanged()
-        {
-            Window.Render(_craftingHudData);
         }
 
         private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)
@@ -105,6 +96,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 {
                     _globalEventBus.Publish(new CraftRequest(inventoryPath, recipe.Id, selectedAmount));
                 });
+        }
+
+        protected override void Redraw()
+        {
+            Window.Render(_craftingHudData);
         }
     }
 
