@@ -6,7 +6,7 @@ namespace Assets._Game.Scripts.UI.Windows
     {
         private bool _isCleanedUp;
 
-        public virtual void OnShow() { }
+        public virtual void OnShow() => _isCleanedUp = false;
         public virtual void OnHide() => _isCleanedUp = true;
 
         protected virtual void OnDestroy()

@@ -58,25 +58,33 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void OnEnable()
         {
-            _filterByClothingToggle.onValueChanged.AddListener(isOn => FilterByClothingButtonClicked?.Invoke(isOn));
-            _filterByWeaponToggle.onValueChanged.AddListener(isOn => FilterByWeaponButtonClicked?.Invoke(isOn));
-            _filterByUtilityToggle.onValueChanged.AddListener(isOn => FilterByUtilityButtonClicked?.Invoke(isOn));
-            _filterByResourceToggle.onValueChanged.AddListener(isOn => FilterByResourceButtonClicked?.Invoke(isOn));
+            _filterByClothingToggle.onValueChanged.AddListener(OnFilterByClothingToggleValueChanged);
+            _filterByWeaponToggle.onValueChanged.AddListener(OnFilterByWeaponToggleValueChanged);
+            _filterByUtilityToggle.onValueChanged.AddListener(OnFilterByUtilityToggleValueChanged);
+            _filterByResourceToggle.onValueChanged.AddListener(OnFilterByResourceToggleValueChanged);
 
-            _orderByNameButton.onClick.AddListener(() => OrderByNameButtonClicked?.Invoke());
-            _orderByPurposeButton.onClick.AddListener(() => OrderByPurposeButtonClicked?.Invoke());
+            _orderByNameButton.onClick.AddListener(OnOrderByNameButtonClicked);
+            _orderByPurposeButton.onClick.AddListener(OnOrderByPurposeButtonClicked);
         }
 
         private void OnDisable()
         {
-            _filterByClothingToggle.onValueChanged.RemoveAllListeners();
-            _filterByWeaponToggle.onValueChanged.RemoveAllListeners();
-            _filterByUtilityToggle.onValueChanged.RemoveAllListeners();
-            _filterByResourceToggle.onValueChanged.RemoveAllListeners();
+            _filterByClothingToggle.onValueChanged.RemoveListener(OnFilterByClothingToggleValueChanged);
+            _filterByWeaponToggle.onValueChanged.RemoveListener(OnFilterByWeaponToggleValueChanged);
+            _filterByUtilityToggle.onValueChanged.RemoveListener(OnFilterByUtilityToggleValueChanged);
+            _filterByResourceToggle.onValueChanged.RemoveListener(OnFilterByResourceToggleValueChanged);
 
-            _orderByNameButton.onClick.RemoveAllListeners();
-            _orderByPurposeButton.onClick.RemoveAllListeners();
+            _orderByNameButton.onClick.RemoveListener(OnOrderByNameButtonClicked);
+            _orderByPurposeButton.onClick.RemoveListener(OnOrderByPurposeButtonClicked);
         }
+
+        private void OnFilterByClothingToggleValueChanged(bool isOn) => FilterByClothingButtonClicked?.Invoke(isOn);
+        private void OnFilterByWeaponToggleValueChanged(bool isOn) => FilterByWeaponButtonClicked?.Invoke(isOn);
+        private void OnFilterByUtilityToggleValueChanged(bool isOn) => FilterByUtilityButtonClicked?.Invoke(isOn);
+        private void OnFilterByResourceToggleValueChanged(bool isOn) => FilterByResourceButtonClicked?.Invoke(isOn);
+
+        private void OnOrderByNameButtonClicked() => OrderByNameButtonClicked?.Invoke();
+        private void OnOrderByPurposeButtonClicked() => OrderByPurposeButtonClicked?.Invoke();
 
         public void Render(IInventoryHudData inventoryHudData)
         {
@@ -94,6 +102,7 @@ namespace Assets._Game.Scripts.UI.Views
                 if (_slots.Count > inventorySlot.Index)
                 {
                     var slot = _slots[inventorySlot.Index];
+                    slot.Bind(inventoryHudData.ContainerPath, inventorySlot.ToInt64());
                     slot.Render(stack);
                     slot.gameObject.SetActive(true);
                     continue;

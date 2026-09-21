@@ -4,6 +4,7 @@ using Assets._Game.Scripts.UI.Windows.Modal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -106,7 +107,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private WindowStackEntry FindWindowStackEntry(WindowId windowId, IWindowControllerArguments arguments)
         {
-            var entry = _windowStack.FirstOrDefault(e => e.Id == windowId && e.Arguments.Equals(arguments));
+            var entry = _windowStack.FirstOrDefault(e => e.Id == windowId && Equals(e.Arguments, arguments));
             return entry;
         }
 

@@ -25,6 +25,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 OnBind();
                 Redraw();
             }
+            else
+            {
+                SLog.Error($"Cannot bind a window of type {window.GetType()}. Expected window type is {WindowType}");
+            }
         }
 
         public void Unbind()
@@ -39,6 +43,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             {
                 Arguments = args;
                 OnInitialize();
+            }
+            else
+            {
+                SLog.Error($"Cannot initialize with arguments of type {arguments.GetType()}. Expected arguments type is {typeof(TArguments)}");
             }
         }
 

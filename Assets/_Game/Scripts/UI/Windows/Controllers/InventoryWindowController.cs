@@ -41,10 +41,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public override void Dispose()
         {
+            base.Dispose();
+
             _inventoryHudData.Dispose();
             _inventoryViewController.Dispose();
-
-            base.Dispose();
         }
     }
 
