@@ -34,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Systems
             {
                 GlobalEventBus.Publish(new WindowToggleRequest(
                     WindowId.Shop,
-                    new InventoryShopWindowControllerArguments(
+                    new ShopWindowControllerArguments(
                         request.ShopEntityId,
                         request.InventoryEntityId,
                         shopModule.Definition.ShopName,
@@ -54,7 +54,7 @@ namespace Assets._Game.Scripts.UI.Systems
         {
             GlobalEventBus.Publish(new WindowToggleRequest(
                 WindowId.Storage,
-                new InventoryStorageWindowControllerArguments(request.StorageEntityId, request.InventoryEntityId, request.InventoryEntityId)));
+                new StorageWindowControllerArguments(request.StorageEntityId, request.InventoryEntityId, request.InventoryEntityId)));
         }
 
         private void OnQuestGiverWindowOpenRequest(QuestGiverWindowOpenRequest request)

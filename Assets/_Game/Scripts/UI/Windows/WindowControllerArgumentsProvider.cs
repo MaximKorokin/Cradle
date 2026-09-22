@@ -20,6 +20,7 @@ namespace Assets._Game.Scripts.UI.Windows
             return windowId switch
             {
                 WindowId.Inventory => new InventoryWindowControllerArguments(playerId),
+                WindowId.Equipment => new EquipmentWindowControllerArguments(playerId),
                 WindowId.ItemUseSettings => new ItemUseSettingsWindowControllerArguments(playerId),
                 WindowId.Quests => new QuestsWindowControllerArguments(playerId),
                 WindowId.Stats => new StatsWindowControllerArguments(playerId),

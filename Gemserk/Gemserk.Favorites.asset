@@ -21,3 +21,5 @@ MonoBehaviour:
     assetPath: Assets/_Game/Scenes/UIRoot.unity
   - reference: {fileID: 3880321814137415004, guid: bf40191eaabc31b4ea449cb4ea0fccb2, type: 3}
     assetPath: Assets/_Game/Prefabs/UI/Views/DragDropView.prefab
+  - reference: {fileID: 4236470503915288397, guid: 65468bccb608edc4787793a54478eafd, type: 3}
+    assetPath: Assets/_Game/Prefabs/UI/Windows/EquipmentWindow.prefab

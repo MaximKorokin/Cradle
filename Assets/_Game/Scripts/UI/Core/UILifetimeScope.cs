@@ -108,16 +108,16 @@ namespace Assets._Game.Scripts.UI.Core
 
                 // Primary windows
                 new(WindowId.Cheats, typeof(CheatsWindowController), new(true, false, true)),
-                new(WindowId.Equipment, typeof(InventoryEquipmentWindowController), new(true, false, true)),
+                new(WindowId.Equipment, typeof(EquipmentWindowController), new(true, false, true)),
                 new(WindowId.Quests, typeof(QuestsWindowController), new(true, false, true)),
                 new(WindowId.QuestGiver, typeof(QuestGiverWindowController), new(true, false, true)),
                 new(WindowId.QuestDescription, typeof(QuestDescriptionWindowController), new(true, false, true)),
 
                 new(WindowId.Stats, typeof(StatsWindowController), new(true, false, true)),
-                new(WindowId.Storage, typeof(InventoryStorageWindowController), new(true, false, true)),
+                new(WindowId.Storage, typeof(StorageWindowController), new(true, false, true)),
                 new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindowController), new(true, false, true)),
                 new(WindowId.Crafting, typeof(CraftingWindowController), new(true, false, true)),
-                new(WindowId.Shop, typeof(InventoryShopWindowController), new(true, false, true)),
+                new(WindowId.Shop, typeof(ShopWindowController), new(true, false, true)),
 
                 // Service windows
                 new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindowController), new(true, false, true)),

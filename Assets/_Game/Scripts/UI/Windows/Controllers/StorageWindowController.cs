@@ -8,25 +8,22 @@ using Assets._Game.Scripts.UI.Views;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public class InventoryStorageWindowController : WindowControllerBase<InventoryStorageWindow, InventoryStorageWindowControllerArguments>
+    public class StorageWindowController : WindowControllerBase<StorageWindow, StorageWindowControllerArguments>
     {
-        private readonly InventoryViewController _firstInventoryViewController;
-        private readonly InventoryViewController _secondInventoryViewController;
+        private readonly InventoryViewController _stoargeInventoryViewController;
         private readonly InventoryHudData _inventoryHudData;
         private readonly StorageHudData _storageHudData;
         private readonly EquipmentHudData _equipmentHudData;
         private readonly ItemPreviewService _itemPreviewService;
 
-        public InventoryStorageWindowController(
-            InventoryViewController firstInventoryViewController,
-            InventoryViewController secondInventoryViewController,
+        public StorageWindowController(
+            InventoryViewController stoargeInventoryViewController,
             InventoryHudData inventoryHudData,
             StorageHudData storageHudData,
             EquipmentHudData equipmentHudData,
             ItemPreviewService itemPreviewService)
         {
-            _firstInventoryViewController = firstInventoryViewController;
-            _secondInventoryViewController = secondInventoryViewController;
+            _stoargeInventoryViewController = stoargeInventoryViewController;
             _inventoryHudData = inventoryHudData;
             _storageHudData = storageHudData;
             _equipmentHudData = equipmentHudData;
@@ -46,24 +43,19 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            _firstInventoryViewController.Initialize(Window.FirstInventoryView);
-            _firstInventoryViewController.Bind(_inventoryHudData);
-            _secondInventoryViewController.Initialize(Window.SecondInventoryView);
-            _secondInventoryViewController.Bind(_storageHudData);
+            _stoargeInventoryViewController.Initialize(Window.StorageInventoryView);
+            _stoargeInventoryViewController.Bind(_storageHudData);
 
-            _firstInventoryViewController.SlotClick += OnFirstInventorySlotClick;
-            _secondInventoryViewController.SlotClick += OnSecondInventorySlotClick;
+            _stoargeInventoryViewController.SlotClick += OnStoargeInventorySlotClick;
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            _firstInventoryViewController.SlotClick -= OnFirstInventorySlotClick;
-            _secondInventoryViewController.SlotClick -= OnSecondInventorySlotClick;
+            _stoargeInventoryViewController.SlotClick -= OnStoargeInventorySlotClick;
 
-            _firstInventoryViewController.Unbind();
-            _secondInventoryViewController.Unbind();
+            _stoargeInventoryViewController.Unbind();
         }
 
         private void OnFirstInventorySlotClick(InventorySlot slot)
@@ -81,7 +73,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 equipmentSlotToCompare);
         }
 
-        private void OnSecondInventorySlotClick(InventorySlot slot)
+        private void OnStoargeInventorySlotClick(InventorySlot slot)
         {
             var item = _storageHudData.InventoryModel.Get(slot);
             if (item == null) return;
@@ -98,18 +90,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            _firstInventoryViewController.Redraw();
-            _secondInventoryViewController.Redraw();
+            _stoargeInventoryViewController.Redraw();
         }
     }
 
-    public readonly struct InventoryStorageWindowControllerArguments : IWindowControllerArguments
+    public readonly struct StorageWindowControllerArguments : IWindowControllerArguments
     {
         public IReadOnlyObservableData<string> StorageEntityId { get; }
         public IReadOnlyObservableData<string> InventoryEntityId { get; }
         public IReadOnlyObservableData<string> EquipmentEntityId { get; }
 
-        public InventoryStorageWindowControllerArguments(
+        public StorageWindowControllerArguments(
             IReadOnlyObservableData<string> storageEntityId,
             IReadOnlyObservableData<string> inventoryEntityId,
             IReadOnlyObservableData<string> equipmentEntityId)

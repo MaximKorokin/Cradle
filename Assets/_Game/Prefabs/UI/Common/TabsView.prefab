@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d517211110eed4da70a732d4e508a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initialTabs: []
   _tabsContainer: {fileID: 1079210070689621513}
   _tabTemplate: {fileID: 6579645275697974408}
   _tabContentsContainer: {fileID: 6251315963569690140}
@@ -604,10 +605,10 @@ RectTransform:
   - {fileID: 6345075327604256743}
   m_Father: {fileID: 1079210070689621513}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 100}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 80, y: -40}
+  m_SizeDelta: {x: 150, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &975169913307362093
 CanvasRenderer:
@@ -659,7 +660,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fe0a34dc178dd4e809aa87d016bd38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectionType: 0
   _selectedColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   _image: {fileID: 3063564962849177616}
   _title: {fileID: 4214373818055834455}
@@ -847,7 +847,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.35
+  m_fontSize: 30.65
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1189,7 +1189,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 15
   m_Viewport: {fileID: 5378198019726701774}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 3197855255093658594}
@@ -1255,7 +1255,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: 110
+  m_PreferredHeight: 80
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
