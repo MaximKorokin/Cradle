@@ -1,4 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using VContainer;
@@ -9,6 +11,8 @@ namespace Assets._Game.Scripts.UI.Systems
     {
         private WindowManager _windowManager;
 
+        private WindowWrapperBase _currentlyMovingWindow;
+
         [Inject]
         public void Construct(
             IGlobalEventBus globalEventBus,
@@ -18,9 +22,35 @@ namespace Assets._Game.Scripts.UI.Systems
 
             _windowManager = windowManager;
 
+            TrackGlobalEvent<PointerDownEvent>(OnPointerDown);
+            TrackGlobalEvent<PointerUpEvent>(OnPointerUp);
+            TrackGlobalEvent<PointerMoveEvent>(OnPointerMove);
+
             TrackGlobalEvent<WindowToggleRequest>(OnWindowToggleRequested);
             TrackGlobalEvent<WindowOpenRequest>(OnWindowOpenRequested);
             TrackGlobalEvent<WindowCloseRequest>(OnWindowCloseRequested);
+        }
+
+        private void OnPointerDown(PointerDownEvent e)
+        {
+            if (!e.Context.UnderlyingElement.TryGetComponentInParent<WindowWrapperBase>(out var windowWrapper)) return;
+
+            _windowManager.SetTopWindow(windowWrapper);
+
+            if (!e.Context.UnderlyingElement.TryGetComponentInParent<WindowDragHandler>(out var _)) return;
+
+            _currentlyMovingWindow = windowWrapper;
+        }
+
+        private void OnPointerUp(PointerUpEvent e)
+        {
+            _currentlyMovingWindow = null;
+        }
+
+        private void OnPointerMove(PointerMoveEvent e)
+        {
+            if (_currentlyMovingWindow == null) return;
+            _windowManager.MoveWindow(_currentlyMovingWindow, e.Context.ScreenPosition - e.Context.PreviousScreenPosition);
         }
 
         private void OnWindowToggleRequested(WindowToggleRequest e)

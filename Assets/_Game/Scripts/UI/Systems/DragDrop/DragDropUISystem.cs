@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Views;
 using UnityEngine;
 using VContainer;
@@ -37,7 +38,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         private void OnPointerDown(PointerDownEvent e)
         {
-            if (TryResolveDragDropSource(e.Context.UnderlyingElement, out var source) && source.CanStartDrag())
+            if (e.Context.UnderlyingElement.TryGetComponentInParent<IDragDropSource>(out var source) && source.CanStartDrag())
             {
                 _currentDragDropSource = source;
                 _dragStartPosition = e.Context.ScreenPosition;
@@ -77,25 +78,13 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             _dragDropView.transform.position = e.Context.ScreenPosition;
 
             // Get Drop candidate and set highlight
-            TryResolveDragDropTarget(e.Context.UnderlyingElement, out var target);
+            e.Context.UnderlyingElement.TryGetComponentInParent<IDragDropTarget>(out var target);
             if (_dragDropTargetCandidate != target)
             {
                 _dragDropTargetCandidate?.SetDragDropHighlight(false);
                 _dragDropTargetCandidate = target;
                 _dragDropTargetCandidate?.SetDragDropHighlight(true);
             }
-        }
-
-        private bool TryResolveDragDropSource(GameObject gameObject, out IDragDropSource dragDropSource)
-        {
-            dragDropSource = gameObject == null ? null : gameObject.GetComponentInParent<IDragDropSource>();
-            return dragDropSource != null;
-        }
-
-        private bool TryResolveDragDropTarget(GameObject gameObject, out IDragDropTarget dragDropTarget)
-        {
-            dragDropTarget = gameObject == null ? null : gameObject.GetComponentInParent<IDragDropTarget>();
-            return dragDropTarget != null;
         }
     }
 }

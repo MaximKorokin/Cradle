@@ -106,10 +106,7 @@ namespace Assets._Game.Scripts.UI.Windows
         }
 
         private WindowStackEntry FindWindowStackEntry(WindowId windowId, IWindowControllerArguments arguments)
-        {
-            var entry = _windowStack.FirstOrDefault(e => e.Id == windowId && Equals(e.Arguments, arguments));
-            return entry;
-        }
+            => _windowStack.FirstOrDefault(e => e.Id == windowId && Equals(e.Arguments, arguments));
 
         private void CloseWindowInternal(WindowStackEntry element)
         {
@@ -129,15 +126,6 @@ namespace Assets._Game.Scripts.UI.Windows
             element.Controller.Dispose();
         }
 
-        public void CloseTopWindow()
-        {
-            if (_windowStack.Count == 0) return;
-
-            var lastElement = _windowStack.Last();
-
-            CloseWindowInternal(lastElement);
-        }
-
         public void CloseWindow(UIWindowBase window)
         {
             var element = _windowStack.FirstOrDefault(e => e.Window == window);
@@ -148,6 +136,16 @@ namespace Assets._Game.Scripts.UI.Windows
             }
 
             CloseWindowInternal(element);
+        }
+
+        public void MoveWindow(WindowWrapperBase window, Vector2 delta)
+        {
+            window.transform.localPosition += (Vector3)delta;
+        }
+
+        public void SetTopWindow(WindowWrapperBase window)
+        {
+            window.transform.SetAsLastSibling();
         }
 
         private readonly struct WindowStackEntry

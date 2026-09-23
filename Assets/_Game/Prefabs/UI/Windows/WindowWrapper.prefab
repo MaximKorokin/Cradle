@@ -275,8 +275,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8ea690140168c4a8df72fd1a3149e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _closeButton: {fileID: 5329003060153548138}
   _windowParent: {fileID: 1885330526583248904}
+  _closeButton: {fileID: 5329003060153548138}
 --- !u!114 &2837384653621095369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 5069793439041405960}
   - component: {fileID: 1502383507175215008}
   - component: {fileID: 2730938296091642809}
+  - component: {fileID: 359869566601824462}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -443,6 +444,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &359869566601824462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7615737706710270173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07a0492321885da4986c6a716c7911f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7871275917339554123
 GameObject:
   m_ObjectHideFlags: 0

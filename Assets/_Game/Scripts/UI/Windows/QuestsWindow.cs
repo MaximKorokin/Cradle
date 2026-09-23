@@ -21,6 +21,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public void Render(QuestsHudData data)
         {
+            var currentTabIndex = _questsTabsController.GetSelectedTabIndex();
+
             // Active quests
             _activeQuestsListView = Instantiate(_questsListViewTemplate);
             _activeQuestsListView.Render(data.ActiveQuests.Where(q => !q.IsCompleted).Select(q => new SimpleListItemData()
@@ -44,6 +46,8 @@ namespace Assets._Game.Scripts.UI.Windows
             _questsTabsController.AddTab(new("Completed", _completedQuestsListView.transform as RectTransform));
             _completedQuestsListView.ElementInfoClicked += OnQuestInfoClicked;
             _completedQuestsListView.ElementActionClicked += OnQuestActionClicked;
+
+            _questsTabsController.SelectTab(currentTabIndex);
         }
 
         public override void OnShow()
