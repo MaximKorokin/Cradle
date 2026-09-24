@@ -7,7 +7,6 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Services;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -19,7 +18,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly CheatsHudData _cheatsHudData;
         private readonly EquipmentHudData _equipmentHudData;
         private readonly ItemStackFactory _itemStackAssembler;
-        private readonly ItemPreviewService _itemPreviewService;
 
         public CheatsWindowController(
             IGlobalEventBus globalEventBus,
@@ -27,8 +25,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             EntityRepository entityRepository,
             CheatsHudData cheatsHudData,
             EquipmentHudData equipmentHudData,
-            ItemStackFactory itemStackAssembler,
-            ItemPreviewService itemPreviewService)
+            ItemStackFactory itemStackAssembler)
         {
             _globalEventBus = globalEventBus;
             _playerProvider = playerProvider;
@@ -36,7 +33,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _cheatsHudData = cheatsHudData;
             _equipmentHudData = equipmentHudData;
             _itemStackAssembler = itemStackAssembler;
-            _itemPreviewService = itemPreviewService;
         }
 
         protected override void OnInitialize()
@@ -50,7 +46,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            Window.ItemDefinitionInfoClicked += OnItemDefinitionInfoClicked;
             Window.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
             Window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
 
@@ -62,7 +57,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnUnbind();
 
-            Window.ItemDefinitionInfoClicked -= OnItemDefinitionInfoClicked;
             Window.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
             Window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
 
@@ -77,14 +71,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 var statusEffect = new StatusEffect(statusEffectDefinition);
                 statusEffectModule.StatusEffects.AddStatusEffect(statusEffect);
             }
-        }
-
-        private void OnItemDefinitionInfoClicked(ItemDefinition itemDefinition)
-        {
-            _itemPreviewService.ShowItemDefinitionPreview(
-                itemDefinition,
-                ItemContainerPath.Equipment(Arguments.EquipmentEntityId.Value),
-                _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(itemDefinition));
         }
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)

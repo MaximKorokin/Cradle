@@ -6,7 +6,6 @@ using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Services;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -17,22 +16,19 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly CraftingHudData _craftingHudData;
         private readonly EquipmentHudData _equipmentHudData;
         private readonly CraftingService _craftingService;
-        private readonly ItemPreviewService _itemPreviewService;
 
         public CraftingWindowController(
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver,
             CraftingHudData craftingHudData,
             EquipmentHudData equipmentHudData,
-            CraftingService craftingService,
-            ItemPreviewService itemPreviewService)
+            CraftingService craftingService)
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
             _craftingHudData = craftingHudData;
             _equipmentHudData = equipmentHudData;
             _craftingService = craftingService;
-            _itemPreviewService = itemPreviewService;
         }
 
         protected override void OnInitialize()
@@ -66,10 +62,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)
         {
-            _itemPreviewService.ShowItemDefinitionPreview(
-                recipe.Result.ItemDefinition,
-                ItemContainerPath.Equipment(Arguments.EquipmentEntityId.Value),
-                _equipmentHudData.EquipmentModel.FindOccupiedSlotForItem(recipe.Result.ItemDefinition));
+
         }
 
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)

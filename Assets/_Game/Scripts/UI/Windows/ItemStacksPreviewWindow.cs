@@ -1,9 +1,6 @@
 ﻿using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Views;
-using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
-using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,8 +19,6 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private readonly List<Button> _actionButtons = new();
 
-        public event Action<ItemStackActionType> ActionButtonClicked;
-
         public override void OnShow()
         {
             base.OnShow();
@@ -38,9 +33,9 @@ namespace Assets._Game.Scripts.UI.Windows
             Clear();
         }
 
-        public void Render(ItemStackDisplayData primaryItemStack, IEnumerable<ItemStackAction> actions) => Render(primaryItemStack, default, actions);
+        public void Render(ItemStackDisplayData primaryItemStack) => Render(primaryItemStack, default);
 
-        public void Render(ItemStackDisplayData primaryItemStack, ItemStackDisplayData secondaryItemStack, IEnumerable<ItemStackAction> actions)
+        public void Render(ItemStackDisplayData primaryItemStack, ItemStackDisplayData secondaryItemStack)
         {
             Clear();
             if (primaryItemStack.HasData)
@@ -50,18 +45,6 @@ namespace Assets._Game.Scripts.UI.Windows
             if (secondaryItemStack.HasData)
             {
                 _secondaryItemPreviewView.Render(secondaryItemStack);
-            }
-
-            foreach (var action in actions)
-            {
-                var button = Instantiate(_actionButtonTemplate, _actionButtonParent);
-                button.gameObject.SetActive(true);
-                button.GetComponentInChildren<TMP_Text>().text = action.Title;
-                button.onClick.AddListener(() =>
-                {
-                    ActionButtonClicked?.Invoke(action.Type);
-                });
-                _actionButtons.Add(button);
             }
         }
 

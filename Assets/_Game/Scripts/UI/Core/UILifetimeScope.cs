@@ -1,12 +1,10 @@
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
-using Assets._Game.Scripts.UI.Services;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
-using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 using Assets._Game.Scripts.UI.Windows.Modal;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,8 +67,6 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterServices(IContainerBuilder builder)
         {
-            builder.Register<ItemPreviewService>(Lifetime.Singleton);
-
             builder.Register<DragDropHandler>(Lifetime.Singleton);
         }
 

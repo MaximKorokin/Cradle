@@ -6,7 +6,6 @@ using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.Views;
-using Assets._Game.Scripts.UI.Windows;
 
 namespace Assets._Game.Scripts.UI.Systems.DragDrop
 {
