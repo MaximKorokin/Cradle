@@ -77,14 +77,14 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public IEnumerable<(InventorySlot Slot, ItemStackSnapshot? Item)> Enumerate()
         {
-            var slotIndex = 0;
-            foreach (var (_, snapshot) in InventoryModel.Enumerate())
+            foreach (var (slot, snapshot) in InventoryModel.Enumerate())
             {
-                if (_enumerationFilter == null || _enumerationFilter(snapshot))
+                var filteredSnapshot = snapshot;
+                if (_enumerationFilter != null && !_enumerationFilter(snapshot))
                 {
-                    yield return (InventorySlot.FromInt64(slotIndex), snapshot);
-                    slotIndex++;
+                    filteredSnapshot = null;
                 }
+                yield return (slot, filteredSnapshot);
             }
         }
 
