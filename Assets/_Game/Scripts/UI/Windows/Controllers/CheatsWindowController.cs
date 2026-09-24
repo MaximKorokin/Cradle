@@ -16,7 +16,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
-        private readonly WindowManager _windowManager;
         private readonly CheatsHudData _cheatsHudData;
         private readonly EquipmentHudData _equipmentHudData;
         private readonly ItemStackFactory _itemStackAssembler;
@@ -26,7 +25,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             IGlobalEventBus globalEventBus,
             IPlayerProvider playerProvider,
             EntityRepository entityRepository,
-            WindowManager windowManager,
             CheatsHudData cheatsHudData,
             EquipmentHudData equipmentHudData,
             ItemStackFactory itemStackAssembler,
@@ -35,7 +33,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _globalEventBus = globalEventBus;
             _playerProvider = playerProvider;
             _entityRepository = entityRepository;
-            _windowManager = windowManager;
             _cheatsHudData = cheatsHudData;
             _equipmentHudData = equipmentHudData;
             _itemStackAssembler = itemStackAssembler;
@@ -94,7 +91,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             if (_entityRepository.Get(Arguments.InventoryEntityId.Value).TryGetModule<InventoryModule>(out var inventoryModule))
             {
-                _windowManager.ShowAmountPickerIfNeeded(itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
+                WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
                 {
                     inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, amount).Snapshot);
                 });

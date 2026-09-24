@@ -2,6 +2,7 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview;
 
@@ -10,20 +11,17 @@ namespace Assets._Game.Scripts.UI.Services
     public sealed class ItemPreviewService
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly WindowManager _windowManager;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
         private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
 
         public ItemPreviewService(
             IGlobalEventBus globalEventBus,
-            WindowManager windowManager,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
             ItemDefinitionFormatter itemDefinitionFormatter)
         {
             _globalEventBus = globalEventBus;
-            _windowManager = windowManager;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
             _itemDefinitionFormatter = itemDefinitionFormatter;
@@ -41,7 +39,6 @@ namespace Assets._Game.Scripts.UI.Services
         {
             var strategy = new ContainerItemStacksPreviewStrategy(
                 _globalEventBus,
-                _windowManager,
                 _itemContainerResolver,
                 _itemStackFormatter,
                 equipmentSlotToCompare,
@@ -50,9 +47,10 @@ namespace Assets._Game.Scripts.UI.Services
                 containerPath,
                 secondaryContainerPath);
 
-            _windowManager.InstantiateWindow(
-                WindowId.ItemStacksPreview,
-                new ItemStacksPreviewWindowControllerArguments(strategy));
+            _globalEventBus.Publish(
+                new WindowOpenRequest(
+                    WindowId.ItemStacksPreview,
+                    new ItemStacksPreviewWindowControllerArguments(strategy)));
         }
 
         /// <summary>
@@ -69,21 +67,21 @@ namespace Assets._Game.Scripts.UI.Services
         {
             var strategy = new ShopItemStacksPreviewStrategy(
                 _globalEventBus,
-                _windowManager,
                 _itemContainerResolver,
                 _itemStackFormatter,
                 shopContainerPath,
                 inventoryContainerPath,
                 equipmentContainerPath,
                 shopSlot,
-                isBuying: true,
+                true,
                 buyCoefficient,
                 sellCoefficient,
                 equipmentSlotToCompare);
 
-            _windowManager.InstantiateWindow(
-                WindowId.ItemStacksPreview,
-                new ItemStacksPreviewWindowControllerArguments(strategy));
+            _globalEventBus.Publish(
+                new WindowOpenRequest(
+                    WindowId.ItemStacksPreview,
+                    new ItemStacksPreviewWindowControllerArguments(strategy)));
         }
 
         /// <summary>
@@ -99,7 +97,6 @@ namespace Assets._Game.Scripts.UI.Services
         {
             var strategy = new InventoryToShopPreviewStrategy(
                 _globalEventBus,
-                _windowManager,
                 _itemContainerResolver,
                 _itemStackFormatter,
                 shopContainerPath,
@@ -109,9 +106,10 @@ namespace Assets._Game.Scripts.UI.Services
                 sellCoefficient,
                 equipmentSlotToCompare);
 
-            _windowManager.InstantiateWindow(
-                WindowId.ItemStacksPreview,
-                new ItemStacksPreviewWindowControllerArguments(strategy));
+            _globalEventBus.Publish(
+                new WindowOpenRequest(
+                    WindowId.ItemStacksPreview,
+                    new ItemStacksPreviewWindowControllerArguments(strategy)));
         }
 
         /// <summary>
@@ -130,9 +128,10 @@ namespace Assets._Game.Scripts.UI.Services
                 equipmentContainerPath,
                 equipmentSlotToCompare);
 
-            _windowManager.InstantiateWindow(
-                WindowId.ItemStacksPreview,
-                new ItemStacksPreviewWindowControllerArguments(strategy));
+            _globalEventBus.Publish(
+                new WindowOpenRequest(
+                    WindowId.ItemStacksPreview,
+                    new ItemStacksPreviewWindowControllerArguments(strategy)));
         }
     }
 }

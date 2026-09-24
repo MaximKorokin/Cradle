@@ -1,9 +1,19 @@
+using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.UI.Systems;
 using System;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ConfirmationWindowController : WindowControllerBase<ConfirmationWindow, ConfirmationWindowControllerArguments>
     {
+        private readonly IGlobalEventBus _globalEventBus;
+
+        public ConfirmationWindowController(
+            IGlobalEventBus globalEventBus)
+        {
+            _globalEventBus = globalEventBus;
+        }
+
         protected override void OnBind()
         {
             base.OnBind();
@@ -21,6 +31,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void OnConfirmationResult(bool confirmed)
         {
             Arguments.OnDecisionCallback?.Invoke(confirmed);
+            _globalEventBus.Publish(new WindowCloseRequest(Window));
         }
 
         protected override void Redraw()

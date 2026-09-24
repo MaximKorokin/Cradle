@@ -8,6 +8,7 @@ using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.Shared.Utils;
 using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.Systems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
     public sealed class ContainerItemStacksPreviewStrategy : IItemStacksPreviewStrategy
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly WindowManager _windowManager;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
         private readonly EquipmentSlotKey? _equipmentSlot;
@@ -33,7 +33,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
         public ContainerItemStacksPreviewStrategy(
             IGlobalEventBus globalEventBus,
-            WindowManager windowManager,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
             EquipmentSlotKey? equipmentSlot,
@@ -43,7 +42,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             ItemContainerPath secondaryContainerPath)
         {
             _globalEventBus = globalEventBus;
-            _windowManager = windowManager;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
             _equipmentSlot = equipmentSlot;
@@ -81,7 +79,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
             if (primaryItem == null)
             {
-                _windowManager.CloseWindow(window);
+                _globalEventBus.Publish(new WindowCloseRequest(window));
                 return;
             }
 
@@ -107,19 +105,19 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             switch (actionType)
             {
                 case ItemStackActionType.Destroy:
-                    _windowManager.ShowConfirmationOrAmountPicker(item.Value.Amount, item.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {item.Value.Definition.Name}?", amount =>
+                    WindowUtils.ShowConfirmationOrAmountPicker(_globalEventBus, item.Value.Amount, item.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {item.Value.Definition.Name}?", amount =>
                     {
                         PublishItemCommand(new DestroyItemCommand(_primaryContainerPath, _primaryContainerSlot, amount));
                     });
                     break;
                 case ItemStackActionType.Drop:
-                    _windowManager.ShowConfirmationOrAmountPicker(item.Value.Amount, item.Value.Amount, "Drop Item", $"Are you sure you want to drop {item.Value.Definition.Name}?", amount =>
+                    WindowUtils.ShowConfirmationOrAmountPicker(_globalEventBus, item.Value.Amount, item.Value.Amount, "Drop Item", $"Are you sure you want to drop {item.Value.Definition.Name}?", amount =>
                     {
                         PublishItemCommand(new DropItemCommand(_primaryContainerPath, _primaryContainerSlot, amount));
                     });
                     break;
                 case ItemStackActionType.Transfer:
-                    _windowManager.ShowAmountPickerIfNeeded(item.Value.Amount, item.Value.Amount, amount =>
+                    WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, item.Value.Amount, item.Value.Amount, amount =>
                     {
                         PublishItemCommand(new TransferToContainerCommand(_primaryContainerPath, _primaryContainerSlot, _secondaryContainerPath, amount));
                     });
@@ -136,7 +134,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Enchant:
                     var enchantableTrait = item.Value.GetTrait<EnchantableTrait>();
                     item.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData);
-                    _windowManager.ShowConfirmation("Enchant Item", $"Are you sure you want to enchant {item.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
+                    WindowUtils.ShowConfirmation(_globalEventBus, "Enchant Item", $"Are you sure you want to enchant {item.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
                     {
                         if (confirmed) PublishItemCommand(new EnchantItemCommand(_primaryContainerPath, _primaryContainerSlot));
                     });
@@ -146,8 +144,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
         private void PublishItemCommand(IItemCommand command)
         {
-            _windowManager.CloseWindow(_window);
-
+            _globalEventBus.Publish(new WindowCloseRequest(_window));
             _globalEventBus.Publish(new ItemCommandRequest(command));
         }
 

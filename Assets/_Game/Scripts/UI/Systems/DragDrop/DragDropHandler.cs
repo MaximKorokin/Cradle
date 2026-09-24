@@ -13,13 +13,13 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
     public class DragDropHandler
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly WindowManager _windowManager;
         private readonly ItemContainerResolver _itemContainerResolver;
 
-        public DragDropHandler(IGlobalEventBus globalEventBus, WindowManager windowManager, ItemContainerResolver itemContainerResolver)
+        public DragDropHandler(
+            IGlobalEventBus globalEventBus,
+            ItemContainerResolver itemContainerResolver)
         {
             _globalEventBus = globalEventBus;
-            _windowManager = windowManager;
             _itemContainerResolver = itemContainerResolver;
         }
 
@@ -57,7 +57,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
             else
             {
-                _windowManager.ShowAmountPickerIfNeeded(itemStack1.Value.Amount, itemStack1.Value.Amount, (selectedAmount) =>
+                WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, itemStack1.Value.Amount, itemStack1.Value.Amount, (selectedAmount) =>
                 {
                     PublishCommand(new TransferToContainerSlotCommand(
                         inventorySlot1.ContainerPath,
@@ -73,7 +73,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
         {
             if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
 
-            _windowManager.ShowConfirmationOrAmountPicker(itemStack.Value.Amount, itemStack.Value.Amount, "Drop Item", $"Are you sure you want to drop {itemStack.Value.Definition.Name}?", (selectedAmount) =>
+            WindowUtils.ShowConfirmationOrAmountPicker(_globalEventBus, itemStack.Value.Amount, itemStack.Value.Amount, "Drop Item", $"Are you sure you want to drop {itemStack.Value.Definition.Name}?", (selectedAmount) =>
             {
                 PublishCommand(new DropItemCommand(
                     inventorySlot.ContainerPath,
@@ -88,7 +88,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             switch (dropArea.Type)
             {
                 case DropAreaType.ItemDestroy:
-                    _windowManager.ShowConfirmationOrAmountPicker(itemStack.Value.Amount, itemStack.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {itemStack.Value.Definition.Name}?", (selectedAmount) =>
+                    WindowUtils.ShowConfirmationOrAmountPicker(_globalEventBus, itemStack.Value.Amount, itemStack.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {itemStack.Value.Definition.Name}?", (selectedAmount) =>
                     {
                         PublishCommand(new DestroyItemCommand(
                             inventorySlot.ContainerPath,
@@ -99,7 +99,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                 case DropAreaType.ItemEnchant:
                     var enchantableTrait = itemStack.Value.GetTrait<EnchantableTrait>();
                     if (!itemStack.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData)) return;
-                    _windowManager.ShowConfirmation("Enchant Item", $"Are you sure you want to enchant {itemStack.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
+                    WindowUtils.ShowConfirmation(_globalEventBus, "Enchant Item", $"Are you sure you want to enchant {itemStack.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
                     {
                         if (!confirmed) return;
                         PublishCommand(new EnchantItemCommand(

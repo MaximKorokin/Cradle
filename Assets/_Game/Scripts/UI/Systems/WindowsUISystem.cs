@@ -60,7 +60,7 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnWindowOpenRequested(WindowOpenRequest e)
         {
-            _windowManager.InstantiateWindow(e.WindowId, e.Arguments);
+            _windowManager.OpenWindow(e.WindowId, e.Arguments);
         }
 
         private void OnWindowCloseRequested(WindowCloseRequest e)

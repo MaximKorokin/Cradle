@@ -1,28 +1,30 @@
 using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Systems;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestGiverWindowController : WindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments>
     {
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly QuestGiverHudData _questGiverHudData;
         private readonly EntityRepository _entityRepository;
-        private readonly WindowManager _windowManager;
 
         private string _targetEntityId;
 
         public QuestGiverWindowController(
+            IGlobalEventBus globalEventBus,
             QuestGiverHudData questGiverHudData,
-            EntityRepository entityRepository,
-            WindowManager windowManager)
+            EntityRepository entityRepository)
         {
+            _globalEventBus = globalEventBus;
             _questGiverHudData = questGiverHudData;
             _entityRepository = entityRepository;
-            _windowManager = windowManager;
         }
 
         protected override void OnInitialize()
@@ -62,7 +64,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             var questState = _questGiverHudData.IsQuestAccepted(questId) ? _questGiverHudData.GetQuestState(questId) : new(quest);
 
-            _windowManager.InstantiateWindow(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(questState));
+            _globalEventBus.Publish(new WindowOpenRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(questState)));
         }
 
         private void OnQuestAcceptClicked(string questId)

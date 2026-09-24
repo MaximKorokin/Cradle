@@ -14,7 +14,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly WindowManager _windowManager;
         private readonly CraftingHudData _craftingHudData;
         private readonly EquipmentHudData _equipmentHudData;
         private readonly CraftingService _craftingService;
@@ -23,7 +22,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public CraftingWindowController(
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver,
-            WindowManager windowManager,
             CraftingHudData craftingHudData,
             EquipmentHudData equipmentHudData,
             CraftingService craftingService,
@@ -31,7 +29,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
-            _windowManager = windowManager;
             _craftingHudData = craftingHudData;
             _equipmentHudData = equipmentHudData;
             _craftingService = craftingService;
@@ -87,7 +84,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var maxResultAmount = recipe.Result.ItemDefinition.MaxAmount;
             var maxAmount = System.Math.Min(maxCraftable, maxResultAmount);
 
-            _windowManager.ShowAmountPickerThenConfirmation(
+            WindowUtils.ShowAmountPickerThenConfirmation(
+                _globalEventBus,
                 maxAmount,
                 maxAmount,
                 "Confirm Crafting",

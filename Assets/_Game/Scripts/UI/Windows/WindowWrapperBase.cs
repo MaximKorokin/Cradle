@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.UI.Systems;
+using System;
 using UnityEngine;
+using VContainer;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
@@ -8,9 +11,15 @@ namespace Assets._Game.Scripts.UI.Windows
         [SerializeField]
         private RectTransform _windowParent;
 
+        private IGlobalEventBus _globalEventBus;
+
         private UIWindowBase _window;
 
-        public event Action<UIWindowBase> WindowCloseRequested;
+        [Inject]
+        private void Construct(IGlobalEventBus globalEventBus)
+        {
+            _globalEventBus = globalEventBus;
+        }
 
         public void SetWindow(UIWindowBase window)
         {
@@ -20,7 +29,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public void RequestClose()
         {
-            WindowCloseRequested?.Invoke(_window);
+            _globalEventBus.Publish(new WindowCloseRequest(_window));
         }
     }
 }

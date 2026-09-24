@@ -53,8 +53,12 @@ namespace Assets._Game.Scripts.UI.Windows
             InstantiateWindow(windowId, arguments);
         }
 
-        /// <summary> Uses OpenStrategy if available, otherwise provides empty arguments to the controller </summary>
-        public UIWindowBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        public UIWindowBase OpenWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        {
+            return InstantiateWindow(windowId, arguments);
+        }
+
+        private UIWindowBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
             // find definition
             var definition = FindWindowDefinition(windowId);
@@ -87,7 +91,6 @@ namespace Assets._Game.Scripts.UI.Windows
             var wrapperParent = definition.Configuration.IsModal ? _modalsRoot : _windowsRoot;
             var wrapperRoot = _resolver.Instantiate(wrapperPrefab, wrapperParent);
             wrapperRoot.SetWindow(window);
-            wrapperRoot.WindowCloseRequested += CloseWindow;
 
             // push window and controller to stack that will be used to destroy everything correctly
             _windowStack.Add(new(windowId, window, controller, arguments, wrapperRoot));
@@ -116,7 +119,6 @@ namespace Assets._Game.Scripts.UI.Windows
             
             if (element.WrapperRoot != null)
             {
-                element.WrapperRoot.WindowCloseRequested -= CloseWindow;
                 UnityEngine.Object.Destroy(element.WrapperRoot.gameObject);
             }
             else

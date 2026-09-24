@@ -1,20 +1,22 @@
-﻿using Assets._Game.Scripts.Shared;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Systems;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestsWindowController : WindowControllerBase<QuestsWindow, QuestsWindowControllerArguments>
     {
+        private readonly IGlobalEventBus _globalEventBus;
         private readonly QuestsHudData _questsHudData;
-        private readonly WindowManager _windowManager;
 
         public QuestsWindowController(
-            QuestsHudData questsHudData,
-            WindowManager windowManager)
+            IGlobalEventBus globalEventBus,
+            QuestsHudData questsHudData)
         {
+            _globalEventBus = globalEventBus;
             _questsHudData = questsHudData;
-            _windowManager = windowManager;
         }
 
         protected override void OnInitialize()
@@ -43,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             var quest = _questsHudData.ActiveQuests.FirstOrDefault(q => q.Definition.Id == questId);
             if (quest == null) return;
 
-            _windowManager.InstantiateWindow(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest));
+            _globalEventBus.Publish(new WindowOpenRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest)));
         }
 
         protected override void Redraw()

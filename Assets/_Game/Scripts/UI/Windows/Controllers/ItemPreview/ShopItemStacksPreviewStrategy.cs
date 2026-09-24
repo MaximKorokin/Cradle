@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.Systems;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
@@ -14,7 +15,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
     public sealed class ShopItemStacksPreviewStrategy : IItemStacksPreviewStrategy
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly WindowManager _windowManager;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemStackFormatter _itemStackFormatter;
         private readonly ItemContainerPath _shopContainerPath;
@@ -32,7 +32,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
         public ShopItemStacksPreviewStrategy(
             IGlobalEventBus globalEventBus,
-            WindowManager windowManager,
             ItemContainerResolver itemContainerResolver,
             ItemStackFormatter itemStackFormatter,
             ItemContainerPath shopContainerPath,
@@ -45,7 +44,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
             EquipmentSlotKey? equipmentSlot)
         {
             _globalEventBus = globalEventBus;
-            _windowManager = windowManager;
             _itemContainerResolver = itemContainerResolver;
             _itemStackFormatter = itemStackFormatter;
             _shopContainerPath = shopContainerPath;
@@ -89,7 +87,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
             if (!item.HasValue)
             {
-                _windowManager.CloseWindow(window);
+                _globalEventBus.Publish(new WindowCloseRequest(window));
                 return;
             }
 
@@ -113,7 +111,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
                 case ItemStackActionType.Buy:
                     if (item.Value.Definition.TryGetTrait<PriceTrait>(out var priceTrait))
                     {
-                        _windowManager.ShowAmountPickerThenConfirmation(
+                        WindowUtils.ShowAmountPickerThenConfirmation(
+                            _globalEventBus,
                             item.Value.Amount,
                             item.Value.Amount,
                             "Confirm Purchase",
@@ -134,8 +133,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers.ItemPreview
 
         private void PublishItemCommand(IItemCommand command)
         {
-            _windowManager.CloseWindow(_window);
-
+            _globalEventBus.Publish(new WindowCloseRequest(_window));
             _globalEventBus.Publish(new ItemCommandRequest(command));
         }
 
