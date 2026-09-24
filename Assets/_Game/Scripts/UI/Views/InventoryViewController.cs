@@ -1,9 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
-using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
-using System;
 
 namespace Assets._Game.Scripts.UI.Views
 {
@@ -12,12 +10,6 @@ namespace Assets._Game.Scripts.UI.Views
         private readonly IGlobalEventBus _globalEventBus;
 
         private IInventoryHudData _inventoryHudData;
-
-        public event Action<InventorySlot> SlotClick
-        {
-            add => View.SlotClick += value;
-            remove => View.SlotClick -= value;
-        }
 
         public InventoryViewController(IGlobalEventBus globalEventBus)
         {

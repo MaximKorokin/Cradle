@@ -8,18 +8,10 @@ namespace Assets._Game.Scripts.UI.Views
     {
         private IEquipmentHudData _equipmentHudData;
 
-        public event Action<EquipmentSlotKey> SlotClick
-        {
-            add => View.SlotClick += value;
-            remove => View.SlotClick -= value;
-        }
-
         public void Bind(IEquipmentHudData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
             _equipmentHudData.Changed += Redraw;
-
-            View.Bind();
         }
 
         public void Unbind()

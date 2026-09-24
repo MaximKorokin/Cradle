@@ -46,8 +46,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         private IInventoryHudData _inventoryHudData;
 
-        public event Action<InventorySlot> SlotClick;
-
         public event Action<bool> FilterByClothingButtonClicked;
         public event Action<bool> FilterByWeaponButtonClicked;
         public event Action<bool> FilterByUtilityButtonClicked;
@@ -111,7 +109,6 @@ namespace Assets._Game.Scripts.UI.Views
                 // Instantiate new slot if there are not enough in the pool
                 var newSlot = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
                 newSlot.Bind(inventoryHudData.ContainerPath, inventorySlot.ToInt64());
-                newSlot.PointerClick += OnSlotPointerClick;
                 _slots.Add(newSlot);
                 newSlot.gameObject.SetActive(true);
                 newSlot.Render(stack);
@@ -130,11 +127,6 @@ namespace Assets._Game.Scripts.UI.Views
         public void Unbind()
         {
             _inventoryHudData = null;
-        }
-
-        private void OnSlotPointerClick(long slotIndex)
-        {
-            SlotClick?.Invoke(InventorySlot.FromInt64(slotIndex));
         }
     }
 }

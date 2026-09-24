@@ -15,16 +15,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         private IEquipmentHudData _equipmentHudData;
 
-        public event Action<EquipmentSlotKey> SlotClick;
-
-        public void Bind()
-        {
-            foreach (var slot in _slots)
-            {
-                slot.SlotView.PointerClick += OnSlotPointerClick;
-            }
-        }
-
         public void Render(IEquipmentHudData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
@@ -61,17 +51,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Unbind()
         {
-            foreach (var slot in _slots)
-            {
-                slot.SlotView.PointerClick -= OnSlotPointerClick;
-            }
-
             _equipmentHudData = null;
-        }
-
-        private void OnSlotPointerClick(long slot)
-        {
-            SlotClick?.Invoke(EquipmentSlotKey.FromInt64(slot));
         }
     }
 }
