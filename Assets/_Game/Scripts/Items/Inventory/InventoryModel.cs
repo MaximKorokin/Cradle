@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Inventory
 {
@@ -44,6 +45,29 @@ namespace Assets._Game.Scripts.Items.Inventory
                 var s = _slots[i];
                 yield return (new InventorySlot(i), s?.Snapshot);
             }
+        }
+
+        public void SortBy(Func<ItemStackSnapshot, object> keySelector)
+        {
+            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+
+            var sortedStacks = _slots
+                .Where(stack => stack != null)
+                .OrderBy(stack => keySelector(stack.Snapshot))
+                .ToArray();
+
+            if (sortedStacks.SequenceEqual(_slots)) return;
+
+            for (int i = 0; i < _slots.Length; i++)
+                UnsubscribeSlot(i);
+
+            Array.Clear(_slots, 0, _slots.Length);
+            Array.Copy(sortedStacks, _slots, sortedStacks.Length);
+
+            for (int i = 0; i < _slots.Length; i++)
+                SubscribeSlot(i);
+
+            Changed?.Invoke();
         }
 
         public int Count(ItemKey key)
