@@ -1,11 +1,12 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Systems;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Systems
 {
-    public abstract class UISystemBase : MonoBehaviour, IDisposable
+    public abstract class UISystemBase : MonoBehaviour, IDisposable, IUISystem
     {
         protected IGlobalEventBus GlobalEventBus;
 
@@ -32,4 +33,6 @@ namespace Assets._Game.Scripts.UI.Systems
             _subscriptions.Clear();
         }
     }
+
+    public interface IUISystem : ISystemBase { }
 }

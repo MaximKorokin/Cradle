@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.Items.Inventory;
-using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class InventoryView : MonoBehaviour
+    public sealed class InventoryView : UIViewBase<IInventoryHudData>
     {
         [SerializeField]
         private RectTransform _inventorySlotsParent;
@@ -84,7 +83,7 @@ namespace Assets._Game.Scripts.UI.Views
         private void OnOrderByNameButtonClicked() => OrderByNameButtonClicked?.Invoke();
         private void OnOrderByPurposeButtonClicked() => OrderByPurposeButtonClicked?.Invoke();
 
-        public void Render(IInventoryHudData inventoryHudData)
+        public override void Render(IInventoryHudData inventoryHudData)
         {
             _inventorySlotTemplate.gameObject.SetActive(false);
 

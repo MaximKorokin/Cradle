@@ -1,39 +1,53 @@
-﻿using Assets._Game.Scripts.Entities;
-using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Shared;
-using System.Linq;
+﻿using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class StatsWindowController : WindowControllerBase<StatsWindow, StatsWindowControllerArguments>
     {
-        private StatModule _statModule;
-        private readonly EntityRepository _entityRepository;
+        private readonly StatsHudData _statsHudData;
+        private readonly StatsViewController _statsViewController;
 
-        public StatsWindowController(EntityRepository entityRepository)
+        public StatsWindowController(
+            StatsHudData statsHudData,
+            StatsViewController statsViewController)
         {
-            _entityRepository = entityRepository;
+            _statsHudData = statsHudData;
+            _statsViewController = statsViewController;
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            _statsHudData.SetEntityId(Arguments.EntityId);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            _statModule = _entityRepository.Get(Arguments.EntityId.Value).GetModule<StatModule>();
-            _statModule.Stats.Changed += Redraw;
+            _statsViewController.Initialize(Window.StatsView);
+            _statsViewController.Bind(_statsHudData);
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            _statModule.Stats.Changed -= Redraw;
-            _statModule = null;
+            _statsViewController.Unbind();
         }
 
         protected override void Redraw()
         {
-            Window.Render(_statModule.Stats.Enumerate().Select(s => (s.Id.ToString(), s.Final.ToString())));
+            _statsViewController.Render();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _statsViewController.Dispose();
+            _statsHudData.Dispose();
         }
     }
 

@@ -14,7 +14,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         protected abstract void Redraw();
 
         protected virtual void OnBind() { }
+
         protected virtual void OnUnbind() { }
+
         protected virtual void OnInitialize() { }
 
         public void Bind(UIWindowBase window)

@@ -1,21 +1,20 @@
 ﻿using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.UI.DataAggregators;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentView : MonoBehaviour
+    public sealed class EquipmentView : UIViewBase<IEquipmentHudData>
     {
         [SerializeField]
         private EquipmentSlotView[] _slots;
 
         private IEquipmentHudData _equipmentHudData;
 
-        public void Render(IEquipmentHudData equipmentHudData)
+        public override void Render(IEquipmentHudData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
 

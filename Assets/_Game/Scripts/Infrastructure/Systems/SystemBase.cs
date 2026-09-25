@@ -32,5 +32,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         }
     }
 
-    public interface ISystem { }
+    public interface ISystem : ISystemBase { }
+
+    public interface ISystemBase { }
 }

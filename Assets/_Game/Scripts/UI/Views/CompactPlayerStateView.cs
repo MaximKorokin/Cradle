@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class CompactPlayerStateView : MonoBehaviour
+    public sealed class CompactPlayerStateView : UIViewBase<PlayerStateViewData>
     {
         [Header("HP")]
         [SerializeField]
@@ -35,8 +35,9 @@ namespace Assets._Game.Scripts.UI.Views
         private PlayerStateViewData _playerStateViewData;
         private readonly List<(FillBar FillBar, StatusEffectSnapshot Snapshot, float RemainingDuration)> _activeStatusEffects = new();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _buffTemplate.gameObject.SetActive(false);
             _debuffTemplate.gameObject.SetActive(false);
         }
@@ -56,12 +57,11 @@ namespace Assets._Game.Scripts.UI.Views
         }
 
         // todo: optimize by only updating changed values instead of redrawing everything
-        public void Redraw(PlayerStateViewData playerStateViewData)
+        public override void Render(PlayerStateViewData playerStateViewData)
         {
             Clear();
 
             _playerStateViewData = playerStateViewData;
-            _playerStateViewData.Changed += OnPlayerStateViewDataChanged;
 
             // HP
             _hpFillBar.SetFillRatio(_playerStateViewData.CurrentHp / _playerStateViewData.MaxHp);
@@ -93,11 +93,6 @@ namespace Assets._Game.Scripts.UI.Views
             }
         }
 
-        private void OnPlayerStateViewDataChanged()
-        {
-            Redraw(_playerStateViewData);
-        }
-
         public void Clear()
         {
             foreach (var (fillBar, _, _) in _activeStatusEffects)
@@ -105,8 +100,6 @@ namespace Assets._Game.Scripts.UI.Views
                 if (fillBar != null) Destroy(fillBar.gameObject);
             }
             _activeStatusEffects.Clear();
-
-            if (_playerStateViewData != null) _playerStateViewData.Changed -= OnPlayerStateViewDataChanged;
         }
     }
 }

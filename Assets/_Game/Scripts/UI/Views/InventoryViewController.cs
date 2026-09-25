@@ -45,19 +45,26 @@ namespace Assets._Game.Scripts.UI.Views
         public void Bind(IInventoryHudData inventoryHudData)
         {
             _inventoryHudData = inventoryHudData;
-            _inventoryHudData.Changed += Redraw;
+            _inventoryHudData.Changed += OnInventoryChanged;
         }
 
         public void Unbind()
         {
             if (_inventoryHudData != null)
-                _inventoryHudData.Changed -= Redraw;
-            _inventoryHudData = null;
+            {
+                _inventoryHudData.Changed -= OnInventoryChanged;
+                _inventoryHudData = null;
+            }
         }
 
-        public void Redraw()
+        protected override void OnRender()
         {
-            View.Render(_inventoryHudData);
+            View.RequestRender(_inventoryHudData);
+        }
+
+        private void OnInventoryChanged()
+        {
+            Render();
         }
 
         private void OnFilterButtonClicked(bool isOn, ItemStackPurpose purpose)

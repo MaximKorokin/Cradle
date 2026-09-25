@@ -1,29 +1,34 @@
 ﻿using Assets._Game.Scripts.UI.DataAggregators;
-using System;
-
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class CompactPlayerStateViewController : IDisposable
+    public sealed class CompactPlayerStateViewController : ViewControllerBase<CompactPlayerStateView>
     {
-        private readonly CompactPlayerStateView _compactPlayerStateView;
         private readonly PlayerStateViewData _playerStateViewData;
 
         public CompactPlayerStateViewController(
             CompactPlayerStateView compactPlayerStateView,
             PlayerStateViewData playerStateViewData)
         {
-            _compactPlayerStateView = compactPlayerStateView;
+            Initialize(compactPlayerStateView);
             _playerStateViewData = playerStateViewData;
+            _playerStateViewData.Changed += OnPlayerStateChanged;
         }
 
-        public void Render()
+        protected override void OnRender()
         {
-            _compactPlayerStateView.Redraw(_playerStateViewData);
+            View.RequestRender(_playerStateViewData);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            _compactPlayerStateView.Clear();
+            _playerStateViewData.Changed -= OnPlayerStateChanged;
+            View.Clear();
+            base.Dispose();
+        }
+
+        private void OnPlayerStateChanged()
+        {
+            Render();
         }
     }
 }

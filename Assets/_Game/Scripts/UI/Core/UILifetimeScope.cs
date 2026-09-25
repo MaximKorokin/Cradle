@@ -47,6 +47,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterInstance(_rootReferences);
 
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<UISystemRunner>(Lifetime.Scoped);
 
             builder.Register<EquipmentHudData>(Lifetime.Transient);
             builder.Register<InventoryHudData>(Lifetime.Transient);
@@ -54,6 +55,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<CraftingHudData>(Lifetime.Transient);
             builder.Register<QuestsHudData>(Lifetime.Transient);
             builder.Register<QuestGiverHudData>(Lifetime.Transient);
+            builder.Register<StatsHudData>(Lifetime.Transient);
 
             builder.Register<CheatsHudData>(Lifetime.Transient);
 
@@ -151,6 +153,8 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<InventoryViewController>(Lifetime.Transient);
             builder.Register<EquipmentViewController>(Lifetime.Transient);
             builder.Register<ShopViewController>(Lifetime.Transient);
+            builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
+            builder.Register<StatsViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)

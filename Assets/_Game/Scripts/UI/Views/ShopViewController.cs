@@ -7,9 +7,8 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ShopViewController
+    public sealed class ShopViewController : ViewControllerBase<ShopView>
     {
-        private ShopView _view;
         private ShopModel _shopModel;
         private string _shopName;
         private float _buyCoefficient;
@@ -17,9 +16,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public event Action<ShopSlot> SlotClick;
 
-        public void Initialize(ShopView view, ShopModel shopModel, string shopName, float buyCoefficient, float sellCoefficient)
+        public void InitializeShop(ShopView view, ShopModel shopModel, string shopName, float buyCoefficient, float sellCoefficient)
         {
-            _view = view;
+            Initialize(view);
             _shopModel = shopModel;
             _shopName = shopName;
             _buyCoefficient = buyCoefficient;
@@ -28,15 +27,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public void Bind()
         {
-            _view.SlotClicked += OnSlotClick;
+            View.SlotClicked += OnSlotClick;
             _shopModel.Changed += OnShopChanged;
         }
 
         public void Unbind()
         {
-            if (_view != null)
+            if (View != null)
             {
-                _view.SlotClicked -= OnSlotClick;
+                View.SlotClicked -= OnSlotClick;
             }
 
             if (_shopModel != null)
@@ -45,7 +44,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             }
         }
 
-        public void Redraw()
+        protected override void OnRender()
         {
             var viewData = new List<ShopSlotViewData>();
             foreach (var (slot, snapshot) in _shopModel.Enumerate())
@@ -65,7 +64,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 viewData.Add(viewSlotData);
             }
 
-            _view.Render(viewData, _shopName, _buyCoefficient, _sellCoefficient);
+            View.RequestRender((viewData, _shopName, _buyCoefficient, _sellCoefficient));
         }
 
         private void OnSlotClick(ShopSlot slot)
@@ -75,7 +74,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnShopChanged()
         {
-            Redraw();
+            Render();
+        }
+
+        public override void Dispose()
+        {
+            Unbind();
+            base.Dispose();
         }
     }
 }

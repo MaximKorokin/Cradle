@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a082182aef04fb4284ec52286779fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _statsView: {fileID: 488486638319978948}
+  <StatsView>k__BackingField: {fileID: 488486638319978948}
 --- !u!1 &4447772413310357908
 GameObject:
   m_ObjectHideFlags: 0

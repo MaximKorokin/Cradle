@@ -1,6 +1,4 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.UI.DataAggregators;
-using System;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Views
 {
@@ -11,7 +9,7 @@ namespace Assets._Game.Scripts.UI.Views
         public void Bind(IEquipmentHudData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
-            _equipmentHudData.Changed += Redraw;
+            _equipmentHudData.Changed += OnEquipmentChanged;
         }
 
         public void Unbind()
@@ -19,13 +17,20 @@ namespace Assets._Game.Scripts.UI.Views
             View.Unbind();
 
             if (_equipmentHudData != null)
-                _equipmentHudData.Changed -= Redraw;
-            _equipmentHudData = null;
+            {
+                _equipmentHudData.Changed -= OnEquipmentChanged;
+                _equipmentHudData = null;
+            }
         }
 
-        public void Redraw()
+        protected override void OnRender()
         {
-            View.Render(_equipmentHudData);
+            View.RequestRender(_equipmentHudData);
+        }
+
+        private void OnEquipmentChanged()
+        {
+            Render();
         }
     }
 }

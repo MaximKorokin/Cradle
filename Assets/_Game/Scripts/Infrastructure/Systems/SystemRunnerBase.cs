@@ -10,21 +10,24 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private readonly DispatcherService _dispatcherService;
         private readonly IReadOnlyList<IStartSystem> _startSystems;
         private readonly IReadOnlyList<ITickSystem> _tickSystems;
+        private readonly IReadOnlyList<ILateTickSystem> _lateTickSystems;
         private readonly IReadOnlyList<IFixedTickSystem> _fixedTickSystems;
 
         public SystemRunnerBase(
             DispatcherService dispatcherService,
-            IReadOnlyList<ISystem> systems)
+            IReadOnlyList<ISystemBase> systems)
         {
             _dispatcherService = dispatcherService;
             _startSystems = systems.OfType<IStartSystem>().ToArray();
             _tickSystems = systems.OfType<ITickSystem>().ToArray();
+            _lateTickSystems = systems.OfType<ILateTickSystem>().ToArray();
             _fixedTickSystems = systems.OfType<IFixedTickSystem>().ToArray();
         }
 
         public void Initialize()
         {
             _dispatcherService.OnTick += OnTick;
+            _dispatcherService.OnLateTick += OnLateTick;
             _dispatcherService.OnFixedTick += OnFixedTick;
 
             for (var i = 0; i < _startSystems.Count; i++)
@@ -36,6 +39,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public void Dispose()
         {
             _dispatcherService.OnTick -= OnTick;
+            _dispatcherService.OnLateTick -= OnLateTick;
             _dispatcherService.OnFixedTick -= OnFixedTick;
         }
 
@@ -44,6 +48,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             for (var i = 0; i < _tickSystems.Count; i++)
             {
                 _tickSystems[i].Tick(delta);
+            }
+        }
+
+        private void OnLateTick(float delta)
+        {
+            for (var i = 0; i < _lateTickSystems.Count; i++)
+            {
+                _lateTickSystems[i].LateTick(delta);
             }
         }
 
@@ -64,6 +76,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public interface ITickSystem
     {
         void Tick(float delta);
+    }
+
+    public interface ILateTickSystem
+    {
+        void LateTick(float delta);
     }
 
     public interface IFixedTickSystem

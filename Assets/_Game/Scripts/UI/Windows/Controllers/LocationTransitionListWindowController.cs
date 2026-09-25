@@ -6,6 +6,7 @@ using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Locations;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.Systems;
+using Assets._Game.Scripts.UI.Views;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -14,15 +15,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IGlobalEventBus _globalEventBus;
         private readonly LocationConfig _locationConfig;
         private readonly EntityRepository _entityRepository;
+        private readonly LocationTransitionListViewController _viewController;
 
         public LocationTransitionListWindowController(
             IGlobalEventBus globalEventBus,
             LocationConfig locationConfig,
-            EntityRepository entityRepository)
+            EntityRepository entityRepository,
+            LocationTransitionListViewController viewController)
         {
             _globalEventBus = globalEventBus;
             _locationConfig = locationConfig;
             _entityRepository = entityRepository;
+            _viewController = viewController;
         }
 
         protected override void OnBind()
@@ -30,6 +34,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnBind();
 
             Window.TransitionButtonClicked += OnTransitionButtonClicked;
+            _viewController.Initialize(Window.View);
         }
 
         protected override void OnUnbind()
@@ -49,7 +54,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             var playerLevel = _entityRepository.Get(Arguments.EntityId.Value).GetModule<LevelingModule>().Level;
             var locations = _locationConfig.GetAvailableLocations(playerLevel);
-            Window.Render(locations);
+            _viewController.SetTransitions(locations);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _viewController.Dispose();
         }
     }
 

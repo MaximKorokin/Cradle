@@ -4,31 +4,33 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class PlayerAiToggleView : MonoBehaviour
+    public sealed class PlayerAiToggleView : UIViewBase<bool>
     {
         [SerializeField]
         private Toggle _toggle;
 
         public event Action<bool> ValueChanged;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _toggle.onValueChanged.AddListener(OnToggleChanged);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             _toggle.onValueChanged.RemoveListener(OnToggleChanged);
-        }
-
-        public void SetValueWithoutNotify(bool value)
-        {
-            _toggle.SetIsOnWithoutNotify(value);
         }
 
         private void OnToggleChanged(bool value)
         {
             ValueChanged?.Invoke(value);
+        }
+
+        public override void Render(bool data)
+        {
+
         }
     }
 }

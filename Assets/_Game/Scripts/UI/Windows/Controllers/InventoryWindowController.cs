@@ -36,7 +36,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            _inventoryViewController.Redraw();
+            _inventoryViewController.Render();
         }
 
         public override void Dispose()

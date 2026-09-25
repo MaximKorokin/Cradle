@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class ShopView : MonoBehaviour
+    public sealed class ShopView : UIViewBase<(IReadOnlyList<ShopSlotViewData> ShopSlots, string ShopName, float BuyCoefficient, float SellCoefficient)>
     {
         [SerializeField]
         private RectTransform _shopSlotsParent;
@@ -24,22 +24,22 @@ namespace Assets._Game.Scripts.UI.Views
 
         public event Action<ShopSlot> SlotClicked;
 
-        public void Render(IReadOnlyList<ShopSlotViewData> shopSlots, string shopName, float buyCoefficient, float sellCoefficient)
+        public override void Render((IReadOnlyList<ShopSlotViewData> ShopSlots, string ShopName, float BuyCoefficient, float SellCoefficient) data)
         {
             _shopSlotTemplate.gameObject.SetActive(false);
 
-            _shopNameText.text = shopName;
-            _buyCoefficientText.text = $"Buy: {buyCoefficient:0.#}x";
-            _sellCoefficientText.text = $"Sell: {sellCoefficient:0.#}x";
+            _shopNameText.text = data.ShopName;
+            _buyCoefficientText.text = $"Buy: {data.BuyCoefficient:0.#}x";
+            _sellCoefficientText.text = $"Sell: {data.SellCoefficient:0.#}x";
 
             foreach (var slot in _slots)
             {
                 slot.gameObject.SetActive(false);
             }
 
-            for (int i = 0; i < shopSlots.Count; i++)
+            for (int i = 0; i < data.ShopSlots.Count; i++)
             {
-                var shopSlot = shopSlots[i];
+                var shopSlot = data.ShopSlots[i];
                 if (_slots.Count > i)
                 {
                     var slot = _slots[i];

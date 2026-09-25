@@ -10,10 +10,10 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _statValue;
 
-        public void Render(string name, string value)
+        public void Render((string Name, string Value) data)
         {
-            _statName.text = name;
-            _statValue.text = value;
+            _statName.text = data.Name;
+            _statValue.text = data.Value;
             gameObject.SetActive(true);
         }
 

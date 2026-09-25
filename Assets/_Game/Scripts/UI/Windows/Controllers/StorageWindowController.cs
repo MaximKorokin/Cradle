@@ -49,7 +49,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            _storageInventoryViewController.Redraw();
+            _storageInventoryViewController.Render();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _storageInventoryViewController.Dispose();
+            _inventoryHudData.Dispose();
+            _storageHudData.Dispose();
+            _equipmentHudData.Dispose();
         }
     }
 

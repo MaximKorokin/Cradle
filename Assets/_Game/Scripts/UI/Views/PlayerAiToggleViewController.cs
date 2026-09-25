@@ -1,27 +1,27 @@
 using Assets._Game.Scripts.Infrastructure.Game;
-using System;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class PlayerAiToggleViewController : IDisposable
+    public sealed class PlayerAiToggleViewController : ViewControllerBase<PlayerAiToggleView>
     {
-        private readonly PlayerAiToggleView _view;
         private readonly PlayerContext _playerContext;
 
         public PlayerAiToggleViewController(PlayerAiToggleView view, PlayerContext playerContext)
         {
-            _view = view;
+            Initialize(view);
             _playerContext = playerContext;
         }
 
-        public void Render()
+        protected override void OnRender()
         {
-            _view.ValueChanged += OnValueChanged;
+            View.ValueChanged -= OnValueChanged;
+            View.ValueChanged += OnValueChanged;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            _view.ValueChanged -= OnValueChanged;
+            if (View != null) View.ValueChanged -= OnValueChanged;
+            base.Dispose();
         }
 
         private void OnValueChanged(bool enabled)

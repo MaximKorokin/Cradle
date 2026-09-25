@@ -1,7 +1,6 @@
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Shared;
-using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
@@ -35,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            _shopViewController.Initialize(
+            _shopViewController.InitializeShop(
                 Window.ShopView,
                 ShopModel,
                 Arguments.ShopName,
@@ -53,7 +52,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            _shopViewController.Redraw();
+            _shopViewController.Render();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _shopViewController.Dispose();
         }
     }
 

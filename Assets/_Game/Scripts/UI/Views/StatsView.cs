@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class StatsView : MonoBehaviour
+    public sealed class StatsView : UIViewBase<IEnumerable<(string, string)>>
     {
         [SerializeField]
         private RectTransform _statsParent;
@@ -12,12 +12,13 @@ namespace Assets._Game.Scripts.UI.Views
 
         private readonly List<StatView> _statViews = new();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _statTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(IEnumerable<(string, string)> stats)
+        public override void Render(IEnumerable<(string, string)> stats)
         {
             Clear();
 
@@ -25,7 +26,7 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 var statView = Instantiate(_statTemplate, _statsParent);
                 _statViews.Add(statView);
-                statView.Render(stat, value);
+                statView.Render((stat, value));
             }
         }
 

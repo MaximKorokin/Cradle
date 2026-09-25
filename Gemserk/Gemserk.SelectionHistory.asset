@@ -259,23 +259,7 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 12708c68b119ad841ad46302b0117d98, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: 9a20291fd5a2dad4f8378142a4e79618, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: e189c94fa2a6e4b4c966f66625d87e1f, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -335,10 +319,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 4236470503915288397, guid: cf1dd061d23ea9d48ae9ecfa3a7a039c, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 4236470503915288397, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
       sceneName: 
       scenePath: 
@@ -351,35 +331,39 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: CraftingWindow
+    - reference: {fileID: 102900000, guid: 12708c68b119ad841ad46302b0117d98, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CraftingWindow
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 9a20291fd5a2dad4f8378142a4e79618, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CraftingWindow
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CraftingWindow
+      globalObjectId: 
+    - reference: {fileID: 4236470503915288397, guid: cf1dd061d23ea9d48ae9ecfa3a7a039c, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CraftingWindow
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 3da6f2e0c9284f14c9bf721b48a32c93, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CraftingWindow
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      globalObjectId: 
     - reference: {fileID: 0}
-      sceneName: CraftingWindow
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      sceneName: UIRoot
+      scenePath: Assets/_Game/Scenes/UIRoot.unity
+      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-1058341462-0
     - reference: {fileID: 0}
-      sceneName: CraftingWindow
+      sceneName: UIRoot
+      scenePath: Assets/_Game/Scenes/UIRoot.unity
+      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-197602179-0
+    - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      globalObjectId: 

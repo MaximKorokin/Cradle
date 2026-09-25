@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class LocationTransitionListView : MonoBehaviour
+    public sealed class LocationTransitionListView : UIViewBase<IReadOnlyList<LocationTransitionData>>
     {
         [SerializeField]
         private Button _transitionButtonTemplate;
@@ -18,12 +18,13 @@ namespace Assets._Game.Scripts.UI.Views
 
         public event Action<LocationTransitionData> TransitionButtonClicked;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _transitionButtonTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(IReadOnlyList<LocationTransitionData> transitions)
+        public override void Render(IReadOnlyList<LocationTransitionData> transitions)
         {
             foreach (var button in _transitionButtons)
             {
