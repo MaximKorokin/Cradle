@@ -9,30 +9,22 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class QuestsWindowData : EntityBoundDataAggregatorBase
     {
-        private readonly EntityRepository _entityRepository;
-
         private QuestModule _questModule;
 
         public IEnumerable<QuestState> ActiveQuests { get; private set; }
 
         public event Action Changed;
 
-        public QuestsWindowData(EntityRepository entityRepository)
-        {
-            _entityRepository = entityRepository;
-            UpdateData();
-        }
+        public QuestsWindowData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
         {
-            var entity = _entityRepository.Get(entityId);
-
             if (_questModule != null)
             {
                 _questModule.Updated -= OnQuestModuleUpdated;
             }
 
-            if (entity != null && entity.TryGetModule<QuestModule>(out var questsModule))
+            if (Entity != null && Entity.TryGetModule<QuestModule>(out var questsModule))
             {
                 _questModule = questsModule;
                 _questModule.Updated += OnQuestModuleUpdated;

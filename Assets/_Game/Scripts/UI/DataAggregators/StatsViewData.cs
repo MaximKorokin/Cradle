@@ -8,16 +8,12 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class StatsViewData : EntityBoundDataAggregatorBase
     {
-        private readonly EntityRepository _entityRepository;
         private StatModule _statModule;
 
         public IEnumerable<(string, string)> Stats { get; private set; }
         public event Action Changed;
 
-        public StatsViewData(EntityRepository entityRepository)
-        {
-            _entityRepository = entityRepository;
-        }
+        public StatsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
         {
@@ -26,8 +22,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 _statModule.Stats.Changed -= OnStatsChanged;
             }
 
-            var entity = string.IsNullOrEmpty(entityId) ? null : _entityRepository.Get(entityId);
-            _statModule = entity?.GetModule<StatModule>();
+            _statModule = Entity?.GetModule<StatModule>();
 
             if (_statModule != null)
             {

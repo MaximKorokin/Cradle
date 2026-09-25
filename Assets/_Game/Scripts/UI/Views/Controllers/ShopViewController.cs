@@ -16,8 +16,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private float _buyCoefficient;
         private float _sellCoefficient;
 
-        public event Action<ShopSlot> SlotClick;
-
         public void InitializeShop(ShopView view, ShopModel shopModel, string shopName, float buyCoefficient, float sellCoefficient)
         {
             Initialize(view);
@@ -29,17 +27,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         public void Bind()
         {
-            View.SlotClicked += OnSlotClick;
             _shopModel.Changed += OnShopChanged;
         }
 
         public void Unbind()
         {
-            if (View != null)
-            {
-                View.SlotClicked -= OnSlotClick;
-            }
-
             if (_shopModel != null)
             {
                 _shopModel.Changed -= OnShopChanged;
@@ -67,11 +59,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             }
 
             View.RequestRender((viewData, _shopName, _buyCoefficient, _sellCoefficient));
-        }
-
-        private void OnSlotClick(ShopSlot slot)
-        {
-            SlotClick?.Invoke(slot);
         }
 
         private void OnShopChanged()

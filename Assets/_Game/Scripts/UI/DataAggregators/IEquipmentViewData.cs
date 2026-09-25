@@ -13,22 +13,18 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public class EquipmentViewData : ItemContainerDataAggregatorBase, IEquipmentViewData
     {
-        private readonly EntityRepository _entityRepository;
-
         private EquipmentModule _equipmentModule;
 
-        public EquipmentViewData(EntityRepository entityRepository, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
-        {
-            _entityRepository = entityRepository;
-        }
+        public EquipmentViewData(
+            ItemContainerResolver itemContainerResolver,
+            EntityRepository entityRepository) : base(itemContainerResolver, entityRepository) { }
 
         public EquipmentModel EquipmentModel => _equipmentModule.Equipment;
         public ItemUseSettings ItemUseSettings => _equipmentModule.AutoItemUseSettings;
 
         protected override void OnBoundEntityChanged(string equipmentEntityId)
         {
-            var entity = _entityRepository.Get(equipmentEntityId);
-            _equipmentModule = entity.GetModule<EquipmentModule>();
+            _equipmentModule = Entity.GetModule<EquipmentModule>();
 
             base.OnBoundEntityChanged(equipmentEntityId);
         }

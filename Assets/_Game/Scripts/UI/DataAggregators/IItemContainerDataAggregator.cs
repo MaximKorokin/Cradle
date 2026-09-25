@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Items;
 using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
@@ -12,17 +13,19 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public abstract class ItemContainerDataAggregatorBase : EntityBoundDataAggregatorBase, IItemContainerDataAggregator
     {
-        public ItemContainerDataAggregatorBase(ItemContainerResolver itemContainerResolver)
-        {
-            ItemContainerResolver = itemContainerResolver;
-        }
-
-        protected ItemContainerResolver ItemContainerResolver { get; private set; }
-
         public ItemContainerPath ContainerPath { get; protected set; }
         public IItemContainer ItemContainer { get; protected set; }
 
+        private ItemContainerResolver _itemContainerResolver;
+
         public event Action Changed;
+
+        public ItemContainerDataAggregatorBase(
+            ItemContainerResolver itemContainerResolver,
+            EntityRepository entityRepository) : base(entityRepository)
+        {
+            _itemContainerResolver = itemContainerResolver;
+        }
 
         protected void NotifyChanged()
         {
@@ -34,7 +37,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             if (entityId == null) return;
 
             ContainerPath = GetContainerPath(entityId);
-            var newItemContainer = ItemContainerResolver.ResolveContainer(ContainerPath);
+            var newItemContainer = _itemContainerResolver.ResolveContainer(ContainerPath);
 
             if (ItemContainer != newItemContainer)
             {

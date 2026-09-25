@@ -41,7 +41,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private Func<ItemStackSnapshot?, bool> _enumerationFilter;
 
-        public InventoryViewDataBase(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
+        public InventoryViewDataBase(
+            ItemsConfig itemsConfig,
+            ItemContainerResolver itemContainerResolver,
+            EntityRepository entityRepository) : base(itemContainerResolver, entityRepository)
         {
             _itemsConfig = itemsConfig;
         }
@@ -97,25 +100,20 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public class InventoryViewData : InventoryViewDataBase
     {
-        private readonly EntityRepository _entityRepository;
-
         private IStatsReadOnly _statsController;
         private float _weightCurrent;
         private float _weightMax;
 
         public InventoryViewData(
-            EntityRepository entityRepository,
             ItemsConfig itemsConfig,
-            ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
-        {
-            _entityRepository = entityRepository;
-        }
+            ItemContainerResolver itemContainerResolver,
+            EntityRepository entityRepository) : base(itemsConfig, itemContainerResolver, entityRepository) { }
 
         protected override void OnBoundEntityChanged(string inventoryEntityId)
         {
             base.OnBoundEntityChanged(inventoryEntityId);
 
-            var newStats = _entityRepository.Get(inventoryEntityId).GetModule<StatModule>().Stats;
+            var newStats = Entity.GetModule<StatModule>().Stats;
             if (_statsController != newStats)
             {
                 if (_statsController != null)
@@ -163,9 +161,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public class StorageHudData : InventoryViewDataBase
     {
-        public StorageHudData(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
-        {
-        }
+        public StorageHudData(
+            ItemsConfig itemsConfig,
+            ItemContainerResolver itemContainerResolver,
+            EntityRepository entityRepository) : base(itemsConfig, itemContainerResolver, entityRepository) { }
 
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Storage(entityId);
 

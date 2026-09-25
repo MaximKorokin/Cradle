@@ -1,54 +1,51 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Entities.StatusEffects;
-using Assets._Game.Scripts.Infrastructure.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class PlayerStateViewData : DataAggregatorBase
+    public sealed class PlayerStateViewData : EntityBoundDataAggregatorBase
     {
-        private readonly PlayerContext _playerContext;
-
         public event Action Changed;
 
-        public PlayerStateViewData(PlayerContext playerContext)
-        {
-            _playerContext = playerContext;
-            _playerContext.PlayerChanging += UnsubscribeFromPlayerModules;
-            _playerContext.PlayerChanged += SubscribeToPlayerModules;
+        public PlayerStateViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
+        protected override void OnBoundEntityChanged(string entityId)
+        {
+            UnsubscribeFromPlayerModules();
             SubscribeToPlayerModules();
         }
 
         private void SubscribeToPlayerModules()
         {
-            _playerContext.GetModule<StatModule>().Stats.StatChanged += OnStatChanged;
-            _playerContext.GetModule<HealthModule>().Changed += OnHealthChanged;
-            _playerContext.GetModule<StatusEffectModule>().StatusEffects.Changed += OnStatusEffectsControllerChanged;
-            _playerContext.GetModule<LevelingModule>().Changed += OnLevelingModuleChanged;
+            Entity.GetModule<StatModule>().Stats.StatChanged += OnStatChanged;
+            Entity.GetModule<HealthModule>().Changed += OnHealthChanged;
+            Entity.GetModule<StatusEffectModule>().StatusEffects.Changed += OnStatusEffectsControllerChanged;
+            Entity.GetModule<LevelingModule>().Changed += OnLevelingModuleChanged;
         }
 
         private void UnsubscribeFromPlayerModules()
         {
-            _playerContext.GetModule<StatModule>().Stats.StatChanged -= OnStatChanged;
-            _playerContext.GetModule<HealthModule>().Changed -= OnHealthChanged;
-            _playerContext.GetModule<StatusEffectModule>().StatusEffects.Changed -= OnStatusEffectsControllerChanged;
-            _playerContext.GetModule<LevelingModule>().Changed -= OnLevelingModuleChanged;
+            Entity.GetModule<StatModule>().Stats.StatChanged -= OnStatChanged;
+            Entity.GetModule<HealthModule>().Changed -= OnHealthChanged;
+            Entity.GetModule<StatusEffectModule>().StatusEffects.Changed -= OnStatusEffectsControllerChanged;
+            Entity.GetModule<LevelingModule>().Changed -= OnLevelingModuleChanged;
         }
 
-        public float CurrentHp => _playerContext.GetModule<HealthModule>().CurrentHealth;
-        public float MaxHp => _playerContext.GetModule<HealthModule>().MaxHealth;
-        public float Level => _playerContext.GetModule<LevelingModule>().Level;
-        public float NormalizedExperience => _playerContext.GetModule<LevelingModule>().GetNormalizedExperience();
+        public float CurrentHp => Entity.GetModule<HealthModule>().CurrentHealth;
+        public float MaxHp => Entity.GetModule<HealthModule>().MaxHealth;
+        public float Level => Entity.GetModule<LevelingModule>().Level;
+        public float NormalizedExperience => Entity.GetModule<LevelingModule>().GetNormalizedExperience();
 
         public IEnumerable<StatusEffectSnapshot> Buffs =>
-            _playerContext.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
+            Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
 
         public IEnumerable<StatusEffectSnapshot> Debuffs =>
-            _playerContext.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
+            Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
 
         private void OnStatChanged(StatId statId)
         {
@@ -76,9 +73,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public override void Dispose()
         {
             base.Dispose();
-
-            _playerContext.PlayerChanging -= UnsubscribeFromPlayerModules;
-            _playerContext.PlayerChanged -= SubscribeToPlayerModules;
 
             UnsubscribeFromPlayerModules();
         }

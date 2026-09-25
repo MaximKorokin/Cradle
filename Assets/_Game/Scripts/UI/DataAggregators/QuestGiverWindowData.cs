@@ -10,8 +10,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class QuestGiverWindowData : EntityBoundDataAggregatorBase
     {
-        private readonly EntityRepository _entityRepository;
-
         private QuestGiverModule _questGiverModule;
         private QuestModule _questModule;
 
@@ -20,15 +18,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public event Action Changed;
 
-        public QuestGiverWindowData(EntityRepository entityRepository)
-        {
-            _entityRepository = entityRepository;
-        }
+        public QuestGiverWindowData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
         {
-            var giverEntity = _entityRepository.Get(entityId);
-
+            var giverEntity = Entity;
             QuestGiverName = giverEntity.Definition.DisplayName;
 
             _questGiverModule = null;
@@ -44,7 +38,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public void SetTargetEntity(IReadOnlyObservableData<string> targetEntityId)
         {
-            var targetEntity = _entityRepository.Get(targetEntityId.Value);
+            var targetEntity = EntityRepository.Get(targetEntityId.Value);
             _questModule = null;
 
             if (_questModule != null)

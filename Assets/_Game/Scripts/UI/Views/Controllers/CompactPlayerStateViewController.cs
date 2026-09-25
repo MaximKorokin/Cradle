@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.UI.DataAggregators;
 namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class CompactPlayerStateViewController : ViewControllerBase<CompactPlayerStateView>
@@ -7,10 +8,13 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         public CompactPlayerStateViewController(
             CompactPlayerStateView compactPlayerStateView,
-            PlayerStateViewData playerStateViewData)
+            PlayerStateViewData playerStateViewData,
+            IPlayerProvider playerProvider)
         {
             Initialize(compactPlayerStateView);
+
             _playerStateViewData = playerStateViewData;
+            _playerStateViewData.SetEntityId(playerProvider.ObservablePlayerId);
             _playerStateViewData.Changed += OnPlayerStateChanged;
         }
 

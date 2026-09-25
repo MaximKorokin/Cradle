@@ -12,7 +12,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class CraftingWindowData : ItemContainerDataAggregatorBase
     {
-        private readonly EntityRepository _entityRepository;
         private readonly CraftingService _craftingService;
 
         private CraftingModule _crafterCraftingModule;
@@ -22,15 +21,14 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public CraftingWindowData(
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository,
-            CraftingService craftingService) : base(itemContainerResolver)
+            CraftingService craftingService) : base(itemContainerResolver, entityRepository)
         {
-            _entityRepository = entityRepository;
             _craftingService = craftingService;
         }
 
         public void SetCrafterEntity(IReadOnlyObservableData<string> crafterEntityId)
         {
-            if (_entityRepository.Get(crafterEntityId.Value).TryGetModule<CraftingModule>(out var craftingModule))
+            if (EntityRepository.Get(crafterEntityId.Value).TryGetModule<CraftingModule>(out var craftingModule))
             {
                 _crafterCraftingModule = craftingModule;
                 NotifyChanged();
