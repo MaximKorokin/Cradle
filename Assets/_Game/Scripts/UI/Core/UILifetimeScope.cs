@@ -1,8 +1,10 @@
-using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Modal;
@@ -21,7 +23,7 @@ namespace Assets._Game.Scripts.UI.Core
         private Transform _uiSystemsRoot;
         [Header("Prefabs")]
         [SerializeField]
-        private EntityNameplateView _entityNameplateView;
+        private EntityNameplateWidget _entityNameplateView;
         [SerializeField]
         private UIWindowBase[] _windowPrefabs;
         [SerializeField]
@@ -33,13 +35,13 @@ namespace Assets._Game.Scripts.UI.Core
         [SerializeField]
         private UIRootReferences _rootReferences;
         [SerializeField]
-        private LocationAnnounceView _locationAnnounceView;
+        private LocationAnnounceWidget _locationAnnounceView;
         [SerializeField]
-        private InteractionPromptView _interactionPromptView;
+        private InteractionPromptWidget _interactionPromptView;
         [SerializeField]
-        private ClickEffectView _clickEffectView;
+        private ClickEffectWidget _clickEffectView;
         [SerializeField]
-        private DragDropView _dragDropView;
+        private DragDropWidget _dragDropView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -49,15 +51,15 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
             builder.RegisterEntryPoint<UISystemRunner>(Lifetime.Scoped);
 
-            builder.Register<EquipmentHudData>(Lifetime.Transient);
-            builder.Register<InventoryHudData>(Lifetime.Transient);
+            builder.Register<EquipmentViewData>(Lifetime.Transient);
+            builder.Register<InventoryViewData>(Lifetime.Transient);
             builder.Register<StorageHudData>(Lifetime.Transient);
-            builder.Register<CraftingHudData>(Lifetime.Transient);
-            builder.Register<QuestsHudData>(Lifetime.Transient);
-            builder.Register<QuestGiverHudData>(Lifetime.Transient);
-            builder.Register<StatsHudData>(Lifetime.Transient);
+            builder.Register<CraftingWindowData>(Lifetime.Transient);
+            builder.Register<QuestsWindowData>(Lifetime.Transient);
+            builder.Register<QuestGiverWindowData>(Lifetime.Transient);
+            builder.Register<StatsViewData>(Lifetime.Transient);
 
-            builder.Register<CheatsHudData>(Lifetime.Transient);
+            builder.Register<CheatsWindowData>(Lifetime.Transient);
 
             RegisterSystems(builder);
             RegisterWindows(builder);

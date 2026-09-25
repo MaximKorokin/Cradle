@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Infrastructure.Systems.Location;
+﻿using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

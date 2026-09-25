@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities.StatusEffects;
+﻿using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Configs;
 
 namespace Assets._Game.Scripts.Entities.Modules

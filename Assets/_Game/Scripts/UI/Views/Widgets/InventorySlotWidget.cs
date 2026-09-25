@@ -6,9 +6,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class InventorySlotView : ContainerSlotView, IDragDropSource, IDragDropTarget
+    public sealed class InventorySlotWidget : ContainerSlotWidget, IDragDropSource, IDragDropTarget
     {
         [SerializeField]
         private Image _itemImage;

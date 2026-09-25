@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Assets._Game.Scripts.Shared.Attributes;
 using UnityEditor;
 using UnityEngine;

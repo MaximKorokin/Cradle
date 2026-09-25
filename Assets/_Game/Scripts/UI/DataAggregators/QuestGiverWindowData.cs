@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class QuestGiverHudData : EntityBoundDataAggregatorBase
+    public sealed class QuestGiverWindowData : EntityBoundDataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
 
@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public event Action Changed;
 
-        public QuestGiverHudData(EntityRepository entityRepository)
+        public QuestGiverWindowData(EntityRepository entityRepository)
         {
             _entityRepository = entityRepository;
         }

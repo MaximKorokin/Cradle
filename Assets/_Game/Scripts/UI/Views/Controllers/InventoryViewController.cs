@@ -3,13 +3,13 @@ using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class InventoryViewController : ViewControllerBase<InventoryView>
     {
         private readonly IGlobalEventBus _globalEventBus;
 
-        private IInventoryHudData _inventoryHudData;
+        private IInventoryViewData _inventoryHudData;
 
         public InventoryViewController(IGlobalEventBus globalEventBus)
         {
@@ -42,7 +42,7 @@ namespace Assets._Game.Scripts.UI.Views
             base.Dispose();
         }
 
-        public void Bind(IInventoryHudData inventoryHudData)
+        public void Bind(IInventoryViewData inventoryHudData)
         {
             _inventoryHudData = inventoryHudData;
             _inventoryHudData.Changed += OnInventoryChanged;

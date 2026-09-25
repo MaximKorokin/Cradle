@@ -15,16 +15,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
-        private readonly CheatsHudData _cheatsHudData;
-        private readonly EquipmentHudData _equipmentHudData;
+        private readonly CheatsWindowData _cheatsHudData;
+        private readonly EquipmentViewData _equipmentHudData;
         private readonly ItemStackFactory _itemStackAssembler;
 
         public CheatsWindowController(
             IGlobalEventBus globalEventBus,
             IPlayerProvider playerProvider,
             EntityRepository entityRepository,
-            CheatsHudData cheatsHudData,
-            EquipmentHudData equipmentHudData,
+            CheatsWindowData cheatsHudData,
+            EquipmentViewData equipmentHudData,
             ItemStackFactory itemStackAssembler)
         {
             _globalEventBus = globalEventBus;

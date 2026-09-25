@@ -1,9 +1,9 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class DragDropView : MonoBehaviour
+    public sealed class DragDropWidget : MonoBehaviour
     {
         [SerializeField]
         private RectTransform _nestedVisualParent;

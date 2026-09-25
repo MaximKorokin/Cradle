@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Items;
@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CraftingHudData : ItemContainerDataAggregatorBase
+    public sealed class CraftingWindowData : ItemContainerDataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
         private readonly CraftingService _craftingService;
@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private InventoryModel InventoryModel => ItemContainer as InventoryModel;
 
-        public CraftingHudData(
+        public CraftingWindowData(
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository,
             CraftingService craftingService) : base(itemContainerResolver)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets._Game.Scripts.UI.Views.Widgets;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
@@ -8,9 +9,9 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private RectTransform _statsParent;
         [SerializeField]
-        private StatView _statTemplate;
+        private StatWidget _statTemplate;
 
-        private readonly List<StatView> _statViews = new();
+        private readonly List<StatWidget> _statViews = new();
 
         protected override void Awake()
         {

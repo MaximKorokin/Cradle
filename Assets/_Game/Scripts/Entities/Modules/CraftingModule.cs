@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Items.Crafting;
+﻿using Assets._Game.Scripts.Items.Crafting;
 using System;
 using System.Collections.Generic;
 

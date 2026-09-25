@@ -9,11 +9,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class ItemUseSettingsWindowController : WindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>
     {
         private readonly IPlayerProvider _playerProvider;
-        private readonly EquipmentHudData _equipmentHudData;
+        private readonly EquipmentViewData _equipmentHudData;
 
         public ItemUseSettingsWindowController(
             IPlayerProvider playerProvider,
-            EquipmentHudData equipmentHudData)
+            EquipmentViewData equipmentHudData)
         {
             _playerProvider = playerProvider;
             _equipmentHudData = equipmentHudData;

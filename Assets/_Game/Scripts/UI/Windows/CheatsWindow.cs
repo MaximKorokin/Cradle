@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Assets._Game.Scripts.UI.Windows
         private SimpleListView _cheatsTabContentTemplate;
 
         [field: SerializeField]
-        public GameControlView GameControlTabContent { get; private set; }
+        public GameControlWidget GameControlTabContent { get; private set; }
 
         private SimpleListView _itemsListView;
         private SimpleListView _buffsListView;
@@ -48,7 +49,7 @@ namespace Assets._Game.Scripts.UI.Windows
             _cheatsTabContentTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(CheatsHudData data)
+        public void Render(CheatsWindowData data)
         {
             // Control tab
             _cheatsTabsController.AddTab(new TabData(ControlTabId, "Control", GameControlTabContent.transform as RectTransform));

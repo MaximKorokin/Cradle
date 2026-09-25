@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Shared.Extensions;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using UnityEngine;
 using VContainer;
 
@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
         private const int DragStartThreshold = 30;
 
         private DragDropHandler _dragDropHandler;
-        private DragDropView _dragDropView;
+        private DragDropWidget _dragDropView;
 
         private Vector2 _dragStartPosition;
         private bool _isDragging;
@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
         private void Construct(
             IGlobalEventBus globalEventBus,
             DragDropHandler dragDropHandler,
-            DragDropView dragDropView)
+            DragDropWidget dragDropView)
         {
             BaseConstruct(globalEventBus);
 

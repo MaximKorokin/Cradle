@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Quests;
+﻿using Assets._Game.Scripts.Quests;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Entities.Modules

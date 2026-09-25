@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
     [RequireComponent(typeof(Image))]
-    public sealed class ClickEffectView : MonoBehaviour
+    public sealed class ClickEffectWidget : MonoBehaviour
     {
         [SerializeField]
         private float _duration = 0.4f;

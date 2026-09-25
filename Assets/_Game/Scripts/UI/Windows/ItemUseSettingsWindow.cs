@@ -34,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Windows
             _overrideStatusEffectsToggle.onValueChanged.RemoveListener(OnOverrideStatusEffectsToggleValueChanged);
         }
 
-        public void Render(EquipmentHudData equipmentHudData)
+        public void Render(EquipmentViewData equipmentHudData)
         {
             _hpPercentSlider.SetValueWithoutNotify(equipmentHudData.ItemUseSettings.HpPercent);
             _hpPercentText.text = $"{equipmentHudData.ItemUseSettings.HpPercent}%";

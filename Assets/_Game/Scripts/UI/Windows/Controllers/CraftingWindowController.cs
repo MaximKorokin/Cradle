@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
@@ -13,15 +13,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly CraftingHudData _craftingHudData;
-        private readonly EquipmentHudData _equipmentHudData;
+        private readonly CraftingWindowData _craftingHudData;
+        private readonly EquipmentViewData _equipmentHudData;
         private readonly CraftingService _craftingService;
 
         public CraftingWindowController(
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver,
-            CraftingHudData craftingHudData,
-            EquipmentHudData equipmentHudData,
+            CraftingWindowData craftingHudData,
+            EquipmentViewData equipmentHudData,
             CraftingService craftingService)
         {
             _globalEventBus = globalEventBus;

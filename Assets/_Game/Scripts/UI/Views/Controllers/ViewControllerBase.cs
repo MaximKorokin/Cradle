@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public abstract class ViewControllerBase<TView> : IDisposable
         where TView : UIViewBase

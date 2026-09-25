@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.UI.Systems;
 using System;
 

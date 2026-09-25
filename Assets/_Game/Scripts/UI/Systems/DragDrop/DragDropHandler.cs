@@ -5,7 +5,7 @@ using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Common;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 
 namespace Assets._Game.Scripts.UI.Systems.DragDrop
 {
@@ -24,9 +24,9 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         public void Handle(IDragDropSource source, IDragDropTarget target, PointerContext pointerContext)
         {
-            if (source is InventorySlotView inventorySlot1)
+            if (source is InventorySlotWidget inventorySlot1)
             {
-                if (target is InventorySlotView inventorySlot2)
+                if (target is InventorySlotWidget inventorySlot2)
                 {
                     HandleInventorySlotToInventorySlotDrop(inventorySlot1, inventorySlot2);
                 }
@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
         }
 
-        private void HandleInventorySlotToInventorySlotDrop(InventorySlotView inventorySlot1, InventorySlotView inventorySlot2)
+        private void HandleInventorySlotToInventorySlotDrop(InventorySlotWidget inventorySlot1, InventorySlotWidget inventorySlot2)
         {
             if (!TryGetContainerAndItemStack(inventorySlot1, out var container1, out var itemStack1)) return;
 
@@ -68,7 +68,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
         }
 
-        private void HandleInventorySlotToNonUIDrop(InventorySlotView inventorySlot)
+        private void HandleInventorySlotToNonUIDrop(InventorySlotWidget inventorySlot)
         {
             if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
 
@@ -81,7 +81,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             });
         }
 
-        private void HandleInventorySlotToDropAreaDrop(InventorySlotView inventorySlot, DropArea dropArea)
+        private void HandleInventorySlotToDropAreaDrop(InventorySlotWidget inventorySlot, DropArea dropArea)
         {
             if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
             switch (dropArea.Type)
@@ -112,7 +112,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
         }
 
-        private bool TryGetContainerAndItemStack(InventorySlotView inventorySlot, out IItemContainer container, out ItemStackSnapshot? itemStack)
+        private bool TryGetContainerAndItemStack(InventorySlotWidget inventorySlot, out IItemContainer container, out ItemStackSnapshot? itemStack)
         {
             container = null;
             itemStack = null;

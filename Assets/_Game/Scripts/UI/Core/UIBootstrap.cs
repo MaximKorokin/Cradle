@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.UI.Views;
+﻿using Assets._Game.Scripts.UI.Views.Controllers;
 using VContainer.Unity;
 
 namespace Assets._Game.Scripts.UI.Core

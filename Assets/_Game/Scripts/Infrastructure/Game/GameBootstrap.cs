@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Infrastructure.Systems;
+﻿using Assets._Game.Scripts.Infrastructure.Systems;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;

@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,9 +10,9 @@ namespace Assets._Game.Scripts.UI.Windows
     public sealed class ItemStacksPreviewWindow : UIWindowBase
     {
         [SerializeField]
-        private ItemStacksPreviewView _primaryItemPreviewView;
+        private ItemStacksPreviewWidget _primaryItemPreviewView;
         [SerializeField]
-        private ItemStacksPreviewView _secondaryItemPreviewView;
+        private ItemStacksPreviewWidget _secondaryItemPreviewView;
         [SerializeField]
         private RectTransform _actionButtonParent;
         [SerializeField]

@@ -1,4 +1,4 @@
-using Assets.CoreScripts;
+﻿using Assets.CoreScripts;
 using System.Collections;
 using System.Text;
 using UnityEngine;

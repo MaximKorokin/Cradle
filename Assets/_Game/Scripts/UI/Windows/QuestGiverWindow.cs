@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.UI.Common;
+﻿using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Assets._Game.Scripts.UI.Windows
         public event Action<string> QuestAcceptClicked;
         public event Action<string> QuestCompleteClicked;
 
-        public void Render(QuestGiverHudData data)
+        public void Render(QuestGiverWindowData data)
         {
             _questGiverName.text = data.QuestGiverName;
 

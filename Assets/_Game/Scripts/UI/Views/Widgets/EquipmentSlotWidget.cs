@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class EquipmentSlotView : MonoBehaviour
+    public sealed class EquipmentSlotWidget : MonoBehaviour
     {
         [SerializeField]
-        private InventorySlotView _inventorySlotView;
+        private InventorySlotWidget _inventorySlotView;
         [SerializeField]
         private Image _placeholderImage;
         [SerializeField]
@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.Views
         [field: Tooltip("Used to bind Model slot to UI")]
         public EquipmentSlotType SlotType { get; private set; }
 
-        public InventorySlotView SlotView => _inventorySlotView;
+        public InventorySlotWidget SlotView => _inventorySlotView;
 
         public void Render(ItemStackSnapshot? itemStack, bool isBlocked)
         {

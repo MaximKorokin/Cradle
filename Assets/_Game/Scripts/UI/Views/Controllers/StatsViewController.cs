@@ -1,12 +1,12 @@
-using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class StatsViewController : ViewControllerBase<StatsView>
     {
-        private StatsHudData _statsHudData;
+        private StatsViewData _statsHudData;
 
-        public void Bind(StatsHudData statsHudData)
+        public void Bind(StatsViewData statsHudData)
         {
             _statsHudData = statsHudData;
             _statsHudData.Changed += OnStatsChanged;

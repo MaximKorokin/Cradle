@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.DataFormatters;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers

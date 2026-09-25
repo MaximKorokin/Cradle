@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.UI.DataFormatters;
+﻿using Assets._Game.Scripts.UI.DataFormatters;
 using TMPro;
 using UnityEngine;
 

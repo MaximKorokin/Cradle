@@ -1,6 +1,6 @@
-using Assets._Game.Scripts.Infrastructure.Game;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class PlayerAiToggleViewController : ViewControllerBase<PlayerAiToggleView>
     {

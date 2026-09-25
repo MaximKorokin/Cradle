@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
 using System.Collections.Generic;
 

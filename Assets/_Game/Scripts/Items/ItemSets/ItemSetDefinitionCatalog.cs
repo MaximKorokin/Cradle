@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Infrastructure.Storage;
+﻿using Assets._Game.Scripts.Infrastructure.Storage;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.Items

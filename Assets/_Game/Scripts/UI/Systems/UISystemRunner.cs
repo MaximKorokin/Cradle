@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Infrastructure;
+﻿using Assets._Game.Scripts.Infrastructure;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using System.Collections.Generic;
 

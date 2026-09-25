@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Quests;
@@ -12,14 +12,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class QuestGiverWindowController : WindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments>
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly QuestGiverHudData _questGiverHudData;
+        private readonly QuestGiverWindowData _questGiverHudData;
         private readonly EntityRepository _entityRepository;
 
         private string _targetEntityId;
 
         public QuestGiverWindowController(
             IGlobalEventBus globalEventBus,
-            QuestGiverHudData questGiverHudData,
+            QuestGiverWindowData questGiverHudData,
             EntityRepository entityRepository)
         {
             _globalEventBus = globalEventBus;

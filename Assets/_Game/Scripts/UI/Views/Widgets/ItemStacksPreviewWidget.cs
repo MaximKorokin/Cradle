@@ -5,9 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class ItemStacksPreviewView : MonoBehaviour
+    public sealed class ItemStacksPreviewWidget : MonoBehaviour
     {
         [SerializeField]
         private TMP_Text _prefixText;

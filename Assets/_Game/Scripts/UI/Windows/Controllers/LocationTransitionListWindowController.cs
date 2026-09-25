@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Locations;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {

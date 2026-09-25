@@ -1,7 +1,7 @@
-using Assets._Game.Scripts.Locations;
+﻿using Assets._Game.Scripts.Locations;
 using System.Collections.Generic;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class LocationTransitionListViewController : ViewControllerBase<LocationTransitionListView>
     {

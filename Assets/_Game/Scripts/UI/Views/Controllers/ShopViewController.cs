@@ -1,6 +1,8 @@
-using Assets._Game.Scripts.Items.Shop;
+﻿using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

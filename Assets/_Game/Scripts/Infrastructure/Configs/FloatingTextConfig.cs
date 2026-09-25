@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.UI.Views;
+﻿using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
     [CreateAssetMenu(fileName = "FloatingTextConfig", menuName = "Configs/FloatingTextConfig")]
     public class FloatingTextConfig : ScriptableObject
     {
-        public FloatingTextView FloatingTextPrefab;
+        public FloatingTextWidget FloatingTextPrefab;
         public Vector2 Offset;
         public Vector2 RandomOffset;
 

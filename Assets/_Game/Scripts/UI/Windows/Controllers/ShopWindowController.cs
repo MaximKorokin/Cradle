@@ -1,3 +1,4 @@
+﻿using Assets._Game.Scripts.UI.Views.Controllers;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Shared;
@@ -9,14 +10,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ShopViewController _shopViewController;
-        private readonly EquipmentHudData _equipmentHudData;
+        private readonly EquipmentViewData _equipmentHudData;
 
         private ShopModel ShopModel => _itemContainerResolver.ResolveShop(Arguments.ShopContainerPath);
 
         public ShopWindowController(
             ItemContainerResolver itemContainerResolver,
             ShopViewController shopViewController,
-            EquipmentHudData equipmentHudData)
+            EquipmentViewData equipmentHudData)
         {
             _itemContainerResolver = itemContainerResolver;
             _shopViewController = shopViewController;

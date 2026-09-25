@@ -9,11 +9,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class QuestsWindowController : WindowControllerBase<QuestsWindow, QuestsWindowControllerArguments>
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly QuestsHudData _questsHudData;
+        private readonly QuestsWindowData _questsHudData;
 
         public QuestsWindowController(
             IGlobalEventBus globalEventBus,
-            QuestsHudData questsHudData)
+            QuestsWindowData questsHudData)
         {
             _globalEventBus = globalEventBus;
             _questsHudData = questsHudData;

@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class GameControlView : MonoBehaviour
+    public sealed class GameControlWidget : MonoBehaviour
     {
         [SerializeField]
         private Button _resetPlayerQuestsButton;

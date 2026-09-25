@@ -5,7 +5,7 @@ using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Shared.Utils;
 using Assets._Game.Scripts.UI.Core;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -16,17 +16,17 @@ namespace Assets._Game.Scripts.UI.Systems
     {
         private Camera _camera;
         private RectTransform _root;
-        private EntityNameplateView _entityNameplateViewPrefab;
+        private EntityNameplateWidget _entityNameplateViewPrefab;
         private EntityViewService _entityViewService;
 
-        private readonly Dictionary<EntityView, EntityNameplateView> _items = new();
+        private readonly Dictionary<EntityView, EntityNameplateWidget> _items = new();
 
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
             ICameraService cameraService,
             UIRootReferences roots,
-            EntityNameplateView entityNameplateViewPrefab,
+            EntityNameplateWidget entityNameplateViewPrefab,
             EntityViewService entityViewService)
         {
             BaseConstruct(globalEventBus);
@@ -63,7 +63,7 @@ namespace Assets._Game.Scripts.UI.Systems
             Destroy(nameplate.gameObject);
         }
 
-        private void Register(EntityView entityView, EntityNameplateView view)
+        private void Register(EntityView entityView, EntityNameplateWidget view)
         {
             _items[entityView] = view;
         }
@@ -102,10 +102,10 @@ namespace Assets._Game.Scripts.UI.Systems
             }
         }
 
-        private EntityNameplateView Create(Entity entity, EntityView entityView)
+        private EntityNameplateWidget Create(Entity entity, EntityView entityView)
         {
             var view = Instantiate(_entityNameplateViewPrefab, _root);
-            view.Bind(new EntityNameplateViewData(entity));
+            view.Bind(new EntityNameplateWidgetData(entity));
             Register(entityView, view);
             return view;
         }

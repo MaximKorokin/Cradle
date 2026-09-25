@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Configs

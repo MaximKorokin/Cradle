@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class QuestsHudData : EntityBoundDataAggregatorBase
+    public sealed class QuestsWindowData : EntityBoundDataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
 
@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public event Action Changed;
 
-        public QuestsHudData(EntityRepository entityRepository)
+        public QuestsWindowData(EntityRepository entityRepository)
         {
             _entityRepository = entityRepository;
             UpdateData();

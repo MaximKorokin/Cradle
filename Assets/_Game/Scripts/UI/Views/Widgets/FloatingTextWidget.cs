@@ -2,9 +2,9 @@
 using TMPro;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class FloatingTextView : MonoBehaviour
+    public sealed class FloatingTextWidget : MonoBehaviour
     {
         [SerializeField]
         private TMP_Text _text;

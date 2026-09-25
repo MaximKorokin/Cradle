@@ -1,3 +1,4 @@
+﻿using Assets._Game.Scripts.UI.Views.Widgets;
 using Assets._Game.Scripts.Items.Shop;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private RectTransform _shopSlotsParent;
         [SerializeField]
-        private ShopSlotView _shopSlotTemplate;
+        private ShopSlotWidget _shopSlotTemplate;
         [Space]
         [SerializeField]
         private TMP_Text _shopNameText;
@@ -20,7 +21,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _sellCoefficientText;
 
-        private readonly List<ShopSlotView> _slots = new();
+        private readonly List<ShopSlotWidget> _slots = new();
 
         public event Action<ShopSlot> SlotClicked;
 

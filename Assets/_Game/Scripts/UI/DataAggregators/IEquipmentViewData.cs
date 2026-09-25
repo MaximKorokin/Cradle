@@ -6,18 +6,18 @@ using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IEquipmentHudData : IItemContainerDataAggregator
+    public interface IEquipmentViewData : IItemContainerDataAggregator
     {
         EquipmentModel EquipmentModel { get; }
     }
 
-    public class EquipmentHudData : ItemContainerDataAggregatorBase, IEquipmentHudData
+    public class EquipmentViewData : ItemContainerDataAggregatorBase, IEquipmentViewData
     {
         private readonly EntityRepository _entityRepository;
 
         private EquipmentModule _equipmentModule;
 
-        public EquipmentHudData(EntityRepository entityRepository, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
+        public EquipmentViewData(EntityRepository entityRepository, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
         {
             _entityRepository = entityRepository;
         }

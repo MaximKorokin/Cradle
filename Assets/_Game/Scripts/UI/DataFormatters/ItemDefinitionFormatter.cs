@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using System;

@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using VContainer;
 
@@ -7,12 +7,12 @@ namespace Assets._Game.Scripts.UI.Systems
 {
     public sealed class InteractionPromptUISystem : UISystemBase
     {
-        private InteractionPromptView _interactionPromptView;
+        private InteractionPromptWidget _interactionPromptView;
 
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
-            InteractionPromptView locationTransitionView)
+            InteractionPromptWidget locationTransitionView)
         {
             BaseConstruct(globalEventBus);
 

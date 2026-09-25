@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.UI.Windows
             Clear();
         }
 
-        public void Render(CraftingHudData data)
+        public void Render(CraftingWindowData data)
         {
             Clear();
 

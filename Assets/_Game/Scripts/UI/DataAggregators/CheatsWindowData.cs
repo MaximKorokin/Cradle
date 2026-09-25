@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CheatsHudData : DataAggregatorBase
+    public sealed class CheatsWindowData : DataAggregatorBase
     {
         private readonly ItemDefinitionCatalog _itemDefinitionCatalog;
         private readonly StatusEffectDefinitionCatalog _statusEffectDefinitionCatalog;
         private readonly QuestDefinitionCatalog _questDefinitionCatalog;
 
-        public CheatsHudData(
+        public CheatsWindowData(
             ItemDefinitionCatalog itemDefinitionCatalog,
             StatusEffectDefinitionCatalog statusEffectDefinitionCatalog,
             QuestDefinitionCatalog questDefinitionCatalog)

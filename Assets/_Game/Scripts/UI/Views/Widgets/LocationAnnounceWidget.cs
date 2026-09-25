@@ -1,9 +1,9 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class LocationAnnounceView : MonoBehaviour
+    public sealed class LocationAnnounceWidget : MonoBehaviour
     {
         [SerializeField]
         private Animator _animator;

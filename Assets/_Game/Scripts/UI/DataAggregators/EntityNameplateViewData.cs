@@ -4,7 +4,7 @@ using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public class EntityNameplateViewData : DataAggregatorBase
+    public class EntityNameplateWidgetData : DataAggregatorBase
     {
         private readonly HealthModule _healthModule;
 
@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public event Action Changed;
 
-        public EntityNameplateViewData(Entity entity)
+        public EntityNameplateWidgetData(Entity entity)
         {
             if (entity.TryGetModule<HealthModule>(out _healthModule))
             {

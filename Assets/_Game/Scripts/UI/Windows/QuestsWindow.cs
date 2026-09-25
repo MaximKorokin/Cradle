@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.Windows
         public event Action<string> QuestInfoClicked;
         public event Action<string> QuestActionClicked;
 
-        public void Render(QuestsHudData data)
+        public void Render(QuestsWindowData data)
         {
             var currentTabIndex = _questsTabsController.GetSelectedTabIndex();
 

@@ -1,5 +1,5 @@
 ﻿using Assets._Game.Scripts.UI.DataAggregators;
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class CompactPlayerStateViewController : ViewControllerBase<CompactPlayerStateView>
     {

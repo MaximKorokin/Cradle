@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities.Stats;
+﻿using Assets._Game.Scripts.Entities.Stats;
 using Assets._Game.Scripts.Shared;
 using System;
 using System.Collections.Generic;

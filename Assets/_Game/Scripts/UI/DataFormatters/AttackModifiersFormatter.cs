@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities.Modules;
+﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Collections.Generic;
 using System.Text;

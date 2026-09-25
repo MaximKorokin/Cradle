@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.UI.Views;
+﻿using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.Infrastructure.Game;
 using System.Collections.Generic;
 using VContainer;

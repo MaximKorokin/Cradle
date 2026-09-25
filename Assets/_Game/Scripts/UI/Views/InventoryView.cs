@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.UI.DataAggregators;
+﻿using Assets._Game.Scripts.UI.Views.Widgets;
+using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -7,12 +8,12 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class InventoryView : UIViewBase<IInventoryHudData>
+    public sealed class InventoryView : UIViewBase<IInventoryViewData>
     {
         [SerializeField]
         private RectTransform _inventorySlotsParent;
         [SerializeField]
-        private InventorySlotView _inventorySlotTemplate;
+        private InventorySlotWidget _inventorySlotTemplate;
         [Space]
         [SerializeField]
         private TMP_Text _weightText;
@@ -41,9 +42,9 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private Button _orderByPurposeButton;
 
-        private readonly List<InventorySlotView> _slots = new();
+        private readonly List<InventorySlotWidget> _slots = new();
 
-        private IInventoryHudData _inventoryHudData;
+        private IInventoryViewData _inventoryHudData;
 
         public event Action<bool> FilterByClothingButtonClicked;
         public event Action<bool> FilterByWeaponButtonClicked;
@@ -83,7 +84,7 @@ namespace Assets._Game.Scripts.UI.Views
         private void OnOrderByNameButtonClicked() => OrderByNameButtonClicked?.Invoke();
         private void OnOrderByPurposeButtonClicked() => OrderByPurposeButtonClicked?.Invoke();
 
-        public override void Render(IInventoryHudData inventoryHudData)
+        public override void Render(IInventoryViewData inventoryHudData)
         {
             _inventorySlotTemplate.gameObject.SetActive(false);
 

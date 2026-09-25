@@ -3,11 +3,11 @@ using Assets._Game.Scripts.UI.DataAggregators;
 using TMPro;
 using UnityEngine;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class EntityNameplateView : MonoBehaviour
+    public sealed class EntityNameplateWidget : MonoBehaviour
     {
-        private EntityNameplateViewData data;
+        private EntityNameplateWidgetData data;
 
         [SerializeField]
         private RectTransform _rect;
@@ -18,7 +18,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private FillBar _healthFillBar;
 
-        public void Bind(EntityNameplateViewData entityNameplateViewData)
+        public void Bind(EntityNameplateWidgetData entityNameplateViewData)
         {
             data = entityNameplateViewData;
 

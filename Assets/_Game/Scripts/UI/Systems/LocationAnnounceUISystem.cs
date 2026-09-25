@@ -1,6 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Locations;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems
@@ -8,13 +8,13 @@ namespace Assets._Game.Scripts.UI.Systems
     public sealed class LocationAnnounceUISystem : UISystemBase
     {
         private LocationCatalog _locationCatalog;
-        private LocationAnnounceView _locationAnnounceView;
+        private LocationAnnounceWidget _locationAnnounceView;
 
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
             LocationCatalog locationCatalog,
-            LocationAnnounceView locationAnnounceView)
+            LocationAnnounceWidget locationAnnounceView)
         {
             BaseConstruct(globalEventBus);
 

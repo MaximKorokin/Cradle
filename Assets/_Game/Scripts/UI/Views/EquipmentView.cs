@@ -1,4 +1,5 @@
-﻿using Assets._Game.Scripts.Items.Equipment;
+﻿using Assets._Game.Scripts.UI.Views.Widgets;
+using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.UI.DataAggregators;
 using System.Collections.Generic;
@@ -7,14 +8,14 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class EquipmentView : UIViewBase<IEquipmentHudData>
+    public sealed class EquipmentView : UIViewBase<IEquipmentViewData>
     {
         [SerializeField]
-        private EquipmentSlotView[] _slots;
+        private EquipmentSlotWidget[] _slots;
 
-        private IEquipmentHudData _equipmentHudData;
+        private IEquipmentViewData _equipmentHudData;
 
-        public override void Render(IEquipmentHudData equipmentHudData)
+        public override void Render(IEquipmentViewData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
 

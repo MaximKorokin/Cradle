@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IInventoryHudData : IItemContainerDataAggregator
+    public interface IInventoryViewData : IItemContainerDataAggregator
     {
         InventoryModel InventoryModel { get; }
 
@@ -35,13 +35,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         void SetEnumerationFilter(Func<ItemStackSnapshot?, bool> filter);
     }
 
-    public abstract class InventoryHudDataBase : ItemContainerDataAggregatorBase, IInventoryHudData
+    public abstract class InventoryViewDataBase : ItemContainerDataAggregatorBase, IInventoryViewData
     {
         private readonly ItemsConfig _itemsConfig;
 
         private Func<ItemStackSnapshot?, bool> _enumerationFilter;
 
-        public InventoryHudDataBase(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
+        public InventoryViewDataBase(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemContainerResolver)
         {
             _itemsConfig = itemsConfig;
         }
@@ -67,10 +67,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnContainerChanged()
         {
-            Pneuma = InventoryHudDataUtils.CalculatePneuma(_itemsConfig, InventoryModel);
-            Gold = InventoryHudDataUtils.CalculateGold(_itemsConfig, InventoryModel);
-            SlotsUsed = InventoryHudDataUtils.CalculateSlotsUsed(InventoryModel);
-            SlotsMax = InventoryHudDataUtils.CalculateSlotsMax(InventoryModel);
+            Pneuma = InventoryViewDataUtils.CalculatePneuma(_itemsConfig, InventoryModel);
+            Gold = InventoryViewDataUtils.CalculateGold(_itemsConfig, InventoryModel);
+            SlotsUsed = InventoryViewDataUtils.CalculateSlotsUsed(InventoryModel);
+            SlotsMax = InventoryViewDataUtils.CalculateSlotsMax(InventoryModel);
 
             base.OnContainerChanged();
         }
@@ -95,7 +95,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         }
     }
 
-    public class InventoryHudData : InventoryHudDataBase
+    public class InventoryViewData : InventoryViewDataBase
     {
         private readonly EntityRepository _entityRepository;
 
@@ -103,7 +103,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private float _weightCurrent;
         private float _weightMax;
 
-        public InventoryHudData(
+        public InventoryViewData(
             EntityRepository entityRepository,
             ItemsConfig itemsConfig,
             ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
@@ -161,7 +161,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         }
     }
 
-    public class StorageHudData : InventoryHudDataBase
+    public class StorageHudData : InventoryViewDataBase
     {
         public StorageHudData(ItemsConfig itemsConfig, ItemContainerResolver itemContainerResolver) : base(itemsConfig, itemContainerResolver)
         {
@@ -184,7 +184,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public override bool ViewDestroyDropArea => false;
     }
 
-    public static class InventoryHudDataUtils
+    public static class InventoryViewDataUtils
     {
         public static int CalculatePneuma(ItemsConfig itemsConfig, InventoryModel inventoryModel)
         {

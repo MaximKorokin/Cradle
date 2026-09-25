@@ -1,4 +1,4 @@
-namespace Assets._Game.Scripts.Entities.Modules
+﻿namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class CreatureModule : EntityModuleBase
     {

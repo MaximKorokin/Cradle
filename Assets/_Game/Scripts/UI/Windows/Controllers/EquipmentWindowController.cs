@@ -1,16 +1,17 @@
 ﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class EquipmentWindowController : WindowControllerBase<EquipmentWindow, EquipmentWindowControllerArguments>
     {
-        private readonly EquipmentHudData _equipmentHudData;
+        private readonly EquipmentViewData _equipmentHudData;
         private readonly EquipmentViewController _equipmentViewController;
 
         public EquipmentWindowController(
-            EquipmentHudData equipmentHudData,
+            EquipmentViewData equipmentHudData,
             EquipmentViewController equipmentViewController)
         {
             _equipmentHudData = equipmentHudData;

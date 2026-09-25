@@ -1,13 +1,13 @@
-using Assets._Game.Scripts.Items.Shop;
+﻿using Assets._Game.Scripts.Items.Shop;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class ShopSlotView : MonoBehaviour, IPointerClickHandler
+    public sealed class ShopSlotWidget : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField]
         private Image _icon;

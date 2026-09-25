@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.UI.Views;
+﻿using Assets._Game.Scripts.UI.Views;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows

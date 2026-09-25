@@ -1,12 +1,12 @@
 ﻿using Assets._Game.Scripts.UI.DataAggregators;
 
-namespace Assets._Game.Scripts.UI.Views
+namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class EquipmentViewController : ViewControllerBase<EquipmentView>
     {
-        private IEquipmentHudData _equipmentHudData;
+        private IEquipmentViewData _equipmentHudData;
 
-        public void Bind(IEquipmentHudData equipmentHudData)
+        public void Bind(IEquipmentViewData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
             _equipmentHudData.Changed += OnEquipmentChanged;

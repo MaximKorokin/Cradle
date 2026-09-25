@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Entities;
+﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class StatsHudData : EntityBoundDataAggregatorBase
+    public sealed class StatsViewData : EntityBoundDataAggregatorBase
     {
         private readonly EntityRepository _entityRepository;
         private StatModule _statModule;
@@ -14,7 +14,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public IEnumerable<(string, string)> Stats { get; private set; }
         public event Action Changed;
 
-        public StatsHudData(EntityRepository entityRepository)
+        public StatsViewData(EntityRepository entityRepository)
         {
             _entityRepository = entityRepository;
         }

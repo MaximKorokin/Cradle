@@ -1,16 +1,16 @@
 ﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class StatsWindowController : WindowControllerBase<StatsWindow, StatsWindowControllerArguments>
     {
-        private readonly StatsHudData _statsHudData;
+        private readonly StatsViewData _statsHudData;
         private readonly StatsViewController _statsViewController;
 
         public StatsWindowController(
-            StatsHudData statsHudData,
+            StatsViewData statsHudData,
             StatsViewController statsViewController)
         {
             _statsHudData = statsHudData;

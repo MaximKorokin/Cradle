@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
 using System;
 using System.Linq;

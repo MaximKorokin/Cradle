@@ -1,16 +1,16 @@
 ﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class InventoryWindowController : WindowControllerBase<InventoryWindow, InventoryWindowControllerArguments>
     {
-        private readonly InventoryHudData _inventoryHudData;
+        private readonly InventoryViewData _inventoryHudData;
         private readonly InventoryViewController _inventoryViewController;
 
         public InventoryWindowController(
-            InventoryHudData inventoryHudData,
+            InventoryViewData inventoryHudData,
             InventoryViewController inventoryViewController)
         {
             _inventoryHudData = inventoryHudData;
