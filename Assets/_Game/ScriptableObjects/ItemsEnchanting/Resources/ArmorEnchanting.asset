@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 648b3db0472632c42bd3dbe07c68c0d7, type: 3}
   m_Name: ArmorEnchanting
   m_EditorClassIdentifier: 
-  _id: 08cc617306a9434cbbf022b790b697fd
+  _id: 416927f5f3f0479e96eef038cc13ff91
   _levels:
   - _bonuses:
     - <Stat>k__BackingField: 200

@@ -53,7 +53,7 @@ namespace Assets._Game.Scripts.Locations
             if (CurrentLocation != null)
                 throw new InvalidOperationException("Initial location is already loaded.");
 
-            await LoadLocationInternal(locationId, entranceId, unloadCurrent: false);
+            await LoadLocationInternal(locationId, entranceId, false);
         }
 
         public async Task TransitToLocation(string locationId, string entranceId)
@@ -61,7 +61,7 @@ namespace Assets._Game.Scripts.Locations
             if (IsTransitionInProgress)
                 return;
 
-            await LoadLocationInternal(locationId, entranceId, unloadCurrent: true);
+            await LoadLocationInternal(locationId, entranceId, true);
         }
 
         private async Task LoadLocationInternal(string locationId, string entranceId, bool unloadCurrent)

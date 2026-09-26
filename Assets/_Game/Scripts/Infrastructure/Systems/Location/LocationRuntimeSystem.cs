@@ -60,22 +60,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
                 {
                     if (_entitySpawnSpots.Any(s => s.Id == spawnSourceModule.SourceId))
                     {
-                        DisableAndDespawnEntity(entity);
+                        RequestEntityDespawn(entity);
                     }
                 }
                 // Disable and despawn all loot
                 if (entity.TryGetModule<LootItemModule>(out var lootItemModule))
                 {
-                    DisableAndDespawnEntity(entity);
+                    RequestEntityDespawn(entity);
                 }
             }
         }
 
-        private void DisableAndDespawnEntity(Entity entity)
+        private void RequestEntityDespawn(Entity entity)
         {
-            if (entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule))
-                restrictionStateModule.Add(RestrictionState.Disabled);
-
             GlobalEventBus.Publish(new DespawnEntityRequest(entity));
         }
 

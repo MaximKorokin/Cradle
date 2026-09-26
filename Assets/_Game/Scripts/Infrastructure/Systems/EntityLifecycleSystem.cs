@@ -99,6 +99,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             GlobalEventBus.Publish(new EntityDespawningEvent(request.Entity));
 
+            var stateModule = request.Entity.GetModule<RestrictionStateModule>();
+            stateModule.Add(RestrictionState.Disabled);
+
             _entityViewService.DespawnEntityView(request.Entity);
             // For now entity does not exist if it does not have view
             // There will be a big TODO in the future if this will change

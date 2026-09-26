@@ -27,6 +27,19 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
             return Definition.Range * stat.Stats.Get(StatId.PhysicalRangeMultiplier);
         }
 
+        public bool IsTargetValid(InteractionContext context)
+        {
+            return context.Target == null || EntityQuery.Match(context.Target, context.Source);
+        }
+
+        public void Interrupt()
+        {
+            if (_interactionInstance == null) return;
+
+            _interactionInstance.Cancel();
+            _interactionInstance = null;
+        }
+
         public bool CanStartPreparation(InteractionContext context)
         {
             if (!Cooldown.IsOver())

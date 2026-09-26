@@ -16,7 +16,7 @@ using VContainer;
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
     /// <summary>
-    /// Drives the action lifecycle for each entity: intent → preparation → channeling → completion.
+    /// Drives the action lifecycle for each entity: intent -> preparation -> channeling -> completion.
     /// Also reacts to equipment changes that grant or revoke special actions.
     /// </summary>
     public sealed class ActionSystem : EntitySystemBase, ITickSystem
@@ -37,6 +37,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _resolver = resolver;
 
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
+            TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
         }
 
         protected override void OnEntityAdded(Entity entity)
@@ -56,7 +57,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        // ───────────────────────── Equipment Events ─────────────────────────
+        // ───────────────────────── Events ─────────────────────────
 
         private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
@@ -77,6 +78,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
+        private void OnEntityRepositionRequested(Entity entity, EntityRepositionRequest e)
+        {
+            var actionModule = entity.GetModule<ActionModule>();
+            InterruptActiveAction(actionModule);
+        }
+
         // ───────────────────────── Tick Loop ─────────────────────────
 
         public void Tick(float delta)
@@ -89,6 +96,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             var statModule = entity.GetModule<StatModule>();
             var actionModule = entity.GetModule<ActionModule>();
 
+            if (actionModule.ActiveAction != null && !actionModule.ActiveAction.IsTargetValid(actionModule.ActiveContext))
+            {
+                InterruptActiveAction(actionModule);
+            }
+
+            // Start action if intent changed and global cooldown is over
+            if (TryBeginNewAction(entity, statModule, actionModule))
+            {
+                return;
+            }
+
             if (actionModule.IsPreparing)
             {
                 TickPreparation(statModule, actionModule, delta);
@@ -97,54 +115,57 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 TickChanneling(statModule, actionModule, delta);
             }
-            else
-            {
-                TryBeginNewAction(entity, statModule, actionModule);
-            }
         }
 
         // ───────────────────────── Starting a New Action ─────────────────────────
 
-        private void TryBeginNewAction(Entity entity, StatModule statModule, ActionModule actionModule)
+        private bool TryBeginNewAction(Entity entity, StatModule statModule, ActionModule actionModule)
         {
             var intent = entity.GetModule<IntentModule>();
 
             if (!intent.TryConsumeAction(out var actionIntent))
-                return;
+                return false;
 
             var action = actionIntent.ActionInstance;
 
             // A null action signals that the current action should be cancelled.
             if (action == null)
             {
-                actionModule.ResetActiveState();
-                return;
+                InterruptActiveAction(actionModule);
+                return false;
             }
 
             if (!CanStartAction(actionModule, action, entity, actionIntent))
-                return;
+                return false;
 
+            InterruptActiveAction(actionModule);
             ActivateAction(entity, statModule, actionModule, action, actionIntent);
             BeginPreparation(actionModule);
+
+            return true;
         }
 
         private bool CanStartAction(ActionModule actionModule, ActionInstance action, Entity entity, ActionIntent actionIntent)
         {
             // Prevent restarting the same action.
-            if (actionModule.ActiveAction?.Definition.Id == action.Definition.Id)
+            if (actionModule.ActiveAction?.Definition.Id == action.Definition.Id && actionModule.ActiveContext.Target == actionIntent.Target)
                 return false;
 
             if (!actionModule.GlobalCooldown.IsOver())
                 return false;
 
             var context = new InteractionContext(entity, actionIntent.Target, actionIntent.Point);
-            return action.CanStartPreparation(context);
+            return action.IsTargetValid(context) && action.CanStartPreparation(context);
+        }
+
+        private void InterruptActiveAction(ActionModule actionModule)
+        {
+            actionModule.ActiveAction?.Interrupt();
+            actionModule.ResetActiveState();
         }
 
         private void ActivateAction(Entity entity, StatModule statModule, ActionModule actionModule, ActionInstance action, ActionIntent actionIntent)
         {
-            actionModule.ResetActiveState();
-
             actionModule.ActiveAction = action;
             actionModule.ActiveContext = new InteractionContext(entity, actionIntent.Target, actionIntent.Point);
 
