@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Systems;
+using Assets._Game.Scripts.UI.Systems.Click;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
@@ -71,7 +72,8 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterServices(IContainerBuilder builder)
         {
-            builder.Register<DragDropHandler>(Lifetime.Singleton);
+            builder.Register<DragDropHandlerService>(Lifetime.Singleton);
+            builder.Register<ClickHandlerService>(Lifetime.Singleton);
         }
 
         private void RegisterSystems(IContainerBuilder builder)

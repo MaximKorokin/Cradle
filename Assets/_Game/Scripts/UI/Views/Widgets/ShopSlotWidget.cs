@@ -1,13 +1,11 @@
 ﻿using Assets._Game.Scripts.Items.Shop;
-using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class ShopSlotWidget : MonoBehaviour, IPointerClickHandler
+    public sealed class ShopSlotWidget : MonoBehaviour
     {
         [SerializeField]
         private Image _icon;
@@ -17,8 +15,6 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         private TMP_Text _priceText;
 
         private ShopSlot _slot;
-
-        public event Action<ShopSlot> PointerClick;
 
         public void Bind(ShopSlot slot)
         {
@@ -39,11 +35,6 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
             _icon.sprite = data.Icon;
             _amountText.text = data.AmountText;
             _priceText.text = data.PriceText;
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            PointerClick?.Invoke(_slot);
         }
     }
 

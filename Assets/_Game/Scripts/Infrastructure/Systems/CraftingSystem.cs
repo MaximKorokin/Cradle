@@ -2,6 +2,7 @@
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Crafting;
+using Assets._Game.Scripts.Items.Inventory;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems
 {
@@ -26,7 +27,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void HandleCraftRequest(CraftRequest request)
         {
-            var inventoryModel = _itemContainerResolver.ResolveInventory(request.InventoryPath);
+            var inventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(request.InventoryPath);
 
             var recipe = _craftingRecipeCatalogue.Get(request.RecipeId);
             if (recipe == null)

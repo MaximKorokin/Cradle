@@ -9,12 +9,12 @@ using Assets._Game.Scripts.UI.Views.Widgets;
 
 namespace Assets._Game.Scripts.UI.Systems.DragDrop
 {
-    public class DragDropHandler
+    public class DragDropHandlerService
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
 
-        public DragDropHandler(
+        public DragDropHandlerService(
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver)
         {

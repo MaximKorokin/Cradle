@@ -1,0 +1,36 @@
+﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.UI.Common;
+using Assets._Game.Scripts.UI.Views.Widgets;
+using Assets._Game.Scripts.UI.Windows;
+using Assets._Game.Scripts.UI.Windows.Controllers;
+
+namespace Assets._Game.Scripts.UI.Systems.Click
+{
+    public class ClickHandlerService
+    {
+        private readonly IGlobalEventBus _globalEventBus;
+        private readonly WindowControllerArgumentsProvider _controllerArgumentsProvider;
+
+        public ClickHandlerService(
+            IGlobalEventBus globalEventBus,
+            WindowControllerArgumentsProvider controllerArgumentsProvider)
+        {
+            _globalEventBus = globalEventBus;
+            _controllerArgumentsProvider = controllerArgumentsProvider;
+        }
+
+        public void Handle(IClickTarget clickTarget)
+        {
+            if (clickTarget is WindowOpenTrigger windowOpenTrigger)
+            {
+                var arguments = _controllerArgumentsProvider.GetPlayerArguments(windowOpenTrigger.WindowId);
+                _globalEventBus.Publish(new WindowToggleRequest(windowOpenTrigger.WindowId, arguments));
+            }
+            else if (clickTarget is ContainerSlotWidget containerSlotWidget)
+            {
+                var arguments = new ItemStacksPreviewWindowControllerArguments(containerSlotWidget.ContainerPath, containerSlotWidget.SlotIndex);
+                _globalEventBus.Publish(new WindowToggleRequest(WindowId.ItemStacksPreview, arguments));
+            }
+        }
+    }
+}

@@ -1,5 +1,4 @@
-﻿using Assets._Game.Scripts.UI.Views.Controllers;
-using Assets._Game.Scripts.Items;
+﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
@@ -12,7 +11,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly ShopViewController _shopViewController;
         private readonly EquipmentViewData _equipmentHudData;
 
-        private ShopModel ShopModel => _itemContainerResolver.ResolveShop(Arguments.ShopContainerPath);
+        private ShopModel ShopModel => _itemContainerResolver.ResolveContainer<ShopModel>(Arguments.ShopContainerPath);
 
         public ShopWindowController(
             ItemContainerResolver itemContainerResolver,

@@ -1,9 +1,6 @@
 ﻿using Assets._Game.Scripts.UI.DataFormatters;
-using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Widgets;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
@@ -13,19 +10,6 @@ namespace Assets._Game.Scripts.UI.Windows
         private ItemStacksPreviewWidget _primaryItemPreviewView;
         [SerializeField]
         private ItemStacksPreviewWidget _secondaryItemPreviewView;
-        [SerializeField]
-        private RectTransform _actionButtonParent;
-        [SerializeField]
-        private Button _actionButtonTemplate;
-
-        private readonly List<Button> _actionButtons = new();
-
-        public override void OnShow()
-        {
-            base.OnShow();
-
-            _actionButtonTemplate.gameObject.SetActive(false);
-        }
 
         public override void OnHide()
         {
@@ -39,11 +23,11 @@ namespace Assets._Game.Scripts.UI.Windows
         public void Render(ItemStackDisplayData primaryItemStack, ItemStackDisplayData secondaryItemStack)
         {
             Clear();
-            if (primaryItemStack.HasData)
+            if (primaryItemStack.HasData && _primaryItemPreviewView != null)
             {
                 _primaryItemPreviewView.Render(primaryItemStack);
             }
-            if (secondaryItemStack.HasData)
+            if (secondaryItemStack.HasData && _secondaryItemPreviewView != null)
             {
                 _secondaryItemPreviewView.Render(secondaryItemStack);
             }
@@ -51,15 +35,14 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public void Clear()
         {
-            _primaryItemPreviewView.Clear();
-            _secondaryItemPreviewView.Clear();
-
-            foreach (var button in _actionButtons)
+            if (_primaryItemPreviewView != null)
             {
-                button.onClick.RemoveAllListeners();
-                Destroy(button.gameObject);
+                _primaryItemPreviewView.Clear();
             }
-            _actionButtons.Clear();
+            if (_secondaryItemPreviewView != null)
+            {
+                _secondaryItemPreviewView.Clear();
+            }
         }
     }
 }

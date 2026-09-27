@@ -4,11 +4,15 @@ namespace Assets._Game.Scripts.Items
 {
     public readonly struct ItemContainerPath
     {
-        public string EntityId { get; }
-        public ItemContainerId ContainerId { get; }
+        public readonly bool HasData;
+
+        public readonly string EntityId;
+        public readonly ItemContainerId ContainerId;
 
         private ItemContainerPath(string entityId, ItemContainerId containerId)
         {
+            HasData = true;
+
             EntityId = entityId;
             ContainerId = containerId;
         }
@@ -17,6 +21,11 @@ namespace Assets._Game.Scripts.Items
         public static ItemContainerPath Equipment(string entityId) => new(entityId, ItemContainerId.Equipment);
         public static ItemContainerPath Storage(string entityId) => new(entityId, ItemContainerId.Storage);
         public static ItemContainerPath Shop(string entityId) => new(entityId, ItemContainerId.Shop);
+
+        public override string ToString()
+        {
+            return $"{EntityId}, {ContainerId}";
+        }
 
         public override bool Equals(object obj)
         {

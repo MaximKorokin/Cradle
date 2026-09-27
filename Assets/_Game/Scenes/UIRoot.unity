@@ -636,9 +636,9 @@ GameObject:
   - component: {fileID: 197602184}
   - component: {fileID: 197602185}
   - component: {fileID: 197602187}
-  - component: {fileID: 197602188}
   - component: {fileID: 197602189}
   - component: {fileID: 197602190}
+  - component: {fileID: 197602192}
   m_Layer: 0
   m_Name: UISystems
   m_TagString: Untagged
@@ -733,18 +733,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af2f858b11443ca409b98f73116e8a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &197602188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197602179}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d622d37fe62c0948a3fc35ee81562c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &197602189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -779,6 +767,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ab26be307dfff44dba79a3c908fd48a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &197602192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197602179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1b1bbe49a050734db8088f0cdd31652, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &214706335
@@ -2570,7 +2570,7 @@ MonoBehaviour:
   _entityNameplateView: {fileID: 3037742340099991746, guid: 7ca1b21890d64af4fbaa3e4279dda09b, type: 3}
   _windowPrefabs:
   - {fileID: 80786669936262798, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
-  - {fileID: 9128174536294733404, guid: 85bdbaa33bf0fb04297762b35f52ce0d, type: 3}
+  - {fileID: 1213809409166016501, guid: ef812fea16118544698c6cca887e7453, type: 3}
   - {fileID: 5518000423211942906, guid: cf1dd061d23ea9d48ae9ecfa3a7a039c, type: 3}
   - {fileID: 4623452112733648134, guid: b822161b34f14264a8216d9d273e5189, type: 3}
   - {fileID: 3927784664322938998, guid: 1020db7874cd0474091297cd8e9e0bc3, type: 3}

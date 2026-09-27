@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Crafting;
+using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
@@ -68,7 +69,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)
         {
             var inventoryPath = ItemContainerPath.Inventory(Arguments.InventoryEntityId.Value);
-            var inventoryModel = _itemContainerResolver.ResolveInventory(inventoryPath);
+            var inventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(inventoryPath);
 
             var maxCraftable = _craftingService.CalculateMaxCraftable(recipe, inventoryModel);
             if (maxCraftable == 0)

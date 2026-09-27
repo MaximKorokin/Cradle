@@ -11,7 +11,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
     {
         private const int DragStartThreshold = 30;
 
-        private DragDropHandler _dragDropHandler;
+        private DragDropHandlerService _dragDropHandlerService;
         private DragDropWidget _dragDropView;
 
         private Vector2 _dragStartPosition;
@@ -23,12 +23,12 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
-            DragDropHandler dragDropHandler,
+            DragDropHandlerService dragDropHandlerService,
             DragDropWidget dragDropView)
         {
             BaseConstruct(globalEventBus);
 
-            _dragDropHandler = dragDropHandler;
+            _dragDropHandlerService = dragDropHandlerService;
             _dragDropView = dragDropView;
 
             TrackGlobalEvent<PointerDownEvent>(OnPointerDown);
@@ -49,7 +49,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
         {
             if (_isDragging)
             {
-                _dragDropHandler.Handle(_currentDragDropSource, _dragDropTargetCandidate, e.Context);
+                _dragDropHandlerService.Handle(_currentDragDropSource, _dragDropTargetCandidate, e.Context);
             }
 
             _currentDragDropSource = null;

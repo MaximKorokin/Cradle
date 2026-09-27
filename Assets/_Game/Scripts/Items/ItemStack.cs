@@ -101,12 +101,16 @@ namespace Assets._Game.Scripts.Items
 
     public readonly struct ItemStackSnapshot
     {
+        public readonly bool HasData;
+
         public readonly ItemDefinition Definition;
         public readonly IItemInstanceData InstanceData;
         public readonly int Amount;
 
         public ItemStackSnapshot(ItemDefinition definition, IItemInstanceData instanceData, int amount)
         {
+            HasData = true;
+
             Definition = definition;
             InstanceData = instanceData;
             Amount = amount;
