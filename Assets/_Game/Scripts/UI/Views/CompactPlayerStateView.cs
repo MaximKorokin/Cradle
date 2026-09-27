@@ -57,7 +57,7 @@ namespace Assets._Game.Scripts.UI.Views
         }
 
         // todo: optimize by only updating changed values instead of redrawing everything
-        public override void Render(PlayerStateViewData playerStateViewData)
+        protected override void Render(PlayerStateViewData playerStateViewData)
         {
             Clear();
 

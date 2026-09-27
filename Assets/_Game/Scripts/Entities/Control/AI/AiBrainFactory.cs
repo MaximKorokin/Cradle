@@ -35,9 +35,9 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             {
                 behaviours.Add(new ActionBehaviour(_actionEvaluator));
             }
-            if (behaviour.HasFlag(AiBehaviour.Interaction))
+            if (behaviour.HasFlag(AiBehaviour.PlayerPrompt))
             {
-                behaviours.Add(new InteractionBehaviour(_globalEventBus, _entitySensor));
+                behaviours.Add(new PlayerPromptBehaviour(_globalEventBus, _entitySensor));
             }
 
             return new(behaviours);

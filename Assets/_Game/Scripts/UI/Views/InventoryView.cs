@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.UI.Views
         private void OnOrderByNameButtonClicked() => OrderByNameButtonClicked?.Invoke();
         private void OnOrderByPurposeButtonClicked() => OrderByPurposeButtonClicked?.Invoke();
 
-        public override void Render(IInventoryViewData inventoryHudData)
+        protected override void Render(IInventoryViewData inventoryHudData)
         {
             _inventorySlotTemplate.gameObject.SetActive(false);
 

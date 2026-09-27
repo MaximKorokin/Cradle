@@ -37,7 +37,7 @@ namespace Assets._Game.Scripts.UI.Core
         [SerializeField]
         private LocationAnnounceWidget _locationAnnounceView;
         [SerializeField]
-        private InteractionPromptWidget _interactionPromptView;
+        private PlayerPromptWidget _interactionPromptView;
         [SerializeField]
         private ClickEffectWidget _clickEffectView;
         [SerializeField]

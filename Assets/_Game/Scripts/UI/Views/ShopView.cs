@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private readonly List<ShopSlotWidget> _slots = new();
 
-        public override void Render((IReadOnlyList<ShopSlotViewData> ShopSlots, string ShopName, float BuyCoefficient, float SellCoefficient) data)
+        protected override void Render((IReadOnlyList<ShopSlotViewData> ShopSlots, string ShopName, float BuyCoefficient, float SellCoefficient) data)
         {
             _shopSlotTemplate.gameObject.SetActive(false);
 

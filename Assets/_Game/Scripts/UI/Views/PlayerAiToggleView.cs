@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.UI.Views
             ValueChanged?.Invoke(value);
         }
 
-        public override void Render(bool data)
+        protected override void Render(bool data)
         {
 
         }

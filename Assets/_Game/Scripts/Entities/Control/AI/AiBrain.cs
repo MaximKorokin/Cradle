@@ -53,6 +53,6 @@ namespace Assets._Game.Scripts.Entities.Control.AI
         Wander = 1,
         StandStill = 2,
         Action = 4,
-        Interaction = 8,
+        PlayerPrompt = 8,
     }
 }

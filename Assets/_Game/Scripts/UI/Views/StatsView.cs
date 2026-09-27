@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.Views
             _statTemplate.gameObject.SetActive(false);
         }
 
-        public override void Render(IEnumerable<(string, string)> stats)
+        protected override void Render(IEnumerable<(string, string)> stats)
         {
             Clear();
 

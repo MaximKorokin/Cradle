@@ -5,13 +5,13 @@ using Assets._Game.Scripts.UI.Systems;
 
 namespace Assets._Game.Scripts.Entities.Control.AI
 {
-    public sealed class InteractionBehaviour : IAiBehaviour
+    public sealed class PlayerPromptBehaviour : IAiBehaviour
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IEntitySensor _entitySensor;
         private bool _isPromptShowing;
 
-        public InteractionBehaviour(IGlobalEventBus globalEventBus, IEntitySensor entitySensor)
+        public PlayerPromptBehaviour(IGlobalEventBus globalEventBus, IEntitySensor entitySensor)
         {
             _globalEventBus = globalEventBus;
             _entitySensor = entitySensor;
@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.Entities.Control.AI
 
         public BehaviourEvaluation Evaluate(Entity entity)
         {
-            if (entity.TryGetModule<InteractionBehaviourModule>(out var module) &&
+            if (entity.TryGetModule<PlayerPromptBehaviourModule>(out var module) &&
                 _entitySensor.TryGetFirstInRange(entity, module.Radius, Faction.FactionRelation.Ally, default, out var foundEntity))
             {
                 return new BehaviourEvaluation(1, new TargetBehaviourContext(foundEntity));
@@ -36,16 +36,16 @@ namespace Assets._Game.Scripts.Entities.Control.AI
             if (_isPromptShowing)
             {
                 _isPromptShowing = false;
-                _globalEventBus.Publish(InteractionPromptViewRequest.HideRequest());
+                _globalEventBus.Publish(PlayerPromptRequest.GetHideRequest());
             }
         }
 
         public void Tick(Entity entity, IBehaviourContext context, float delta)
         {
-            if (entity.TryGetModule<InteractionBehaviourModule>(out var module) && context is TargetBehaviourContext targetContext)
+            if (entity.TryGetModule<PlayerPromptBehaviourModule>(out var module) && context is TargetBehaviourContext targetContext)
             {
                 _isPromptShowing = true;
-                _globalEventBus.Publish(InteractionPromptViewRequest.ShowRequest(
+                _globalEventBus.Publish(PlayerPromptRequest.GetShowRequest(
                     module.PromptText,
                     module.ButtonText,
                     () => module.Open(entity.Id, targetContext.Target.Id)));

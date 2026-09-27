@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.UI.Views
             _transitionButtonTemplate.gameObject.SetActive(false);
         }
 
-        public override void Render(IReadOnlyList<LocationTransitionData> transitions)
+        protected override void Render(IReadOnlyList<LocationTransitionData> transitions)
         {
             foreach (var button in _transitionButtons)
             {

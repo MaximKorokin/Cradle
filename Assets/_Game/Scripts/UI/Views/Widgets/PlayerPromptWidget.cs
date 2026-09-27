@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class InteractionPromptWidget : MonoBehaviour
+    public sealed class PlayerPromptWidget : MonoBehaviour
     {
         [SerializeField]
         private GameObject _viewGameObject;
@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
             _buttonText.text = buttonText;
             _viewGameObject.SetActive(true);
 
-            _button.onClick.RemoveAllListeners();
+            _button.onClick.RemoveListener(OnButtonClicked);
             _button.onClick.AddListener(OnButtonClicked);
         }
 

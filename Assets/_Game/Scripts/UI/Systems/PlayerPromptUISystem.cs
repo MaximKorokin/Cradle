@@ -2,29 +2,36 @@
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
+using System;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems
 {
-    public sealed class InteractionUISystem : UISystemBase
+    public sealed class PlayerPromptUISystem : UISystemBase
     {
         private EntityRepository _entityRepository;
+        private PlayerPromptWidget _playerPromptWidget;
 
         [Inject]
         private void Construct(
             IGlobalEventBus globalEventBus,
-            EntityRepository entityRepository)
+            EntityRepository entityRepository,
+            PlayerPromptWidget playerPromptWidget)
         {
             BaseConstruct(globalEventBus);
 
             _entityRepository = entityRepository;
+            _playerPromptWidget = playerPromptWidget;
 
             TrackGlobalEvent<ShopWindowOpenRequest>(OnShopWindowOpenRequest);
             TrackGlobalEvent<CraftingWindowOpenRequest>(OnCraftingWindowOpenRequest);
             TrackGlobalEvent<StorageWindowOpenRequest>(OnStorageWindowOpenRequest);
             TrackGlobalEvent<QuestGiverWindowOpenRequest>(OnQuestGiverWindowOpenRequest);
+
+            TrackGlobalEvent<PlayerPromptRequest>(OnPlayerPromptRequested);
         }
 
         private void OnShopWindowOpenRequest(ShopWindowOpenRequest request)
@@ -62,6 +69,19 @@ namespace Assets._Game.Scripts.UI.Systems
             GlobalEventBus.Publish(new WindowToggleRequest(
                 WindowId.QuestGiver,
                 new QuestGiverWindowControllerArguments(request.GiverEntityId, request.TargetEntityId)));
+        }
+
+        private void OnPlayerPromptRequested(PlayerPromptRequest request)
+        {
+            SLog.Log(request.Callback);
+            if (request.Show)
+            {
+                _playerPromptWidget.Show(request.PromptText, request.ButtonText, request.Callback);
+            }
+            else
+            {
+                _playerPromptWidget.Hide();
+            }
         }
     }
 
@@ -110,6 +130,32 @@ namespace Assets._Game.Scripts.UI.Systems
         {
             GiverEntityId = giverEntityId;
             TargetEntityId = targetEntityId;
+        }
+    }
+
+    public readonly struct PlayerPromptRequest : IGlobalEvent
+    {
+        public string PromptText { get; }
+        public string ButtonText { get; }
+        public bool Show { get; }
+        public Action Callback { get; }
+
+        private PlayerPromptRequest(string promptText, string buttonText, bool show, Action callback = null)
+        {
+            PromptText = promptText;
+            ButtonText = buttonText;
+            Show = show;
+            Callback = callback;
+        }
+
+        public static PlayerPromptRequest GetShowRequest(string promptText, string buttonText, Action callback = null)
+        {
+            return new PlayerPromptRequest(promptText, buttonText, true, callback);
+        }
+
+        public static PlayerPromptRequest GetHideRequest()
+        {
+            return new PlayerPromptRequest(string.Empty, string.Empty, false, null);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private IEquipmentViewData _equipmentHudData;
 
-        public override void Render(IEquipmentViewData equipmentHudData)
+        protected override void Render(IEquipmentViewData equipmentHudData)
         {
             _equipmentHudData = equipmentHudData;
 

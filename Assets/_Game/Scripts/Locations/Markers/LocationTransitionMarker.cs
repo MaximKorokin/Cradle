@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.Locations.Markers
             if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
                 return;
 
-            _globalEventBus.Publish(InteractionPromptViewRequest.ShowRequest(
+            _globalEventBus.Publish(PlayerPromptRequest.GetShowRequest(
                 "<size=80%><color=#888888>Entrance to</color></size>" + Environment.NewLine + _locationTransitionData.LocationDefinition.DisplayName, "Enter", OnEnterPressed));
         }
 
@@ -47,7 +47,7 @@ namespace Assets._Game.Scripts.Locations.Markers
             if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
                 return;
 
-            _globalEventBus.Publish(InteractionPromptViewRequest.HideRequest());
+            _globalEventBus.Publish(PlayerPromptRequest.GetHideRequest());
         }
 
         private void OnEnterPressed()

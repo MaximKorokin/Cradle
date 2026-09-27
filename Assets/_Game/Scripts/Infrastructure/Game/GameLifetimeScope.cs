@@ -215,7 +215,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
             builder.Register<CraftingModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<InteractionBehaviourModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<PlayerPromptBehaviourModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<CreatureModuleFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }

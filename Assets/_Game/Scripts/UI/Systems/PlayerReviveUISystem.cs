@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.UI.Systems
         {
             if (e.Victim == _playerProvider.Player)
             {
-                GlobalEventBus.Publish(InteractionPromptViewRequest.ShowRequest("You Died", "Revive", OnReviveButtonClicked));
+                GlobalEventBus.Publish(PlayerPromptRequest.GetShowRequest("You Died", "Revive", OnReviveButtonClicked));
             }
         }
 
@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.UI.Systems
         {
             if (e.Entity == _playerProvider.Player)
             {
-                GlobalEventBus.Publish(InteractionPromptViewRequest.HideRequest());
+                GlobalEventBus.Publish(PlayerPromptRequest.GetHideRequest());
             }
         }
     }

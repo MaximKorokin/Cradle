@@ -31,7 +31,7 @@ namespace Assets._Game.Scripts.UI.Views
             if (!_isCleanedUp) OnHide();
         }
 
-        internal abstract void TickRender();
+        public abstract void TickRender();
     }
 
     public abstract class UIViewBase<TData> : UIViewBase
@@ -45,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Views
             _isDirty = true;
         }
 
-        internal override void TickRender()
+        public override void TickRender()
         {
             if (!_isDirty) return;
 
@@ -53,6 +53,6 @@ namespace Assets._Game.Scripts.UI.Views
             Render(_data);
         }
 
-        public abstract void Render(TData data);
+        protected abstract void Render(TData data);
     }
 }

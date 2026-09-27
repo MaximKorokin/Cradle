@@ -5,7 +5,7 @@ using System;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
-    public sealed class InteractionBehaviourModule : EntityModuleBase
+    public sealed class PlayerPromptBehaviourModule : EntityModuleBase
     {
         private readonly Action<string, string> _onOpen;
 
@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.Entities.Modules
         public string PromptText { get; }
         public string ButtonText { get; }
 
-        public InteractionBehaviourModule(float radius, string promptText, string buttonText, Action<string, string> onOpen)
+        public PlayerPromptBehaviourModule(float radius, string promptText, string buttonText, Action<string, string> onOpen)
         {
             Radius = radius;
             PromptText = promptText;
@@ -24,11 +24,11 @@ namespace Assets._Game.Scripts.Entities.Modules
         public void Open(string entityId, string targetId) => _onOpen(entityId, targetId);
     }
 
-    public sealed class InteractionBehaviourModuleFactory : IEntityModuleFactory
+    public sealed class PlayerPromptBehaviourModuleFactory : IEntityModuleFactory
     {
         private readonly IGlobalEventBus _globalEventBus;
 
-        public InteractionBehaviourModuleFactory(IGlobalEventBus globalEventBus)
+        public PlayerPromptBehaviourModuleFactory(IGlobalEventBus globalEventBus)
         {
             _globalEventBus = globalEventBus;
         }
@@ -36,22 +36,22 @@ namespace Assets._Game.Scripts.Entities.Modules
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (entityDefinition.TryGetModuleDefinition<ShopModuleDefinition>(out var shopDefinition) && shopDefinition.Radius > 0)
-                return new InteractionBehaviourModule(shopDefinition.Radius, shopDefinition.ShopDefinition.ShopName ?? "Shop", "Open",
+                return new PlayerPromptBehaviourModule(shopDefinition.Radius, shopDefinition.ShopDefinition.ShopName ?? "Shop", "Open",
                     (entityId, targetId) => _globalEventBus.Publish(
                         new ShopWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<CraftingModuleDefinition>(out var craftDefinition) && craftDefinition.Radius > 0)
-                return new InteractionBehaviourModule(craftDefinition.Radius, craftDefinition.CrafterName, "Craft",
+                return new PlayerPromptBehaviourModule(craftDefinition.Radius, craftDefinition.CrafterName, "Craft",
                     (entityId, targetId) => _globalEventBus.Publish(
                         new CraftingWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<StorageModuleDefinition>(out var storageDefinition) && storageDefinition.Radius > 0)
-                return new InteractionBehaviourModule(storageDefinition.Radius, entityDefinition.DisplayName, "Open",
+                return new PlayerPromptBehaviourModule(storageDefinition.Radius, entityDefinition.DisplayName, "Open",
                     (entityId, targetId) => _globalEventBus.Publish(
                         new StorageWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var questGiverDefinition) && questGiverDefinition.Radius > 0)
-                return new InteractionBehaviourModule(questGiverDefinition.Radius, entityDefinition.DisplayName, "Talk",
+                return new PlayerPromptBehaviourModule(questGiverDefinition.Radius, entityDefinition.DisplayName, "Talk",
                     (entityId, targetId) => _globalEventBus.Publish(
                         new QuestGiverWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
 

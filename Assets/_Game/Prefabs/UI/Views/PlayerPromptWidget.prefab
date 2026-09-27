@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 4997674355347181238}
   - component: {fileID: 5837778422038708625}
   m_Layer: 5
-  m_Name: InteractionPromptView
+  m_Name: PlayerPromptWidget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
