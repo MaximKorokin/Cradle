@@ -146,6 +146,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     int totalPrice = sellPricePerUnit * amount;
                     PublishCommand(new SellToShopCommand(
                         shopView.Data.ContainerPath,
+                        shopView.Data.BuyerInventoryPath,
                         inventorySlot.ContainerPath,
                         inventorySlot.SlotIndex,
                         amount,
@@ -178,6 +179,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     int totalPrice = buyPricePerUnit * amount;
                     PublishCommand(new BuyFromShopCommand(
                         shopSlot.ContainerPath,
+                        shopSlot.ShopView.Data.BuyerInventoryPath,
                         inventorySlot.ContainerPath,
                         shopSlot.SlotIndex,
                         inventorySlot.SlotIndex,

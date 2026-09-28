@@ -311,18 +311,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 2bd2e7912b2f7c043a76699e25d38bca, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: b64a65fa7f086f640b2298b7a55eba03, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: 6841f2f5d86e4cc499ed013c0231a24b, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 11400000, guid: ab214886e61416e4da0c0b48c8e8b24f, type: 2}
       sceneName: 
       scenePath: 
@@ -435,27 +423,23 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: ShopPanel
+    - reference: {fileID: 102900000, guid: 2bd2e7912b2f7c043a76699e25d38bca, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: ShopPanel
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: b64a65fa7f086f640b2298b7a55eba03, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: ShopPanel
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 6841f2f5d86e4cc499ed013c0231a24b, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: ShopPanel
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: b045704cf788a7a45a228b371df7fb11, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: ShopPanel
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: fc423adb93c22844c90b5b1fb898a7ab, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: ShopPanel
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      globalObjectId: 

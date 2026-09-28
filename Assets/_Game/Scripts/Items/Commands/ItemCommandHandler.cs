@@ -225,7 +225,8 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleBuy(BuyFromShopCommand c)
         {
-            var inventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(c.InventoryModelPath);
+            var itemContainerModel = _itemContainerResolver.ResolveContainer(c.ItemContainerModelPath);
+            var goldInventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(c.GoldInventoryModelPath);
             var shopModel = _itemContainerResolver.ResolveContainer<ShopModel>(c.ShopModelPath);
 
             var itemSnapshot = shopModel.Get(ShopSlot.FromInt64(c.ShopSlot));
@@ -233,12 +234,12 @@ namespace Assets._Game.Scripts.Items.Commands
 
             var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
             var goldKey = ItemKey.From(goldDefinition, null);
-            if (inventoryModel.Count(goldKey) < c.Price)
+            if (goldInventoryModel.Count(goldKey) < c.Price)
                 return false;
 
             // Try to add to inventory
             var amountToTransfer = Math.Min(c.Amount, itemSnapshot.Value.Amount);
-            var preview = inventoryModel.PreviewAdd(new ItemStackSnapshot(
+            var preview = itemContainerModel.PreviewAdd(new ItemStackSnapshot(
                 itemSnapshot.Value.Definition,
                 itemSnapshot.Value.InstanceData,
                 amountToTransfer));
@@ -246,13 +247,13 @@ namespace Assets._Game.Scripts.Items.Commands
             if (preview != amountToTransfer) return false;
 
             // Remove gold from inventory
-            inventoryModel.Remove(goldKey, c.Price);
+            goldInventoryModel.Remove(goldKey, c.Price);
 
             // Remove item from shop
             shopModel.RemoveFromSlot(ShopSlot.FromInt64(c.ShopSlot), preview);
 
             // Add item to inventory
-            inventoryModel.AddToSlot(
+            itemContainerModel.AddToSlot(
                 c.InventorySlot,
                 new ItemStackSnapshot(
                     itemSnapshot.Value.Definition,
@@ -264,18 +265,19 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleSell(SellToShopCommand c)
         {
-            var inventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(c.InventoryModelPath);
+            var itemContainerModel = _itemContainerResolver.ResolveContainer(c.ItemContainerModelPath);
+            var goldInventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(c.GoldInventoryModelPath);
             var shopModel = _itemContainerResolver.ResolveContainer<ShopModel>(c.ShopModelPath);
 
-            var itemSnapshot = inventoryModel.Get(InventorySlot.FromInt64(c.InventorySlot));
+            var itemSnapshot = itemContainerModel.Get(c.InventorySlot);
             if (!itemSnapshot.HasValue) return false;
 
             // Remove item from inventory
-            var removed = inventoryModel.RemoveFromSlot(InventorySlot.FromInt64(c.InventorySlot), c.Amount);
+            var removed = itemContainerModel.RemoveFromSlot(c.InventorySlot, c.Amount);
             if (removed <= 0) return false;
 
             var goldDefinition = _itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
-            inventoryModel.Add(new ItemStackSnapshot(goldDefinition, null, c.Price));
+            goldInventoryModel.Add(new ItemStackSnapshot(goldDefinition, null, c.Price));
 
             // Add item back to shop (buyback feature)
             shopModel.Add(new ItemStackSnapshot(

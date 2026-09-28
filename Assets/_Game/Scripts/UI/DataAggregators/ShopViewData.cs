@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Shop;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using System.Collections.Generic;
 
@@ -12,6 +13,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public float BuyCoefficient { get; private set; }
         public float SellCoefficient { get; private set; }
 
+        private IReadOnlyObservableData<string> _buyerEntityId;
+
+        public ItemContainerPath BuyerInventoryPath => ItemContainerPath.Inventory(_buyerEntityId?.Value);
+
         private ShopModel ShopModel => ItemContainer as ShopModel;
 
         public ShopViewData(
@@ -21,11 +26,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public void SetShopData(
             string shopName,
             float buyCoefficient,
-            float sellCoefficient)
+            float sellCoefficient,
+            IReadOnlyObservableData<string> buyerEntityId)
         {
             ShopName = shopName;
             BuyCoefficient = buyCoefficient;
             SellCoefficient = sellCoefficient;
+            _buyerEntityId = buyerEntityId;
         }
 
         public IEnumerable<(ShopSlot Slot, ItemStackSnapshot? Item, bool IsInfinite, string PriceText)> Enumerate()

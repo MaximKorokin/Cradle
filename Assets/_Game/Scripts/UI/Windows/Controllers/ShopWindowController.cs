@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnInitialize();
 
             _shopViewData.SetEntityId(Arguments.ShopEntityId);
-            _shopViewData.SetShopData(Arguments.ShopName, Arguments.BuyCoefficient, Arguments.SellCoefficient);
+            _shopViewData.SetShopData(Arguments.ShopName, Arguments.BuyCoefficient, Arguments.SellCoefficient, Arguments.BuyerEntityId);
         }
 
         protected override void OnBind()
@@ -63,8 +63,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public float SellCoefficient { get; }
 
         public ItemContainerPath ShopContainerPath => ItemContainerPath.Shop(ShopEntityId.Value);
-        //public ItemContainerPath InventoryContainerPath => ItemContainerPath.Inventory(BuyerEntityId.Value);
-        //public ItemContainerPath EquipmentContainerPath => ItemContainerPath.Equipment(BuyerEntityId.Value);
 
         public ShopWindowControllerArguments(
             IReadOnlyObservableData<string> shopEntityId,

@@ -40,8 +40,8 @@ MonoBehaviour:
       type: {class: ShopModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        <Radius>k__BackingField: 1
         <ShopDefinition>k__BackingField: {fileID: 11400000, guid: fc423adb93c22844c90b5b1fb898a7ab, type: 2}
+        <Radius>k__BackingField: 1
     - rid: 3564180267895619758
       type: {class: ControlModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
