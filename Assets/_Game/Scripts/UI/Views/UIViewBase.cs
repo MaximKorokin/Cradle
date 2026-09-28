@@ -39,6 +39,8 @@ namespace Assets._Game.Scripts.UI.Views
         private TData _data;
         private bool _isDirty;
 
+        public TData Data => _data;
+
         public void RequestRender(TData data)
         {
             _data = data;

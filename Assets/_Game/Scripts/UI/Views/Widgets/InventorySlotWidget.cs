@@ -8,10 +8,8 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class InventorySlotWidget : ContainerSlotWidget, IDragDropSource, IDragDropTarget
+    public sealed class InventorySlotWidget : ContainerSlotWidget, IDragDropTarget
     {
-        [SerializeField]
-        private Image _itemImage;
         [SerializeField]
         private Image _highlightImage;
         [SerializeField]
@@ -21,28 +19,22 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         [SerializeField]
         private FillBar _cooldownFillBar;
 
-        private bool _containsData;
         private CooldownCounter _itemCooldownCounter;
 
         public void Render(ItemStackSnapshot? itemStack) => Render(itemStack, Color.white);
 
-        public void Render(ItemStackSnapshot? itemStack, Color color)
+        public override void Render(ItemStackSnapshot? itemStack, Color color)
         {
+            base.Render(itemStack, color);
+
             _itemCooldownCounter = null;
-            _containsData = itemStack != null;
-            if (!_containsData)
+            if (!ContainsData)
             {
                 _amountText.enabled = false;
                 _enchantText.enabled = false;
-                _itemImage.sprite = null;
-                _itemImage.enabled = false;
                 _cooldownFillBar.gameObject.SetActive(false);
                 return;
             }
-
-            _itemImage.enabled = true;
-            _itemImage.sprite = itemStack.Value.Definition.Icon;
-            _itemImage.color = color;
 
             if (itemStack.Value.Definition.MaxAmount > 1)
             {
@@ -92,21 +84,6 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
             {
                 _cooldownFillBar.SetFillRatio(1 - _itemCooldownCounter.TimeSinceReset / _itemCooldownCounter.Cooldown);
             }
-        }
-
-        public bool CanStartDrag()
-        {
-            return _containsData;
-        }
-
-        public RectTransform CreateDragDropVisual()
-        {
-            var image = new GameObject().AddComponent<Image>();
-            image.sprite = _itemImage.sprite;
-            image.color = new(0.8f, 0.8f, 0.8f);
-            image.rectTransform.sizeDelta = _itemImage.rectTransform.rect.size;
-
-            return image.transform as RectTransform;
         }
 
         public void SetDragDropHighlight(bool highlighted)

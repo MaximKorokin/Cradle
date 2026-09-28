@@ -1,5 +1,4 @@
 ﻿using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 
@@ -7,40 +6,31 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ShopWindowController : WindowControllerBase<ShopWindow, ShopWindowControllerArguments>
     {
-        private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ShopViewController _shopViewController;
-        private readonly EquipmentViewData _equipmentHudData;
-
-        private ShopModel ShopModel => _itemContainerResolver.ResolveContainer<ShopModel>(Arguments.ShopContainerPath);
+        private readonly ShopViewData _shopViewData;
 
         public ShopWindowController(
-            ItemContainerResolver itemContainerResolver,
             ShopViewController shopViewController,
-            EquipmentViewData equipmentHudData)
+            ShopViewData shopViewData)
         {
-            _itemContainerResolver = itemContainerResolver;
             _shopViewController = shopViewController;
-            _equipmentHudData = equipmentHudData;
+            _shopViewData = shopViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _equipmentHudData.SetEntityId(Arguments.BuyerEntityId);
+            _shopViewData.SetEntityId(Arguments.ShopEntityId);
+            _shopViewData.SetShopData(Arguments.ShopName, Arguments.BuyCoefficient, Arguments.SellCoefficient);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            _shopViewController.InitializeShop(
-                Window.ShopView,
-                ShopModel,
-                Arguments.ShopName,
-                Arguments.BuyCoefficient,
-                Arguments.SellCoefficient);
-            _shopViewController.Bind();
+            _shopViewController.Initialize(Window.ShopView);
+            _shopViewController.Bind(_shopViewData);
         }
 
         protected override void OnUnbind()
@@ -58,6 +48,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Dispose()
         {
             base.Dispose();
+            _shopViewData.Dispose();
             _shopViewController.Dispose();
         }
     }
@@ -72,8 +63,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public float SellCoefficient { get; }
 
         public ItemContainerPath ShopContainerPath => ItemContainerPath.Shop(ShopEntityId.Value);
-        public ItemContainerPath InventoryContainerPath => ItemContainerPath.Inventory(BuyerEntityId.Value);
-        public ItemContainerPath EquipmentContainerPath => ItemContainerPath.Equipment(BuyerEntityId.Value);
+        //public ItemContainerPath InventoryContainerPath => ItemContainerPath.Inventory(BuyerEntityId.Value);
+        //public ItemContainerPath EquipmentContainerPath => ItemContainerPath.Equipment(BuyerEntityId.Value);
 
         public ShopWindowControllerArguments(
             IReadOnlyObservableData<string> shopEntityId,

@@ -157,6 +157,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<InventoryViewController>(Lifetime.Transient);
             builder.Register<EquipmentViewController>(Lifetime.Transient);
             builder.Register<ShopViewController>(Lifetime.Transient);
+            builder.Register<ShopViewData>(Lifetime.Transient);
             builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
             builder.Register<StatsViewController>(Lifetime.Transient);
         }

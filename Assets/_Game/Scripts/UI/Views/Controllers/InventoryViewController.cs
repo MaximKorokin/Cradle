@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
     {
         private readonly IGlobalEventBus _globalEventBus;
 
-        private IInventoryViewData _inventoryHudData;
+        private IInventoryViewData _inventoryViewData;
 
         public InventoryViewController(IGlobalEventBus globalEventBus)
         {
@@ -42,24 +42,24 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             base.Dispose();
         }
 
-        public void Bind(IInventoryViewData inventoryHudData)
+        public void Bind(IInventoryViewData inventoryViewData)
         {
-            _inventoryHudData = inventoryHudData;
-            _inventoryHudData.Changed += OnInventoryChanged;
+            _inventoryViewData = inventoryViewData;
+            _inventoryViewData.Changed += OnInventoryChanged;
         }
 
         public void Unbind()
         {
-            if (_inventoryHudData != null)
+            if (_inventoryViewData != null)
             {
-                _inventoryHudData.Changed -= OnInventoryChanged;
-                _inventoryHudData = null;
+                _inventoryViewData.Changed -= OnInventoryChanged;
+                _inventoryViewData = null;
             }
         }
 
         protected override void OnRender()
         {
-            View.RequestRender(_inventoryHudData);
+            View.RequestRender(_inventoryViewData);
         }
 
         private void OnInventoryChanged()
@@ -69,7 +69,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnFilterButtonClicked(bool isOn, ItemStackPurpose purpose)
         {
-            _inventoryHudData.SetEnumerationFilter(!isOn
+            _inventoryViewData.SetEnumerationFilter(!isOn
                 ? null
                 : item => item != null && item.Value.GetPurpose() == purpose);
         }
@@ -81,12 +81,12 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnOrderByNameButtonClicked()
         {
-            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByName, _inventoryHudData.InventoryModel));
+            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByName, _inventoryViewData.InventoryModel));
         }
 
         private void OnOrderByPurposeButtonClicked()
         {
-            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByPurpose, _inventoryHudData.InventoryModel));
+            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByPurpose, _inventoryViewData.InventoryModel));
         }
     }
 }

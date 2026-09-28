@@ -1,31 +1,35 @@
 ﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class EquipmentWindowController : WindowControllerBase<EquipmentWindow, EquipmentWindowControllerArguments>
     {
-        private readonly EquipmentViewData _equipmentHudData;
+        private readonly EquipmentViewData _equipmentViewData;
         private readonly EquipmentViewController _equipmentViewController;
 
         public EquipmentWindowController(
-            EquipmentViewData equipmentHudData,
+            EquipmentViewData equipmentViewData,
             EquipmentViewController equipmentViewController)
         {
-            _equipmentHudData = equipmentHudData;
+            _equipmentViewData = equipmentViewData;
             _equipmentViewController = equipmentViewController;
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            _equipmentViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
-
             _equipmentViewController.Initialize(Window.EquipmentView);
-            _equipmentViewController.Bind(_equipmentHudData);
+            _equipmentViewController.Bind(_equipmentViewData);
         }
 
         protected override void OnUnbind()
@@ -44,7 +48,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Dispose();
 
-            _equipmentHudData.Dispose();
+            _equipmentViewData.Dispose();
             _equipmentViewController.Dispose();
         }
     }

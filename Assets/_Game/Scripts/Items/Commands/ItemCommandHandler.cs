@@ -252,10 +252,12 @@ namespace Assets._Game.Scripts.Items.Commands
             shopModel.RemoveFromSlot(ShopSlot.FromInt64(c.ShopSlot), preview);
 
             // Add item to inventory
-            inventoryModel.Add(new ItemStackSnapshot(
-                itemSnapshot.Value.Definition,
-                itemSnapshot.Value.InstanceData,
-                preview));
+            inventoryModel.AddToSlot(
+                c.InventorySlot,
+                new ItemStackSnapshot(
+                    itemSnapshot.Value.Definition,
+                    itemSnapshot.Value.InstanceData,
+                    preview));
 
             return true;
         }

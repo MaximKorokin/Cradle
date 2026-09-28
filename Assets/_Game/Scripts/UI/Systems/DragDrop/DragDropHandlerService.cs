@@ -2,9 +2,12 @@
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
+using Assets._Game.Scripts.Items.Inventory;
+using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Common;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Widgets;
 
 namespace Assets._Game.Scripts.UI.Systems.DragDrop
@@ -24,19 +27,30 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         public void Handle(IDragDropSource source, IDragDropTarget target, PointerContext pointerContext)
         {
-            if (source is InventorySlotWidget inventorySlot1)
+            if (source is InventorySlotWidget sourceInventorySlot)
             {
-                if (target is InventorySlotWidget inventorySlot2)
+                if (target is InventorySlotWidget targetInventorySlot)
                 {
-                    HandleInventorySlotToInventorySlotDrop(inventorySlot1, inventorySlot2);
+                    HandleInventorySlotToInventorySlotDrop(sourceInventorySlot, targetInventorySlot);
                 }
                 else if (target is DropArea dropArea)
                 {
-                    HandleInventorySlotToDropAreaDrop(inventorySlot1, dropArea);
+                    HandleInventorySlotToDropAreaDrop(sourceInventorySlot, dropArea);
+                }
+                else if (target is ShopView shopView)
+                {
+                    HandleInventorySlotToShopViewDrop(sourceInventorySlot, shopView);
                 }
                 else if (!pointerContext.IsOverUI)
                 {
-                    HandleInventorySlotToNonUIDrop(inventorySlot1);
+                    HandleInventorySlotToNonUIDrop(sourceInventorySlot);
+                }
+            }
+            else if (source is ShopSlotWidget shopSlot)
+            {
+                if (target is InventorySlotWidget inventorySlot)
+                {
+                    HandleShopSlotToInventorySlotDrop(shopSlot, inventorySlot);
                 }
             }
         }
@@ -112,13 +126,74 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
         }
 
-        private bool TryGetContainerAndItemStack(InventorySlotWidget inventorySlot, out IItemContainer container, out ItemStackSnapshot? itemStack)
+        private void HandleInventorySlotToShopViewDrop(InventorySlotWidget inventorySlot, ShopView shopView)
+        {
+            if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack) ||
+                !itemStack.Value.Definition.TryGetSellPrice(shopView.Data.SellCoefficient, out var sellPricePerUnit)) return;
+
+            WindowUtils.ShowAmountPickerThenConfirmation(
+                _globalEventBus,
+                itemStack.Value.Amount,
+                itemStack.Value.Amount,
+                "Confirm Sale",
+                amount =>
+                {
+                    int totalPrice = sellPricePerUnit * amount;
+                    return $"Sell {amount}x {itemStack.Value.Definition.Name} for {totalPrice}g?";
+                },
+                amount =>
+                {
+                    int totalPrice = sellPricePerUnit * amount;
+                    PublishCommand(new SellToShopCommand(
+                        shopView.Data.ContainerPath,
+                        inventorySlot.ContainerPath,
+                        inventorySlot.SlotIndex,
+                        amount,
+                        totalPrice));
+                });
+        }
+
+        private void HandleShopSlotToInventorySlotDrop(ShopSlotWidget shopSlot, InventorySlotWidget inventorySlot)
+        {
+            if (!TryGetContainerAndItemStack(shopSlot, out var shop, out var shopItemStack) ||
+                shop is not ShopModel shopModel ||
+                shopSlot.ShopView == null ||
+                !shopModel.TryGetBuyPrice(ShopSlot.FromInt64(shopSlot.SlotIndex), shopSlot.ShopView.Data.BuyCoefficient, shopSlot.ShopView.Data.SellCoefficient, out var buyPricePerUnit)) return;
+            
+            // Allow to buy to empty slot
+            if (TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack) && itemStack != null) return;
+
+            WindowUtils.ShowAmountPickerThenConfirmation(
+                _globalEventBus,
+                shopItemStack.Value.Amount,
+                shopItemStack.Value.Amount,
+                "Confirm Purchase",
+                amount =>
+                {
+                    int totalPrice = buyPricePerUnit * amount;
+                    return $"Buy {amount}x {shopItemStack.Value.Definition.Name} for {totalPrice}g?";
+                },
+                amount =>
+                {
+                    int totalPrice = buyPricePerUnit * amount;
+                    PublishCommand(new BuyFromShopCommand(
+                        shopSlot.ContainerPath,
+                        inventorySlot.ContainerPath,
+                        shopSlot.SlotIndex,
+                        inventorySlot.SlotIndex,
+                        amount,
+                        totalPrice
+                        ));
+                });
+        }
+
+        private bool TryGetContainerAndItemStack(ContainerSlotWidget containerSlot, out IItemContainer container, out ItemStackSnapshot? itemStack)
         {
             container = null;
             itemStack = null;
 
-            var resolvedContainer = _itemContainerResolver.ResolveContainer(inventorySlot.ContainerPath);
-            var resolvedItemStack = resolvedContainer.Get(inventorySlot.SlotIndex);
+            var resolvedContainer = _itemContainerResolver.ResolveContainer(containerSlot.ContainerPath);
+            var resolvedItemStack = resolvedContainer.Get(containerSlot.SlotIndex);
 
             if (resolvedContainer != null && resolvedItemStack != null)
             {

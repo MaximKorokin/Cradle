@@ -1,64 +1,36 @@
-﻿using Assets._Game.Scripts.Items.Shop;
-using Assets._Game.Scripts.Shared.Extensions;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
-using Assets._Game.Scripts.UI.Views.Widgets;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ShopViewController : ViewControllerBase<ShopView>
     {
-        private ShopModel _shopModel;
-        private string _shopName;
-        private float _buyCoefficient;
-        private float _sellCoefficient;
+        private ShopViewData _shopViewData;
 
-        public void InitializeShop(ShopView view, ShopModel shopModel, string shopName, float buyCoefficient, float sellCoefficient)
+        public override void Initialize(ShopView view)
         {
-            Initialize(view);
-            _shopModel = shopModel;
-            _shopName = shopName;
-            _buyCoefficient = buyCoefficient;
-            _sellCoefficient = sellCoefficient;
+            base.Initialize(view);
         }
 
-        public void Bind()
+        public void Bind(ShopViewData shopViewData)
         {
-            _shopModel.Changed += OnShopChanged;
+            _shopViewData = shopViewData;
+            _shopViewData.Changed += OnShopChanged;
         }
 
         public void Unbind()
         {
-            if (_shopModel != null)
+            if (_shopViewData != null)
             {
-                _shopModel.Changed -= OnShopChanged;
+                _shopViewData.Changed -= OnShopChanged;
+                _shopViewData = null;
             }
         }
 
         protected override void OnRender()
         {
-            var viewData = new List<ShopSlotViewData>();
-            foreach (var (slot, snapshot) in _shopModel.Enumerate())
-            {
-                Sprite icon = null;
-                string amount = "";
-                string price = "";
-
-                if (snapshot.HasValue)
-                {
-                    icon = snapshot.Value.Definition.Icon;
-
-                    amount = _shopModel.IsInfinite(slot) ? "" : snapshot.Value.Amount.ToString();
-                    price = _shopModel.TryGetBuyPrice(slot, _buyCoefficient, _sellCoefficient, out var buyPrice) ? buyPrice.ToString() : "";
-                }
-                var viewSlotData = new ShopSlotViewData(slot, snapshot.HasValue, icon, amount, price);
-                viewData.Add(viewSlotData);
-            }
-
-            View.RequestRender((viewData, _shopName, _buyCoefficient, _sellCoefficient));
+            View.RequestRender(_shopViewData);
         }
 
         private void OnShopChanged()

@@ -6,25 +6,30 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class InventoryWindowController : WindowControllerBase<InventoryWindow, InventoryWindowControllerArguments>
     {
-        private readonly InventoryViewData _inventoryHudData;
+        private readonly InventoryViewData _inventoryViewData;
         private readonly InventoryViewController _inventoryViewController;
 
         public InventoryWindowController(
-            InventoryViewData inventoryHudData,
+            InventoryViewData inventoryViewData,
             InventoryViewController inventoryViewController)
         {
-            _inventoryHudData = inventoryHudData;
+            _inventoryViewData = inventoryViewData;
             _inventoryViewController = inventoryViewController;
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            _inventoryViewData.SetEntityId(Arguments.InventoryEntityId);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            _inventoryHudData.SetEntityId(Arguments.InventoryEntityId);
-
             _inventoryViewController.Initialize(Window.InventoryView);
-            _inventoryViewController.Bind(_inventoryHudData);
+            _inventoryViewController.Bind(_inventoryViewData);
         }
 
         protected override void OnUnbind()
@@ -43,7 +48,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.Dispose();
 
-            _inventoryHudData.Dispose();
+            _inventoryViewData.Dispose();
             _inventoryViewController.Dispose();
         }
     }

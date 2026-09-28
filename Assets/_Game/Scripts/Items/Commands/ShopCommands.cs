@@ -5,14 +5,16 @@
         public ItemContainerPath ShopModelPath { get; }
         public ItemContainerPath InventoryModelPath { get; }
         public long ShopSlot { get; }
+        public long InventorySlot { get; }
         public int Amount { get; }
         public int Price { get; }
 
-        public BuyFromShopCommand(ItemContainerPath shopModelPath, ItemContainerPath inventoryModelPath, long shopSlot, int amount, int price)
+        public BuyFromShopCommand(ItemContainerPath shopModelPath, ItemContainerPath inventoryModelPath, long shopSlot, long inventorySlot, int amount, int price)
         {
             ShopModelPath = shopModelPath;
             InventoryModelPath = inventoryModelPath;
             ShopSlot = shopSlot;
+            InventorySlot = inventorySlot;
             Amount = amount;
             Price = price;
         }

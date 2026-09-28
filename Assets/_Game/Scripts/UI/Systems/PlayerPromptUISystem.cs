@@ -73,7 +73,6 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnPlayerPromptRequested(PlayerPromptRequest request)
         {
-            SLog.Log(request.Callback);
             if (request.Show)
             {
                 _playerPromptWidget.Show(request.PromptText, request.ButtonText, request.Callback);

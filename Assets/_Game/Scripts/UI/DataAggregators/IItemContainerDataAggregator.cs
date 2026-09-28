@@ -13,10 +13,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public abstract class ItemContainerDataAggregatorBase : EntityBoundDataAggregatorBase, IItemContainerDataAggregator
     {
-        public ItemContainerPath ContainerPath { get; protected set; }
-        public IItemContainer ItemContainer { get; protected set; }
+        public ItemContainerPath ContainerPath { get; private set; }
+        public IItemContainer ItemContainer { get; private set; }
 
-        private ItemContainerResolver _itemContainerResolver;
+        private readonly ItemContainerResolver _itemContainerResolver;
 
         public event Action Changed;
 
