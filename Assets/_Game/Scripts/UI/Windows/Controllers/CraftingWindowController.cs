@@ -15,20 +15,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly CraftingWindowData _craftingHudData;
-        private readonly EquipmentViewData _equipmentHudData;
         private readonly CraftingService _craftingService;
 
         public CraftingWindowController(
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver,
             CraftingWindowData craftingHudData,
-            EquipmentViewData equipmentHudData,
             CraftingService craftingService)
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
             _craftingHudData = craftingHudData;
-            _equipmentHudData = equipmentHudData;
             _craftingService = craftingService;
         }
 
@@ -38,7 +35,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
             _craftingHudData.SetCrafterEntity(Arguments.CrafterEntityId);
             _craftingHudData.SetEntityId(Arguments.InventoryEntityId);
-            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
         protected override void OnBind()

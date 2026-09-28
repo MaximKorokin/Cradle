@@ -13,8 +13,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public IEnumerable<QuestState> ActiveQuests { get; private set; }
 
-        public event Action Changed;
-
         public QuestsWindowData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
@@ -43,7 +41,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             ActiveQuests = _questModule.AllQuests.ToArray();
 
-            Changed?.Invoke();
+            NotifyChanged();
         }
 
         private void OnQuestModuleUpdated()

@@ -14,8 +14,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public bool ShouldViewHealthBar => _healthModule != null;
 
-        public event Action Changed;
-
         public EntityNameplateWidgetData(Entity entity)
         {
             if (entity.TryGetModule<HealthModule>(out _healthModule))
@@ -45,7 +43,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 HealthRatio = _healthModule.HealthRatio;
             }
 
-            Changed?.Invoke();
+            NotifyChanged();
         }
     }
 }

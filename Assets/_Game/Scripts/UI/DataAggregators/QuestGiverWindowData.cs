@@ -16,8 +16,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public string QuestGiverName { get; set; }
         public IReadOnlyList<QuestDefinition> OfferedQuests { get; private set; } = new QuestDefinition[0];
 
-        public event Action Changed;
-
         public QuestGiverWindowData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
@@ -33,7 +31,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
 
             OfferedQuests = _questGiverModule == null ? new QuestDefinition[0] : _questGiverModule.OfferedQuests;
-            Changed?.Invoke();
+
+            NotifyChanged();
         }
 
         public void SetTargetEntity(IReadOnlyObservableData<string> targetEntityId)
@@ -51,7 +50,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 _questModule = questModule;
                 _questModule.Updated += OnQuestModuleUpdated;
             }
-            Changed?.Invoke();
+
+            NotifyChanged();
         }
 
         public bool IsQuestAccepted(string questId)
@@ -74,7 +74,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private void OnQuestModuleUpdated()
         {
-            Changed?.Invoke();
+            NotifyChanged();
         }
 
         public override void Dispose()

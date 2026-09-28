@@ -11,7 +11,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private StatModule _statModule;
 
         public IEnumerable<(string, string)> Stats { get; private set; }
-        public event Action Changed;
 
         public StatsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
@@ -44,7 +43,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 : _statModule.Stats.Enumerate()
                     .Select(stat => (stat.Id.ToString(), stat.Final.ToString()));
 
-            Changed?.Invoke();
+            NotifyChanged();
         }
 
         public override void Dispose()

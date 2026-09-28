@@ -52,7 +52,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         protected abstract void OnBoundEntityChanged(string entityId);
     }
 
-    public interface IEntityBoundDataAggregatorBase
+    public interface IEntityBoundDataAggregatorBase : IDataAggregator
     {
         void SetEntityId(IReadOnlyObservableData<string> observableEntityId);
     }

@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;
 using UnityEngine;
 using VContainer;
@@ -34,7 +35,7 @@ namespace Assets._Game.Scripts.UI.Views
         public abstract void TickRender();
     }
 
-    public abstract class UIViewBase<TData> : UIViewBase
+    public abstract class UIViewBase<TData> : UIViewBase where TData : IDataAggregator
     {
         private TData _data;
         private bool _isDirty;

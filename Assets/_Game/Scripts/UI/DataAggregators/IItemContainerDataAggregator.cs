@@ -7,8 +7,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     public interface IItemContainerDataAggregator : IEntityBoundDataAggregatorBase, IDisposable
     {
         ItemContainerPath ContainerPath { get; }
-
-        event Action Changed;
     }
 
     public abstract class ItemContainerDataAggregatorBase : EntityBoundDataAggregatorBase, IItemContainerDataAggregator
@@ -18,18 +16,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private readonly ItemContainerResolver _itemContainerResolver;
 
-        public event Action Changed;
-
         public ItemContainerDataAggregatorBase(
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository) : base(entityRepository)
         {
             _itemContainerResolver = itemContainerResolver;
-        }
-
-        protected void NotifyChanged()
-        {
-            Changed?.Invoke();
         }
 
         protected override void OnBoundEntityChanged(string entityId)

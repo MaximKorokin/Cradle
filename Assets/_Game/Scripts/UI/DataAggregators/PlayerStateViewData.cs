@@ -10,8 +10,6 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class PlayerStateViewData : EntityBoundDataAggregatorBase
     {
-        public event Action Changed;
-
         public PlayerStateViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
@@ -51,23 +49,23 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             if (statId == StatId.HpMax)
             {
-                Changed?.Invoke();
+                NotifyChanged();
             }
         }
 
         private void OnHealthChanged(float previous, float current)
         {
-            Changed?.Invoke();
+            NotifyChanged();
         }
 
         private void OnStatusEffectsControllerChanged()
         {
-            Changed?.Invoke();
+            NotifyChanged();
         }
 
         private void OnLevelingModuleChanged()
         {
-            Changed?.Invoke();
+            NotifyChanged();
         }
 
         public override void Dispose()

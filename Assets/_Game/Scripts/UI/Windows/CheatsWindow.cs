@@ -3,7 +3,6 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
-using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using System.Collections.Generic;
