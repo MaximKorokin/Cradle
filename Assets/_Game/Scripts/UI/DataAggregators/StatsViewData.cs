@@ -6,11 +6,16 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class StatsViewData : EntityBoundDataAggregatorBase
+    public interface IStatsViewData : IDataAggregator
+    {
+        IEnumerable<(string Name, string Value)> Stats { get; }
+    }
+
+    public sealed class StatsViewData : EntityBoundDataAggregatorBase, IStatsViewData
     {
         private StatModule _statModule;
 
-        public IEnumerable<(string, string)> Stats { get; private set; }
+        public IEnumerable<(string Name, string Value)> Stats { get; private set; }
 
         public StatsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 

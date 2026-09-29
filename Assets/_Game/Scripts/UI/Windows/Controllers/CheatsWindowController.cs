@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -15,39 +16,45 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
-        private readonly CheatsWindowData _cheatsHudData;
-        private readonly EquipmentViewData _equipmentHudData;
+        private readonly CheatsViewData _cheatsViewData;
+        private readonly EquipmentViewData _equipmentViewData;
         private readonly ItemStackFactory _itemStackAssembler;
+        private readonly CheatsViewController _cheatsViewController;
 
         public CheatsWindowController(
             IGlobalEventBus globalEventBus,
             IPlayerProvider playerProvider,
             EntityRepository entityRepository,
-            CheatsWindowData cheatsHudData,
-            EquipmentViewData equipmentHudData,
-            ItemStackFactory itemStackAssembler)
+            CheatsViewData cheatsViewData,
+            EquipmentViewData equipmentViewData,
+            ItemStackFactory itemStackAssembler,
+            CheatsViewController cheatsViewController)
         {
             _globalEventBus = globalEventBus;
             _playerProvider = playerProvider;
             _entityRepository = entityRepository;
-            _cheatsHudData = cheatsHudData;
-            _equipmentHudData = equipmentHudData;
+            _cheatsViewData = cheatsViewData;
+            _equipmentViewData = equipmentViewData;
             _itemStackAssembler = itemStackAssembler;
+            _cheatsViewController = cheatsViewController;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
+            _equipmentViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            Window.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
-            Window.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
+            _cheatsViewController.Initialize(Window.CheatsView);
+            _cheatsViewController.Bind(_cheatsViewData);
+            
+            Window.CheatsView.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
+            Window.CheatsView.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
 
             Window.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
             Window.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
@@ -57,11 +64,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnUnbind();
 
-            Window.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
-            Window.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
+            Window.CheatsView.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
+            Window.CheatsView.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
 
             Window.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
             Window.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
+
+            _cheatsViewController.Unbind();
         }
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
@@ -96,7 +105,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            Window.Render(_cheatsHudData);
+            _cheatsViewController.Render();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _cheatsViewData.Dispose();
+            _equipmentViewData.Dispose();
+            _cheatsViewController.Dispose();
         }
     }
 

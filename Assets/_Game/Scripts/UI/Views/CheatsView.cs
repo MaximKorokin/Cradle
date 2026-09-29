@@ -1,0 +1,175 @@
+using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Quests;
+using Assets._Game.Scripts.UI.Common;
+using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views.Widgets;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace Assets._Game.Scripts.UI.Views
+{
+    public sealed class CheatsView : UIViewBase<CheatsViewData>
+    {
+        private const string ControlTabId = "Control_id";
+        private const string ItemsTabId = "Items_id";
+        private const string BuffsTabId = "Buffs_id";
+        private const string DebuffsTabId = "Debuffs_id";
+        private const string QuestsTabId = "Quests_id";
+
+        [SerializeField]
+        private SelectableTabsController _cheatsTabsController;
+        [SerializeField]
+        private SimpleListView _cheatsTabContentTemplate;
+
+        [field: SerializeField]
+        public GameControlWidget GameControlTabContent { get; private set; }
+
+        private SimpleListView _itemsListView;
+        private SimpleListView _buffsListView;
+        private SimpleListView _debuffsListView;
+        private SimpleListView _questsListView;
+
+        private Dictionary<string, ItemDefinition> _itemDefinitions;
+        private Dictionary<string, StatusEffectDefinition> _statusEffectDefinitions;
+        private Dictionary<string, QuestDefinition> _questDefinitions;
+
+        public event Action<ItemDefinition> ItemDefinitionInfoClicked;
+        public event Action<ItemDefinition> ItemDefinitionActionClicked;
+        public event Action<StatusEffectDefinition> StatusEffectDefinitionClicked;
+        public event Action<QuestDefinition> QuestDefinitionClicked;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _cheatsTabContentTemplate.gameObject.SetActive(false);
+        }
+
+        public override void OnShow()
+        {
+            base.OnShow();
+
+            _cheatsTabContentTemplate.gameObject.SetActive(false);
+        }
+
+        public override void OnHide()
+        {
+            base.OnHide();
+
+            ClearTabs();
+        }
+
+        protected override void Render(CheatsViewData data)
+        {
+            ClearTabs();
+
+            _itemDefinitions = data.ItemDefinitions.ToDictionary(d => d.Id, d => d);
+            _statusEffectDefinitions = data.StatusEffectDefinitions.ToDictionary(d => d.Id, d => d);
+            _questDefinitions = data.QuestDefinitions.ToDictionary(d => d.Id, d => d);
+
+            // Control tab
+            _cheatsTabsController.AddTab(new TabData(ControlTabId, "Control", GameControlTabContent.transform as RectTransform));
+
+            // Items tab
+            _itemsListView = Instantiate(_cheatsTabContentTemplate);
+            _itemsListView.Render(data.ItemDefinitions.Select(d => new SimpleListItemData()
+            {
+                Identifier = d.Id,
+                Sprite = d.Icon,
+                Text = d.Name
+            }));
+            _cheatsTabsController.AddTab(new TabData(ItemsTabId, "Items", _itemsListView.transform as RectTransform));
+            _itemsListView.ElementInfoClicked += OnItemDefinitionInfoClicked;
+            _itemsListView.ElementActionClicked += OnItemDefinitionActionClicked;
+
+            // Buffs tab
+            _buffsListView = Instantiate(_cheatsTabContentTemplate);
+            _buffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Buff).Select(d => new SimpleListItemData()
+            {
+                Identifier = d.Id,
+                Sprite = d.Icon,
+                Text = d.Name
+            }));
+            _cheatsTabsController.AddTab(new TabData(BuffsTabId, "Buffs", _buffsListView.transform as RectTransform));
+            _buffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
+
+            // Debuffs tab
+            _debuffsListView = Instantiate(_cheatsTabContentTemplate);
+            _debuffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Debuff).Select(d => new SimpleListItemData()
+            {
+                Identifier = d.Id,
+                Sprite = d.Icon,
+                Text = d.Name
+            }));
+            _cheatsTabsController.AddTab(new TabData(DebuffsTabId, "Debuffs", _debuffsListView.transform as RectTransform));
+            _debuffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
+
+            // Quests tab
+            _questsListView = Instantiate(_cheatsTabContentTemplate);
+            _questsListView.Render(data.QuestDefinitions.Select(d => new SimpleListItemData()
+            {
+                Identifier = d.Id,
+                Sprite = null,
+                Text = d.Title
+            }));
+            _cheatsTabsController.AddTab(new TabData(QuestsTabId, "Quests", _questsListView.transform as RectTransform));
+            _questsListView.ElementActionClicked += OnQuestDefinitionClicked;
+        }
+
+        private void ClearTabs()
+        {
+            if (_itemsListView != null)
+            {
+                _itemsListView.ElementInfoClicked -= OnItemDefinitionInfoClicked;
+                _itemsListView.ElementActionClicked -= OnItemDefinitionActionClicked;
+                _itemsListView.Clear();
+            }
+
+            if (_buffsListView != null)
+            {
+                _buffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
+                _buffsListView.Clear();
+            }
+
+            if (_debuffsListView != null)
+            {
+                _debuffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
+                _debuffsListView.Clear();
+            }
+
+            if (_questsListView != null)
+            {
+                _questsListView.ElementActionClicked -= OnQuestDefinitionClicked;
+                _questsListView.Clear();
+            }
+
+            _cheatsTabsController.ClearTabs();
+        }
+
+        private void OnItemDefinitionInfoClicked(string itemId)
+        {
+            if (_itemDefinitions.TryGetValue(itemId, out var itemDef))
+                ItemDefinitionInfoClicked?.Invoke(itemDef);
+        }
+
+        private void OnItemDefinitionActionClicked(string itemId)
+        {
+            if (_itemDefinitions.TryGetValue(itemId, out var itemDef))
+                ItemDefinitionActionClicked?.Invoke(itemDef);
+        }
+
+        private void OnStatusEffectDefinitionClicked(string statusEffectId)
+        {
+            if (_statusEffectDefinitions.TryGetValue(statusEffectId, out var statusEffectDef))
+                StatusEffectDefinitionClicked?.Invoke(statusEffectDef);
+        }
+
+        private void OnQuestDefinitionClicked(string questId)
+        {
+            if (_questDefinitions.TryGetValue(questId, out var questDef))
+                QuestDefinitionClicked?.Invoke(questDef);
+        }
+    }
+}

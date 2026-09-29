@@ -1,48 +1,55 @@
 ﻿using Assets._Game.Scripts.Quests;
-using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestDescriptionWindowController : WindowControllerBase<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>
     {
-        private QuestState _quest;
+        private readonly QuestDescriptionViewData _questDescriptionViewData;
+        private readonly QuestDescriptionViewController _questDescriptionViewController;
 
-        private readonly QuestStateFormatter _questStateFormatter;
-
-        public QuestDescriptionWindowController(QuestStateFormatter questStateFormatter)
+        public QuestDescriptionWindowController(
+            QuestDescriptionViewData questDescriptionViewData,
+            QuestDescriptionViewController questDescriptionViewController)
         {
-            _questStateFormatter = questStateFormatter;
+            _questDescriptionViewData = questDescriptionViewData;
+            _questDescriptionViewController = questDescriptionViewController;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _quest = Arguments.Quest;
+            _questDescriptionViewData.SetQuestState(Arguments.Quest);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            _quest.Updated += OnQuestUpdated;
+            _questDescriptionViewController.Initialize(Window.QuestDescriptionView);
+            _questDescriptionViewController.Bind(_questDescriptionViewData);
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            _quest.Updated -= OnQuestUpdated;
-        }
-
-        private void OnQuestUpdated(QuestState quest)
-        {
-            Redraw();
+            _questDescriptionViewController.Unbind();
         }
 
         protected override void Redraw()
         {
-            Window.Render(_questStateFormatter.FormatData(_quest));
+            _questDescriptionViewController.Render();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _questDescriptionViewData.Dispose();
+            _questDescriptionViewController.Dispose();
         }
     }
 

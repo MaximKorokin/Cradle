@@ -6,25 +6,29 @@ using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestGiverWindowController : WindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments>
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly QuestGiverWindowData _questGiverHudData;
+        private readonly QuestGiverViewData _questGiverViewData;
         private readonly EntityRepository _entityRepository;
+        private readonly QuestGiverViewController _questGiverViewController;
 
         private string _targetEntityId;
 
         public QuestGiverWindowController(
             IGlobalEventBus globalEventBus,
-            QuestGiverWindowData questGiverHudData,
-            EntityRepository entityRepository)
+            QuestGiverViewData questGiverViewData,
+            EntityRepository entityRepository,
+            QuestGiverViewController questGiverViewController)
         {
             _globalEventBus = globalEventBus;
-            _questGiverHudData = questGiverHudData;
+            _questGiverViewData = questGiverViewData;
             _entityRepository = entityRepository;
+            _questGiverViewController = questGiverViewController;
         }
 
         protected override void OnInitialize()
@@ -32,46 +36,48 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnInitialize();
 
             _targetEntityId = Arguments.TargetEntityId.Value;
-            _questGiverHudData.SetEntityId(Arguments.GiverEntityId);
-            _questGiverHudData.SetTargetEntity(Arguments.TargetEntityId);
-            _questGiverHudData.Changed += Redraw;
+            _questGiverViewData.SetEntityId(Arguments.GiverEntityId);
+            _questGiverViewData.SetTargetEntity(Arguments.TargetEntityId);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            Window.QuestInfoClicked += OnQuestInfoClicked;
-            Window.QuestAcceptClicked += OnQuestAcceptClicked;
-            Window.QuestCompleteClicked += OnQuestCompleteClicked;
+            _questGiverViewController.Initialize(Window.QuestGiverView);
+            _questGiverViewController.Bind(_questGiverViewData);
+
+            Window.QuestGiverView.QuestInfoClicked += OnQuestInfoClicked;
+            Window.QuestGiverView.QuestAcceptClicked += OnQuestAcceptClicked;
+            Window.QuestGiverView.QuestCompleteClicked += OnQuestCompleteClicked;
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            _questGiverHudData.Changed -= Redraw;
+            Window.QuestGiverView.QuestInfoClicked -= OnQuestInfoClicked;
+            Window.QuestGiverView.QuestAcceptClicked -= OnQuestAcceptClicked;
+            Window.QuestGiverView.QuestCompleteClicked -= OnQuestCompleteClicked;
 
-            Window.QuestInfoClicked -= OnQuestInfoClicked;
-            Window.QuestAcceptClicked -= OnQuestAcceptClicked;
-            Window.QuestCompleteClicked -= OnQuestCompleteClicked;
+            _questGiverViewController.Unbind();
         }
 
         private void OnQuestInfoClicked(string questId)
         {
-            var quest = _questGiverHudData.OfferedQuests.FindById(questId);
+            var quest = _questGiverViewData.OfferedQuests.FindById(questId);
             if (quest == null) return;
 
-            var questState = _questGiverHudData.IsQuestAccepted(questId) ? _questGiverHudData.GetQuestState(questId) : new(quest);
+            var questState = _questGiverViewData.IsQuestAccepted(questId) ? _questGiverViewData.GetQuestState(questId) : new(quest);
 
             _globalEventBus.Publish(new WindowOpenRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(questState)));
         }
 
         private void OnQuestAcceptClicked(string questId)
         {
-            if (_questGiverHudData.IsQuestAccepted(questId)) return;
+            if (_questGiverViewData.IsQuestAccepted(questId)) return;
 
-            var quest = _questGiverHudData.OfferedQuests.FindById(questId);
+            var quest = _questGiverViewData.OfferedQuests.FindById(questId);
             if (quest == null) return;
 
             var targetEntity = _entityRepository.Get(_targetEntityId);
@@ -80,22 +86,25 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         private void OnQuestCompleteClicked(string questId)
         {
-            if (!_questGiverHudData.IsQuestAccepted(questId) || !_questGiverHudData.CanCompleteQuest(questId)) return;
+            if (!_questGiverViewData.IsQuestAccepted(questId)) return;
+            if (!_questGiverViewData.CanCompleteQuest(questId)) return;
 
+            var questState = _questGiverViewData.GetQuestState(questId);
             var targetEntity = _entityRepository.Get(_targetEntityId);
-            targetEntity.Publish(new QuestCompleteRequest(_questGiverHudData.GetQuestState(questId)));
+            targetEntity.Publish(new QuestCompleteRequest(questState));
+        }
+
+        protected override void Redraw()
+        {
+            _questGiverViewController.Render();
         }
 
         public override void Dispose()
         {
             base.Dispose();
 
-            _questGiverHudData.Dispose();
-        }
-
-        protected override void Redraw()
-        {
-            Window.Render(_questGiverHudData);
+            _questGiverViewData.Dispose();
+            _questGiverViewController.Dispose();
         }
     }
 

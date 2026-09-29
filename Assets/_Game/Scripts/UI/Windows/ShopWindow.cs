@@ -5,9 +5,7 @@ namespace Assets._Game.Scripts.UI.Windows
 {
     public sealed class ShopWindow : UIWindowBase
     {
-        [SerializeField]
-        private ShopView _shopView;
-
-        public ShopView ShopView => _shopView;
+        [field: SerializeField]
+        public ShopView ShopView { get; private set; }
     }
 }

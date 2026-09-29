@@ -159,9 +159,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         }
     }
 
-    public class StorageHudData : InventoryViewDataBase
+    public class StorageViewData : InventoryViewDataBase
     {
-        public StorageHudData(
+        public StorageViewData(
             ItemsConfig itemsConfig,
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository) : base(itemsConfig, itemContainerResolver, entityRepository) { }

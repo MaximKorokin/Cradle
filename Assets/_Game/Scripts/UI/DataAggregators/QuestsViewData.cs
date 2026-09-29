@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
 using System;
@@ -7,13 +7,13 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class QuestsWindowData : EntityBoundDataAggregatorBase
+    public sealed class QuestsViewData : EntityBoundDataAggregatorBase
     {
         private QuestModule _questModule;
 
         public IEnumerable<QuestState> ActiveQuests { get; private set; }
 
-        public QuestsWindowData(EntityRepository entityRepository) : base(entityRepository) { }
+        public QuestsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
         {

@@ -8,13 +8,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private readonly InventoryViewController _storageInventoryViewController;
         private readonly InventoryViewData _inventoryHudData;
-        private readonly StorageHudData _storageHudData;
+        private readonly StorageViewData _storageHudData;
         private readonly EquipmentViewData _equipmentHudData;
 
         public StorageWindowController(
             InventoryViewController stoargeInventoryViewController,
             InventoryViewData inventoryHudData,
-            StorageHudData storageHudData,
+            StorageViewData storageHudData,
             EquipmentViewData equipmentHudData)
         {
             _storageInventoryViewController = stoargeInventoryViewController;

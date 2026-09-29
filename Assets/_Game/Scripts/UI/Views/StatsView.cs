@@ -1,10 +1,11 @@
 ﻿using Assets._Game.Scripts.UI.Views.Widgets;
+using Assets._Game.Scripts.UI.DataAggregators;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class StatsView : UIViewBase<IEnumerable<(string, string)>>
+    public sealed class StatsView : UIViewBase<IStatsViewData>
     {
         [SerializeField]
         private RectTransform _statsParent;
@@ -19,11 +20,11 @@ namespace Assets._Game.Scripts.UI.Views
             _statTemplate.gameObject.SetActive(false);
         }
 
-        protected override void Render(IEnumerable<(string, string)> stats)
+        protected override void Render(IStatsViewData statsViewData)
         {
             Clear();
 
-            foreach (var (stat, value) in stats)
+            foreach (var (stat, value) in statsViewData.Stats)
             {
                 var statView = Instantiate(_statTemplate, _statsParent);
                 _statViews.Add(statView);

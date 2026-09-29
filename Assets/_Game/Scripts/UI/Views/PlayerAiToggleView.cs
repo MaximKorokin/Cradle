@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class PlayerAiToggleView : UIViewBase<bool>
+    public sealed class PlayerAiToggleView : UIViewBase<IPlayerAiToggleViewData>
     {
         [SerializeField]
         private Toggle _toggle;
@@ -28,9 +29,9 @@ namespace Assets._Game.Scripts.UI.Views
             ValueChanged?.Invoke(value);
         }
 
-        protected override void Render(bool data)
+        protected override void Render(IPlayerAiToggleViewData viewData)
         {
-
+            _toggle.SetIsOnWithoutNotify(viewData.IsAIEnabled);
         }
     }
 }

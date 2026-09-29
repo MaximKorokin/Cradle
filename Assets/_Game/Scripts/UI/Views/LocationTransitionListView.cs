@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Locations;
+using Assets._Game.Scripts.UI.DataAggregators;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class LocationTransitionListView : UIViewBase<IReadOnlyList<LocationTransitionData>>
+    public sealed class LocationTransitionListView : UIViewBase<ILocationTransitionListViewData>
     {
         [SerializeField]
         private Button _transitionButtonTemplate;
@@ -24,14 +25,15 @@ namespace Assets._Game.Scripts.UI.Views
             _transitionButtonTemplate.gameObject.SetActive(false);
         }
 
-        protected override void Render(IReadOnlyList<LocationTransitionData> transitions)
+        protected override void Render(ILocationTransitionListViewData viewData)
         {
             foreach (var button in _transitionButtons)
             {
                 Destroy(button.gameObject);
             }
+            _transitionButtons.Clear();
 
-            foreach (var transition in transitions)
+            foreach (var transition in viewData.Transitions)
             {
                 var button = Instantiate(_transitionButtonTemplate, _buttonsRoot);
                 _transitionButtons.Add(button);

@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Items;
@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CraftingWindowData : ItemContainerDataAggregatorBase
+    public sealed class CraftingViewData : ItemContainerDataAggregatorBase
     {
         private readonly CraftingService _craftingService;
 
@@ -18,7 +18,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private InventoryModel InventoryModel => ItemContainer as InventoryModel;
 
-        public CraftingWindowData(
+        public CraftingViewData(
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository,
             CraftingService craftingService) : base(itemContainerResolver, entityRepository)
@@ -56,7 +56,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, InventoryModel));
             }
         }
-        
+
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Inventory(entityId);
     }
 }

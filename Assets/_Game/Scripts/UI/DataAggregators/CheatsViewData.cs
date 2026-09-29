@@ -1,17 +1,17 @@
-﻿using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Quests;
 using System.Collections.Generic;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CheatsWindowData : DataAggregatorBase
+    public sealed class CheatsViewData : DataAggregatorBase
     {
         private readonly ItemDefinitionCatalog _itemDefinitionCatalog;
         private readonly StatusEffectDefinitionCatalog _statusEffectDefinitionCatalog;
         private readonly QuestDefinitionCatalog _questDefinitionCatalog;
 
-        public CheatsWindowData(
+        public CheatsViewData(
             ItemDefinitionCatalog itemDefinitionCatalog,
             StatusEffectDefinitionCatalog statusEffectDefinitionCatalog,
             QuestDefinitionCatalog questDefinitionCatalog)

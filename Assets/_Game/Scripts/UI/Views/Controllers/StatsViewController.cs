@@ -4,25 +4,25 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class StatsViewController : ViewControllerBase<StatsView>
     {
-        private StatsViewData _statsHudData;
+        private IStatsViewData _statsViewData;
 
-        public void Bind(StatsViewData statsHudData)
+        public void Bind(IStatsViewData statsViewData)
         {
-            _statsHudData = statsHudData;
-            _statsHudData.Changed += OnStatsChanged;
+            _statsViewData = statsViewData;
+            _statsViewData.Changed += OnStatsChanged;
         }
 
         public void Unbind()
         {
-            if (_statsHudData == null) return;
+            if (_statsViewData == null) return;
 
-            _statsHudData.Changed -= OnStatsChanged;
-            _statsHudData = null;
+            _statsViewData.Changed -= OnStatsChanged;
+            _statsViewData = null;
         }
 
         protected override void OnRender()
         {
-            View.RequestRender(_statsHudData.Stats);
+            View.RequestRender(_statsViewData);
         }
 
         public override void Dispose()

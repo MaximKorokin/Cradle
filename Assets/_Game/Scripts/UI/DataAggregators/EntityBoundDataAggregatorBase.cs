@@ -46,6 +46,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
 
             OnBoundEntityChanged(ObservableEntityId?.Value);
+
+            NotifyChanged();
         }
 
         /// <summary>Triggers when ObservableEntityId.Value is changed</summary>

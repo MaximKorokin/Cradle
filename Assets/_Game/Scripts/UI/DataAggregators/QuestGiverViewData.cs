@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared;
@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class QuestGiverWindowData : EntityBoundDataAggregatorBase
+    public sealed class QuestGiverViewData : EntityBoundDataAggregatorBase
     {
         private QuestGiverModule _questGiverModule;
         private QuestModule _questModule;
@@ -16,7 +16,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public string QuestGiverName { get; set; }
         public IReadOnlyList<QuestDefinition> OfferedQuests { get; private set; } = new QuestDefinition[0];
 
-        public QuestGiverWindowData(EntityRepository entityRepository) : base(entityRepository) { }
+        public QuestGiverViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
         {

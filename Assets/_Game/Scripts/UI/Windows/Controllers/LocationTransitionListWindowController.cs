@@ -5,8 +5,8 @@ using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Locations;
 using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;
-using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
@@ -17,32 +17,37 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         private readonly LocationConfig _locationConfig;
         private readonly EntityRepository _entityRepository;
         private readonly LocationTransitionListViewController _viewController;
+        private readonly LocationTransitionListViewData _viewData;
 
         public LocationTransitionListWindowController(
             IGlobalEventBus globalEventBus,
             LocationConfig locationConfig,
             EntityRepository entityRepository,
-            LocationTransitionListViewController viewController)
+            LocationTransitionListViewController viewController,
+            LocationTransitionListViewData viewData)
         {
             _globalEventBus = globalEventBus;
             _locationConfig = locationConfig;
             _entityRepository = entityRepository;
             _viewController = viewController;
+            _viewData = viewData;
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            Window.TransitionButtonClicked += OnTransitionButtonClicked;
-            _viewController.Initialize(Window.View);
+            Window.LocationTransitionListView.TransitionButtonClicked += OnTransitionButtonClicked;
+            _viewController.Initialize(Window.LocationTransitionListView);
+            _viewController.Bind(_viewData);
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            Window.TransitionButtonClicked -= OnTransitionButtonClicked;
+            Window.LocationTransitionListView.TransitionButtonClicked -= OnTransitionButtonClicked;
+            _viewController.Unbind();
         }
 
         private void OnTransitionButtonClicked(LocationTransitionData transitionData)
@@ -55,13 +60,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             var playerLevel = _entityRepository.Get(Arguments.EntityId.Value).GetModule<LevelingModule>().Level;
             var locations = _locationConfig.GetAvailableLocations(playerLevel);
-            _viewController.SetTransitions(locations);
+            _viewData.SetTransitions(locations);
+            _viewController.Render();
         }
 
         public override void Dispose()
         {
             base.Dispose();
             _viewController.Dispose();
+            _viewData.Dispose();
         }
     }
 

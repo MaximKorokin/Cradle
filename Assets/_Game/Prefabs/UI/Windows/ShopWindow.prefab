@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96344196efa48bf4aa531794cbeeb02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shopView: {fileID: 6977111829526434596}
+  <ShopView>k__BackingField: {fileID: 6977111829526434596}
 --- !u!1 &4447772413310357908
 GameObject:
   m_ObjectHideFlags: 0

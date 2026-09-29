@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
@@ -14,52 +15,49 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly CraftingWindowData _craftingHudData;
+        private readonly CraftingViewData _craftingViewData;
         private readonly CraftingService _craftingService;
+        private readonly CraftingViewController _craftingViewController;
 
         public CraftingWindowController(
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver,
-            CraftingWindowData craftingHudData,
-            CraftingService craftingService)
+            CraftingViewData craftingViewData,
+            CraftingService craftingService,
+            CraftingViewController craftingViewController)
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
-            _craftingHudData = craftingHudData;
+            _craftingViewData = craftingViewData;
             _craftingService = craftingService;
+            _craftingViewController = craftingViewController;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _craftingHudData.SetCrafterEntity(Arguments.CrafterEntityId);
-            _craftingHudData.SetEntityId(Arguments.InventoryEntityId);
+            _craftingViewData.SetCrafterEntity(Arguments.CrafterEntityId);
+            _craftingViewData.SetEntityId(Arguments.InventoryEntityId);
         }
 
         protected override void OnBind()
         {
             base.OnBind();
 
-            _craftingHudData.Changed += Redraw;
+            _craftingViewController.Initialize(Window.CraftingView);
+            _craftingViewController.Bind(_craftingViewData);
 
-            Window.RecipeInfoClicked += OnRecipeInfoClicked;
-            Window.RecipeActionClicked += OnRecipeActionClicked;
+            Window.CraftingView.RecipeActionClicked += OnRecipeActionClicked;
         }
 
         protected override void OnUnbind()
         {
             base.OnUnbind();
 
-            _craftingHudData.Changed -= Redraw;
+            Window.CraftingView.RecipeActionClicked -= OnRecipeActionClicked;
 
-            Window.RecipeInfoClicked -= OnRecipeInfoClicked;
-            Window.RecipeActionClicked -= OnRecipeActionClicked;
-        }
-
-        private void OnRecipeInfoClicked(CraftingRecipeDefinition recipe)
-        {
-
+            _craftingViewController.Unbind();
         }
 
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)
@@ -88,7 +86,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            Window.Render(_craftingHudData);
+            _craftingViewController.Render();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            _craftingViewData.Dispose();
+            _craftingViewController.Dispose();
         }
     }
 

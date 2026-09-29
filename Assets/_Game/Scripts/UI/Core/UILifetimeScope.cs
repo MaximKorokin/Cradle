@@ -46,38 +46,27 @@ namespace Assets._Game.Scripts.UI.Core
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_entityNameplateView);
-            builder.RegisterInstance(_rootReferences);
-
-            builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
-            builder.RegisterEntryPoint<UISystemRunner>(Lifetime.Scoped);
-
-            builder.Register<EquipmentViewData>(Lifetime.Transient);
-            builder.Register<InventoryViewData>(Lifetime.Transient);
-            builder.Register<StorageHudData>(Lifetime.Transient);
-            builder.Register<CraftingWindowData>(Lifetime.Transient);
-            builder.Register<QuestsWindowData>(Lifetime.Transient);
-            builder.Register<QuestGiverWindowData>(Lifetime.Transient);
-            builder.Register<StatsViewData>(Lifetime.Transient);
-
-            builder.Register<CheatsWindowData>(Lifetime.Transient);
-
+            RegisterInstances(builder);
             RegisterSystems(builder);
+            RegisterDataAggregators(builder);
+            RegisterViewControllers(builder);
+            RegisterDataFormatters(builder);
             RegisterWindows(builder);
             RegisterHud(builder);
-            RegisterItemContainers(builder);
-            RegisterDataFormatters(builder);
             RegisterServices(builder);
         }
 
-        private void RegisterServices(IContainerBuilder builder)
+        private void RegisterInstances(IContainerBuilder builder)
         {
-            builder.Register<DragDropHandlerService>(Lifetime.Singleton);
-            builder.Register<ClickHandlerService>(Lifetime.Singleton);
+            builder.RegisterInstance(_entityNameplateView);
+            builder.RegisterInstance(_rootReferences);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
         {
+            builder.RegisterEntryPoint<UIBootstrap>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<UISystemRunner>(Lifetime.Scoped);
+
             var uiSystems = _uiSystemsRoot.GetComponentsInChildren<UISystemBase>(true).ToArray();
 
             foreach (var system in uiSystems)
@@ -92,6 +81,60 @@ namespace Assets._Game.Scripts.UI.Core
                     container.Resolve(system.GetType());
                 }
             });
+        }
+
+        private void RegisterDataAggregators(IContainerBuilder builder)
+        {
+            builder.Register<EquipmentViewData>(Lifetime.Transient);
+            builder.Register<InventoryViewData>(Lifetime.Transient);
+            builder.Register<StorageViewData>(Lifetime.Transient);
+            builder.Register<StatsViewData>(Lifetime.Transient);
+            builder.Register<PlayerAiToggleViewData>(Lifetime.Transient);
+            builder.Register<PlayerStateViewData>(Lifetime.Transient);
+            builder.Register<QuestsViewData>(Lifetime.Transient);
+            builder.Register<QuestGiverViewData>(Lifetime.Transient);
+            builder.Register<CraftingViewData>(Lifetime.Transient);
+            builder.Register<CheatsViewData>(Lifetime.Transient);
+            builder.Register<LocationTransitionListViewData>(Lifetime.Transient);
+            builder.Register<QuestDescriptionViewData>(Lifetime.Transient);
+            builder.Register<ShopViewData>(Lifetime.Transient);
+        }
+
+        private void RegisterViewControllers(IContainerBuilder builder)
+        {
+            // Container/Inventory ViewControllers
+            builder.Register<InventoryViewController>(Lifetime.Transient);
+            builder.Register<EquipmentViewController>(Lifetime.Transient);
+            builder.Register<ShopViewController>(Lifetime.Transient);
+            builder.Register<StatsViewController>(Lifetime.Transient);
+
+            // Window ViewControllers
+            builder.Register<QuestsViewController>(Lifetime.Transient);
+            builder.Register<CheatsViewController>(Lifetime.Transient);
+            builder.Register<CraftingViewController>(Lifetime.Transient);
+            builder.Register<QuestGiverViewController>(Lifetime.Transient);
+            builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
+            builder.Register<QuestDescriptionViewController>(Lifetime.Transient);
+
+            // HUD ViewControllers
+            builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
+            builder.Register<PlayerAiToggleViewController>(Lifetime.Scoped);
+        }
+
+        private void RegisterDataFormatters(IContainerBuilder builder)
+        {
+            builder.Register<ItemStackFormatter>(Lifetime.Singleton);
+            builder.Register<ItemDefinitionFormatter>(Lifetime.Singleton);
+            builder.Register<ItemSetFormatter>(Lifetime.Singleton);
+            builder.Register<FunctionalItemTraitFormatter>(Lifetime.Singleton);
+            builder.Register<EnchantableTraitFormatter>(Lifetime.Singleton);
+            builder.Register<StatModifiersFormatter>(Lifetime.Singleton);
+            builder.Register<AttackModifiersFormatter>(Lifetime.Singleton);
+            builder.Register<StatusEffectFormatter>(Lifetime.Singleton);
+            builder.Register<InteractionDefinitionFormatter>(Lifetime.Singleton);
+            builder.Register<ActionDefinitionFormatter>(Lifetime.Singleton);
+            builder.Register<QuestStateFormatter>(Lifetime.Singleton);
+            builder.Register<QuestObjectiveProgressFormatter>(Lifetime.Singleton);
         }
 
         private void RegisterWindows(IContainerBuilder builder)
@@ -140,11 +183,7 @@ namespace Assets._Game.Scripts.UI.Core
         private void RegisterHud(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
-            builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
-            builder.Register<PlayerStateViewData>(Lifetime.Transient);
-
             builder.RegisterComponentInHierarchy<PlayerAiToggleView>();
-            builder.Register<PlayerAiToggleViewController>(Lifetime.Scoped);
 
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
@@ -152,30 +191,10 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponent(_dragDropView);
         }
 
-        private void RegisterItemContainers(IContainerBuilder builder)
+        private void RegisterServices(IContainerBuilder builder)
         {
-            builder.Register<InventoryViewController>(Lifetime.Transient);
-            builder.Register<EquipmentViewController>(Lifetime.Transient);
-            builder.Register<ShopViewController>(Lifetime.Transient);
-            builder.Register<ShopViewData>(Lifetime.Transient);
-            builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
-            builder.Register<StatsViewController>(Lifetime.Transient);
-        }
-
-        private void RegisterDataFormatters(IContainerBuilder builder)
-        {
-            builder.Register<ItemStackFormatter>(Lifetime.Singleton);
-            builder.Register<ItemDefinitionFormatter>(Lifetime.Singleton);
-            builder.Register<ItemSetFormatter>(Lifetime.Singleton);
-            builder.Register<FunctionalItemTraitFormatter>(Lifetime.Singleton);
-            builder.Register<EnchantableTraitFormatter>(Lifetime.Singleton);
-            builder.Register<StatModifiersFormatter>(Lifetime.Singleton);
-            builder.Register<AttackModifiersFormatter>(Lifetime.Singleton);
-            builder.Register<StatusEffectFormatter>(Lifetime.Singleton);
-            builder.Register<InteractionDefinitionFormatter>(Lifetime.Singleton);
-            builder.Register<ActionDefinitionFormatter>(Lifetime.Singleton);
-            builder.Register<QuestStateFormatter>(Lifetime.Singleton);
-            builder.Register<QuestObjectiveProgressFormatter>(Lifetime.Singleton);
+            builder.Register<DragDropHandlerService>(Lifetime.Singleton);
+            builder.Register<ClickHandlerService>(Lifetime.Singleton);
         }
     }
 }
