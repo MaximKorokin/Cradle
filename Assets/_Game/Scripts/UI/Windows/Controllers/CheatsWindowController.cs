@@ -7,36 +7,33 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class CheatsWindowController : WindowControllerBase<CheatsWindow, CheatsWindowControllerArguments>
+    public sealed class CheatsWindowController : SingleViewWindowControllerBase<CheatsWindow, CheatsWindowControllerArguments, CheatsView, CheatsViewData, CheatsViewController>
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
-        private readonly CheatsViewData _cheatsViewData;
         private readonly EquipmentViewData _equipmentViewData;
         private readonly ItemStackFactory _itemStackAssembler;
-        private readonly CheatsViewController _cheatsViewController;
 
         public CheatsWindowController(
+            CheatsViewController cheatsViewController,
+            CheatsViewData cheatsViewData,
             IGlobalEventBus globalEventBus,
             IPlayerProvider playerProvider,
             EntityRepository entityRepository,
-            CheatsViewData cheatsViewData,
             EquipmentViewData equipmentViewData,
-            ItemStackFactory itemStackAssembler,
-            CheatsViewController cheatsViewController)
+            ItemStackFactory itemStackAssembler) : base(cheatsViewController, cheatsViewData)
         {
             _globalEventBus = globalEventBus;
             _playerProvider = playerProvider;
             _entityRepository = entityRepository;
-            _cheatsViewData = cheatsViewData;
             _equipmentViewData = equipmentViewData;
             _itemStackAssembler = itemStackAssembler;
-            _cheatsViewController = cheatsViewController;
         }
 
         protected override void OnInitialize()
@@ -50,9 +47,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            _cheatsViewController.Initialize(Window.CheatsView);
-            _cheatsViewController.Bind(_cheatsViewData);
-            
             Window.CheatsView.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
             Window.CheatsView.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
 
@@ -62,15 +56,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void OnUnbind()
         {
-            base.OnUnbind();
-
             Window.CheatsView.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
             Window.CheatsView.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
 
             Window.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
             Window.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
 
-            _cheatsViewController.Unbind();
+            base.OnUnbind();
         }
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
@@ -103,18 +95,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(LevelingModule)));
         }
 
-        protected override void Redraw()
-        {
-            _cheatsViewController.Render();
-        }
+        protected override CheatsView GetView() => Window.CheatsView;
 
         public override void Dispose()
         {
             base.Dispose();
 
-            _cheatsViewData.Dispose();
             _equipmentViewData.Dispose();
-            _cheatsViewController.Dispose();
         }
     }
 

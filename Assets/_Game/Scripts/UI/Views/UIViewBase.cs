@@ -57,5 +57,14 @@ namespace Assets._Game.Scripts.UI.Views
         }
 
         protected abstract void Render(TData data);
+
+        /// <summary>
+        /// Called when the view's data is unbound. Override to release any cached
+        /// references to the data so they are not held onto after unbinding.
+        /// </summary>
+        public virtual void Unbind()
+        {
+            _data = default;
+        }
     }
 }

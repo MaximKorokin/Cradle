@@ -1,56 +1,28 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ShopWindowController : WindowControllerBase<ShopWindow, ShopWindowControllerArguments>
+    public sealed class ShopWindowController : SingleViewWindowControllerBase<ShopWindow, ShopWindowControllerArguments, ShopView, ShopViewData, ShopViewController>
     {
-        private readonly ShopViewController _shopViewController;
-        private readonly ShopViewData _shopViewData;
-
         public ShopWindowController(
             ShopViewController shopViewController,
-            ShopViewData shopViewData)
+            ShopViewData shopViewData) : base(shopViewController, shopViewData)
         {
-            _shopViewController = shopViewController;
-            _shopViewData = shopViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _shopViewData.SetEntityId(Arguments.ShopEntityId);
-            _shopViewData.SetShopData(Arguments.ShopName, Arguments.BuyCoefficient, Arguments.SellCoefficient, Arguments.BuyerEntityId);
+            ViewData.SetEntityId(Arguments.ShopEntityId);
+            ViewData.SetShopData(Arguments.ShopName, Arguments.BuyCoefficient, Arguments.SellCoefficient, Arguments.BuyerEntityId);
         }
 
-        protected override void OnBind()
-        {
-            base.OnBind();
-
-            _shopViewController.Initialize(Window.ShopView);
-            _shopViewController.Bind(_shopViewData);
-        }
-
-        protected override void OnUnbind()
-        {
-            base.OnUnbind();
-
-            _shopViewController.Unbind();
-        }
-
-        protected override void Redraw()
-        {
-            _shopViewController.Render();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _shopViewData.Dispose();
-            _shopViewController.Dispose();
-        }
+        protected override ShopView GetView() => Window.ShopView;
     }
 
     public readonly struct ShopWindowControllerArguments : IWindowControllerArguments

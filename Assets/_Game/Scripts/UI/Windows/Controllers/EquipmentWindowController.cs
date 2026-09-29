@@ -1,20 +1,19 @@
 ﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class EquipmentWindowController : WindowControllerBase<EquipmentWindow, EquipmentWindowControllerArguments>
+    public sealed class EquipmentWindowController : SingleViewWindowControllerBase<EquipmentWindow, EquipmentWindowControllerArguments, EquipmentView, IEquipmentViewData, EquipmentViewController>
     {
         private readonly EquipmentViewData _equipmentViewData;
-        private readonly EquipmentViewController _equipmentViewController;
 
         public EquipmentWindowController(
-            EquipmentViewData equipmentViewData,
-            EquipmentViewController equipmentViewController)
+            EquipmentViewController equipmentViewController,
+            EquipmentViewData equipmentViewData) : base(equipmentViewController, equipmentViewData)
         {
             _equipmentViewData = equipmentViewData;
-            _equipmentViewController = equipmentViewController;
         }
 
         protected override void OnInitialize()
@@ -24,33 +23,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _equipmentViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        protected override void OnBind()
-        {
-            base.OnBind();
-
-            _equipmentViewController.Initialize(Window.EquipmentView);
-            _equipmentViewController.Bind(_equipmentViewData);
-        }
-
-        protected override void OnUnbind()
-        {
-            base.OnUnbind();
-
-            _equipmentViewController.Unbind();
-        }
-
-        protected override void Redraw()
-        {
-            _equipmentViewController.Render();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _equipmentViewData.Dispose();
-            _equipmentViewController.Dispose();
-        }
+        protected override EquipmentView GetView() => Window.EquipmentView;
     }
 
     public readonly struct EquipmentWindowControllerArguments : IWindowControllerArguments

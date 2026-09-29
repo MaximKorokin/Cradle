@@ -5,11 +5,9 @@ using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Views.Controllers
 {
-    public sealed class InventoryViewController : ViewControllerBase<InventoryView>
+    public sealed class InventoryViewController : ViewControllerBase<InventoryView, IInventoryViewData>
     {
         private readonly IGlobalEventBus _globalEventBus;
-
-        private IInventoryViewData _inventoryViewData;
 
         public InventoryViewController(IGlobalEventBus globalEventBus)
         {
@@ -42,34 +40,9 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             base.Dispose();
         }
 
-        public void Bind(IInventoryViewData inventoryViewData)
-        {
-            _inventoryViewData = inventoryViewData;
-            _inventoryViewData.Changed += OnInventoryChanged;
-        }
-
-        public void Unbind()
-        {
-            if (_inventoryViewData != null)
-            {
-                _inventoryViewData.Changed -= OnInventoryChanged;
-                _inventoryViewData = null;
-            }
-        }
-
-        protected override void OnRender()
-        {
-            View.RequestRender(_inventoryViewData);
-        }
-
-        private void OnInventoryChanged()
-        {
-            Render();
-        }
-
         private void OnFilterButtonClicked(bool isOn, ItemStackPurpose purpose)
         {
-            _inventoryViewData.SetEnumerationFilter(!isOn
+            Data.SetEnumerationFilter(!isOn
                 ? null
                 : item => item != null && item.Value.GetPurpose() == purpose);
         }
@@ -81,12 +54,12 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnOrderByNameButtonClicked()
         {
-            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByName, _inventoryViewData.InventoryModel));
+            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByName, Data.InventoryModel));
         }
 
         private void OnOrderByPurposeButtonClicked()
         {
-            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByPurpose, _inventoryViewData.InventoryModel));
+            _globalEventBus.Publish(new InventorySortRequest(InventorySortingType.ByPurpose, Data.InventoryModel));
         }
     }
 }

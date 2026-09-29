@@ -1,23 +1,22 @@
 ﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class StorageWindowController : WindowControllerBase<StorageWindow, StorageWindowControllerArguments>
+    public sealed class StorageWindowController : SingleViewWindowControllerBase<StorageWindow, StorageWindowControllerArguments, InventoryView, IInventoryViewData, InventoryViewController>
     {
-        private readonly InventoryViewController _storageInventoryViewController;
         private readonly InventoryViewData _inventoryHudData;
         private readonly StorageViewData _storageHudData;
         private readonly EquipmentViewData _equipmentHudData;
 
         public StorageWindowController(
-            InventoryViewController stoargeInventoryViewController,
-            InventoryViewData inventoryHudData,
+            InventoryViewController storageInventoryViewController,
             StorageViewData storageHudData,
-            EquipmentViewData equipmentHudData)
+            InventoryViewData inventoryHudData,
+            EquipmentViewData equipmentHudData) : base(storageInventoryViewController, storageHudData)
         {
-            _storageInventoryViewController = stoargeInventoryViewController;
             _inventoryHudData = inventoryHudData;
             _storageHudData = storageHudData;
             _equipmentHudData = equipmentHudData;
@@ -32,32 +31,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        protected override void OnBind()
-        {
-            base.OnBind();
-
-            _storageInventoryViewController.Initialize(Window.StorageInventoryView);
-            _storageInventoryViewController.Bind(_storageHudData);
-        }
-
-        protected override void OnUnbind()
-        {
-            base.OnUnbind();
-
-            _storageInventoryViewController.Unbind();
-        }
-
-        protected override void Redraw()
-        {
-            _storageInventoryViewController.Render();
-        }
+        protected override InventoryView GetView() => Window.StorageInventoryView;
 
         public override void Dispose()
         {
             base.Dispose();
-            _storageInventoryViewController.Dispose();
+
             _inventoryHudData.Dispose();
-            _storageHudData.Dispose();
             _equipmentHudData.Dispose();
         }
     }

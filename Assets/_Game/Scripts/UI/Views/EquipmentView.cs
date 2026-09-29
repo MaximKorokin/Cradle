@@ -13,14 +13,10 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private EquipmentSlotWidget[] _slots;
 
-        private IEquipmentViewData _equipmentHudData;
-
-        protected override void Render(IEquipmentViewData equipmentHudData)
+        protected override void Render(IEquipmentViewData equipmentViewData)
         {
-            _equipmentHudData = equipmentHudData;
-
             // Find all equipped items that have secondary slots and create a mapping of those secondary slots to the item occupying them
-            var blockedSlots = _equipmentHudData.EquipmentModel.Enumerate()
+            var blockedSlots = equipmentViewData.EquipmentModel.Enumerate()
                 .Where(x => x.Snapshot != null
                     && x.Snapshot.Value.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait)
                     && equippableTrait.SecondarySlots.Length > 0)
@@ -36,7 +32,7 @@ namespace Assets._Game.Scripts.UI.Views
                     count = slotTypeCount;
 
                 var slotKey = new EquipmentSlotKey(slot.SlotType, count);
-                var itemStack = _equipmentHudData.EquipmentModel.Get(slotKey);
+                var itemStack = equipmentViewData.EquipmentModel.Get(slotKey);
 
                 // Show item in slot or item that is blocking the slot if there is one, but indicate that it is blocked
                 if (itemStack == null && blockedSlots.TryGetValue(slot.SlotType, out var blockedItemStack))
@@ -44,14 +40,9 @@ namespace Assets._Game.Scripts.UI.Views
                 else
                     slot.Render(itemStack, false);
 
-                slot.SlotView.Bind(equipmentHudData.ContainerPath, slotKey.ToInt64());
+                slot.SlotView.Bind(equipmentViewData.ContainerPath, slotKey.ToInt64());
                 slotTypeCounts[slot.SlotType] = count + 1;
             }
-        }
-
-        public void Unbind()
-        {
-            _equipmentHudData = null;
         }
     }
 }

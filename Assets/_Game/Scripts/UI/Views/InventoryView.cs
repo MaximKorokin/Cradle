@@ -44,8 +44,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         private readonly List<InventorySlotWidget> _slots = new();
 
-        private IInventoryViewData _inventoryHudData;
-
         public event Action<bool> FilterByClothingButtonClicked;
         public event Action<bool> FilterByWeaponButtonClicked;
         public event Action<bool> FilterByUtilityButtonClicked;
@@ -84,23 +82,22 @@ namespace Assets._Game.Scripts.UI.Views
         private void OnOrderByNameButtonClicked() => OrderByNameButtonClicked?.Invoke();
         private void OnOrderByPurposeButtonClicked() => OrderByPurposeButtonClicked?.Invoke();
 
-        protected override void Render(IInventoryViewData inventoryHudData)
+        protected override void Render(IInventoryViewData inventoryViewData)
         {
             _inventorySlotTemplate.gameObject.SetActive(false);
 
-            _inventoryHudData = inventoryHudData;
             foreach (var slot in _slots)
             {
                 slot.gameObject.SetActive(false);
             }
 
             // Render inventory slots
-            foreach (var (inventorySlot, stack) in _inventoryHudData.Enumerate())
+            foreach (var (inventorySlot, stack) in inventoryViewData.Enumerate())
             {
                 if (_slots.Count > inventorySlot.Index)
                 {
                     var slot = _slots[inventorySlot.Index];
-                    slot.Bind(inventoryHudData.ContainerPath, inventorySlot.ToInt64());
+                    slot.Bind(inventoryViewData.ContainerPath, inventorySlot.ToInt64());
                     slot.Render(stack);
                     slot.gameObject.SetActive(true);
                     continue;
@@ -108,25 +105,20 @@ namespace Assets._Game.Scripts.UI.Views
 
                 // Instantiate new slot if there are not enough in the pool
                 var newSlot = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                newSlot.Bind(inventoryHudData.ContainerPath, inventorySlot.ToInt64());
+                newSlot.Bind(inventoryViewData.ContainerPath, inventorySlot.ToInt64());
                 _slots.Add(newSlot);
                 newSlot.gameObject.SetActive(true);
                 newSlot.Render(stack);
             }
 
             // Update text fields and drop areas visibility
-            _pneumaText.text = _inventoryHudData.ViewPneuma ? $"Pneuma: {_inventoryHudData.Pneuma}" : "";
-            _goldText.text = _inventoryHudData.ViewGold ? $"Gold: {_inventoryHudData.Gold}" : "";
-            _slotsAmountText.text = _inventoryHudData.ViewSlotsAmount ? $"Slots: {_inventoryHudData.SlotsUsed} / {_inventoryHudData.SlotsMax}" : "";
-            _weightText.text = _inventoryHudData.ViewWeight ? $"Weight: {_inventoryHudData.WeightCurrent} / {_inventoryHudData.WeightMax}" : "";
+            _pneumaText.text = inventoryViewData.ViewPneuma ? $"Pneuma: {inventoryViewData.Pneuma}" : "";
+            _goldText.text = inventoryViewData.ViewGold ? $"Gold: {inventoryViewData.Gold}" : "";
+            _slotsAmountText.text = inventoryViewData.ViewSlotsAmount ? $"Slots: {inventoryViewData.SlotsUsed} / {inventoryViewData.SlotsMax}" : "";
+            _weightText.text = inventoryViewData.ViewWeight ? $"Weight: {inventoryViewData.WeightCurrent} / {inventoryViewData.WeightMax}" : "";
 
-            _enchantDropArea.gameObject.SetActive(_inventoryHudData.ViewEnchantDropArea);
-            _destroyDropArea.gameObject.SetActive(_inventoryHudData.ViewDestroyDropArea);
-        }
-
-        public void Unbind()
-        {
-            _inventoryHudData = null;
+            _enchantDropArea.gameObject.SetActive(inventoryViewData.ViewEnchantDropArea);
+            _destroyDropArea.gameObject.SetActive(inventoryViewData.ViewDestroyDropArea);
         }
     }
 }

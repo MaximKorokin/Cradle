@@ -6,29 +6,28 @@ using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class QuestGiverWindowController : WindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments>
+    public sealed class QuestGiverWindowController : SingleViewWindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments, QuestGiverView, QuestGiverViewData, QuestGiverViewController>
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly QuestGiverViewData _questGiverViewData;
         private readonly EntityRepository _entityRepository;
-        private readonly QuestGiverViewController _questGiverViewController;
 
         private string _targetEntityId;
 
         public QuestGiverWindowController(
-            IGlobalEventBus globalEventBus,
+            QuestGiverViewController questGiverViewController,
             QuestGiverViewData questGiverViewData,
-            EntityRepository entityRepository,
-            QuestGiverViewController questGiverViewController)
+            IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository) : base(questGiverViewController, questGiverViewData)
         {
             _globalEventBus = globalEventBus;
             _questGiverViewData = questGiverViewData;
             _entityRepository = entityRepository;
-            _questGiverViewController = questGiverViewController;
         }
 
         protected override void OnInitialize()
@@ -44,9 +43,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            _questGiverViewController.Initialize(Window.QuestGiverView);
-            _questGiverViewController.Bind(_questGiverViewData);
-
             Window.QuestGiverView.QuestInfoClicked += OnQuestInfoClicked;
             Window.QuestGiverView.QuestAcceptClicked += OnQuestAcceptClicked;
             Window.QuestGiverView.QuestCompleteClicked += OnQuestCompleteClicked;
@@ -54,13 +50,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void OnUnbind()
         {
-            base.OnUnbind();
-
             Window.QuestGiverView.QuestInfoClicked -= OnQuestInfoClicked;
             Window.QuestGiverView.QuestAcceptClicked -= OnQuestAcceptClicked;
             Window.QuestGiverView.QuestCompleteClicked -= OnQuestCompleteClicked;
 
-            _questGiverViewController.Unbind();
+            base.OnUnbind();
         }
 
         private void OnQuestInfoClicked(string questId)
@@ -94,18 +88,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             targetEntity.Publish(new QuestCompleteRequest(questState));
         }
 
-        protected override void Redraw()
-        {
-            _questGiverViewController.Render();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _questGiverViewData.Dispose();
-            _questGiverViewController.Dispose();
-        }
+        protected override QuestGiverView GetView() => Window.QuestGiverView;
     }
 
     public readonly struct QuestGiverWindowControllerArguments : IWindowControllerArguments

@@ -7,30 +7,29 @@ using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class CraftingWindowController : WindowControllerBase<CraftingWindow, CraftingWindowControllerArguments>
+    public sealed class CraftingWindowController : SingleViewWindowControllerBase<CraftingWindow, CraftingWindowControllerArguments, CraftingView, CraftingViewData, CraftingViewController>
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly CraftingViewData _craftingViewData;
         private readonly CraftingService _craftingService;
-        private readonly CraftingViewController _craftingViewController;
 
         public CraftingWindowController(
+            CraftingViewController craftingViewController,
+            CraftingViewData craftingViewData,
             IGlobalEventBus globalEventBus,
             ItemContainerResolver itemContainerResolver,
-            CraftingViewData craftingViewData,
-            CraftingService craftingService,
-            CraftingViewController craftingViewController)
+            CraftingService craftingService) : base(craftingViewController, craftingViewData)
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
             _craftingViewData = craftingViewData;
             _craftingService = craftingService;
-            _craftingViewController = craftingViewController;
         }
 
         protected override void OnInitialize()
@@ -45,19 +44,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnBind();
 
-            _craftingViewController.Initialize(Window.CraftingView);
-            _craftingViewController.Bind(_craftingViewData);
-
             Window.CraftingView.RecipeActionClicked += OnRecipeActionClicked;
         }
 
         protected override void OnUnbind()
         {
-            base.OnUnbind();
-
             Window.CraftingView.RecipeActionClicked -= OnRecipeActionClicked;
 
-            _craftingViewController.Unbind();
+            base.OnUnbind();
         }
 
         private void OnRecipeActionClicked(CraftingRecipeDefinition recipe)
@@ -84,18 +78,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
                 });
         }
 
-        protected override void Redraw()
-        {
-            _craftingViewController.Render();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _craftingViewData.Dispose();
-            _craftingViewController.Dispose();
-        }
+        protected override CraftingView GetView() => Window.CraftingView;
     }
 
     public readonly struct CraftingWindowControllerArguments : IWindowControllerArguments

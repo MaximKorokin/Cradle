@@ -1,20 +1,19 @@
 ﻿using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class QuestDescriptionWindowController : WindowControllerBase<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments>
+    public sealed class QuestDescriptionWindowController : SingleViewWindowControllerBase<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments, QuestDescriptionView, IQuestDescriptionViewData, QuestDescriptionViewController>
     {
         private readonly QuestDescriptionViewData _questDescriptionViewData;
-        private readonly QuestDescriptionViewController _questDescriptionViewController;
 
         public QuestDescriptionWindowController(
-            QuestDescriptionViewData questDescriptionViewData,
-            QuestDescriptionViewController questDescriptionViewController)
+            QuestDescriptionViewController questDescriptionViewController,
+            QuestDescriptionViewData questDescriptionViewData) : base(questDescriptionViewController, questDescriptionViewData)
         {
             _questDescriptionViewData = questDescriptionViewData;
-            _questDescriptionViewController = questDescriptionViewController;
         }
 
         protected override void OnInitialize()
@@ -24,33 +23,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _questDescriptionViewData.SetQuestState(Arguments.Quest);
         }
 
-        protected override void OnBind()
-        {
-            base.OnBind();
-
-            _questDescriptionViewController.Initialize(Window.QuestDescriptionView);
-            _questDescriptionViewController.Bind(_questDescriptionViewData);
-        }
-
-        protected override void OnUnbind()
-        {
-            base.OnUnbind();
-
-            _questDescriptionViewController.Unbind();
-        }
-
-        protected override void Redraw()
-        {
-            _questDescriptionViewController.Render();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            _questDescriptionViewData.Dispose();
-            _questDescriptionViewController.Dispose();
-        }
+        protected override QuestDescriptionView GetView() => Window.QuestDescriptionView;
     }
 
     public readonly struct QuestDescriptionWindowControllerArguments : IWindowControllerArguments
