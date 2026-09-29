@@ -1,6 +1,4 @@
-﻿using Assets._Game.Scripts.Locations;
-using Assets._Game.Scripts.UI.DataAggregators;
-using System.Collections.Generic;
+﻿using Assets._Game.Scripts.UI.DataAggregators;
 
 namespace Assets._Game.Scripts.UI.Views.Controllers
 {

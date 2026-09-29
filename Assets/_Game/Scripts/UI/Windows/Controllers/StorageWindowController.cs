@@ -4,7 +4,7 @@ using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public class StorageWindowController : WindowControllerBase<StorageWindow, StorageWindowControllerArguments>
+    public sealed class StorageWindowController : WindowControllerBase<StorageWindow, StorageWindowControllerArguments>
     {
         private readonly InventoryViewController _storageInventoryViewController;
         private readonly InventoryViewData _inventoryHudData;

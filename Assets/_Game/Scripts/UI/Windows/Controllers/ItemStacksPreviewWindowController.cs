@@ -17,11 +17,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             _itemStackFormatter = itemStackFormatter;
         }
 
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-        }
-
         protected override void Redraw()
         {
             var itemSnapshot = _itemContainerResolver.ResolveContainer(Arguments.ItemContainerPath).Get(Arguments.ItemContainerSlot);
