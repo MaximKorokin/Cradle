@@ -10,6 +10,11 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         private RectTransform _currentVisual;
 
+        public void SetPosition(Vector2 position)
+        {
+            transform.position = position;
+        }
+
         public void AttachVisual(RectTransform visual)
         {
             if (visual == null) return;

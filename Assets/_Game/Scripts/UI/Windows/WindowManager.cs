@@ -53,12 +53,12 @@ namespace Assets._Game.Scripts.UI.Windows
             InstantiateWindow(windowId, arguments);
         }
 
-        public UIWindowBase OpenWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        public WindowWrapperBase OpenWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
             return InstantiateWindow(windowId, arguments);
         }
 
-        private UIWindowBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        private WindowWrapperBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
         {
             // find definition
             var definition = FindWindowDefinition(windowId);
@@ -68,7 +68,7 @@ namespace Assets._Game.Scripts.UI.Windows
             if (definition.Configuration.IsSingleton && entry.HasData)
             {
                 SLog.Warn($"Window {windowId} with arguments {arguments} is a singleton and is already open. Returning existing instance.");
-                return entry.Window;
+                return entry.WrapperRoot;
             }
 
             // 1. Get controller type
@@ -98,7 +98,7 @@ namespace Assets._Game.Scripts.UI.Windows
             // initialize window
             window.OnShow();
 
-            return window;
+            return wrapperRoot;
         }
 
         private WindowDefinition FindWindowDefinition(WindowId windowId)
@@ -142,7 +142,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public void MoveWindow(WindowWrapperBase window, Vector2 delta)
         {
-            window.transform.localPosition += (Vector3)delta;
+            window.transform.position += (Vector3)delta;
         }
 
         public void SetTopWindow(WindowWrapperBase window)

@@ -1,12 +1,13 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.UI.Systems.Click;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
+using Assets._Game.Scripts.UI.Systems.Tooltip;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public abstract class ContainerSlotWidget : MonoBehaviour, IClickTarget, IDragDropSource
+    public abstract class ContainerSlotWidget : MonoBehaviour, IClickTarget, IDragDropSource, ITooltipSource
     {
         [SerializeField]
         private Image _itemImage;
@@ -14,7 +15,7 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         public ItemContainerPath ContainerPath { get; private set; }
         public long SlotIndex { get; private set; }
 
-        protected bool ContainsData { get; private set; }
+        public bool ContainsData { get; private set; }
 
         public virtual void Bind(ItemContainerPath containerPath, long slotIndex)
         {

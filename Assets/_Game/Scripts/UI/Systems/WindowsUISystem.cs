@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
+using System;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems
@@ -60,7 +61,8 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnWindowOpenRequested(WindowOpenRequest e)
         {
-            _windowManager.OpenWindow(e.WindowId, e.Arguments);
+            var windowWrapper = _windowManager.OpenWindow(e.WindowId, e.Arguments);
+            e.Callback?.Invoke(windowWrapper);
         }
 
         private void OnWindowCloseRequested(WindowCloseRequest e)
@@ -85,11 +87,13 @@ namespace Assets._Game.Scripts.UI.Systems
     {
         public readonly WindowId WindowId;
         public readonly IWindowControllerArguments Arguments;
+        public readonly Action<WindowWrapperBase> Callback;
 
-        public WindowOpenRequest(WindowId windowId, IWindowControllerArguments arguments)
+        public WindowOpenRequest(WindowId windowId, IWindowControllerArguments arguments, Action<WindowWrapperBase> callback = null)
         {
             WindowId = windowId;
             Arguments = arguments;
+            Callback = callback;
         }
     }
 

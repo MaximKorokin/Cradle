@@ -9,21 +9,21 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class ItemUseSettingsWindowController : WindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>
     {
         private readonly IPlayerProvider _playerProvider;
-        private readonly EquipmentViewData _equipmentHudData;
+        private readonly EquipmentViewData _equipmentViewData;
 
         public ItemUseSettingsWindowController(
             IPlayerProvider playerProvider,
-            EquipmentViewData equipmentHudData)
+            EquipmentViewData equipmentViewData)
         {
             _playerProvider = playerProvider;
-            _equipmentHudData = equipmentHudData;
+            _equipmentViewData = equipmentViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _equipmentHudData.SetEntityId(Arguments.EquipmentEntityId);
+            _equipmentViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
         protected override void OnBind()
@@ -47,7 +47,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected override void Redraw()
         {
-            Window.Render(_equipmentHudData);
+            Window.Render(_equipmentViewData);
         }
     }
 

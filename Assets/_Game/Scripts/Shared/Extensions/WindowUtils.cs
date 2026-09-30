@@ -83,5 +83,19 @@ namespace Assets._Game.Scripts.Shared.Extensions
                 });
             });
         }
+
+        public static (WindowWrapperBase Window, Action closeAction) ShowWindowWithCloseAction(IGlobalEventBus globalEventBus, WindowId windowId, IWindowControllerArguments arguments)
+        {
+            WindowWrapperBase windowWrapperBase = null;
+
+            void WindowCreationCallback(WindowWrapperBase createdWindowWrapper)
+            {
+                windowWrapperBase = createdWindowWrapper;
+            }
+
+            globalEventBus.Publish(new WindowOpenRequest(windowId, arguments, WindowCreationCallback));
+
+            return (windowWrapperBase, () => globalEventBus.Publish(new WindowCloseRequest(windowWrapperBase.Window)));
+        }
     }
 }

@@ -3,6 +3,7 @@ using Assets._Game.Scripts.UI.DataFormatters;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Systems.Click;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
+using Assets._Game.Scripts.UI.Systems.Tooltip;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 using Assets._Game.Scripts.UI.Views.Widgets;
@@ -43,6 +44,8 @@ namespace Assets._Game.Scripts.UI.Core
         private ClickEffectWidget _clickEffectView;
         [SerializeField]
         private DragDropWidget _dragDropView;
+        [SerializeField]
+        private TooltipWidget _tooltipView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -189,12 +192,14 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponent(_interactionPromptView);
             builder.RegisterComponent(_clickEffectView);
             builder.RegisterComponent(_dragDropView);
+            builder.RegisterComponent(_tooltipView);
         }
 
         private void RegisterServices(IContainerBuilder builder)
         {
             builder.Register<DragDropHandlerService>(Lifetime.Singleton);
             builder.Register<ClickHandlerService>(Lifetime.Singleton);
+            builder.Register<TooltipHandlerService>(Lifetime.Singleton);
         }
     }
 }

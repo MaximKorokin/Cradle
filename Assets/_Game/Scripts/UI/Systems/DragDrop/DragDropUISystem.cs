@@ -75,7 +75,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
             if (!_isDragging) return;
 
-            _dragDropView.transform.position = e.Context.ScreenPosition;
+            _dragDropView.SetPosition(e.Context.ScreenPosition);
 
             // Get Drop candidate and set highlight
             e.Context.UnderlyingElement.TryGetComponentInParent<IDragDropTarget>(out var target);
