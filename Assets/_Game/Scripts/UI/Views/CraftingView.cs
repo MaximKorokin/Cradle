@@ -30,20 +30,6 @@ namespace Assets._Game.Scripts.UI.Views
             _craftingTabContentTemplate.gameObject.SetActive(false);
         }
 
-        public override void OnShow()
-        {
-            base.OnShow();
-
-            _craftingTabContentTemplate.gameObject.SetActive(false);
-        }
-
-        public override void OnHide()
-        {
-            base.OnHide();
-
-            Clear();
-        }
-
         protected override void Render(CraftingViewData data)
         {
             Clear();

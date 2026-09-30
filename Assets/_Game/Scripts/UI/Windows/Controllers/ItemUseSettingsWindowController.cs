@@ -1,54 +1,29 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Infrastructure.Systems;
-using Assets._Game.Scripts.Shared;
+﻿using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ItemUseSettingsWindowController : WindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments>
+    public sealed class ItemUseSettingsWindowController : SingleViewWindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments, ItemUseSettingsView, ItemUseSettingsViewData, ItemUseSettingsViewController>
     {
-        private readonly IPlayerProvider _playerProvider;
-        private readonly EquipmentViewData _equipmentViewData;
+        private readonly ItemUseSettingsViewData _itemUseSettingsViewData;
 
         public ItemUseSettingsWindowController(
-            IPlayerProvider playerProvider,
-            EquipmentViewData equipmentViewData)
+            ItemUseSettingsViewController itemUseSettingsViewController,
+            ItemUseSettingsViewData itemUseSettingsViewData) : base(itemUseSettingsViewController, itemUseSettingsViewData)
         {
-            _playerProvider = playerProvider;
-            _equipmentViewData = equipmentViewData;
+            _itemUseSettingsViewData = itemUseSettingsViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _equipmentViewData.SetEntityId(Arguments.EquipmentEntityId);
+            _itemUseSettingsViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
-        protected override void OnBind()
-        {
-            base.OnBind();
-
-            Window.Changed += OnChanged;
-        }
-
-        protected override void OnUnbind()
-        {
-            base.OnUnbind();
-
-            Window.Changed -= OnChanged;
-        }
-
-        private void OnChanged(ItemUseSettings settings)
-        {
-            _playerProvider.Player.Publish(new ItemUseSettingsUpdateRequest(settings));
-        }
-
-        protected override void Redraw()
-        {
-            Window.Render(_equipmentViewData);
-        }
+        protected override ItemUseSettingsView GetView() => Window.ItemUseSettingsView;
     }
 
     public readonly struct ItemUseSettingsWindowControllerArguments : IWindowControllerArguments

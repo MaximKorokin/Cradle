@@ -1,61 +1,11 @@
-﻿using Assets._Game.Scripts.Entities.Modules;
-using Assets._Game.Scripts.UI.DataAggregators;
-using System;
-using TMPro;
+﻿using Assets._Game.Scripts.UI.Views;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Windows
 {
     public sealed class ItemUseSettingsWindow : UIWindowBase
     {
-        [SerializeField]
-        private TMP_Text _hpPercentText;
-        [SerializeField]
-        private Slider _hpPercentSlider;
-        [SerializeField]
-        private Toggle _overrideStatusEffectsToggle;
-
-        public event Action<ItemUseSettings> Changed;
-
-        public override void OnShow()
-        {
-            base.OnShow();
-
-            _hpPercentSlider.onValueChanged.AddListener(OnHpPercentSliderValueChanged);
-            _overrideStatusEffectsToggle.onValueChanged.AddListener(OnOverrideStatusEffectsToggleValueChanged);
-        }
-
-        public override void OnHide()
-        {
-            base.OnHide();
-
-            _hpPercentSlider.onValueChanged.RemoveListener(OnHpPercentSliderValueChanged);
-            _overrideStatusEffectsToggle.onValueChanged.RemoveListener(OnOverrideStatusEffectsToggleValueChanged);
-        }
-
-        public void Render(EquipmentViewData equipmentHudData)
-        {
-            _hpPercentSlider.SetValueWithoutNotify(equipmentHudData.ItemUseSettings.HpPercent);
-            _hpPercentText.text = $"{equipmentHudData.ItemUseSettings.HpPercent}%";
-            _overrideStatusEffectsToggle.SetIsOnWithoutNotify(equipmentHudData.ItemUseSettings.OverrideStatusEffects);
-        }
-
-        private void OnHpPercentSliderValueChanged(float value)
-        {
-            var intValue = (int)_hpPercentSlider.value;
-            _hpPercentText.text = $"{intValue}%";
-            InvokeChanged();
-        }
-
-        private void OnOverrideStatusEffectsToggleValueChanged(bool value)
-        {
-            InvokeChanged();
-        }
-
-        private void InvokeChanged()
-        {
-            Changed?.Invoke(new ItemUseSettings((int)_hpPercentSlider.value, _overrideStatusEffectsToggle.isOn));
-        }
+        [field: SerializeField]
+        public ItemUseSettingsView ItemUseSettingsView { get; private set; }
     }
 }

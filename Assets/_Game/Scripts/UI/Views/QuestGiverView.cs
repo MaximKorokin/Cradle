@@ -20,6 +20,7 @@ namespace Assets._Game.Scripts.UI.Views
         public event Action<string> QuestAcceptClicked;
         public event Action<string> QuestCompleteClicked;
 
+        // Subscribe to events in Render so that they can trigger when view is rendered
         protected override void Render(QuestGiverViewData data)
         {
             _questGiverName.text = data.QuestGiverName;
@@ -31,6 +32,8 @@ namespace Assets._Game.Scripts.UI.Views
                 Text = q.Title
             }));
 
+            _canCompleteQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
+            _canCompleteQuestsListView.ElementActionClicked -= OnQuestCompleteClicked;
             _canCompleteQuestsListView.ElementInfoClicked += OnQuestInfoClicked;
             _canCompleteQuestsListView.ElementActionClicked += OnQuestCompleteClicked;
 
@@ -41,13 +44,15 @@ namespace Assets._Game.Scripts.UI.Views
                 Text = q.Title
             }));
 
+            _availableQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
+            _availableQuestsListView.ElementActionClicked -= OnQuestAcceptClicked;
             _availableQuestsListView.ElementInfoClicked += OnQuestInfoClicked;
             _availableQuestsListView.ElementActionClicked += OnQuestAcceptClicked;
         }
 
-        public override void OnHide()
+        protected override void OnDestroy()
         {
-            base.OnHide();
+            base.OnDestroy();
 
             _canCompleteQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
             _canCompleteQuestsListView.ElementActionClicked -= OnQuestCompleteClicked;

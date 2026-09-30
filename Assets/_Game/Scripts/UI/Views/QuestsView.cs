@@ -25,34 +25,10 @@ namespace Assets._Game.Scripts.UI.Views
             _questsListViewTemplate.gameObject.SetActive(false);
         }
 
-        public override void OnShow()
-        {
-            base.OnShow();
-        }
-
-        public override void OnHide()
-        {
-            base.OnHide();
-
-            if (_activeQuestsListView != null)
-            {
-                _activeQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
-                _activeQuestsListView.ElementActionClicked -= OnQuestActionClicked;
-                _activeQuestsListView.Clear();
-            }
-
-            if (_completedQuestsListView != null)
-            {
-                _completedQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
-                _completedQuestsListView.ElementActionClicked -= OnQuestActionClicked;
-                _completedQuestsListView.Clear();
-            }
-
-            _questsTabsController.ClearTabs();
-        }
-
         protected override void Render(QuestsViewData data)
         {
+            Clear();
+
             var currentTabIndex = _questsTabsController.GetSelectedTabIndex();
 
             // Clear previous tabs
@@ -83,6 +59,25 @@ namespace Assets._Game.Scripts.UI.Views
             _completedQuestsListView.ElementActionClicked += OnQuestActionClicked;
 
             _questsTabsController.SelectTab(currentTabIndex);
+        }
+
+        private void Clear()
+        {
+            if (_activeQuestsListView != null)
+            {
+                _activeQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
+                _activeQuestsListView.ElementActionClicked -= OnQuestActionClicked;
+                _activeQuestsListView.Clear();
+            }
+
+            if (_completedQuestsListView != null)
+            {
+                _completedQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
+                _completedQuestsListView.ElementActionClicked -= OnQuestActionClicked;
+                _completedQuestsListView.Clear();
+            }
+
+            _questsTabsController.ClearTabs();
         }
 
         private void OnQuestInfoClicked(string questId)

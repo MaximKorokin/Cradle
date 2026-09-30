@@ -101,27 +101,24 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<LocationTransitionListViewData>(Lifetime.Transient);
             builder.Register<QuestDescriptionViewData>(Lifetime.Transient);
             builder.Register<ShopViewData>(Lifetime.Transient);
+            builder.Register<ItemUseSettingsViewData>(Lifetime.Transient);
         }
 
         private void RegisterViewControllers(IContainerBuilder builder)
         {
-            // Container/Inventory ViewControllers
             builder.Register<InventoryViewController>(Lifetime.Transient);
             builder.Register<EquipmentViewController>(Lifetime.Transient);
             builder.Register<ShopViewController>(Lifetime.Transient);
             builder.Register<StatsViewController>(Lifetime.Transient);
-
-            // Window ViewControllers
             builder.Register<QuestsViewController>(Lifetime.Transient);
             builder.Register<CheatsViewController>(Lifetime.Transient);
             builder.Register<CraftingViewController>(Lifetime.Transient);
             builder.Register<QuestGiverViewController>(Lifetime.Transient);
             builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
             builder.Register<QuestDescriptionViewController>(Lifetime.Transient);
-
-            // HUD ViewControllers
-            builder.Register<CompactPlayerStateViewController>(Lifetime.Scoped);
-            builder.Register<PlayerAiToggleViewController>(Lifetime.Scoped);
+            builder.Register<CompactPlayerStateViewController>(Lifetime.Transient);
+            builder.Register<PlayerAiToggleViewController>(Lifetime.Transient);
+            builder.Register<ItemUseSettingsViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)

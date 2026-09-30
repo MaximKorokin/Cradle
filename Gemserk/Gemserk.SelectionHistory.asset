@@ -291,10 +291,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 5242694482221674520, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: 2bd2e7912b2f7c043a76699e25d38bca, type: 3}
       sceneName: 
       scenePath: 
@@ -360,14 +356,6 @@ MonoBehaviour:
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 4236470503915288397, guid: 85bdbaa33bf0fb04297762b35f52ce0d, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 4236470503915288397, guid: ef812fea16118544698c6cca887e7453, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 4236470503915288397, guid: 1020db7874cd0474091297cd8e9e0bc3, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -471,15 +459,35 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 2246517009663046086, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
+    - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 5242694482221674520, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 953159348912878209, guid: ecb4308956b04114ab51fdb04c09319e, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 4236470503915288397, guid: ef812fea16118544698c6cca887e7453, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
     - reference: {fileID: 0}
-      sceneName: TooltipWidget
+      sceneName: ItemStackPreviewWindow
+      scenePath: 
+      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+    - reference: {fileID: 4236470503915288397, guid: 1020db7874cd0474091297cd8e9e0bc3, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
+    - reference: {fileID: 0}
+      sceneName: ItemUseSettingsSettingsWindow
       scenePath: 
       globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0

@@ -47,20 +47,6 @@ namespace Assets._Game.Scripts.UI.Views
             _cheatsTabContentTemplate.gameObject.SetActive(false);
         }
 
-        public override void OnShow()
-        {
-            base.OnShow();
-
-            _cheatsTabContentTemplate.gameObject.SetActive(false);
-        }
-
-        public override void OnHide()
-        {
-            base.OnHide();
-
-            ClearTabs();
-        }
-
         protected override void Render(CheatsViewData data)
         {
             ClearTabs();

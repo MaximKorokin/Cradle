@@ -8,7 +8,6 @@ namespace Assets._Game.Scripts.UI.Views
 {
     public abstract class UIViewBase : MonoBehaviour
     {
-        private bool _isCleanedUp;
         private IGlobalEventBus _globalEventBus;
 
         [Inject]
@@ -22,14 +21,9 @@ namespace Assets._Game.Scripts.UI.Views
         {
         }
 
-        public virtual void OnShow() => _isCleanedUp = false;
-
-        public virtual void OnHide() => _isCleanedUp = true;
-
         protected virtual void OnDestroy()
         {
             _globalEventBus?.Publish(new UIViewDestroyedEvent(this));
-            if (!_isCleanedUp) OnHide();
         }
 
         public abstract void TickRender();
