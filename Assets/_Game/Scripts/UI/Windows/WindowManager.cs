@@ -65,7 +65,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
             // find existing window
             var entry = FindWindowStackEntry(windowId, arguments);
-            if (definition.Configuration.IsSingleton && entry.HasData)
+            if (/*definition.Configuration.IsSingleton &&*/ entry.HasData)
             {
                 SLog.Warn($"Window {windowId} with arguments {arguments} is a singleton and is already open. Returning existing instance.");
                 return entry.WrapperRoot;
@@ -76,9 +76,9 @@ namespace Assets._Game.Scripts.UI.Windows
 
             // 2. Create window and controller
             var controller = (IWindowController)_resolver.Resolve(controllerType);
-            var prefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == controller.WindowType);
-            if (prefab == null) throw new ArgumentException($"No prefab for window of type {controller.WindowType} registered.");
-            var window = _resolver.Instantiate(prefab, _windowsRoot);
+            var windowPrefab = _windowPrefabs.FirstOrDefault(w => w.GetType() == controller.WindowType);
+            if (windowPrefab == null) throw new ArgumentException($"No prefab for window of type {controller.WindowType} registered.");
+            var window = _resolver.Instantiate(windowPrefab, _windowsRoot);
 
             // 3. Initialize
             controller.Initialize(arguments);
@@ -91,6 +91,10 @@ namespace Assets._Game.Scripts.UI.Windows
             var wrapperParent = definition.Configuration.IsModal ? _modalsRoot : _windowsRoot;
             var wrapperRoot = _resolver.Instantiate(wrapperPrefab, wrapperParent);
             wrapperRoot.SetWindow(window);
+            if (!definition.Configuration.IsModal && wrapperRoot is WindowWrapper windowWrapper)
+            {
+                windowWrapper.SetupWrapperHeader(true, true, windowPrefab.name);
+            }
 
             // push window and controller to stack that will be used to destroy everything correctly
             _windowStack.Add(new(windowId, window, controller, arguments, wrapperRoot));

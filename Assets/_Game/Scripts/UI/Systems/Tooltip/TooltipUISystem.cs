@@ -39,9 +39,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             {
                 if (_currentTooltipContent != null)
                 {
-                    var tooltipRect = _currentTooltipContent.rect;
-                    var tooltipSize = new Vector2(tooltipRect.width, tooltipRect.height);
-                    var tooltipPosition = e.Context.ScreenPosition + new Vector2(tooltipSize.x / 2, tooltipSize.y / 2);
+                    var tooltipPosition = GetTooltipPosition(((Component)tooltipSource).transform as RectTransform, _currentTooltipContent);
                     _tooltipWidget.SetPosition(tooltipPosition);
                 }
 
@@ -69,6 +67,52 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             _tooltipWidget.SetVisible(false);
             _currentTooltipCleanAction?.Invoke();
             _currentTooltipCleanAction = null;
+        }
+
+        private static Vector2 GetTooltipPosition(RectTransform sourceTransform, RectTransform tooltipContent)
+        {
+            var tooltipSize = new Vector2(tooltipContent.rect.width, tooltipContent.rect.height);
+            var sourceRect = sourceTransform.rect;
+            var sourceTopLeft = sourceTransform.TransformPoint(new Vector3(sourceRect.xMin, sourceRect.yMax));
+            var sourceTopRight = sourceTransform.TransformPoint(new Vector3(sourceRect.xMax, sourceRect.yMax));
+            var halfTooltipSize = tooltipSize / 2;
+
+            // Try to position the tooltip above the source element
+            var abovePosition = (Vector2)sourceTopLeft + new Vector2(halfTooltipSize.x, halfTooltipSize.y);
+            if (FitsInHeight(abovePosition, tooltipSize))
+            {
+                // Clamp the x position to ensure the tooltip stays within screen bounds
+                abovePosition.x = Mathf.Clamp(abovePosition.x, halfTooltipSize.x, Screen.width - halfTooltipSize.x);
+                return abovePosition;
+            }
+
+            // Try to position the tooltip to the right of the source element
+            var topAlignedY = Screen.height - halfTooltipSize.y;
+            var rightPosition = new Vector2(sourceTopRight.x + halfTooltipSize.x, topAlignedY);
+            if (FitsOnScreen(rightPosition, tooltipSize))
+            {
+                return rightPosition;
+            }
+
+            // Try to position the tooltip to the left of the source element
+            var leftPosition = new Vector2(sourceTopLeft.x - halfTooltipSize.x, topAlignedY);
+            leftPosition.x = Mathf.Clamp(leftPosition.x, halfTooltipSize.x, Screen.width - halfTooltipSize.x);
+            return leftPosition;
+        }
+
+        private static bool FitsOnScreen(Vector2 position, Vector2 size)
+        {
+            var halfSize = size / 2;
+            return position.x - halfSize.x >= 0 &&
+                   position.x + halfSize.x <= Screen.width &&
+                   FitsInHeight(position, size);
+        }
+
+        private static bool FitsInHeight(Vector2 position, Vector2 size)
+        {
+            var halfHeight = size.y / 2;
+            return position.y - halfHeight >= 0 &&
+                   position.y + halfHeight <= Screen.height;
         }
     }
 }

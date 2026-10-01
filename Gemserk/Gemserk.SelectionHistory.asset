@@ -447,10 +447,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 4236470503915288397, guid: fb35fe489b68fd44180b9528641c5017, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
       sceneName: 
       scenePath: 
@@ -483,7 +479,15 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
+    - reference: {fileID: 4236470503915288397, guid: fb35fe489b68fd44180b9528641c5017, type: 3}
+      sceneName: 
+      scenePath: 
+      globalObjectId: 
     - reference: {fileID: 0}
-      sceneName: ItemStackPreviewWindow
+      sceneName: WindowWrapper
+      scenePath: 
+      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+    - reference: {fileID: 0}
+      sceneName: WindowWrapper
       scenePath: 
       globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
