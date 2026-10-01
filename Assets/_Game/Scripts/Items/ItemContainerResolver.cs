@@ -47,6 +47,11 @@ namespace Assets._Game.Scripts.Items
             return TryResolveContainerInternal<T>(path, true, out container);
         }
 
+        public bool TryResolveContainer(ItemContainerPath path, out IItemContainer container)
+        {
+            return TryResolveContainerInternal<IItemContainer>(path, true, out container);
+        }
+
         public T ResolveContainer<T>(ItemContainerPath path) where T : class, IItemContainer
         {
             if (TryResolveContainerInternal<T>(path, false, out var container))

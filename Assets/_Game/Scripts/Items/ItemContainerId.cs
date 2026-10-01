@@ -2,6 +2,7 @@
 {
     public enum ItemContainerId
     {
+        None = 0,
         Inventory,
         Storage,
         Equipment,

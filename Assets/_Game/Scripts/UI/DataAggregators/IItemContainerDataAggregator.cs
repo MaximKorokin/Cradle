@@ -16,6 +16,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private readonly ItemContainerResolver _itemContainerResolver;
 
+        protected ItemContainerResolver ItemContainerResolver => _itemContainerResolver;
+
         public ItemContainerDataAggregatorBase(
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository) : base(entityRepository)

@@ -9,7 +9,7 @@ namespace Assets._Game.Scripts.Items
         public readonly string EntityId;
         public readonly ItemContainerId ContainerId;
 
-        private ItemContainerPath(string entityId, ItemContainerId containerId)
+        public ItemContainerPath(string entityId, ItemContainerId containerId)
         {
             HasData = true;
 

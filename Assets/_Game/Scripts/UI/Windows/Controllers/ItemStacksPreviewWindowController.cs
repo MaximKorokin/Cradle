@@ -1,32 +1,39 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
-    public sealed class ItemStacksPreviewWindowController : WindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
+    public sealed class ItemStacksPreviewWindowController : MultiViewWindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
     {
-        private readonly ItemContainerResolver _itemContainerResolver;
-        private readonly ItemStackFormatter _itemStackFormatter;
+        private readonly ItemStackPreviewViewData _primaryItemStackPreviewViewData;
+        private readonly ItemStackPreviewViewData _secondaryItemStackPreviewViewData;
 
         public ItemStacksPreviewWindowController(
-            ItemContainerResolver itemContainerResolver,
-            ItemStackFormatter itemStackFormatter)
+            ItemStackPreviewViewData primaryItemStackPreviewViewData,
+            ItemStackPreviewViewData secondaryItemStackPreviewViewData,
+            ItemStackPreviewViewController primaryItemStackPreviewViewController
+            //ItemStackPreviewViewController secondaryItemStackPreviewViewController
+            )
         {
-            _itemContainerResolver = itemContainerResolver;
-            _itemStackFormatter = itemStackFormatter;
+            _primaryItemStackPreviewViewData = primaryItemStackPreviewViewData;
+            _secondaryItemStackPreviewViewData = secondaryItemStackPreviewViewData;
+
+            RegisterView(primaryItemStackPreviewViewController, _primaryItemStackPreviewViewData, () => Window.PrimaryItemPreviewView);
+
+            //RegisterView(secondaryItemStackPreviewViewController, _secondaryItemStackPreviewViewData, () => Window.SecondaryItemPreviewView);
         }
 
-        protected override void Redraw()
+        protected override void OnInitialize()
         {
-            var itemSnapshot = _itemContainerResolver.ResolveContainer(Arguments.ItemContainerPath).Get(Arguments.ItemContainerSlot);
+            base.OnInitialize();
 
-            if (itemSnapshot == null) return;
+            _primaryItemStackPreviewViewData.SetData(Arguments.ItemContainerPath, Arguments.ItemContainerSlot);
+            _primaryItemStackPreviewViewData.SetEntityId(new ObservableData<string>(Arguments.ItemContainerPath.EntityId));
 
-            var equipmentPath = ItemContainerPath.Equipment(Arguments.ItemContainerPath.EntityId);
-            _itemContainerResolver.TryResolveContainer<EquipmentModel>(equipmentPath, out var equipmentModel);
-
-            Window.Render(_itemStackFormatter.FormatData((itemSnapshot.Value, equipmentModel)));
+            //_secondaryItemStackPreviewViewData.SetData();
         }
     }
 

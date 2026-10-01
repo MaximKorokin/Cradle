@@ -102,6 +102,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<QuestDescriptionViewData>(Lifetime.Transient);
             builder.Register<ShopViewData>(Lifetime.Transient);
             builder.Register<ItemUseSettingsViewData>(Lifetime.Transient);
+            builder.Register<ItemStackPreviewViewData>(Lifetime.Transient);
         }
 
         private void RegisterViewControllers(IContainerBuilder builder)
@@ -119,6 +120,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<CompactPlayerStateViewController>(Lifetime.Transient);
             builder.Register<PlayerAiToggleViewController>(Lifetime.Transient);
             builder.Register<ItemUseSettingsViewController>(Lifetime.Transient);
+            builder.Register<ItemStackPreviewViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)

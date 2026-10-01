@@ -364,8 +364,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51325b574fd649a4c904d934fe7b5cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _primaryItemPreviewView: {fileID: 3554932334570252707}
-  _secondaryItemPreviewView: {fileID: 0}
+  <PrimaryItemPreviewView>k__BackingField: {fileID: 3554932334570252707}
+  <SecondaryItemPreviewView>k__BackingField: {fileID: 0}
 --- !u!1 &4447772413310357908
 GameObject:
   m_ObjectHideFlags: 0
@@ -2092,6 +2092,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49da8543a66f4ff4ca840e4f9b2b3956, type: 3}
+  m_Script: {fileID: 11500000, guid: d5874f2b79e314546ab740c97104cbbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

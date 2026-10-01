@@ -1,13 +1,14 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets._Game.Scripts.UI.Views.Widgets
+namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class ItemStacksPreviewWidget : MonoBehaviour
+    public sealed class ItemStackPreviewView : UIViewBase<ItemStackPreviewViewData>
     {
         [SerializeField]
         private TMP_Text _prefixText;
@@ -89,8 +90,10 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         private readonly List<GameObject> _instantiatedTemplates = new();
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             _equippableEffectTextTemplate.gameObject.SetActive(false);
 
             _inInventoryEffectTextTemplate.gameObject.SetActive(false);
@@ -107,18 +110,24 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
             _enchantEffectTextTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(ItemStackDisplayData itemStack)
+        protected override void Render(ItemStackPreviewViewData data)
+        {
+            var displayData = data.GetDisplayData();
+            if (displayData.HasData) Render(displayData);
+        }
+
+        public void Render(ItemStackDisplayData displayData)
         {
             Clear();
 
-            RenderHeader(itemStack);
-            RenderEquippableInfo(itemStack);
-            RenderInInventoryInfo(itemStack);
-            RenderUsableInfo(itemStack);
-            RenderSetInfo(itemStack);
-            RenderEnchantInfo(itemStack);
-            RenderCommonInfo(itemStack);
-            RenderDescription(itemStack);
+            RenderHeader(displayData);
+            RenderEquippableInfo(displayData);
+            RenderInInventoryInfo(displayData);
+            RenderUsableInfo(displayData);
+            RenderSetInfo(displayData);
+            RenderEnchantInfo(displayData);
+            RenderCommonInfo(displayData);
+            RenderDescription(displayData);
 
             gameObject.SetActive(true);
         }

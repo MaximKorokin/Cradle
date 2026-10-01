@@ -4260,7 +4260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5242694482221674520}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49da8543a66f4ff4ca840e4f9b2b3956, type: 3}
+  m_Script: {fileID: 11500000, guid: d5874f2b79e314546ab740c97104cbbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _prefixText: {fileID: 5011716108569014145}
@@ -4900,7 +4900,7 @@ GameObject:
   - component: {fileID: 91144510900912705}
   - component: {fileID: 185854132243126241}
   m_Layer: 5
-  m_Name: EnchantEffectTextTemplate (1)
+  m_Name: EnchantEffectTextTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6150,7 +6150,7 @@ GameObject:
   - component: {fileID: 8251463619628118728}
   - component: {fileID: 2001640443803109546}
   m_Layer: 5
-  m_Name: CooldownText
+  m_Name: ConsumableLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
