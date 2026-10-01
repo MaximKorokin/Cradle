@@ -2,7 +2,6 @@ using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +13,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private QuestModule _questModule;
 
         public string QuestGiverName { get; set; }
+        public string TargetEntityId { get; private set; }
         public IReadOnlyList<QuestDefinition> OfferedQuests { get; private set; } = new QuestDefinition[0];
 
         public QuestGiverViewData(EntityRepository entityRepository) : base(entityRepository) { }
@@ -37,13 +37,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public void SetTargetEntity(IReadOnlyObservableData<string> targetEntityId)
         {
+            TargetEntityId = targetEntityId?.Value;
             var targetEntity = EntityRepository.Get(targetEntityId.Value);
-            _questModule = null;
-
             if (_questModule != null)
             {
                 _questModule.Updated -= OnQuestModuleUpdated;
             }
+            _questModule = null;
 
             if (targetEntity != null && targetEntity.TryGetModule<QuestModule>(out var questModule))
             {

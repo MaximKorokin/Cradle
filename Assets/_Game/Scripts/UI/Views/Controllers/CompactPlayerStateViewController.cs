@@ -28,6 +28,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             _playerStateViewData.Changed -= OnPlayerStateChanged;
             View.Clear();
             base.Dispose();
+            _playerStateViewData.Dispose();
         }
 
         private void OnPlayerStateChanged()

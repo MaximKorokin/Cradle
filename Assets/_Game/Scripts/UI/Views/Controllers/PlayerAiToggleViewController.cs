@@ -59,6 +59,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             if (View != null) View.ValueChanged -= OnValueChanged;
             Unbind();
             base.Dispose();
+            _viewData?.Dispose();
         }
 
         private void OnValueChanged(bool enabled)
