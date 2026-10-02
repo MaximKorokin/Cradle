@@ -4,7 +4,6 @@ using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems.Tooltip
@@ -36,8 +35,11 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
         {
             if (_currentTooltipSource == null || _currentTooltipContent == null) return;
 
-            var tooltipPosition = GetTooltipPosition(((Component)_currentTooltipSource).transform as RectTransform, _tooltipWidget.transform as RectTransform);
-            _tooltipWidget.SetPosition(tooltipPosition);
+            var tooltipPosition = GetTooltipPosition(
+                ((Component)_currentTooltipSource).transform as RectTransform,
+                _tooltipWidget.transform as RectTransform,
+                false);
+            _tooltipWidget.SetPosition(tooltipPosition + new Vector2(0, 5));
         }
 
         private void OnPointerMove(PointerMoveEvent e)
@@ -72,7 +74,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             _currentTooltipCleanAction = null;
         }
 
-        private static Vector2 GetTooltipPosition(RectTransform sourceTransform, RectTransform tooltipContent)
+        private static Vector2 GetTooltipPosition(RectTransform sourceTransform, RectTransform tooltipContent, bool alignAboveByCorners = true)
         {
             var tooltipSize = new Vector2(tooltipContent.rect.width, tooltipContent.rect.height);
             var sourceRect = sourceTransform.rect;
@@ -81,7 +83,10 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             var halfTooltipSize = tooltipSize / 2;
 
             // Try to position the tooltip above the source element
-            var abovePosition = (Vector2)sourceTopLeft + new Vector2(halfTooltipSize.x, halfTooltipSize.y);
+            var sourceTopCenter = ((Vector2)sourceTopLeft + (Vector2)sourceTopRight) / 2;
+            var abovePosition = alignAboveByCorners
+                ? (Vector2)sourceTopLeft + halfTooltipSize
+                : sourceTopCenter + Vector2.up * halfTooltipSize.y;
             if (FitsInHeight(abovePosition, tooltipSize))
             {
                 // Clamp the x position to ensure the tooltip stays within screen bounds

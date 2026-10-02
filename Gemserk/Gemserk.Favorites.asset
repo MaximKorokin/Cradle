@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   favoritesList:
-  - reference: {fileID: 5242694482221674520, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
-    assetPath: Assets/_Game/Prefabs/UI/Views/ItemPreviewView.prefab
   - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
     assetPath: Assets/_Game/Scenes/Bootstrap.unity
   - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
     assetPath: Assets/_Game/Scenes/UIRoot.unity
-  - reference: {fileID: 3880321814137415004, guid: bf40191eaabc31b4ea449cb4ea0fccb2, type: 3}
-    assetPath: Assets/_Game/Prefabs/UI/Views/DragDropView.prefab
-  - reference: {fileID: 4236470503915288397, guid: 65468bccb608edc4787793a54478eafd, type: 3}
-    assetPath: Assets/_Game/Prefabs/UI/Windows/EquipmentWindow.prefab
+  - reference: {fileID: 102900000, guid: e189c94fa2a6e4b4c966f66625d87e1f, type: 3}
+    assetPath: Assets/_Game/Prefabs/UI/Views
+  - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
+    assetPath: Assets/_Game/Prefabs/UI/Windows

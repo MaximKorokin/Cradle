@@ -32,5 +32,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public EntityReviveConfig ReviveConfig { get; private set; }
         [field: SerializeField]
         public MoveTargetIndicatorConfig MoveTargetIndicatorConfig { get; private set; }
+        [field: SerializeField]
+        public UITooltipConfig UITooltipConfig { get; private set; }
     }
 }

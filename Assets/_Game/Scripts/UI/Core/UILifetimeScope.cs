@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.UI.Core
         private Transform _uiSystemsRoot;
         [Header("Prefabs")]
         [SerializeField]
-        private EntityNameplateWidget _entityNameplateView;
+        private EntityNameplateWidget _entityNameplateViewPrefab;
         [SerializeField]
         private UIWindowBase[] _windowPrefabs;
         [SerializeField]
@@ -46,8 +46,6 @@ namespace Assets._Game.Scripts.UI.Core
         private DragDropWidget _dragDropView;
         [SerializeField]
         private TooltipWidget _tooltipView;
-        [SerializeField]
-        private ItemStackPreviewView _itemStackPreviewView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -63,8 +61,12 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterInstances(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_entityNameplateView);
+            builder.RegisterInstance(_entityNameplateViewPrefab);
             builder.RegisterInstance(_rootReferences);
+
+            builder.RegisterInstance(_windowWrapperPrefab);
+            builder.RegisterInstance(_modalWrapperPrefab);
+            builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -144,9 +146,6 @@ namespace Assets._Game.Scripts.UI.Core
         private void RegisterWindows(IContainerBuilder builder)
         {
             builder.Register<WindowManager>(Lifetime.Scoped);
-            builder.RegisterInstance(_windowWrapperPrefab);
-            builder.RegisterInstance(_modalWrapperPrefab);
-            builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);
 
             builder.Register<WindowControllerArgumentsProvider>(Lifetime.Singleton);
 
@@ -194,7 +193,6 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponent(_clickEffectView);
             builder.RegisterComponent(_dragDropView);
             builder.RegisterComponent(_tooltipView);
-            builder.RegisterComponent(_itemStackPreviewView);
         }
 
         private void RegisterServices(IContainerBuilder builder)
