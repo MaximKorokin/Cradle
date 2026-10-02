@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public sealed class ItemStackFormatter : IDataFormatter<(ItemStackSnapshot, EquipmentModel), ItemStackDisplayData>
+    public sealed class ItemStackFormatter : IDataFormatter<(ItemStackSnapshot, EquipmentModel, bool), ItemStackDisplayData>
     {
         private readonly ItemDefinitionFormatter _itemDefinitionFormatter;
         private readonly ItemSetFormatter _itemSetFormatter;
@@ -20,9 +20,9 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             _enchantableTraitFormatter = enchantableTraitFormatter;
         }
 
-        public ItemStackDisplayData FormatData((ItemStackSnapshot, EquipmentModel) data)
+        public ItemStackDisplayData FormatData((ItemStackSnapshot, EquipmentModel, bool) data)
         {
-            var (itemStackSnapshot, equipmentModel) = data;
+            var (itemStackSnapshot, equipmentModel, provideFullData) = data;
 
             var definitionData = _itemDefinitionFormatter.FormatData(itemStackSnapshot.Definition);
 
@@ -44,16 +44,16 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 definitionData.PriceText,
                 definitionData.IsEquippable,
                 definitionData.EquipmentSlotName,
-                definitionData.EquippableEffectsText,
-                definitionData.HasInInventoryEffects,
-                definitionData.InInventoryEffectsText,
-                definitionData.IsUsable,
-                definitionData.IsConsumable,
-                definitionData.UsableCooldownText,
-                definitionData.UsableEffectsText,
-                enchantableDisplayData,
-                itemSetDisplayData,
-                definitionData.Description);
+                provideFullData ? definitionData.EquippableEffectsText : default,
+                provideFullData ? definitionData.HasInInventoryEffects : default,
+                provideFullData ? definitionData.InInventoryEffectsText : default,
+                provideFullData ? definitionData.IsUsable : default,
+                provideFullData ? definitionData.IsConsumable : default,
+                provideFullData ? definitionData.UsableCooldownText : default,
+                provideFullData ? definitionData.UsableEffectsText : default,
+                provideFullData ? enchantableDisplayData : default,
+                provideFullData ? itemSetDisplayData : default,
+                provideFullData ? definitionData.Description : default);
         }
 
         private string GetPrefixText(ItemStackSnapshot itemStackSnapshot)

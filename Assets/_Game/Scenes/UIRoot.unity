@@ -2605,6 +2605,7 @@ MonoBehaviour:
   _clickEffectView: {fileID: 1171793408}
   _dragDropView: {fileID: 1697629424}
   _tooltipView: {fileID: 1489462756}
+  _itemStackPreviewView: {fileID: 6641248307609624257, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
 --- !u!4 &1058341465
 Transform:
   m_ObjectHideFlags: 0
@@ -5253,6 +5254,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1674695386}
     m_Modifications:
+    - target: {fileID: 1866240820821423454, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866240820821423454, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866240820821423454, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866240820821423454, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866240820821423454, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866240820821423454, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2246517009663046086, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
       propertyPath: m_Name
       value: TooltipWidget
@@ -5283,11 +5308,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5991050985000915175, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 114
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5991050985000915175, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5991050985000915175, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5335,6 +5360,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5991050985000915175, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813156692557945117, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813156692557945117, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813156692557945117, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7813156692557945117, guid: 3c76ef88aba6f6a429fec04128ebac04, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

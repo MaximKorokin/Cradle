@@ -11,6 +11,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private ItemContainerPath _itemContainerPath;
         private long _slotIndex;
+        private bool _provideFullData;
 
         public ItemStackPreviewViewData(
             ItemStackFormatter itemStackFormatter,
@@ -22,21 +23,21 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public ItemStackDisplayData GetDisplayData()
         {
-            var itemStackSnapshot = ItemContainerResolver.ResolveContainer(_itemContainerPath).Get(_slotIndex);
+            var itemStackSnapshot = GetItemStackSnapshot();
 
             if (!itemStackSnapshot.HasValue) return default;
 
             var equipmentPath = ItemContainerPath.Equipment(_itemContainerPath.EntityId);
             ItemContainerResolver.TryResolveContainer(equipmentPath, out EquipmentModel equipmentModel);
 
-            return _itemStackFormatter.FormatData((itemStackSnapshot.Value, equipmentModel));
+            return _itemStackFormatter.FormatData((itemStackSnapshot.Value, equipmentModel, _provideFullData));
         }
 
-        public void SetData(ItemContainerPath itemContainerPath, long slotIndex)
+        public void SetData(ItemContainerPath itemContainerPath, long slotIndex, bool provideFullData)
         {
             if (_itemContainerPath != default)
             {
-                var oldItemStackSnapshot = ItemContainerResolver.ResolveContainer(_itemContainerPath).Get(slotIndex);
+                var oldItemStackSnapshot = GetItemStackSnapshot();
                 if (oldItemStackSnapshot.HasValue && oldItemStackSnapshot.Value.InstanceData != null)
                 {
                     oldItemStackSnapshot.Value.InstanceData.Changed -= OnItemStackInstanceDataChanged;
@@ -45,23 +46,26 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             _itemContainerPath = itemContainerPath;
             _slotIndex = slotIndex;
+            _provideFullData = provideFullData;
 
-            var itemStackSnapshot = ItemContainerResolver.ResolveContainer(_itemContainerPath).Get(slotIndex).Value;
-            if (itemStackSnapshot.InstanceData != null)
+            var itemStackSnapshot = GetItemStackSnapshot();
+            if (itemStackSnapshot.HasValue && itemStackSnapshot.Value.InstanceData != null)
             {
-                itemStackSnapshot.InstanceData.Changed -= OnItemStackInstanceDataChanged;
-                itemStackSnapshot.InstanceData.Changed += OnItemStackInstanceDataChanged;
+                itemStackSnapshot.Value.InstanceData.Changed -= OnItemStackInstanceDataChanged;
+                itemStackSnapshot.Value.InstanceData.Changed += OnItemStackInstanceDataChanged;
             }
+
+            NotifyChanged();
         }
 
         public override void Dispose()
         {
             base.Dispose();
 
-            var itemStackSnapshot = ItemContainerResolver.ResolveContainer(_itemContainerPath).Get(_slotIndex).Value;
-            if (itemStackSnapshot.InstanceData != null)
+            var itemStackSnapshot = GetItemStackSnapshot();
+            if (itemStackSnapshot.HasValue && itemStackSnapshot.Value.InstanceData != null)
             {
-                itemStackSnapshot.InstanceData.Changed -= OnItemStackInstanceDataChanged;
+                itemStackSnapshot.Value.InstanceData.Changed -= OnItemStackInstanceDataChanged;
             }
         }
 
@@ -71,5 +75,14 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         }
 
         protected override ItemContainerPath GetContainerPath(string entityId) => new(entityId, _itemContainerPath.ContainerId);
+
+        private ItemStackSnapshot? GetItemStackSnapshot()
+        {
+            if (_itemContainerPath == default) return null;
+
+            var container = ItemContainerResolver.ResolveContainer(_itemContainerPath);
+            if (container == null) return null;
+            return container.Get(_slotIndex);
+        }
     }
 }

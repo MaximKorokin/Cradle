@@ -12,16 +12,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private readonly IReadOnlyList<ITickSystem> _tickSystems;
         private readonly IReadOnlyList<ILateTickSystem> _lateTickSystems;
         private readonly IReadOnlyList<IFixedTickSystem> _fixedTickSystems;
+        private readonly IReadOnlyList<IUIRenderTickSystem> _uiRenderTickSystems;
 
         public SystemRunnerBase(
             DispatcherService dispatcherService,
             IReadOnlyList<ISystemBase> systems)
         {
             _dispatcherService = dispatcherService;
+
             _startSystems = systems.OfType<IStartSystem>().ToArray();
             _tickSystems = systems.OfType<ITickSystem>().ToArray();
             _lateTickSystems = systems.OfType<ILateTickSystem>().ToArray();
             _fixedTickSystems = systems.OfType<IFixedTickSystem>().ToArray();
+            _uiRenderTickSystems = systems.OfType<IUIRenderTickSystem>().ToArray();
         }
 
         public void Initialize()
@@ -29,6 +32,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _dispatcherService.OnTick += OnTick;
             _dispatcherService.OnLateTick += OnLateTick;
             _dispatcherService.OnFixedTick += OnFixedTick;
+
+            _dispatcherService.OnWillRenderCanvases += OnWillUIRenderTick;
 
             for (var i = 0; i < _startSystems.Count; i++)
             {
@@ -41,6 +46,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _dispatcherService.OnTick -= OnTick;
             _dispatcherService.OnLateTick -= OnLateTick;
             _dispatcherService.OnFixedTick -= OnFixedTick;
+
+            _dispatcherService.OnWillRenderCanvases -= OnWillUIRenderTick;
         }
 
         private void OnTick(float delta)
@@ -66,6 +73,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 _fixedTickSystems[i].FixedTick(delta);
             }
         }
+
+        private void OnWillUIRenderTick(float delta)
+        {
+            for (var i = 0; i < _uiRenderTickSystems.Count; i++)
+            {
+                _uiRenderTickSystems[i].UIRenderTick(delta);
+            }
+        }
     }
 
     public interface IStartSystem
@@ -86,5 +101,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public interface IFixedTickSystem
     {
         void FixedTick(float delta);
+    }
+
+    public interface IUIRenderTickSystem
+    {
+        void UIRenderTick(float delta);
     }
 }

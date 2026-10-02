@@ -4,11 +4,12 @@ using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems.Tooltip
 {
-    public sealed class TooltipUISystem : UISystemBase
+    public sealed class TooltipUISystem : UISystemBase, IUIRenderTickSystem
     {
         private TooltipWidget _tooltipWidget;
         private TooltipHandlerService _tooltipHandlerService;
@@ -31,18 +32,19 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             TrackGlobalEvent<PointerMoveEvent>(OnPointerMove);
         }
 
+        public void UIRenderTick(float delta)
+        {
+            if (_currentTooltipSource == null || _currentTooltipContent == null) return;
+
+            var tooltipPosition = GetTooltipPosition(((Component)_currentTooltipSource).transform as RectTransform, _tooltipWidget.transform as RectTransform);
+            _tooltipWidget.SetPosition(tooltipPosition);
+        }
+
         private void OnPointerMove(PointerMoveEvent e)
         {
             var foundTooltipSource = e.Context.UnderlyingElement.TryGetComponentInParent<ITooltipSource>(out var tooltipSource);
-            _tooltipWidget.SetVisible(foundTooltipSource);
             if (foundTooltipSource)
             {
-                if (_currentTooltipContent != null)
-                {
-                    var tooltipPosition = GetTooltipPosition(((Component)tooltipSource).transform as RectTransform, _currentTooltipContent);
-                    _tooltipWidget.SetPosition(tooltipPosition);
-                }
-
                 if (_currentTooltipSource == tooltipSource) return;
                 if (_currentTooltipSource != null) CleanState();
 
@@ -54,6 +56,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
                 _currentTooltipContent = content;
                 _currentTooltipCleanAction = cleanAction;
                 _tooltipWidget.SetContent(_currentTooltipContent);
+                _tooltipWidget.SetVisible(true);
             }
             else
             {
@@ -86,26 +89,28 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
                 return abovePosition;
             }
 
-            // Try to position the tooltip to the right of the source element
+            // If the tooltip doesn't fit above, position it at the top of the screen
             var topAlignedY = Screen.height - halfTooltipSize.y;
+
+            // Try to position the tooltip to the right of the source element
             var rightPosition = new Vector2(sourceTopRight.x + halfTooltipSize.x, topAlignedY);
-            if (FitsOnScreen(rightPosition, tooltipSize))
+            if (FitsInWidth(rightPosition, tooltipSize))
             {
                 return rightPosition;
             }
 
             // Try to position the tooltip to the left of the source element
             var leftPosition = new Vector2(sourceTopLeft.x - halfTooltipSize.x, topAlignedY);
+            // Clamp the x position to ensure the tooltip stays within screen bounds
             leftPosition.x = Mathf.Clamp(leftPosition.x, halfTooltipSize.x, Screen.width - halfTooltipSize.x);
             return leftPosition;
         }
 
-        private static bool FitsOnScreen(Vector2 position, Vector2 size)
+        private static bool FitsInWidth(Vector2 position, Vector2 size)
         {
-            var halfSize = size / 2;
-            return position.x - halfSize.x >= 0 &&
-                   position.x + halfSize.x <= Screen.width &&
-                   FitsInHeight(position, size);
+            var halfWidth = size.x / 2;
+            return position.x - halfWidth >= 0 &&
+                   position.x + halfWidth <= Screen.width;
         }
 
         private static bool FitsInHeight(Vector2 position, Vector2 size)

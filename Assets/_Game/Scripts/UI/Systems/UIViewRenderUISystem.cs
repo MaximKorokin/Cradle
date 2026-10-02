@@ -1,12 +1,14 @@
-﻿using Assets._Game.Scripts.UI.Views;
-using Assets._Game.Scripts.Infrastructure.Game;
-using System.Collections.Generic;
-using VContainer;
+﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.UI.Views;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using VContainer;
 
 namespace Assets._Game.Scripts.UI.Systems
 {
-    public sealed class UIViewRenderUISystem : UISystemBase, ILateTickSystem
+    public sealed class UIViewRenderUISystem : UISystemBase, ITickSystem, ILateTickSystem, IUIRenderTickSystem
     {
         private readonly HashSet<UIViewBase> _views = new();
 
@@ -18,23 +20,25 @@ namespace Assets._Game.Scripts.UI.Systems
             TrackGlobalEvent<UIViewCreatedEvent>(OnViewCreated);
             TrackGlobalEvent<UIViewDestroyedEvent>(OnViewDestroyed);
 
-            foreach (var view in UnityEngine.Object.FindObjectsByType<UIViewBase>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None))
+            foreach (var view in FindObjectsByType<UIViewBase>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None))
             {
                 _views.Add(view);
             }
         }
 
+        public void Tick(float delta)
+        {
+            TickRenderViews();
+        }
+
         public void LateTick(float delta)
         {
-            var views = new List<UIViewBase>(_views);
-            foreach (var view in views)
-            {
-                //if (view != null && view.isActiveAndEnabled)
-                if (view != null)
-                {
-                    view.TickRender();
-                }
-            }
+            TickRenderViews();
+        }
+
+        public void UIRenderTick(float delta)
+        {
+            TickRenderViews();
         }
 
         public override void Dispose()
@@ -51,6 +55,22 @@ namespace Assets._Game.Scripts.UI.Systems
         private void OnViewDestroyed(UIViewDestroyedEvent e)
         {
             _views.Remove(e.View);
+        }
+
+        private void TickRenderViews()
+        {
+            var views = new List<UIViewBase>(_views);
+            foreach (var view in views)
+            {
+                // Render the view and rebuild the layout after so that view has the correct size and position
+                if (view != null &&
+                    view.isActiveAndEnabled &&
+                    view.gameObject.transform.parent != null && // prefab
+                    view.TickRender())
+                {
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(view.transform as RectTransform);
+                }
+            }
         }
     }
 

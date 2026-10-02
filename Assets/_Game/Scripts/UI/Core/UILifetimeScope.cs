@@ -46,6 +46,8 @@ namespace Assets._Game.Scripts.UI.Core
         private DragDropWidget _dragDropView;
         [SerializeField]
         private TooltipWidget _tooltipView;
+        [SerializeField]
+        private ItemStackPreviewView _itemStackPreviewView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -192,6 +194,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.RegisterComponent(_clickEffectView);
             builder.RegisterComponent(_dragDropView);
             builder.RegisterComponent(_tooltipView);
+            builder.RegisterComponent(_itemStackPreviewView);
         }
 
         private void RegisterServices(IContainerBuilder builder)

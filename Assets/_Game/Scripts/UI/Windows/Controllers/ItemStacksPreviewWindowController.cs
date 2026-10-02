@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnInitialize();
 
-            _primaryItemStackPreviewViewData.SetData(Arguments.ItemContainerPath, Arguments.ItemContainerSlot);
+            _primaryItemStackPreviewViewData.SetData(Arguments.ItemContainerPath, Arguments.ItemContainerSlot, true);
             _primaryItemStackPreviewViewData.SetEntityId(new ObservableData<string>(Arguments.ItemContainerPath.EntityId));
         }
     }

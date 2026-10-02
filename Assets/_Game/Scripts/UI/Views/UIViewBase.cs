@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.UI.Views
             _globalEventBus?.Publish(new UIViewDestroyedEvent(this));
         }
 
-        public abstract void TickRender();
+        public abstract bool TickRender();
     }
 
     public abstract class UIViewBase<TData> : UIViewBase where TData : IDataAggregator
@@ -42,12 +42,14 @@ namespace Assets._Game.Scripts.UI.Views
             _isDirty = true;
         }
 
-        public override void TickRender()
+        public override bool TickRender()
         {
-            if (!_isDirty) return;
+            if (!_isDirty) return false;
 
             _isDirty = false;
             Render(_data);
+
+            return true;
         }
 
         protected abstract void Render(TData data);
