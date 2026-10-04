@@ -34,5 +34,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public MoveTargetIndicatorConfig MoveTargetIndicatorConfig { get; private set; }
         [field: SerializeField]
         public UITooltipConfig UITooltipConfig { get; private set; }
+        [field: SerializeField]
+        public WindowPrefabsConfig WindowPrefabsConfig { get; private set; }
     }
 }

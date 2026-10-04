@@ -70,9 +70,6 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
 
         private (RectTransform Content, Action CleanAction) HandleStatusEffect(StatusEffectWidget statusEffectWidget)
         {
-            if (!statusEffectWidget.gameObject.TryGetComponentInParent<StatusEffectListView>(out var statusEffectListView))
-                return (null, null);
-
             InstantiateFromPrefab(_config.StatusEffectDescriptionViewPrefab, ref _statusEffectDescriptionView);
             _statusEffectDescriptionView.Render(statusEffectWidget.StatusEffectDefinition, statusEffectWidget.RemainingDuration);
             _statusEffectDescriptionView.gameObject.SetActive(true);

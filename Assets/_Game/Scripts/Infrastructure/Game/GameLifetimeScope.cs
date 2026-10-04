@@ -100,6 +100,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.ReviveConfig);
             builder.RegisterInstance(_configReferences.MoveTargetIndicatorConfig);
             builder.RegisterInstance(_configReferences.UITooltipConfig);
+            builder.RegisterInstance(_configReferences.WindowPrefabsConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)

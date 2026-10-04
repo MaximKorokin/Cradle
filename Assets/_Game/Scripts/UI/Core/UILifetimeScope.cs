@@ -27,8 +27,6 @@ namespace Assets._Game.Scripts.UI.Core
         [SerializeField]
         private EntityNameplateWidget _entityNameplateViewPrefab;
         [SerializeField]
-        private UIWindowBase[] _windowPrefabs;
-        [SerializeField]
         private WindowWrapper _windowWrapperPrefab;
         [SerializeField]
         private ModalWrapper _modalWrapperPrefab;
@@ -66,7 +64,6 @@ namespace Assets._Game.Scripts.UI.Core
 
             builder.RegisterInstance(_windowWrapperPrefab);
             builder.RegisterInstance(_modalWrapperPrefab);
-            builder.RegisterInstance((IEnumerable<UIWindowBase>)_windowPrefabs);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -151,7 +148,6 @@ namespace Assets._Game.Scripts.UI.Core
 
             builder.Register<WindowControllerArgumentsProvider>(Lifetime.Singleton);
 
-            // Register Window Definitions and Window Controllers
             var windows = new WindowDefinition[]
             {
                 new(WindowId.Cheats, typeof(CheatsWindowController), new(true, false, true)),
