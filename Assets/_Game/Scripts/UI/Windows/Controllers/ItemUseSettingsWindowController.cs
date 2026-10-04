@@ -7,20 +7,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class ItemUseSettingsWindowController : SingleViewWindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments, ItemUseSettingsView, ItemUseSettingsViewData, ItemUseSettingsViewController>
     {
-        private readonly ItemUseSettingsViewData _itemUseSettingsViewData;
-
         public ItemUseSettingsWindowController(
             ItemUseSettingsViewController itemUseSettingsViewController,
             ItemUseSettingsViewData itemUseSettingsViewData) : base(itemUseSettingsViewController, itemUseSettingsViewData)
         {
-            _itemUseSettingsViewData = itemUseSettingsViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _itemUseSettingsViewData.SetEntityId(Arguments.EquipmentEntityId);
+            ViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
         protected override ItemUseSettingsView GetView() => Window.ItemUseSettingsView;

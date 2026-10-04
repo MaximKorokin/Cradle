@@ -7,20 +7,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class EquipmentWindowController : SingleViewWindowControllerBase<EquipmentWindow, EquipmentWindowControllerArguments, EquipmentView, IEquipmentViewData, EquipmentViewController>
     {
-        private readonly EquipmentViewData _equipmentViewData;
-
         public EquipmentWindowController(
             EquipmentViewController equipmentViewController,
             EquipmentViewData equipmentViewData) : base(equipmentViewController, equipmentViewData)
         {
-            _equipmentViewData = equipmentViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _equipmentViewData.SetEntityId(Arguments.EquipmentEntityId);
+            ViewData.SetEntityId(Arguments.EquipmentEntityId);
         }
 
         protected override EquipmentView GetView() => Window.EquipmentView;

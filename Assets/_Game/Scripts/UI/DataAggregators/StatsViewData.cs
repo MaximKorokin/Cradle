@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IStatsViewData : IDataAggregator
+    public interface IStatsViewData : IEntityBoundDataAggregatorBase
     {
         IEnumerable<(string Name, string Value)> Stats { get; }
     }

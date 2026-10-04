@@ -7,20 +7,17 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class InventoryWindowController : SingleViewWindowControllerBase<InventoryWindow, InventoryWindowControllerArguments, InventoryView, IInventoryViewData, InventoryViewController>
     {
-        private readonly InventoryViewData _inventoryViewData;
-
         public InventoryWindowController(
             InventoryViewController inventoryViewController,
             InventoryViewData inventoryViewData) : base(inventoryViewController, inventoryViewData)
         {
-            _inventoryViewData = inventoryViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _inventoryViewData.SetEntityId(Arguments.InventoryEntityId);
+            ViewData.SetEntityId(Arguments.InventoryEntityId);
         }
 
         protected override InventoryView GetView() => Window.InventoryView;

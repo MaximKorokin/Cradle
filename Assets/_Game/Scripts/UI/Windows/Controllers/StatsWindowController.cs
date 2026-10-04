@@ -7,19 +7,16 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class StatsWindowController : SingleViewWindowControllerBase<StatsWindow, StatsWindowControllerArguments, StatsView, IStatsViewData, StatsViewController>
     {
-        private readonly StatsViewData _statsHudData;
-
         public StatsWindowController(
             StatsViewController statsViewController,
             StatsViewData statsHudData) : base(statsViewController, statsHudData)
         {
-            _statsHudData = statsHudData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            _statsHudData.SetEntityId(Arguments.EntityId);
+            ViewData.SetEntityId(Arguments.EntityId);
         }
 
         protected override StatsView GetView() => Window.StatsView;

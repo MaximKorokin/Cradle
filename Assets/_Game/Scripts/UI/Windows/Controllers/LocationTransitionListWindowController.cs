@@ -12,7 +12,6 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         private readonly LocationConfig _locationConfig;
         private readonly EntityRepository _entityRepository;
-        private readonly LocationTransitionListViewData _viewData;
 
         public LocationTransitionListWindowController(
             LocationTransitionListViewController viewController,
@@ -22,14 +21,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             _locationConfig = locationConfig;
             _entityRepository = entityRepository;
-            _viewData = viewData;
         }
 
         protected override void Redraw()
         {
             var playerLevel = _entityRepository.Get(Arguments.EntityId.Value).GetModule<LevelingModule>().Level;
             var locations = _locationConfig.GetAvailableLocations(playerLevel);
-            _viewData.SetTransitions(locations);
+            ViewData.SetTransitions(locations);
 
             base.Redraw();
         }

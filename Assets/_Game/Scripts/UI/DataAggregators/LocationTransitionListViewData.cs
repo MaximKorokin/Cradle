@@ -7,6 +7,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     public interface ILocationTransitionListViewData : IDataAggregator
     {
         IReadOnlyList<LocationTransitionData> Transitions { get; }
+        void SetTransitions(IReadOnlyList<LocationTransitionData> transitions);
     }
 
     public class LocationTransitionListViewData : DataAggregatorBase, ILocationTransitionListViewData

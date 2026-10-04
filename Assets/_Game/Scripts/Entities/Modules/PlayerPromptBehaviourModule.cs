@@ -48,7 +48,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (entityDefinition.TryGetModuleDefinition<StorageModuleDefinition>(out var storageDefinition) && storageDefinition.Radius > 0)
                 return new PlayerPromptBehaviourModule(storageDefinition.Radius, entityDefinition.DisplayName, "Open",
                     (entityId, targetId) => _globalEventBus.Publish(
-                        new StorageWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
+                        new StorageWindowOpenRequest(new ObservableData<string>(entityId))));
 
             if (entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var questGiverDefinition) && questGiverDefinition.Radius > 0)
                 return new PlayerPromptBehaviourModule(questGiverDefinition.Radius, entityDefinition.DisplayName, "Talk",

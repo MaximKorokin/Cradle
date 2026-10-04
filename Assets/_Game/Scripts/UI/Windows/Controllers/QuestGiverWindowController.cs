@@ -7,21 +7,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class QuestGiverWindowController : SingleViewWindowControllerBase<QuestGiverWindow, QuestGiverWindowControllerArguments, QuestGiverView, QuestGiverViewData, QuestGiverViewController>
     {
-        private readonly QuestGiverViewData _questGiverViewData;
-
         public QuestGiverWindowController(
             QuestGiverViewController questGiverViewController,
             QuestGiverViewData questGiverViewData) : base(questGiverViewController, questGiverViewData)
         {
-            _questGiverViewData = questGiverViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _questGiverViewData.SetEntityId(Arguments.GiverEntityId);
-            _questGiverViewData.SetTargetEntity(Arguments.TargetEntityId);
+            ViewData.SetEntityId(Arguments.GiverEntityId);
+            ViewData.SetTargetEntity(Arguments.TargetEntityId);
         }
 
         protected override QuestGiverView GetView() => Window.QuestGiverView;

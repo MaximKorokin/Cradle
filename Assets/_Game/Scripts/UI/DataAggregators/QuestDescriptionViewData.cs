@@ -6,6 +6,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     public interface IQuestDescriptionViewData : IDataAggregator
     {
         QuestStateDisplayData QuestData { get; }
+        void SetQuestState(QuestState questState);
     }
 
     public class QuestDescriptionViewData : DataAggregatorBase, IQuestDescriptionViewData

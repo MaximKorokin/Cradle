@@ -18,10 +18,10 @@ namespace Assets._Game.Scripts.Items
             var entityId = path.EntityId;
             container = (IItemContainer)(path.ContainerId switch
             {
-                ItemContainerId.Equipment => GetEntityModule<EquipmentModule>(entityId, safeGetModule).Equipment,
-                ItemContainerId.Inventory => GetEntityModule<InventoryModule>(entityId, safeGetModule).Inventory,
-                ItemContainerId.Storage => GetEntityModule<StorageModule>(entityId, safeGetModule).Storage,
-                ItemContainerId.Shop => GetEntityModule<ShopModule>(entityId, safeGetModule).Shop,
+                ItemContainerId.Equipment => GetEntityModule<EquipmentModule>(entityId, safeGetModule)?.Equipment,
+                ItemContainerId.Inventory => GetEntityModule<InventoryModule>(entityId, safeGetModule)?.Inventory,
+                ItemContainerId.Storage => GetEntityModule<StorageModule>(entityId, safeGetModule)?.Storage,
+                ItemContainerId.Shop => GetEntityModule<ShopModule>(entityId, safeGetModule)?.Shop,
                 _ => default
             }) as T;
 

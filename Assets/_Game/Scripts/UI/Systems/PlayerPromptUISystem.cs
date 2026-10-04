@@ -54,14 +54,14 @@ namespace Assets._Game.Scripts.UI.Systems
         {
             GlobalEventBus.Publish(new WindowToggleRequest(
                 WindowId.Crafting,
-                new CraftingWindowControllerArguments(request.CrafterEntityId, request.InventoryEntityId, request.InventoryEntityId)));
+                new CraftingWindowControllerArguments(request.CrafterEntityId, request.InventoryEntityId)));
         }
 
         private void OnStorageWindowOpenRequest(StorageWindowOpenRequest request)
         {
             GlobalEventBus.Publish(new WindowToggleRequest(
                 WindowId.Storage,
-                new StorageWindowControllerArguments(request.StorageEntityId, request.InventoryEntityId, request.InventoryEntityId)));
+                new StorageWindowControllerArguments(request.StorageEntityId)));
         }
 
         private void OnQuestGiverWindowOpenRequest(QuestGiverWindowOpenRequest request)
@@ -111,12 +111,10 @@ namespace Assets._Game.Scripts.UI.Systems
     public readonly struct StorageWindowOpenRequest : IGlobalEvent
     {
         public IReadOnlyObservableData<string> StorageEntityId { get; }
-        public IReadOnlyObservableData<string> InventoryEntityId { get; }
 
-        public StorageWindowOpenRequest(IReadOnlyObservableData<string> storageEntityId, IReadOnlyObservableData<string> inventoryEntityId)
+        public StorageWindowOpenRequest(IReadOnlyObservableData<string> storageEntityId)
         {
             StorageEntityId = storageEntityId;
-            InventoryEntityId = inventoryEntityId;
         }
     }
 

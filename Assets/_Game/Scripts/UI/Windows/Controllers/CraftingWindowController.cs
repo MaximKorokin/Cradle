@@ -7,21 +7,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     public sealed class CraftingWindowController : SingleViewWindowControllerBase<CraftingWindow, CraftingWindowControllerArguments, CraftingView, CraftingViewData, CraftingViewController>
     {
-        private readonly CraftingViewData _craftingViewData;
-
         public CraftingWindowController(
             CraftingViewController craftingViewController,
             CraftingViewData craftingViewData) : base(craftingViewController, craftingViewData)
         {
-            _craftingViewData = craftingViewData;
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            _craftingViewData.SetCrafterEntity(Arguments.CrafterEntityId);
-            _craftingViewData.SetEntityId(Arguments.InventoryEntityId);
+            ViewData.SetCrafterEntity(Arguments.CrafterEntityId);
+            ViewData.SetEntityId(Arguments.InventoryEntityId);
         }
 
         protected override CraftingView GetView() => Window.CraftingView;
@@ -31,16 +28,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         public IReadOnlyObservableData<string> CrafterEntityId { get; }
         public IReadOnlyObservableData<string> InventoryEntityId { get; }
-        public IReadOnlyObservableData<string> EquipmentEntityId { get; }
 
         public CraftingWindowControllerArguments(
             IReadOnlyObservableData<string> crafterEntityId,
-            IReadOnlyObservableData<string> inventoryEntityId,
-            IReadOnlyObservableData<string> equipmentEntityId)
+            IReadOnlyObservableData<string> inventoryEntityId)
         {
             CrafterEntityId = crafterEntityId;
             InventoryEntityId = inventoryEntityId;
-            EquipmentEntityId = equipmentEntityId;
         }
     }
 }
