@@ -11,5 +11,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public TextViewWidget TextViewPrefab { get; private set; }
         [field: SerializeField]
         public ItemStackPreviewView ItemStackPreviewViewPrefab { get; private set; }
+        [field: SerializeField]
+        public StatusEffectDescriptionWidget StatusEffectDescriptionViewPrefab { get; private set; }
     }
 }

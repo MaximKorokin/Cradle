@@ -40,6 +40,9 @@ namespace Assets._Game.Scripts.UI.Windows
 
         AmountPicker = 2100,
         Confirmation = 2200,
+
+        StatusEffectList = 10100,
+        CompactEntityStatus = 10200,
     }
 
     [Serializable]

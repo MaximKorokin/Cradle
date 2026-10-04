@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             if (quest == null) return;
 
             var questState = Data.IsQuestAccepted(questId) ? Data.GetQuestState(questId) : new QuestState(quest);
-            _globalEventBus.Publish(new WindowOpenRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(questState)));
+            _globalEventBus.Publish(new WindowToggleRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(questState)));
         }
 
         private void OnQuestAcceptClicked(string questId)

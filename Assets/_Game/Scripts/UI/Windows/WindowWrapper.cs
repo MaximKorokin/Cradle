@@ -18,9 +18,10 @@ namespace Assets._Game.Scripts.UI.Windows
             _closeButton.onClick.AddListener(RequestClose);
         }
 
-        public void SetupWrapperHeader(bool isActive, bool canClose, string title)
+        public void SetupWrapperHeader(bool isActive, bool canClose, bool showTitle, string title)
         {
             _headerTransform.gameObject.SetActive(isActive);
+            _titleText.gameObject.SetActive(showTitle);
             _titleText.text = title;
             _closeButton.gameObject.SetActive(canClose);
         }

@@ -24,7 +24,14 @@ namespace Assets._Game.Scripts.UI.Systems.Click
             if (clickTarget is WindowOpenTrigger windowOpenTrigger)
             {
                 var arguments = _controllerArgumentsProvider.GetPlayerArguments(windowOpenTrigger.WindowId);
-                _globalEventBus.Publish(new WindowToggleRequest(windowOpenTrigger.WindowId, arguments));
+
+                // DEBUG
+                WindowSettings settings = default;
+                if (windowOpenTrigger.WindowId == WindowId.StatusEffectList)
+                    settings = new(false, false, false);
+                // DEBUG
+
+                _globalEventBus.Publish(new WindowToggleRequest(windowOpenTrigger.WindowId, arguments, settings));
             }
             else if (clickTarget is ContainerSlotWidget containerSlot && containerSlot.ContainsData)
             {

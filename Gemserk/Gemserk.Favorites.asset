@@ -21,3 +21,5 @@ MonoBehaviour:
     assetPath: Assets/_Game/Prefabs/UI/Views
   - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
     assetPath: Assets/_Game/Prefabs/UI/Windows
+  - reference: {fileID: 11400000, guid: 19076b3d2bcee9b4ab5400969972af18, type: 2}
+    assetPath: Assets/_Game/ScriptableObjects/Configs/_ConfigReferences.asset

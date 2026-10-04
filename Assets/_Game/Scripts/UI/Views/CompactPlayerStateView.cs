@@ -48,11 +48,11 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 var (fillBar, snapshot, remainingDuration) = _activeStatusEffects[i];
 
-                if (!snapshot.Behaviour.HasFlag(StatusEffectBehaviour.Duration)) continue;
+                if (!snapshot.Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration)) continue;
 
                 remainingDuration -= Time.deltaTime;
                 _activeStatusEffects[i] = (fillBar, snapshot, remainingDuration);
-                fillBar.SetFillRatio(remainingDuration / snapshot.Duration);
+                fillBar.SetFillRatio(remainingDuration / snapshot.Definition.Duration);
             }
         }
 
@@ -77,9 +77,9 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 var buffView = Instantiate(_buffTemplate, _buffsParent);
                 _activeStatusEffects.Add((buffView, buff, buff.RemainingDuration));
-                buffView.ForegroundImage.sprite = buff.Icon;
+                buffView.ForegroundImage.sprite = buff.Definition.Icon;
                 buffView.gameObject.SetActive(true);
-                buffView.SetFillRatio(buff.RemainingDuration / buff.Duration);
+                buffView.SetFillRatio(buff.RemainingDuration / buff.Definition.Duration);
             }
 
             // Debuffs
@@ -87,9 +87,9 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 var debuffView = Instantiate(_debuffTemplate, _debuffsParent);
                 _activeStatusEffects.Add((debuffView, debuff, debuff.RemainingDuration));
-                debuffView.ForegroundImage.sprite = debuff.Icon;
+                debuffView.ForegroundImage.sprite = debuff.Definition.Icon;
                 debuffView.gameObject.SetActive(true);
-                debuffView.SetFillRatio(debuff.RemainingDuration / debuff.Duration);
+                debuffView.SetFillRatio(debuff.RemainingDuration / debuff.Definition.Duration);
             }
         }
 

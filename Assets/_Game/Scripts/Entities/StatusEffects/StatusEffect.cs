@@ -1,5 +1,4 @@
 ﻿using Assets.CoreScripts;
-using UnityEngine;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
 {
@@ -44,19 +43,13 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
     public readonly struct StatusEffectSnapshot
     {
-        public readonly string Name;
-        public readonly Sprite Icon;
-        public readonly float Duration;
+        public readonly StatusEffectDefinition Definition;
         public readonly float RemainingDuration;
-        public readonly StatusEffectBehaviour Behaviour;
 
         public StatusEffectSnapshot(StatusEffect statusEffect)
         {
-            Name = statusEffect.Definition.Name;
-            Icon = statusEffect.Definition.Icon;
-            Duration = statusEffect.Definition.Duration;
+            Definition = statusEffect.Definition;
             RemainingDuration = statusEffect.RemainingDuration;
-            Behaviour = statusEffect.Definition.Behaviour;
         }
     }
 }

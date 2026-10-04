@@ -33,10 +33,10 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
 
         public void UIRenderTick(float delta)
         {
-            if (_currentTooltipSource == null || _currentTooltipContent == null) return;
+            if (_currentTooltipSource is not Component sourceComponent || sourceComponent == null || _currentTooltipContent == null) return;
 
             var tooltipPosition = GetTooltipPosition(
-                ((Component)_currentTooltipSource).transform as RectTransform,
+                sourceComponent.transform as RectTransform,
                 _tooltipWidget.transform as RectTransform,
                 false);
             _tooltipWidget.SetPosition(tooltipPosition + new Vector2(0, 5));

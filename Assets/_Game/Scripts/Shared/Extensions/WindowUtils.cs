@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
             });
         }
 
-        public static (WindowWrapperBase Window, Action closeAction) ShowWindowWithCloseAction(IGlobalEventBus globalEventBus, WindowId windowId, IWindowControllerArguments arguments)
+        public static (WindowWrapperBase Window, Action closeAction) ShowWindowWithCloseAction(IGlobalEventBus globalEventBus, WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
             WindowWrapperBase windowWrapperBase = null;
 
@@ -93,7 +93,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
                 windowWrapperBase = createdWindowWrapper;
             }
 
-            globalEventBus.Publish(new WindowOpenRequest(windowId, arguments, WindowCreationCallback));
+            globalEventBus.Publish(new WindowOpenRequest(windowId, arguments, settings, WindowCreationCallback));
 
             return (windowWrapperBase, () => globalEventBus.Publish(new WindowCloseRequest(windowWrapperBase.Window)));
         }

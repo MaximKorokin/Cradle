@@ -33,7 +33,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             var quest = Data.ActiveQuests.FirstOrDefault(q => q.Definition.Id == questId);
             if (quest == null) return;
 
-            _globalEventBus.Publish(new WindowOpenRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest)));
+            _globalEventBus.Publish(new WindowToggleRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest)));
         }
     }
 }

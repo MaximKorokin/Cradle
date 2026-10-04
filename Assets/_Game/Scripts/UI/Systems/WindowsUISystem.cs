@@ -56,12 +56,12 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnWindowToggleRequested(WindowToggleRequest e)
         {
-            _windowManager.ToggleWindow(e.WindowId, e.Arguments);
+            _windowManager.ToggleWindow(e.WindowId, e.Arguments, e.Settings);
         }
 
         private void OnWindowOpenRequested(WindowOpenRequest e)
         {
-            var windowWrapper = _windowManager.OpenWindow(e.WindowId, e.Arguments);
+            var windowWrapper = _windowManager.OpenWindow(e.WindowId, e.Arguments, e.Settings);
             e.Callback?.Invoke(windowWrapper);
         }
 
@@ -75,11 +75,13 @@ namespace Assets._Game.Scripts.UI.Systems
     {
         public readonly WindowId WindowId;
         public readonly IWindowControllerArguments Arguments;
+        public readonly WindowSettings Settings;
 
-        public WindowToggleRequest(WindowId windowId, IWindowControllerArguments arguments)
+        public WindowToggleRequest(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
             WindowId = windowId;
             Arguments = arguments;
+            Settings = settings;
         }
     }
 
@@ -88,11 +90,13 @@ namespace Assets._Game.Scripts.UI.Systems
         public readonly WindowId WindowId;
         public readonly IWindowControllerArguments Arguments;
         public readonly Action<WindowWrapperBase> Callback;
+        public readonly WindowSettings Settings;
 
-        public WindowOpenRequest(WindowId windowId, IWindowControllerArguments arguments, Action<WindowWrapperBase> callback = null)
+        public WindowOpenRequest(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default, Action<WindowWrapperBase> callback = null)
         {
             WindowId = windowId;
             Arguments = arguments;
+            Settings = settings;
             Callback = callback;
         }
     }

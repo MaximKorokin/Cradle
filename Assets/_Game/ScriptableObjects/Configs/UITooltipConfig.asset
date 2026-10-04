@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <TextViewPrefab>k__BackingField: {fileID: 281000649741437083, guid: c768be7ac818cd24eb295f87cfcfaeea, type: 3}
   <ItemStackPreviewViewPrefab>k__BackingField: {fileID: 6641248307609624257, guid: 3280b194dd64a1947aae492f5bf28536, type: 3}
+  <StatusEffectDescriptionViewPrefab>k__BackingField: {fileID: 2296251139614438902, guid: ce746d3b10e0c0f4390f921207f2c147, type: 3}

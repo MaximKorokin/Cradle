@@ -107,6 +107,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ShopViewData>(Lifetime.Transient);
             builder.Register<ItemUseSettingsViewData>(Lifetime.Transient);
             builder.Register<ItemStackPreviewViewData>(Lifetime.Transient);
+            builder.Register<StatusEffectListViewData>(Lifetime.Transient);
         }
 
         private void RegisterViewControllers(IContainerBuilder builder)
@@ -125,6 +126,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<PlayerAiToggleViewController>(Lifetime.Transient);
             builder.Register<ItemUseSettingsViewController>(Lifetime.Transient);
             builder.Register<ItemStackPreviewViewController>(Lifetime.Transient);
+            builder.Register<StatusEffectListViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)
@@ -152,10 +154,8 @@ namespace Assets._Game.Scripts.UI.Core
             // Register Window Definitions and Window Controllers
             var windows = new WindowDefinition[]
             {
-                new(WindowId.Inventory, typeof(InventoryWindowController), new(true, false, true)),
-
-                // Primary windows
                 new(WindowId.Cheats, typeof(CheatsWindowController), new(true, false, true)),
+                new(WindowId.Inventory, typeof(InventoryWindowController), new(true, false, true)),
                 new(WindowId.Equipment, typeof(EquipmentWindowController), new(true, false, true)),
                 new(WindowId.Quests, typeof(QuestsWindowController), new(true, false, true)),
                 new(WindowId.QuestGiver, typeof(QuestGiverWindowController), new(true, false, true)),
@@ -167,12 +167,13 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Crafting, typeof(CraftingWindowController), new(true, false, true)),
                 new(WindowId.Shop, typeof(ShopWindowController), new(true, false, true)),
 
-                // Service windows
                 new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindowController), new(true, false, true)),
                 new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindowController), new(true, false, true)),
 
                 new(WindowId.AmountPicker, typeof(AmountPickerWindowController), new(true, true, false)),
                 new(WindowId.Confirmation, typeof(ConfirmationWindowController), new(true, true, false)),
+
+                new(WindowId.StatusEffectList, typeof(StatusEffectListWindowController), new(true, false, true)),
             };
 
             foreach (var windowDefinition in windows)

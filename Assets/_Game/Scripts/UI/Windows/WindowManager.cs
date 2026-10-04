@@ -23,6 +23,8 @@ namespace Assets._Game.Scripts.UI.Windows
         private readonly ModalWrapper _modalWrapperPrefab;
         private readonly IObjectResolver _resolver;
 
+        private readonly WindowSettings _defaultWindowSettings = new(true, true, true);
+
         public WindowManager(
             UIRootReferences rootReferences,
             IEnumerable<UIWindowBase> windowPrefabs,
@@ -41,7 +43,7 @@ namespace Assets._Game.Scripts.UI.Windows
         }
 
         /// <summary> Opens a window if it is not already open, otherwise closes it if it is a singleton window. If the window is not a singleton, it will open a new instance of the window. </summary>
-        public void ToggleWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        public void ToggleWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
             var definition = FindWindowDefinition(windowId);
             var existingWindow = FindWindowStackEntry(windowId, arguments);
@@ -50,15 +52,15 @@ namespace Assets._Game.Scripts.UI.Windows
                 CloseWindowInternal(existingWindow);
                 return;
             }
-            InstantiateWindow(windowId, arguments);
+            InstantiateWindow(windowId, arguments, settings);
         }
 
-        public WindowWrapperBase OpenWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        public WindowWrapperBase OpenWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
-            return InstantiateWindow(windowId, arguments);
+            return InstantiateWindow(windowId, arguments, settings);
         }
 
-        private WindowWrapperBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments = default)
+        private WindowWrapperBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
             // find definition
             var definition = FindWindowDefinition(windowId);
@@ -91,9 +93,11 @@ namespace Assets._Game.Scripts.UI.Windows
             var wrapperParent = definition.Configuration.IsModal ? _modalsRoot : _windowsRoot;
             var wrapperRoot = _resolver.Instantiate(wrapperPrefab, wrapperParent);
             wrapperRoot.SetWindow(window);
-            if (!definition.Configuration.IsModal && wrapperRoot is WindowWrapper windowWrapper)
+
+            if (wrapperRoot is WindowWrapper windowWrapper)
             {
-                windowWrapper.SetupWrapperHeader(true, true, windowPrefab.name);
+                var settingsToUse = settings.HasData ? settings : _defaultWindowSettings;
+                windowWrapper.SetupWrapperHeader(settingsToUse.ShowHeader, settingsToUse.ShowCloseButton, settingsToUse.ShowHeaderText, windowPrefab.name);
             }
 
             // push window and controller to stack that will be used to destroy everything correctly
@@ -120,7 +124,7 @@ namespace Assets._Game.Scripts.UI.Windows
             _windowStack.Remove(element);
 
             element.Window.OnHide();
-            
+
             if (element.WrapperRoot != null)
             {
                 UnityEngine.Object.Destroy(element.WrapperRoot.gameObject);
@@ -179,6 +183,24 @@ namespace Assets._Game.Scripts.UI.Windows
                 Arguments = arguments;
                 WrapperRoot = wrapperRoot;
             }
+        }
+    }
+
+    public readonly struct WindowSettings
+    {
+        public readonly bool HasData;
+
+        public readonly bool ShowHeader;
+        public readonly bool ShowCloseButton;
+        public readonly bool ShowHeaderText;
+
+        public WindowSettings(bool showHeader, bool showCloseButton, bool showHeaderText)
+        {
+            HasData = true;
+
+            ShowHeader = showHeader;
+            ShowCloseButton = showCloseButton;
+            ShowHeaderText = showHeaderText;
         }
     }
 }
