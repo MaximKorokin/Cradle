@@ -1,9 +1,32 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
+using Assets._Game.Scripts.UI.Windows;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Persistence
 {
-    public sealed class SaveService
+    public interface ISaveService
+    {
+        EntitySave GetEntitySave(Entity entity);
+        void SaveGame(string saveName);
+        void LoadGame(string saveName);
+        void ResetSave();
+    }
+
+    public interface IEntitySaveService
+    {
+        void SaveEntity(Entity entity);
+        void LoadEntity(Entity entity);
+    }
+
+    public interface IWindowsSaveService
+    {
+        void SaveWindow(WindowId windowId, Vector2 position);
+        Vector2? LoadWindow(WindowId windowId);
+        void ResetWindows();
+    }
+
+    public sealed class SaveService : ISaveService, IEntitySaveService, IWindowsSaveService
     {
         private const string DefaultSaveKey = "Save_0";
 
@@ -37,8 +60,6 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
             var entitySave = _entityFactory.Save(entity);
             _currentSave.EntitySaves[persistenceKey] = entitySave;
-
-            _gameSaveRepository.Save(persistenceKey, _currentSave);
         }
 
         public void LoadEntity(Entity entity)
@@ -80,6 +101,30 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public void ResetSave()
         {
             _gameSaveRepository.Save(DefaultSaveKey, null);
+        }
+
+        public void SaveWindow(WindowId windowId, Vector2 position)
+        {
+            _currentSave.WindowSaves ??= new();
+            _currentSave.WindowSaves[windowId] = new WindowSave
+            {
+                WindowId = windowId,
+                Position = position
+            };
+        }
+
+        public Vector2? LoadWindow(WindowId windowId)
+        {
+            if (_currentSave.WindowSaves != null && _currentSave.WindowSaves.TryGetValue(windowId, out var windowSave))
+            {
+                return windowSave.Position;
+            }
+            return null;
+        }
+
+        public void ResetWindows()
+        {
+            _currentSave.WindowSaves = new();
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Entities.Stats;
+using Assets._Game.Scripts.Infrastructure.Persistence.DataTypes;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.UI.Windows;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -36,14 +38,14 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public int Version;
         public long SavedAtUtc;
         public Dictionary<string, EntitySave> EntitySaves;
+        public Dictionary<WindowId, WindowSave> WindowSaves;
     }
 
     public sealed class LocationSave
     {
         public string LocationId;
         public string EntranceId;
-        public float PositionX;
-        public float PositionY;
+        public SerializableVector2 Position;
     }
 
     public sealed class EntitySave
@@ -112,5 +114,11 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     {
         public string Type;
         public string Json;
+    }
+
+    public class WindowSave
+    {
+        public WindowId WindowId;
+        public SerializableVector2 Position;
     }
 }

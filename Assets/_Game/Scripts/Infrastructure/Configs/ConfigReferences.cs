@@ -35,6 +35,6 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         [field: SerializeField]
         public UITooltipConfig UITooltipConfig { get; private set; }
         [field: SerializeField]
-        public WindowPrefabsConfig WindowPrefabsConfig { get; private set; }
+        public UIWindowsConfig UIWindowsConfig { get; private set; }
     }
 }

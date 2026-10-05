@@ -103,8 +103,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 LocationId = _locationContext.CurrentLocation != null ? _locationContext.CurrentLocation.Id : "",
                 EntranceId = _locationContext.CurrentEntrance != null ? _locationContext.CurrentEntrance.Id : "",
-                PositionX = playerPosition.x,
-                PositionY = playerPosition.y
+                Position = playerPosition
             };
 
             // Save player data
@@ -124,7 +123,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
                 entity.SubscribeOnce<EntityViewBoundEvent>(_ =>
                 {
-                    var position = new Vector2(playerSave.LocationSave.PositionX, playerSave.LocationSave.PositionY);
+                    var position = playerSave.LocationSave.Position;
                     entity.Publish(new EntityRepositionRequest(position));
                 });
             }

@@ -48,7 +48,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             }
             else
             {
-                SLog.Error($"Cannot initialize with arguments of type {arguments.GetType()}. Expected arguments type is {typeof(TArguments)}");
+                if (arguments == null)
+                {
+                    SLog.Error($"Cannot initialize with null arguments. Expected arguments type is {typeof(TArguments)}");
+                }
+                else
+                {
+                    SLog.Error($"Cannot initialize with arguments of type {arguments.GetType()}. Expected arguments type is {typeof(TArguments)}");
+                }
             }
         }
 

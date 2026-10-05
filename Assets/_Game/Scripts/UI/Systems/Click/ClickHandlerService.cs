@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.UI.Systems.Click
                 // DEBUG
                 WindowSettings settings = default;
                 if (windowOpenTrigger.WindowId == WindowId.StatusEffectList || windowOpenTrigger.WindowId == WindowId.CompactEntityStatus)
-                    settings = new(false, false, false);
+                    settings = new(false, false, false, "");
                 // DEBUG
 
                 _globalEventBus.Publish(new WindowToggleRequest(windowOpenTrigger.WindowId, arguments, settings));

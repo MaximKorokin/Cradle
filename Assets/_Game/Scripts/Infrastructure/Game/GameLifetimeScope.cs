@@ -100,7 +100,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.ReviveConfig);
             builder.RegisterInstance(_configReferences.MoveTargetIndicatorConfig);
             builder.RegisterInstance(_configReferences.UITooltipConfig);
-            builder.RegisterInstance(_configReferences.WindowPrefabsConfig);
+            builder.RegisterInstance(_configReferences.UIWindowsConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -137,7 +137,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterSavesFeature(IContainerBuilder builder)
         {
-            builder.Register<SaveService>(Lifetime.Singleton);
+            builder.Register<SaveService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<GameSaveRepository>(Lifetime.Singleton);
             builder.Register<ISaveStorage, PlayerPrefsSavesStorage>(Lifetime.Singleton);
             builder.Register<ISaveSerializer, JsonSaveSerializer>(Lifetime.Singleton);

@@ -299,10 +299,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 6923385124357583428, guid: db8e4415ffc671d4087430d48dfb33f9, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 6681865753318865380, guid: 07a291b25fde24847ae54060def21cc0, type: 3}
       sceneName: 
       scenePath: 
@@ -463,10 +459,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 11400000, guid: 7338c27a158317f4faa8ff2aa56b37cb, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 7280347950355265304, guid: 636b952e1442ffd4a9b49222cdf2e854, type: 3}
       sceneName: 
       scenePath: 
@@ -487,23 +479,11 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: b59acbe72c06dbc4686df715ec6c928f, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 4236470503915288397, guid: fb35fe489b68fd44180b9528641c5017, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 4681338851052056355, guid: a61acd5cdeddd04478a06d78512bf011, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 11400000, guid: 19076b3d2bcee9b4ab5400969972af18, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 11400000, guid: f125455c2e863ce4690cbfb79972ab74, type: 2}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -516,26 +496,6 @@ MonoBehaviour:
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 102900000, guid: a621282b644968249b16511062318849, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: e189c94fa2a6e4b4c966f66625d87e1f, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -559,35 +519,39 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusWindow
+    - reference: {fileID: 102900000, guid: b59acbe72c06dbc4686df715ec6c928f, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusWindow
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 7338c27a158317f4faa8ff2aa56b37cb, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusView
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: f125455c2e863ce4690cbfb79972ab74, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusView
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 19076b3d2bcee9b4ab5400969972af18, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: e189c94fa2a6e4b4c966f66625d87e1f, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusView
+      globalObjectId: 
+    - reference: {fileID: 6923385124357583428, guid: db8e4415ffc671d4087430d48dfb33f9, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: CompactEntityStatusView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      globalObjectId: 
     - reference: {fileID: 0}
-      sceneName: CompactEntityStatusWindow
+      sceneName: UIRoot
+      scenePath: Assets/_Game/Scenes/UIRoot.unity
+      globalObjectId: GlobalObjectId_V1-2-be2de9ff549fcc24a80b02b13bbfa110-1958108981-0
+    - reference: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      globalObjectId: 

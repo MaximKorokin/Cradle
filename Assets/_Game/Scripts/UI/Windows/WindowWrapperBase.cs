@@ -12,6 +12,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private IGlobalEventBus _globalEventBus;
 
+        public WindowId WindowId { get; private set; }
         public UIWindowBase Window { get; private set; }
 
         [Inject]
@@ -20,8 +21,9 @@ namespace Assets._Game.Scripts.UI.Windows
             _globalEventBus = globalEventBus;
         }
 
-        public void SetWindow(UIWindowBase window)
+        public void SetWindow(WindowId windowId, UIWindowBase window)
         {
+            WindowId = windowId;
             Window = window;
             window.transform.SetParent(_windowParent, false);
         }

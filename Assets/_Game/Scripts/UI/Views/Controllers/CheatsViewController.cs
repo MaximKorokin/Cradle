@@ -7,6 +7,7 @@ using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Systems;
 
 namespace Assets._Game.Scripts.UI.Views.Controllers
 {
@@ -44,6 +45,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             View.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
             View.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
             View.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
+            View.GameControlTabContent.ResetWindowPositionsButtonClicked += OnResetWindowPositionsButtonClicked;
         }
 
         public override void Dispose()
@@ -52,6 +54,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             View.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
             View.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
             View.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
+            View.GameControlTabContent.ResetWindowPositionsButtonClicked -= OnResetWindowPositionsButtonClicked;
 
             base.Dispose();
         }
@@ -83,6 +86,11 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
         private void OnResetPlayerLevelButtonClicked()
         {
             _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(LevelingModule)));
+        }
+
+        private void OnResetWindowPositionsButtonClicked()
+        {
+            _globalEventBus.Publish(new WindowPositionsResetRequest());
         }
     }
 }

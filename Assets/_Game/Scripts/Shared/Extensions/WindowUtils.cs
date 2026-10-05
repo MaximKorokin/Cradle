@@ -3,6 +3,7 @@ using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using System;
+using UnityEngine;
 
 namespace Assets._Game.Scripts.Shared.Extensions
 {
@@ -84,7 +85,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
             });
         }
 
-        public static (WindowWrapperBase Window, Action closeAction) ShowWindowWithCloseAction(IGlobalEventBus globalEventBus, WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
+        public static (WindowWrapperBase Window, Action closeAction) ShowWindowWithCloseAction(IGlobalEventBus globalEventBus, WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default, Vector2? position = null)
         {
             WindowWrapperBase windowWrapperBase = null;
 
@@ -93,7 +94,7 @@ namespace Assets._Game.Scripts.Shared.Extensions
                 windowWrapperBase = createdWindowWrapper;
             }
 
-            globalEventBus.Publish(new WindowOpenRequest(windowId, arguments, settings, WindowCreationCallback));
+            globalEventBus.Publish(new WindowOpenRequest(windowId, arguments, settings, position, WindowCreationCallback));
 
             return (windowWrapperBase, () => globalEventBus.Publish(new WindowCloseRequest(windowWrapperBase.Window)));
         }

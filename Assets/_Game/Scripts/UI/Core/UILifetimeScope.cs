@@ -185,6 +185,7 @@ namespace Assets._Game.Scripts.UI.Core
         private void RegisterHud(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<PlayerAiToggleView>();
+            builder.RegisterComponentInHierarchy<InitialWindowsDataProvider>();
 
             builder.RegisterComponent(_locationAnnounceView);
             builder.RegisterComponent(_interactionPromptView);
@@ -198,6 +199,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<DragDropHandlerService>(Lifetime.Singleton);
             builder.Register<ClickHandlerService>(Lifetime.Singleton);
             builder.Register<TooltipHandlerService>(Lifetime.Singleton);
+            builder.Register<WindowsInitializerService>(Lifetime.Singleton);
         }
     }
 }

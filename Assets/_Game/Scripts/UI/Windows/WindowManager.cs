@@ -24,12 +24,12 @@ namespace Assets._Game.Scripts.UI.Windows
         private readonly ModalWrapper _modalWrapperPrefab;
         private readonly IObjectResolver _resolver;
 
-        private readonly WindowSettings _defaultWindowSettings = new(true, true, true);
+        private readonly WindowSettings _defaultWindowSettings = new(true, true, true, null);
 
         public WindowManager(
             UIRootReferences rootReferences,
             IEnumerable<WindowDefinition> windowDefinitions,
-            WindowPrefabsConfig windowPrefabsConfig,
+            UIWindowsConfig windowPrefabsConfig,
             WindowWrapper windowWrapperPrefab,
             ModalWrapper modalWrapperPrefab,
             IObjectResolver resolver)
@@ -79,17 +79,19 @@ namespace Assets._Game.Scripts.UI.Windows
             _resolver = resolver;
         }
 
+        public IReadOnlyCollection<WindowWrapperBase> ActiveWindows => _windowStack.Select(entry => entry.WrapperRoot).ToList();
+
         /// <summary> Opens a window if it is not already open, otherwise closes it if it is a singleton window. If the window is not a singleton, it will open a new instance of the window. </summary>
-        public void ToggleWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
+        public WindowWrapperBase ToggleWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
             var definition = FindWindowDefinition(windowId);
             var existingWindow = FindWindowStackEntry(windowId, arguments);
             if (existingWindow.Window != null && definition.Configuration.IsSingleton)
             {
                 CloseWindowInternal(existingWindow);
-                return;
+                return null;
             }
-            InstantiateWindow(windowId, arguments, settings);
+            return InstantiateWindow(windowId, arguments, settings);
         }
 
         public WindowWrapperBase OpenWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
@@ -132,12 +134,12 @@ namespace Assets._Game.Scripts.UI.Windows
             WindowWrapperBase wrapperPrefab = definition.Configuration.IsModal ? _modalWrapperPrefab : _windowWrapperPrefab;
             var wrapperParent = definition.Configuration.IsModal ? _modalsRoot : _windowsRoot;
             var wrapperRoot = _resolver.Instantiate(wrapperPrefab, wrapperParent);
-            wrapperRoot.SetWindow(window);
+            wrapperRoot.SetWindow(windowId, window);
 
             if (wrapperRoot is WindowWrapper windowWrapper)
             {
                 var settingsToUse = settings.HasData ? settings : _defaultWindowSettings;
-                windowWrapper.SetupWrapperHeader(settingsToUse.ShowHeader, settingsToUse.ShowCloseButton, settingsToUse.ShowHeaderText, windowPrefab.name);
+                windowWrapper.SetupWrapperHeader(settingsToUse.ShowHeader, settingsToUse.ShowCloseButton, settingsToUse.ShowHeaderText, settingsToUse.HeaderText ?? windowPrefab.name);
             }
 
             // push window and controller to stack that will be used to destroy everything correctly
@@ -196,6 +198,11 @@ namespace Assets._Game.Scripts.UI.Windows
             window.transform.position += (Vector3)delta;
         }
 
+        public void SetWindowPosition(WindowWrapperBase window, Vector2 position)
+        {
+            window.transform.position = (Vector3)position;
+        }
+
         public void SetTopWindow(WindowWrapperBase window)
         {
             window.transform.SetAsLastSibling();
@@ -229,21 +236,30 @@ namespace Assets._Game.Scripts.UI.Windows
         }
     }
 
-    public readonly struct WindowSettings
+    [Serializable]
+    public struct WindowSettings
     {
-        public readonly bool HasData;
+        [field: SerializeField]
+        [field: Tooltip("Will use default settings if set to False")]
+        public bool HasData { get; private set; }
 
-        public readonly bool ShowHeader;
-        public readonly bool ShowCloseButton;
-        public readonly bool ShowHeaderText;
+        [field: SerializeField]
+        public bool ShowHeader { get; private set; }
+        [field: SerializeField]
+        public bool ShowCloseButton { get; private set; }
+        [field: SerializeField]
+        public bool ShowHeaderText { get; private set; }
+        [field: SerializeField]
+        public string HeaderText { get; private set; }
 
-        public WindowSettings(bool showHeader, bool showCloseButton, bool showHeaderText)
+        public WindowSettings(bool showHeader, bool showCloseButton, bool showHeaderText, string headerText)
         {
             HasData = true;
 
             ShowHeader = showHeader;
             ShowCloseButton = showCloseButton;
             ShowHeaderText = showHeaderText;
+            HeaderText = headerText;
         }
     }
 }

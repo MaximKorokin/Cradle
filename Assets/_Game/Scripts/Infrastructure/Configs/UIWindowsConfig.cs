@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Configs
 {
-    [CreateAssetMenu(fileName = "WindowPrefabsConfig", menuName = "Configs/WindowPrefabsConfig")]
-    public sealed class WindowPrefabsConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "UIWindowPrefabsConfig", menuName = "Configs/UIWindowPrefabsConfig")]
+    public sealed class UIWindowsConfig : ScriptableObject
     {
         [field: SerializeField]
         public UIWindowBase[] WindowPrefabs { get; private set; }

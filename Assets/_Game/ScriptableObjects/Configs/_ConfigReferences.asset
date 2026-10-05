@@ -26,4 +26,5 @@ MonoBehaviour:
   <ReviveConfig>k__BackingField: {fileID: 11400000, guid: 9be88879345cda748a423f564f622b10, type: 2}
   <MoveTargetIndicatorConfig>k__BackingField: {fileID: 11400000, guid: 5b1be7d1f2519ba498df0f7f8606a62f, type: 2}
   <UITooltipConfig>k__BackingField: {fileID: 11400000, guid: 7338c27a158317f4faa8ff2aa56b37cb, type: 2}
-  <WindowPrefabsConfig>k__BackingField: {fileID: 11400000, guid: f125455c2e863ce4690cbfb79972ab74, type: 2}
+  <UIWindowPrefabsConfig>k__BackingField: {fileID: 11400000, guid: f125455c2e863ce4690cbfb79972ab74, type: 2}
+  <UIWindowsRuntimeConfig>k__BackingField: {fileID: 11400000, guid: 460f6c325cc0b314996ea3747ed0d52d, type: 2}

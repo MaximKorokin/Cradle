@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e82484d871e38f04d830b5931f17c02d, type: 3}
-  m_Name: WindowPrefabsConfig
+  m_Name: UIWindowsConfig
   m_EditorClassIdentifier: 
   <WindowPrefabs>k__BackingField:
   - {fileID: 80786669936262798, guid: 7fb094b8ca9eb154c8ef1e27f9af5572, type: 3}
