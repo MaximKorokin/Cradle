@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class PlayerStateViewData : EntityBoundDataAggregatorBase
+    public sealed class EntityStatusViewData : EntityBoundDataAggregatorBase
     {
-        public PlayerStateViewData(EntityRepository entityRepository) : base(entityRepository) { }
+        public EntityStatusViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
         protected override void OnBoundEntityChanged(string entityId)
         {

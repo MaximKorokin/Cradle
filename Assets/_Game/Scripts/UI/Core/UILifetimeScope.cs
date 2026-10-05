@@ -94,7 +94,6 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<StorageViewData>(Lifetime.Transient);
             builder.Register<StatsViewData>(Lifetime.Transient);
             builder.Register<PlayerAiToggleViewData>(Lifetime.Transient);
-            builder.Register<PlayerStateViewData>(Lifetime.Transient);
             builder.Register<QuestsViewData>(Lifetime.Transient);
             builder.Register<QuestGiverViewData>(Lifetime.Transient);
             builder.Register<CraftingViewData>(Lifetime.Transient);
@@ -105,6 +104,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ItemUseSettingsViewData>(Lifetime.Transient);
             builder.Register<ItemStackPreviewViewData>(Lifetime.Transient);
             builder.Register<StatusEffectListViewData>(Lifetime.Transient);
+            builder.Register<EntityStatusViewData>(Lifetime.Transient);
         }
 
         private void RegisterViewControllers(IContainerBuilder builder)
@@ -119,11 +119,12 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<QuestGiverViewController>(Lifetime.Transient);
             builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
             builder.Register<QuestDescriptionViewController>(Lifetime.Transient);
-            builder.Register<CompactPlayerStateViewController>(Lifetime.Transient);
+            builder.Register<CompactEntityStatusViewController>(Lifetime.Transient);
             builder.Register<PlayerAiToggleViewController>(Lifetime.Transient);
             builder.Register<ItemUseSettingsViewController>(Lifetime.Transient);
             builder.Register<ItemStackPreviewViewController>(Lifetime.Transient);
             builder.Register<StatusEffectListViewController>(Lifetime.Transient);
+            builder.Register<CompactEntityStatusViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)
@@ -170,6 +171,7 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Confirmation, typeof(ConfirmationWindowController), new(true, true, false)),
 
                 new(WindowId.StatusEffectList, typeof(StatusEffectListWindowController), new(true, false, true)),
+                new(WindowId.CompactEntityStatus, typeof(CompactEntityStatusWindowController), new(true, false, true)),
             };
 
             foreach (var windowDefinition in windows)
@@ -182,7 +184,6 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterHud(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<CompactPlayerStateView>();
             builder.RegisterComponentInHierarchy<PlayerAiToggleView>();
 
             builder.RegisterComponent(_locationAnnounceView);
