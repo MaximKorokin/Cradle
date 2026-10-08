@@ -35,6 +35,8 @@ namespace Assets._Game.Scripts.UI.Windows
         Quests = 80,
         QuestGiver = 81,
         QuestDescription = 82,
+        EntityAiToggle = 90,
+        WindowBar = 100,
 
         ItemUseSettings = 1100,
 

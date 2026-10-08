@@ -93,7 +93,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<InventoryViewData>(Lifetime.Transient);
             builder.Register<StorageViewData>(Lifetime.Transient);
             builder.Register<StatsViewData>(Lifetime.Transient);
-            builder.Register<PlayerAiToggleViewData>(Lifetime.Transient);
+            builder.Register<EntityAiToggleViewData>(Lifetime.Transient);
             builder.Register<QuestsViewData>(Lifetime.Transient);
             builder.Register<QuestGiverViewData>(Lifetime.Transient);
             builder.Register<CraftingViewData>(Lifetime.Transient);
@@ -120,7 +120,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<LocationTransitionListViewController>(Lifetime.Transient);
             builder.Register<QuestDescriptionViewController>(Lifetime.Transient);
             builder.Register<CompactEntityStatusViewController>(Lifetime.Transient);
-            builder.Register<PlayerAiToggleViewController>(Lifetime.Transient);
+            builder.Register<EntityAiToggleViewController>(Lifetime.Transient);
             builder.Register<ItemUseSettingsViewController>(Lifetime.Transient);
             builder.Register<ItemStackPreviewViewController>(Lifetime.Transient);
             builder.Register<StatusEffectListViewController>(Lifetime.Transient);
@@ -157,6 +157,8 @@ namespace Assets._Game.Scripts.UI.Core
                 new(WindowId.Quests, typeof(QuestsWindowController), new(true, false, true)),
                 new(WindowId.QuestGiver, typeof(QuestGiverWindowController), new(true, false, true)),
                 new(WindowId.QuestDescription, typeof(QuestDescriptionWindowController), new(true, false, true)),
+                new(WindowId.EntityAiToggle, typeof(EntityAiToggleWindowController), new(true, false, true)),
+                new(WindowId.WindowBar, typeof(EmptyWindowController<WindowBarWindow>), new(true, false, true)),
 
                 new(WindowId.Stats, typeof(StatsWindowController), new(true, false, true)),
                 new(WindowId.Storage, typeof(StorageWindowController), new(true, false, true)),
@@ -184,7 +186,6 @@ namespace Assets._Game.Scripts.UI.Core
 
         private void RegisterHud(IContainerBuilder builder)
         {
-            builder.RegisterComponentInHierarchy<PlayerAiToggleView>();
             builder.RegisterComponentInHierarchy<InitialWindowsDataProvider>();
 
             builder.RegisterComponent(_locationAnnounceView);

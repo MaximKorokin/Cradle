@@ -10,6 +10,7 @@ namespace Assets._Game.Scripts.Entities.Control
         public override ControlPriority Priority => ControlPriority.BaseAI;
         public override ControlMask Mask => _isEnabled ? ControlMask.All : ControlMask.None;
         public override bool IsPersisted => true;
+        public bool IsEnabled => _isEnabled;
 
         private bool _isEnabled = true;
         private readonly AiBrain _brain;

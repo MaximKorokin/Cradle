@@ -4,28 +4,19 @@ using VContainer.Unity;
 
 namespace Assets._Game.Scripts.UI.Core
 {
-    public sealed class UIBootstrap : IStartable, IDisposable
+    public sealed class UIBootstrap : IStartable
     {
         private readonly WindowsInitializerService _windowsInitializerService;
-        private readonly PlayerAiToggleViewController _playerAiToggleViewController;
-
+        
         public UIBootstrap(
-            WindowsInitializerService windowsInitializerService,
-            PlayerAiToggleViewController playerAiToggleViewController)
+            WindowsInitializerService windowsInitializerService)
         {
             _windowsInitializerService = windowsInitializerService;
-            _playerAiToggleViewController = playerAiToggleViewController;
         }
 
         public void Start()
         {
             _windowsInitializerService.InitializeWindows();
-            _playerAiToggleViewController.Render();
-        }
-
-        public void Dispose()
-        {
-            _playerAiToggleViewController.Dispose();
         }
     }
 }

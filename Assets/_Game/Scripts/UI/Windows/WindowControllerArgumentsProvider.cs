@@ -28,6 +28,9 @@ namespace Assets._Game.Scripts.UI.Windows
                 WindowId.LocationTransitionList => new LocationTransitionListWindowControllerArguments(playerId),
                 WindowId.StatusEffectList => new StatusEffectListWindowControllerArguments(playerId),
                 WindowId.CompactEntityStatus => new CompactEntityStatusWindowControllerArguments(playerId),
+                WindowId.EntityAiToggle => new EntityAiToggleWindowControllerArguments(playerId),
+                WindowId.WindowBar => new EmptyWindowControllerArguments(),
+
                 _ => throw new ArgumentException($"Cannot provide default Player arguments for Window with id: {windowId}")
             };
         }
