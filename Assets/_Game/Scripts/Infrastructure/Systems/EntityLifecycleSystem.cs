@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
@@ -202,6 +203,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public void Initialize(Entity entity)
         {
             _playerContext.SetPlayer(entity);
+
+            if (entity.TryGetModule<ControlModule>(out var controlModule))
+            {
+                foreach (var provider in controlModule.Providers)
+                {
+                    if (provider is AiControlProvider aiControlProvider)
+                    {
+                        aiControlProvider.SetEnabled(false);
+                    }
+                }
+            }
         }
     }
 }
