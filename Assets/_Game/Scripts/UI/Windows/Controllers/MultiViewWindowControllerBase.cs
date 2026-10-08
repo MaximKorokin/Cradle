@@ -71,6 +71,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         where TArguments : IWindowControllerArguments
     {
         private readonly List<IBoundViewController> _boundViewControllers = new();
+        private readonly List<IDataAggregator> _dataAggregators = new();
 
         protected void RegisterView<TView, TData, TViewController>(TViewController viewController, TData viewData, Func<TView> getView)
             where TView : UIViewBase<TData>
@@ -78,6 +79,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             where TViewController : ViewControllerBase<TView, TData>
         {
             _boundViewControllers.Add(new BoundViewController<TView, TData, TViewController>(viewController, viewData, getView));
+
+            viewData.Invalidated += RequestClose;
+            _dataAggregators.Add(viewData);
         }
 
         protected override void OnBind()
@@ -111,6 +115,11 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         public override void Dispose()
         {
             base.Dispose();
+
+            foreach (var dataAggregator in _dataAggregators)
+            {
+                dataAggregator.Invalidated -= RequestClose;
+            }
 
             foreach (var boundViewController in _boundViewControllers)
             {

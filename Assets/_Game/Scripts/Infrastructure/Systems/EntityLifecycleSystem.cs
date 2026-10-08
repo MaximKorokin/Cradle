@@ -70,12 +70,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // 1) Create entity with modules defined in the definition
             var entity = _entityFactory.Create(request.EntityDefinition);
 
-            // 2) Apply any additional initialization logic (e.g. add more modules, set up module state, etc.)
-            if (request.Initializers != null)
+            // 2) Apply any additional pre-add initialization logic (e.g. add more modules, set up module state, etc.)
+            if (request.PreInitializers != null)
             {
-                for (int i = 0; i < request.Initializers.Length; i++)
+                for (int i = 0; i < request.PreInitializers.Length; i++)
                 {
-                    request.Initializers[i].Initialize(entity);
+                    request.PreInitializers[i].PreInitialize(entity);
                 }
             }
 
@@ -88,9 +88,18 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             // 4) Add entity to repository so it can be found by other systems and modules
             EntityRepository.Add(entity);
 
+            // 5) Apply post-add initialization logic (the entity is already observable through the repository)
+            if (request.PostInitializers != null)
+            {
+                for (int i = 0; i < request.PostInitializers.Length; i++)
+                {
+                    request.PostInitializers[i].PostInitialize(entity);
+                }
+            }
+
             entity.MarkCreated();
 
-            // 5) Spawn view for the entity
+            // 6) Spawn view for the entity
             _entityViewService.SpawnEntityView(entity, request.Position);
 
             GlobalEventBus.Publish(new EntitySpawnedEvent(entity));
@@ -114,13 +123,19 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     {
         public readonly EntityDefinition EntityDefinition;
         public readonly Vector2 Position;
-        public readonly IEntitySpawnInitializer[] Initializers;
+        public readonly IEntityPreInitializer[] PreInitializers;
+        public readonly IEntityPostInitializer[] PostInitializers;
 
-        public SpawnEntityRequest(EntityDefinition entityDefinition, Vector2 position, IEntitySpawnInitializer[] initializers = null)
+        public SpawnEntityRequest(
+            EntityDefinition entityDefinition,
+            Vector2 position,
+            IEntityPreInitializer[] preInitializers = null,
+            IEntityPostInitializer[] postInitializers = null)
         {
             EntityDefinition = entityDefinition;
             Position = position;
-            Initializers = initializers;
+            PreInitializers = preInitializers;
+            PostInitializers = postInitializers;
         }
     }
 
@@ -153,54 +168,60 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         }
     }
 
-    public interface IEntitySpawnInitializer
+    /// <summary>Runs before the entity is initialized and added to the repository.</summary>
+    public interface IEntityPreInitializer
     {
-        void Initialize(Entity entity);
+        void PreInitialize(Entity entity);
     }
 
-    public class SpawnSourceEntitySpawnInitializer : IEntitySpawnInitializer
+    /// <summary>Runs after the entity is added to the repository, before it is marked as created.</summary>
+    public interface IEntityPostInitializer
+    {
+        void PostInitialize(Entity entity);
+    }
+
+    public class SpawnSourceEntityPreInitializer : IEntityPreInitializer
     {
         private readonly string _spawnSourceId;
 
-        public SpawnSourceEntitySpawnInitializer(string spawnSourceId)
+        public SpawnSourceEntityPreInitializer(string spawnSourceId)
         {
             _spawnSourceId = spawnSourceId;
         }
 
-        public void Initialize(Entity entity)
+        public void PreInitialize(Entity entity)
         {
             entity.AddModule(new SpawnSourceModule(_spawnSourceId));
         }
     }
 
-    public class LootItemEntitySpawnInitializer : IEntitySpawnInitializer
+    public class LootItemEntityPreInitializer : IEntityPreInitializer
     {
         private readonly ItemDefinition _itemDefinition;
         private readonly int _amount;
 
-        public LootItemEntitySpawnInitializer(ItemDefinition itemDefinition, int amount)
+        public LootItemEntityPreInitializer(ItemDefinition itemDefinition, int amount)
         {
             _itemDefinition = itemDefinition;
             _amount = amount;
         }
 
-        public void Initialize(Entity entity)
+        public void PreInitialize(Entity entity)
         {
             entity.AddModule(new LootItemModule(_itemDefinition, _amount));
         }
     }
 
-    public class PlayerEntitySpawnInitializer : IEntitySpawnInitializer
+    public class PlayerEntityPostInitializer : IEntityPostInitializer
     {
         private readonly PlayerContext _playerContext;
-        private readonly EntitySave _playerSave;
 
-        public PlayerEntitySpawnInitializer(PlayerContext playerContext)
+        public PlayerEntityPostInitializer(PlayerContext playerContext)
         {
             _playerContext = playerContext;
         }
 
-        public void Initialize(Entity entity)
+        public void PostInitialize(Entity entity)
         {
             _playerContext.SetPlayer(entity);
 

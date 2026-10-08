@@ -80,8 +80,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             if (_itemContainerPath == default) return null;
 
-            var container = ItemContainerResolver.ResolveContainer(_itemContainerPath);
-            if (container == null) return null;
+            if (!ItemContainerResolver.TryResolveContainer(_itemContainerPath, out var container)) return null;
             return container.Get(_slotIndex);
         }
     }

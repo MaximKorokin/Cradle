@@ -25,8 +25,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct StatsWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> EntityId { get; }
-        public StatsWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        public IReadOnlyObservableData<EntryRef> EntityId { get; }
+        public StatsWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId)
         {
             EntityId = entityId;
         }

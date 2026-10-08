@@ -24,6 +24,8 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private readonly WindowSettings _defaultWindowSettings = new(true, true, true, null);
 
+        public IReadOnlyCollection<WindowWrapperBase> ActiveWindows => _windowStack.Select(entry => entry.WrapperRoot).ToList();
+
         public WindowManager(
             UIRootReferences rootReferences,
             WindowRegistry registry,
@@ -39,8 +41,6 @@ namespace Assets._Game.Scripts.UI.Windows
             _modalWrapperPrefab = modalWrapperPrefab;
             _resolver = resolver;
         }
-
-        public IReadOnlyCollection<WindowWrapperBase> ActiveWindows => _windowStack.Select(entry => entry.WrapperRoot).ToList();
 
         /// <summary> Opens a window if it is not already open, otherwise closes it if it is a singleton window. If the window is not a singleton, it will open a new instance of the window. </summary>
         public WindowWrapperBase ToggleWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
@@ -83,6 +83,7 @@ namespace Assets._Game.Scripts.UI.Windows
             var window = _resolver.Instantiate(windowPrefab, _windowsRoot);
 
             // 3. Initialize
+            controller.CloseRequested += () => OnControllerCloseRequested(controller);
             controller.Initialize(arguments);
 
             // 4. Bind
@@ -106,7 +107,22 @@ namespace Assets._Game.Scripts.UI.Windows
             // initialize window
             window.OnShow();
 
+            // data could have been invalidated during initialization, before the window was tracked
+            if (controller.IsCloseRequested)
+            {
+                OnControllerCloseRequested(controller);
+                return null;
+            }
+
             return wrapperRoot;
+        }
+
+        private void OnControllerCloseRequested(IWindowController controller)
+        {
+            var element = _windowStack.FirstOrDefault(e => e.Controller == controller);
+            if (!element.HasData) return;
+
+            CloseWindowInternal(element);
         }
         
         private WindowStackEntry FindWindowStackEntry(WindowId windowId, IWindowControllerArguments arguments)

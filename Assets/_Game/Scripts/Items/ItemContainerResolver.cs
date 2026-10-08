@@ -30,6 +30,9 @@ namespace Assets._Game.Scripts.Items
 
         private T GetEntityModule<T>(string entityId, bool safe) where T : EntityModuleBase
         {
+            if (safe && !_entityManager.TryGet(entityId, out _))
+                return null;
+
             var entity = _entityManager.Get(entityId);
             if (safe)
             {

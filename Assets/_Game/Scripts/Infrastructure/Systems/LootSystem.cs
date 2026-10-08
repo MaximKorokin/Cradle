@@ -87,8 +87,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             GlobalEventBus.Publish(new SpawnEntityRequest(
                 _defaultEntityDefinitionReferences.LootItem,
                 position,
-                new[] {
-                    new LootItemEntitySpawnInitializer(itemDefinition, amount)
+                new IEntityPreInitializer[] {
+                    new LootItemEntityPreInitializer(itemDefinition, amount)
                 }));
         }
     }

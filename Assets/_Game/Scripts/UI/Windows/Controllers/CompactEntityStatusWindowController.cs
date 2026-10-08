@@ -27,9 +27,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct CompactEntityStatusWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly IReadOnlyObservableData<string> EntityId;
+        public readonly IReadOnlyObservableData<EntryRef> EntityId;
 
-        public CompactEntityStatusWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        public CompactEntityStatusWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId)
         {
             EntityId = entityId;
         }

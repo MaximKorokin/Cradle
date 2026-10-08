@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct StorageWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> StorageEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> StorageEntityId { get; }
 
-        public StorageWindowControllerArguments(IReadOnlyObservableData<string> storageEntityId)
+        public StorageWindowControllerArguments(IReadOnlyObservableData<EntryRef> storageEntityId)
         {
             StorageEntityId = storageEntityId;
         }

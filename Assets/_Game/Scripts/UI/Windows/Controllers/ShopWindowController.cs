@@ -28,18 +28,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct ShopWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> ShopEntityId { get; }
-        public IReadOnlyObservableData<string> BuyerEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> ShopEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> BuyerEntityId { get; }
 
         public string ShopName { get; }
         public float BuyCoefficient { get; }
         public float SellCoefficient { get; }
 
-        public ItemContainerPath ShopContainerPath => ItemContainerPath.Shop(ShopEntityId.Value);
+        public ItemContainerPath ShopContainerPath => ItemContainerPath.Shop(ShopEntityId.Value.Id);
 
         public ShopWindowControllerArguments(
-            IReadOnlyObservableData<string> shopEntityId,
-            IReadOnlyObservableData<string> buyerEntityId,
+            IReadOnlyObservableData<EntryRef> shopEntityId,
+            IReadOnlyObservableData<EntryRef> buyerEntityId,
             string shopName,
             float buyCoefficient,
             float sellCoefficient)

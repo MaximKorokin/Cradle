@@ -90,7 +90,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
                         globalEventBus.Publish(new SpawnEntityRequest(
                             entityDefinition,
                             GetSpawnPosition(spot.Center, spot.Radius),
-                            new[] { new SpawnSourceEntitySpawnInitializer(spot.Id) }));
+                            new IEntityPreInitializer[] { new SpawnSourceEntityPreInitializer(spot.Id) }));
                         spot.MarkSpawned(entityDefinition.Id);
                     }
                 }

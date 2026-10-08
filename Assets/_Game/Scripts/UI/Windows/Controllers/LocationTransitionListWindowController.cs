@@ -38,9 +38,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct LocationTransitionListWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly IReadOnlyObservableData<string> EntityId;
+        public readonly IReadOnlyObservableData<EntryRef> EntityId;
 
-        public LocationTransitionListWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        public LocationTransitionListWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId)
         {
             EntityId = entityId;
         }

@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct StatusEffectListWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly IReadOnlyObservableData<string> EntityId;
+        public readonly IReadOnlyObservableData<EntryRef> EntityId;
 
-        public StatusEffectListWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        public StatusEffectListWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId)
         {
             EntityId = entityId;
         }

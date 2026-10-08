@@ -9,26 +9,30 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 {
     public interface IPlayerProvider
     {
-        IReadOnlyObservableData<string> ObservablePlayerId { get; }
+        IReadOnlyObservableData<EntryRef> ObservablePlayerId { get; }
         Entity Player { get; }
     }
 
-    public sealed class PlayerContext : IPlayerProvider
+    public sealed class PlayerContext : IPlayerProvider, IDisposable
     {
         private readonly PlayerControlProvider _playerControlProvider;
+        private readonly EntityRepository _entityRepository;
 
-        private readonly ObservableData<string> _observablePlayerId = new(null);
+        private readonly ObservableData<EntryRef> _observablePlayerId = new(default);
+
+        private IReadOnlyObservableData<EntryRef> _currentEntryObservable;
 
         public Entity Player { get; private set; }
 
-        public IReadOnlyObservableData<string> ObservablePlayerId => _observablePlayerId;
+        public IReadOnlyObservableData<EntryRef> ObservablePlayerId => _observablePlayerId;
 
         public event Action PlayerChanging;
         public event Action PlayerChanged;
 
-        public PlayerContext(PlayerControlProvider playerControlProvider)
+        public PlayerContext(PlayerControlProvider playerControlProvider, EntityRepository entityRepository)
         {
             _playerControlProvider = playerControlProvider;
+            _entityRepository = entityRepository;
         }
 
         public T GetModule<T>() where T : class, IEntityModule
@@ -44,6 +48,11 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         public void SetPlayer(Entity player)
         {
+            if (!_entityRepository.Contains(player.Id))
+            {
+                throw new InvalidOperationException($"Cannot set player {player.Id}: entity is not added to the repository");
+            }
+
             PlayerChanging?.Invoke();
 
             // Remove the control provider from the old player, if there is one
@@ -53,7 +62,14 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
 
             Player = player;
-            _observablePlayerId.SetData(player.Id);
+
+            if (_currentEntryObservable != null)
+            {
+                _currentEntryObservable.ValueChanged -= OnCurrentEntryChanged;
+            }
+            _currentEntryObservable = _entityRepository.Observe(player.Id);
+            _currentEntryObservable.ValueChanged += OnCurrentEntryChanged;
+            OnCurrentEntryChanged(_currentEntryObservable.Value);
 
             // Add the control provider to the new player
             if (Player.TryGetModule(out controlModule))
@@ -62,6 +78,20 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             }
 
             PlayerChanged?.Invoke();
+        }
+
+        private void OnCurrentEntryChanged(EntryRef entryRef)
+        {
+            _observablePlayerId.SetData(entryRef);
+        }
+
+        public void Dispose()
+        {
+            if (_currentEntryObservable != null)
+            {
+                _currentEntryObservable.ValueChanged -= OnCurrentEntryChanged;
+                _currentEntryObservable = null;
+            }
         }
     }
 }

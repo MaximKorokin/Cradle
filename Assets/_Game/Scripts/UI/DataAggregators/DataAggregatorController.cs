@@ -17,13 +17,23 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             _data.Changed -= HandleDataChanged;
             _data.Changed += HandleDataChanged;
+            _data.Invalidated -= HandleDataInvalidated;
+            _data.Invalidated += HandleDataInvalidated;
             HandleDataChanged();
         }
 
         public void Dispose()
         {
             if (_data != null)
+            {
                 _data.Changed -= HandleDataChanged;
+                _data.Invalidated -= HandleDataInvalidated;
+            }
+        }
+
+        private void HandleDataInvalidated()
+        {
+            _view.gameObject.SetActive(false);
         }
 
         private void HandleDataChanged()

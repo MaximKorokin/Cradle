@@ -18,7 +18,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
         private readonly EntityRepository _entityRepository;
         private readonly ItemStackFactory _itemStackAssembler;
 
-        private IReadOnlyObservableData<string> _inventoryEntityId;
+        private IReadOnlyObservableData<EntryRef> _inventoryEntityId;
 
         public CheatsViewController(
             IGlobalEventBus globalEventBus,
@@ -32,7 +32,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             _itemStackAssembler = itemStackAssembler;
         }
 
-        public void SetInventoryEntityId(IReadOnlyObservableData<string> inventoryEntityId)
+        public void SetInventoryEntityId(IReadOnlyObservableData<EntryRef> inventoryEntityId)
         {
             _inventoryEntityId = inventoryEntityId;
         }
@@ -61,7 +61,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
         {
-            if (_entityRepository.Get(_inventoryEntityId.Value).TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            if (_entityRepository.TryGet(_inventoryEntityId.Value, out var statusEntity) && statusEntity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
                 statusEffectModule.StatusEffects.AddStatusEffect(new StatusEffect(statusEffectDefinition));
             }
@@ -69,7 +69,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)
         {
-            if (_entityRepository.Get(_inventoryEntityId.Value).TryGetModule<InventoryModule>(out var inventoryModule))
+            if (_entityRepository.TryGet(_inventoryEntityId.Value, out var inventoryEntity) && inventoryEntity.TryGetModule<InventoryModule>(out var inventoryModule))
             {
                 WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
                 {

@@ -27,10 +27,12 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class PlayerPromptBehaviourModuleFactory : IEntityModuleFactory
     {
         private readonly IGlobalEventBus _globalEventBus;
+        private readonly EntityRepository _entityRepository;
 
-        public PlayerPromptBehaviourModuleFactory(IGlobalEventBus globalEventBus)
+        public PlayerPromptBehaviourModuleFactory(IGlobalEventBus globalEventBus, EntityRepository entityRepository)
         {
             _globalEventBus = globalEventBus;
+            _entityRepository = entityRepository;
         }
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
@@ -38,22 +40,22 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (entityDefinition.TryGetModuleDefinition<ShopModuleDefinition>(out var shopDefinition) && shopDefinition.Radius > 0)
                 return new PlayerPromptBehaviourModule(shopDefinition.Radius, shopDefinition.ShopDefinition.ShopName ?? "Shop", "Open",
                     (entityId, targetId) => _globalEventBus.Publish(
-                        new ShopWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
+                        new ShopWindowOpenRequest(_entityRepository.Observe(entityId), _entityRepository.Observe(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<CraftingModuleDefinition>(out var craftDefinition) && craftDefinition.Radius > 0)
                 return new PlayerPromptBehaviourModule(craftDefinition.Radius, craftDefinition.CrafterName, "Craft",
                     (entityId, targetId) => _globalEventBus.Publish(
-                        new CraftingWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
+                        new CraftingWindowOpenRequest(_entityRepository.Observe(entityId), _entityRepository.Observe(targetId))));
 
             if (entityDefinition.TryGetModuleDefinition<StorageModuleDefinition>(out var storageDefinition) && storageDefinition.Radius > 0)
                 return new PlayerPromptBehaviourModule(storageDefinition.Radius, entityDefinition.DisplayName, "Open",
                     (entityId, targetId) => _globalEventBus.Publish(
-                        new StorageWindowOpenRequest(new ObservableData<string>(entityId))));
+                        new StorageWindowOpenRequest(_entityRepository.Observe(entityId))));
 
             if (entityDefinition.TryGetModuleDefinition<QuestGiverModuleDefinition>(out var questGiverDefinition) && questGiverDefinition.Radius > 0)
                 return new PlayerPromptBehaviourModule(questGiverDefinition.Radius, entityDefinition.DisplayName, "Talk",
                     (entityId, targetId) => _globalEventBus.Publish(
-                        new QuestGiverWindowOpenRequest(new ObservableData<string>(entityId), new ObservableData<string>(targetId))));
+                        new QuestGiverWindowOpenRequest(_entityRepository.Observe(entityId), _entityRepository.Observe(targetId))));
 
             return null;
         }

@@ -27,12 +27,12 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct CraftingWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> CrafterEntityId { get; }
-        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> CrafterEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> InventoryEntityId { get; }
 
         public CraftingWindowControllerArguments(
-            IReadOnlyObservableData<string> crafterEntityId,
-            IReadOnlyObservableData<string> inventoryEntityId)
+            IReadOnlyObservableData<EntryRef> crafterEntityId,
+            IReadOnlyObservableData<EntryRef> inventoryEntityId)
         {
             CrafterEntityId = crafterEntityId;
             InventoryEntityId = inventoryEntityId;

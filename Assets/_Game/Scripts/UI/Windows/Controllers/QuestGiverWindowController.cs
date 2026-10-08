@@ -27,10 +27,10 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct QuestGiverWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> GiverEntityId { get; }
-        public IReadOnlyObservableData<string> TargetEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> GiverEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> TargetEntityId { get; }
 
-        public QuestGiverWindowControllerArguments(IReadOnlyObservableData<string> giverEntityId, IReadOnlyObservableData<string> targetEntityId)
+        public QuestGiverWindowControllerArguments(IReadOnlyObservableData<EntryRef> giverEntityId, IReadOnlyObservableData<EntryRef> targetEntityId)
         {
             GiverEntityId = giverEntityId;
             TargetEntityId = targetEntityId;

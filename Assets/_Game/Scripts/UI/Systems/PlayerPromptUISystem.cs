@@ -36,7 +36,9 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnShopWindowOpenRequest(ShopWindowOpenRequest request)
         {
-            var shopEntity = _entityRepository.Get(request.ShopEntityId.Value);
+            if (!_entityRepository.TryGet(request.ShopEntityId.Value, out var shopEntity))
+                return;
+
             if (shopEntity.TryGetModule<ShopModule>(out var shopModule))
             {
                 GlobalEventBus.Publish(new WindowToggleRequest(
@@ -86,10 +88,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct ShopWindowOpenRequest : IGlobalEvent
     {
-        public IReadOnlyObservableData<string> ShopEntityId { get; }
-        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> ShopEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> InventoryEntityId { get; }
 
-        public ShopWindowOpenRequest(IReadOnlyObservableData<string> shopEntityId, IReadOnlyObservableData<string> inventoryEntityId)
+        public ShopWindowOpenRequest(IReadOnlyObservableData<EntryRef> shopEntityId, IReadOnlyObservableData<EntryRef> inventoryEntityId)
         {
             ShopEntityId = shopEntityId;
             InventoryEntityId = inventoryEntityId;
@@ -98,10 +100,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct CraftingWindowOpenRequest : IGlobalEvent
     {
-        public IReadOnlyObservableData<string> CrafterEntityId { get; }
-        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> CrafterEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> InventoryEntityId { get; }
 
-        public CraftingWindowOpenRequest(IReadOnlyObservableData<string> crafterEntityId, IReadOnlyObservableData<string> inventoryEntityId)
+        public CraftingWindowOpenRequest(IReadOnlyObservableData<EntryRef> crafterEntityId, IReadOnlyObservableData<EntryRef> inventoryEntityId)
         {
             CrafterEntityId = crafterEntityId;
             InventoryEntityId = inventoryEntityId;
@@ -110,9 +112,9 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct StorageWindowOpenRequest : IGlobalEvent
     {
-        public IReadOnlyObservableData<string> StorageEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> StorageEntityId { get; }
 
-        public StorageWindowOpenRequest(IReadOnlyObservableData<string> storageEntityId)
+        public StorageWindowOpenRequest(IReadOnlyObservableData<EntryRef> storageEntityId)
         {
             StorageEntityId = storageEntityId;
         }
@@ -120,10 +122,10 @@ namespace Assets._Game.Scripts.UI.Systems
 
     public readonly struct QuestGiverWindowOpenRequest : IGlobalEvent
     {
-        public IReadOnlyObservableData<string> GiverEntityId { get; }
-        public IReadOnlyObservableData<string> TargetEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> GiverEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> TargetEntityId { get; }
 
-        public QuestGiverWindowOpenRequest(IReadOnlyObservableData<string> giverEntityId, IReadOnlyObservableData<string> targetEntityId)
+        public QuestGiverWindowOpenRequest(IReadOnlyObservableData<EntryRef> giverEntityId, IReadOnlyObservableData<EntryRef> targetEntityId)
         {
             GiverEntityId = giverEntityId;
             TargetEntityId = targetEntityId;

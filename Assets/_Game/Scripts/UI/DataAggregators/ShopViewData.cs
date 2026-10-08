@@ -13,9 +13,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public float BuyCoefficient { get; private set; }
         public float SellCoefficient { get; private set; }
 
-        private IReadOnlyObservableData<string> _buyerEntityId;
+        private IReadOnlyObservableData<EntryRef> _buyerEntityId;
 
-        public ItemContainerPath BuyerInventoryPath => ItemContainerPath.Inventory(_buyerEntityId?.Value);
+        public ItemContainerPath BuyerInventoryPath => ItemContainerPath.Inventory(_buyerEntityId?.Value.Id);
 
         private ShopModel ShopModel => ItemContainer as ShopModel;
 
@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             string shopName,
             float buyCoefficient,
             float sellCoefficient,
-            IReadOnlyObservableData<string> buyerEntityId)
+            IReadOnlyObservableData<EntryRef> buyerEntityId)
         {
             ShopName = shopName;
             BuyCoefficient = buyCoefficient;

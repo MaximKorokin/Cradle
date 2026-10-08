@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct InventoryWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> InventoryEntityId { get; }
 
-        public InventoryWindowControllerArguments(IReadOnlyObservableData<string> inventoryEntityId)
+        public InventoryWindowControllerArguments(IReadOnlyObservableData<EntryRef> inventoryEntityId)
         {
             InventoryEntityId = inventoryEntityId;
         }

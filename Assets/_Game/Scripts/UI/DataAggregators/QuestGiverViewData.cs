@@ -35,10 +35,12 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             NotifyChanged();
         }
 
-        public void SetTargetEntity(IReadOnlyObservableData<string> targetEntityId)
+        public void SetTargetEntity(IReadOnlyObservableData<EntryRef> targetEntityId)
         {
-            TargetEntityId = targetEntityId?.Value;
-            var targetEntity = EntityRepository.Get(targetEntityId.Value);
+            var targetEntryRef = targetEntityId?.Value ?? default;
+            TargetEntityId = targetEntryRef.Id;
+            EntityRepository.TryGet(targetEntryRef, out var targetEntity);
+            
             if (_questModule != null)
             {
                 _questModule.Updated -= OnQuestModuleUpdated;

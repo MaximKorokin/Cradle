@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             if (entityId == null) return;
 
             ContainerPath = GetContainerPath(entityId);
-            var newItemContainer = _itemContainerResolver.ResolveContainer(ContainerPath);
+            _itemContainerResolver.TryResolveContainer(ContainerPath, out var newItemContainer);
 
             if (ItemContainer != newItemContainer)
             {

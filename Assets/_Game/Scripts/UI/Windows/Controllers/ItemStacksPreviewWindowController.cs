@@ -1,5 +1,5 @@
+using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Items;
-using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
@@ -9,12 +9,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public sealed class ItemStacksPreviewWindowController : MultiViewWindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
     {
         private readonly ItemStackPreviewViewData _primaryItemStackPreviewViewData;
+        private readonly EntityRepository _entityRepository;
 
         public ItemStacksPreviewWindowController(
             ItemStackPreviewViewData primaryItemStackPreviewViewData,
-            ItemStackPreviewViewController primaryItemStackPreviewViewController)
+            ItemStackPreviewViewController primaryItemStackPreviewViewController,
+            EntityRepository entityRepository)
         {
             _primaryItemStackPreviewViewData = primaryItemStackPreviewViewData;
+            _entityRepository = entityRepository;
 
             RegisterView(primaryItemStackPreviewViewController, _primaryItemStackPreviewViewData, () => Window.PrimaryItemPreviewView);
         }
@@ -24,7 +27,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnInitialize();
 
             _primaryItemStackPreviewViewData.SetData(Arguments.ItemContainerPath, Arguments.ItemContainerSlot, true);
-            _primaryItemStackPreviewViewData.SetEntityId(new ObservableData<string>(Arguments.ItemContainerPath.EntityId));
+            _primaryItemStackPreviewViewData.SetEntityId(_entityRepository.Observe(Arguments.ItemContainerPath.EntityId));
         }
     }
 

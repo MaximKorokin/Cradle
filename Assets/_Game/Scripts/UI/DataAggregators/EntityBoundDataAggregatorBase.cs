@@ -7,9 +7,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         protected readonly EntityRepository EntityRepository;
 
-        private IReadOnlyObservableData<string> ObservableEntityId;
+        private IReadOnlyObservableData<EntryRef> ObservableEntityId;
 
-        public string EntityId => ObservableEntityId?.Value;
+        public string EntityId => ObservableEntityId?.Value.Id;
         public Entity Entity { get; private set; }
 
         public EntityBoundDataAggregatorBase(EntityRepository entityRepository)
@@ -23,17 +23,17 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             if (ObservableEntityId != null)
             {
-                ObservableEntityId.ValueChanged -= OnBoundEntityChanged;
+                ObservableEntityId.ValueChanged -= OnEntryRefChanged;
             }
         }
 
-        public void SetEntityId(IReadOnlyObservableData<string> observableEntityId)
+        public void SetEntityId(IReadOnlyObservableData<EntryRef> observableEntityId)
         {
             if (ObservableEntityId == observableEntityId) return;
 
             if (ObservableEntityId != null)
             {
-                ObservableEntityId.ValueChanged -= OnBoundEntityChanged;
+                ObservableEntityId.ValueChanged -= OnEntryRefChanged;
             }
 
             ObservableEntityId = observableEntityId;
@@ -41,21 +41,43 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             if (ObservableEntityId != null)
             {
-                Entity = EntityRepository.Get(ObservableEntityId.Value);
-                ObservableEntityId.ValueChanged += OnBoundEntityChanged;
+                ObservableEntityId.ValueChanged += OnEntryRefChanged;
+                ApplyEntryRef(ObservableEntityId.Value);
             }
-
-            OnBoundEntityChanged(ObservableEntityId?.Value);
+            else
+            {
+                OnBoundEntityChanged(null);
+            }
 
             NotifyChanged();
         }
 
-        /// <summary>Triggers when ObservableEntityId.Value is changed</summary>
+        private void OnEntryRefChanged(EntryRef entryRef)
+        {
+            ApplyEntryRef(entryRef);
+            NotifyChanged();
+        }
+
+        private void ApplyEntryRef(EntryRef entryRef)
+        {
+            if (entryRef.IsBound && !entryRef.Exists)
+            {
+                Entity = null;
+                NotifyInvalidated();
+                return;
+            }
+
+            EntityRepository.TryGet(entryRef, out var entity);
+            Entity = entity;
+            OnBoundEntityChanged(entryRef.Id);
+        }
+
+        /// <summary>Triggers when the bound entity id changes. Id is null when nothing is bound.</summary>
         protected abstract void OnBoundEntityChanged(string entityId);
     }
 
     public interface IEntityBoundDataAggregatorBase : IDataAggregator
     {
-        void SetEntityId(IReadOnlyObservableData<string> observableEntityId);
+        void SetEntityId(IReadOnlyObservableData<EntryRef> observableEntityId);
     }
 }

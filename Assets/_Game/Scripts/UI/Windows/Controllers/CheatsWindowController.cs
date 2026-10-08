@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct CheatsWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> InventoryEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> InventoryEntityId { get; }
 
-        public CheatsWindowControllerArguments(IReadOnlyObservableData<string> inventoryEntityId)
+        public CheatsWindowControllerArguments(IReadOnlyObservableData<EntryRef> inventoryEntityId)
         {
             InventoryEntityId = inventoryEntityId;
         }

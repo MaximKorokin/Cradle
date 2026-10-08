@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct EquipmentWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> EquipmentEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> EquipmentEntityId { get; }
 
-        public EquipmentWindowControllerArguments(IReadOnlyObservableData<string> equipmentEntityId)
+        public EquipmentWindowControllerArguments(IReadOnlyObservableData<EntryRef> equipmentEntityId)
         {
             EquipmentEntityId = equipmentEntityId;
         }

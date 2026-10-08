@@ -194,10 +194,12 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             container = null;
             itemStack = null;
 
-            var resolvedContainer = _itemContainerResolver.ResolveContainer(containerSlot.ContainerPath);
+            if (!_itemContainerResolver.TryResolveContainer(containerSlot.ContainerPath, out var resolvedContainer))
+                return false;
+
             var resolvedItemStack = resolvedContainer.Get(containerSlot.SlotIndex);
 
-            if (resolvedContainer != null && resolvedItemStack != null)
+            if (resolvedItemStack != null)
             {
                 container = resolvedContainer;
                 itemStack = resolvedItemStack;

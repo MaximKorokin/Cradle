@@ -1,6 +1,5 @@
-﻿using Assets._Game.Scripts.Infrastructure.Configs;
-using Assets._Game.Scripts.Shared;
-using Assets._Game.Scripts.Shared.Extensions;
+﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
@@ -17,6 +16,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
         private readonly IObjectResolver _resolver;
         private readonly UITooltipConfig _config;
         private readonly ItemStackPreviewViewData _itemStackPreviewViewData;
+        private readonly EntityRepository _entityRepository;
 
         private ItemStackPreviewView _itemStackPreviewView;
         private TextViewWidget _textView;
@@ -27,11 +27,13 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
         public TooltipHandlerService(
             IObjectResolver resolver,
             UITooltipConfig config,
-            ItemStackPreviewViewData itemStackPreviewViewData)
+            ItemStackPreviewViewData itemStackPreviewViewData,
+            EntityRepository entityRepository)
         {
             _resolver = resolver;
             _config = config;
             _itemStackPreviewViewData = itemStackPreviewViewData;
+            _entityRepository = entityRepository;
         }
 
         public (RectTransform Content, Action CleanAction) Handle(ITooltipSource tooltipSource)
@@ -51,7 +53,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             InstantiateFromPrefab(_config.ItemStackPreviewViewPrefab, ref _itemStackPreviewView);
 
             _itemStackPreviewViewData.SetData(containerSlot.ContainerPath, containerSlot.SlotIndex, false);
-            _itemStackPreviewViewData.SetEntityId(new ObservableData<string>(containerSlot.ContainerPath.EntityId));
+            _itemStackPreviewViewData.SetEntityId(_entityRepository.Observe(containerSlot.ContainerPath.EntityId));
             _currentController = new DataAggregatorController<ItemStackPreviewView, ItemStackPreviewViewData>(_itemStackPreviewView, _itemStackPreviewViewData);
             _itemStackPreviewView.gameObject.SetActive(true);
 

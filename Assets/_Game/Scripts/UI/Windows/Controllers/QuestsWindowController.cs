@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct QuestsWindowControllerArguments : IWindowControllerArguments
     {
-        public IReadOnlyObservableData<string> QuestModuleEntityId { get; }
+        public IReadOnlyObservableData<EntryRef> QuestModuleEntityId { get; }
 
-        public QuestsWindowControllerArguments(IReadOnlyObservableData<string> questModuleEntityId)
+        public QuestsWindowControllerArguments(IReadOnlyObservableData<EntryRef> questModuleEntityId)
         {
             QuestModuleEntityId = questModuleEntityId;
         }

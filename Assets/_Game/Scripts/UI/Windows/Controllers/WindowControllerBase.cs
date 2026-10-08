@@ -11,6 +11,18 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
         protected TArguments Arguments { get; private set; }
 
+        public bool IsCloseRequested { get; private set; }
+
+        public event Action CloseRequested;
+
+        protected void RequestClose()
+        {
+            if (IsCloseRequested) return;
+
+            IsCloseRequested = true;
+            CloseRequested?.Invoke();
+        }
+
         protected abstract void Redraw();
 
         protected virtual void OnBind() { }
@@ -68,6 +80,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public interface IWindowController : IDisposable
     {
         Type WindowType { get; }
+        bool IsCloseRequested { get; }
+
+        event Action CloseRequested;
 
         void Bind(UIWindowBase window);
         void Unbind();

@@ -28,9 +28,9 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct EntityAiToggleWindowControllerArguments : IWindowControllerArguments
     {
-        public readonly IReadOnlyObservableData<string> EntityId;
+        public readonly IReadOnlyObservableData<EntryRef> EntityId;
 
-        public EntityAiToggleWindowControllerArguments(IReadOnlyObservableData<string> entityId)
+        public EntityAiToggleWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId)
         {
             EntityId = entityId;
         }

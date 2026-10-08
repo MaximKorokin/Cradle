@@ -37,6 +37,25 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackGlobalEvent<SaveGameRequest>(OnSaveGameRequested);
             TrackGlobalEvent<LoadGameRequest>(OnLoadGameRequested);
+
+            _playerContext.PlayerChanged += OnPlayerChanged;
+        }
+
+        public override void Dispose()
+        {
+            _playerContext.PlayerChanged -= OnPlayerChanged;
+
+            base.Dispose();
+        }
+
+        private void OnPlayerChanged()
+        {
+            var player = _playerContext.Player;
+
+            if (!EntityQuery.Match(player)) return;
+
+            // Load player save data and transition to the correct location
+            LoadPlayerLocation(player, _saveService.GetEntitySave(player));
         }
 
         protected override void OnEntityAdded(Entity entity)
@@ -46,14 +65,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!EntityQuery.Match(entity)) return;
 
             _saveService.LoadEntity(entity);
-
-            var entitySave = _saveService.GetEntitySave(entity);
-
-            // Load player save data and transition to the correct location
-            if (_playerContext.Player == entity)
-            {
-                LoadPlayerLocation(entity, entitySave);
-            }
         }
 
         protected override void OnEntityRemoved(Entity entity)
@@ -84,7 +95,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             GlobalEventBus.Publish(new SpawnEntityRequest(
                 _newGameDefinition.PlayerEntityDefinition,
                 Vector2.zero,
-                new[] { new PlayerEntitySpawnInitializer(_playerContext) }));
+                null,
+                new IEntityPostInitializer[] { new PlayerEntityPostInitializer(_playerContext) }));
         }
 
         private void SavePlayerLocation()

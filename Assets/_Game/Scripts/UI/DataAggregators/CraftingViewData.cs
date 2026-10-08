@@ -26,9 +26,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _craftingService = craftingService;
         }
 
-        public void SetCrafterEntity(IReadOnlyObservableData<string> crafterEntityId)
+        public void SetCrafterEntity(IReadOnlyObservableData<EntryRef> crafterEntityId)
         {
-            if (EntityRepository.Get(crafterEntityId.Value).TryGetModule<CraftingModule>(out var craftingModule))
+            if (EntityRepository.TryGet(crafterEntityId.Value, out var crafter) && crafter.TryGetModule<CraftingModule>(out var craftingModule))
             {
                 _crafterCraftingModule = craftingModule;
                 NotifyChanged();
