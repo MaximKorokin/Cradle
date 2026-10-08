@@ -78,7 +78,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct EmptyWindowControllerArguments : IWindowControllerArguments { }
 
-    public sealed class EmptyWindowController<TWindow> : WindowControllerBase<TWindow, EmptyWindowControllerArguments>
+    public class EmptyWindowController<TWindow> : WindowControllerBase<TWindow, EmptyWindowControllerArguments>
         where TWindow : UIWindowBase
     {
         protected override void Redraw() { }

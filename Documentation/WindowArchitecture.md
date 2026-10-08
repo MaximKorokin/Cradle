@@ -26,10 +26,10 @@ Caller publishes `WindowOpenRequest` or `WindowToggleRequest` -> `WindowsUISyste
 
 ## Add a window
 
-- [ ] Add a unique `WindowId` and definition in `WindowDefinition.cs` / `UILifetimeScope.RegisterWindows()`.
+- [ ] Add a unique `WindowId` in `WindowDefinition.cs`.
 - [ ] Create the `UIWindowBase` component and prefab; wire its child views.
 - [ ] Add the prefab to `WindowPrefabsConfig`; its component type must match controller `WindowType`.
-- [ ] Create the controller and argument type; register the controller in `UILifetimeScope.RegisterWindows()`.
+- [ ] Create the controller and argument type; mark the controller with `[Window(WindowId.X, IsSingleton, IsModal, CanMove)]`. `WindowDefinitionScanner` finds it and `UILifetimeScope.RegisterWindows()` registers it automatically (duplicate/`None` ids throw).
 - [ ] For data-backed views, create view, view controller, and data aggregator; register them in `RegisterViewControllers()` and `RegisterDataAggregators()`.
 - [ ] Choose singleton/modal/movable flags; ensure scene roots and wrapper prefabs are configured.
 - [ ] Publish an open/toggle request with the new ID and required arguments.

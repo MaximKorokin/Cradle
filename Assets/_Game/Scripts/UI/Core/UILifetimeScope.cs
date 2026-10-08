@@ -149,32 +149,7 @@ namespace Assets._Game.Scripts.UI.Core
 
             builder.Register<WindowControllerArgumentsProvider>(Lifetime.Singleton);
 
-            var windows = new WindowDefinition[]
-            {
-                new(WindowId.Cheats, typeof(CheatsWindowController), new(true, false, true)),
-                new(WindowId.Inventory, typeof(InventoryWindowController), new(true, false, true)),
-                new(WindowId.Equipment, typeof(EquipmentWindowController), new(true, false, true)),
-                new(WindowId.Quests, typeof(QuestsWindowController), new(true, false, true)),
-                new(WindowId.QuestGiver, typeof(QuestGiverWindowController), new(true, false, true)),
-                new(WindowId.QuestDescription, typeof(QuestDescriptionWindowController), new(true, false, true)),
-                new(WindowId.EntityAiToggle, typeof(EntityAiToggleWindowController), new(true, false, true)),
-                new(WindowId.WindowBar, typeof(EmptyWindowController<WindowBarWindow>), new(true, false, true)),
-
-                new(WindowId.Stats, typeof(StatsWindowController), new(true, false, true)),
-                new(WindowId.Storage, typeof(StorageWindowController), new(true, false, true)),
-                new(WindowId.LocationTransitionList, typeof(LocationTransitionListWindowController), new(true, false, true)),
-                new(WindowId.Crafting, typeof(CraftingWindowController), new(true, false, true)),
-                new(WindowId.Shop, typeof(ShopWindowController), new(true, false, true)),
-
-                new(WindowId.ItemUseSettings, typeof(ItemUseSettingsWindowController), new(true, false, true)),
-                new(WindowId.ItemStacksPreview, typeof(ItemStacksPreviewWindowController), new(true, false, true)),
-
-                new(WindowId.AmountPicker, typeof(AmountPickerWindowController), new(true, true, false)),
-                new(WindowId.Confirmation, typeof(ConfirmationWindowController), new(true, true, false)),
-
-                new(WindowId.StatusEffectList, typeof(StatusEffectListWindowController), new(true, false, true)),
-                new(WindowId.CompactEntityStatus, typeof(CompactEntityStatusWindowController), new(true, false, true)),
-            };
+            var windows = WindowDefinitionScanner.Scan();
 
             foreach (var windowDefinition in windows)
             {
@@ -182,6 +157,7 @@ namespace Assets._Game.Scripts.UI.Core
             }
 
             builder.RegisterInstance((IEnumerable<WindowDefinition>)windows);
+            builder.Register<WindowRegistry>(Lifetime.Singleton);
         }
 
         private void RegisterHud(IContainerBuilder builder)

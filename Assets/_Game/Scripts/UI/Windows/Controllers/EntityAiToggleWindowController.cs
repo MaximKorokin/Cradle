@@ -5,6 +5,7 @@ using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.EntityAiToggle)]
     public sealed class EntityAiToggleWindowController : SingleViewWindowControllerBase<EntityAiToggleWindow, EntityAiToggleWindowControllerArguments, EntityAiToggleView, IEntityAiToggleViewData, EntityAiToggleViewController>
     {
         private readonly EntityAiToggleViewData _viewData;

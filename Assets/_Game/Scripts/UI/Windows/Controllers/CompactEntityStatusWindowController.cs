@@ -1,10 +1,11 @@
-﻿using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.CompactEntityStatus)]
     public sealed class CompactEntityStatusWindowController : SingleViewWindowControllerBase<CompactEntityStatusWindow, CompactEntityStatusWindowControllerArguments, CompactEntityStatusView, EntityStatusViewData, CompactEntityStatusViewController>
     {
         public CompactEntityStatusWindowController(

@@ -1,10 +1,11 @@
-﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.ItemStacksPreview)]
     public sealed class ItemStacksPreviewWindowController : MultiViewWindowControllerBase<ItemStacksPreviewWindow, ItemStacksPreviewWindowControllerArguments>
     {
         private readonly ItemStackPreviewViewData _primaryItemStackPreviewViewData;

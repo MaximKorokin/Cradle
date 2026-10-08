@@ -1,4 +1,4 @@
-﻿using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Shared;
@@ -8,6 +8,7 @@ using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.LocationTransitionList)]
     public sealed class LocationTransitionListWindowController : SingleViewWindowControllerBase<LocationTransitionListWindow, LocationTransitionListWindowControllerArguments, LocationTransitionListView, ILocationTransitionListViewData, LocationTransitionListViewController>
     {
         private readonly LocationConfig _locationConfig;

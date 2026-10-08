@@ -1,9 +1,10 @@
-﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.UI.Systems;
 using System;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.Confirmation, IsModal = true, CanMove = false)]
     public sealed class ConfirmationWindowController : WindowControllerBase<ConfirmationWindow, ConfirmationWindowControllerArguments>
     {
         private readonly IGlobalEventBus _globalEventBus;

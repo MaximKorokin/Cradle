@@ -1,10 +1,11 @@
-﻿using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.Equipment)]
     public sealed class EquipmentWindowController : SingleViewWindowControllerBase<EquipmentWindow, EquipmentWindowControllerArguments, EquipmentView, IEquipmentViewData, EquipmentViewController>
     {
         public EquipmentWindowController(

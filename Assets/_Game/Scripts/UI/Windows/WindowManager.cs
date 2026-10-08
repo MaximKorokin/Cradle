@@ -1,7 +1,6 @@
-﻿using Assets._Game.Scripts.UI.Core;
+using Assets._Game.Scripts.UI.Core;
 using Assets._Game.Scripts.UI.Windows.Controllers;
 using Assets._Game.Scripts.UI.Windows.Modal;
-using Assets._Game.Scripts.Infrastructure.Configs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +17,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         private readonly RectTransform _windowsRoot;
         private readonly RectTransform _modalsRoot;
-        private readonly Dictionary<WindowId, WindowDefinition> _windowDefinitions;
-        private readonly Dictionary<Type, UIWindowBase> _windowPrefabsByType;
+        private readonly WindowRegistry _registry;
         private readonly WindowWrapper _windowWrapperPrefab;
         private readonly ModalWrapper _modalWrapperPrefab;
         private readonly IObjectResolver _resolver;
@@ -28,8 +26,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
         public WindowManager(
             UIRootReferences rootReferences,
-            IEnumerable<WindowDefinition> windowDefinitions,
-            UIWindowsConfig windowPrefabsConfig,
+            WindowRegistry registry,
             WindowWrapper windowWrapperPrefab,
             ModalWrapper modalWrapperPrefab,
             IObjectResolver resolver)
@@ -37,43 +34,7 @@ namespace Assets._Game.Scripts.UI.Windows
             _windowsRoot = rootReferences.WindowsRoot;
             _modalsRoot = rootReferences.ModalsRoot;
 
-            if (windowPrefabsConfig == null || windowPrefabsConfig.WindowPrefabs == null)
-            {
-                throw new InvalidOperationException("Window prefab configuration is not registered or contains no prefab list.");
-            }
-
-            _windowPrefabsByType = new Dictionary<Type, UIWindowBase>();
-            foreach (var prefab in windowPrefabsConfig.WindowPrefabs)
-            {
-                if (prefab == null)
-                {
-                    throw new InvalidOperationException("Window prefab configuration contains a null entry.");
-                }
-
-                var prefabType = prefab.GetType();
-                if (_windowPrefabsByType.ContainsKey(prefabType))
-                {
-                    throw new InvalidOperationException($"More than one window prefab is registered for type {prefabType}.");
-                }
-
-                _windowPrefabsByType.Add(prefabType, prefab);
-            }
-
-            _windowDefinitions = new Dictionary<WindowId, WindowDefinition>();
-            foreach (var definition in windowDefinitions)
-            {
-                if (definition == null)
-                {
-                    throw new InvalidOperationException("Window definitions contain a null entry.");
-                }
-
-                if (_windowDefinitions.ContainsKey(definition.Id))
-                {
-                    throw new InvalidOperationException($"More than one definition is registered for window {definition.Id}.");
-                }
-
-                _windowDefinitions.Add(definition.Id, definition);
-            }
+            _registry = registry;
             _windowWrapperPrefab = windowWrapperPrefab;
             _modalWrapperPrefab = modalWrapperPrefab;
             _resolver = resolver;
@@ -84,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Windows
         /// <summary> Opens a window if it is not already open, otherwise closes it if it is a singleton window. If the window is not a singleton, it will open a new instance of the window. </summary>
         public WindowWrapperBase ToggleWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
-            var definition = FindWindowDefinition(windowId);
+            var definition = _registry.GetDefinition(windowId);
             var existingWindow = FindWindowStackEntry(windowId, arguments);
             if (existingWindow.Window != null && definition.Configuration.IsSingleton)
             {
@@ -102,7 +63,7 @@ namespace Assets._Game.Scripts.UI.Windows
         private WindowWrapperBase InstantiateWindow(WindowId windowId, IWindowControllerArguments arguments, WindowSettings settings = default)
         {
             // find definition
-            var definition = FindWindowDefinition(windowId);
+            var definition = _registry.GetDefinition(windowId);
 
             // find existing window
             var entry = FindWindowStackEntry(windowId, arguments);
@@ -117,10 +78,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
             // 2. Create window and controller
             var controller = (IWindowController)_resolver.Resolve(controllerType);
-            if (!_windowPrefabsByType.TryGetValue(controller.WindowType, out var windowPrefab))
-            {
-                throw new InvalidOperationException($"No prefab for window type {controller.WindowType} is registered.");
-            }
+            var windowPrefab = _registry.GetPrefab(controller.WindowType);
 
             var window = _resolver.Instantiate(windowPrefab, _windowsRoot);
 
@@ -150,17 +108,7 @@ namespace Assets._Game.Scripts.UI.Windows
 
             return wrapperRoot;
         }
-
-        private WindowDefinition FindWindowDefinition(WindowId windowId)
-        {
-            if (!_windowDefinitions.TryGetValue(windowId, out var definition))
-            {
-                throw new InvalidOperationException($"No definition for window {windowId} registered.");
-            }
-
-            return definition;
-        }
-
+        
         private WindowStackEntry FindWindowStackEntry(WindowId windowId, IWindowControllerArguments arguments)
             => _windowStack.FirstOrDefault(e => e.Id == windowId && Equals(e.Arguments, arguments));
 

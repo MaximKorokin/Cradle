@@ -1,10 +1,11 @@
-﻿using Assets._Game.Scripts.Shared;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
 
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
+    [Window(WindowId.ItemUseSettings)]
     public sealed class ItemUseSettingsWindowController : SingleViewWindowControllerBase<ItemUseSettingsWindow, ItemUseSettingsWindowControllerArguments, ItemUseSettingsView, ItemUseSettingsViewData, ItemUseSettingsViewController>
     {
         public ItemUseSettingsWindowController(
