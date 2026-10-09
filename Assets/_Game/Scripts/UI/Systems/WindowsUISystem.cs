@@ -21,6 +21,7 @@ namespace Assets._Game.Scripts.UI.Systems
         private WindowManager _windowManager;
 
         private WindowWrapperBase _currentlyMovingWindow;
+        private Vector2 _previousWindowMovePointerPosition;
 
         [Inject]
         public void Construct(
@@ -55,6 +56,7 @@ namespace Assets._Game.Scripts.UI.Systems
             if (!e.Context.UnderlyingElement.TryGetComponentInParent<WindowDragHandler>(out var _)) return;
 
             _currentlyMovingWindow = windowWrapper;
+            _previousWindowMovePointerPosition = e.Context.ScreenPosition;
         }
 
         private void OnPointerUp(PointerUpEvent e)
@@ -65,7 +67,9 @@ namespace Assets._Game.Scripts.UI.Systems
         private void OnPointerMove(PointerMoveEvent e)
         {
             if (_currentlyMovingWindow == null) return;
-            _windowManager.MoveWindow(_currentlyMovingWindow, e.Context.ScreenPosition - e.Context.PreviousScreenPosition);
+            var pointerDelta = e.Context.ScreenPosition - _previousWindowMovePointerPosition;
+            _previousWindowMovePointerPosition = e.Context.ScreenPosition;
+            _windowManager.MoveWindow(_currentlyMovingWindow, pointerDelta);
             _windowsSaveService.SaveWindow(_currentlyMovingWindow.WindowId, _currentlyMovingWindow.transform.position);
         }
 

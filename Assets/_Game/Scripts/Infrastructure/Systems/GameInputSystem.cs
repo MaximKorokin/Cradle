@@ -36,7 +36,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 GlobalEventBus.Publish(new PointerUpEvent(pointerContext));
             }
 
-            GlobalEventBus.Publish(new PointerMoveEvent(pointerContext));
+            if (pointerPosition != _previousPointerPosition)
+            {
+                GlobalEventBus.Publish(new PointerMoveEvent(pointerContext));
+            }
 
             _previousPointerPosition = pointerPosition;
         }
