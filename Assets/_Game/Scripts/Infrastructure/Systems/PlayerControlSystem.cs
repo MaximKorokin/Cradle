@@ -40,6 +40,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             _isMoving = true;
             var worldPosition = (Vector2)_cameraService.Camera.ScreenToWorldPoint(e.Context.ScreenPosition);
+            _playerControlProvider.SetMoveTarget(worldPosition);
             _moveTragetIndicatorView.PlayAt(worldPosition);
         }
 
