@@ -70,10 +70,10 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnContainerChanged()
         {
-            Pneuma = InventoryViewDataUtils.CalculatePneuma(_itemsConfig, InventoryModel);
-            Gold = InventoryViewDataUtils.CalculateGold(_itemsConfig, InventoryModel);
-            SlotsUsed = InventoryViewDataUtils.CalculateSlotsUsed(InventoryModel);
-            SlotsMax = InventoryViewDataUtils.CalculateSlotsMax(InventoryModel);
+            Pneuma = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculatePneuma(_itemsConfig, InventoryModel);
+            Gold = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateGold(_itemsConfig, InventoryModel);
+            SlotsUsed = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateSlotsUsed(InventoryModel);
+            SlotsMax = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateSlotsMax(InventoryModel);
 
             base.OnContainerChanged();
         }
@@ -109,9 +109,22 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository) : base(itemsConfig, itemContainerResolver, entityRepository) { }
 
-        protected override void OnBoundEntityChanged(string inventoryEntityId)
+        protected override void OnBoundEntityChanged()
         {
-            base.OnBoundEntityChanged(inventoryEntityId);
+            base.OnBoundEntityChanged();
+
+            if (Entity == null)
+            {
+                if (_statsController != null)
+                {
+                    _statsController.StatChanged -= OnStatsChanged;
+                    _statsController = null;
+                }
+
+                _weightCurrent = 0;
+                _weightMax = 0;
+                return;
+            }
 
             var newStats = Entity.GetModule<StatModule>().Stats;
             if (_statsController != newStats)

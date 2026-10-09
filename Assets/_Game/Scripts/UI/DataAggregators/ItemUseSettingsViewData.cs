@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
         }
 
-        protected override void OnBoundEntityChanged(string entityId)
+        protected override void OnBoundEntityChanged()
         {
             _equipmentModule = Entity.GetModule<EquipmentModule>();
         }

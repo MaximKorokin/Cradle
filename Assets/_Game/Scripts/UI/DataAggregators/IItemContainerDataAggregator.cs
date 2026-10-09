@@ -25,12 +25,19 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             _itemContainerResolver = itemContainerResolver;
         }
 
-        protected override void OnBoundEntityChanged(string entityId)
+        protected override void OnBoundEntityChanged()
         {
-            if (entityId == null) return;
-
-            ContainerPath = GetContainerPath(entityId);
-            _itemContainerResolver.TryResolveContainer(ContainerPath, out var newItemContainer);
+            var entityId = EntityId;
+            IItemContainer newItemContainer = null;
+            if (entityId == null)
+            {
+                ContainerPath = default;
+            }
+            else
+            {
+                ContainerPath = GetContainerPath(entityId);
+                _itemContainerResolver.TryResolveContainer(ContainerPath, out newItemContainer);
+            }
 
             if (ItemContainer != newItemContainer)
             {

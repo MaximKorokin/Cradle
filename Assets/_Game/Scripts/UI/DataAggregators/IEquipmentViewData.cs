@@ -22,11 +22,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public EquipmentModel EquipmentModel => _equipmentModule.Equipment;
         public ItemUseSettings ItemUseSettings => _equipmentModule.AutoItemUseSettings;
 
-        protected override void OnBoundEntityChanged(string equipmentEntityId)
+        protected override void OnBoundEntityChanged()
         {
             _equipmentModule = Entity.GetModule<EquipmentModule>();
 
-            base.OnBoundEntityChanged(equipmentEntityId);
+            base.OnBoundEntityChanged();
         }
 
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Equipment(entityId);

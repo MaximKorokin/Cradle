@@ -11,7 +11,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         public EntityStatusViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
-        protected override void OnBoundEntityChanged(string entityId)
+        protected override void OnBoundEntityChanged()
         {
             UnsubscribeFromPlayerModules();
             SubscribeToPlayerModules();

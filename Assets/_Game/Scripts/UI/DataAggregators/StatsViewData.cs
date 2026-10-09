@@ -19,7 +19,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public StatsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
-        protected override void OnBoundEntityChanged(string entityId)
+        protected override void OnBoundEntityChanged()
         {
             if (_statModule != null)
             {

@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public EntityAiToggleViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
-        protected override void OnBoundEntityChanged(string entityId)
+        protected override void OnBoundEntityChanged()
         {
             IsAIEnabled = false;
 

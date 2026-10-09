@@ -10,39 +10,64 @@ using System.Linq;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public sealed class CraftingViewData : ItemContainerDataAggregatorBase
+    public sealed class CraftingViewData : EntityBoundDataAggregatorBase
     {
         private readonly CraftingService _craftingService;
+        private readonly InventoryViewData _inventoryViewData;
 
         private CraftingModule _crafterCraftingModule;
 
-        private InventoryModel InventoryModel => ItemContainer as InventoryModel;
+        public ItemContainerPath InventoryPath => _inventoryViewData.ContainerPath;
+        public InventoryModel InventoryModel => _inventoryViewData.InventoryModel;
 
         public CraftingViewData(
-            ItemContainerResolver itemContainerResolver,
             EntityRepository entityRepository,
-            CraftingService craftingService) : base(itemContainerResolver, entityRepository)
+            CraftingService craftingService,
+            InventoryViewData inventoryViewData) : base(entityRepository)
         {
             _craftingService = craftingService;
+            _inventoryViewData = inventoryViewData;
+            _inventoryViewData.Changed += OnInventoryChanged;
+            _inventoryViewData.Invalidated += OnInventoryInvalidated;
         }
 
-        public void SetCrafterEntity(IReadOnlyObservableData<EntryRef> crafterEntityId)
+        public void SetConsumerEntity(IReadOnlyObservableData<EntryRef> consumerEntityId)
         {
-            if (EntityRepository.TryGet(crafterEntityId.Value, out var crafter) && crafter.TryGetModule<CraftingModule>(out var craftingModule))
-            {
-                _crafterCraftingModule = craftingModule;
-                NotifyChanged();
-            }
+            _inventoryViewData.SetEntityId(consumerEntityId);
+        }
+
+        protected override void OnBoundEntityChanged()
+        {
+            _crafterCraftingModule = Entity?.GetModule<CraftingModule>();
+            NotifyChanged();
+        }
+
+        private void OnInventoryChanged()
+        {
+            NotifyChanged();
+        }
+
+        private void OnInventoryInvalidated()
+        {
+            NotifyInvalidated();
+        }
+
+        public override void Dispose()
+        {
+            _inventoryViewData.Changed -= OnInventoryChanged;
+            _inventoryViewData.Invalidated -= OnInventoryInvalidated;
+            _inventoryViewData.Dispose();
+            base.Dispose();
         }
 
         public IEnumerable<CraftingRecipeDefinition> AvailableRecipes
         {
             get
             {
-                if (InventoryModel == null || _crafterCraftingModule == null)
+                if (_inventoryViewData.InventoryModel == null || _crafterCraftingModule == null)
                     return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _crafterCraftingModule.Recipes.Where(recipe => _craftingService.CanCraftAny(recipe, InventoryModel));
+                return _crafterCraftingModule.Recipes.Where(recipe => _craftingService.CanCraftAny(recipe, _inventoryViewData.InventoryModel));
             }
         }
 
@@ -50,13 +75,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             get
             {
-                if (InventoryModel == null || _crafterCraftingModule == null)
+                if (_inventoryViewData.InventoryModel == null || _crafterCraftingModule == null)
                     return Enumerable.Empty<CraftingRecipeDefinition>();
 
-                return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, InventoryModel));
+                return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, _inventoryViewData.InventoryModel));
             }
         }
-
-        protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Inventory(entityId);
     }
 }

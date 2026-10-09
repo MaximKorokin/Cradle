@@ -15,7 +15,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public QuestsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
-        protected override void OnBoundEntityChanged(string entityId)
+        protected override void OnBoundEntityChanged()
         {
             if (_questModule != null)
             {

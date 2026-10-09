@@ -18,8 +18,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnInitialize();
 
-            ViewData.SetCrafterEntity(Arguments.CrafterEntityId);
-            ViewData.SetEntityId(Arguments.InventoryEntityId);
+            ViewData.SetEntityId(Arguments.CrafterEntityId);
+            ViewData.SetConsumerEntity(Arguments.InventoryEntityId);
         }
 
         protected override CraftingView GetView() => Window.CraftingView;

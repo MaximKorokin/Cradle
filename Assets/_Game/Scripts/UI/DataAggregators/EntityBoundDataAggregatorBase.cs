@@ -46,7 +46,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
             else
             {
-                OnBoundEntityChanged(null);
+                OnBoundEntityChanged();
             }
 
             NotifyChanged();
@@ -69,11 +69,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
             EntityRepository.TryGet(entryRef, out var entity);
             Entity = entity;
-            OnBoundEntityChanged(entryRef.Id);
+            OnBoundEntityChanged();
         }
 
-        /// <summary>Triggers when the bound entity id changes. Id is null when nothing is bound.</summary>
-        protected abstract void OnBoundEntityChanged(string entityId);
+        /// <summary>Triggers when the bound entity changes. <see cref="EntityId"/> is null when nothing is bound.</summary>
+        protected abstract void OnBoundEntityChanged();
     }
 
     public interface IEntityBoundDataAggregatorBase : IDataAggregator
