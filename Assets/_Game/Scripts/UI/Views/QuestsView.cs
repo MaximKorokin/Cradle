@@ -13,8 +13,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private SimpleListView _questsListViewTemplate;
 
-        private SimpleListView _activeQuestsListView;
-        private SimpleListView _completedQuestsListView;
+        private TabbedListViewCollection _tabbedListViews;
 
         public event Action<string> QuestInfoClicked;
         public event Action<string> QuestActionClicked;
@@ -23,61 +22,36 @@ namespace Assets._Game.Scripts.UI.Views
         {
             base.Awake();
             _questsListViewTemplate.gameObject.SetActive(false);
+            _tabbedListViews = new TabbedListViewCollection(_questsTabsController, _questsListViewTemplate);
         }
 
         protected override void Render(QuestsViewData data)
         {
+            var currentTabIndex = _questsTabsController.GetSelectedTabIndex();
             Clear();
 
-            var currentTabIndex = _questsTabsController.GetSelectedTabIndex();
-
-            // Clear previous tabs
-            _questsTabsController.ClearTabs();
-
             // Active quests
-            _activeQuestsListView = Instantiate(_questsListViewTemplate);
-            _activeQuestsListView.Render(data.ActiveQuests.Where(q => !q.IsCompleted).Select(q => new SimpleListItemData()
+            _tabbedListViews.AddTab("Active", "Active", data.ActiveQuests.Where(q => !q.IsCompleted).Select(q => new SimpleListItemData()
             {
                 Identifier = q.Definition.Id,
                 Sprite = null,
                 Text = q.Definition.Title,
-            }));
-            _questsTabsController.AddTab(new("Active", _activeQuestsListView.transform as RectTransform));
-            _activeQuestsListView.ElementInfoClicked += OnQuestInfoClicked;
-            _activeQuestsListView.ElementActionClicked += OnQuestActionClicked;
+            }), OnQuestInfoClicked, OnQuestActionClicked);
 
             // Completed quests
-            _completedQuestsListView = Instantiate(_questsListViewTemplate);
-            _completedQuestsListView.Render(data.ActiveQuests.Where(q => q.IsCompleted).Select(q => new SimpleListItemData()
+            _tabbedListViews.AddTab("Completed", "Completed", data.ActiveQuests.Where(q => q.IsCompleted).Select(q => new SimpleListItemData()
             {
                 Identifier = q.Definition.Id,
                 Sprite = null,
                 Text = q.Definition.Title,
-            }));
-            _questsTabsController.AddTab(new("Completed", _completedQuestsListView.transform as RectTransform));
-            _completedQuestsListView.ElementInfoClicked += OnQuestInfoClicked;
-            _completedQuestsListView.ElementActionClicked += OnQuestActionClicked;
+            }), OnQuestInfoClicked, OnQuestActionClicked);
 
             _questsTabsController.SelectTab(currentTabIndex);
         }
 
         private void Clear()
         {
-            if (_activeQuestsListView != null)
-            {
-                _activeQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
-                _activeQuestsListView.ElementActionClicked -= OnQuestActionClicked;
-                _activeQuestsListView.Clear();
-            }
-
-            if (_completedQuestsListView != null)
-            {
-                _completedQuestsListView.ElementInfoClicked -= OnQuestInfoClicked;
-                _completedQuestsListView.ElementActionClicked -= OnQuestActionClicked;
-                _completedQuestsListView.Clear();
-            }
-
-            _questsTabsController.ClearTabs();
+            _tabbedListViews.Clear();
         }
 
         private void OnQuestInfoClicked(string questId)

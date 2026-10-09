@@ -70,6 +70,7 @@ namespace Assets._Game.Scripts.UI.Common
             var tabsToRemove = _tabsGroup.SelectableElements.ToArray();
             tabsToRemove.ForEach(x =>
             {
+                x.SetSelection(false, true);
                 _tabsGroup.RemoveSelectable(x);
                 Destroy(x.gameObject);
             });

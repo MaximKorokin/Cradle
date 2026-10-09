@@ -16,8 +16,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private SimpleListView _craftingTabContentTemplate;
 
-        private SimpleListView _availableRecipesListView;
-        private SimpleListView _unavailableRecipesListView;
+        private TabbedListViewCollection _tabbedListViews;
 
         private Dictionary<string, CraftingRecipeDefinition> _recipeDefinitions;
 
@@ -28,13 +27,13 @@ namespace Assets._Game.Scripts.UI.Views
         {
             base.Awake();
             _craftingTabContentTemplate.gameObject.SetActive(false);
+            _tabbedListViews = new TabbedListViewCollection(_craftingTabsController, _craftingTabContentTemplate);
         }
 
         protected override void Render(CraftingViewData data)
         {
-            Clear();
-
             var currentTabIndex = _craftingTabsController.GetSelectedTabIndex();
+            Clear();
 
             var availableRecipes = data.AvailableRecipes.ToArray();
             var unavailableRecipes = data.UnavailableRecipes.ToArray();
@@ -42,28 +41,20 @@ namespace Assets._Game.Scripts.UI.Views
             _recipeDefinitions = availableRecipes.Concat(unavailableRecipes).ToDictionary(r => r.Id, r => r);
 
             // Available Recipes
-            _availableRecipesListView = Instantiate(_craftingTabContentTemplate);
-            _availableRecipesListView.Render(availableRecipes.Select(r => new SimpleListItemData()
+            _tabbedListViews.AddTab("Available", "Available", availableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
                 Sprite = r.Result.ItemDefinition.Icon,
                 Text = FormatRecipeWithIngredients(r, true)
-            }));
-            _craftingTabsController.AddTab(new TabData("Available", _availableRecipesListView.transform as RectTransform));
-            _availableRecipesListView.ElementInfoClicked += OnRecipeInfoClicked;
-            _availableRecipesListView.ElementActionClicked += OnRecipeActionClicked;
+            }), OnRecipeInfoClicked, OnRecipeActionClicked);
 
             // Unavailable Recipes
-            _unavailableRecipesListView = Instantiate(_craftingTabContentTemplate);
-            _unavailableRecipesListView.Render(unavailableRecipes.Select(r => new SimpleListItemData()
+            _tabbedListViews.AddTab("Unavailable", "Unavailable", unavailableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
                 Sprite = r.Result.ItemDefinition.Icon,
                 Text = FormatRecipeWithIngredients(r, false)
-            }));
-            _craftingTabsController.AddTab(new TabData("Unavailable", _unavailableRecipesListView.transform as RectTransform));
-            _unavailableRecipesListView.ElementInfoClicked += OnRecipeInfoClicked;
-            _unavailableRecipesListView.ElementActionClicked += OnRecipeActionClicked;
+            }), OnRecipeInfoClicked, OnRecipeActionClicked);
 
             _craftingTabsController.SelectTab(currentTabIndex);
         }
@@ -97,21 +88,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void Clear()
         {
-            if (_availableRecipesListView != null)
-            {
-                _availableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
-                _availableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
-                _availableRecipesListView.Clear();
-            }
-
-            if (_unavailableRecipesListView != null)
-            {
-                _unavailableRecipesListView.ElementInfoClicked -= OnRecipeInfoClicked;
-                _unavailableRecipesListView.ElementActionClicked -= OnRecipeActionClicked;
-                _unavailableRecipesListView.Clear();
-            }
-
-            _craftingTabsController.ClearTabs();
+            _tabbedListViews.Clear();
         }
 
         private void OnRecipeInfoClicked(string recipeId)

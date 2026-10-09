@@ -27,10 +27,7 @@ namespace Assets._Game.Scripts.UI.Views
         [field: SerializeField]
         public GameControlWidget GameControlTabContent { get; private set; }
 
-        private SimpleListView _itemsListView;
-        private SimpleListView _buffsListView;
-        private SimpleListView _debuffsListView;
-        private SimpleListView _questsListView;
+        private TabbedListViewCollection _tabbedListViews;
 
         private Dictionary<string, ItemDefinition> _itemDefinitions;
         private Dictionary<string, StatusEffectDefinition> _statusEffectDefinitions;
@@ -45,11 +42,12 @@ namespace Assets._Game.Scripts.UI.Views
         {
             base.Awake();
             _cheatsTabContentTemplate.gameObject.SetActive(false);
+            _tabbedListViews = new TabbedListViewCollection(_cheatsTabsController, _cheatsTabContentTemplate);
         }
 
         protected override void Render(CheatsViewData data)
         {
-            ClearTabs();
+            Clear();
 
             _itemDefinitions = data.ItemDefinitions.ToDictionary(d => d.Id, d => d);
             _statusEffectDefinitions = data.StatusEffectDefinitions.ToDictionary(d => d.Id, d => d);
@@ -59,79 +57,41 @@ namespace Assets._Game.Scripts.UI.Views
             _cheatsTabsController.AddTab(new TabData(ControlTabId, "Control", GameControlTabContent.transform as RectTransform));
 
             // Items tab
-            _itemsListView = Instantiate(_cheatsTabContentTemplate);
-            _itemsListView.Render(data.ItemDefinitions.Select(d => new SimpleListItemData()
+            _tabbedListViews.AddTab(ItemsTabId, "Items", data.ItemDefinitions.Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = d.Icon,
                 Text = d.Name
-            }));
-            _cheatsTabsController.AddTab(new TabData(ItemsTabId, "Items", _itemsListView.transform as RectTransform));
-            _itemsListView.ElementInfoClicked += OnItemDefinitionInfoClicked;
-            _itemsListView.ElementActionClicked += OnItemDefinitionActionClicked;
+            }), OnItemDefinitionInfoClicked, OnItemDefinitionActionClicked);
 
             // Buffs tab
-            _buffsListView = Instantiate(_cheatsTabContentTemplate);
-            _buffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Buff).Select(d => new SimpleListItemData()
+            _tabbedListViews.AddTab(BuffsTabId, "Buffs", data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Buff).Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = d.Icon,
                 Text = d.Name
-            }));
-            _cheatsTabsController.AddTab(new TabData(BuffsTabId, "Buffs", _buffsListView.transform as RectTransform));
-            _buffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
+            }), actionClicked: OnStatusEffectDefinitionClicked);
 
             // Debuffs tab
-            _debuffsListView = Instantiate(_cheatsTabContentTemplate);
-            _debuffsListView.Render(data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Debuff).Select(d => new SimpleListItemData()
+            _tabbedListViews.AddTab(DebuffsTabId, "Debuffs", data.StatusEffectDefinitions.Where(d => d.Category == StatusEffectCategory.Debuff).Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = d.Icon,
                 Text = d.Name
-            }));
-            _cheatsTabsController.AddTab(new TabData(DebuffsTabId, "Debuffs", _debuffsListView.transform as RectTransform));
-            _debuffsListView.ElementActionClicked += OnStatusEffectDefinitionClicked;
+            }), actionClicked: OnStatusEffectDefinitionClicked);
 
             // Quests tab
-            _questsListView = Instantiate(_cheatsTabContentTemplate);
-            _questsListView.Render(data.QuestDefinitions.Select(d => new SimpleListItemData()
+            _tabbedListViews.AddTab(QuestsTabId, "Quests", data.QuestDefinitions.Select(d => new SimpleListItemData()
             {
                 Identifier = d.Id,
                 Sprite = null,
                 Text = d.Title
-            }));
-            _cheatsTabsController.AddTab(new TabData(QuestsTabId, "Quests", _questsListView.transform as RectTransform));
-            _questsListView.ElementActionClicked += OnQuestDefinitionClicked;
+            }), actionClicked: OnQuestDefinitionClicked);
         }
 
-        private void ClearTabs()
+        private void Clear()
         {
-            if (_itemsListView != null)
-            {
-                _itemsListView.ElementInfoClicked -= OnItemDefinitionInfoClicked;
-                _itemsListView.ElementActionClicked -= OnItemDefinitionActionClicked;
-                _itemsListView.Clear();
-            }
-
-            if (_buffsListView != null)
-            {
-                _buffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
-                _buffsListView.Clear();
-            }
-
-            if (_debuffsListView != null)
-            {
-                _debuffsListView.ElementActionClicked -= OnStatusEffectDefinitionClicked;
-                _debuffsListView.Clear();
-            }
-
-            if (_questsListView != null)
-            {
-                _questsListView.ElementActionClicked -= OnQuestDefinitionClicked;
-                _questsListView.Clear();
-            }
-
-            _cheatsTabsController.ClearTabs();
+            _tabbedListViews.Clear();
         }
 
         private void OnItemDefinitionInfoClicked(string itemId)
