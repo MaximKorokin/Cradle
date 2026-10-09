@@ -20,12 +20,18 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
             _cooldownFillBar.ForegroundImage.sprite = statusEffectSnapshot.Definition.Icon;
             _cooldownFillBar.gameObject.SetActive(true);
+
+            TickStatusEffectVisual();
         }
 
         private void Update()
         {
-            if (StatusEffectDefinition == null) return;
+            TickStatusEffectVisual();
+        }
 
+        private void TickStatusEffectVisual()
+        {
+            if (StatusEffectDefinition == null) return;
             if (RemainingDuration > 0 && float.IsFinite(RemainingDuration))
             {
                 RemainingDuration -= Time.deltaTime;

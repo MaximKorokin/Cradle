@@ -8,6 +8,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 {
     public sealed class StatusEffectListViewData : EntityBoundDataAggregatorBase
     {
+        private StatusEffectModule _statusEffectModule;
+
         public IEnumerable<StatusEffectSnapshot> Buffs =>
             Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
 
@@ -20,18 +22,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnBoundEntityChanged()
         {
-            UnsubscribeFromPlayerModules();
-            SubscribeToPlayerModules();
-        }
-
-        private void SubscribeToPlayerModules()
-        {
-            Entity.GetModule<StatusEffectModule>().StatusEffects.Changed += OnStatusEffectsModuleChanged;
-        }
-
-        private void UnsubscribeFromPlayerModules()
-        {
-            Entity.GetModule<StatusEffectModule>().StatusEffects.Changed -= OnStatusEffectsModuleChanged;
+            _statusEffectModule = Entity.GetModule<StatusEffectModule>();
+            _statusEffectModule.StatusEffects.Changed -= OnStatusEffectsModuleChanged;
+            _statusEffectModule.StatusEffects.Changed += OnStatusEffectsModuleChanged;
         }
 
         private void OnStatusEffectsModuleChanged()
@@ -41,7 +34,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public override void Dispose()
         {
-            Entity.GetModule<StatusEffectModule>().StatusEffects.Changed -= OnStatusEffectsModuleChanged;
+            _statusEffectModule.StatusEffects.Changed -= OnStatusEffectsModuleChanged;
             base.Dispose();
         }
     }
