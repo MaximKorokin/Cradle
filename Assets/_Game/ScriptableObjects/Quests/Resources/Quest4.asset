@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0735a31cac337694b98a5fcd5143f269, type: 3}
+  m_Name: Quest4
+  m_EditorClassIdentifier: 
+  _id: 4d51cb2fb27e4ed08ec33d5195f0155a
+  <Title>k__BackingField: Wolves4
+  <Description>k__BackingField: 
+  <RequiredLevel>k__BackingField: 10
+  <Objectives>k__BackingField:
+  - rid: 3564180410443759731
+  - rid: 3564180427547345043
+  - rid: 3564180427547345044
+  <Reward>k__BackingField:
+    _experience: 0
+    _itemRewards:
+    - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
+    - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
+    - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 3564180410443759731
+      type: {class: EntityKillsObjectiveDefinition, ns: Assets._Game.Scripts.Quests.Objectives, asm: Assembly-CSharp}
+      data:
+        <RequiredAmount>k__BackingField: 10000
+        <Entity>k__BackingField: {fileID: 11400000, guid: d52724609bd1c004c9df88bdb5afe673, type: 2}
+    - rid: 3564180427547345043
+      type: {class: LevelObjectiveDefinition, ns: Assets._Game.Scripts.Quests.Objectives, asm: Assembly-CSharp}
+      data:
+        <RequiredAmount>k__BackingField: 3
+    - rid: 3564180427547345044
+      type: {class: ItemsInInventoryObjectiveDefinition, ns: Assets._Game.Scripts.Quests.Objectives, asm: Assembly-CSharp}
+      data:
+        <RequiredAmount>k__BackingField: 1000
+        <Item>k__BackingField: {fileID: 11400000, guid: 8def6da0c958e1c41ba548b4b206f9ba, type: 2}

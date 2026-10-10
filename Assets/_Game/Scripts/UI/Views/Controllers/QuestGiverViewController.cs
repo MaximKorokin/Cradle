@@ -1,7 +1,6 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
-using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;

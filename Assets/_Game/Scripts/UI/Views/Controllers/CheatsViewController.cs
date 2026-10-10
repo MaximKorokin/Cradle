@@ -81,8 +81,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnQuestDefinitionClicked(QuestDefinition questDefinition)
         {
-            if (!_entityRepository.TryGet(_entityId.Value, out var entity) || !entity.TryGetModule<QuestModule>(out var questModule)) return;
-            if (questModule.AllQuestSnapshots.Any(quest => quest.Definition.Id == questDefinition.Id)) return;
+            if (!_entityRepository.TryGet(_entityId.Value, out var entity)) return;
 
             entity.Publish(new QuestAddRequest(questDefinition.Id));
         }

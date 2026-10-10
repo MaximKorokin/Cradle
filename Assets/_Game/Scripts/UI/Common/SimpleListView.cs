@@ -18,15 +18,17 @@ namespace Assets._Game.Scripts.UI.Common
 
         private void Awake()
         {
-            _itemTemplate.gameObject.SetActive(false);
+            if (_itemTemplate != null)
+                _itemTemplate.gameObject.SetActive(false);
         }
 
-        public void Render(IEnumerable<SimpleListItemData> itemDefinitions)
+        public void Render(IEnumerable<SimpleListItemData> itemDefinitions, Func<SimpleListItemData, SimpleListItemView> templateProvider = null)
         {
             Clear();
             foreach (var itemDefinition in itemDefinitions)
             {
-                var item = Instantiate(_itemTemplate);
+                var template = templateProvider != null ? templateProvider(itemDefinition) : _itemTemplate;
+                var item = Instantiate(template);
                 _items.Add(item);
                 item.transform.SetParent(_itemsParent, false);
                 item.Render(itemDefinition);
