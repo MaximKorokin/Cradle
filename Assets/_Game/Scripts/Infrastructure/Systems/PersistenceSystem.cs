@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class PersistenceSystem : EntitySystemBase
     {
         private readonly SaveService _saveService;
-        private readonly NewGameDefinition _newGameDefinition;
+        private readonly NewGameConfig _newGameDefinition;
         private readonly PlayerContext _playerContext;
         private readonly ILocationContext _locationContext;
 
@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IGlobalEventBus globalEventBus,
             EntityRepository repository,
             SaveService saveService,
-            NewGameDefinition newGameDefinition,
+            NewGameConfig newGameDefinition,
             PlayerContext playerContext,
             ILocationContext locationContext) : base(globalEventBus, repository)
         {

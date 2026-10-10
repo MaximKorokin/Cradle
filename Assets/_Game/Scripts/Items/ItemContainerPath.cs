@@ -30,8 +30,8 @@ namespace Assets._Game.Scripts.Items
         public override bool Equals(object obj)
         {
             return obj is ItemContainerPath path &&
-                   EntityId == path.EntityId &&
-                   ContainerId == path.ContainerId;
+                EntityId == path.EntityId &&
+                ContainerId == path.ContainerId;
         }
 
         public override int GetHashCode()

@@ -7,8 +7,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         protected readonly EntityRepository EntityRepository;
 
-        private IReadOnlyObservableData<EntryRef> ObservableEntityId;
-
+        public IReadOnlyObservableData<EntryRef> ObservableEntityId { get; private set; }
         public string EntityId => ObservableEntityId?.Value.Id;
         public Entity Entity { get; private set; }
 

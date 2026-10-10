@@ -15,6 +15,7 @@ MonoBehaviour:
   _id: 30f6b3f8463447bbb8edd9b6a0f671ef
   <Title>k__BackingField: Wolves
   <Description>k__BackingField: 
+  <RequiredLevel>k__BackingField: 1
   <Objectives>k__BackingField:
   - rid: 3564180410443759731
   - rid: 3564180427547345043

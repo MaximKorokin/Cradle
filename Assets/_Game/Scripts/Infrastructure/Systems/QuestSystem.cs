@@ -11,6 +11,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public sealed class QuestSystem : EntitySystemBase
     {
         private readonly ItemStackFactory _itemStackFactory;
+        private readonly QuestDefinitionCatalog _questDefinitionCatalog;
 
         protected override EntityQuery EntityQuery { get; } =
             new EntityQuery(
@@ -20,10 +21,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         public QuestSystem(
             IGlobalEventBus globalEventBus,
-            EntityRepository repository,
-            ItemStackFactory itemStackFactory) : base(globalEventBus, repository)
+            EntityRepository entityRepository,
+            ItemStackFactory itemStackFactory,
+            QuestDefinitionCatalog questDefinitionCatalog) : base(globalEventBus, entityRepository)
         {
             _itemStackFactory = itemStackFactory;
+            _questDefinitionCatalog = questDefinitionCatalog;
 
             TrackEntityEvent<LevelChangedEvent>(OnLevelChanged);
             TrackEntityEvent<InventoryChangedEvent>(OnInventoryChanged);
@@ -61,9 +64,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void HandleEvent(QuestModule questModule, IEvent e)
         {
-            for (int i = 0; i < questModule.AllQuests.Count; i++)
+            for (int i = 0; i < questModule.AllQuestStates.Count; i++)
             {
-                var quest = questModule.AllQuests[i];
+                var quest = questModule.AllQuestStates[i];
 
                 if (quest.IsCompleted) continue;
 
@@ -78,22 +81,27 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnQuestAddRequested(Entity entity, QuestAddRequest e)
         {
-            entity.GetModule<QuestModule>().AddQuest(e.QuestState);
+            var questDefinition = _questDefinitionCatalog.Get(e.QuestDefinitionId);
+            entity.GetModule<QuestModule>().AddQuest(questDefinition);
         }
 
         private void OnQuestCompleteRequested(Entity entity, QuestCompleteRequest e)
         {
-            if (!entity.GetModule<QuestModule>().AllQuests.Contains(e.QuestState))
+            var questDefinition = _questDefinitionCatalog.Get(e.QuestDefinitionId);
+            if (!entity.GetModule<QuestModule>().HasQuest(e.QuestDefinitionId))
             {
-                SLog.Error($"Cannot complete quest with name {e.QuestState.Definition.Title} because entity {entity} does not contain it");
+                SLog.Error($"Cannot complete quest with name {questDefinition.Title} because entity {entity} does not contain it");
+                return;
             }
+            var questState = entity.GetModule<QuestModule>().GetQuestState(e.QuestDefinitionId);
 
-            e.QuestState.SetCompleted(true);
+            questState.SetCompleted(true);
         }
 
         private void OnQuestAdded(Entity entity, QuestAddedEvent e)
         {
-            InitializeQuest(e.QuestState, entity);
+            var questState = entity.GetModule<QuestModule>().GetQuestState(e.QuestState.Definition.Id);
+            InitializeQuest(questState, entity);
         }
 
         private void OnQuestUpdated(Entity entity, QuestUpdatedEvent e)
@@ -145,29 +153,29 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct QuestAddRequest : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public string QuestDefinitionId { get; }
 
-        public QuestAddRequest(QuestState questState)
+        public QuestAddRequest(string questDefinitionId)
         {
-            QuestState = questState;
+            QuestDefinitionId = questDefinitionId;
         }
     }
 
     public readonly struct QuestCompleteRequest : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public string QuestDefinitionId { get; }
 
-        public QuestCompleteRequest(QuestState questState)
+        public QuestCompleteRequest(string questDefinitionId)
         {
-            QuestState = questState;
+            QuestDefinitionId = questDefinitionId;
         }
     }
 
     public readonly struct QuestAddedEvent : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public QuestStateSnapshot QuestState { get; }
 
-        public QuestAddedEvent(QuestState questState)
+        public QuestAddedEvent(QuestStateSnapshot questState)
         {
             QuestState = questState;
         }
@@ -175,9 +183,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct QuestRemovedEvent : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public QuestStateSnapshot QuestState { get; }
 
-        public QuestRemovedEvent(QuestState questState)
+        public QuestRemovedEvent(QuestStateSnapshot questState)
         {
             QuestState = questState;
         }
@@ -185,9 +193,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct QuestUpdatedEvent : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public QuestStateSnapshot QuestState { get; }
 
-        public QuestUpdatedEvent(QuestState questState)
+        public QuestUpdatedEvent(QuestStateSnapshot questState)
         {
             QuestState = questState;
         }
@@ -195,9 +203,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct QuestObjectivesCompletedEvent : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public QuestStateSnapshot QuestState { get; }
 
-        public QuestObjectivesCompletedEvent(QuestState questState)
+        public QuestObjectivesCompletedEvent(QuestStateSnapshot questState)
         {
             QuestState = questState;
         }
@@ -205,9 +213,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct QuestCompletedEvent : IEntityEvent
     {
-        public QuestState QuestState { get; }
+        public QuestStateSnapshot QuestState { get; }
 
-        public QuestCompletedEvent(QuestState questState)
+        public QuestCompletedEvent(QuestStateSnapshot questState)
         {
             QuestState = questState;
         }

@@ -1,57 +1,61 @@
+using Assets._Game.Scripts.Entities;
+using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.UI.DataFormatters;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public interface IQuestDescriptionViewData : IDataAggregator
+    public class QuestDescriptionViewData : EntityBoundDataAggregatorBase
     {
-        QuestStateDisplayData QuestData { get; }
-        void SetQuestState(QuestState questState);
-    }
-
-    public class QuestDescriptionViewData : DataAggregatorBase, IQuestDescriptionViewData
-    {
+        private readonly QuestDefinitionCatalog _questDefinitionCatalog;
         private readonly QuestStateFormatter _questStateFormatter;
-        private QuestState _questState;
-        private QuestStateDisplayData _questData;
 
-        public QuestStateDisplayData QuestData => _questData;
+        private QuestModule _questModule;
+        private string _questId;
 
-        public QuestDescriptionViewData(QuestStateFormatter questStateFormatter)
+        public QuestStateDisplayData QuestData { get; private set; }
+
+        public QuestDescriptionViewData(
+            EntityRepository entityRepository,
+            QuestDefinitionCatalog questDefinitionCatalog,
+            QuestStateFormatter questStateFormatter) : base(entityRepository)
         {
+            _questDefinitionCatalog = questDefinitionCatalog;
             _questStateFormatter = questStateFormatter;
         }
 
-        public void SetQuestState(QuestState questState)
+        protected override void OnBoundEntityChanged()
         {
-            if (_questState != null)
+            if (_questModule != null)
             {
-                _questState.Updated -= OnQuestUpdated;
+                _questModule.QuestUpdated -= OnQuestUpdated;
             }
-
-            _questState = questState;
-
-            if (_questState != null)
+            _questModule = Entity?.GetModule<QuestModule>();
+            if (_questModule != null)
             {
-                _questState.Updated += OnQuestUpdated;
-                UpdateQuestData();
+                _questModule.QuestUpdated += OnQuestUpdated;
             }
         }
 
-        private void OnQuestUpdated(QuestState quest)
+        public void SetQuestId(string questId)
         {
-            UpdateQuestData();
+            _questId = questId;
+            var questState = _questModule != null
+                ? _questModule.GetQuestStateSnapshot(_questId)
+                : new QuestStateSnapshot(_questDefinitionCatalog.Get(_questId));
+
+            OnQuestUpdated(questState);
         }
 
-        private void UpdateQuestData()
+        private void OnQuestUpdated(QuestStateSnapshot questState)
         {
-            if (_questState == null)
+            if (questState.Equals(default) || questState.Definition == null || questState.Definition.Id != _questId)
             {
-                _questData = default;
+                QuestData = default;
             }
             else
             {
-                _questData = _questStateFormatter.FormatData(_questState);
+                QuestData = _questStateFormatter.FormatData(questState);
             }
 
             NotifyChanged();
@@ -59,9 +63,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public override void Dispose()
         {
-            if (_questState != null)
+            if (_questModule != null)
             {
-                _questState.Updated -= OnQuestUpdated;
+                _questModule.QuestUpdated -= OnQuestUpdated;
             }
 
             base.Dispose();

@@ -1,4 +1,4 @@
-using Assets._Game.Scripts.Quests;
+using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Controllers;
@@ -6,7 +6,7 @@ using Assets._Game.Scripts.UI.Views.Controllers;
 namespace Assets._Game.Scripts.UI.Windows.Controllers
 {
     [Window(WindowId.QuestDescription)]
-    public sealed class QuestDescriptionWindowController : SingleViewWindowControllerBase<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments, QuestDescriptionView, IQuestDescriptionViewData, QuestDescriptionViewController>
+    public sealed class QuestDescriptionWindowController : SingleViewWindowControllerBase<QuestDescriptionWindow, QuestDescriptionWindowControllerArguments, QuestDescriptionView, QuestDescriptionViewData, QuestDescriptionViewController>
     {
         public QuestDescriptionWindowController(
             QuestDescriptionViewController questDescriptionViewController,
@@ -18,7 +18,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnInitialize();
 
-            ViewData.SetQuestState(Arguments.Quest);
+            ViewData.SetEntityId(Arguments.EntityId);
+            ViewData.SetQuestId(Arguments.QuestDefinitionId);
         }
 
         protected override QuestDescriptionView GetView() => Window.QuestDescriptionView;
@@ -26,11 +27,13 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
 
     public readonly struct QuestDescriptionWindowControllerArguments : IWindowControllerArguments
     {
-        public QuestState Quest { get; }
+        public readonly IReadOnlyObservableData<EntryRef> EntityId;
+        public readonly string QuestDefinitionId;
 
-        public QuestDescriptionWindowControllerArguments(QuestState quest)
+        public QuestDescriptionWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId, string questDefinitionId)
         {
-            Quest = quest;
+            EntityId = entityId;
+            QuestDefinitionId = questDefinitionId;
         }
     }
 }

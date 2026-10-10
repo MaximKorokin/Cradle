@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public sealed class QuestStateFormatter : IDataFormatter<QuestState, QuestStateDisplayData>
+    public sealed class QuestStateFormatter : IDataFormatter<QuestStateSnapshot, QuestStateDisplayData>
     {
         private readonly QuestObjectiveProgressFormatter _questObjectiveProgressFormatter;
 
@@ -12,27 +12,33 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             _questObjectiveProgressFormatter = questObjectiveProgressFormatter;
         }
 
-        public QuestStateDisplayData FormatData(QuestState data)
+        public QuestStateDisplayData FormatData(QuestStateSnapshot data)
         {
             var stringBuilder = new StringBuilder();
-            for (int i = 0; i < data.Objectives.Length; i++)
+            var objectives = data.GetObjectives();
+            for (int i = 0; i < objectives.Length; i++)
             {
-                stringBuilder.AppendLine($"- {_questObjectiveProgressFormatter.FormatData(data.Objectives[i])}");
+                stringBuilder.AppendLine($"- {_questObjectiveProgressFormatter.FormatData(objectives[i])}");
             }
             var objectivesText = stringBuilder.ToString();
 
             stringBuilder.Clear();
-            for (int i = 0; i < data.Definition.Reward.ItemRewards.Length; i++)
+            if (data.Definition.Reward != null)
             {
-                stringBuilder.AppendLine($"- {data.Definition.Reward.ItemRewards[i].Name}");
+                for (int i = 0; i < data.Definition.Reward.ItemRewards.Length; i++)
+                {
+                    stringBuilder.AppendLine($"- {data.Definition.Reward.ItemRewards[i].Name}");
+                }
             }
             var itemRewardsText = stringBuilder.ToString();
+            var experienceRewardText = data.Definition.Reward != null ? $"{data.Definition.Reward.Experience} Exp" : "";
 
             return new QuestStateDisplayData(
                 data.Definition.Title,
                 data.Definition.Description,
+                $"Level: {data.Definition.RequiredLevel}+",
                 objectivesText,
-                $"{data.Definition.Reward.Experience} Exp",
+                experienceRewardText,
                 itemRewardsText);
         }
     }
@@ -43,6 +49,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
         public readonly string Title;
         public readonly string Description;
+        public readonly string RequirementsText;
         public readonly string ObjectivesText;
         public readonly string ExperienceRewardText;
         public readonly string ItemRewardsText;
@@ -50,6 +57,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public QuestStateDisplayData(
             string title,
             string description,
+            string requirementsText,
             string objectivesText,
             string experienceRewardText,
             string itemRewardsText)
@@ -58,6 +66,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             Title = title;
             Description = description;
+            RequirementsText = requirementsText;
             ObjectivesText = objectivesText;
             ExperienceRewardText = experienceRewardText;
             ItemRewardsText = itemRewardsText;

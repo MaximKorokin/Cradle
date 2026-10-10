@@ -31,7 +31,7 @@ namespace Assets._Game.Scripts.UI.Views
             Clear();
 
             // Active quests
-            _tabbedListViews.AddTab("Active", "Active", data.ActiveQuests.Where(q => !q.IsCompleted).Select(q => new SimpleListItemData()
+            _tabbedListViews.AddTab("Active", "Active", data.AllQuests.Where(q => !q.IsCompleted).Select(q => new SimpleListItemData()
             {
                 Identifier = q.Definition.Id,
                 Sprite = null,
@@ -39,7 +39,7 @@ namespace Assets._Game.Scripts.UI.Views
             }), OnQuestInfoClicked, OnQuestActionClicked);
 
             // Completed quests
-            _tabbedListViews.AddTab("Completed", "Completed", data.ActiveQuests.Where(q => q.IsCompleted).Select(q => new SimpleListItemData()
+            _tabbedListViews.AddTab("Completed", "Completed", data.AllQuests.Where(q => q.IsCompleted).Select(q => new SimpleListItemData()
             {
                 Identifier = q.Definition.Id,
                 Sprite = null,

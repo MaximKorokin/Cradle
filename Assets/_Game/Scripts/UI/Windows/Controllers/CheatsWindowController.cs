@@ -18,7 +18,7 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnInitialize();
 
-            ViewController.SetInventoryEntityId(Arguments.InventoryEntityId);
+            ViewController.SetEntityId(Arguments.InventoryEntityId);
         }
 
         protected override CheatsView GetView() => Window.CheatsView;

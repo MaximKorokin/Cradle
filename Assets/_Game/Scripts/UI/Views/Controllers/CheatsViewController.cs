@@ -4,37 +4,36 @@ using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;
+using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Views.Controllers
 {
     public sealed class CheatsViewController : ViewControllerBase<CheatsView, CheatsViewData>
     {
         private readonly IGlobalEventBus _globalEventBus;
-        private readonly IPlayerProvider _playerProvider;
         private readonly EntityRepository _entityRepository;
         private readonly ItemStackFactory _itemStackAssembler;
 
-        private IReadOnlyObservableData<EntryRef> _inventoryEntityId;
+        private IReadOnlyObservableData<EntryRef> _entityId;
 
         public CheatsViewController(
             IGlobalEventBus globalEventBus,
-            IPlayerProvider playerProvider,
             EntityRepository entityRepository,
             ItemStackFactory itemStackAssembler)
         {
             _globalEventBus = globalEventBus;
-            _playerProvider = playerProvider;
             _entityRepository = entityRepository;
             _itemStackAssembler = itemStackAssembler;
         }
 
-        public void SetInventoryEntityId(IReadOnlyObservableData<EntryRef> inventoryEntityId)
+        public void SetEntityId(IReadOnlyObservableData<EntryRef> entityId)
         {
-            _inventoryEntityId = inventoryEntityId;
+            _entityId = entityId;
         }
 
         public override void Initialize(CheatsView view)
@@ -43,6 +42,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
             View.ItemDefinitionActionClicked += OnItemDefinitionActionClicked;
             View.StatusEffectDefinitionClicked += OnStatusEffectDefinitionClicked;
+            View.QuestDefinitionClicked += OnQuestDefinitionClicked;
             View.GameControlTabContent.ResetPlayerQuestsButtonClicked += OnResetPlayerQuestsButtonClicked;
             View.GameControlTabContent.ResetPlayerLevelButtonClicked += OnResetPlayerLevelButtonClicked;
             View.GameControlTabContent.ResetWindowPositionsButtonClicked += OnResetWindowPositionsButtonClicked;
@@ -52,6 +52,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
         {
             View.ItemDefinitionActionClicked -= OnItemDefinitionActionClicked;
             View.StatusEffectDefinitionClicked -= OnStatusEffectDefinitionClicked;
+            View.QuestDefinitionClicked -= OnQuestDefinitionClicked;
             View.GameControlTabContent.ResetPlayerQuestsButtonClicked -= OnResetPlayerQuestsButtonClicked;
             View.GameControlTabContent.ResetPlayerLevelButtonClicked -= OnResetPlayerLevelButtonClicked;
             View.GameControlTabContent.ResetWindowPositionsButtonClicked -= OnResetWindowPositionsButtonClicked;
@@ -61,7 +62,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
         {
-            if (_entityRepository.TryGet(_inventoryEntityId.Value, out var statusEntity) && statusEntity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            if (_entityRepository.TryGet(_entityId.Value, out var statusEntity) && statusEntity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
                 statusEffectModule.StatusEffects.AddStatusEffect(new StatusEffect(statusEffectDefinition));
             }
@@ -69,7 +70,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)
         {
-            if (_entityRepository.TryGet(_inventoryEntityId.Value, out var inventoryEntity) && inventoryEntity.TryGetModule<InventoryModule>(out var inventoryModule))
+            if (_entityRepository.TryGet(_entityId.Value, out var inventoryEntity) && inventoryEntity.TryGetModule<InventoryModule>(out var inventoryModule))
             {
                 WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
                 {
@@ -78,14 +79,24 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             }
         }
 
+        private void OnQuestDefinitionClicked(QuestDefinition questDefinition)
+        {
+            if (!_entityRepository.TryGet(_entityId.Value, out var entity) || !entity.TryGetModule<QuestModule>(out var questModule)) return;
+            if (questModule.AllQuestSnapshots.Any(quest => quest.Definition.Id == questDefinition.Id)) return;
+
+            entity.Publish(new QuestAddRequest(questDefinition.Id));
+        }
+
         private void OnResetPlayerQuestsButtonClicked()
         {
-            _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(QuestModule)));
+            if (_entityRepository.TryGet(_entityId.Value, out var entity))
+                _globalEventBus.Publish(new ResetEntityModuleRequest(entity, typeof(QuestModule)));
         }
 
         private void OnResetPlayerLevelButtonClicked()
         {
-            _globalEventBus.Publish(new ResetEntityModuleRequest(_playerProvider.Player, typeof(LevelingModule)));
+            if (_entityRepository.TryGet(_entityId.Value, out var entity))
+                _globalEventBus.Publish(new ResetEntityModuleRequest(entity, typeof(LevelingModule)));
         }
 
         private void OnResetWindowPositionsButtonClicked()

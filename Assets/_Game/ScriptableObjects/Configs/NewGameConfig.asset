@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e1642542ef72eb44a4f96befbf74f98, type: 3}
-  m_Name: NewGameDefinition
+  m_Script: {fileID: 11500000, guid: 8be0426140481bb4dbb49a72a670bd54, type: 3}
+  m_Name: NewGameConfig
   m_EditorClassIdentifier: 
   <PlayerEntityDefinition>k__BackingField: {fileID: 11400000, guid: 8152b2c4633aec6448b38d643bcda4ec, type: 2}
   <LocationTransitionData>k__BackingField:
-    <LocationDefinition>k__BackingField: {fileID: 11400000, guid: 4b198a041011eeb478bc9174b6ec1792, type: 2}
-    <EntranceDefinition>k__BackingField: {fileID: 11400000, guid: e3c66083505112849ba45481e4f58d40, type: 2}
+    <LocationDefinition>k__BackingField: {fileID: 11400000, guid: 121a29130d1cc5548b781e84a3e38098, type: 2}
+    <EntranceDefinition>k__BackingField: {fileID: 11400000, guid: ec568c09d05a0294bac28e190c234996, type: 2}

@@ -7,7 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
     public sealed class ConfigReferences : ScriptableObject
     {
         [field: SerializeField]
-        public NewGameDefinition NewGameDefinition { get; private set; }
+        public NewGameConfig NewGameConfig { get; private set; }
         [field: SerializeField]
         public SaveConfig SaveConfig { get; private set; }
         [field: SerializeField]

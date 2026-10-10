@@ -17,7 +17,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
         }
     }
 
-    public sealed class EntityKillsObjectiveProgress : ObjectiveProgress<EntityKillsObjectiveDefinition>, ISaveableObjectiveProgress
+    public sealed class EntityKillsObjectiveProgress : ObjectiveProgress<EntityKillsObjectiveDefinition>, ISaveableObjectiveProgress, ILoadableObjectiveProgress
     {
         public EntityKillsObjectiveProgress(EntityKillsObjectiveDefinition definition) : base(definition)
         {
@@ -33,11 +33,11 @@ namespace Assets._Game.Scripts.Quests.Objectives
 
         public bool TryLoad(object state)
         {
-            if (state is EntityKillsObjectiveProgressData data)
+            if (state is QuestObjectiveProgressData data)
             {
-                if (data.EntityId == Definition.Entity.Id)
+                if (data.Payload is string entityId && entityId == Definition.Entity.Id)
                 {
-                    SetProgress(data.KillsAmount);
+                    SetProgress(data.CurrentAmount);
                     return true;
                 }
             }
@@ -46,11 +46,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
 
         public object Save()
         {
-            return new EntityKillsObjectiveProgressData
-            {
-                EntityId = Definition.Entity.Id,
-                KillsAmount = CurrentAmount
-            };
+            return new QuestObjectiveProgressData(CurrentAmount, Definition.Entity.Id);
         }
     }
 }

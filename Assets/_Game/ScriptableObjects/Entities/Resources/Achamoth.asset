@@ -73,4 +73,5 @@ MonoBehaviour:
         Enabled: 1
         <OfferedQuests>k__BackingField:
         - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
+        - {fileID: 11400000, guid: 053ec541b82061b43a18c80258d5c86d, type: 2}
         <Radius>k__BackingField: 1

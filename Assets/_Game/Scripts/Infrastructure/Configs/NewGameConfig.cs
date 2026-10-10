@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.Infrastructure.Game
 {
-    [CreateAssetMenu(menuName = "Configs/NewGameDefinition")]
-    public class NewGameDefinition : ScriptableObject
+    [CreateAssetMenu(menuName = "Configs/NewGameConfig", fileName = "NewGameConfig")]
+    public class NewGameConfig : ScriptableObject
     {
         [field: SerializeField]
         public EntityDefinition PlayerEntityDefinition { get; private set; }

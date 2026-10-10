@@ -16,6 +16,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
 
     public abstract class ObjectiveProgress
     {
+        public ObjectiveDefinition ObjectiveDefinition { get; private set; }
         public virtual int CurrentAmount { get; private set; }
         public virtual int RequiredAmount { get; private set; }
 
@@ -25,6 +26,7 @@ namespace Assets._Game.Scripts.Quests.Objectives
 
         public ObjectiveProgress(ObjectiveDefinition definition)
         {
+            ObjectiveDefinition = definition;
             CurrentAmount = 0;
             RequiredAmount = definition.RequiredAmount;
         }
@@ -59,9 +61,34 @@ namespace Assets._Game.Scripts.Quests.Objectives
         }
     }
 
+    public interface ILoadableObjectiveProgress
+    {
+        bool TryLoad(object state);
+    }
+
     public interface ISaveableObjectiveProgress
     {
         object Save();
-        bool TryLoad(object state);
+    }
+
+    public readonly struct ObjectiveProgressSnapshot
+    {
+        public readonly ObjectiveDefinition ObjectiveDefinition;
+        public readonly int CurrentAmount;
+        public readonly int RequiredAmount;
+
+        public ObjectiveProgressSnapshot(ObjectiveProgress progress)
+        {
+            ObjectiveDefinition = progress.ObjectiveDefinition;
+            CurrentAmount = progress.CurrentAmount;
+            RequiredAmount = progress.RequiredAmount;
+        }
+
+        public ObjectiveProgressSnapshot(ObjectiveDefinition definition)
+        {
+            ObjectiveDefinition = definition;
+            CurrentAmount = 0;
+            RequiredAmount = definition.RequiredAmount;
+        }
     }
 }

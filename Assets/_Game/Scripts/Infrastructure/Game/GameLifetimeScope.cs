@@ -85,7 +85,7 @@ namespace Assets._Game.Scripts.Infrastructure
 
         private void RegisterConfigs(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_configReferences.NewGameDefinition);
+            builder.RegisterInstance(_configReferences.NewGameConfig);
 
             builder.RegisterInstance(_configReferences.StatusEffectsConfig);
             builder.RegisterInstance(_configReferences.ItemsConfig);
@@ -146,7 +146,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<IDataCodec, EnchantDataCodec>(Lifetime.Singleton);
             builder.Register<IDataCodec, EmptyCodec>(Lifetime.Singleton);
 
-            builder.Register<IDataCodec, EntityKillsObjectiveCodec>(Lifetime.Singleton);
+            builder.Register<IDataCodec, QuestObjectiveCodec>(Lifetime.Singleton);
 
             builder.Register<CodecRegistry>(Lifetime.Singleton);
         }

@@ -30,10 +30,10 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnQuestInfoClicked(string questId)
         {
-            var quest = Data.ActiveQuests.FirstOrDefault(q => q.Definition.Id == questId);
-            if (quest == null) return;
+            var quest = Data.AllQuests.FirstOrDefault(q => q.Definition.Id == questId);
+            if (quest.Equals(default)) return;
 
-            _globalEventBus.Publish(new WindowToggleRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(quest)));
+            _globalEventBus.Publish(new WindowToggleRequest(WindowId.QuestDescription, new QuestDescriptionWindowControllerArguments(Data.ObservableEntityId, questId)));
         }
     }
 }

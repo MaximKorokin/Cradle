@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class QuestDescriptionView : UIViewBase<IQuestDescriptionViewData>
+    public sealed class QuestDescriptionView : UIViewBase<QuestDescriptionViewData>
     {
         [SerializeField]
         private TMP_Text _titleText;
@@ -13,6 +13,10 @@ namespace Assets._Game.Scripts.UI.Views
         private RectTransform _descriptionInfo;
         [SerializeField]
         private TMP_Text _descriptionText;
+        [SerializeField]
+        private RectTransform _requirementsInfo;
+        [SerializeField]
+        private TMP_Text _requirementsText;
         [SerializeField]
         private RectTransform _objectivesInfo;
         [SerializeField]
@@ -24,7 +28,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _itemRewardsText;
 
-        protected override void Render(IQuestDescriptionViewData viewData)
+        protected override void Render(QuestDescriptionViewData viewData)
         {
             var quest = viewData.QuestData;
 
@@ -32,6 +36,7 @@ namespace Assets._Game.Scripts.UI.Views
                 _titleText.text = quest.Title;
 
             RenderDescription(quest);
+            RenderRequirements(quest);
             RenderObjectives(quest);
             RenderRewards(quest);
         }
@@ -54,6 +59,17 @@ namespace Assets._Game.Scripts.UI.Views
 
             if (hasObjectives)
                 _objectivesText.text = quest.ObjectivesText;
+        }
+
+        private void RenderRequirements(QuestStateDisplayData quest)
+        {
+            var hasRequirements = _requirementsText != null && !string.IsNullOrWhiteSpace(quest.RequirementsText);
+
+            if (_requirementsInfo != null)
+                _requirementsInfo.gameObject.SetActive(hasRequirements);
+
+            if (_requirementsText != null)
+                _requirementsText.text = hasRequirements ? quest.RequirementsText : string.Empty;
         }
 
         private void RenderRewards(QuestStateDisplayData quest)

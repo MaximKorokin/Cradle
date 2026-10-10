@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443687fd25bcaaa4aa2572bd4cadcb2a, type: 3}
   m_Name: _ConfigReferences
   m_EditorClassIdentifier: 
-  <NewGameDefinition>k__BackingField: {fileID: 11400000, guid: 46c0fe08b4fc5424180cb73dc2408f79, type: 2}
+  <NewGameConfig>k__BackingField: {fileID: 11400000, guid: d250fa474d5173a4192d857a920d73c9, type: 2}
   <SaveConfig>k__BackingField: {fileID: 11400000, guid: 6c49e312684f4b841b10dfd6e75e2082, type: 2}
   <ItemsConfig>k__BackingField: {fileID: 11400000, guid: 5d949efdf99c17c4697df6b59e537bbb, type: 2}
   <StatsConfig>k__BackingField: {fileID: 11400000, guid: 8255ace4ade20fc4b8629b0e4d714bd1, type: 2}

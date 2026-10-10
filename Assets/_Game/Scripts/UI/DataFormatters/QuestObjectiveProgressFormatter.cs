@@ -2,18 +2,18 @@
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public sealed class QuestObjectiveProgressFormatter : IDataFormatter<ObjectiveProgress, string>
+    public sealed class QuestObjectiveProgressFormatter : IDataFormatter<ObjectiveProgressSnapshot, string>
     {
-        public string FormatData(ObjectiveProgress data)
+        public string FormatData(ObjectiveProgressSnapshot data)
         {
-            return data switch
+            return data.ObjectiveDefinition switch
             {
-                ItemsInInventoryObjectiveProgress itemsObjective => $"({itemsObjective.CurrentAmount} / {itemsObjective.RequiredAmount}) {itemsObjective.Definition.Item.Name}",
-                EntityKillsObjectiveProgress entityKillsObjective => $"({entityKillsObjective.CurrentAmount} / {entityKillsObjective.RequiredAmount}) {entityKillsObjective.Definition.Entity.DisplayName}",
-                LevelObjectiveProgress levelObjective => $"({levelObjective.CurrentAmount} / {levelObjective.RequiredAmount}) Level",
-                
+                ItemsInInventoryObjectiveDefinition itemsObjective => $"({data.CurrentAmount} / {itemsObjective.RequiredAmount}) {itemsObjective.Item.Name}",
+                EntityKillsObjectiveDefinition entityKillsObjective => $"({data.CurrentAmount} / {entityKillsObjective.RequiredAmount}) {entityKillsObjective.Entity.DisplayName}",
+                LevelObjectiveDefinition levelObjective => $"({data.CurrentAmount} / {levelObjective.RequiredAmount}) Level",
+
                 // Unsupported type fallback
-                ObjectiveProgress objective => $"({objective.CurrentAmount} / {objective.RequiredAmount}) {objective.GetType()}",
+                ObjectiveDefinition objective => $"({data.CurrentAmount} / {objective.RequiredAmount}) {objective.GetType()}",
                 _ => "unsupported objective progress type"
             };
         }

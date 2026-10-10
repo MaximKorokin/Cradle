@@ -20,7 +20,6 @@ namespace Assets._Game.Scripts.UI.Views
         public event Action<string> QuestAcceptClicked;
         public event Action<string> QuestCompleteClicked;
 
-        // Subscribe to events in Render so that they can trigger when view is rendered
         protected override void Render(QuestGiverViewData data)
         {
             _questGiverName.text = data.QuestGiverName;

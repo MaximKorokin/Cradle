@@ -13,7 +13,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private QuestModule _questModule;
 
         public string QuestGiverName { get; set; }
-        public string TargetEntityId { get; private set; }
+        public IReadOnlyObservableData<EntryRef> TargetEntityId { get; private set; }
         public IReadOnlyList<QuestDefinition> OfferedQuests { get; private set; } = new QuestDefinition[0];
 
         public QuestGiverViewData(EntityRepository entityRepository) : base(entityRepository) { }
@@ -38,19 +38,19 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public void SetTargetEntity(IReadOnlyObservableData<EntryRef> targetEntityId)
         {
             var targetEntryRef = targetEntityId?.Value ?? default;
-            TargetEntityId = targetEntryRef.Id;
+            TargetEntityId = targetEntityId;
             EntityRepository.TryGet(targetEntryRef, out var targetEntity);
             
             if (_questModule != null)
             {
-                _questModule.Updated -= OnQuestModuleUpdated;
+                _questModule.Updated -= OnTargetQuestModuleUpdated;
             }
             _questModule = null;
 
             if (targetEntity != null && targetEntity.TryGetModule<QuestModule>(out var questModule))
             {
                 _questModule = questModule;
-                _questModule.Updated += OnQuestModuleUpdated;
+                _questModule.Updated += OnTargetQuestModuleUpdated;
             }
 
             NotifyChanged();
@@ -59,22 +59,22 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public bool IsQuestAccepted(string questId)
         {
             if (_questModule == null) return false;
-            return _questModule.AllQuests.Any(q => q.Definition.Id == questId);
+            return _questModule.AllQuestSnapshots.Any(q => q.Definition.Id == questId);
         }
 
         public bool CanCompleteQuest(string questId)
         {
             if (_questModule == null) return false;
-            return _questModule.AllQuests.Any(q => q.Definition.Id == questId && q.AreObjectivesCompleted && !q.IsCompleted);
+            return _questModule.AllQuestSnapshots.Any(q => q.Definition.Id == questId && q.AreObjectivesCompleted && !q.IsCompleted);
         }
 
-        public QuestState GetQuestState(string questId)
+        public QuestStateSnapshot GetQuestStateSnapshot(string questId)
         {
-            if (_questModule == null) return null;
-            return _questModule.AllQuests.FirstOrDefault(q => q.Definition.Id == questId);
+            if (_questModule == null) return default;
+            return _questModule.GetQuestStateSnapshot(questId);
         }
 
-        private void OnQuestModuleUpdated()
+        private void OnTargetQuestModuleUpdated()
         {
             NotifyChanged();
         }
@@ -82,7 +82,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public override void Dispose()
         {
             if (_questModule != null)
-                _questModule.Updated -= OnQuestModuleUpdated;
+                _questModule.Updated -= OnTargetQuestModuleUpdated;
         }
     }
 }

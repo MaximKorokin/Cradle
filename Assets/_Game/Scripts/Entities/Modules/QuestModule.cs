@@ -11,64 +11,96 @@ namespace Assets._Game.Scripts.Entities.Modules
 {
     public sealed class QuestModule : EntityModuleBase, IResettableModule
     {
-        private readonly List<QuestState> _allQuests = new();
-        public IReadOnlyList<QuestState> AllQuests => _allQuests;
+        private readonly List<QuestState> _allQuestStates = new();
+        public IReadOnlyList<QuestState> AllQuestStates => _allQuestStates.ToList();
+        public IReadOnlyList<QuestStateSnapshot> AllQuestSnapshots => _allQuestStates.Select(q => q.Snapshot).ToList();
 
         public event Action Updated;
-        public event Action<QuestState> QuestAdded;
-        public event Action<QuestState> QuestUpdated;
-        public event Action<QuestState> QuestObjectivesCompleted;
-        public event Action<QuestState> QuestCompleted;
-        public event Action<QuestState> QuestRemoved;
+        public event Action<QuestStateSnapshot> QuestAdded;
+        public event Action<QuestStateSnapshot> QuestUpdated;
+        public event Action<QuestStateSnapshot> QuestObjectivesCompleted;
+        public event Action<QuestStateSnapshot> QuestCompleted;
+        public event Action<QuestStateSnapshot> QuestRemoved;
 
-        public void AddQuest(QuestState questState)
+        public QuestState GetQuestState(string questDefinitionId)
         {
-            _allQuests.Add(questState);
+            return _allQuestStates.FirstOrDefault(q => q.Definition.Id == questDefinitionId);
+        }
+
+        public QuestStateSnapshot GetQuestStateSnapshot(string questDefinitionId)
+        {
+            var questState = _allQuestStates.FirstOrDefault(q => q.Definition.Id == questDefinitionId);
+            return questState == null ? default : questState.Snapshot;
+        }
+
+        public bool HasQuest(string questDefinitionId)
+        {
+            return _allQuestStates.Any(q => q.Definition.Id == questDefinitionId);
+        }
+
+        public void AddQuest(QuestDefinition questDefinition)
+        {
+            if (HasQuest(questDefinition.Id)) return;
+
+            var questState = new QuestState(questDefinition);
+            AddQuestState(questState);
+        }
+
+        public void AddQuestState(QuestState questState)
+        {
+            _allQuestStates.Add(questState);
             questState.Updated += OnQuestUpdated;
             questState.ObjectivesCompleted += OnQuestObjectivesCompleted;
             questState.Completed += OnQuestCompleted;
 
-            QuestAdded?.Invoke(questState);
+            var snapshot = questState.Snapshot;
+            QuestAdded?.Invoke(snapshot);
             Updated?.Invoke();
-            Publish(new QuestAddedEvent(questState));
+            Publish(new QuestAddedEvent(snapshot));
         }
 
         public void RemoveQuest(QuestState questState)
         {
-            _allQuests.Remove(questState);
+            if (!HasQuest(questState.Definition.Id)) return;
+
+            _allQuestStates.Remove(questState);
             questState.Updated -= OnQuestUpdated;
             questState.ObjectivesCompleted -= OnQuestObjectivesCompleted;
             questState.Completed -= OnQuestCompleted;
 
-            QuestRemoved?.Invoke(questState);
+            var snapshot = questState.Snapshot;
+            QuestRemoved?.Invoke(snapshot);
             Updated?.Invoke();
-            Publish(new QuestRemovedEvent(questState));
+            Publish(new QuestRemovedEvent(snapshot));
         }
 
         private void OnQuestUpdated(QuestState questState)
         {
-            QuestUpdated?.Invoke(questState);
+            var snapshot = questState.Snapshot;
+            QuestUpdated?.Invoke(snapshot);
             Updated?.Invoke();
-            Publish(new QuestUpdatedEvent(questState));
+            Publish(new QuestUpdatedEvent(snapshot));
         }
 
         private void OnQuestObjectivesCompleted(QuestState questState)
         {
-            QuestObjectivesCompleted?.Invoke(questState);
+            var snapshot = questState.Snapshot;
+            QuestObjectivesCompleted?.Invoke(snapshot);
             Updated?.Invoke();
-            Publish(new QuestObjectivesCompletedEvent(questState));
+            Publish(new QuestObjectivesCompletedEvent(snapshot));
         }
 
         private void OnQuestCompleted(QuestState questState)
         {
-            QuestCompleted?.Invoke(questState);
+            var snapshot = questState.Snapshot;
+            QuestCompleted?.Invoke(snapshot);
             Updated?.Invoke();
-            Publish(new QuestCompletedEvent(questState));
+            Publish(new QuestCompletedEvent(snapshot));
         }
 
         public void Reset()
         {
-            foreach (var quests in _allQuests.ToArray())
+            foreach (var quests in _allQuestStates.ToArray())
             {
                 RemoveQuest(quests);
             }
@@ -94,11 +126,6 @@ namespace Assets._Game.Scripts.Entities.Modules
             }
 
             var questModule = new QuestModule();
-            foreach (var questDefinition in questModuleDefinition.InitialQuests)
-            {
-                var questState = new QuestState(questDefinition);
-                questModule.AddQuest(questState);
-            }
 
             return questModule;
         }
@@ -110,17 +137,15 @@ namespace Assets._Game.Scripts.Entities.Modules
             for (int i = 0; i < entitySave.QuestSaves.Length; i++)
             {
                 var questSave = entitySave.QuestSaves[i];
-                var questState = questModule.AllQuests.FirstOrDefault(x => x.Definition.Id == questSave.DefinitionId);
 
-                if (questState == null)
-                {
-                    if (!_questDefinitionCatalog.TryGet(questSave.DefinitionId, out var questDefinition)) continue;
-                    questState = new QuestState(questDefinition);
-                    questModule.AddQuest(questState);
-                }
+                if (questModule.HasQuest(questSave.DefinitionId) ||
+                    !_questDefinitionCatalog.TryGet(questSave.DefinitionId, out var questDefinition)) continue;
+
+                var questState = new QuestState(questDefinition);
 
                 // If quest is completed, we should not raise Completed event
-                questState.SetCompleted(questSave.IsCompleted, raiseEvents: false);
+                // If quest was completed but now is not, we should not allow to complete it again
+                questState.SetCompleted(questSave.IsCompleted, true);
 
                 for (int j = 0; j < questSave.ProgressSaves.Length; j++)
                 {
@@ -128,10 +153,12 @@ namespace Assets._Game.Scripts.Entities.Modules
                     if (progressSave == null) continue;
                     var data = _codecRegistry.DecodeOrNull(progressSave);
                     if (data == null) continue;
-                    foreach (var objective in questState.Objectives.OfType<ISaveableObjectiveProgress>())
+                    foreach (var objective in questState.Objectives.OfType<ILoadableObjectiveProgress>())
                         if (objective.TryLoad(data))
                             break;
                 }
+
+                questModule.AddQuestState(questState);
             }
         }
 
@@ -139,10 +166,11 @@ namespace Assets._Game.Scripts.Entities.Modules
         {
             if (!entity.TryGetModule<QuestModule>(out var questModule)) return;
 
-            entitySave.QuestSaves = new QuestStateSave[questModule.AllQuests.Count];
-            for (int i = 0; i < questModule.AllQuests.Count; i++)
+            var quests = questModule.AllQuestStates;
+            entitySave.QuestSaves = new QuestStateSave[quests.Count];
+            for (int i = 0; i < quests.Count; i++)
             {
-                var questState = questModule.AllQuests[i];
+                var questState = quests[i];
                 entitySave.QuestSaves[i] = new QuestStateSave
                 {
                     DefinitionId = questState.Definition.Id,

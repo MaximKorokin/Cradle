@@ -1,7 +1,6 @@
 using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Quests;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +10,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         private QuestModule _questModule;
 
-        public IEnumerable<QuestState> ActiveQuests { get; private set; }
+        public IEnumerable<QuestStateSnapshot> AllQuests { get; private set; }
 
         public QuestsViewData(EntityRepository entityRepository) : base(entityRepository) { }
 
@@ -28,25 +27,20 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 _questModule.Updated += OnQuestModuleUpdated;
             }
 
-            UpdateData();
-        }
-
-        private void UpdateData()
-        {
-            if (_questModule == null)
-            {
-                ActiveQuests = new QuestState[0];
-                return;
-            }
-
-            ActiveQuests = _questModule.AllQuests.ToArray();
-
-            NotifyChanged();
+            OnQuestModuleUpdated();
         }
 
         private void OnQuestModuleUpdated()
         {
-            UpdateData();
+            if (_questModule == null)
+            {
+                AllQuests = new QuestStateSnapshot[0];
+                return;
+            }
+
+            AllQuests = _questModule.AllQuestSnapshots.ToArray();
+
+            NotifyChanged();
         }
 
         public override void Dispose()
