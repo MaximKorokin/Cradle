@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.UI.Systems.Click
             }
             else if (clickTarget is ContainerSlotWidget containerSlot && containerSlot.ContainsData)
             {
-                var arguments = new ItemStacksPreviewWindowControllerArguments(containerSlot.ContainerPath, containerSlot.SlotIndex);
+                var arguments = new ItemStacksPreviewWindowControllerArguments(containerSlot.ContainerPath, containerSlot.ItemSlotIndex);
                 _globalEventBus.Publish(new WindowToggleRequest(WindowId.ItemStacksPreview, arguments));
             }
         }

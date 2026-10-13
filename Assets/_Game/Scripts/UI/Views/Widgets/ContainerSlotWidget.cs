@@ -14,13 +14,16 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         public ItemContainerPath ContainerPath { get; private set; }
         public long SlotIndex { get; private set; }
+        public long? BlockingSlotIndex { get; private set; }
+        public long ItemSlotIndex => BlockingSlotIndex ?? SlotIndex;
 
         public bool ContainsData { get; private set; }
 
-        public virtual void Bind(ItemContainerPath containerPath, long slotIndex)
+        public virtual void Bind(ItemContainerPath containerPath, long slotIndex, long? blockingSlotIndex = null)
         {
             ContainerPath = containerPath;
             SlotIndex = slotIndex;
+            BlockingSlotIndex = blockingSlotIndex;
         }
 
         public virtual void Render(ItemStackSnapshot? itemStack, Color color)

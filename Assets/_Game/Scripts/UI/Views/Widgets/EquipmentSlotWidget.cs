@@ -2,7 +2,6 @@
 using Assets._Game.Scripts.Items.Equipment;
 using UnityEngine;
 using UnityEngine.UI;
-using VContainer;
 
 namespace Assets._Game.Scripts.UI.Views.Widgets
 {

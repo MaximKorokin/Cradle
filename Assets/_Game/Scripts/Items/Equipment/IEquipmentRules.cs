@@ -1,5 +1,5 @@
-﻿using Assets._Game.Scripts.Items.Traits;
-using Assets._Game.Scripts.Shared.Extensions;
+﻿using Assets._Game.Scripts.Shared.Extensions;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets._Game.Scripts.Items.Equipment
@@ -8,6 +8,7 @@ namespace Assets._Game.Scripts.Items.Equipment
     {
         bool CanEquip(ItemStackSnapshot snapshot);
         bool CanPlace(EquipmentSlotKey slot, ItemStackSnapshot item, EquipmentModel equipmentModel);
+        IEnumerable<EquipmentSlotKey> GetConflictingSlots(EquipmentSlotKey targetSlot, ItemStackSnapshot item, EquipmentModel equipmentModel);
     }
 
     public sealed class DefaultEquipmentRules : IEquipmentRules
@@ -27,34 +28,32 @@ namespace Assets._Game.Scripts.Items.Equipment
 
             if (slotType != slot.SlotType) return false;
 
-            // Check if the target slot is occupied by another item's secondary slots
-            if (IsSlotOccupiedBySecondarySlots(slot, equipmentModel))
-                return false;
-
-            return true;
+            return !GetConflictingSlots(slot, item, equipmentModel).Any(conflictingSlot => !conflictingSlot.Equals(slot));
         }
 
-        private bool IsSlotOccupiedBySecondarySlots(EquipmentSlotKey targetSlot, EquipmentModel equipmentModel)
+        public IEnumerable<EquipmentSlotKey> GetConflictingSlots(EquipmentSlotKey targetSlot, ItemStackSnapshot item, EquipmentModel equipmentModel)
         {
-            // Check all equipped items to see if any of them claim this slot as a secondary slot
-            foreach (var (slot, snapshot) in equipmentModel.Enumerate())
+            var slotsToCheck = new HashSet<EquipmentSlotKey> { targetSlot };
+            foreach (var secondarySlot in equipmentModel.GetSecondarySlots(item))
+                slotsToCheck.Add(secondarySlot);
+
+            var conflictingSlots = new HashSet<EquipmentSlotKey>();
+
+            // Check if any of the slots to check are already occupied
+            foreach (var slotToCheck in slotsToCheck)
             {
-                if (snapshot == null) continue;
-                if (slot.Equals(targetSlot)) continue; // Skip the target slot itself
-
-                // Check if this item has secondary slots
-                if (!snapshot.Value.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait))
-                    continue;
-
-                if (equippableTrait.SecondarySlots == null || equippableTrait.SecondarySlots.Length == 0)
-                    continue;
-
-                // Check if the target slot is in this item's secondary slots
-                if (equippableTrait.SecondarySlots.Contains(targetSlot.SlotType))
-                    return true;
+                if (equipmentModel.Get(slotToCheck) != null)
+                    conflictingSlots.Add(slotToCheck);
             }
 
-            return false;
+            // Check if any equipped item's secondary slots conflict with the slots to check
+            foreach (var (blockedSlot, _, blockingSlot) in equipmentModel.EnumerateBlockedSlots())
+            {
+                if (slotsToCheck.Contains(blockedSlot))
+                    conflictingSlots.Add(blockingSlot);
+            }
+
+            return conflictingSlots;
         }
     }
 }

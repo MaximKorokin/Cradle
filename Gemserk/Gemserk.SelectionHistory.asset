@@ -51,10 +51,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: ea6ce8e945290b549b4103b48f25d83a, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: d87c8dd13495cb84785e57b362ba82e5, type: 3}
       sceneName: 
       scenePath: 
@@ -128,10 +124,6 @@ MonoBehaviour:
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 11400000, guid: 86ced898d77a2fe42a844ce70423fba8, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: d0f82aca46b7241448dd98a8b0a0560d, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -220,14 +212,6 @@ MonoBehaviour:
       scenePath: 
       globalObjectId: 
     - reference: {fileID: 11400000, guid: 128f37432a7c6f74ea8f55b0b803d6ea, type: 2}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: d1805f698583636438741c0a95e3562e, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
-    - reference: {fileID: 102900000, guid: cb89b1f968eb9ff4596cad7ed6345c56, type: 3}
       sceneName: 
       scenePath: 
       globalObjectId: 
@@ -575,10 +559,6 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 102900000, guid: 2bd2e7912b2f7c043a76699e25d38bca, type: 3}
-      sceneName: 
-      scenePath: 
-      globalObjectId: 
     - reference: {fileID: 102900000, guid: b64a65fa7f086f640b2298b7a55eba03, type: 3}
       sceneName: 
       scenePath: 
@@ -607,87 +587,43 @@ MonoBehaviour:
       sceneName: 
       scenePath: 
       globalObjectId: 
-    - reference: {fileID: 0}
-      sceneName: QuestGiverWindow
+    - reference: {fileID: 102900000, guid: 2bd2e7912b2f7c043a76699e25d38bca, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverWindow
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: d1805f698583636438741c0a95e3562e, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: cb89b1f968eb9ff4596cad7ed6345c56, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: d0f82aca46b7241448dd98a8b0a0560d, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 5e22550bbbc7d6a4bbe5e5be7bf691c4, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: ea6ce8e945290b549b4103b48f25d83a, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 2a159a0d0d19e4f46aed030da64fb038, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: 3def517a49bbb6a45af9a5d8afe76505, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 102900000, guid: e5e320d8d9a57f24596ef59cdf8a628d, type: 3}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
+      globalObjectId: 
+    - reference: {fileID: 11400000, guid: 5e22550bbbc7d6a4bbe5e5be7bf691c4, type: 2}
+      sceneName: 
       scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverView
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
-    - reference: {fileID: 0}
-      sceneName: QuestGiverWindow
-      scenePath: 
-      globalObjectId: GlobalObjectId_V1-0-00000000000000000000000000000000-0-0
+      globalObjectId: 

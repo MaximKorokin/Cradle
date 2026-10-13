@@ -55,6 +55,13 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             var from = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
             var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
+
+            if (to is EquipmentModel equipmentModel)
+            {
+                var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                return ItemContainerUtils.MoveToEquipmentSlot(from, fromSlot, equipmentModel, null, c.Amount) > 0;
+            }
+
             return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
         }
 
@@ -64,6 +71,13 @@ namespace Assets._Game.Scripts.Items.Commands
             var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
 
             var item = from.Get(c.FromSlot);
+            if (from is InventoryModel inventoryModel && to is EquipmentModel equipmentModel)
+            {
+                var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.ToSlot);
+                return ItemContainerUtils.MoveToEquipmentSlot(inventoryModel, fromSlot, equipmentModel, equipmentSlot, c.Amount) > 0;
+            }
+
             if (item != null && item.Value.Amount == c.Amount)
             {
                 // If the entire stack is being moved, try to swap the items instead of moving them
@@ -85,15 +99,7 @@ namespace Assets._Game.Scripts.Items.Commands
             var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.Equipment);
             var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
 
-            var fromItemNullable = fromContainer.Get(fromSlot);
-            if (fromItemNullable == null)
-                return false;
-
-            var fromItem = fromItemNullable.Value;
-            if (fromItem.Amount <= 0)
-                return false;
-
-            return ItemContainerUtils.TryEquipWithSwap(fromContainer, fromSlot, equipmentSlot, equipmentModel, fromItem);
+            return ItemContainerUtils.MoveToEquipmentSlot(fromContainer, fromSlot, equipmentModel, equipmentSlot, null) > 0;
         }
 
         private bool HandleUnequip(UnequipToContainerCommand c)

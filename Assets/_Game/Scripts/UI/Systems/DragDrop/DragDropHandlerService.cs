@@ -63,7 +63,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             {
                 PublishCommand(new TransferToContainerSlotCommand(
                     inventorySlot1.ContainerPath,
-                    inventorySlot1.SlotIndex,
+                    inventorySlot1.ItemSlotIndex,
                     inventorySlot2.ContainerPath,
                     inventorySlot2.SlotIndex,
                     itemStack1.Value.Amount));
@@ -74,7 +74,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                 {
                     PublishCommand(new TransferToContainerSlotCommand(
                         inventorySlot1.ContainerPath,
-                        inventorySlot1.SlotIndex,
+                        inventorySlot1.ItemSlotIndex,
                         inventorySlot2.ContainerPath,
                         inventorySlot2.SlotIndex,
                         selectedAmount));
@@ -90,7 +90,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             {
                 PublishCommand(new DropItemCommand(
                     inventorySlot.ContainerPath,
-                    inventorySlot.SlotIndex,
+                    inventorySlot.ItemSlotIndex,
                     selectedAmount));
             });
         }
@@ -105,7 +105,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     {
                         PublishCommand(new DestroyItemCommand(
                             inventorySlot.ContainerPath,
-                            inventorySlot.SlotIndex,
+                            inventorySlot.ItemSlotIndex,
                             selectedAmount));
                     });
                     break;
@@ -117,7 +117,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                         if (!confirmed) return;
                         PublishCommand(new EnchantItemCommand(
                             inventorySlot.ContainerPath,
-                            inventorySlot.SlotIndex));
+                            inventorySlot.ItemSlotIndex));
                     });
                     break;
                 default:
@@ -148,7 +148,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                         shopView.Data.ContainerPath,
                         shopView.Data.BuyerInventoryPath,
                         inventorySlot.ContainerPath,
-                        inventorySlot.SlotIndex,
+                        inventorySlot.ItemSlotIndex,
                         amount,
                         totalPrice));
                 });
@@ -197,7 +197,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             if (!_itemContainerResolver.TryResolveContainer(containerSlot.ContainerPath, out var resolvedContainer))
                 return false;
 
-            var resolvedItemStack = resolvedContainer.Get(containerSlot.SlotIndex);
+            var resolvedItemStack = resolvedContainer.Get(containerSlot.ItemSlotIndex);
 
             if (resolvedItemStack != null)
             {

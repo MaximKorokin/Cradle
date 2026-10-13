@@ -1,7 +1,6 @@
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
-using NUnit.Framework;
 using System;
 using System.Linq;
 using TMPro;

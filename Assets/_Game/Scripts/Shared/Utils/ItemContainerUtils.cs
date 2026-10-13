@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
-using Assets._Game.Scripts.Items.Traits;
+using Assets._Game.Scripts.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,8 +42,7 @@ namespace Assets._Game.Scripts.Shared.Utils
             int remainder = removed - added;
             if (remainder > 0)
             {
-                // Best-effort rollback: try stack-then-empty back into source (not necessarily same slot)
-                int rolledBack = from.Add(new(fromSnapshot.Definition, fromSnapshot.InstanceData, remainder), AddPolicy.StackThenEmpty);
+                int rolledBack = from.AddToSlot(fromSlot, new(fromSnapshot.Definition, fromSnapshot.InstanceData, remainder));
 
                 // If rollback also couldn't fit (shouldn't happen unless capacity changed),
                 // we "lose" items - in production you'd drop to world or keep an overflow buffer.
@@ -94,8 +93,7 @@ namespace Assets._Game.Scripts.Shared.Utils
             int remainder = removed - added;
             if (remainder > 0)
             {
-                // Best-effort rollback: try stack-then-empty back into source (not necessarily same slot)
-                int rolledBack = from.Add(new(fromSnapshot.Definition, fromSnapshot.InstanceData, remainder), AddPolicy.StackThenEmpty);
+                int rolledBack = from.AddToSlot(fromSlot, new(fromSnapshot.Definition, fromSnapshot.InstanceData, remainder));
 
                 // If rollback also couldn't fit (shouldn't happen unless capacity changed),
                 // we "lose" items - in production you'd drop to world or keep an overflow buffer.
@@ -225,83 +223,127 @@ namespace Assets._Game.Scripts.Shared.Utils
             return container.Count(key) >= amount;
         }
 
+        public static int MoveToEquipmentSlot(
+            IItemContainer<InventorySlot> fromContainer,
+            InventorySlot fromSlot,
+            EquipmentModel equipmentModel,
+            EquipmentSlotKey? requestedEquipmentSlot,
+            int? amount)
+        {
+            var sourceItem = fromContainer.Get(fromSlot);
+            if (sourceItem == null || !sourceItem.Value.IsEquippable())
+                return 0;
+
+            int transferAmount = Math.Min(amount ?? sourceItem.Value.Amount, sourceItem.Value.Amount);
+            if (transferAmount <= 0)
+                return 0;
+
+            var transferItem = new ItemStackSnapshot(sourceItem.Value.Definition, sourceItem.Value.InstanceData, transferAmount);
+            var equipmentSlot = requestedEquipmentSlot ?? default;
+            if (!requestedEquipmentSlot.HasValue)
+            {
+                int addableAmount = equipmentModel.PreviewAdd(transferItem);
+                if (addableAmount > 0)
+                    return MoveAmount(fromContainer, fromSlot, equipmentModel, addableAmount);
+
+                equipmentSlot = equipmentModel.Slots.FirstOrDefault(slot => slot.SlotType == transferItem.GetEquipmentSlotType());
+            }
+
+            if (equipmentSlot.SlotType == EquipmentSlotType.None || !equipmentModel.IsValidSlot(equipmentSlot))
+                return 0;
+
+            int addableToSlot = equipmentModel.PreviewAddToSlot(equipmentSlot, transferItem);
+            if (addableToSlot > 0)
+                return MoveAmount(fromContainer, fromSlot.ToInt64(), equipmentModel, equipmentSlot.ToInt64(), addableToSlot);
+
+            return TryEquipWithSwap(fromContainer, fromSlot, equipmentSlot, equipmentModel, transferItem)
+                ? transferAmount
+                : 0;
+        }
+
         public static bool TryEquipWithSwap(
             IItemContainer<InventorySlot> fromContainer,
             InventorySlot fromSlot,
             EquipmentSlotKey equipmentSlot,
             EquipmentModel equipmentModel,
-            ItemStackSnapshot fromItem)
+            ItemStackSnapshot fromItem,
+            bool removeOnlyDirectConflicts = false)
         {
-            var secondarySlotKeys = GetSecondarySlotKeys(fromItem, equipmentModel);
+            if (fromItem.GetEquipmentSlotType() != equipmentSlot.SlotType)
+                return false;
 
-            // Fast-path: try to equip directly if secondary slots are free (no swap needed)
-            var secondarySlotsAvailable = secondarySlotKeys.All(slot => equipmentModel.Get(slot) == null);
-            if (secondarySlotsAvailable)
+            // Fast-path: try to equip directly if the rules allow it (no swap needed)
+            if (equipmentModel.PreviewAddToSlot(equipmentSlot, fromItem) == fromItem.Amount)
             {
-                // 1) Fast path: try to equip directly into the requested equipment slot (no swap).
-                if (equipmentModel.PreviewAddToSlot(equipmentSlot, fromItem) == fromItem.Amount)
+                if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
+                    return false;
+
+                int equipped = equipmentModel.AddToSlot(equipmentSlot, fromItem);
+                if (equipped == 0)
                 {
-                    if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
-                        return false;
-
-                    int equipped = equipmentModel.AddToSlot(equipmentSlot, fromItem);
-                    if (equipped == 0)
-                    {
-                        fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
-                        return false;
-                    }
-
-                    ClearSlots(equipmentModel, secondarySlotKeys);
-                    return true;
+                    fromContainer.AddToSlot(fromSlot, fromItem);
+                    return false;
                 }
 
-                // 2) Fast path: try to equip without specifying the equipment slot (no swap).
-                if (equipmentModel.PreviewAdd(fromItem) >= 1)
+                return true;
+            }
+
+            var conflictSlots = new HashSet<EquipmentSlotKey>(equipmentModel.GetConflictingSlots(equipmentSlot, fromItem));
+            if (!removeOnlyDirectConflicts)
+            {
+                var pendingSlots = new Queue<EquipmentSlotKey>(conflictSlots);
+                while (pendingSlots.Count > 0)
                 {
-                    if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
-                        return false;
+                    var slot = pendingSlots.Dequeue();
+                    var item = equipmentModel.Get(slot);
+                    if (item == null) continue;
 
-                    int equipped = equipmentModel.Add(fromItem);
-                    if (equipped == 0)
-                    {
-                        fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
-                        return false;
-                    }
-
-                    ClearSlots(equipmentModel, secondarySlotKeys);
-                    return true;
+                    foreach (var conflictSlot in equipmentModel.GetConflictingSlots(slot, item.Value))
+                        if (conflictSlots.Add(conflictSlot))
+                            pendingSlots.Enqueue(conflictSlot);
                 }
             }
 
-            var oldItemNullable = equipmentModel.Get(equipmentSlot);
-            if (oldItemNullable == null)
-                return false;
-
-            var oldItem = oldItemNullable.Value;
-            if (oldItem.Amount <= 0)
-                return false;
-
-            // Collect items from secondary slots that the new item will occupy
-            var secondarySlotItems = new List<(EquipmentSlotKey slot, ItemStackSnapshot item)>();
-            foreach (var slot in secondarySlotKeys)
+            var conflictingItems = new List<(EquipmentSlotKey slot, ItemStackSnapshot item)>();
+            foreach (var slot in equipmentModel.Slots)
             {
-                var secondaryItem = equipmentModel.Get(slot);
-                if (secondaryItem != null)
-                    secondarySlotItems.Add((slot, secondaryItem.Value));
+                if (!conflictSlots.Contains(slot)) continue;
+                var item = equipmentModel.Get(slot);
+                if (item != null)
+                    conflictingItems.Add((slot, item.Value));
             }
 
-            // Check if we have enough space to store all items before starting the swap
-            if (!CanStoreAllItems(fromContainer, oldItem, secondarySlotItems))
+            if (conflictingItems.Count == 0)
                 return false;
 
-            // Remove old equipment items
-            if (!RemoveOldEquipment(equipmentModel, equipmentSlot, oldItem, secondarySlotItems, out var removedSecondaryItems))
+            EquipmentSlotKey? sourceSlotItem = conflictingItems
+                .Where(x => x.slot.Equals(equipmentSlot))
+                .Select(x => (EquipmentSlotKey?)x.slot)
+                .FirstOrDefault();
+            sourceSlotItem ??= conflictingItems
+                .Where(x => equipmentModel.GetSecondarySlots(x.item).Contains(equipmentSlot))
+                .Select(x => (EquipmentSlotKey?)x.slot)
+                .FirstOrDefault();
+            sourceSlotItem ??= conflictingItems[0].slot;
+
+            var sourceItem = fromContainer.Get(fromSlot);
+            int additionalEmptySlots = sourceItem != null && sourceItem.Value.Amount == fromItem.Amount ? 1 : 0;
+            if (!CanStoreAllItems(fromContainer, conflictingItems, additionalEmptySlots))
                 return false;
+
+            if (!RemoveEquipment(equipmentModel, conflictingItems, out var removedItems))
+                return false;
+
+            if (equipmentModel.PreviewAddToSlot(equipmentSlot, fromItem) != fromItem.Amount)
+            {
+                RollbackRemoveEquipment(equipmentModel, removedItems);
+                return false;
+            }
 
             // Remove new item from source container
             if (fromContainer.RemoveFromSlot(fromSlot, fromItem.Amount) == 0)
             {
-                RollbackRemoveOldEquipment(equipmentModel, equipmentSlot, oldItem, removedSecondaryItems);
+                RollbackRemoveEquipment(equipmentModel, removedItems);
                 return false;
             }
 
@@ -309,78 +351,40 @@ namespace Assets._Game.Scripts.Shared.Utils
             int equippedNew = equipmentModel.AddToSlot(equipmentSlot, fromItem);
             if (equippedNew == 0)
             {
-                fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
-                RollbackRemoveOldEquipment(equipmentModel, equipmentSlot, oldItem, removedSecondaryItems);
+                fromContainer.AddToSlot(fromSlot, fromItem);
+                RollbackRemoveEquipment(equipmentModel, removedItems);
                 return false;
             }
 
-            // Clear secondary slots for the new item
-            ClearSlots(equipmentModel, secondarySlotKeys);
-
-            // Store old items in container
-            int storedOld = fromContainer.Add(oldItem, AddPolicy.StackThenEmpty);
-            if (storedOld != oldItem.Amount)
+            // Store displaced items back to source container
+            foreach (var (slot, item) in conflictingItems.OrderBy(x => x.slot.Equals(sourceSlotItem.Value) ? 0 : 1))
             {
-                // This should not happen if CanStoreAllItems check was correct
-                // Rollback the entire operation
-                equipmentModel.RemoveFromSlot(equipmentSlot, fromItem.Amount);
-                fromContainer.Add(fromItem, AddPolicy.StackThenEmpty);
-                RollbackRemoveOldEquipment(equipmentModel, equipmentSlot, oldItem, removedSecondaryItems);
-                SLog.Error($"Failed to store old equipped item back to container during equip with swap. Expected to store {oldItem.Amount}, but only stored {storedOld}. Rolling back equip operation.");
-                return false;
-            }
-
-            // Store secondary slot items in container
-            foreach (var (_, item) in secondarySlotItems)
-            {
-                int stored = fromContainer.Add(item, AddPolicy.StackThenEmpty);
-                if (stored != item.Amount)
+                int stored = slot.Equals(sourceSlotItem.Value)
+                    ? fromContainer.AddToSlot(fromSlot, item)
+                    : fromContainer.Add(item, AddPolicy.StackThenEmpty);
+                int remainder = item.Amount - stored;
+                if (remainder > 0)
                 {
-                    SLog.Error($"Failed to store item from secondary slot back to container during equip with swap. Expected to store {item.Amount}, but only stored {stored}. This may lead to item loss. Please investigate.");
-                    // This should not happen if CanStoreAllItems check was correct
-                    // At this point we've already partially completed the operation
-                    // We can't fully rollback, so this is a critical error
-                    // The best we can do is try to store what we can
-                    return false;
+                    int storedElsewhere = fromContainer.Add(
+                        new(item.Definition, item.InstanceData, remainder),
+                        AddPolicy.StackThenEmpty);
+                    if (storedElsewhere != remainder)
+                    {
+                        SLog.Error($"Failed to store displaced equipment item back to container during equip. Expected to store {remainder}, but only stored {storedElsewhere}. This may lead to item loss. Please investigate.");
+                        return false;
+                    }
                 }
             }
 
             return true;
         }
 
-        private static List<EquipmentSlotKey> GetSecondarySlotKeys(ItemStackSnapshot item, EquipmentModel equipmentModel)
-        {
-            var secondarySlotKeys = new List<EquipmentSlotKey>();
-            if (!item.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait) ||
-                equippableTrait.SecondarySlots == null ||
-                equippableTrait.SecondarySlots.Length == 0)
-                return secondarySlotKeys;
-
-            foreach (var secondarySlotType in equippableTrait.SecondarySlots)
-            {
-                var slotKey = equipmentModel.Slots.FirstOrDefault(s => s.SlotType == secondarySlotType);
-                if (equipmentModel.IsValidSlot(slotKey))
-                    secondarySlotKeys.Add(slotKey);
-            }
-
-            return secondarySlotKeys;
-        }
-
-        private static void ClearSlots(EquipmentModel equipmentModel, List<EquipmentSlotKey> slotKeys)
-        {
-            foreach (var slot in slotKeys)
-            {
-                equipmentModel.RemoveFromSlot(slot, int.MaxValue);
-            }
-        }
-
-        private static bool CanStoreAllItems(IItemContainer<InventorySlot> container, ItemStackSnapshot oldItem, List<(EquipmentSlotKey slot, ItemStackSnapshot item)> secondarySlotItems)
+        private static bool CanStoreAllItems(
+            IItemContainer<InventorySlot> container,
+            List<(EquipmentSlotKey slot, ItemStackSnapshot item)> items,
+            int additionalEmptySlots = 0)
         {
             // Conservative check: ensure there are enough empty slots for all items
-            // Count total items that need to be stored
-            int totalItemsToStore = 1 + secondarySlotItems.Count;
-
-            // Count empty slots in the container
             int emptySlots = 0;
             if (container is InventoryModel inventoryModel)
             {
@@ -392,14 +396,11 @@ namespace Assets._Game.Scripts.Shared.Utils
 
                 // We need at least as many empty slots as items to store
                 // This is conservative but safe for equipment items (which don't stack)
-                return emptySlots >= totalItemsToStore;
+                return emptySlots + additionalEmptySlots >= items.Count;
             }
 
             // Fallback for non-inventory containers: check each item individually
-            if (container.PreviewAdd(oldItem, AddPolicy.StackThenEmpty) < oldItem.Amount)
-                return false;
-
-            foreach (var (_, item) in secondarySlotItems)
+            foreach (var (_, item) in items)
             {
                 if (container.PreviewAdd(item, AddPolicy.StackThenEmpty) < item.Amount)
                     return false;
@@ -408,45 +409,34 @@ namespace Assets._Game.Scripts.Shared.Utils
             return true;
         }
 
-        private static bool RemoveOldEquipment(
+        private static bool RemoveEquipment(
             EquipmentModel equipmentModel,
-            EquipmentSlotKey equipmentSlot,
-            ItemStackSnapshot oldItem,
-            List<(EquipmentSlotKey slot, ItemStackSnapshot item)> secondarySlotItems,
-            out List<(EquipmentSlotKey slot, ItemStackSnapshot item, int removed)> removedSecondaryItems)
+            List<(EquipmentSlotKey slot, ItemStackSnapshot item)> items,
+            out List<(EquipmentSlotKey slot, ItemStackSnapshot item)> removedItems)
         {
-            removedSecondaryItems = new List<(EquipmentSlotKey slot, ItemStackSnapshot item, int removed)>();
+            removedItems = new List<(EquipmentSlotKey slot, ItemStackSnapshot item)>();
 
-            int removedOld = equipmentModel.RemoveFromSlot(equipmentSlot, oldItem.Amount);
-            if (removedOld != oldItem.Amount)
-                return false;
-
-            foreach (var (slot, item) in secondarySlotItems)
+            foreach (var (slot, item) in items)
             {
                 int removed = equipmentModel.RemoveFromSlot(slot, item.Amount);
                 if (removed != item.Amount)
                 {
-                    equipmentModel.AddToSlot(equipmentSlot, oldItem);
-                    foreach (var (prevSlot, prevItem, _) in removedSecondaryItems)
-                    {
-                        equipmentModel.AddToSlot(prevSlot, prevItem);
-                    }
+                    if (removed > 0)
+                        equipmentModel.AddToSlot(slot, new(item.Definition, item.InstanceData, removed));
+                    RollbackRemoveEquipment(equipmentModel, removedItems);
                     return false;
                 }
-                removedSecondaryItems.Add((slot, item, removed));
+                removedItems.Add((slot, item));
             }
 
             return true;
         }
 
-        private static void RollbackRemoveOldEquipment(
+        private static void RollbackRemoveEquipment(
             EquipmentModel equipmentModel,
-            EquipmentSlotKey equipmentSlot,
-            ItemStackSnapshot oldItem,
-            List<(EquipmentSlotKey slot, ItemStackSnapshot item, int removed)> removedSecondaryItems)
+            List<(EquipmentSlotKey slot, ItemStackSnapshot item)> removedItems)
         {
-            equipmentModel.AddToSlot(equipmentSlot, oldItem);
-            foreach (var (slot, item, _) in removedSecondaryItems)
+            foreach (var (slot, item) in removedItems)
             {
                 equipmentModel.AddToSlot(slot, item);
             }

@@ -1,6 +1,5 @@
 ﻿using Assets._Game.Scripts.UI.Views.Widgets;
 using Assets._Game.Scripts.Items.Equipment;
-using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.UI.DataAggregators;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +14,9 @@ namespace Assets._Game.Scripts.UI.Views
 
         protected override void Render(IEquipmentViewData equipmentViewData)
         {
-            // Find all equipped items that have secondary slots and create a mapping of those secondary slots to the item occupying them
-            var blockedSlots = equipmentViewData.EquipmentModel.Enumerate()
-                .Where(x => x.Snapshot != null
-                    && x.Snapshot.Value.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait)
-                    && equippableTrait.SecondarySlots.Length > 0)
-                .SelectMany(x => x.Snapshot.Value.Definition.GetTrait<EquippableTrait>().SecondarySlots
-                    .Select(y => (Slot: y, Item: x.Snapshot.Value)))
-                .ToDictionary(x => x.Slot, x => x.Item);
+            var blockedSlots = equipmentViewData.EquipmentModel
+                .EnumerateBlockedSlots()
+                .ToDictionary(x => x.BlockedSlot.SlotType, x => (x.Item, x.BlockingSlot));
 
             var slotTypeCounts = new Dictionary<EquipmentSlotType, int>();
             foreach (var slot in _slots)
@@ -35,12 +29,18 @@ namespace Assets._Game.Scripts.UI.Views
                 var itemStack = equipmentViewData.EquipmentModel.Get(slotKey);
 
                 // Show item in slot or item that is blocking the slot if there is one, but indicate that it is blocked
-                if (itemStack == null && blockedSlots.TryGetValue(slot.SlotType, out var blockedItemStack))
-                    slot.Render(blockedItemStack, true);
+                long? blockingSlotIndex = null;
+                if (itemStack == null && blockedSlots.TryGetValue(slot.SlotType, out var blocker))
+                {
+                    slot.Render(blocker.Item, true);
+                    blockingSlotIndex = blocker.BlockingSlot.ToInt64();
+                }
                 else
+                {
                     slot.Render(itemStack, false);
+                }
 
-                slot.SlotView.Bind(equipmentViewData.ContainerPath, slotKey.ToInt64());
+                slot.SlotView.Bind(equipmentViewData.ContainerPath, slotKey.ToInt64(), blockingSlotIndex);
                 slotTypeCounts[slot.SlotType] = count + 1;
             }
         }

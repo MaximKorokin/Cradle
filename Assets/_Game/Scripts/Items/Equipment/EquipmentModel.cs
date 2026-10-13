@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Game.Scripts.Items.Traits;
 
 namespace Assets._Game.Scripts.Items.Equipment
 {
@@ -41,6 +42,21 @@ namespace Assets._Game.Scripts.Items.Equipment
         public bool IsValidSlot(EquipmentSlotKey slot)
             => _slots.ContainsKey(slot);
 
+        public IEnumerable<EquipmentSlotKey> GetSecondarySlots(ItemStackSnapshot item)
+        {
+            if (!item.Definition.TryGetTrait<EquippableTrait>(out var equippableTrait)
+                || equippableTrait.SecondarySlots == null
+                || equippableTrait.SecondarySlots.Length == 0)
+                yield break;
+
+            foreach (var slot in _slotList)
+                if (equippableTrait.SecondarySlots.Contains(slot.SlotType))
+                    yield return slot;
+        }
+
+        public IEnumerable<EquipmentSlotKey> GetConflictingSlots(EquipmentSlotKey targetSlot, ItemStackSnapshot item)
+            => _rules.GetConflictingSlots(targetSlot, item, this);
+
         public ItemStackSnapshot? Get(EquipmentSlotKey slot)
         {
             if (!_slots.TryGetValue(slot, out var s) || s is null) return null;
@@ -56,6 +72,17 @@ namespace Assets._Game.Scripts.Items.Equipment
         {
             foreach (var kv in _slots)
                 yield return (kv.Key, kv.Value?.Snapshot);
+        }
+
+        public IEnumerable<(EquipmentSlotKey BlockedSlot, ItemStackSnapshot Item, EquipmentSlotKey BlockingSlot)> EnumerateBlockedSlots()
+        {
+            foreach (var (blockingSlot, snapshot) in Enumerate())
+            {
+                if (snapshot == null) continue;
+
+                foreach (var blockedSlot in GetSecondarySlots(snapshot.Value))
+                    yield return (blockedSlot, snapshot.Value, blockingSlot);
+            }
         }
 
         public int Count(ItemKey key)
