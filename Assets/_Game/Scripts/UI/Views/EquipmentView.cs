@@ -16,7 +16,8 @@ namespace Assets._Game.Scripts.UI.Views
         {
             var blockedSlots = equipmentViewData.EquipmentModel
                 .EnumerateBlockedSlots()
-                .ToDictionary(x => x.BlockedSlot.SlotType, x => (x.Item, x.BlockingSlot));
+                .GroupBy(x => x.BlockedSlot.SlotType)
+                .ToDictionary(x => x.Key, x => x.First());
 
             var slotTypeCounts = new Dictionary<EquipmentSlotType, int>();
             foreach (var slot in _slots)
