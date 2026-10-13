@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                         return;
 
                     handler(entity, evt);
-                });
+                }, EventPriority);
 
                 subscriptions.Add(subscription);
             }
@@ -59,7 +59,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _addedHandlers.Add(handler);
         }
 
-        protected void TrackEntityCreated(Action<Entity> handler, bool invokeForAlreadyCreated = true)
+        protected void TrackEntityCreatedEvent(Action<Entity> handler, bool invokeForAlreadyCreated = true)
         {
             void Bind(Entity entity, List<IDisposable> subscriptions)
             {
@@ -70,7 +70,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 }
                 else
                 {
-                    subscriptions.Add(entity.SubscribeOnce<EntityCreatedEvent>(_ => handler(entity)));
+                    subscriptions.Add(entity.SubscribeOnce<EntityCreatedEvent>(
+                        _ => handler(entity),
+                        EventPriority));
                 }
             }
 

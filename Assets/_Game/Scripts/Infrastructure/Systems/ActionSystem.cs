@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
-            TrackEntityCreated(OnEntityCreated);
+            TrackEntityCreatedEvent(OnEntityCreated);
         }
 
         private void OnEntityCreated(Entity entity)

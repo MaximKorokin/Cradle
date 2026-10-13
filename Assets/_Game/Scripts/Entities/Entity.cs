@@ -84,11 +84,11 @@ namespace Assets._Game.Scripts.Entities
         public void Publish<TEvent>(in TEvent evt) where TEvent : struct, IEntityEvent
             => _bus.Publish(evt);
 
-        public IDisposable Subscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
-            => _bus.Subscribe(handler);
+        public IDisposable Subscribe<TEvent>(Action<TEvent> handler, int priority = 0) where TEvent : struct, IEntityEvent
+            => _bus.Subscribe(handler, priority);
 
-        public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
-            => _bus.SubscribeOnce(handler);
+        public IDisposable SubscribeOnce<TEvent>(Action<TEvent> handler, int priority = 0) where TEvent : struct, IEntityEvent
+            => _bus.SubscribeOnce(handler, priority);
 
         public void Unsubscribe<TEvent>(Action<TEvent> handler) where TEvent : struct, IEntityEvent
             => _bus.Unsubscribe(handler);

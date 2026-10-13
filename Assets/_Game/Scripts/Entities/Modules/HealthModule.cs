@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Entities.Stats;
 using System;
+using Assets._Game.Scripts.Infrastructure.Persistence;
 
 namespace Assets._Game.Scripts.Entities.Modules
 {
@@ -7,7 +8,6 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         private StatModule _statModule;
         private float _maxHealth;
-
         private float _currentHealth;
 
         public float MaxHealth => _maxHealth;
@@ -83,15 +83,46 @@ namespace Assets._Game.Scripts.Entities.Modules
 
             return CurrentHealth - before;
         }
+
+        public void SetCurrentHealth(float value)
+        {
+            CurrentHealth = value;
+        }
+
     }
 
-    public sealed class HealthModuleFactory : IEntityModuleFactory
+    public sealed class HealthModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
         public EntityModuleBase Create(EntityDefinition entityDefinition)
         {
             if (!entityDefinition.TryGetModuleDefinition<StatsModuleDefinition>(out _)) return null;
 
             return new HealthModule();
+        }
+
+        public void Apply(Entity entity, EntitySave entitySave)
+        {
+            if (entitySave.HealthSave == null || !entity.TryGetModule<HealthModule>(out var healthModule)) return;
+
+            var currentHealth = entitySave.HealthSave.CurrentHealth;
+            if (entity.IsCreated)
+            {
+                healthModule.SetCurrentHealth(currentHealth);
+            }
+            else
+            {
+                entity.SubscribeOnce<EntityCreatedEvent>(_ => healthModule.SetCurrentHealth(currentHealth), int.MinValue);
+            }
+        }
+
+        public void Save(Entity entity, EntitySave entitySave)
+        {
+            if (!entity.TryGetModule<HealthModule>(out var healthModule)) return;
+
+            entitySave.HealthSave = new HealthSave
+            {
+                CurrentHealth = healthModule.CurrentHealth
+            };
         }
     }
 }

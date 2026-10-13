@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackGlobalEvent<SpawnEntityRequest>(OnEntitySpawnRequested);
             TrackGlobalEvent<DespawnEntityRequest>(OnEntityDespawnRequested);
-            TrackEntityCreated(OnEntityCreated, false);
+            TrackEntityCreatedEvent(OnEntityCreated, false);
         }
 
         public void Tick(float delta)

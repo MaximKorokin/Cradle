@@ -27,7 +27,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _equipmentVisualHandler = new EquipmentVisualHandler();
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
-            TrackEntityCreated(OnEntityCreated);
+            TrackEntityCreatedEvent(OnEntityCreated);
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
         }

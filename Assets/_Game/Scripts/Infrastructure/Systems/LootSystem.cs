@@ -31,7 +31,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackGlobalEvent<LootDropRequestedEvent>(OnLootDropRequested);
             TrackGlobalEvent<LootItemDropRequestedEvent>(OnLootItemDropRequested);
-            TrackEntityCreated(OnEntityCreated, false);
+            TrackEntityCreatedEvent(OnEntityCreated, false);
         }
 
         private void OnEntityCreated(Entity entity)

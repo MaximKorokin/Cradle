@@ -49,7 +49,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
             TrackEntityEvent<LevelChangedEvent>(OnLevelChanged);
-            TrackEntityCreated(OnEntityCreated);
+            TrackEntityCreatedEvent(OnEntityCreated);
 
             TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
         }

@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             Entity = entity;
 
             if (Entity.IsCreated) OnEntityCreated(new());
-            else Entity.SubscribeOnce<EntityCreatedEvent>(OnEntityCreated);
+            else Entity.SubscribeOnce<EntityCreatedEvent>(OnEntityCreated, int.MaxValue);
 
             OnAttach();
         }

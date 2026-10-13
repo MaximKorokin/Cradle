@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _itemStackFactory = itemStackFactory;
             TrackEntityEvent<ItemUseSettingsUpdateRequest>(OnItemUseSettingsUpdateRequested);
-            TrackEntityCreated(OnEntityCreated, false);
+            TrackEntityCreatedEvent(OnEntityCreated, false);
         }
 
         private void OnEntityCreated(Entity entity)

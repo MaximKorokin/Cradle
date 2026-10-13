@@ -12,7 +12,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
     public sealed class EventBusCore : IEventBus
     {
-        private readonly Dictionary<Type, List<Delegate>> _handlers = new();
+        private readonly Dictionary<Type, List<HandlerEntry>> _handlers = new();
+        private long _nextSequence;
 
         public void Publish<T>(in T e) where T : struct
         {
@@ -21,22 +22,32 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
             var snapshot = list.ToArray();
             for (int i = 0; i < snapshot.Length; i++)
-                ((Action<T>)snapshot[i]).Invoke(e);
+                ((Action<T>)snapshot[i].Handler).Invoke(e);
         }
 
         public IDisposable Subscribe<T>(Action<T> handler) where T : struct
+            => Subscribe(handler, 0);
+
+        public IDisposable Subscribe<T>(Action<T> handler, int priority) where T : struct
         {
             if (handler == null) throw new ArgumentNullException(nameof(handler));
 
             var type = typeof(T);
             if (!_handlers.TryGetValue(type, out var list))
-                _handlers[type] = list = new List<Delegate>(8);
+                _handlers[type] = list = new List<HandlerEntry>(128);
 
-            list.Add(handler);
+            var entry = new HandlerEntry(handler, priority, _nextSequence++);
+            list.Add(entry);
+            list.Sort((a, b) =>
+            {
+                var priorityOrder = b.Priority.CompareTo(a.Priority);
+                return priorityOrder != 0 ? priorityOrder : a.Sequence.CompareTo(b.Sequence);
+            });
+
             return new Subscription(() =>
             {
                 if (_handlers.TryGetValue(type, out var list))
-                    list.Remove(handler);
+                    list.Remove(entry);
             });
         }
 
@@ -44,21 +55,48 @@ namespace Assets._Game.Scripts.Infrastructure.Game
         {
             var type = typeof(T);
             if (_handlers.TryGetValue(type, out var list))
-                list.Remove(handler);
+            {
+                var index = list.FindIndex(entry => Equals(entry.Handler, handler));
+                if (index >= 0)
+                    list.RemoveAt(index);
+            }
         }
 
         public IDisposable SubscribeOnce<T>(Action<T> handler) where T : struct
+            => SubscribeOnce(handler, 0);
+
+        public IDisposable SubscribeOnce<T>(Action<T> handler, int priority) where T : struct
         {
             IDisposable subscription = null;
             subscription = Subscribe<T>(e =>
             {
-                handler(e);
-                subscription.Dispose();
-            });
+                try
+                {
+                    handler(e);
+                }
+                finally
+                {
+                    subscription.Dispose();
+                }
+            }, priority);
             return subscription;
         }
 
         public void Clear() => _handlers.Clear();
+
+        private sealed class HandlerEntry
+        {
+            public Delegate Handler { get; }
+            public int Priority { get; }
+            public long Sequence { get; }
+
+            public HandlerEntry(Delegate handler, int priority, long sequence)
+            {
+                Handler = handler;
+                Priority = priority;
+                Sequence = sequence;
+            }
+        }
 
         private sealed class Subscription : IDisposable
         {

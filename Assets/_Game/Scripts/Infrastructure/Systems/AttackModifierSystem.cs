@@ -18,7 +18,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
-            TrackEntityCreated(OnEntityCreated);
+            TrackEntityCreatedEvent(OnEntityCreated);
         }
 
         private void OnEntityCreated(Entity entity)

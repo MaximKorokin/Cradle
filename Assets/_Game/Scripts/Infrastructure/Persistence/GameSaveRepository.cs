@@ -54,6 +54,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
         public InventorySave StorageSave;
         public InventorySave InventorySave;
         public EquipmentSave EquipmentSave;
+        public HealthSave HealthSave;
         public LevelingSave LevelingSave;
         public QuestStateSave[] QuestSaves;
         public LocationSave LocationSave;
@@ -63,6 +64,11 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     {
         public int Level;
         public long Experience;
+    }
+
+    public sealed class HealthSave
+    {
+        public float CurrentHealth;
     }
 
     public sealed class StatBaseSave

@@ -7,6 +7,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public abstract class SystemBase : ISystem, IDisposable
     {
         protected readonly IGlobalEventBus GlobalEventBus;
+        protected virtual int EventPriority => 0;
 
         private readonly List<IDisposable> _subscriptions = new();
 
@@ -18,7 +19,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected void TrackGlobalEvent<T>(Action<T> handler)
             where T : struct, IGlobalEvent
         {
-            var subscription = GlobalEventBus.Subscribe(handler);
+            var subscription = GlobalEventBus.Subscribe(handler, EventPriority);
             _subscriptions.Add(subscription);
         }
 

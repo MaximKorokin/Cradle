@@ -31,7 +31,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
             TrackEntityEvent<EntityAiToggleRequest>(OnEntityAiToggleRequested);
-            TrackEntityCreated(OnEntityCreated, false);
+            TrackEntityCreatedEvent(OnEntityCreated, false);
         }
 
         private void OnEntityCreated(Entity entity)
