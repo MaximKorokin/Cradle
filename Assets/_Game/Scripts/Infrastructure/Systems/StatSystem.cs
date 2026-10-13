@@ -49,6 +49,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
             TrackEntityEvent<LevelChangedEvent>(OnLevelChanged);
+            TrackEntityCreated(OnEntityCreated);
 
             TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
         }
@@ -58,10 +59,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IterateMatchingEntities(_tickController.Tick);
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
 
             _derivedStatsCalculator.RecalculateDerivedStats(entity);
@@ -238,16 +237,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var source = StatModifierSource.FromStatusEffect(e.StatusEffect.Definition.Id);
 
-            foreach (var modifier in e.StatusEffect.Definition.StatModifiers)
+            stats.RemoveModifiers(source);
+
+            if (e.Kind == StatusEffectChangeKind.Added)
             {
-                if (e.Kind == StatusEffectChangeKind.Added)
-                {
-                    stats.AddModifiers(source, new[] { modifier });
-                }
-                else if (e.Kind == StatusEffectChangeKind.Removed)
-                {
-                    stats.RemoveModifiers(source);
-                }
+                stats.AddModifiers(source, e.StatusEffect.Definition.StatModifiers);
             }
         }
 

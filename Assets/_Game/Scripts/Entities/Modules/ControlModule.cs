@@ -7,6 +7,7 @@ namespace Assets._Game.Scripts.Entities.Modules
     public sealed class ControlModule : EntityModuleBase
     {
         private readonly List<IControlProvider> _providers = new();
+        private readonly Dictionary<string, IControlProvider> _providersByKey = new();
         public IReadOnlyList<IControlProvider> Providers => _providers;
 
         public const int ControlMaskCount = 3;
@@ -34,6 +35,26 @@ namespace Assets._Game.Scripts.Entities.Modules
         public void RemoveProvider(IControlProvider p)
         {
             _providers.Remove(p);
+        }
+
+        public void SetProvider(string key, IControlProvider provider)
+        {
+            RemoveProvider(key);
+
+            if (provider == null) return;
+
+            AddProvider(provider);
+            _providersByKey.Add(key, provider);
+        }
+
+        public bool RemoveProvider(string key)
+        {
+            if (!_providersByKey.TryGetValue(key, out var provider))
+                return false;
+
+            _providersByKey.Remove(key);
+            RemoveProvider(provider);
+            return true;
         }
 
         public void ResetProviders()

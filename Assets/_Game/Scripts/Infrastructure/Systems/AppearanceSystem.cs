@@ -27,14 +27,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _equipmentVisualHandler = new EquipmentVisualHandler();
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
+            TrackEntityCreated(OnEntityCreated);
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
 
             // Set initial visuals when the entity view created

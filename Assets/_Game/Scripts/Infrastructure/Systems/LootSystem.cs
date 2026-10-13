@@ -31,12 +31,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackGlobalEvent<LootDropRequestedEvent>(OnLootDropRequested);
             TrackGlobalEvent<LootItemDropRequestedEvent>(OnLootItemDropRequested);
+            TrackEntityCreated(OnEntityCreated, false);
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
 
             entity.SubscribeOnce<EntityViewBoundEvent>(e =>

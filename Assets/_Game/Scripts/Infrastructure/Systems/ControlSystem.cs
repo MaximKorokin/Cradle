@@ -31,12 +31,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
             TrackEntityEvent<EntityAiToggleRequest>(OnEntityAiToggleRequested);
+            TrackEntityCreated(OnEntityCreated, false);
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
 
             entity.SubscribeOnce<EntityViewBoundEvent>(e =>
@@ -122,10 +121,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
         {
+            if (!entity.TryGetModule<ControlModule>(out var controlModule)) return;
+
             if (e.Kind == StatusEffectChangeKind.Added && e.StatusEffect.Definition.ControlProvider != null)
             {
-                var controlModule = entity.GetModule<ControlModule>();
-                controlModule.AddProvider(e.StatusEffect.Definition.ControlProvider.CreateInstance(_resolver));
+                controlModule.SetProvider(
+                    e.StatusEffect.Definition.Id,
+                    e.StatusEffect.Definition.ControlProvider.CreateInstance(_resolver));
+            }
+            else if (e.Kind == StatusEffectChangeKind.Removed)
+            {
+                controlModule.RemoveProvider(e.StatusEffect.Definition.Id);
             }
         }
 

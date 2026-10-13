@@ -11,7 +11,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         protected readonly EntityRepository EntityRepository;
 
         private Entity[] _buffer = new Entity[256];
+        private readonly List<Action<Entity>> _addedHandlers = new();
         private readonly List<Action<Entity, List<IDisposable>>> _eventBinders = new();
+        private readonly List<Action<Entity, List<IDisposable>>> _createdBinders = new();
         private readonly Dictionary<Entity, List<IDisposable>> _subscriptionsByEntity = new();
 
         protected abstract EntityQuery EntityQuery { get; }
@@ -22,7 +24,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             EntityRepository = repository;
 
-            EntityRepository.Added += OnEntityAdded;
+            EntityRepository.Added += HandleEntityAdded;
             EntityRepository.Removed += OnEntityRemoved;
 
             IterateAllEntities(RegisterEntity);
@@ -52,9 +54,42 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        protected virtual void OnEntityAdded(Entity entity)
+        protected void TrackEntityAdded(Action<Entity> handler)
+        {
+            _addedHandlers.Add(handler);
+        }
+
+        protected void TrackEntityCreated(Action<Entity> handler, bool invokeForAlreadyCreated = true)
+        {
+            void Bind(Entity entity, List<IDisposable> subscriptions)
+            {
+                if (entity.IsCreated)
+                {
+                    if (invokeForAlreadyCreated)
+                        handler(entity);
+                }
+                else
+                {
+                    subscriptions.Add(entity.SubscribeOnce<EntityCreatedEvent>(_ => handler(entity)));
+                }
+            }
+
+            _createdBinders.Add(Bind);
+
+            foreach (var pair in _subscriptionsByEntity)
+            {
+                Bind(pair.Key, pair.Value);
+            }
+        }
+
+        private void HandleEntityAdded(Entity entity)
         {
             RegisterEntity(entity);
+
+            for (int i = 0; i < _addedHandlers.Count; i++)
+            {
+                _addedHandlers[i](entity);
+            }
         }
 
         protected virtual void OnEntityRemoved(Entity entity)
@@ -74,6 +109,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             {
                 _eventBinders[i](entity, subscriptions);
             }
+
+            for (int i = 0; i < _createdBinders.Count; i++)
+            {
+                _createdBinders[i](entity, subscriptions);
+            }
         }
 
         private void UnregisterEntity(Entity entity)
@@ -91,7 +131,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         public override void Dispose()
         {
-            EntityRepository.Added -= OnEntityAdded;
+            EntityRepository.Added -= HandleEntityAdded;
             EntityRepository.Removed -= OnEntityRemoved;
 
             foreach (var pair in _subscriptionsByEntity)
@@ -104,7 +144,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
 
             _subscriptionsByEntity.Clear();
+            _addedHandlers.Clear();
             _eventBinders.Clear();
+            _createdBinders.Clear();
 
             base.Dispose();
         }

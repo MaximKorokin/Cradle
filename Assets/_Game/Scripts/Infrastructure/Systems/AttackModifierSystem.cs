@@ -18,13 +18,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             TrackGlobalEvent<DamageAppliedEvent>(OnDamageApplied);
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
+            TrackEntityCreated(OnEntityCreated);
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
+
+            if (entity.TryGetModule<AttackModifierModule>(out var attackModifierModule))
+                attackModifierModule.ClearModifiers();
 
             if (entity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
             {
@@ -69,12 +71,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (e.Kind == StatusEffectChangeKind.Added)
             {
-                // If the entity doesn't have an AttackModifierModule, add one.
-                if (!entity.TryGetModule<AttackModifierModule>(out var attackModifierModule))
-                {
-                    attackModifierModule = new();
-                    entity.AddModule(attackModifierModule);
-                }
+                var attackModifierModule = GetOrAddAttackModifierModule(entity);
 
                 for (int i = 0; i < e.StatusEffect.Definition.AttackModifiers.Length; i++)
                 {
@@ -89,6 +86,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     attackModifierModule.RemoveModifier(e.StatusEffect.Definition.AttackModifiers[i]);
                 }
             }
+        }
+
+        private static AttackModifierModule GetOrAddAttackModifierModule(Entity entity)
+        {
+            if (entity.TryGetModule<AttackModifierModule>(out var module))
+                return module;
+
+            module = new AttackModifierModule();
+            entity.AddModule(module);
+            return module;
         }
     }
 }

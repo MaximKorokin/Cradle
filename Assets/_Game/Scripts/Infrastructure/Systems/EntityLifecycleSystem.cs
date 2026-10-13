@@ -2,7 +2,6 @@
 using Assets._Game.Scripts.Entities.Control;
 using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Game;
-using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Items;
 using UnityEngine;
@@ -28,6 +27,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackGlobalEvent<SpawnEntityRequest>(OnEntitySpawnRequested);
             TrackGlobalEvent<DespawnEntityRequest>(OnEntityDespawnRequested);
+            TrackEntityCreated(OnEntityCreated, false);
         }
 
         public void Tick(float delta)
@@ -43,10 +43,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (entity.TryGetModule<DespawnModule>(out var module))
             {
                 if (module.Trigger == DespawnCounterStartTrigger.OnSpawn) module.StartDespawnTime = Time.time;

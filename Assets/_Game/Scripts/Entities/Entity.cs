@@ -29,6 +29,8 @@ namespace Assets._Game.Scripts.Entities
 
         public void MarkCreated()
         {
+            if (IsCreated) return;
+
             IsCreated = true;
             Publish(new EntityCreatedEvent());
         }

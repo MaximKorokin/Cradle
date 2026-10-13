@@ -38,12 +38,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
+            TrackEntityCreated(OnEntityCreated);
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void OnEntityCreated(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
 
             if (entity.TryGetModule<EquipmentModule>(out var equipmentModule))

@@ -37,6 +37,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             TrackGlobalEvent<SaveGameRequest>(OnSaveGameRequested);
             TrackGlobalEvent<LoadGameRequest>(OnLoadGameRequested);
+            TrackEntityAdded(LoadEntity);
 
             _playerContext.PlayerChanged += OnPlayerChanged;
         }
@@ -58,10 +59,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             LoadPlayerLocation(player, _saveService.GetEntitySave(player));
         }
 
-        protected override void OnEntityAdded(Entity entity)
+        private void LoadEntity(Entity entity)
         {
-            base.OnEntityAdded(entity);
-
             if (!EntityQuery.Match(entity)) return;
 
             _saveService.LoadEntity(entity);
