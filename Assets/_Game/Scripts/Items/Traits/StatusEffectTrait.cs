@@ -17,6 +17,11 @@ namespace Assets._Game.Scripts.Items.Traits
             // OnUse requires additional checks
             if (context.Trigger != ItemTrigger.OnUse) return true;
             if (context.Payload is not ItemUseSettings itemUseSettings) return true;
+            if (itemUseSettings.CheckStatusEffectsLimit
+                && context.User.TryGetModule<StatusEffectModule>(out var limitModule)
+                && limitModule.StatusEffects.WouldRemoveOtherStatusEffect(StatusEffect))
+                return false;
+
             if (itemUseSettings.OverrideStatusEffects) return true;
 
             // Don't trigger if the user already has the status effect.

@@ -15,6 +15,8 @@ namespace Assets._Game.Scripts.UI.Views
         private Slider _hpPercentSlider;
         [SerializeField]
         private Toggle _overrideStatusEffectsToggle;
+        [SerializeField]
+        private Toggle _checkStatusEffectsLimitToggle;
 
         public event Action<ItemUseSettings> Changed;
 
@@ -24,7 +26,14 @@ namespace Assets._Game.Scripts.UI.Views
             _hpPercentText.text = $"{itemUseSettingsViewData.ItemUseSettings.HpPercent}%";
             _overrideStatusEffectsToggle.SetIsOnWithoutNotify(itemUseSettingsViewData.ItemUseSettings.OverrideStatusEffects);
 
+            _checkStatusEffectsLimitToggle.SetIsOnWithoutNotify(itemUseSettingsViewData.ItemUseSettings.CheckStatusEffectsLimit);
+
+            _hpPercentSlider.onValueChanged.RemoveListener(OnHpPercentSliderValueChanged);
+            _checkStatusEffectsLimitToggle.onValueChanged.RemoveListener(OnCheckStatusEffectsLimitToggleValueChanged);
+            _overrideStatusEffectsToggle.onValueChanged.RemoveListener(OnOverrideStatusEffectsToggleValueChanged);
+
             _hpPercentSlider.onValueChanged.AddListener(OnHpPercentSliderValueChanged);
+            _checkStatusEffectsLimitToggle.onValueChanged.AddListener(OnCheckStatusEffectsLimitToggleValueChanged);
             _overrideStatusEffectsToggle.onValueChanged.AddListener(OnOverrideStatusEffectsToggleValueChanged);
         }
 
@@ -33,7 +42,13 @@ namespace Assets._Game.Scripts.UI.Views
             base.OnDestroy();
 
             _hpPercentSlider.onValueChanged.RemoveListener(OnHpPercentSliderValueChanged);
+            _checkStatusEffectsLimitToggle.onValueChanged.RemoveListener(OnCheckStatusEffectsLimitToggleValueChanged);
             _overrideStatusEffectsToggle.onValueChanged.RemoveListener(OnOverrideStatusEffectsToggleValueChanged);
+        }
+
+        private void OnCheckStatusEffectsLimitToggleValueChanged(bool value)
+        {
+            NotifyChanged();
         }
 
         private void OnHpPercentSliderValueChanged(float value)
@@ -50,7 +65,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void NotifyChanged()
         {
-            Changed?.Invoke(new ItemUseSettings((int)_hpPercentSlider.value, _overrideStatusEffectsToggle.isOn));
+            Changed?.Invoke(new ItemUseSettings((int)_hpPercentSlider.value, _overrideStatusEffectsToggle.isOn, _checkStatusEffectsLimitToggle.isOn));
         }
     }
 }

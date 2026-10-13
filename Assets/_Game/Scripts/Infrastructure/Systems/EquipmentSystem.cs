@@ -22,22 +22,6 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _itemStackFactory = itemStackFactory;
             TrackEntityEvent<ItemUseSettingsUpdateRequest>(OnItemUseSettingsUpdateRequested);
-            TrackEntityCreatedEvent(OnEntityCreated, false);
-        }
-
-        private void OnEntityCreated(Entity entity)
-        {
-            if (!EntityQuery.Match(entity) ||
-                !entity.Definition.TryGetModuleDefinition<EquipmentModuleDefinition>(out var defaultEquipment) ||
-                defaultEquipment.DefaultItems == null ||
-                defaultEquipment.DefaultItems.Length == 0) return;
-
-            var equipmentModule = entity.GetModule<EquipmentModule>();
-            foreach (var itemDefinition in defaultEquipment.DefaultItems)
-            {
-                var itemStack = _itemStackFactory.Create(itemDefinition.Id, 1);
-                equipmentModule.Equipment.Add(itemStack.Snapshot);
-            }
         }
 
         private void OnItemUseSettingsUpdateRequested(Entity entity, ItemUseSettingsUpdateRequest request)

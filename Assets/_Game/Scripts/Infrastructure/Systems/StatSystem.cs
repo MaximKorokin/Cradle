@@ -106,29 +106,32 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEquipmentChanged(Entity entity, EquipmentChangedEvent e)
         {
-            var stats = entity.GetModule<StatModule>();
+            var statModule = entity.GetModule<StatModule>();
 
-            var source = StatModifierSource.FromEquipmentSlot(e.Slot);
-
-            // Always remove previous modifiers from this slot (covers unequip/replace/update)
-            stats.RemoveModifiers(source);
-
-            // Apply new modifiers if something is equipped now and change weight
-            if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
+            using (statModule.Stats.BeginTransaction())
             {
-                AddWeightModifierFromItem(e.Item.Value, stats, source);
+                var source = StatModifierSource.FromEquipmentSlot(e.Slot);
 
-                var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileEquipped);
-                if (modifiers.Count > 0)
+                // Always remove previous modifiers from this slot (covers unequip/replace/update)
+                statModule.RemoveModifiers(source);
+
+                // Apply new modifiers if something is equipped now and change weight
+                if (e.Kind != EquipmentChangeKind.Unequipped && e.Item != null)
                 {
-                    stats.AddModifiers(source, modifiers);
-                }
-            }
+                    AddWeightModifierFromItem(e.Item.Value, statModule, source);
 
-            // Recalculate item set bonuses
-            if (e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Unequipped)
-            {
-                RecalculateItemSetBonuses(entity, stats);
+                    var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileEquipped);
+                    if (modifiers.Count > 0)
+                    {
+                        statModule.AddModifiers(source, modifiers);
+                    }
+                }
+
+                // Recalculate item set bonuses
+                if (e.Kind == EquipmentChangeKind.Equipped || e.Kind == EquipmentChangeKind.Unequipped)
+                {
+                    RecalculateItemSetBonuses(entity, statModule);
+                }
             }
         }
 
@@ -164,9 +167,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             stats.AddModifiers(source, new StatModifier(StatId.CarryWeight, StatStage.Add, StatOperation.Add, item.Definition.Weight * item.Amount).Yield());
         }
 
-        private void RecalculateItemSetBonuses(Entity entity, StatModule stats)
+        private void RecalculateItemSetBonuses(Entity entity, StatModule statModule)
         {
-            stats.RemoveModifiers(StatModifierSource.ItemSet);
+            statModule.RemoveModifiers(StatModifierSource.ItemSet);
 
             if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule))
                 return;
@@ -190,7 +193,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 {
                     if (bonus.Modifiers.Count > 0)
                     {
-                        stats.AddModifiers(StatModifierSource.ItemSet, bonus.Modifiers);
+                        statModule.AddModifiers(StatModifierSource.ItemSet, bonus.Modifiers);
                     }
                 }
             }
@@ -213,35 +216,41 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private static void OnInventoryChanged(Entity entity, InventoryChangedEvent e)
         {
-            var stats = entity.GetModule<StatModule>();
+            var statModule = entity.GetModule<StatModule>();
 
-            var source = StatModifierSource.FromInventorySlot(e.Slot.Index);
-
-            stats.RemoveModifiers(source);
-
-            if (e.Kind != InventoryChangeKind.Removed && e.Item != null)
+            using (statModule.Stats.BeginTransaction())
             {
-                AddWeightModifierFromItem(e.Item.Value, stats, source);
+                var source = StatModifierSource.FromInventorySlot(e.Slot.Index);
 
-                var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileInInventory);
-                if (modifiers.Count > 0)
+                statModule.RemoveModifiers(source);
+
+                if (e.Kind != InventoryChangeKind.Removed && e.Item != null)
                 {
-                    stats.AddModifiers(source, modifiers);
+                    AddWeightModifierFromItem(e.Item.Value, statModule, source);
+
+                    var modifiers = ExtractStatModifiers(entity, e.Item.Value, ItemTrigger.WhileInInventory);
+                    if (modifiers.Count > 0)
+                    {
+                        statModule.AddModifiers(source, modifiers);
+                    }
                 }
             }
         }
 
         private static void OnStatusEffectChanged(Entity entity, StatusEffectChangedEvent e)
         {
-            var stats = entity.GetModule<StatModule>();
+            var statModule = entity.GetModule<StatModule>();
 
-            var source = StatModifierSource.FromStatusEffect(e.StatusEffect.Definition.Id);
-
-            stats.RemoveModifiers(source);
-
-            if (e.Kind == StatusEffectChangeKind.Added)
+            using (statModule.Stats.BeginTransaction())
             {
-                stats.AddModifiers(source, e.StatusEffect.Definition.StatModifiers);
+                var source = StatModifierSource.FromStatusEffect(e.StatusEffect.Definition.Id);
+
+                statModule.RemoveModifiers(source);
+
+                if (e.Kind == StatusEffectChangeKind.Added)
+                {
+                    statModule.AddModifiers(source, e.StatusEffect.Definition.StatModifiers);
+                }
             }
         }
 
@@ -249,10 +258,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             var statModule = entity.GetModule<StatModule>();
 
-            statModule.RemoveModifiers(StatModifierSource.Level);
-            statModule.AddModifiers(
-                StatModifierSource.Level,
-                Enumerable.Repeat(0, levelChangedEvent.NewLevel).SelectMany(_ => _levelingConfig.StatModifiersOnLevelUp));
+            using (statModule.Stats.BeginTransaction())
+            {
+                statModule.RemoveModifiers(StatModifierSource.Level);
+                statModule.AddModifiers(
+                    StatModifierSource.Level,
+                    Enumerable.Repeat(0, levelChangedEvent.NewLevel).SelectMany(_ => _levelingConfig.StatModifiersOnLevelUp));
+            }
         }
     }
 

@@ -29,6 +29,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             TrackEntityEvent<ItemUseStartedEvent>(OnItemUseStarted);
 
             TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
+            TrackGlobalEvent<StatusEffectApplyRequest>(OnStatusEffectApplyRequested);
+            TrackGlobalEvent<StatusEffectRemoveRequest>(OnStatusEffectRemoveRequested);
+            TrackGlobalEvent<StatusEffectsClearRequest>(OnStatusEffectsClearRequested);
         }
 
         public void Tick(float delta)
@@ -47,7 +50,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 {
                     if (statusEffect.IsExpired)
                     {
-                        statusEffectModule.StatusEffects.RemoveStatusEffect(statusEffect);
+                        GlobalEventBus.Publish(new StatusEffectRemoveRequest(entity, statusEffect));
                     }
                 }
             }
@@ -66,7 +69,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                     statusEffect.SetCharges(statusEffect.ChargesAmount - 1);
                     if (statusEffect.ChargesAmount <= 0)
                     {
-                        statusEffectModule.StatusEffects.RemoveStatusEffect(statusEffect);
+                        GlobalEventBus.Publish(new StatusEffectRemoveRequest(entity, statusEffect));
                     }
                 }
             }
@@ -79,15 +82,68 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             foreach (var trait in e.Item.GetFunctionalTraits<StatusEffectTrait>(ItemTrigger.OnUse))
             {
                 // No need to check if trait can trigger, as it was already checked in ItemSystem when starting item use.
-                statusEffectModule.StatusEffects.AddStatusEffect(new(trait.StatusEffect));
+                GlobalEventBus.Publish(new StatusEffectApplyRequest(entity, new(trait.StatusEffect)));
             }
+        }
+
+        private void OnStatusEffectApplyRequested(StatusEffectApplyRequest e)
+        {
+            if (!e.Target.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+
+            statusEffectModule.StatusEffects.AddStatusEffect(e.StatusEffect);
         }
 
         private void OnEntityDied(EntityDiedEvent e)
         {
-            if (!e.Victim.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+            GlobalEventBus.Publish(new StatusEffectsClearRequest(e.Victim));
+        }
+
+        private void OnStatusEffectRemoveRequested(StatusEffectRemoveRequest e)
+        {
+            if (!e.Target.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+
+            statusEffectModule.StatusEffects.RemoveStatusEffect(e.StatusEffect);
+        }
+
+        private void OnStatusEffectsClearRequested(StatusEffectsClearRequest e)
+        {
+            if (!e.Target.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
             statusEffectModule.StatusEffects.ClearStatusEffects();
+        }
+    }
+
+    public readonly struct StatusEffectRemoveRequest : IGlobalEvent
+    {
+        public readonly Entity Target;
+        public readonly StatusEffect StatusEffect;
+
+        public StatusEffectRemoveRequest(Entity target, StatusEffect statusEffect)
+        {
+            Target = target;
+            StatusEffect = statusEffect;
+        }
+    }
+
+    public readonly struct StatusEffectsClearRequest : IGlobalEvent
+    {
+        public readonly Entity Target;
+
+        public StatusEffectsClearRequest(Entity target)
+        {
+            Target = target;
+        }
+    }
+
+    public readonly struct StatusEffectApplyRequest : IGlobalEvent
+    {
+        public readonly Entity Target;
+        public readonly StatusEffect StatusEffect;
+
+        public StatusEffectApplyRequest(Entity target, StatusEffect statusEffect)
+        {
+            Target = target;
+            StatusEffect = statusEffect;
         }
     }
 }

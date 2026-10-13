@@ -56,6 +56,12 @@ public static class SLog
     }
 
     [HideInCallstack]
+    public static void Exception(System.Exception exception)
+    {
+        Debug.LogException(exception);
+    }
+
+    [HideInCallstack]
     public static void Write(object obj, LogLevel logLevel)
     {
         switch (logLevel)

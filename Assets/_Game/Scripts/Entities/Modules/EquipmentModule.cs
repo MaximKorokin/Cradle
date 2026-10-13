@@ -43,11 +43,13 @@ namespace Assets._Game.Scripts.Entities.Modules
     {
         public int HpPercent;
         public bool OverrideStatusEffects;
+        public bool CheckStatusEffectsLimit;
 
-        public ItemUseSettings(int hpPercent, bool overrideStatusEffect)
+        public ItemUseSettings(int hpPercent, bool overrideStatusEffect, bool checkStatusEffectsLimit = false)
         {
             HpPercent = hpPercent;
             OverrideStatusEffects = overrideStatusEffect;
+            CheckStatusEffectsLimit = checkStatusEffectsLimit;
         }
     }
 
@@ -75,10 +77,12 @@ namespace Assets._Game.Scripts.Entities.Modules
     public class EquipmentModuleFactory : IEntityModuleFactory, IEntityModulePersistance
     {
         private readonly EquipmentModelFactory _equipmentModelAssembler;
+        private readonly ItemStackFactory _itemStackFactory;
 
-        public EquipmentModuleFactory(EquipmentModelFactory equipmentModelAssembler)
+        public EquipmentModuleFactory(EquipmentModelFactory equipmentModelAssembler, ItemStackFactory itemStackFactory)
         {
             _equipmentModelAssembler = equipmentModelAssembler;
+            _itemStackFactory = itemStackFactory;
         }
 
         public EntityModuleBase Create(EntityDefinition entityDefinition)
@@ -88,12 +92,22 @@ namespace Assets._Game.Scripts.Entities.Modules
 
             var slots = equipmentDefinitionModule.EquipmentSlots.ToArray();
             var equipmentModel = _equipmentModelAssembler.Create(slots);
+            if (equipmentDefinitionModule.DefaultItems != null)
+            {
+                foreach (var itemDefinition in equipmentDefinitionModule.DefaultItems)
+                {
+                    var itemStack = _itemStackFactory.Create(itemDefinition.Id, 1);
+                    equipmentModel.Add(itemStack.Snapshot);
+                }
+            }
             return new EquipmentModule(equipmentModel, equipmentDefinitionModule.ManualItemUseSettings);
         }
 
         public void Apply(Entity entity, EntitySave entitySave)
         {
             if (!entity.TryGetModule<EquipmentModule>(out var equipmentModule)) return;
+            foreach (var slot in equipmentModule.Equipment.Slots)
+                equipmentModule.Equipment.RemoveFromSlot(slot, int.MaxValue);
             _equipmentModelAssembler.Apply(equipmentModule.Equipment, entitySave.EquipmentSave);
             equipmentModule.SetAutoItemUseSettings(entitySave.EquipmentSave.AutoItemUseSettings);
         }

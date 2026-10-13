@@ -52,6 +52,16 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             return true;
         }
 
+        public bool WouldRemoveOtherStatusEffect(StatusEffectDefinition definition)
+        {
+            var category = definition.Category;
+            var maxAmount = _config.GetMaxAmountForCategory(category);
+            if (maxAmount == 0) return false;
+            if (!_statusEffects.TryGetValue(category, out var stack)) return false;
+            if (stack.Any(se => se.Definition.Id == definition.Id)) return false;
+            return stack.Count >= maxAmount;
+        }
+
         public void RemoveStatusEffect(StatusEffect statusEffect)
         {
             var category = statusEffect.Definition.Category;

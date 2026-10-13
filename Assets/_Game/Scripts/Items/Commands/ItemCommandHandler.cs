@@ -41,6 +41,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 TransferToContainerSlotCommand c => HandleTransferToSlot(c),
                 EquipFromContainerCommand c => HandleEquip(c),
                 UnequipToContainerCommand c => HandleUnequip(c),
+                AddItemCommand c => HandleAdd(c),
                 DestroyItemCommand c => HandleDestroy(c),
                 DropItemCommand c => HandleDrop(c),
                 UseItemCommand c => HandleUse(c),
@@ -51,69 +52,105 @@ namespace Assets._Game.Scripts.Items.Commands
             };
         }
 
+        private IDisposable BeginStatTransaction(ItemContainerPath path)
+        {
+            if (!path.HasData || string.IsNullOrWhiteSpace(path.EntityId) ||
+                !_entityRepository.TryGet(path.EntityId, out var entity) ||
+                !entity.TryGetModule<StatModule>(out var statModule))
+                return null;
+
+            return statModule.Stats.BeginTransaction();
+        }
+
         private bool HandleTransfer(TransferToContainerCommand c)
         {
-            var from = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
-            var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
-
-            if (to is EquipmentModel equipmentModel)
+            using (BeginStatTransaction(c.FromContainer))
+            using (BeginStatTransaction(c.ToContainer))
             {
-                var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
-                return ItemContainerUtils.MoveToEquipmentSlot(from, fromSlot, equipmentModel, null, c.Amount) > 0;
-            }
+                var from = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
+                var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
 
-            return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
+                if (to is EquipmentModel equipmentModel)
+                {
+                    var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                    return ItemContainerUtils.MoveToEquipmentSlot(from, fromSlot, equipmentModel, null, c.Amount) > 0;
+                }
+
+                return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
+            }
         }
 
         private bool HandleTransferToSlot(TransferToContainerSlotCommand c)
         {
-            var from = _itemContainerResolver.ResolveContainer(c.FromContainer);
-            var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
-
-            var item = from.Get(c.FromSlot);
-            if (from is InventoryModel inventoryModel && to is EquipmentModel equipmentModel)
+            using (BeginStatTransaction(c.FromContainer))
+            using (BeginStatTransaction(c.ToContainer))
             {
-                var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
-                var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.ToSlot);
-                return ItemContainerUtils.MoveToEquipmentSlot(inventoryModel, fromSlot, equipmentModel, equipmentSlot, c.Amount) > 0;
-            }
+                var from = _itemContainerResolver.ResolveContainer(c.FromContainer);
+                var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
 
-            if (item != null && item.Value.Amount == c.Amount)
-            {
-                // If the entire stack is being moved, try to swap the items instead of moving them
-                return ItemContainerUtils.TrySwapBetweenContainerSlots(from, c.FromSlot, to, c.ToSlot);
-            }
+                var item = from.Get(c.FromSlot);
+                if (from is InventoryModel inventoryModel && to is EquipmentModel equipmentModel)
+                {
+                    var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                    var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.ToSlot);
+                    return ItemContainerUtils.MoveToEquipmentSlot(inventoryModel, fromSlot, equipmentModel, equipmentSlot, c.Amount) > 0;
+                }
 
-            return ItemContainerUtils.MoveAmount(
-                from,
-                c.FromSlot,
-                to,
-                c.ToSlot,
-                c.Amount) > 0;
+                if (item != null && item.Value.Amount == c.Amount)
+                {
+                    // If the entire stack is being moved, try to swap the items instead of moving them
+                    return ItemContainerUtils.TrySwapBetweenContainerSlots(from, c.FromSlot, to, c.ToSlot);
+                }
+
+                return ItemContainerUtils.MoveAmount(
+                    from,
+                    c.FromSlot,
+                    to,
+                    c.ToSlot,
+                    c.Amount) > 0;
+            }
         }
 
         private bool HandleEquip(EquipFromContainerCommand c)
         {
-            var fromContainer = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
-            var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
-            var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.Equipment);
-            var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
+            using (BeginStatTransaction(c.FromContainer))
+            using (BeginStatTransaction(c.Equipment))
+            {
+                var fromContainer = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
+                var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
+                var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.Equipment);
+                var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
 
-            return ItemContainerUtils.MoveToEquipmentSlot(fromContainer, fromSlot, equipmentModel, equipmentSlot, null) > 0;
+                return ItemContainerUtils.MoveToEquipmentSlot(fromContainer, fromSlot, equipmentModel, equipmentSlot, null) > 0;
+            }
         }
 
         private bool HandleUnequip(UnequipToContainerCommand c)
         {
-            var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.FromEquipment);
-            var toContainer = _itemContainerResolver.ResolveContainer<InventoryModel>(c.ToContainer);
-            var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
+            using (BeginStatTransaction(c.FromEquipment))
+            using (BeginStatTransaction(c.ToContainer))
+            {
+                var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.FromEquipment);
+                var toContainer = _itemContainerResolver.ResolveContainer<InventoryModel>(c.ToContainer);
+                var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
 
-            var item = equipmentModel.Get(equipmentSlot);
-            if (item == null) return false;
+                var item = equipmentModel.Get(equipmentSlot);
+                if (item == null) return false;
 
-            // Move the item to container
-            // Secondary slots are automatically unblocked once the item is removed
-            return ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount) > 0;
+                // Move the item to container
+                // Secondary slots are automatically unblocked once the item is removed
+                return ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount) > 0;
+            }
+        }
+
+        private bool HandleAdd(AddItemCommand c)
+        {
+            using (BeginStatTransaction(c.ToContainer))
+            {
+                var container = _itemContainerResolver.ResolveContainer<InventoryModel>(c.ToContainer);
+                container.Add(c.Item);
+                return true;
+            }
         }
 
         private bool HandleDestroy(DestroyItemCommand c)

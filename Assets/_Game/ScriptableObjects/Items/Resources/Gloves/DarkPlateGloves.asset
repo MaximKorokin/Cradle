@@ -39,7 +39,7 @@ MonoBehaviour:
       type: {class: EquippableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
         <Slot>k__BackingField: 40
-        <SecondarySlots>k__BackingField: 
+        <SecondarySlots>k__BackingField: 0f000000
     - rid: 3564180343019798622
       type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

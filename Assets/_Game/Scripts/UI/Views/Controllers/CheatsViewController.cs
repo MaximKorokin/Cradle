@@ -4,12 +4,12 @@ using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Commands;
 using Assets._Game.Scripts.Quests;
 using Assets._Game.Scripts.Shared;
 using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Systems;
-using System.Linq;
 
 namespace Assets._Game.Scripts.UI.Views.Controllers
 {
@@ -62,19 +62,21 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
 
         private void OnStatusEffectDefinitionClicked(StatusEffectDefinition statusEffectDefinition)
         {
-            if (_entityRepository.TryGet(_entityId.Value, out var statusEntity) && statusEntity.TryGetModule<StatusEffectModule>(out var statusEffectModule))
+            if (_entityRepository.TryGet(_entityId.Value, out var statusEntity))
             {
-                statusEffectModule.StatusEffects.AddStatusEffect(new StatusEffect(statusEffectDefinition));
+                _globalEventBus.Publish(new StatusEffectApplyRequest(statusEntity, new StatusEffect(statusEffectDefinition)));
             }
         }
 
         private void OnItemDefinitionActionClicked(ItemDefinition itemDefinition)
         {
-            if (_entityRepository.TryGet(_entityId.Value, out var inventoryEntity) && inventoryEntity.TryGetModule<InventoryModule>(out var inventoryModule))
+            if (_entityRepository.TryGet(_entityId.Value, out var inventoryEntity) && inventoryEntity.HasModule<InventoryModule>())
             {
+                var path = ItemContainerPath.Inventory(inventoryEntity.Id);
                 WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, itemDefinition.MaxAmount, itemDefinition.MaxAmount, amount =>
                 {
-                    inventoryModule.Inventory.Add(_itemStackAssembler.Create(itemDefinition.Id, amount).Snapshot);
+                    var item = _itemStackAssembler.Create(itemDefinition.Id, amount).Snapshot;
+                    _globalEventBus.Publish(new ItemCommandRequest(new AddItemCommand(path, item)));
                 });
             }
         }

@@ -19,6 +19,9 @@ namespace Assets._Game.Scripts.Entities.Stats
     {
         private readonly Dictionary<StatId, Stat> _stats = new();
         private readonly StatRegulator _statRegulator;
+        private readonly List<StatId> _batchedChanges = new();
+        private readonly HashSet<StatId> _batchedChangeSet = new();
+        private int _batchDepth;
 
         public event Action<StatId> StatChanged;
         public event Action Changed;
@@ -64,7 +67,7 @@ namespace Assets._Game.Scripts.Entities.Stats
 
             _statRegulator.RegulateAfterChange(this, id);
 
-            RaiseChanged(id);
+            MarkChanged(id);
         }
 
         public void AddModifiers(StatModifierSource source, IEnumerable<StatModifier> modifiers)
@@ -78,8 +81,14 @@ namespace Assets._Game.Scripts.Entities.Stats
 
                 _statRegulator.RegulateAfterChange(this, m.Stat);
 
-                RaiseChanged(m.Stat);
+                MarkChanged(m.Stat);
             }
+        }
+
+        public IDisposable BeginTransaction()
+        {
+            _batchDepth++;
+            return new TransactionScope(this);
         }
 
         public void RemoveModifiers(StatModifierSource source)
@@ -90,7 +99,7 @@ namespace Assets._Game.Scripts.Entities.Stats
                 if (removed > 0)
                 {
                     _statRegulator.RegulateAfterChange(this, kv.Key);
-                    RaiseChanged(kv.Key);
+                    MarkChanged(kv.Key);
                 }
             }
         }
@@ -109,10 +118,56 @@ namespace Assets._Game.Scripts.Entities.Stats
             return s;
         }
 
-        private void RaiseChanged(StatId id)
+        private void MarkChanged(StatId id)
         {
-            StatChanged.Invoke(id);
-            Changed.Invoke();
+            if (_batchDepth > 0)
+            {
+                if (_batchedChangeSet.Add(id))
+                    _batchedChanges.Add(id);
+                return;
+            }
+
+            NotifyChanged(id);
+        }
+
+        private void EndBatch()
+        {
+            if (--_batchDepth > 0) return;
+
+            var changedStats = _batchedChanges.ToArray();
+            _batchedChanges.Clear();
+            _batchedChangeSet.Clear();
+
+            for (int i = 0; i < changedStats.Length; i++)
+            {
+                try
+                {
+                    NotifyChanged(changedStats[i]);
+                }
+                catch (Exception ex)
+                {
+                    SLog.Exception(ex);
+                }
+            }
+        }
+
+        private void NotifyChanged(StatId id)
+        {
+            StatChanged?.Invoke(id);
+            Changed?.Invoke();
+        }
+
+        private sealed class TransactionScope : IDisposable
+        {
+            private StatsController _owner;
+
+            public TransactionScope(StatsController owner) => _owner = owner;
+
+            public void Dispose()
+            {
+                _owner?.EndBatch();
+                _owner = null;
+            }
         }
     }
 }
