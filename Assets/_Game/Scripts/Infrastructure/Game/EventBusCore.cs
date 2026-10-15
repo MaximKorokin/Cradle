@@ -30,7 +30,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         public IDisposable Subscribe<T>(Action<T> handler, int priority) where T : struct
         {
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
 
             var type = typeof(T);
             if (!_handlers.TryGetValue(type, out var list))

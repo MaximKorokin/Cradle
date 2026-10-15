@@ -4,6 +4,7 @@ using Assets._Game.Scripts.Entities.StatusEffects;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Querying;
+using Assets._Game.Scripts.Infrastructure.Systems.GameAnalytics;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -82,7 +83,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             foreach (var trait in e.Item.GetFunctionalTraits<StatusEffectTrait>(ItemTrigger.OnUse))
             {
                 // No need to check if trait can trigger, as it was already checked in ItemSystem when starting item use.
-                GlobalEventBus.Publish(new StatusEffectApplyRequest(entity, new(trait.StatusEffect)));
+                GlobalEventBus.Publish(new StatusEffectApplyRequest(entity, entity, new(trait.StatusEffect)));
             }
         }
 
@@ -90,7 +91,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (!e.Target.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
-            statusEffectModule.StatusEffects.AddStatusEffect(e.StatusEffect);
+            if (statusEffectModule.StatusEffects.AddStatusEffect(e.StatusEffect))
+                GlobalEventBus.Publish(new GameAnalyticsEvent(AnalyticsEntryType.StatusEffectStart, null, e.Target, 0f, e.StatusEffect.Definition.name));
         }
 
         private void OnEntityDied(EntityDiedEvent e)
@@ -103,11 +105,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             if (!e.Target.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
 
             statusEffectModule.StatusEffects.RemoveStatusEffect(e.StatusEffect);
+            GlobalEventBus.Publish(new GameAnalyticsEvent(AnalyticsEntryType.StatusEffectEnd, null, e.Target, 0f, e.StatusEffect.Definition.name));
         }
 
         private void OnStatusEffectsClearRequested(StatusEffectsClearRequest e)
         {
             if (!e.Target.TryGetModule<StatusEffectModule>(out var statusEffectModule)) return;
+
+            foreach (var statusEffect in statusEffectModule.StatusEffects.GetStatusEffects())
+                GlobalEventBus.Publish(new GameAnalyticsEvent(AnalyticsEntryType.StatusEffectEnd, null, e.Target, 0f, statusEffect.Definition.name));
 
             statusEffectModule.StatusEffects.ClearStatusEffects();
         }
@@ -137,11 +143,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
     public readonly struct StatusEffectApplyRequest : IGlobalEvent
     {
+        public readonly Entity Source;
         public readonly Entity Target;
         public readonly StatusEffect StatusEffect;
 
-        public StatusEffectApplyRequest(Entity target, StatusEffect statusEffect)
+        public StatusEffectApplyRequest(Entity source, Entity target, StatusEffect statusEffect)
         {
+            Source = source;
             Target = target;
             StatusEffect = statusEffect;
         }

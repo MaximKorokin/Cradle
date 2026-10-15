@@ -3,6 +3,7 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Infrastructure.Systems.GameAnalytics;
 using Assets._Game.Scripts.Items.Equipment;
 using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
@@ -52,6 +53,15 @@ namespace Assets._Game.Scripts.Items.Commands
             };
         }
 
+        private void PublishGameAnalyticsEvent(AnalyticsEntryType type, ItemContainerPath path, ItemStackSnapshot? item, int amount, string details = null)
+        {
+            if (!path.HasData || string.IsNullOrWhiteSpace(path.EntityId) || !_entityRepository.TryGet(path.EntityId, out var entity))
+                return;
+
+            var name = item.HasValue ? item.Value.Definition.name : null;
+            _globalEventBus.Publish(new GameAnalyticsEvent(type, entity, null, amount, details == null ? name : $"{name} {details}"));
+        }
+
         private IDisposable BeginStatTransaction(ItemContainerPath path)
         {
             if (!path.HasData || string.IsNullOrWhiteSpace(path.EntityId) ||
@@ -69,14 +79,20 @@ namespace Assets._Game.Scripts.Items.Commands
             {
                 var from = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
                 var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
+                var item = from.Get(ContainerSlotConverter.ToInventorySlot(c.FromSlot));
 
+                int moved;
                 if (to is EquipmentModel equipmentModel)
                 {
                     var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
-                    return ItemContainerUtils.MoveToEquipmentSlot(from, fromSlot, equipmentModel, null, c.Amount) > 0;
+                    moved = ItemContainerUtils.MoveToEquipmentSlot(from, fromSlot, equipmentModel, null, c.Amount);
+                    if (moved > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEquip, c.ToContainer, item, moved);
+                    return moved > 0;
                 }
 
-                return ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount) > 0;
+                moved = ItemContainerUtils.MoveAmount(from, ContainerSlotConverter.ToInventorySlot(c.FromSlot), to, c.Amount);
+                if (moved > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemTransfer, c.FromContainer, item, moved);
+                return moved > 0;
             }
         }
 
@@ -93,21 +109,26 @@ namespace Assets._Game.Scripts.Items.Commands
                 {
                     var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
                     var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.ToSlot);
-                    return ItemContainerUtils.MoveToEquipmentSlot(inventoryModel, fromSlot, equipmentModel, equipmentSlot, c.Amount) > 0;
+                    var equipped = ItemContainerUtils.MoveToEquipmentSlot(inventoryModel, fromSlot, equipmentModel, equipmentSlot, c.Amount);
+                    if (equipped > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEquip, c.ToContainer, item, equipped);
+                    return equipped > 0;
                 }
 
+                bool success;
+                int movedAmount = c.Amount;
                 if (item != null && item.Value.Amount == c.Amount)
                 {
                     // If the entire stack is being moved, try to swap the items instead of moving them
-                    return ItemContainerUtils.TrySwapBetweenContainerSlots(from, c.FromSlot, to, c.ToSlot);
+                    success = ItemContainerUtils.TrySwapBetweenContainerSlots(from, c.FromSlot, to, c.ToSlot);
+                }
+                else
+                {
+                    movedAmount = ItemContainerUtils.MoveAmount(from, c.FromSlot, to, c.ToSlot, c.Amount);
+                    success = movedAmount > 0;
                 }
 
-                return ItemContainerUtils.MoveAmount(
-                    from,
-                    c.FromSlot,
-                    to,
-                    c.ToSlot,
-                    c.Amount) > 0;
+                if (success) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemTransfer, c.FromContainer, item, movedAmount);
+                return success;
             }
         }
 
@@ -121,7 +142,10 @@ namespace Assets._Game.Scripts.Items.Commands
                 var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.Equipment);
                 var equipmentSlot = ContainerSlotConverter.ToEquipmentSlot(c.EquipmentSlot);
 
-                return ItemContainerUtils.MoveToEquipmentSlot(fromContainer, fromSlot, equipmentModel, equipmentSlot, null) > 0;
+                var item = fromContainer.Get(fromSlot);
+                var equipped = ItemContainerUtils.MoveToEquipmentSlot(fromContainer, fromSlot, equipmentModel, equipmentSlot, null);
+                if (equipped > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEquip, c.Equipment, item, equipped);
+                return equipped > 0;
             }
         }
 
@@ -139,7 +163,9 @@ namespace Assets._Game.Scripts.Items.Commands
 
                 // Move the item to container
                 // Secondary slots are automatically unblocked once the item is removed
-                return ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount) > 0;
+                var unequipped = ItemContainerUtils.MoveAmount(equipmentModel, equipmentSlot, toContainer, item.Value.Amount);
+                if (unequipped > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemUnequip, c.FromEquipment, item, unequipped);
+                return unequipped > 0;
             }
         }
 
@@ -149,6 +175,7 @@ namespace Assets._Game.Scripts.Items.Commands
             {
                 var container = _itemContainerResolver.ResolveContainer<InventoryModel>(c.ToContainer);
                 container.Add(c.Item);
+                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemAppear, c.ToContainer, c.Item, c.Item.Amount);
                 return true;
             }
         }
@@ -159,13 +186,19 @@ namespace Assets._Game.Scripts.Items.Commands
             {
                 var equipmentModel = _itemContainerResolver.ResolveContainer<EquipmentModel>(c.FromContainer);
                 var slot = ContainerSlotConverter.ToEquipmentSlot(c.FromSlot);
-                return ItemContainerUtils.RemoveAmount(equipmentModel, slot, c.Amount) > 0;
+                var item = equipmentModel.Get(slot);
+                var removed = ItemContainerUtils.RemoveAmount(equipmentModel, slot, c.Amount);
+                if (removed > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDestroy, c.FromContainer, item, removed);
+                return removed > 0;
             }
             else
             {
                 var container = _itemContainerResolver.ResolveContainer<InventoryModel>(c.FromContainer);
                 var slot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
-                return ItemContainerUtils.RemoveAmount(container, slot, c.Amount) > 0;
+                var item = container.Get(slot);
+                var removed = ItemContainerUtils.RemoveAmount(container, slot, c.Amount);
+                if (removed > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDestroy, c.FromContainer, item, removed);
+                return removed > 0;
             }
         }
 
@@ -198,6 +231,7 @@ namespace Assets._Game.Scripts.Items.Commands
             if (removedAmount > 0)
             {
                 _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
+                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDrop, c.FromContainer, item, removedAmount);
                 return true;
             }
             return false;
@@ -247,6 +281,7 @@ namespace Assets._Game.Scripts.Items.Commands
             // All checks passed, trigger the item use.
             cooldownData.CooldownCounter.Reset();
             entity.Publish(new ItemUseStartedEvent(item.Value, itemUseSettings));
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemUse, c.Container, item, 1);
 
             // If the item is consumable, remove one from the stack.
             if (usableTrait.Consumable)
@@ -303,6 +338,7 @@ namespace Assets._Game.Scripts.Items.Commands
                     itemSnapshot.Value.InstanceData,
                     preview));
 
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemBuy, c.ItemContainerModelPath, itemSnapshot, preview, $"price {c.Price}");
             return true;
         }
 
@@ -328,6 +364,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 itemSnapshot.Value.InstanceData,
                 removed));
 
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemSell, c.ItemContainerModelPath, itemSnapshot, removed, $"price {c.Price}");
             return true;
         }
 
@@ -348,15 +385,18 @@ namespace Assets._Game.Scripts.Items.Commands
 
             // Checks passed, remove enchanting item from inventory and perform enchantment
             inventoryModel.Remove(enchantingItemKey, 1);
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDisappear, c.FromContainer, itemSnapshot, 1);
 
             var isEnchantSuccessful = enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance > UnityEngine.Random.value;
             if (isEnchantSuccessful)
             {
                 enchantInstanceData.Level++;
+                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantSucces, c.FromContainer, itemSnapshot, 1, $"level {enchantInstanceData.Level}");
                 return true;
             }
 
             // Enchant failed, apply failure rules
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantFail, c.FromContainer, itemSnapshot, 1, enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type.ToString());
             switch (enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type)
             {
                 case Enchanting.EnchantFailureType.None:

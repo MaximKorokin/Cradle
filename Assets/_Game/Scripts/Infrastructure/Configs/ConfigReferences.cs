@@ -36,5 +36,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public UITooltipConfig UITooltipConfig { get; private set; }
         [field: SerializeField]
         public UIWindowsConfig UIWindowsConfig { get; private set; }
+        [field: SerializeField]
+        public GameAnalyticsConfig GameAnalyticsConfig { get; private set; }
     }
 }

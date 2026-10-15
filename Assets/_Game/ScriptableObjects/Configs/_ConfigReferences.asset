@@ -27,3 +27,4 @@ MonoBehaviour:
   <MoveTargetIndicatorConfig>k__BackingField: {fileID: 11400000, guid: 5b1be7d1f2519ba498df0f7f8606a62f, type: 2}
   <UITooltipConfig>k__BackingField: {fileID: 11400000, guid: 7338c27a158317f4faa8ff2aa56b37cb, type: 2}
   <UIWindowsConfig>k__BackingField: {fileID: 11400000, guid: f125455c2e863ce4690cbfb79972ab74, type: 2}
+  <GameAnalyticsConfig>k__BackingField: {fileID: 11400000, guid: af37eb1c13423d14eafe8419283e2330, type: 2}

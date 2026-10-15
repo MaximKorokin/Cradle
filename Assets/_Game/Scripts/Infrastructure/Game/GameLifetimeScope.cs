@@ -14,6 +14,7 @@ using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Infrastructure.Systems;
+using Assets._Game.Scripts.Infrastructure.Systems.GameAnalytics;
 using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
@@ -101,6 +102,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.RegisterInstance(_configReferences.MoveTargetIndicatorConfig);
             builder.RegisterInstance(_configReferences.UITooltipConfig);
             builder.RegisterInstance(_configReferences.UIWindowsConfig);
+            builder.RegisterInstance(_configReferences.GameAnalyticsConfig);
         }
 
         private void RegisterSystems(IContainerBuilder builder)
@@ -133,6 +135,10 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<QuestSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ResetSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+
+            builder.Register<GameAnalyticsSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<GameLoggingService>(Lifetime.Singleton);
+            builder.Register<GameStatisticsService>(Lifetime.Singleton);
         }
 
         private void RegisterSavesFeature(IContainerBuilder builder)

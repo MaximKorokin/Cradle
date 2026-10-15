@@ -22,5 +22,10 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.DataTypes
         {
             return new Vector2(serializableVector.X, serializableVector.Y);
         }
+
+        public override readonly string ToString()
+        {
+            return $"({X:F1},{Y:F1})";
+        }
     }
 }
