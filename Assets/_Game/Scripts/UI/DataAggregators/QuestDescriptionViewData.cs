@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             if (questState.Equals(default) || questState.Definition == null || questState.Definition.Id != _questId)
             {
-                QuestData = default;
+                return;
             }
             else
             {
