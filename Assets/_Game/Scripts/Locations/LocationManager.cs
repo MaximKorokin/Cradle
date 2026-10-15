@@ -77,17 +77,16 @@ namespace Assets._Game.Scripts.Locations
                 if (unloadCurrent && _currentScene.IsValid() && _currentScene.isLoaded)
                     await SceneManager.UnloadSceneAsync(_currentScene).AsTask();
 
-                var loadOperation = SceneManager.LoadSceneAsync(nextLocation.SceneName, LoadSceneMode.Additive);
-                await loadOperation.AsTask();
-
-                var scene = SceneManager.GetSceneByName(nextLocation.SceneName);
-                if (!scene.IsValid() || !scene.isLoaded)
-                    throw new InvalidOperationException($"Scene '{nextLocation.SceneName}' was not loaded.");
-
-                _currentScene = scene;
                 _currentLocationId = nextLocation.Id;
                 CurrentLocation = nextLocation;
                 CurrentEntrance = entranceId != null ? _locationEntranceCatalog.Get(entranceId) : null;
+
+                var loadOperation = SceneManager.LoadSceneAsync(nextLocation.SceneName, LoadSceneMode.Additive);
+                await loadOperation.AsTask();
+
+                _currentScene = SceneManager.GetSceneByName(nextLocation.SceneName);
+                if (!_currentScene.IsValid() || !_currentScene.isLoaded)
+                    throw new InvalidOperationException($"Scene '{nextLocation.SceneName}' was not loaded.");
 
                 _globalEventBus.Publish(new LocationChangedEvent(locationId, entranceId));
             }

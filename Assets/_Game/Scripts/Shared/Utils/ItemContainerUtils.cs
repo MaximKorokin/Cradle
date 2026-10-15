@@ -207,11 +207,10 @@ namespace Assets._Game.Scripts.Shared.Utils
         /// <summary>
         /// Returns actually removed amount.
         /// </summary>
-        public static int RemoveAmount<TSlot>(
-            IItemContainer<TSlot> container,
-            TSlot fromSlot,
+        public static int RemoveAmount(
+            IItemContainer container,
+            long fromSlot,
             int amount)
-            where TSlot : notnull, IContainerSlot
         {
             if (container.Get(fromSlot) == null) return 0;
             return container.RemoveFromSlot(fromSlot, amount);

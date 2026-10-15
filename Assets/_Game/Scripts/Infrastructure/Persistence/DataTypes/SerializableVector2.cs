@@ -25,7 +25,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence.DataTypes
 
         public override readonly string ToString()
         {
-            return $"({X:F1},{Y:F1})";
+            return $"({X:F2},{Y:F2})";
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 GlobalEventBus.Publish(new LocationTransitionRequest(_reviveConfig.ReviveLocation.LocationDefinition.Id, _reviveConfig.ReviveLocation.EntranceDefinition.Id));
             }
 
-            GlobalEventBus.Publish(new EntityRevivedEvent(entity));
+            GlobalEventBus.Publish(new EntityRevivedEvent(entity, entity));
         }
     }
 
@@ -54,10 +54,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
     public readonly struct EntityRevivedEvent : IGlobalEvent
     {
         public readonly Entity Entity;
+        public readonly Entity Source;
 
-        public EntityRevivedEvent(Entity entity)
+        public EntityRevivedEvent(Entity entity, Entity source)
         {
             Entity = entity;
+            Source = source;
         }
     }
 }

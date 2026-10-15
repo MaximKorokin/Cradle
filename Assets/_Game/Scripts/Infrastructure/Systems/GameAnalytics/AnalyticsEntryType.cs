@@ -8,6 +8,7 @@
         DamageApply = 20,
         CriticalDamageApply = 22,
         ExperienceGain = 50,
+        LocationChange = 100,
 
         Item = 1000,
         ItemUse = 1010,
@@ -29,10 +30,16 @@
         EntityDespawn = 2020,
         EntityDeath = 2030,
         EntityRevive = 2040,
+        EntityReposition = 2050,
 
         StatusEffect = 3000,
         StatusEffectStart = 3010,
         StatusEffectEnd = 3020,
         StatusEffectCancel = 3020,
+
+        Quest = 4000,
+        QuestAdd = 4010,
+        QuestComplete = 4020,
+        QuestCancel = 4030,
     }
 }

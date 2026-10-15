@@ -4,23 +4,27 @@ using Assets._Game.Scripts.Entities.Modules;
 using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence.DataTypes;
+using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Locations;
 
 namespace Assets._Game.Scripts.Infrastructure.Systems.GameAnalytics
 {
-    public sealed class GameAnalyticsSystem : SystemBase
+    public sealed class GameAnalyticsSystem : EntitySystemBase
     {
         private readonly GameAnalyticsConfig _gameAnalyticsConfig;
         private readonly GameStatisticsService _statisticsService;
         private readonly GameLoggingService _loggingService;
         private readonly ILocationContext _locationContext;
 
+        protected override EntityQuery EntityQuery { get; } = new EntityQuery();
+
         public GameAnalyticsSystem(
             IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository,
             GameAnalyticsConfig gameAnalyticsConfig,
             GameStatisticsService statisticsService,
             GameLoggingService loggingService,
-            ILocationContext locationContext) : base(globalEventBus)
+            ILocationContext locationContext) : base(globalEventBus, entityRepository)
         {
             _gameAnalyticsConfig = gameAnalyticsConfig;
             _statisticsService = statisticsService;
@@ -38,8 +42,14 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.GameAnalytics
             TrackGlobalEvent<HealAppliedEvent>(e => Publish(AnalyticsEntryType.HealApply, e.Source, e.Target, e.Heal));
             TrackGlobalEvent<AddExperienceRequestEvent>(e => Publish(AnalyticsEntryType.ExperienceGain, e.Source, e.Target, e.Experience));
             TrackGlobalEvent<EntityDiedEvent>(e => Publish(AnalyticsEntryType.EntityDeath, e.Killer, e.Victim));
+            TrackGlobalEvent<EntityRevivedEvent>(e => Publish(AnalyticsEntryType.EntityRevive, e.Source, e.Entity));
             TrackGlobalEvent<EntitySpawnedEvent>(e => Publish(AnalyticsEntryType.EntitySpawn, e.Entity, null, 1));
             TrackGlobalEvent<EntityDespawningEvent>(e => Publish(AnalyticsEntryType.EntityDespawn, e.Entity, null, 1));
+            TrackGlobalEvent<LocationChangedEvent>(e => Publish(AnalyticsEntryType.LocationChange, null, null, 1, _locationContext.CurrentLocation.DisplayName));
+            
+            TrackEntityEvent<EntityRepositionRequest>((entity, e) => Publish(AnalyticsEntryType.EntityReposition, entity, null, 1, e.Position.ToString()));
+            TrackEntityEvent<QuestAddedEvent>((entity, e) => Publish(AnalyticsEntryType.QuestAdd, entity, null, 1, e.QuestState.Definition.Title));
+            TrackEntityEvent<QuestCompletedEvent>((entity, e) => Publish(AnalyticsEntryType.QuestComplete, entity, null, 1, e.QuestState.Definition.Title));
         }
 
         private void Publish(AnalyticsEntryType type, Entity source, Entity target, float value = 0f, string details = null)
@@ -53,7 +63,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.GameAnalytics
             var target = GetEntityName(e.Target);
             var location = _locationContext.CurrentLocation;
             var place = location == null ? "-" : !string.IsNullOrEmpty(location.DisplayName) ? location.DisplayName : location.SceneName;
-            var position = GetEntityPosition(e.Source ?? e.Target);
+            var position = GetEntityPosition(e.Target ?? e.Source);
 
             _statisticsService.AddEntry(new(e.Type, place, source, target, e.Value));
             _loggingService.AddEntry(new(e.Type, place, position, source, target, e.Value, e.Details));
