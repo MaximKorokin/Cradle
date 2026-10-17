@@ -97,18 +97,18 @@ namespace Assets._Game.Scripts.UI.Views
                 if (_slots.Count > inventorySlot.Index)
                 {
                     var slot = _slots[inventorySlot.Index];
-                    slot.Bind(inventoryViewData.ContainerPath, inventorySlot.ToInt64());
-                    slot.Render(stack);
+                    slot.SlotView.Bind(inventoryViewData.ContainerPath, inventorySlot.ToInt64());
+                    slot.SlotView.Render(stack);
                     slot.gameObject.SetActive(true);
                     continue;
                 }
 
                 // Instantiate new slot if there are not enough in the pool
                 var newSlot = Instantiate(_inventorySlotTemplate, _inventorySlotsParent);
-                newSlot.Bind(inventoryViewData.ContainerPath, inventorySlot.ToInt64());
+                newSlot.SlotView.Bind(inventoryViewData.ContainerPath, inventorySlot.ToInt64());
                 _slots.Add(newSlot);
                 newSlot.gameObject.SetActive(true);
-                newSlot.Render(stack);
+                newSlot.SlotView.Render(stack);
             }
 
             // Update text fields and drop areas visibility

@@ -289,10 +289,12 @@ namespace Assets._Game.Scripts.Items.Commands
 
             // Try to add to inventory
             var amountToTransfer = Math.Min(c.Amount, itemSnapshot.Value.Amount);
-            var preview = itemContainerModel.PreviewAdd(new ItemStackSnapshot(
-                itemSnapshot.Value.Definition,
-                itemSnapshot.Value.InstanceData,
-                amountToTransfer));
+            var preview = itemContainerModel.PreviewAddToSlot(
+                c.InventorySlot,
+                new ItemStackSnapshot(
+                    itemSnapshot.Value.Definition,
+                    itemSnapshot.Value.InstanceData,
+                    amountToTransfer));
 
             if (preview != amountToTransfer) return false;
 

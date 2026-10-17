@@ -47,7 +47,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
 
         private void OnPointerUp(PointerUpEvent e)
         {
-            if (_isDragging)
+            if (_isDragging && (_dragDropTargetCandidate == null || _dragDropTargetCandidate.CanDrop()))
             {
                 _dragDropHandlerService.Handle(_currentDragDropSource, _dragDropTargetCandidate, e.Context);
             }
@@ -83,7 +83,10 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             {
                 _dragDropTargetCandidate?.SetDragDropHighlight(false);
                 _dragDropTargetCandidate = target;
-                _dragDropTargetCandidate?.SetDragDropHighlight(true);
+                if (_dragDropTargetCandidate?.CanDrop() == true)
+                {
+                    _dragDropTargetCandidate?.SetDragDropHighlight(true);
+                }
             }
         }
     }

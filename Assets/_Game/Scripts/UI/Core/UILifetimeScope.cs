@@ -105,6 +105,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ItemStackPreviewViewData>(Lifetime.Transient);
             builder.Register<StatusEffectListViewData>(Lifetime.Transient);
             builder.Register<EntityStatusViewData>(Lifetime.Transient);
+            builder.Register<ItemEnchantingViewData>(Lifetime.Transient);
         }
 
         private void RegisterViewControllers(IContainerBuilder builder)
@@ -125,6 +126,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ItemStackPreviewViewController>(Lifetime.Transient);
             builder.Register<StatusEffectListViewController>(Lifetime.Transient);
             builder.Register<CompactEntityStatusViewController>(Lifetime.Transient);
+            builder.Register<ItemEnchantingViewController>(Lifetime.Transient);
         }
 
         private void RegisterDataFormatters(IContainerBuilder builder)

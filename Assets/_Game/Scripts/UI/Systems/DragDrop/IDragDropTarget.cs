@@ -2,6 +2,7 @@
 {
     public interface IDragDropTarget
     {
+        bool CanDrop();
         void SetDragDropHighlight(bool highlighted);
     }
 }

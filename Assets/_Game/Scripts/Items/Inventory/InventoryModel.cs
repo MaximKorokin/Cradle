@@ -308,6 +308,12 @@ namespace Assets._Game.Scripts.Items.Inventory
             return Math.Min(space, snapshot.Amount);
         }
 
+        public int PreviewAddToSlot(long slot, ItemStackSnapshot snapshot)
+        {
+            var inventorySlot = InventorySlot.FromInt64(slot);
+            return PreviewAddToSlot(inventorySlot, snapshot);
+        }
+
         // Utility: swap stacks (UI drag-drop inside inventory)
         public bool Swap(InventorySlot a, InventorySlot b)
         {

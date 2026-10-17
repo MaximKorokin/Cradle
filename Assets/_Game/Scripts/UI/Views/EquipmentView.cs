@@ -41,7 +41,7 @@ namespace Assets._Game.Scripts.UI.Views
                     slot.Render(itemStack, false);
                 }
 
-                slot.SlotView.Bind(equipmentViewData.ContainerPath, slotKey.ToInt64(), blockingSlotIndex);
+                slot.Bind(equipmentViewData.ContainerPath, slotKey.ToInt64(), blockingSlotIndex);
                 slotTypeCounts[slot.SlotType] = count + 1;
             }
         }

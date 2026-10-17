@@ -32,6 +32,8 @@ namespace Assets._Game.Scripts.Items
         int Add(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty);
         int Remove(ItemKey key, int amount);
         int PreviewAdd(ItemStackSnapshot snapshot, AddPolicy policy = AddPolicy.StackThenEmpty);
+
+        int PreviewAddToSlot(long slot, ItemStackSnapshot snapshot);
     }
 
     public enum AddPolicy

@@ -38,7 +38,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
 
         public (RectTransform Content, Action CleanAction) Handle(ITooltipSource tooltipSource)
         {
-            if (tooltipSource is ContainerSlotWidget containerSlot && containerSlot.ContainsData)
+            if (tooltipSource is ItemStackWidget containerSlot && containerSlot.ContainsData)
                 return HandleContainerSlot(containerSlot);
             else if (tooltipSource is WindowOpenTrigger windowOpenTrigger)
                 return HandleWindowOpenTrigger(windowOpenTrigger);
@@ -48,12 +48,12 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             return (null, null);
         }
 
-        private (RectTransform Content, Action CleanAction) HandleContainerSlot(ContainerSlotWidget containerSlot)
+        private (RectTransform Content, Action CleanAction) HandleContainerSlot(ItemStackWidget itemStackWidget)
         {
             _resolver.InstantiateFromPrefab(_config.ItemStackPreviewViewPrefab, ref _itemStackPreviewView);
 
-            _itemStackPreviewViewData.SetData(containerSlot.ContainerPath, containerSlot.ItemSlotIndex, false);
-            _itemStackPreviewViewData.SetEntityId(_entityRepository.Observe(containerSlot.ContainerPath.EntityId));
+            _itemStackPreviewViewData.SetData(itemStackWidget.ContainerPath, itemStackWidget.GetItemSlotIndex(), false);
+            _itemStackPreviewViewData.SetEntityId(_entityRepository.Observe(itemStackWidget.ContainerPath.EntityId));
             _currentController = new DataAggregatorController<ItemStackPreviewView, ItemStackPreviewViewData>(_itemStackPreviewView, _itemStackPreviewViewData);
             _itemStackPreviewView.gameObject.SetActive(true);
 

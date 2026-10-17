@@ -22,11 +22,11 @@ namespace Assets._Game.Scripts.Items.Shop
             // Add initial items (these have infinite stock and always return MaxAmount)
             if (initialItems != null)
             {
-                foreach (var itemDef in initialItems)
+                foreach (var itemDefinition in initialItems)
                 {
-                    if (itemDef != null)
+                    if (itemDefinition != null)
                     {
-                        var stack = _itemStackFactory.Create(itemDef.Id, null, itemDef.MaxAmount);
+                        var stack = _itemStackFactory.Create(itemDefinition.Id, itemDefinition.MaxAmount);
                         _slots.Add(new ShopSlotData(stack, isInfinite: true));
                     }
                 }
@@ -256,6 +256,12 @@ namespace Assets._Game.Scripts.Items.Shop
 
             // Otherwise can add full amount
             return Math.Min(snapshot.Definition.MaxAmount, snapshot.Amount);
+        }
+
+        public int PreviewAddToSlot(long slot, ItemStackSnapshot snapshot)
+        {
+            var shopSlot = ShopSlot.FromInt64(slot);
+            return PreviewAddToSlot(shopSlot, snapshot);
         }
 
         public void Clear()

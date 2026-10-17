@@ -62,5 +62,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             _highlightImage.enabled = highlighted;
         }
+
+        public bool CanDrop() => true;
     }
 }

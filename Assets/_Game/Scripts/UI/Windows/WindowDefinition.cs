@@ -37,6 +37,7 @@ namespace Assets._Game.Scripts.UI.Windows
         QuestDescription = 82,
         EntityAiToggle = 90,
         WindowBar = 100,
+        ItemEnchanting = 110,
 
         ItemUseSettings = 1100,
 

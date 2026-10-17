@@ -8,7 +8,7 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
     public sealed class EquipmentSlotWidget : MonoBehaviour
     {
         [SerializeField]
-        private InventorySlotWidget _inventorySlotView;
+        private ItemStackWidget _itemStackWidget;
         [SerializeField]
         private Image _placeholderImage;
         [SerializeField]
@@ -18,12 +18,19 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         [field: Tooltip("Used to bind Model slot to UI")]
         public EquipmentSlotType SlotType { get; private set; }
 
-        public InventorySlotWidget SlotView => _inventorySlotView;
+        public ItemStackWidget SlotView => _itemStackWidget;
+        public long? BlockingSlotIndex { get; private set; }
 
         public void Render(ItemStackSnapshot? itemStack, bool isBlocked)
         {
-            _inventorySlotView.Render(itemStack, isBlocked ? _blockedSlotColor : Color.white);
+            _itemStackWidget.Render(itemStack, isBlocked ? _blockedSlotColor : Color.white);
             _placeholderImage.enabled = itemStack == null;
+        }
+
+        public void Bind(ItemContainerPath itemContainerPath, long itemSlot, long? blockingSlotIndex)
+        {
+            BlockingSlotIndex = blockingSlotIndex;
+            _itemStackWidget.Bind(itemContainerPath, itemSlot);
         }
     }
 }

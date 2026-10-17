@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Items.Traits;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets._Game.Scripts.Items.Traits;
 
 namespace Assets._Game.Scripts.Items.Equipment
 {
@@ -358,6 +358,12 @@ namespace Assets._Game.Scripts.Items.Equipment
 
             int space = Math.Max(0, existing.Definition.MaxAmount - existing.Amount);
             return Math.Min(space, snapshot.Amount);
+        }
+
+        public int PreviewAddToSlot(long slot, ItemStackSnapshot snapshot)
+        {
+            var equipmentSlot = EquipmentSlotKey.FromInt64(slot);
+            return PreviewAddToSlot(equipmentSlot, snapshot);
         }
 
         /// <summary>
