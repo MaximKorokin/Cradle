@@ -2,7 +2,6 @@
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Items;
 using Assets._Game.Scripts.Items.Commands;
-using Assets._Game.Scripts.Items.Inventory;
 using Assets._Game.Scripts.Items.Shop;
 using Assets._Game.Scripts.Items.Traits;
 using Assets._Game.Scripts.Shared.Extensions;
@@ -35,46 +34,46 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     if (target is ItemStackWidget targetItemStackWidget &&
                         (targetItemStackWidget.Type == ItemStackWidgetType.Inventory || targetItemStackWidget.Type == ItemStackWidgetType.Equipment))
                     {
-                        HandleShopSlotToInventorySlotDrop(shopSlotWidget, targetItemStackWidget);
+                        HandleShopSlotToItemSlotDrop(shopSlotWidget, targetItemStackWidget);
                     }
                 }
                 else if (target is ItemStackWidget targetItemStackWidget)
                 {
                     if (targetItemStackWidget.Type == ItemStackWidgetType.Reference)
                     {
-                        HandleInventorySlotToReferenceSlotDrop(sourceItemStackWidget, targetItemStackWidget);
+                        HandleItemSlotToReferenceSlotDrop(sourceItemStackWidget, targetItemStackWidget);
                     }
                     else
                     {
-                        HandleInventorySlotToInventorySlotDrop(sourceItemStackWidget, targetItemStackWidget);
+                        HandleItemSlotToItemSlotDrop(sourceItemStackWidget, targetItemStackWidget);
                     }
                 }
                 else if (target is DropArea dropArea)
                 {
-                    HandleInventorySlotToDropAreaDrop(sourceItemStackWidget, dropArea);
+                    HandleItemSlotToDropAreaDrop(sourceItemStackWidget, dropArea);
                 }
                 else if (target is ShopView shopView)
                 {
-                    HandleInventorySlotToShopViewDrop(sourceItemStackWidget, shopView);
+                    HandleItemSlotToShopViewDrop(sourceItemStackWidget, shopView);
                 }
                 else if (!pointerContext.IsOverUI)
                 {
-                    HandleInventorySlotToNonUIDrop(sourceItemStackWidget);
+                    HandleItemSlotToNonUIDrop(sourceItemStackWidget);
                 }
             }
         }
 
-        private void HandleInventorySlotToInventorySlotDrop(ItemStackWidget inventorySlot1, ItemStackWidget inventorySlot2)
+        private void HandleItemSlotToItemSlotDrop(ItemStackWidget itemSlot1, ItemStackWidget itemSlot2)
         {
-            if (!TryGetContainerAndItemStack(inventorySlot1, out var container1, out var itemStack1)) return;
+            if (!TryGetContainerAndItemStack(itemSlot1, out var container1, out var itemStack1)) return;
 
-            if (inventorySlot1.ContainerPath == inventorySlot2.ContainerPath)
+            if (itemSlot1.ContainerPath == itemSlot2.ContainerPath)
             {
                 PublishCommand(new TransferToContainerSlotCommand(
-                    inventorySlot1.ContainerPath,
-                    inventorySlot1.GetItemSlotIndex(),
-                    inventorySlot2.ContainerPath,
-                    inventorySlot2.SlotIndex,
+                    itemSlot1.ContainerPath,
+                    itemSlot1.GetItemSlotIndex(),
+                    itemSlot2.ContainerPath,
+                    itemSlot2.SlotIndex,
                     itemStack1.Value.Amount));
             }
             else
@@ -82,39 +81,39 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                 WindowUtils.ShowAmountPickerIfNeeded(_globalEventBus, itemStack1.Value.Amount, itemStack1.Value.Amount, (selectedAmount) =>
                 {
                     PublishCommand(new TransferToContainerSlotCommand(
-                        inventorySlot1.ContainerPath,
-                        inventorySlot1.GetItemSlotIndex(),
-                        inventorySlot2.ContainerPath,
-                        inventorySlot2.SlotIndex,
+                        itemSlot1.ContainerPath,
+                        itemSlot1.GetItemSlotIndex(),
+                        itemSlot2.ContainerPath,
+                        itemSlot2.SlotIndex,
                         selectedAmount));
                 });
             }
         }
 
-        private void HandleInventorySlotToReferenceSlotDrop(ItemStackWidget inventorySlot1, ItemStackWidget inventorySlot2)
+        private void HandleItemSlotToReferenceSlotDrop(ItemStackWidget itemSlot1, ItemStackWidget itemSlot2)
         {
-            if (!TryGetContainerAndItemStack(inventorySlot1, out var _, out var itemStack)) return;
+            if (!TryGetContainerAndItemStack(itemSlot1, out var _, out var itemStack) || itemSlot2.Type != ItemStackWidgetType.Reference) return;
 
-            inventorySlot2.Bind(inventorySlot1.ItemStackPath);
-            inventorySlot2.Render(itemStack);
+            itemSlot2.Bind(itemSlot1.ItemStackPath);
+            itemSlot2.Render(itemStack);
         }
 
-        private void HandleInventorySlotToNonUIDrop(ItemStackWidget inventorySlot)
+        private void HandleItemSlotToNonUIDrop(ItemStackWidget itemSlot)
         {
-            if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
+            if (!TryGetContainerAndItemStack(itemSlot, out var container, out var itemStack)) return;
 
             WindowUtils.ShowConfirmationOrAmountPicker(_globalEventBus, itemStack.Value.Amount, itemStack.Value.Amount, "Drop Item", $"Are you sure you want to drop {itemStack.Value.Definition.Name}?", (selectedAmount) =>
             {
                 PublishCommand(new DropItemCommand(
-                    inventorySlot.ContainerPath,
-                    inventorySlot.GetItemSlotIndex(),
+                    itemSlot.ContainerPath,
+                    itemSlot.GetItemSlotIndex(),
                     selectedAmount));
             });
         }
 
-        private void HandleInventorySlotToDropAreaDrop(ItemStackWidget inventorySlot, DropArea dropArea)
+        private void HandleItemSlotToDropAreaDrop(ItemStackWidget itemSlot, DropArea dropArea)
         {
-            if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack)) return;
+            if (!TryGetContainerAndItemStack(itemSlot, out var container, out var itemStack)) return;
 
             switch (dropArea.Type)
             {
@@ -122,8 +121,8 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     WindowUtils.ShowConfirmationOrAmountPicker(_globalEventBus, itemStack.Value.Amount, itemStack.Value.Amount, "Destroy Item", $"Are you sure you want to destroy {itemStack.Value.Definition.Name}?", (selectedAmount) =>
                     {
                         PublishCommand(new DestroyItemCommand(
-                            inventorySlot.ContainerPath,
-                            inventorySlot.GetItemSlotIndex(),
+                            itemSlot.ContainerPath,
+                            itemSlot.GetItemSlotIndex(),
                             selectedAmount));
                     });
                     break;
@@ -134,8 +133,8 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     {
                         if (!confirmed) return;
                         PublishCommand(new EnchantItemCommand(
-                            inventorySlot.ContainerPath,
-                            inventorySlot.GetItemSlotIndex()));
+                            itemSlot.ContainerPath,
+                            itemSlot.GetItemSlotIndex()));
                     });
                     break;
                 default:
@@ -144,9 +143,9 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
         }
 
-        private void HandleInventorySlotToShopViewDrop(ItemStackWidget inventorySlot, ShopView shopView)
+        private void HandleItemSlotToShopViewDrop(ItemStackWidget itemSlot, ShopView shopView)
         {
-            if (!TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack) ||
+            if (!TryGetContainerAndItemStack(itemSlot, out var container, out var itemStack) ||
                 !itemStack.Value.Definition.TryGetSellPrice(shopView.Data.SellCoefficient, out var sellPricePerUnit)) return;
 
             WindowUtils.ShowAmountPickerThenConfirmation(
@@ -165,14 +164,14 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     PublishCommand(new SellToShopCommand(
                         shopView.Data.ContainerPath,
                         shopView.Data.BuyerInventoryPath,
-                        inventorySlot.ContainerPath,
-                        inventorySlot.GetItemSlotIndex(),
+                        itemSlot.ContainerPath,
+                        itemSlot.GetItemSlotIndex(),
                         amount,
                         totalPrice));
                 });
         }
 
-        private void HandleShopSlotToInventorySlotDrop(ShopSlotWidget shopSlot, ItemStackWidget inventorySlot)
+        private void HandleShopSlotToItemSlotDrop(ShopSlotWidget shopSlot, ItemStackWidget itemSlot)
         {
             if (!TryGetContainerAndItemStack(shopSlot.SlotView, out var shop, out var shopItemStack) ||
                 shop is not ShopModel shopModel ||
@@ -183,7 +182,7 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
             }
 
             // Allow to buy to empty slot
-            if (TryGetContainerAndItemStack(inventorySlot, out var container, out var itemStack) && itemStack != null)
+            if (TryGetContainerAndItemStack(itemSlot, out var container, out var itemStack) && itemStack != null)
             {
                 return;
             }
@@ -204,9 +203,9 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     PublishCommand(new BuyFromShopCommand(
                         shopSlot.SlotView.ContainerPath,
                         shopSlot.ShopView.Data.BuyerInventoryPath,
-                        inventorySlot.ContainerPath,
+                        itemSlot.ContainerPath,
                         shopSlot.SlotView.SlotIndex,
-                        inventorySlot.SlotIndex,
+                        itemSlot.SlotIndex,
                         amount,
                         totalPrice
                         ));
