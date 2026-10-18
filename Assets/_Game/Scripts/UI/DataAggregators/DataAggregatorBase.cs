@@ -7,6 +7,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public event Action Changed;
         public event Action Invalidated;
 
+        public void RequestNotifyChanged()
+        {
+            NotifyChanged();
+        }
+
         protected void NotifyChanged()
         {
             Changed?.Invoke();

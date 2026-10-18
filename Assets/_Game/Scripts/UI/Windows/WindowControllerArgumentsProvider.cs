@@ -30,6 +30,7 @@ namespace Assets._Game.Scripts.UI.Windows
                 WindowId.CompactEntityStatus => new CompactEntityStatusWindowControllerArguments(playerId),
                 WindowId.EntityAiToggle => new EntityAiToggleWindowControllerArguments(playerId),
                 WindowId.WindowBar => new EmptyWindowControllerArguments(),
+                WindowId.ItemEnchanting => new ItemEnchantingWindowControllerArguments(playerId, default, default),
 
                 _ => throw new ArgumentException($"Cannot provide default Player arguments for Window with id: {windowId}")
             };

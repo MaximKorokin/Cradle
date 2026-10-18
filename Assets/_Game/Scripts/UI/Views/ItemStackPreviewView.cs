@@ -202,7 +202,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             foreach (var item in itemStack.EnchantableDisplayData.EligibleItems)
             {
-                TryVisualizeText(_eligibleEnchantItemNameTextTemplate, _eligibleEnchantItemsContainer, item);
+                TryVisualizeText(_eligibleEnchantItemNameTextTemplate, _eligibleEnchantItemsContainer, item.Name);
             }
 
             TryVisualizeText(_enchantEffectTextTemplate, _enchantEffectsContainer, itemStack.EnchantableDisplayData.OverallStatModifiersText);
@@ -242,26 +242,18 @@ namespace Assets._Game.Scripts.UI.Views
 
         private bool TryVisualizeFormattedText(TMP_Text template, RectTransform container, params string[] arguments)
         {
-            if (arguments == null || arguments.Length == 0) return false;
-            var text = template.text.FormatSafe(arguments);
-            VisualizeText(template, container, text);
+            var obj = template.TryCreateFromFormattedTemplate(container, arguments);
+            if (obj == null) return false;
+            _instantiatedTemplates.Add(obj);
             return true;
         }
 
         private bool TryVisualizeText(TMP_Text template, RectTransform container, string text)
         {
-            if (string.IsNullOrEmpty(text)) return false;
-            VisualizeText(template, container, text);
+            var obj = template.TryCreateFromTemplate(container, text);
+            if (obj == null) return false;
+            _instantiatedTemplates.Add(obj);
             return true;
-        }
-
-        private void VisualizeText(TMP_Text template, RectTransform container, string text)
-        {
-            var textTemplateInstance = Instantiate(template, container);
-            textTemplateInstance.text = text;
-            textTemplateInstance.gameObject.SetActive(true);
-
-            _instantiatedTemplates.Add(textTemplateInstance.gameObject);
         }
 
         public void Clear()

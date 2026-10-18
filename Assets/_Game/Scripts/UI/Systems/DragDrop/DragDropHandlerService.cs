@@ -8,6 +8,8 @@ using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.Views;
 using Assets._Game.Scripts.UI.Views.Widgets;
+using Assets._Game.Scripts.UI.Windows;
+using Assets._Game.Scripts.UI.Windows.Controllers;
 
 namespace Assets._Game.Scripts.UI.Systems.DragDrop
 {
@@ -15,13 +17,16 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly ItemContainerResolver _itemContainerResolver;
+        private readonly WindowControllerArgumentsProvider _windowControllerArgumentsProvider;
 
         public DragDropHandlerService(
             IGlobalEventBus globalEventBus,
-            ItemContainerResolver itemContainerResolver)
+            ItemContainerResolver itemContainerResolver,
+            WindowControllerArgumentsProvider windowControllerArgumentsProvider)
         {
             _globalEventBus = globalEventBus;
             _itemContainerResolver = itemContainerResolver;
+            _windowControllerArgumentsProvider = windowControllerArgumentsProvider;
         }
 
         public void Handle(IDragDropSource source, IDragDropTarget target, PointerContext pointerContext)
@@ -127,15 +132,14 @@ namespace Assets._Game.Scripts.UI.Systems.DragDrop
                     });
                     break;
                 case DropAreaType.ItemEnchant:
-                    var enchantableTrait = itemStack.Value.GetTrait<EnchantableTrait>();
-                    if (!itemStack.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData)) return;
-                    WindowUtils.ShowConfirmation(_globalEventBus, "Enchant Item", $"Are you sure you want to enchant {itemStack.Value.Definition.Name}?\nChance is {enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance}", confirmed =>
+                    if (!itemStack.Value.Definition.TryGetTrait<EnchantableTrait>(out var enchantableTrait) || 
+                        !itemStack.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData))
                     {
-                        if (!confirmed) return;
-                        PublishCommand(new EnchantItemCommand(
-                            itemSlot.ContainerPath,
-                            itemSlot.GetItemSlotIndex()));
-                    });
+                        return;
+                    }
+                    var defaultArguments = (ItemEnchantingWindowControllerArguments)_windowControllerArgumentsProvider.GetPlayerArguments(WindowId.ItemEnchanting);
+                    _globalEventBus.Publish(
+                        new WindowToggleRequest(WindowId.ItemEnchanting, new ItemEnchantingWindowControllerArguments(defaultArguments.EntityId, default, itemSlot.ItemStackPath)));
                     break;
                 default:
                     SLog.Error($"Unhandled drop area type: {dropArea.Type}");

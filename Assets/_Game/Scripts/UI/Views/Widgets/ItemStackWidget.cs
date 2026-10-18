@@ -4,6 +4,7 @@ using Assets._Game.Scripts.UI.Systems.Click;
 using Assets._Game.Scripts.UI.Systems.DragDrop;
 using Assets._Game.Scripts.UI.Systems.Tooltip;
 using Assets.CoreScripts;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,11 +39,15 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         public bool ContainsData { get; private set; }
 
+        public event Action BindChanged;
+
         public virtual void Bind(ItemContainerPath itemContainerPath, long itemSlot) => Bind(new(itemContainerPath, itemSlot));
 
         public virtual void Bind(ItemStackPath itemStackPath)
         {
+            if (ItemStackPath == itemStackPath) return;
             ItemStackPath = itemStackPath;
+            BindChanged?.Invoke();
         }
 
         public void Render(ItemStackSnapshot? itemStack) => Render(itemStack, Color.white);

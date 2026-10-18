@@ -2,13 +2,13 @@
 {
     public readonly struct EnchantItemCommand : IItemCommand
     {
-        public readonly ItemContainerPath FromContainer;
-        public readonly long FromSlot;
-
-        public EnchantItemCommand(ItemContainerPath fromContainer, long fromSlot)
+        public readonly ItemStackPath EnchantingItem;
+        public readonly ItemStackPath EnchantableItem;
+        
+        public EnchantItemCommand(ItemStackPath enchantingItem, ItemStackPath enchantableItem)
         {
-            FromContainer = fromContainer;
-            FromSlot = fromSlot;
+            EnchantingItem = enchantingItem;
+            EnchantableItem = enchantableItem;
         }
     }
 }

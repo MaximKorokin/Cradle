@@ -26,14 +26,14 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             var definitionData = _itemDefinitionFormatter.FormatData(itemStackSnapshot.Definition);
 
-            var prefix = GetPrefixText(itemStackSnapshot);
-
             var amount = itemStackSnapshot.Definition.MaxAmount > 1 ? $"Amount: {itemStackSnapshot.Amount}" : string.Empty;
 
             var weight = GetWeightText(itemStackSnapshot);
 
             var enchantableDisplayData = _enchantableTraitFormatter.FormatData((itemStackSnapshot.Definition, itemStackSnapshot.InstanceData));
             var itemSetDisplayData = equipmentModel != null ? _itemSetFormatter.FormatData((itemStackSnapshot.Definition, equipmentModel)) : definitionData.ItemSetDisplayData;
+
+            var prefix = GetPrefixText(itemStackSnapshot, enchantableDisplayData);
 
             return new ItemStackDisplayData(
                 prefix,
@@ -56,17 +56,10 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 provideFullData ? definitionData.Description : default);
         }
 
-        private string GetPrefixText(ItemStackSnapshot itemStackSnapshot)
+        private string GetPrefixText(ItemStackSnapshot itemStackSnapshot, EnchantDisplayData enchantDisplayData)
         {
-            if (itemStackSnapshot.InstanceData == null)
-            {
-                return string.Empty;
-            }
-            if (itemStackSnapshot.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData) && enchantInstanceData.Level > 0)
-            {
-                return $"+{enchantInstanceData.Level} ";
-            }
-            return string.Empty;
+            if (enchantDisplayData.CurrentLevel == 0) return string.Empty;
+            return $"+{enchantDisplayData.CurrentLevel} ";
         }
 
         private string GetWeightText(ItemStackSnapshot itemStackSnapshot)

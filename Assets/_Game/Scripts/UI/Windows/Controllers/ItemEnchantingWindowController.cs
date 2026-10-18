@@ -20,6 +20,8 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
             base.OnInitialize();
 
             ViewData.SetEntityId(Arguments.EntityId);
+            ViewData.SetEnchantingItem(Arguments.EnchantingItemStackPath);
+            ViewData.SetEnchantableItem(Arguments.EnchantableItemStackPath);
         }
 
         protected override ItemEnchantingView GetView() => Window.EnchantingView;
@@ -28,14 +30,14 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     public readonly struct ItemEnchantingWindowControllerArguments : IWindowControllerArguments
     {
         public IReadOnlyObservableData<EntryRef> EntityId { get; }
-        public readonly ItemContainerPath ItemContainerPath;
-        public readonly long Slot;
+        public readonly ItemStackPath EnchantingItemStackPath;
+        public readonly ItemStackPath EnchantableItemStackPath;
 
-        public ItemEnchantingWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId, ItemContainerPath itemContainerPath, long slot)
+        public ItemEnchantingWindowControllerArguments(IReadOnlyObservableData<EntryRef> entityId, ItemStackPath enchantingItemStackPath, ItemStackPath enchantableItemStackPath)
         {
             EntityId = entityId;
-            ItemContainerPath = itemContainerPath;
-            Slot = slot;
+            EnchantingItemStackPath = enchantingItemStackPath;
+            EnchantableItemStackPath = enchantableItemStackPath;
         }
     }
 }

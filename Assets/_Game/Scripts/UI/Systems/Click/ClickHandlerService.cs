@@ -32,14 +32,6 @@ namespace Assets._Game.Scripts.UI.Systems.Click
                 var arguments = new ItemStacksPreviewWindowControllerArguments(itemStackWidget.ContainerPath, itemStackWidget.GetItemSlotIndex());
                 _globalEventBus.Publish(new WindowToggleRequest(WindowId.ItemStacksPreview, arguments));
             }
-            else if (clickTarget is DropArea dropArea)
-            {
-                if (dropArea.Type == DropAreaType.ItemEnchant)
-                {
-                    var arguments = new ItemEnchantingWindowControllerArguments(null, default, -1);
-                    _globalEventBus.Publish(new WindowToggleRequest(WindowId.ItemEnchanting, arguments));
-                }
-            }
         }
     }
 }

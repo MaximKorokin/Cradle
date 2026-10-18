@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets._Game.Scripts.UI.Common
 {
-    public sealed class DropArea : MonoBehaviour, IDragDropTarget, IClickTarget
+    public sealed class DropArea : MonoBehaviour, IDragDropTarget
     {
         [SerializeField]
         private DropAreaType _type;

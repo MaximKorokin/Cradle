@@ -348,35 +348,36 @@ namespace Assets._Game.Scripts.Items.Commands
 
         private bool HandleEnchant(EnchantItemCommand c)
         {
-            var containerModel = _itemContainerResolver.ResolveContainer(c.FromContainer);
-            var itemSnapshot = containerModel.Get(c.FromSlot);
+            var containerModel = _itemContainerResolver.ResolveContainer(c.EnchantableItem.ContainerPath);
+            var itemSnapshot = containerModel.Get(c.EnchantableItem.Slot);
 
             if (!itemSnapshot.HasValue) return false;
             if (!itemSnapshot.Value.Definition.TryGetTrait<EnchantableTrait>(out var enchantableTrait)) return false;
             if (!itemSnapshot.Value.InstanceData.TryGet<EnchantInstanceData>(out var enchantInstanceData)) return false;
             if (enchantInstanceData.Level >= enchantableTrait.ItemEnchantingDefinition.Levels.Count) return false;
 
-            var inventoryPath = ItemContainerPath.Inventory(c.FromContainer.EntityId);
-            var enchantingItemDefinition = enchantableTrait.ItemEnchantingDefinition.Methods[0].Item;
-            var enchantingItemKey = ItemKey.From(enchantingItemDefinition, null);
-            var inventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(inventoryPath);
-            if (!inventoryModel.Has(enchantingItemKey, 1)) return false;
+            var enchantingItemContainer = _itemContainerResolver.ResolveContainer(c.EnchantingItem.ContainerPath);
+            var enchantingItem = enchantingItemContainer.Get(c.EnchantingItem.Slot);
+            if (enchantingItem == null || enchantingItem.Value.Amount < 1) return false;
+
+            var enchantingMethod = enchantableTrait.ItemEnchantingDefinition.Methods.FirstOrDefault(x => x.Item == enchantingItem.Value.Definition);
+            if (enchantingMethod == null) return false;
 
             // Checks passed, remove enchanting item from inventory and perform enchantment
-            inventoryModel.Remove(enchantingItemKey, 1);
-            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDisappear, c.FromContainer, default, enchantingItemDefinition, 1);
+            enchantingItemContainer.RemoveFromSlot(c.EnchantingItem.Slot, 1);
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDisappear, c.EnchantingItem.ContainerPath, default, enchantingItem.Value.Definition, 1);
 
-            var isEnchantSuccessful = enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].SuccessChance > UnityEngine.Random.value;
+            var isEnchantSuccessful = enchantingMethod.Rules[enchantInstanceData.Level].SuccessChance > UnityEngine.Random.value;
             if (isEnchantSuccessful)
             {
                 enchantInstanceData.Level++;
-                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantSucces, c.FromContainer, default, itemSnapshot?.Definition, 1, $"level {enchantInstanceData.Level}");
+                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantSucces, c.EnchantableItem.ContainerPath, default, itemSnapshot?.Definition, 1, $"level {enchantInstanceData.Level}");
                 return true;
             }
 
             // Enchant failed, apply failure rules
-            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantFail, c.FromContainer, default, itemSnapshot?.Definition, 1, enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type.ToString());
-            switch (enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type)
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantFail, c.EnchantableItem.ContainerPath, default, itemSnapshot?.Definition, 1, enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type.ToString());
+            switch (enchantingMethod.Rules[enchantInstanceData.Level].Failure.Type)
             {
                 case Enchanting.EnchantFailureType.None:
                     break;
@@ -389,7 +390,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 case Enchanting.EnchantFailureType.Destroy:
                     var itemKey = ItemKey.From(itemSnapshot.Value.Definition, itemSnapshot.Value.InstanceData);
                     containerModel.Remove(itemKey, 1);
-                    PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDisappear, c.FromContainer, default, itemSnapshot?.Definition, 1);
+                    PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDisappear, c.EnchantableItem.ContainerPath, default, itemSnapshot?.Definition, 1);
                     break;
             }
             return true;

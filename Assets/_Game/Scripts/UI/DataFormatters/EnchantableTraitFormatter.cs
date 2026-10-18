@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Items;
+using Assets._Game.Scripts.Items.Enchanting;
 using Assets._Game.Scripts.Items.Traits;
 using System;
 using System.Linq;
@@ -28,17 +29,21 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 return new EnchantDisplayData();
 
             var eligibleItems = itemEnchantingDefinition.Methods?
-                .Select(m => m.Item != null ? m.Item.Name : "Unknown")
-                .ToArray() ?? Array.Empty<string>();
+                .Select(m => new EnchantItem(
+                    m.Item != null ? m.Item.Name : "Unknown",
+                    m.Rules.Select(x => x.SuccessChance).ToArray(),
+                    m.Rules.Select(x => x.Failure.Type).ToArray()))
+                .ToArray() ?? Array.Empty<EnchantItem>();
 
             EnchantInstanceData enchantInstanceData = null;
             instanceData?.TryGet(out enchantInstanceData);
 
+            var currentLevel = enchantInstanceData != null ? enchantInstanceData.Level : 0;
             var levelBonuses = itemEnchantingDefinition.Levels?
                 .Select((level, i) => new EnchantLevelBonusDisplayData(
                     i + 1,
-                    _statModifiersFormatter.FormatData(level.Bonuses), 
-                    enchantInstanceData != null && enchantInstanceData.Level >= i + 1))
+                    _statModifiersFormatter.FormatData(level.Bonuses),
+                    currentLevel >= i + 1))
                 .ToArray() ?? Array.Empty<EnchantLevelBonusDisplayData>();
 
             var overallStatModifiers = itemEnchantingDefinition.Levels
@@ -49,7 +54,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 .ToArray();
             var overallStatModifiersText = _statModifiersFormatter.FormatData(overallStatModifiers);
 
-            return new EnchantDisplayData(eligibleItems, overallStatModifiersText, levelBonuses);
+            return new EnchantDisplayData(currentLevel, eligibleItems, overallStatModifiersText, levelBonuses);
         }
     }
 
@@ -57,27 +62,52 @@ namespace Assets._Game.Scripts.UI.DataFormatters
     {
         public readonly bool HasData;
 
-        public readonly string[] EligibleItems;
+        public readonly int CurrentLevel;
+        public readonly EnchantItem[] EligibleItems;
         public readonly string OverallStatModifiersText;
         public readonly EnchantLevelBonusDisplayData[] LevelBonuses;
 
-        public EnchantDisplayData(string[] eligibleItems, string overallStatModifiersText, EnchantLevelBonusDisplayData[] levelBonuses)
+        public EnchantDisplayData(int currentLevel, EnchantItem[] eligibleItems, string overallStatModifiersText, EnchantLevelBonusDisplayData[] levelBonuses)
         {
             HasData = true;
+
+            CurrentLevel = currentLevel;
             EligibleItems = eligibleItems;
             OverallStatModifiersText = overallStatModifiersText;
             LevelBonuses = levelBonuses;
         }
     }
 
+    public readonly struct EnchantItem
+    {
+        public readonly bool HasData;
+
+        public readonly string Name;
+        public readonly float[] ProbabilityPerlevel;
+        public readonly EnchantFailureType[] FailurePerLevel;
+
+        public EnchantItem(string name, float[] probabilityPerlevel, EnchantFailureType[] failurePerLevel)
+        {
+            HasData = true;
+
+            Name = name;
+            ProbabilityPerlevel = probabilityPerlevel;
+            FailurePerLevel = failurePerLevel;
+        }
+    }
+
     public readonly struct EnchantLevelBonusDisplayData
     {
+        public readonly bool HasData;
+
         public readonly int Level;
         public readonly string BonusDescription;
         public readonly bool IsEnabled;
 
         public EnchantLevelBonusDisplayData(int level, string bonusDescription, bool isEnabled)
         {
+            HasData = true;
+
             Level = level;
             BonusDescription = bonusDescription;
             IsEnabled = isEnabled;
