@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Configs;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
 {
@@ -18,9 +18,20 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             _config = config;
         }
 
-        public bool AddStatusEffect(StatusEffect statusEffect)
+        public StatusEffect GetStatusEffect(StatusEffectDefinition statusEffectDefinition)
         {
-            var category = statusEffect.Definition.Category;
+            if (!_statusEffects.TryGetValue(statusEffectDefinition.Category, out var stack)) return null;
+            return stack.FirstOrDefault(se => se.Definition.Id == statusEffectDefinition.Id);
+        }
+
+        public bool HasStatusEffect(StatusEffectDefinition statusEffectDefinition)
+        {
+            return GetStatusEffect(statusEffectDefinition) != null;
+        }
+
+        public bool AddStatusEffect(StatusEffectDefinition statusEffectDefinition)
+        {
+            var category = statusEffectDefinition.Category;
             var maxAmount = _config.GetMaxAmountForCategory(category);
             if (maxAmount == 0) return false;
 
@@ -29,18 +40,17 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 _statusEffects[category] = stack = new List<StatusEffect>();
             }
 
-            var activeStatusEffect = stack.FirstOrDefault(se => se.Definition.Id == statusEffect.Definition.Id);
-
-            if (activeStatusEffect != null)
+            if (HasStatusEffect(statusEffectDefinition))
             {
-                RemoveStatusEffect(activeStatusEffect);
+                RemoveStatusEffect(statusEffectDefinition);
             }
 
             if (stack.Count >= maxAmount)
             {
-                RemoveStatusEffect(stack[0]);
+                RemoveStatusEffect(stack[0].Definition);
             }
 
+            var statusEffect = new StatusEffect(statusEffectDefinition);
             stack.Add(statusEffect);
             StatusEffectChanged?.Invoke(new StatusEffectChange
             {
@@ -62,9 +72,10 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             return stack.Count >= maxAmount;
         }
 
-        public void RemoveStatusEffect(StatusEffect statusEffect)
+        public void RemoveStatusEffect(StatusEffectDefinition statusEffectDefinition)
         {
-            var category = statusEffect.Definition.Category;
+            var category = statusEffectDefinition.Category;
+            var statusEffect = GetStatusEffect(statusEffectDefinition);
             if (_statusEffects.TryGetValue(category, out var stack) && stack.Remove(statusEffect))
             {
                 StatusEffectChanged?.Invoke(new StatusEffectChange
@@ -104,7 +115,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
                 foreach (var statusEffect in stack.ToArray())
                 {
-                    RemoveStatusEffect(statusEffect);
+                    RemoveStatusEffect(statusEffect.Definition);
                 }
             }
         }

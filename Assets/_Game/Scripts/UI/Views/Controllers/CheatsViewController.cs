@@ -64,7 +64,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
         {
             if (_entityRepository.TryGet(_entityId.Value, out var statusEntity))
             {
-                _globalEventBus.Publish(new StatusEffectApplyRequest(statusEntity, statusEntity, new StatusEffect(statusEffectDefinition)));
+                _globalEventBus.Publish(new StatusEffectApplyRequest(statusEntity, statusEntity, statusEffectDefinition));
             }
         }
 

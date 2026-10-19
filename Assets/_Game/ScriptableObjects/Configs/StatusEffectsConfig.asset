@@ -15,6 +15,9 @@ MonoBehaviour:
   <TickRate>k__BackingField: 4
   <Categories>k__BackingField:
   - StatusEffectCategory: 0
-    MaxAmount: 5
+    MaxAmount: 10
   - StatusEffectCategory: 1
-    MaxAmount: 3
+    MaxAmount: 10
+  <SpecialStatusEffects>k__BackingField:
+  - Kind: 10
+    StatusEffectDefinition: {fileID: 11400000, guid: 6c018cf9cf8f60644b40acd97fcbcead, type: 2}

@@ -54,6 +54,6 @@ MonoBehaviour:
   - <Id>k__BackingField: 500
     <DefaultBase>k__BackingField: 0
   - <Id>k__BackingField: 510
-    <DefaultBase>k__BackingField: 10000
+    <DefaultBase>k__BackingField: 50000
   - <Id>k__BackingField: 1000
     <DefaultBase>k__BackingField: 1

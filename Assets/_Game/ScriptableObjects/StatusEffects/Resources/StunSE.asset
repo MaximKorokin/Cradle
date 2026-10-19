@@ -17,7 +17,7 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: -513304570566796799, guid: 11d7ac98c3818fe4aaab9dda70f2a784, type: 3}
   <Category>k__BackingField: 1
   <Behaviour>k__BackingField: 1
-  <Duration>k__BackingField: 33
+  <Duration>k__BackingField: 3
   <Charges>k__BackingField: 0
   <Stacks>k__BackingField: 0
   <StatModifiers>k__BackingField: []
@@ -30,4 +30,4 @@ MonoBehaviour:
     - rid: 3412048660377108614
       type: {class: StunControlProviderData, ns: Assets._Game.Scripts.Entities.Control, asm: Assembly-CSharp}
       data:
-        Duration: 33
+        Duration: 3

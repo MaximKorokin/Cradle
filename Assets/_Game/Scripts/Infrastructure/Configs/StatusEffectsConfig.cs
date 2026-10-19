@@ -16,6 +16,8 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         public float TickRate { get; private set; }
         [field: SerializeField]
         public StatusEffectCategoryConfig[] Categories { get; private set; }
+        [field: SerializeField]
+        public SpecialStatusEffectDefinition[] SpecialStatusEffects { get; private set; }
 
         private Dictionary<StatusEffectCategory, int> _maxAmountPerCategory = new();
 
@@ -32,6 +34,11 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
             }
             return 0;
         }
+
+        public StatusEffectDefinition GetSpecialStatusEffect(SpecialStatusEffectKind kind)
+        {
+            return SpecialStatusEffects.FirstOrDefault(x => x.Kind == kind).StatusEffectDefinition;
+        }
     }
 
     [Serializable]
@@ -39,5 +46,18 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
     {
         public StatusEffectCategory StatusEffectCategory;
         public int MaxAmount;
+    }
+
+    [Serializable]
+    public struct SpecialStatusEffectDefinition
+    {
+        public SpecialStatusEffectKind Kind;
+        public StatusEffectDefinition StatusEffectDefinition;
+    }
+
+    public enum SpecialStatusEffectKind
+    {
+        None = 0,
+        Overweight = 10,
     }
 }

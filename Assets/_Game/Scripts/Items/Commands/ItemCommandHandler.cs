@@ -376,7 +376,7 @@ namespace Assets._Game.Scripts.Items.Commands
             }
 
             // Enchant failed, apply failure rules
-            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantFail, c.EnchantableItem.ContainerPath, default, itemSnapshot?.Definition, 1, enchantableTrait.ItemEnchantingDefinition.Methods[0].Rules[enchantInstanceData.Level].Failure.Type.ToString());
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEnchantFail, c.EnchantableItem.ContainerPath, default, itemSnapshot?.Definition, 1, enchantingMethod.Rules[enchantInstanceData.Level].Failure.Type.ToString());
             switch (enchantingMethod.Rules[enchantInstanceData.Level].Failure.Type)
             {
                 case Enchanting.EnchantFailureType.None:
