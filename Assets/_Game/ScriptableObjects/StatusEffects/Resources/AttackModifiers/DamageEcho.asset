@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 882985cea942482f96c5663e24ef4607
   <Name>k__BackingField: Damage Echo
   <Icon>k__BackingField: {fileID: 1308624975233488409, guid: d5940575a81e1074daf366f2a262578c, type: 3}
-  <Category>k__BackingField: 0
+  <Category>k__BackingField: 10
   <Behaviour>k__BackingField: 1
   <Duration>k__BackingField: 5
   <Charges>k__BackingField: 0

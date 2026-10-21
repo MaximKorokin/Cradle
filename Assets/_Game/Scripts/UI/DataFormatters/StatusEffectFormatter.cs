@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Assets._Game.Scripts.UI.DataFormatters
 {
-    public sealed class StatusEffectFormatter : IDataFormatter<StatusEffectDefinition, string>
+    public sealed class StatusEffectFormatter : IDataFormatter<StatusEffectSnapshot, string>
     {
         private readonly StatModifiersFormatter _statModifiersFormatter;
         private readonly AttackModifiersFormatter _attackModifierFormatter;
@@ -17,28 +17,30 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             _attackModifierFormatter = attackModifierFormatter;
         }
 
-        public string FormatData(StatusEffectDefinition data)
+        public string FormatData(StatusEffectSnapshot data)
         {
-            if (data == null)
+            if (data.Definition == null)
                 return string.Empty;
+
+            var definition = data.Definition;
 
             var stringBuilder = new StringBuilder();
 
             // Name and category
-            stringBuilder.Append($"<b><u>{data.Name}</u></b> ({data.Category.GetDescription()})");
+            stringBuilder.Append($"<b><u>{definition.Name}</u></b> ({definition.Category.GetDescription()})");
 
             // Lifetime behaviour
-            if (data.Behaviour.HasFlag(StatusEffectBehaviour.Duration))
-                stringBuilder.Append($", {data.Duration:0.##}s");
-            if (data.Behaviour.HasFlag(StatusEffectBehaviour.Charges))
-                stringBuilder.Append($", {data.Charges} charges");
-            if (data.Behaviour.HasFlag(StatusEffectBehaviour.Stacks))
-                stringBuilder.Append($", {data.Stacks} stacks");
+            if (definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration))
+                stringBuilder.Append($", {definition.Duration:0.##}s");
+            if (definition.Behaviour.HasFlag(StatusEffectBehaviour.Charges))
+                stringBuilder.Append($", {data.RemainingChargesAmount} charges");
+            if (definition.Behaviour.HasFlag(StatusEffectBehaviour.Stacks))
+                stringBuilder.Append($", {definition.Stacks} stacks");
 
             // Stat modifiers
-            if (data.StatModifiers != null && data.StatModifiers.Length > 0)
+            if (definition.StatModifiers != null && definition.StatModifiers.Length > 0)
             {
-                var statModifiersText = _statModifiersFormatter.FormatData(data.StatModifiers);
+                var statModifiersText = _statModifiersFormatter.FormatData(definition.StatModifiers);
                 if (!string.IsNullOrEmpty(statModifiersText))
                 {
                     stringBuilder.AppendLine();
@@ -47,9 +49,9 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             }
 
             // Attack modifiers
-            if (data.AttackModifiers != null && data.AttackModifiers.Length > 0)
+            if (definition.AttackModifiers != null && definition.AttackModifiers.Length > 0)
             {
-                var attackModifiersText = _attackModifierFormatter.FormatData(data.AttackModifiers);
+                var attackModifiersText = _attackModifierFormatter.FormatData(definition.AttackModifiers);
                 if (!string.IsNullOrEmpty(attackModifiersText))
                 {
                     stringBuilder.AppendLine();
@@ -58,10 +60,10 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             }
 
             // Control provider (if present)
-            if (data.ControlProvider != null)
+            if (definition.ControlProvider != null)
             {
                 stringBuilder.AppendLine();
-                var controlType = data.ControlProvider.GetType().Name.Replace("ControlProviderData", "");
+                var controlType = definition.ControlProvider.GetType().Name.Replace("ControlProviderData", "");
                 stringBuilder.Append($"Control: {controlType}");
             }
 

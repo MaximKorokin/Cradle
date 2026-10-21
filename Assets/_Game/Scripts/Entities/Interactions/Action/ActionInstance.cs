@@ -63,8 +63,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
             if (Definition.MaxChannelingTime == 0)
             {
                 _interactionInstance.Tick(0);
-                _interactionInstance.Cancel();
-                _interactionInstance = null;
+                Interrupt();
             }
         }
 
@@ -78,8 +77,7 @@ namespace Assets._Game.Scripts.Entities.Interactions.Action
 
             if (_interactionInstance.Tick(delta))
             {
-                _interactionInstance.Cancel();
-                _interactionInstance = null;
+                Interrupt();
                 return true;
             }
             return false;

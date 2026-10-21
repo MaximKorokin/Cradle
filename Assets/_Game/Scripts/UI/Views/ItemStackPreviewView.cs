@@ -258,8 +258,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         public void Clear()
         {
-            gameObject.SetActive(false);
-
             for (int i = 0; i < _instantiatedTemplates.Count; i++)
             {
                 Destroy(_instantiatedTemplates[i]);

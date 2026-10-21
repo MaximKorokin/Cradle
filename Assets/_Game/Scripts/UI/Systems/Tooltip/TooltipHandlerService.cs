@@ -16,11 +16,12 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
         private readonly IObjectResolver _resolver;
         private readonly UITooltipConfig _config;
         private readonly ItemStackPreviewViewData _itemStackPreviewViewData;
+        private readonly StatusEffectViewData _statusEffectViewData;
         private readonly EntityRepository _entityRepository;
 
         private ItemStackPreviewView _itemStackPreviewView;
         private TextViewWidget _textView;
-        private StatusEffectDescriptionWidget _statusEffectDescriptionView;
+        private StatusEffectDescriptionView _statusEffectDescriptionView;
 
         private IDisposable _currentController;
 
@@ -28,11 +29,13 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             IObjectResolver resolver,
             UITooltipConfig config,
             ItemStackPreviewViewData itemStackPreviewViewData,
+            StatusEffectViewData statusEffectViewData,
             EntityRepository entityRepository)
         {
             _resolver = resolver;
             _config = config;
             _itemStackPreviewViewData = itemStackPreviewViewData;
+            _statusEffectViewData = statusEffectViewData;
             _entityRepository = entityRepository;
         }
 
@@ -42,7 +45,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
                 return HandleContainerSlot(containerSlot);
             else if (tooltipSource is WindowOpenTrigger windowOpenTrigger)
                 return HandleWindowOpenTrigger(windowOpenTrigger);
-            else if (tooltipSource is StatusEffectWidget statusEffectWidget)
+            else if (tooltipSource is StatusEffectView statusEffectWidget)
                 return HandleStatusEffect(statusEffectWidget);
 
             return (null, null);
@@ -70,12 +73,15 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             return (_textView.transform as RectTransform, CleanState);
         }
 
-        private (RectTransform Content, Action CleanAction) HandleStatusEffect(StatusEffectWidget statusEffectWidget)
+        private (RectTransform Content, Action CleanAction) HandleStatusEffect(StatusEffectView statusEffectWidget)
         {
             _resolver.InstantiateFromPrefab(_config.StatusEffectDescriptionViewPrefab, ref _statusEffectDescriptionView);
 
-            _statusEffectDescriptionView.Render(statusEffectWidget.StatusEffectDefinition, statusEffectWidget.RemainingDuration);
+            _statusEffectViewData.SetEntityId(statusEffectWidget.Data.ObservableEntityId);
+            _statusEffectViewData.SetStatusEffect(statusEffectWidget.StatusEffectSnapshot.Definition);
+            _currentController = new DataAggregatorController<StatusEffectDescriptionView, StatusEffectViewData>(_statusEffectDescriptionView, _statusEffectViewData);
             _statusEffectDescriptionView.gameObject.SetActive(true);
+
             return (_statusEffectDescriptionView.transform as RectTransform, CleanState);
         }
 
@@ -87,13 +93,19 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
         private void CleanState()
         {
             if (_itemStackPreviewView != null && _itemStackPreviewView.gameObject.activeSelf)
+            {
                 _itemStackPreviewView.Clear();
+                _itemStackPreviewView.gameObject.SetActive(false);
+            }
 
             if (_textView != null && _textView.gameObject.activeSelf)
                 _textView.Clear();
 
             if (_statusEffectDescriptionView != null && _statusEffectDescriptionView.gameObject.activeSelf)
+            {
                 _statusEffectDescriptionView.Clear();
+                _statusEffectDescriptionView.gameObject.SetActive(false);
+            }
 
             _currentController?.Dispose();
             _currentController = null;

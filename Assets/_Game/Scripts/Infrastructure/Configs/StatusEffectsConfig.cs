@@ -21,7 +21,7 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
 
         private Dictionary<StatusEffectCategory, int> _maxAmountPerCategory = new();
 
-        private void OnEnable()
+        private void OnValidate()
         {
             if (Categories != null) _maxAmountPerCategory = Categories.ToDictionary(c => c.StatusEffectCategory, c => c.MaxAmount);
         }

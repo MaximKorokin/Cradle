@@ -23,19 +23,31 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         protected override void OnBoundEntityChanged()
         {
             _statusEffectModule = Entity.GetModule<StatusEffectModule>();
-            _statusEffectModule.StatusEffects.Changed -= OnStatusEffectsModuleChanged;
-            _statusEffectModule.StatusEffects.Changed += OnStatusEffectsModuleChanged;
+            _statusEffectModule.StatusEffects.StatusEffectChanged -= OnStatusEffectChanged;
+            _statusEffectModule.StatusEffects.StatusEffectChanged += OnStatusEffectChanged;
         }
 
-        private void OnStatusEffectsModuleChanged()
+        private void OnStatusEffectChanged(StatusEffectChange statusEffectChange)
         {
-            NotifyChanged();
+            // flex :D
+            if (statusEffectChange.Kind is StatusEffectChangeKind.Added or StatusEffectChangeKind.Removed)
+                NotifyChanged();
         }
 
         public override void Dispose()
         {
-            _statusEffectModule.StatusEffects.Changed -= OnStatusEffectsModuleChanged;
+            _statusEffectModule.StatusEffects.StatusEffectChanged -= OnStatusEffectChanged;
             base.Dispose();
+        }
+
+        public IEnumerable<StatusEffectSnapshot> GetStatusEffects(StatusEffectCategory statusEffectCategory = StatusEffectCategory.None)
+        {
+            return statusEffectCategory switch
+            {
+                StatusEffectCategory.Buff => Buffs,
+                StatusEffectCategory.Debuff => Debuffs,
+                _ => Buffs.Concat(Debuffs)
+            };
         }
     }
 }

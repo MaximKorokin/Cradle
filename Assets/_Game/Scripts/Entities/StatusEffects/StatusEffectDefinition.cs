@@ -52,8 +52,9 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
     public enum StatusEffectCategory
     {
-        Buff,
-        Debuff
+        None = 0,
+        Buff = 10,
+        Debuff = 20,
     }
 
     [Flags]

@@ -51,6 +51,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             }
 
             var statusEffect = new StatusEffect(statusEffectDefinition);
+            statusEffect.Changed += OnStatusEffectChanged;
             stack.Add(statusEffect);
             StatusEffectChanged?.Invoke(new StatusEffectChange
             {
@@ -78,6 +79,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
             var statusEffect = GetStatusEffect(statusEffectDefinition);
             if (_statusEffects.TryGetValue(category, out var stack) && stack.Remove(statusEffect))
             {
+                statusEffect.Changed -= OnStatusEffectChanged;
                 StatusEffectChanged?.Invoke(new StatusEffectChange
                 {
                     StatusEffect = statusEffect,
@@ -119,6 +121,16 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
                 }
             }
         }
+
+        private void OnStatusEffectChanged(StatusEffect statusEffect)
+        {
+            StatusEffectChanged?.Invoke(new StatusEffectChange
+            {
+                StatusEffect = statusEffect,
+                Kind = StatusEffectChangeKind.Updated
+            });
+            Changed?.Invoke();
+        }
     }
 
     public struct StatusEffectChange
@@ -130,6 +142,7 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
     public enum StatusEffectChangeKind
     {
         Added,
-        Removed
+        Removed,
+        Updated,
     }
 }

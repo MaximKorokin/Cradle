@@ -79,8 +79,9 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnEntityRepositionRequested(Entity entity, EntityRepositionRequest e)
         {
+            var statModule = entity.GetModule<StatModule>();
             var actionModule = entity.GetModule<ActionModule>();
-            InterruptActiveAction(actionModule);
+            InterruptActiveAction(statModule, actionModule);
         }
 
         // ───────────────────────── Tick Loop ─────────────────────────
@@ -97,7 +98,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (actionModule.ActiveAction != null && !actionModule.ActiveAction.IsTargetValid(actionModule.ActiveContext))
             {
-                InterruptActiveAction(actionModule);
+                InterruptActiveAction(statModule, actionModule);
             }
 
             // Start action if intent changed and global cooldown is over
@@ -127,17 +128,17 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             var action = actionIntent.ActionInstance;
 
-            // A null action signals that the current action should be cancelled.
+            // A null action signals that the current action should be cancelled
             if (action == null)
             {
-                InterruptActiveAction(actionModule);
+                InterruptActiveAction(statModule, actionModule);
                 return false;
             }
 
             if (!CanStartAction(actionModule, action, entity, actionIntent))
                 return false;
 
-            InterruptActiveAction(actionModule);
+            InterruptActiveAction(statModule, actionModule);
             ActivateAction(entity, statModule, actionModule, action, actionIntent);
             BeginPreparation(actionModule);
 
@@ -157,8 +158,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             return action.IsTargetValid(context) && action.CanStartPreparation(context);
         }
 
-        private void InterruptActiveAction(ActionModule actionModule)
+        private void InterruptActiveAction(StatModule statModule, ActionModule actionModule)
         {
+            if (actionModule.IsChanneling)
+                CompleteAction(statModule, actionModule, actionModule.ActiveAction);
             actionModule.ActiveAction?.Interrupt();
             actionModule.ResetActiveState();
         }

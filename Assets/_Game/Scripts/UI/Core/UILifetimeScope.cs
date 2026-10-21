@@ -104,6 +104,7 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<ItemUseSettingsViewData>(Lifetime.Transient);
             builder.Register<ItemStackPreviewViewData>(Lifetime.Transient);
             builder.Register<StatusEffectListViewData>(Lifetime.Transient);
+            builder.Register<StatusEffectViewData>(Lifetime.Transient);
             builder.Register<EntityStatusViewData>(Lifetime.Transient);
             builder.Register<ItemEnchantingViewData>(Lifetime.Transient);
         }

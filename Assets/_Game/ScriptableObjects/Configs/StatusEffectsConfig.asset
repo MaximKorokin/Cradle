@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <TickRate>k__BackingField: 4
   <Categories>k__BackingField:
-  - StatusEffectCategory: 0
+  - StatusEffectCategory: 10
     MaxAmount: 10
-  - StatusEffectCategory: 1
+  - StatusEffectCategory: 20
     MaxAmount: 10
   <SpecialStatusEffects>k__BackingField:
   - Kind: 10

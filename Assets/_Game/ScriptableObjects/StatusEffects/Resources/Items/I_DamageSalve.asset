@@ -15,10 +15,10 @@ MonoBehaviour:
   _id: e97dc6a885ca4c838676ef12395bc8ce
   <Name>k__BackingField: Damage Salve
   <Icon>k__BackingField: {fileID: 5807367746513092223, guid: 92a4a48f3385e1a46bbed831c497cd64, type: 3}
-  <Category>k__BackingField: 0
+  <Category>k__BackingField: 10
   <Behaviour>k__BackingField: 16
   <Duration>k__BackingField: 0
-  <Charges>k__BackingField: 1
+  <Charges>k__BackingField: 10
   <Stacks>k__BackingField: 0
   <StatModifiers>k__BackingField: []
   <AttackModifiers>k__BackingField:

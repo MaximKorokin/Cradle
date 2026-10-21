@@ -1,4 +1,5 @@
 ﻿using Assets.CoreScripts;
+using System;
 
 namespace Assets._Game.Scripts.Entities.StatusEffects
 {
@@ -12,6 +13,8 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
         private readonly CooldownCounter _cooldownCounter;
 
         public bool IsExpired => Definition.Behaviour.HasFlag(StatusEffectBehaviour.Duration) && _cooldownCounter.IsOver();
+
+        public Action<StatusEffect> Changed;
 
         public StatusEffect(StatusEffectDefinition definition)
         {
@@ -35,20 +38,34 @@ namespace Assets._Game.Scripts.Entities.StatusEffects
 
         public void SetCharges(int charges)
         {
+            if (ChargesAmount == charges) return;
+
             if (!Definition.Behaviour.HasFlag(StatusEffectBehaviour.Charges))
                 SLog.Error("Status effect does not have charges behaviour.");
+
             ChargesAmount = charges;
+
+            Changed?.Invoke(this);
         }
     }
 
     public readonly struct StatusEffectSnapshot
     {
         public readonly StatusEffectDefinition Definition;
+        public readonly int RemainingChargesAmount;
         public readonly float RemainingDuration;
+
+        public StatusEffectSnapshot(StatusEffectDefinition definition)
+        {
+            Definition = definition;
+            RemainingChargesAmount = 0;
+            RemainingDuration = 0;
+        }
 
         public StatusEffectSnapshot(StatusEffect statusEffect)
         {
             Definition = statusEffect.Definition;
+            RemainingChargesAmount = statusEffect.ChargesAmount;
             RemainingDuration = statusEffect.RemainingDuration;
         }
     }

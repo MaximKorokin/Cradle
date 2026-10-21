@@ -12,6 +12,6 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
         [field: SerializeField]
         public ItemStackPreviewView ItemStackPreviewViewPrefab { get; private set; }
         [field: SerializeField]
-        public StatusEffectDescriptionWidget StatusEffectDescriptionViewPrefab { get; private set; }
+        public StatusEffectDescriptionView StatusEffectDescriptionViewPrefab { get; private set; }
     }
 }

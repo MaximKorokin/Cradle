@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             {
                 InteractionTrait interactionTrait => _interactionDefinitionFormatter.FormatData(interactionTrait.Interaction),
                 StatModifiersTrait statModifiersTrait => _statModifiersFormatter.FormatData(statModifiersTrait.Modifiers),
-                StatusEffectTrait statusEffectTrait => _statusEffectFormatter.FormatData(statusEffectTrait.StatusEffect),
+                StatusEffectTrait statusEffectTrait => _statusEffectFormatter.FormatData(new(statusEffectTrait.StatusEffect)),
                 SpecialActionTrait specialActionTrait => FormatSpecialActionTrait(specialActionTrait),
                 _ => string.Empty
             };

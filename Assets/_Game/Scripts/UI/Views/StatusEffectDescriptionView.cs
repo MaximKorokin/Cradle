@@ -1,14 +1,16 @@
 ﻿using Assets._Game.Scripts.Entities.StatusEffects;
+using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
 using Assets.CoreScripts;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
-namespace Assets._Game.Scripts.UI.Views.Widgets
+namespace Assets._Game.Scripts.UI.Views
 {
-    public sealed class StatusEffectDescriptionWidget : MonoBehaviour
+    public sealed class StatusEffectDescriptionView : UIViewBase<StatusEffectViewData>
     {
         [SerializeField]
         private Image _icon;
@@ -27,6 +29,9 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         private StatusEffectFormatter _statusEffectFormatter;
 
+        public StatusEffectCategory StatusEffectCategory { get; private set; }
+        public int StatusEffectIndex { get; private set; }
+
         [Inject]
         private void Construct(StatusEffectFormatter statusEffectFormatter)
         {
@@ -38,15 +43,23 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
             RenderTimeLeft();
         }
 
-        public void Render(StatusEffectDefinition statusEffectDefinition, float remainingDuration)
+        public void Bind(StatusEffectCategory statusEffectCategory, int statusEffectIndex)
         {
-            if (statusEffectDefinition == null) return;
+            StatusEffectCategory = statusEffectCategory;
+            StatusEffectIndex = statusEffectIndex;
+        }
+
+        protected override void Render(StatusEffectViewData data)
+        {
+            var statusEffectSnapshot = data.StatusEffectSnapshot;
+            var definition = statusEffectSnapshot.Definition;
+            if (definition == null) return;
 
             Clear();
 
-            RenderHeader(statusEffectDefinition);
-            RenderTimeLeft(statusEffectDefinition, remainingDuration);
-            RenderEffects(statusEffectDefinition);
+            RenderHeader(definition);
+            RenderTimeLeft(definition, statusEffectSnapshot.RemainingDuration);
+            RenderEffects(statusEffectSnapshot);
         }
 
         private void RenderHeader(StatusEffectDefinition statusEffectDefinition)
@@ -76,9 +89,9 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
             _timeLeftText.text = $"{timeLeft:F1}s";
         }
 
-        private void RenderEffects(StatusEffectDefinition statusEffectDefinition)
+        private void RenderEffects(StatusEffectSnapshot statusEffectSnapshot)
         {
-            var effectsText = _statusEffectFormatter.FormatData(statusEffectDefinition);
+            var effectsText = _statusEffectFormatter.FormatData(statusEffectSnapshot);
             if (string.IsNullOrEmpty(effectsText))
             {
                 return;
@@ -89,8 +102,6 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         public void Clear()
         {
-            gameObject.SetActive(false);
-
             _icon.sprite = null;
             _nameText.text = string.Empty;
             _timeLeftInfo.SetActive(false);

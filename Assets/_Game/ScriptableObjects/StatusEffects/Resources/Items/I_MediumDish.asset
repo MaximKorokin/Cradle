@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: f0932b0ccd5449fc970fbbb1ea2129d2
   <Name>k__BackingField: Medium Dish
   <Icon>k__BackingField: {fileID: -7951491290743021505, guid: 05bbc83f544c57745860545592ccc07e, type: 3}
-  <Category>k__BackingField: 0
+  <Category>k__BackingField: 10
   <Behaviour>k__BackingField: 1
   <Duration>k__BackingField: 600
   <Charges>k__BackingField: 1
