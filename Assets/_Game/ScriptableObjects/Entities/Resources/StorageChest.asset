@@ -48,7 +48,7 @@ MonoBehaviour:
       type: {class: StorageModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        SlotsAmount: 100
+        SlotsAmount: 90
         Radius: 1
     - rid: 3564180635766489211
       type: {class: PersistenceModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}

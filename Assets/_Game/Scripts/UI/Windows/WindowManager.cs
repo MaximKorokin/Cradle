@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Windows
         private readonly ModalWrapper _modalWrapperPrefab;
         private readonly IObjectResolver _resolver;
 
-        private readonly WindowSettings _defaultWindowSettings = new(true, true, true, null);
+        private readonly WindowSettings _defaultWindowSettings = new(true, true, true, null, true);
 
         public IReadOnlyCollection<WindowWrapperBase> ActiveWindows => _windowStack.Select(entry => entry.WrapperRoot).ToList();
 
@@ -97,8 +97,15 @@ namespace Assets._Game.Scripts.UI.Windows
 
             if (wrapperRoot is WindowWrapper windowWrapper)
             {
-                var settingsToUse = settings.HasData ? settings : _defaultWindowSettings;
-                windowWrapper.SetupWrapperHeader(settingsToUse.ShowHeader, settingsToUse.ShowCloseButton, settingsToUse.ShowHeaderText, settingsToUse.HeaderText ?? windowPrefab.name);
+                var settingsToUse = settings.HasData
+                    ? settings
+                    : new(
+                        _defaultWindowSettings.ShowHeader,
+                        _defaultWindowSettings.ShowCloseButton,
+                        _defaultWindowSettings.ShowHeaderText,
+                        _defaultWindowSettings.HeaderText ?? windowPrefab.name,
+                        _defaultWindowSettings.ShowContentBackground);
+                windowWrapper.SetupWrapperHeader(settingsToUse);
             }
 
             // push window and controller to stack that will be used to destroy everything correctly
@@ -210,17 +217,20 @@ namespace Assets._Game.Scripts.UI.Windows
         [field: SerializeField]
         public bool ShowHeader { get; private set; }
         [field: SerializeField]
+        public bool ShowContentBackground { get; private set; }
+        [field: SerializeField]
         public bool ShowCloseButton { get; private set; }
         [field: SerializeField]
         public bool ShowHeaderText { get; private set; }
         [field: SerializeField]
         public string HeaderText { get; private set; }
 
-        public WindowSettings(bool showHeader, bool showCloseButton, bool showHeaderText, string headerText)
+        public WindowSettings(bool showHeader, bool showCloseButton, bool showHeaderText, string headerText, bool showContentBackground)
         {
             HasData = true;
 
             ShowHeader = showHeader;
+            ShowContentBackground = showContentBackground;
             ShowCloseButton = showCloseButton;
             ShowHeaderText = showHeaderText;
             HeaderText = headerText;

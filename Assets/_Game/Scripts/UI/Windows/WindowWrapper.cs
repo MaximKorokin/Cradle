@@ -9,6 +9,8 @@ namespace Assets._Game.Scripts.UI.Windows
         [SerializeField]
         private RectTransform _headerTransform;
         [SerializeField]
+        private Image _contentBackgroundImage;
+        [SerializeField]
         private TMP_Text _titleText;
         [SerializeField]
         private Button _closeButton;
@@ -18,12 +20,14 @@ namespace Assets._Game.Scripts.UI.Windows
             _closeButton.onClick.AddListener(RequestClose);
         }
 
-        public void SetupWrapperHeader(bool isActive, bool canClose, bool showTitle, string title)
+        public void SetupWrapperHeader(WindowSettings settings)
         {
-            _headerTransform.gameObject.SetActive(isActive);
-            _titleText.gameObject.SetActive(showTitle);
-            _titleText.text = title;
-            _closeButton.gameObject.SetActive(canClose);
+            _headerTransform.gameObject.SetActive(settings.ShowHeader);
+            _titleText.gameObject.SetActive(settings.ShowHeaderText);
+            _titleText.text = settings.HeaderText;
+            _closeButton.gameObject.SetActive(settings.ShowCloseButton);
+
+            _contentBackgroundImage.enabled = settings.ShowContentBackground;
         }
     }
 }

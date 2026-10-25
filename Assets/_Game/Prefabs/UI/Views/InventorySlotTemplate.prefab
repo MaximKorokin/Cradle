@@ -67,8 +67,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7482667652216324306, guid: f6253f0300696f744ab8602c3c5d545b, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: -354840427, guid: edca1ae205cc6ee4b8dce4ab31a8e142, type: 3}
+  m_Type: 1
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
@@ -148,11 +148,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5591779205402875711, guid: a2e17962e7c401f409515996fa797591, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 5591779205402875711, guid: a2e17962e7c401f409515996fa797591, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 5591779205402875711, guid: a2e17962e7c401f409515996fa797591, type: 3}
       propertyPath: m_LocalPosition.x
@@ -229,18 +229,6 @@ PrefabInstance:
     - target: {fileID: 7244327771301635885, guid: a2e17962e7c401f409515996fa797591, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9186110590530713165, guid: a2e17962e7c401f409515996fa797591, type: 3}
-      propertyPath: _canDrag
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9186110590530713165, guid: a2e17962e7c401f409515996fa797591, type: 3}
-      propertyPath: _canDrop
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9186110590530713165, guid: a2e17962e7c401f409515996fa797591, type: 3}
-      propertyPath: <Type>k__BackingField
-      value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

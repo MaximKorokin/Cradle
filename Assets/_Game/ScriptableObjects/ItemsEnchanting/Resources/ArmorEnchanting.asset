@@ -89,10 +89,10 @@ MonoBehaviour:
         <Type>k__BackingField: 1
   - <Item>k__BackingField: {fileID: 11400000, guid: 5e56db7aa9d96274392a368314141211, type: 2}
     _rules:
-    - <SuccessChance>k__BackingField: 100
+    - <SuccessChance>k__BackingField: 1
       <Failure>k__BackingField:
         <Type>k__BackingField: 0
-    - <SuccessChance>k__BackingField: 100
+    - <SuccessChance>k__BackingField: 1
       <Failure>k__BackingField:
         <Type>k__BackingField: 0
     - <SuccessChance>k__BackingField: 0.1

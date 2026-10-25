@@ -14,7 +14,7 @@ namespace Assets._Game.Scripts.UI.Systems
 {
     public sealed class WindowsUISystem : UISystemBase
     {
-        private readonly Vector2 _defaultWindowPosition = new(Screen.width / 2, Screen.height / 2);
+        private readonly Vector2 _defaultWindowPosition = new(Screen.width / 2, Screen.height - 100);
         private IReadOnlyDictionary<WindowId, Vector2> _windowsInitialData;
 
         private IWindowsSaveService _windowsSaveService;
@@ -109,17 +109,8 @@ namespace Assets._Game.Scripts.UI.Systems
         private void SetWindowPosition(WindowWrapperBase windowWrapper, Vector2? position)
         {
             var loadedPosition = _windowsSaveService.LoadWindow(windowWrapper.WindowId);
-            if (windowWrapper != null)
-            {
-                if (loadedPosition.HasValue)
-                {
-                    _windowManager.SetWindowPosition(windowWrapper, loadedPosition.Value);
-                }
-                else if (position.HasValue)
-                {
-                    _windowManager.SetWindowPosition(windowWrapper, position.Value);
-                }
-            }
+            var newPosition = loadedPosition ?? position ?? _defaultWindowPosition;
+            _windowManager.SetWindowPosition(windowWrapper, newPosition);
         }
     }
 

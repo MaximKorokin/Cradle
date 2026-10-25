@@ -39,7 +39,7 @@ MonoBehaviour:
       type: {class: InventoryModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
-        SlotsAmount: 40
+        SlotsAmount: 56
     - rid: 1349792692413661263
       type: {class: EquipmentModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:

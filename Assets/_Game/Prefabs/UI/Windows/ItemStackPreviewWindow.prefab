@@ -292,8 +292,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 7482667652216324306, guid: f6253f0300696f744ab8602c3c5d545b, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -325,6 +325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7708325079765345592}
   - component: {fileID: 1213809409166016501}
+  - component: {fileID: 5305426507610095928}
   m_Layer: 5
   m_Name: ItemStackPreviewWindow
   m_TagString: Untagged
@@ -366,6 +367,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PrimaryItemPreviewView>k__BackingField: {fileID: 3554932334570252707}
   <SecondaryItemPreviewView>k__BackingField: {fileID: 0}
+--- !u!114 &5305426507610095928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4236470503915288397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ceedb83a8e49e49a2a707aac192db8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _source: {fileID: 2610634078114624710}
+  _target: {fileID: 7708325079765345592}
+  _offset: {x: 0, y: 0}
+  _sizeLimit: {x: 400, y: 800}
 --- !u!1 &4447772413310357908
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,8 @@ MonoBehaviour:
     assetPath: Assets/_Game/Scenes/Bootstrap.unity
   - reference: {fileID: 102900000, guid: be2de9ff549fcc24a80b02b13bbfa110, type: 3}
     assetPath: Assets/_Game/Scenes/UIRoot.unity
+  - reference: {fileID: 102900000, guid: 9f0d7147beb71ce4e9c9a8e1c9fd13e6, type: 3}
+    assetPath: Assets/_Game/Prefabs/UI/Common
   - reference: {fileID: 102900000, guid: e189c94fa2a6e4b4c966f66625d87e1f, type: 3}
     assetPath: Assets/_Game/Prefabs/UI/Views
   - reference: {fileID: 102900000, guid: 001eede803167cc45bcf43d33d416023, type: 3}
