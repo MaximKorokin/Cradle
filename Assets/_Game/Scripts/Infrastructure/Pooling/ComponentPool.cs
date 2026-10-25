@@ -3,55 +3,68 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-public sealed class ComponentPool<T> where T : Component, IPoolable
+namespace Assets._Game.Scripts.Infrastructure.Pooling
 {
-    private readonly IObjectResolver _resolver;
-    private readonly T _prefab;
-    private readonly Transform _root;
-    private readonly Stack<T> _stack = new();
-
-    public ComponentPool(IObjectResolver resolver, T prefab, Transform root = null, int prewarm = 0)
+    public sealed class ComponentPool<T> where T : Component, IPoolable
     {
-        _resolver = resolver;
-        _prefab = prefab;
-        _root = root;
-        if (prewarm > 0) Prewarm(prewarm);
-    }
+        private readonly IObjectResolver _resolver;
+        private readonly T _prefab;
+        private readonly Transform _root;
+        private readonly Stack<T> _stack = new();
 
-    public void Prewarm(int count)
-    {
-        for (int i = 0; i < count; i++)
+        public ComponentPool(IObjectResolver resolver, T prefab, Transform root = null, int prewarm = 0)
         {
-            var instance = _resolver.Instantiate(_prefab, _root);
-            instance.Prefab = _prefab;
-            instance.gameObject.SetActive(false);
-            _stack.Push(instance);
+            _resolver = resolver;
+            _prefab = prefab;
+            _root = root;
+            if (prewarm > 0) Prewarm(prewarm);
         }
-    }
 
-    public T Take(Vector3 position, Quaternion rotation, Transform parent = null)
-    {
-        var obj = _stack.Count > 0 ? _stack.Pop() : Object.Instantiate(_prefab);
-        obj.Prefab = _prefab;
+        public void Prewarm(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var instance = _resolver.Instantiate(_prefab, _root);
+                instance.Prefab = _prefab;
+                instance.gameObject.SetActive(false);
+                _stack.Push(instance);
+            }
+        }
 
-        var transform = obj.transform;
-        transform.SetParent(parent != null ? parent : _root, false);
-        transform.SetPositionAndRotation(position, rotation);
+        public T Take(Vector3 position, Quaternion rotation, Transform parent = null)
+        {
+            var obj = _stack.Count > 0 ? _stack.Pop() : _resolver.Instantiate(_prefab, parent != null ? parent : _root);
+            obj.Prefab = _prefab;
 
-        obj.gameObject.SetActive(true);
-        obj.OnTake();
+            obj.transform.SetPositionAndRotation(position, rotation);
 
-        return obj;
-    }
+            obj.OnTake();
+            obj.gameObject.SetActive(true);
 
-    public void Return(T obj)
-    {
-        if (obj == null) return;
+            return obj;
+        }
 
-        obj.OnReturn();
-        obj.gameObject.SetActive(false);
-        obj.transform.SetParent(_root, worldPositionStays: false);
+        public void Return(T obj)
+        {
+            if (obj == null) return;
 
-        _stack.Push(obj);
+            if (_stack.Contains(obj))
+            {
+                Debug.LogWarning($"Object {obj.name} is already in the pool.");
+                return;
+            }
+
+            if (obj.Prefab != _prefab)
+            {
+                Debug.LogWarning($"Object {obj.name} does not belong to this pool.");
+                return;
+            }
+
+            obj.OnReturn();
+            obj.gameObject.SetActive(false);
+            obj.transform.SetParent(_root, worldPositionStays: false);
+
+            _stack.Push(obj);
+        }
     }
 }

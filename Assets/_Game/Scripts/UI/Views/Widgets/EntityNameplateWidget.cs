@@ -1,14 +1,13 @@
-﻿using Assets._Game.Scripts.UI.Common;
+﻿using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using TMPro;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views.Widgets
 {
-    public sealed class EntityNameplateWidget : MonoBehaviour
+    public sealed class EntityNameplateWidget : UIViewBase<EntityNameplateWidgetData>
     {
-        private EntityNameplateWidgetData data;
-
         [SerializeField]
         private RectTransform _rect;
         [SerializeField]
@@ -18,12 +17,10 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         [SerializeField]
         private FillBar _healthFillBar;
 
-        public void Bind(EntityNameplateWidgetData entityNameplateViewData)
+        protected override void Awake()
         {
-            data = entityNameplateViewData;
-
-            entityNameplateViewData.Changed += OnDataChanged;
-            OnDataChanged();
+            base.Awake();
+            transform.DisableRaycastTargets();
         }
 
         public void SetPosition(Vector3 screenPosition)
@@ -37,7 +34,7 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
                 gameObject.SetActive(value);
         }
 
-        private void OnDataChanged()
+        protected override void Render(EntityNameplateWidgetData data)
         {
             _levelText.text = data.Level;
             _nameText.text = data.Name;

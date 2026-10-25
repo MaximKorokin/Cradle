@@ -115,7 +115,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
 
         public Vector2? LoadWindow(WindowId windowId)
         {
-            if (_currentSave.WindowSaves != null && _currentSave.WindowSaves.TryGetValue(windowId, out var windowSave))
+            if (_currentSave != null && _currentSave.WindowSaves != null && _currentSave.WindowSaves.TryGetValue(windowId, out var windowSave))
             {
                 return windowSave.Position;
             }

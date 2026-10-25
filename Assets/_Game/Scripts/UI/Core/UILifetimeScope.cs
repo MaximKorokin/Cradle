@@ -107,6 +107,8 @@ namespace Assets._Game.Scripts.UI.Core
             builder.Register<StatusEffectViewData>(Lifetime.Transient);
             builder.Register<EntityStatusViewData>(Lifetime.Transient);
             builder.Register<ItemEnchantingViewData>(Lifetime.Transient);
+
+            builder.Register<EntityNameplateWidgetData>(Lifetime.Transient);
         }
 
         private void RegisterViewControllers(IContainerBuilder builder)

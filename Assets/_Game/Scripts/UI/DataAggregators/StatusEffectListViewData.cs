@@ -10,11 +10,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         private StatusEffectModule _statusEffectModule;
 
-        public IEnumerable<StatusEffectSnapshot> Buffs =>
-            Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
+        public IEnumerable<StatusEffectSnapshot> Buffs => Entity == null
+            ? Enumerable.Empty<StatusEffectSnapshot>()
+            : Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Buff).Select(s => s.Snapshot);
 
-        public IEnumerable<StatusEffectSnapshot> Debuffs =>
-            Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
+        public IEnumerable<StatusEffectSnapshot> Debuffs => Entity == null
+            ? Enumerable.Empty<StatusEffectSnapshot>()
+            : Entity.GetModule<StatusEffectModule>().StatusEffects.GetStatusEffectsForCategory(StatusEffectCategory.Debuff).Select(s => s.Snapshot);
 
         public StatusEffectListViewData(EntityRepository entityRepository) : base(entityRepository)
         {
@@ -22,8 +24,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnBoundEntityChanged()
         {
-            _statusEffectModule = Entity.GetModule<StatusEffectModule>();
-            _statusEffectModule.StatusEffects.StatusEffectChanged -= OnStatusEffectChanged;
+            if (_statusEffectModule != null)
+            {
+                _statusEffectModule.StatusEffects.StatusEffectChanged -= OnStatusEffectChanged;
+            }
+
+            if (Entity == null || !Entity.TryGetModule<StatusEffectModule>(out _statusEffectModule)) return;
+
             _statusEffectModule.StatusEffects.StatusEffectChanged += OnStatusEffectChanged;
         }
 

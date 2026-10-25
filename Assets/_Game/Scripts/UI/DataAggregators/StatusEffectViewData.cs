@@ -25,9 +25,12 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnBoundEntityChanged()
         {
-            Entity.TryGetModule(out _statusEffectModule);
             if (_statusEffectModule != null)
-                _statusEffectModule.StatusEffects.StatusEffectChanged += OnStatusEffectChanged;
+                _statusEffectModule.StatusEffects.StatusEffectChanged -= OnStatusEffectChanged;
+
+            if (!Entity.TryGetModule(out _statusEffectModule)) return;
+
+            _statusEffectModule.StatusEffects.StatusEffectChanged += OnStatusEffectChanged;
         }
 
         public override void Dispose()

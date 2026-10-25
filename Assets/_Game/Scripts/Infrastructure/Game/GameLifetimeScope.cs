@@ -11,6 +11,7 @@ using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Persistence;
 using Assets._Game.Scripts.Infrastructure.Persistence.Codecs;
+using Assets._Game.Scripts.Infrastructure.Pooling;
 using Assets._Game.Scripts.Infrastructure.Querying;
 using Assets._Game.Scripts.Infrastructure.Services;
 using Assets._Game.Scripts.Infrastructure.Systems;
@@ -132,6 +133,7 @@ namespace Assets._Game.Scripts.Infrastructure
             builder.Register<CameraFollowSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<FloatingTextSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<EntityReviveSystem>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<PlayerRevivePromptSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<CraftingSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<QuestSystem>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ResetSystem>(Lifetime.Singleton).AsImplementedInterfaces();

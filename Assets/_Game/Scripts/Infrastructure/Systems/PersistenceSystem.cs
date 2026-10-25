@@ -85,6 +85,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             SavePlayerLocation();
 
             _saveService.SaveGame(r.SaveName);
+
+            GlobalEventBus.Publish(new GameSavedEvent(r.SaveName));
         }
 
         private void OnLoadGameRequested(LoadGameRequest r)
@@ -96,6 +98,8 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
                 Vector2.zero,
                 null,
                 new IEntityPostInitializer[] { new PlayerEntityPostInitializer(_playerContext) }));
+
+            GlobalEventBus.Publish(new GameLoadedEvent(r.SaveName));
         }
 
         private void SavePlayerLocation()
@@ -156,6 +160,26 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         public string SaveName { get; }
 
         public LoadGameRequest(string saveName)
+        {
+            SaveName = saveName;
+        }
+    }
+
+    public readonly struct GameSavedEvent : IGlobalEvent
+    {
+        public string SaveName { get; }
+
+        public GameSavedEvent(string saveName)
+        {
+            SaveName = saveName;
+        }
+    }
+
+    public readonly struct GameLoadedEvent : IGlobalEvent
+    {
+        public string SaveName { get; }
+
+        public GameLoadedEvent(string saveName)
         {
             SaveName = saveName;
         }

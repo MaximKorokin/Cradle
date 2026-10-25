@@ -11,7 +11,6 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
     {
         private readonly IObjectResolver _objectResolver;
 
-        private readonly List<GameObject> _instantiatedGameObjects = new();
         private readonly List<DataAggregatorController<StatusEffectView, StatusEffectViewData>> _viewControllers = new();
 
         public StatusEffectListViewController(IObjectResolver objectResolver)
@@ -39,7 +38,6 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
         {
             var view = _objectResolver.Instantiate(template, parent);
             view.gameObject.SetActive(true);
-            _instantiatedGameObjects.Add(view.gameObject);
 
             var data = _objectResolver.Resolve<StatusEffectViewData>();
             data.SetStatusEffect(statusEffect.Definition);
@@ -54,14 +52,11 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
             foreach (var controller in _viewControllers)
             {
                 controller.Dispose();
+
+                if (controller.View != null && controller.View.gameObject != null)
+                    Object.Destroy(controller.View.gameObject);
             }
             _viewControllers.Clear();
-
-            foreach (var obj in _instantiatedGameObjects)
-            {
-                Object.Destroy(obj);
-            }
-            _instantiatedGameObjects.Clear();
         }
     }
 }

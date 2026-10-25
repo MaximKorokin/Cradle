@@ -49,6 +49,10 @@ namespace Assets._Game.Scripts.Entities.Control
         protected override void OnComplete()
         {
             Entity.GetModule<RestrictionStateModule>().Remove(RestrictionState.Feared);
+            if (Entity.TryGetModule(out IntentModule intent))
+            {
+                intent.SetMove(new(Vector2.zero));
+            }
         }
     }
 

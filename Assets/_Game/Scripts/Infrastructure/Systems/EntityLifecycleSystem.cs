@@ -24,9 +24,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             _entityFactory = entityFactory;
             _entityViewService = entityViewService;
 
-            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackGlobalEvent<SpawnEntityRequest>(OnEntitySpawnRequested);
             TrackGlobalEvent<DespawnEntityRequest>(OnEntityDespawnRequested);
+
+            TrackEntityEvent<RestrictionStateChangedEvent>(OnRestrictionStateChanged);
             TrackEntityCreatedEvent(OnEntityCreated, false);
         }
 
@@ -52,13 +53,16 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnEntityDied(EntityDiedEvent e)
+        private void OnRestrictionStateChanged(Entity entity, RestrictionStateChangedEvent e)
         {
-            if (e.Victim.TryGetModule<DespawnModule>(out var module))
+            if (e.State == RestrictionState.Dead && e.Kind == RestrictionStateChangeKind.Added)
             {
-                if (module.Trigger == DespawnCounterStartTrigger.OnDeath)
+                if (entity.TryGetModule<DespawnModule>(out var module))
                 {
-                    module.StartDespawnTime = Time.time;
+                    if (module.Trigger == DespawnCounterStartTrigger.OnDeath)
+                    {
+                        module.StartDespawnTime = Time.time;
+                    }
                 }
             }
         }

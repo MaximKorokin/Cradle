@@ -7,38 +7,39 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         where TView : UIViewBase<TData>
         where TData : IDataAggregator
     {
-        private readonly TView _view;
-        private readonly TData _data;
+        public readonly TView View;
+        public readonly TData Data;
 
         public DataAggregatorController(TView view, TData data)
         {
-            _view = view;
-            _data = data;
+            View = view;
+            Data = data;
 
-            _data.Changed -= HandleDataChanged;
-            _data.Changed += HandleDataChanged;
-            _data.Invalidated -= HandleDataInvalidated;
-            _data.Invalidated += HandleDataInvalidated;
+            Data.Changed -= HandleDataChanged;
+            Data.Changed += HandleDataChanged;
+            Data.Invalidated -= HandleDataInvalidated;
+            Data.Invalidated += HandleDataInvalidated;
             HandleDataChanged();
         }
 
         public void Dispose()
         {
-            if (_data != null)
+            if (Data != null)
             {
-                _data.Changed -= HandleDataChanged;
-                _data.Invalidated -= HandleDataInvalidated;
+                Data.Changed -= HandleDataChanged;
+                Data.Invalidated -= HandleDataInvalidated;
+                Data.Dispose();
             }
         }
 
         private void HandleDataInvalidated()
         {
-            _view.gameObject.SetActive(false);
+            View.gameObject.SetActive(false);
         }
 
         private void HandleDataChanged()
         {
-            _view.RequestRender(_data);
+            View.RequestRender(Data);
         }
     }
 }

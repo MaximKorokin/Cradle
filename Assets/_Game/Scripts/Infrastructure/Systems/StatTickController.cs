@@ -11,6 +11,7 @@ namespace Assets._Game.Scripts.Entities.Stats
         public StatTickController(StatsConfig statsConfig)
         {
             _cooldownCounter = new(1 / statsConfig.TickRate);
+            _cooldownCounter.Reset();
         }
 
         public void Tick(Entity entity)

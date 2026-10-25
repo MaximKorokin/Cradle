@@ -28,7 +28,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (_counts[index] == 1)
                 _state |= state;
 
-            Publish(new RestrictionStateChangedEvent(State));
+            Publish(new RestrictionStateChangedEvent(state, RestrictionStateChangeKind.Added));
         }
 
         public void Remove(RestrictionState state)
@@ -43,7 +43,7 @@ namespace Assets._Game.Scripts.Entities.Modules
             if (_counts[index] == 0)
                 _state &= ~state;
 
-            Publish(new RestrictionStateChangedEvent(State));
+            Publish(new RestrictionStateChangedEvent(state, RestrictionStateChangeKind.Removed));
         }
 
         private static int BitIndex(RestrictionState state)
@@ -71,11 +71,19 @@ namespace Assets._Game.Scripts.Entities.Modules
     public readonly struct RestrictionStateChangedEvent : IEntityEvent
     {
         public readonly RestrictionState State;
+        public readonly RestrictionStateChangeKind Kind;
 
-        public RestrictionStateChangedEvent(RestrictionState state)
+        public RestrictionStateChangedEvent(RestrictionState state, RestrictionStateChangeKind kind)
         {
             State = state;
+            Kind = kind;
         }
+    }
+
+    public enum RestrictionStateChangeKind
+    {
+        Added,
+        Removed
     }
 
     public class RestrictionStateModuleFactory : IEntityModuleFactory

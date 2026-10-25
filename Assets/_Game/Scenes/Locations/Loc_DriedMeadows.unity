@@ -321,7 +321,6 @@ Transform:
   - {fileID: 277800475}
   - {fileID: 2067831397}
   - {fileID: 336965156}
-  - {fileID: 637888977}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &334939335
@@ -336,13 +335,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fccb608f1e6ea341a404d663f3c4e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _autoLoadChildrenMarkers: 1
   <LocationEntranceMarkers>k__BackingField:
   - {fileID: 277800476}
   <LocationTransitionMarkers>k__BackingField:
   - {fileID: 2067831398}
-  <EntitySpawnSpotMarkers>k__BackingField:
-  - {fileID: 336965157}
-  - {fileID: 637888978}
+  <EntitySpawnSpotMarkers>k__BackingField: []
 --- !u!1 &336965155
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,51 +436,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CameraBorder>k__BackingField: {fileID: 1664930261}
---- !u!1 &637888976
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 637888977}
-  - component: {fileID: 637888978}
-  m_Layer: 0
-  m_Name: SpawnPoint2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &637888977
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637888976}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.84, y: 1.44, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 334939334}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &637888978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637888976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8dfc52df7b61d447a5b56a5fdb9370e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Definition>k__BackingField: {fileID: 11400000, guid: 6d42c3a076fa771408cd3654a93a59cf, type: 2}
 --- !u!1 &775573827
 GameObject:
   m_ObjectHideFlags: 0

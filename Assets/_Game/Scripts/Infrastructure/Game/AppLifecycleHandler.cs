@@ -19,6 +19,8 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         private readonly CooldownCounter _autosaveCooldownCounter;
 
+        private bool _canAutosave = false;
+
         public AppLifecycleHandler(
             IGlobalEventBus globalEventBus,
             SaveConfig saveConfig)
@@ -27,6 +29,13 @@ namespace Assets._Game.Scripts.Infrastructure.Game
             _saveConfig = saveConfig;
 
             _autosaveCooldownCounter = new(_saveConfig.AutosaveTime);
+
+            _globalEventBus.SubscribeOnce<GameLoadedEvent>(OnGameLoaded);
+        }
+
+        private void OnGameLoaded(GameLoadedEvent e)
+        {
+            _canAutosave = true;
         }
 
         public void OnUpdate()
@@ -54,7 +63,10 @@ namespace Assets._Game.Scripts.Infrastructure.Game
 
         private void PublishSaveGameRequest()
         {
-            _globalEventBus.Publish(new SaveGameRequest());
+            if (_canAutosave)
+            {
+                _globalEventBus.Publish(new SaveGameRequest());
+            }
         }
     }
 }

@@ -69,6 +69,7 @@ namespace Assets._Game.Scripts.Infrastructure.Persistence
     public sealed class HealthSave
     {
         public float CurrentHealth;
+        public bool IsDead;
     }
 
     public sealed class StatBaseSave

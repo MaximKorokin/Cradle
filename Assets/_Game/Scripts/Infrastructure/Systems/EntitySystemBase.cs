@@ -30,14 +30,15 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             IterateAllEntities(RegisterEntity);
         }
 
-        protected void TrackEntityEvent<T>(Action<Entity, T> handler)
+        protected void TrackEntityEvent<T>(Action<Entity, T> handler, EntityQuery customQuery = default)
             where T : struct, IEntityEvent
         {
             void Bind(Entity entity, List<IDisposable> subscriptions)
             {
                 var subscription = entity.Subscribe<T>(evt =>
                 {
-                    if (!EntityQuery.Match(entity))
+                    var query = customQuery.Equals(default) ? EntityQuery : customQuery;
+                    if (!query.Match(entity))
                         return;
 
                     handler(entity, evt);

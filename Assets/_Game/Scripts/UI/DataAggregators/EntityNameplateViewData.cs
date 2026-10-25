@@ -1,12 +1,11 @@
 ﻿using Assets._Game.Scripts.Entities;
 using Assets._Game.Scripts.Entities.Modules;
-using System;
 
 namespace Assets._Game.Scripts.UI.DataAggregators
 {
-    public class EntityNameplateWidgetData : DataAggregatorBase
+    public class EntityNameplateWidgetData : EntityBoundDataAggregatorBase
     {
-        private readonly HealthModule _healthModule;
+        private HealthModule _healthModule;
 
         public string Level { get; private set; }
         public string Name { get; private set; }
@@ -14,16 +13,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         public bool ShouldViewHealthBar => _healthModule != null;
 
-        public EntityNameplateWidgetData(Entity entity)
+        public EntityNameplateWidgetData(EntityRepository entityRepository) : base(entityRepository)
         {
-            if (entity.TryGetModule<HealthModule>(out _healthModule))
-            {
-                HealthRatio = _healthModule.HealthRatio;
-                _healthModule.Changed += OnHealthChanged;
-            }
-
-            Level = entity.TryGetModule<LevelingModule>(out var levelingModule) ? levelingModule.Level.ToString() : "";
-            Name = entity.Definition.DisplayName;
         }
 
         public override void Dispose()
@@ -36,13 +27,27 @@ namespace Assets._Game.Scripts.UI.DataAggregators
             }
         }
 
-        private void OnHealthChanged(float previous, float current)
+        protected override void OnBoundEntityChanged()
         {
             if (_healthModule != null)
             {
-                HealthRatio = _healthModule.HealthRatio;
+                _healthModule.Changed -= OnHealthChanged;
             }
 
+            if (!Entity.TryGetModule<HealthModule>(out _healthModule)) return;
+
+            HealthRatio = _healthModule.HealthRatio;
+            _healthModule.Changed += OnHealthChanged;
+
+            Level = Entity.TryGetModule<LevelingModule>(out var levelingModule) ? levelingModule.Level.ToString() : "";
+            Name = Entity.Definition.DisplayName;
+        }
+
+        private void OnHealthChanged(float previous, float current)
+        {
+            if (_healthModule == null || HealthRatio == _healthModule.HealthRatio) return;
+
+            HealthRatio = _healthModule.HealthRatio;
             NotifyChanged();
         }
     }

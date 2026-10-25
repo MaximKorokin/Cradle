@@ -79,21 +79,21 @@ namespace Assets._Game.Scripts.Locations.Markers
             }
         }
 
-        public int GetSpawnAmount(string entityDefinitionId)
+        public int GetAvailableSpawnsAmount(string entityDefinitionId)
         {
             if (!_definition.RespawnEnabled) return 0;
             if (!ValidateEntityDefinitionId(entityDefinitionId)) return 0;
 
             var cooldowns = _respawnCooldowns[entityDefinitionId];
-            var spawnAmount = 0;
+            var spawnsAmount = 0;
 
             for (int i = 0; i < cooldowns.Length; i++)
             {
                 if (!cooldowns[i].IsSpawned && cooldowns[i].Cooldown.IsOver())
-                    spawnAmount++;
+                    spawnsAmount++;
             }
 
-            return spawnAmount;
+            return spawnsAmount;
         }
 
         public void MarkSpawned(string entityDefinitionId)
@@ -104,7 +104,7 @@ namespace Assets._Game.Scripts.Locations.Markers
 
             for (int i = 0; i < cooldowns.Length; i++)
             {
-                if (!cooldowns[i].IsSpawned)
+                if (!cooldowns[i].IsSpawned && cooldowns[i].Cooldown.IsOver())
                 {
                     cooldowns[i].IsSpawned = true;
                     return;

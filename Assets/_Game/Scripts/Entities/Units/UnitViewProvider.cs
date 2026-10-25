@@ -1,5 +1,6 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Configs;
 using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Infrastructure.Pooling;
 using Assets._Game.Scripts.Shared.Extensions;
 using UnityEngine;
 

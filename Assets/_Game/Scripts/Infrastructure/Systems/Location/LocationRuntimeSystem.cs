@@ -84,7 +84,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems.Location
                 for (int j = 0; j < spot.EntityDefinitions.Count; j++)
                 {
                     var entityDefinition = spot.EntityDefinitions[j];
-                    var spawnAmount = spot.GetSpawnAmount(entityDefinition.Id);
+                    var spawnAmount = spot.GetAvailableSpawnsAmount(entityDefinition.Id);
                     for (int k = 0; k < spawnAmount; k++)
                     {
                         globalEventBus.Publish(new SpawnEntityRequest(

@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-public interface IPoolable
+namespace Assets._Game.Scripts.Infrastructure.Pooling
 {
-    Component Prefab { get; set; }
+    public interface IPoolable
+    {
+        Component Prefab { get; set; }
 
-    void OnTake();
+        void OnTake();
 
-    void OnReturn();
+        void OnReturn();
+    }
 }

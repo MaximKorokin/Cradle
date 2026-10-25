@@ -102,26 +102,41 @@ namespace Assets._Game.Scripts.Entities.Modules
 
         public void Apply(Entity entity, EntitySave entitySave)
         {
-            if (entitySave.HealthSave == null || !entity.TryGetModule<HealthModule>(out var healthModule)) return;
+            if (entitySave.HealthSave == null) return;
+            if (!entity.TryGetModule<HealthModule>(out var healthModule)) return;
+            if (!entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule)) return;
 
             var currentHealth = entitySave.HealthSave.CurrentHealth;
             if (entity.IsCreated)
             {
-                healthModule.SetCurrentHealth(currentHealth);
+                ApplyHealth(entitySave.HealthSave, healthModule, restrictionStateModule);
             }
             else
             {
-                entity.SubscribeOnce<EntityCreatedEvent>(_ => healthModule.SetCurrentHealth(currentHealth), int.MinValue);
+                entity.SubscribeOnce<EntityViewBoundEvent>(
+                    _ => ApplyHealth(entitySave.HealthSave, healthModule, restrictionStateModule),
+                    int.MinValue);
+            }
+        }
+
+        private void ApplyHealth(HealthSave healthSave, HealthModule healthModule, RestrictionStateModule restrictionStateModule)
+        {
+            healthModule.SetCurrentHealth(healthSave.CurrentHealth);
+            if (healthSave.IsDead)
+            {
+                restrictionStateModule.Add(RestrictionState.Dead);
             }
         }
 
         public void Save(Entity entity, EntitySave entitySave)
         {
             if (!entity.TryGetModule<HealthModule>(out var healthModule)) return;
+            if (!entity.TryGetModule<RestrictionStateModule>(out var restrictionStateModule)) return;
 
             entitySave.HealthSave = new HealthSave
             {
-                CurrentHealth = healthModule.CurrentHealth
+                CurrentHealth = healthModule.CurrentHealth,
+                IsDead = restrictionStateModule.Has(RestrictionState.Dead)
             };
         }
     }

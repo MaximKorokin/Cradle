@@ -25,12 +25,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             _resolver = resolver;
 
-            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackGlobalEvent<EntityDespawningEvent>(OnEntityDespawning);
 
             TrackEntityEvent<StatusEffectChangedEvent>(OnStatusEffectChanged);
             TrackEntityEvent<EntityRepositionRequest>(OnEntityRepositionRequested);
             TrackEntityEvent<EntityAiToggleRequest>(OnEntityAiToggleRequested);
+            TrackEntityEvent<RestrictionStateChangedEvent>(OnRestrictionStateChanged, new(RestrictionState.Disabled));
             TrackEntityCreatedEvent(OnEntityCreated, false);
         }
 
@@ -109,9 +109,12 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             return best;
         }
 
-        private void OnEntityDied(EntityDiedEvent e)
+        private void OnRestrictionStateChanged(Entity entity, RestrictionStateChangedEvent e)
         {
-            ResetControl(e.Victim);
+            if (e.State == RestrictionState.Dead && e.Kind == RestrictionStateChangeKind.Added)
+            {
+                ResetControl(entity);
+            }
         }
 
         private void OnEntityDespawning(EntityDespawningEvent e)

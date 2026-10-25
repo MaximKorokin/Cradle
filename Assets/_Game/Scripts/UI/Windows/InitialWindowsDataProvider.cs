@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using VContainer;
 
 namespace Assets._Game.Scripts.UI.Windows
 {

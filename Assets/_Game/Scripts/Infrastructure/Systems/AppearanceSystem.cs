@@ -26,10 +26,11 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             EntityRepository repository) : base(globalEventBus, repository)
         {
             _equipmentVisualHandler = new EquipmentVisualHandler();
-            TrackGlobalEvent<EntityDiedEvent>(OnEntityDied);
             TrackEntityCreatedEvent(OnEntityCreated);
             TrackEntityEvent<EquipmentChangedEvent>(OnEquipmentChanged);
             TrackEntityEvent<StatChangedEvent>(OnStatChanged);
+
+            TrackEntityEvent<RestrictionStateChangedEvent>(OnRestrictionStateChanged);
         }
 
         private void OnEntityCreated(Entity entity)
@@ -104,10 +105,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             }
         }
 
-        private void OnEntityDied(EntityDiedEvent e)
+        private void OnRestrictionStateChanged(Entity entity, RestrictionStateChangedEvent e)
         {
-            var appearance = e.Victim.GetModule<AppearanceModule>();
-            appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.ToDie, true);
+            if (e.State == RestrictionState.Dead && e.Kind == RestrictionStateChangeKind.Added)
+            {
+                var appearance = entity.GetModule<AppearanceModule>();
+                appearance.RequestSetAnimatorValue(EntityAnimatorParameterName.ToDie, true);
+            }
         }
 
         public void Tick(float delta)

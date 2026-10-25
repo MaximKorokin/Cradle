@@ -7,29 +7,39 @@ using Assets._Game.Scripts.UI.Core;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views.Widgets;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Assets._Game.Scripts.UI.Systems
 {
     public sealed class EntityNameplateUISystem : UISystemBase
     {
+        private IObjectResolver _resolver;
+        private EntityRepository _entityRepository;
+
         private Camera _camera;
         private RectTransform _root;
         private EntityNameplateWidget _entityNameplateViewPrefab;
         private EntityViewService _entityViewService;
 
-        private readonly Dictionary<EntityView, EntityNameplateWidget> _items = new();
+        private readonly Dictionary<EntityView, DataAggregatorController<EntityNameplateWidget, EntityNameplateWidgetData>> _items = new();
 
         [Inject]
         private void Construct(
+            IObjectResolver resolver,
             IGlobalEventBus globalEventBus,
+            EntityRepository entityRepository,
             ICameraService cameraService,
             UIRootReferences roots,
             EntityNameplateWidget entityNameplateViewPrefab,
             EntityViewService entityViewService)
         {
             BaseConstruct(globalEventBus);
+
+            _resolver = resolver;
+            _entityRepository = entityRepository;
 
             _camera = cameraService.Camera;
             _root = roots.NameplatesRoot;
@@ -47,7 +57,7 @@ namespace Assets._Game.Scripts.UI.Systems
             var view = _entityViewService.GetEntityView(e.Entity);
             if (view != null)
             {
-                Register(view, Create(e.Entity, view));
+                CreateNameplate(e.Entity, view);
             }
         }
 
@@ -56,26 +66,12 @@ namespace Assets._Game.Scripts.UI.Systems
             var view = _entityViewService.GetEntityView(e.Entity);
             if (view == null) return;
 
-            var nameplate = _items.GetValueOrDefault(view);
-            if (nameplate == null) return;
-
-            Unregister(view);
-            Destroy(nameplate.gameObject);
-        }
-
-        private void Register(EntityView entityView, EntityNameplateWidget view)
-        {
-            _items[entityView] = view;
-        }
-
-        private void Unregister(EntityView entityView)
-        {
-            _items.Remove(entityView);
+            DestroyNameplate(view);
         }
 
         private void LateUpdate()
         {
-            foreach (var (target, view) in _items)
+            foreach (var (target, controller) in _items)
             {
                 if (target == null)
                     continue;
@@ -91,23 +87,48 @@ namespace Assets._Game.Scripts.UI.Systems
 
                 if (!visible)
                 {
-                    view.SetVisible(false);
+                    controller.View.SetVisible(false);
                     continue;
                 }
 
-                view.SetVisible(true);
-
+                controller.View.SetVisible(true);
                 var screenPosition = _camera.WorldToScreenPoint(worldPosition);
-                view.SetPosition(screenPosition);
+                controller.View.SetPosition(screenPosition);
             }
         }
 
-        private EntityNameplateWidget Create(Entity entity, EntityView entityView)
+        private void CreateNameplate(Entity entity, EntityView entityView)
         {
-            var view = Instantiate(_entityNameplateViewPrefab, _root);
-            view.Bind(new EntityNameplateWidgetData(entity));
-            Register(entityView, view);
-            return view;
+            var view = _resolver.Instantiate(_entityNameplateViewPrefab, _root);
+            var data = _resolver.Resolve<EntityNameplateWidgetData>();
+            data.SetEntityId(_entityRepository.Observe(entity.Id));
+
+            var controller = new DataAggregatorController<EntityNameplateWidget, EntityNameplateWidgetData>(view, data);
+
+            _items[entityView] = controller;
+        }
+
+        private void DestroyNameplate(EntityView entityView)
+        {
+            if (_items.TryGetValue(entityView, out var controller))
+            {
+                controller.Dispose();
+
+                if (controller.View != null && controller.View.gameObject != null)
+                    Destroy(controller.View.gameObject);
+
+                _items.Remove(entityView);
+            }
+        }
+
+        public override void Dispose()
+        {
+            foreach (var key in _items.Keys.ToArray())
+            {
+                DestroyNameplate(key);
+            }
+
+            base.Dispose();
         }
     }
 }
