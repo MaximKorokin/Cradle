@@ -48,12 +48,6 @@ namespace Assets._Game.Scripts.Entities
         public string PersistenceKey;
     }
 
-    public class StorageModuleDefinition : EntityModuleDefinition
-    {
-        public int SlotsAmount;
-        public float Radius;
-    }
-
     public class InventoryModuleDefinition : EntityModuleDefinition
     {
         public int SlotsAmount;
@@ -129,32 +123,37 @@ namespace Assets._Game.Scripts.Entities
         public int Level;
     }
 
-    public sealed class ShopModuleDefinition : EntityModuleDefinition
-    {
-        [field: SerializeField]
-        public ShopDefinition ShopDefinition { get; private set; }
-        [field: SerializeField]
-        public float Radius { get; private set; }
-    }
-
     public sealed class QuestModuleDefinition : EntityModuleDefinition
     {
     }
 
-    public sealed class QuestGiverModuleDefinition : EntityModuleDefinition
+    public class PromptModuleDefinitionBase : EntityModuleDefinition
+    {
+        public string PromptText = "Interact";
+        public float Radius = 1;
+    }
+
+    public class StorageModuleDefinition : PromptModuleDefinitionBase
+    {
+        public int SlotsAmount;
+    }
+
+    public sealed class ShopModuleDefinition : PromptModuleDefinitionBase
+    {
+        [field: SerializeField]
+        public ShopDefinition ShopDefinition { get; private set; }
+    }
+
+    public sealed class QuestGiverModuleDefinition : PromptModuleDefinitionBase
     {
         [field: SerializeField]
         public QuestDefinition[] OfferedQuests { get; private set; }
-        [field: SerializeField]
-        public float Radius { get; private set; }
     }
 
-    public sealed class CraftingModuleDefinition : EntityModuleDefinition
+    public sealed class CraftingModuleDefinition : PromptModuleDefinitionBase
     {
         [field: SerializeField]
         public string CrafterName { get; private set; }
-        [field: SerializeField]
-        public float Radius { get; private set; }
         [field: SerializeField]
         public CraftingRecipeDefinition[] Recipes { get; private set; }
     }

@@ -54,6 +54,7 @@ MonoBehaviour:
         ManualItemUseSettings:
           HpPercent: 0
           OverrideStatusEffects: 0
+          CheckStatusEffectsLimit: 0
         DefaultItems:
         - {fileID: 11400000, guid: 82a9c7b7845f5a34c84f6db1d886e4ed, type: 2}
         - {fileID: 11400000, guid: 2e1acb10835da964d833bf9d4590d813, type: 2}
@@ -71,9 +72,10 @@ MonoBehaviour:
       type: {class: QuestGiverModuleDefinition, ns: Assets._Game.Scripts.Entities, asm: Assembly-CSharp}
       data:
         Enabled: 1
+        PromptText: Talk
+        Radius: 1
         <OfferedQuests>k__BackingField:
         - {fileID: 11400000, guid: 3113e2436c589184786bd870c92c3025, type: 2}
         - {fileID: 11400000, guid: 053ec541b82061b43a18c80258d5c86d, type: 2}
         - {fileID: 11400000, guid: 7ae19380592317443b55e214e78dc8ea, type: 2}
         - {fileID: 11400000, guid: d0adbd020681b5640a44b04d6fc670a8, type: 2}
-        <Radius>k__BackingField: 1
