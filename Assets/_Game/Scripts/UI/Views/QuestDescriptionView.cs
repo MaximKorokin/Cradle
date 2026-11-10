@@ -1,5 +1,7 @@
+using Assets._Game.Scripts.Shared.Unity;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using TMPro;
 using UnityEngine;
 
@@ -26,10 +28,23 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _experienceRewardText;
         [SerializeField]
-        private TMP_Text _itemRewardsText;
+        private RectTransform _itemRewardsParent;
+        [SerializeField]
+        private ItemStackWidget _itemRewardTemplate;
+
+        private readonly GameObjectCollection _instantiatedObjects = new();
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            _itemRewardTemplate.gameObject.SetActive(false);
+        }
 
         protected override void Render(QuestDescriptionViewData viewData)
         {
+            Clear();
+
             var quest = viewData.QuestData;
 
             if (_titleText != null)
@@ -75,15 +90,30 @@ namespace Assets._Game.Scripts.UI.Views
         private void RenderRewards(QuestStateDisplayData quest)
         {
             var hasExperienceRewards = _experienceRewardText != null && !string.IsNullOrWhiteSpace(quest.ExperienceRewardText);
-            var hasItemsRewards = _itemRewardsText != null && !string.IsNullOrWhiteSpace(quest.ItemRewardsText);
 
-            _rewardsInfo.gameObject.SetActive(hasExperienceRewards || hasItemsRewards);
+            _rewardsInfo.gameObject.SetActive(hasExperienceRewards);
 
             if (hasExperienceRewards)
                 _experienceRewardText.text = quest.ExperienceRewardText;
 
-            if (hasItemsRewards)
-                _itemRewardsText.text = quest.ItemRewardsText;
+            if (_itemRewardTemplate != null && _itemRewardsParent != null)
+            {
+                foreach (var item in quest.ItemRewards)
+                {
+                    var itemWidget = _instantiatedObjects.Instantiate(_itemRewardTemplate, _itemRewardsParent);
+                    itemWidget.gameObject.SetActive(true);
+                    itemWidget.Render(item);
+                }
+            }
+        }
+
+        private void Clear()
+        {
+            _descriptionText.text = string.Empty;
+            _requirementsText.text = string.Empty;
+            _objectivesText.text = string.Empty;
+            _experienceRewardText.text = string.Empty;
+            _instantiatedObjects.Clear();
         }
     }
 }

@@ -41,8 +41,8 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
 
         public (RectTransform Content, Action CleanAction) Handle(ITooltipSource tooltipSource)
         {
-            if (tooltipSource is ItemStackWidget containerSlot && containerSlot.ContainsData)
-                return HandleContainerSlot(containerSlot);
+            if (tooltipSource is ItemStackWidget itemStackWidget && (itemStackWidget.RenderData != null))
+                return HandleItemStackWidget(itemStackWidget);
             else if (tooltipSource is WindowOpenTrigger windowOpenTrigger)
                 return HandleWindowOpenTrigger(windowOpenTrigger);
             else if (tooltipSource is StatusEffectView statusEffectWidget)
@@ -51,12 +51,23 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             return (null, null);
         }
 
-        private (RectTransform Content, Action CleanAction) HandleContainerSlot(ItemStackWidget itemStackWidget)
+        private (RectTransform Content, Action CleanAction) HandleItemStackWidget(ItemStackWidget itemStackWidget)
         {
             _resolver.InstantiateFromPrefab(_config.ItemStackPreviewViewPrefab, ref _itemStackPreviewView);
 
-            _itemStackPreviewViewData.SetData(itemStackWidget.ContainerPath, itemStackWidget.GetItemSlotIndex(), false);
-            _itemStackPreviewViewData.SetEntityId(_entityRepository.Observe(itemStackWidget.ContainerPath.EntityId));
+            if (itemStackWidget.HasBindData)
+            {
+                _itemStackPreviewViewData.SetData(itemStackWidget.ContainerPath, itemStackWidget.GetItemSlotIndex(), false);
+                _itemStackPreviewViewData.SetEntityId(_entityRepository.Observe(itemStackWidget.ContainerPath.EntityId));
+            }
+            else if (itemStackWidget.RenderData != null)
+            {
+                _itemStackPreviewViewData.SetData(itemStackWidget.RenderData, false);
+            }
+            else
+            {
+                SLog.Error($"TooltipHandlerService: ItemStackWidget has no bind data and no render data. Widget: {itemStackWidget.name}");
+            }
             _currentController = new DataAggregatorController<ItemStackPreviewView, ItemStackPreviewViewData>(_itemStackPreviewView, _itemStackPreviewViewData);
             _itemStackPreviewView.gameObject.SetActive(true);
 

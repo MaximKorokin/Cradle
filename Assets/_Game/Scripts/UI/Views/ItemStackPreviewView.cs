@@ -162,7 +162,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void RenderUsableInfo(ItemStackDisplayData itemStack)
         {
-            // If the item is not usable, we don't need to show the usable info section.
             if (!itemStack.IsUsable) return;
 
             if (!TryVisualizeText(_usableEffectTextTemplate, _usableEffectsContainer, itemStack.UsableEffectsText)) return;

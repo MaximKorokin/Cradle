@@ -48,7 +48,15 @@ namespace Assets._Game.Scripts.Infrastructure.Storage
 
         public bool Contains(string id) => _byId.ContainsKey(id);
         public T Get(string id) => _byId[id];
-        public bool TryGet(string id, out T e) => _byId.TryGetValue(id, out e);
+        public bool TryGet(string id, out T e)
+        {
+            if (id == null)
+            {
+                e = default;
+                return false;
+            }
+            return _byId.TryGetValue(id, out e);
+        }
 
         /// <summary>Throws if the reference is unbound or the entry is removed.</summary>
         public T Get(EntryRef entryRef)

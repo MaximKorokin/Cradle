@@ -13,6 +13,8 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         private long _slotIndex;
         private bool _provideFullData;
 
+        private ItemStackSnapshot? _itemStackSnapshot;
+
         public ItemStackPreviewViewData(
             ItemStackFormatter itemStackFormatter,
             ItemContainerResolver itemContainerResolver,
@@ -44,11 +46,23 @@ namespace Assets._Game.Scripts.UI.DataAggregators
                 }
             }
 
+            var itemStackSnapshot = GetItemStackSnapshot();
+            SetData(itemStackSnapshot, provideFullData);
+
             _itemContainerPath = itemContainerPath;
             _slotIndex = slotIndex;
             _provideFullData = provideFullData;
+        }
 
-            var itemStackSnapshot = GetItemStackSnapshot();
+        /// <summary> Binds to snapshot directly </summary>
+        public void SetData(ItemStackSnapshot? itemStackSnapshot, bool provideFullData)
+        {
+            _itemContainerPath = default;
+            _slotIndex = default;
+            _provideFullData = provideFullData;
+
+            _itemStackSnapshot = itemStackSnapshot;
+
             if (itemStackSnapshot.HasValue && itemStackSnapshot.Value.InstanceData != null)
             {
                 itemStackSnapshot.Value.InstanceData.Changed -= OnItemStackInstanceDataChanged;
@@ -78,7 +92,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         private ItemStackSnapshot? GetItemStackSnapshot()
         {
-            if (_itemContainerPath == default) return null;
+            if (_itemContainerPath == default) return _itemStackSnapshot;
 
             if (!ItemContainerResolver.TryResolveContainer(_itemContainerPath, out var container)) return null;
             return container.Get(_slotIndex);

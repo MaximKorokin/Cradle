@@ -24,7 +24,7 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         public void Render(ItemStackSnapshot? itemStack, bool isInfinite, string priceText)
         {
             _itemStackWidget.Render(itemStack, Color.white);
-            if (!_itemStackWidget.ContainsData)
+            if (!_itemStackWidget.HasBindData)
             {
                 _priceText.text = string.Empty;
                 return;

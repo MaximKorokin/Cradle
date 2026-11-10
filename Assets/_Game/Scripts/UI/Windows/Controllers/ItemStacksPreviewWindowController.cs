@@ -26,8 +26,15 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
         {
             base.OnInitialize();
 
-            _primaryItemStackPreviewViewData.SetData(Arguments.ItemContainerPath, Arguments.ItemContainerSlot, true);
-            _primaryItemStackPreviewViewData.SetEntityId(_entityRepository.Observe(Arguments.ItemContainerPath.EntityId));
+            if (Arguments.ItemContainerPath.HasData)
+            {
+                _primaryItemStackPreviewViewData.SetData(Arguments.ItemContainerPath, Arguments.ItemContainerSlot, true);
+                _primaryItemStackPreviewViewData.SetEntityId(_entityRepository.Observe(Arguments.ItemContainerPath.EntityId));
+            }
+            else if (Arguments.ItemStackSnapshot != null)
+            {
+                _primaryItemStackPreviewViewData.SetData(Arguments.ItemStackSnapshot, true);
+            }
         }
     }
 
@@ -35,11 +42,20 @@ namespace Assets._Game.Scripts.UI.Windows.Controllers
     {
         public readonly ItemContainerPath ItemContainerPath;
         public readonly long ItemContainerSlot;
+        public readonly ItemStackSnapshot? ItemStackSnapshot;
 
         public ItemStacksPreviewWindowControllerArguments(ItemContainerPath itemContainerPath, long itemContainerSlot)
         {
             ItemContainerPath = itemContainerPath;
             ItemContainerSlot = itemContainerSlot;
+            ItemStackSnapshot = null;
+        }
+
+        public ItemStacksPreviewWindowControllerArguments(ItemStackSnapshot? itemStackSnapshot)
+        {
+            ItemContainerPath = default;
+            ItemContainerSlot = default;
+            ItemStackSnapshot = itemStackSnapshot;
         }
     }
 }

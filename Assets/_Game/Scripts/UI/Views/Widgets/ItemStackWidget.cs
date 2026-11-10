@@ -37,7 +37,9 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
         public ItemContainerPath ContainerPath => ItemStackPath.ContainerPath;
         public long SlotIndex => ItemStackPath.Slot;
 
-        public bool ContainsData { get; private set; }
+        public ItemStackSnapshot? RenderData { get; private set; }
+
+        public bool HasBindData { get; private set; }
 
         public event Action BindChanged;
 
@@ -45,7 +47,10 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         public virtual void Bind(ItemStackPath itemStackPath)
         {
+            HasBindData = itemStackPath.HasData;
+
             if (ItemStackPath == itemStackPath) return;
+
             ItemStackPath = itemStackPath;
             BindChanged?.Invoke();
         }
@@ -54,11 +59,10 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         public virtual void Render(ItemStackSnapshot? itemStack, Color color)
         {
-            ContainsData = itemStack != null;
-
+            RenderData = itemStack;
             _itemCooldownCounter = null;
 
-            if (!ContainsData)
+            if (itemStack == null)
             {
                 _itemImage.sprite = null;
                 _itemImage.enabled = false;
@@ -106,7 +110,7 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         public virtual bool CanStartDrag()
         {
-            return _canDrag && ContainsData;
+            return _canDrag && HasBindData && RenderData != null;
         }
 
         public RectTransform CreateDragDropVisual()
