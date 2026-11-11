@@ -23,9 +23,10 @@ MonoBehaviour:
   <Reward>k__BackingField:
     _experience: 0
     _itemRewards:
-    - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
-    - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
-    - {fileID: 11400000, guid: 81abfc73d36f517459482ec814a01ac5, type: 2}
+    - {fileID: 11400000, guid: debb587e079754b46b341fe72addcfeb, type: 2}
+    - {fileID: 11400000, guid: 512001369412b7b4aad7dea4bbc1b698, type: 2}
+    - {fileID: 11400000, guid: d5b5e2483479ede4681d96edbb3c4836, type: 2}
+    - {fileID: 11400000, guid: 9a4b43b665d6b0f44985561bdb68eaa7, type: 2}
   references:
     version: 2
     RefIds:

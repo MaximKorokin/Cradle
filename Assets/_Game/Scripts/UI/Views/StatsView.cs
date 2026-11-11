@@ -1,6 +1,6 @@
-﻿using Assets._Game.Scripts.UI.Views.Widgets;
+﻿using Assets._Game.Scripts.Shared.Unity;
 using Assets._Game.Scripts.UI.DataAggregators;
-using System.Collections.Generic;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using UnityEngine;
 
 namespace Assets._Game.Scripts.UI.Views
@@ -12,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private StatWidget _statTemplate;
 
-        private readonly List<StatWidget> _statViews = new();
+        private readonly GameObjectCollection _instantiatedObjects = new();
 
         protected override void Awake()
         {
@@ -26,19 +26,14 @@ namespace Assets._Game.Scripts.UI.Views
 
             foreach (var (stat, value) in statsViewData.Stats)
             {
-                var statView = Instantiate(_statTemplate, _statsParent);
-                _statViews.Add(statView);
+                var statView = _instantiatedObjects.Instantiate(_statTemplate, _statsParent);
                 statView.Render((stat, value));
             }
         }
 
         public void Clear()
         {
-            foreach (var statView in _statViews)
-            {
-                Destroy(statView.gameObject);
-            }
-            _statViews.Clear();
+            _instantiatedObjects.Clear();
         }
     }
 }

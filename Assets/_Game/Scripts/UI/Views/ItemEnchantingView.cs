@@ -1,8 +1,8 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.Shared.Unity;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +30,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _disabledEnchantEffectTemplate;
 
-        private readonly List<GameObject> _instantiatedTemplates = new();
+        private readonly GameObjectCollection _instantiatedObjects = new();
 
         private string _initialProbabilityText;
         private string _initialEnchantResultText;
@@ -87,7 +87,7 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 var template = bonus.IsEnabled ? _enchantEffectTemplate : _disabledEnchantEffectTemplate;
                 var obj = template.TryCreateFromFormattedTemplate(_enchantEffectsParent, $"+{bonus.Level}", bonus.BonusDescription);
-                _instantiatedTemplates.Add(obj);
+                _instantiatedObjects.Track(obj);
             }
 
             if (Data.CanEnchant())
@@ -105,11 +105,7 @@ namespace Assets._Game.Scripts.UI.Views
 
         private void Clear()
         {
-            for (int i = 0; i < _instantiatedTemplates.Count; i++)
-            {
-                Destroy(_instantiatedTemplates[i]);
-            }
-            _instantiatedTemplates.Clear();
+            _instantiatedObjects.Clear();
 
             _probabilityText.text = "";
             _enchantResultText.text = "";

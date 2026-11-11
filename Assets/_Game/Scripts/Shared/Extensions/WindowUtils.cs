@@ -1,4 +1,5 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
+using Assets._Game.Scripts.Shared.Utils;
 using Assets._Game.Scripts.UI.Systems;
 using Assets._Game.Scripts.UI.Windows;
 using Assets._Game.Scripts.UI.Windows.Controllers;
@@ -20,7 +21,9 @@ namespace Assets._Game.Scripts.Shared.Extensions
                         amount =>
                         {
                             onAmountSelected?.Invoke(amount);
-                        })));
+                        }),
+                    default,
+                    ScreenUtils.ScreenCenter));
         }
 
         public static void ShowAmountPickerIfNeeded(IGlobalEventBus globalEventBus, int amount, int maxAmount, Action<int> onAmountSelected)
@@ -46,7 +49,9 @@ namespace Assets._Game.Scripts.Shared.Extensions
                         confirmed =>
                         {
                             onDecision?.Invoke(confirmed);
-                        })));
+                        }),
+                    default,
+                    ScreenUtils.ScreenCenter));
         }
 
         public static void ShowConfirmationOrAmountPicker(IGlobalEventBus globalEventBus, int amount, int maxAmount, string title, string message, Action<int> onAmountSelected)

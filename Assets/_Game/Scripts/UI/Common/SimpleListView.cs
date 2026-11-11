@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Game.Scripts.Shared.Unity;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Assets._Game.Scripts.UI.Common
         [SerializeField]
         private SimpleListItemView _itemTemplate;
 
-        private readonly List<SimpleListItemView> _items = new();
+        private readonly GameObjectCollection _instantiatedObjects = new();
 
         public event Action<string> ElementInfoClicked;
         public event Action<string> ElementActionClicked;
@@ -28,9 +29,7 @@ namespace Assets._Game.Scripts.UI.Common
             foreach (var itemDefinition in itemDefinitions)
             {
                 var template = templateProvider != null ? templateProvider(itemDefinition) : _itemTemplate;
-                var item = Instantiate(template);
-                _items.Add(item);
-                item.transform.SetParent(_itemsParent, false);
+                var item = _instantiatedObjects.Instantiate(template, _itemsParent);
                 item.Render(itemDefinition);
                 item.InfoButtonClicked += OnItemInfoClicked;
                 item.ActionButtonClicked += OnItemClicked;
@@ -40,15 +39,7 @@ namespace Assets._Game.Scripts.UI.Common
 
         public void Clear()
         {
-            foreach (var item in _items)
-            {
-                item.InfoButtonClicked -= OnItemInfoClicked;
-                item.ActionButtonClicked -= OnItemClicked;
-                item.Clear();
-                Destroy(item);
-            }
-
-            _items.Clear();
+            _instantiatedObjects.Clear();
         }
 
         private void OnItemInfoClicked(string identifier)

@@ -1,7 +1,7 @@
 ﻿using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.Shared.Unity;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.DataFormatters;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -88,7 +88,7 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _descriptionText;
 
-        private readonly List<GameObject> _instantiatedTemplates = new();
+        private readonly GameObjectCollection _instantiatedObjects = new();
 
         protected override void Awake()
         {
@@ -243,7 +243,7 @@ namespace Assets._Game.Scripts.UI.Views
         {
             var obj = template.TryCreateFromFormattedTemplate(container, arguments);
             if (obj == null) return false;
-            _instantiatedTemplates.Add(obj);
+            _instantiatedObjects.Track(obj);
             return true;
         }
 
@@ -251,17 +251,13 @@ namespace Assets._Game.Scripts.UI.Views
         {
             var obj = template.TryCreateFromTemplate(container, text);
             if (obj == null) return false;
-            _instantiatedTemplates.Add(obj);
+            _instantiatedObjects.Track(obj);
             return true;
         }
 
         public void Clear()
         {
-            for (int i = 0; i < _instantiatedTemplates.Count; i++)
-            {
-                Destroy(_instantiatedTemplates[i]);
-            }
-            _instantiatedTemplates.Clear();
+            _instantiatedObjects.Clear();
 
             _titleText.text = string.Empty;
             _slotText.text = string.Empty;
