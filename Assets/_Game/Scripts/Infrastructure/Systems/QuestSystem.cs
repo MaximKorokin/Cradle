@@ -110,6 +110,10 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
         private void OnQuestObjectivesCompleted(Entity entity, QuestObjectivesCompletedEvent e)
         {
+            if (e.QuestState.Definition.IsAutoCompletable)
+            {
+                entity.Publish(new QuestCompleteRequest(e.QuestState.Definition.Id));
+            }
         }
 
         private void OnQuestCompleted(Entity entity, QuestCompletedEvent e)
