@@ -11,6 +11,9 @@ namespace Assets._Game.Scripts.Infrastructure.Game
     {
         IReadOnlyObservableData<EntryRef> ObservablePlayerId { get; }
         Entity Player { get; }
+
+        event Action PlayerChanging;
+        event Action PlayerChanged;
     }
 
     public sealed class PlayerContext : IPlayerProvider, IDisposable

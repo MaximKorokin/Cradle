@@ -18,6 +18,7 @@ namespace Assets._Game.Scripts.UI.Systems
     {
         private IObjectResolver _resolver;
         private EntityRepository _entityRepository;
+        private IPlayerProvider _playerProvider;
 
         private Camera _camera;
         private RectTransform _root;
@@ -30,6 +31,7 @@ namespace Assets._Game.Scripts.UI.Systems
         private void Construct(
             IObjectResolver resolver,
             IGlobalEventBus globalEventBus,
+            IPlayerProvider playerProvider,
             EntityRepository entityRepository,
             ICameraService cameraService,
             UIRootReferences roots,
@@ -40,6 +42,7 @@ namespace Assets._Game.Scripts.UI.Systems
 
             _resolver = resolver;
             _entityRepository = entityRepository;
+            _playerProvider = playerProvider;
 
             _camera = cameraService.Camera;
             _root = roots.NameplatesRoot;
@@ -85,7 +88,8 @@ namespace Assets._Game.Scripts.UI.Systems
                     vp.x >= 0 && vp.x <= 1 &&
                     vp.y >= 0 && vp.y <= 1;
 
-                if (!visible)
+                // Hide nameplate if the entity is the player or outside of the camera view
+                if (!visible || target.Entity == _playerProvider.Player)
                 {
                     controller.View.SetVisible(false);
                     continue;
