@@ -14,7 +14,7 @@ namespace Assets._Game.Scripts.UI.Common
         [SerializeField]
         private Vector2 _sizeLimit = -Vector2.one;
 
-        private void Update()
+        private void LateUpdate()
         {
             if (_source == null || _target == null) return;
 

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c3eba0e706ea64795fc43fd3ebe25c, type: 3}
+  m_Name: ProjectGuide
+  m_EditorClassIdentifier: 
+  Colors:
+  - Name: Window Main
+    Value: {r: 0.08235294, g: 0.078431375, b: 0.0627451, a: 1}
+  - Name: View 1
+    Value: {r: 0.13333334, g: 0.1254902, b: 0.105882354, a: 1}
+  - Name: View 2
+    Value: {r: 0.08627451, g: 0.078431375, b: 0.07058824, a: 1}
+  - Name: View 3
+    Value: {r: 0.16862746, g: 0.16078432, b: 0.14509805, a: 1}
+  - Name: Text 1
+    Value: {r: 0.90588236, g: 0.90588236, b: 0.90588236, a: 1}
+  - Name: Text 2
+    Value: {r: 0.5764706, g: 0.5647059, b: 0.5176471, a: 1}

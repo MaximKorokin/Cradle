@@ -16,9 +16,9 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _descriptionText;
         [SerializeField]
-        private RectTransform _requirementsInfo;
+        private TMP_Text _levelRequirementText;
         [SerializeField]
-        private TMP_Text _requirementsText;
+        private TMP_Text _completionText;
         [SerializeField]
         private RectTransform _objectivesInfo;
         [SerializeField]
@@ -51,7 +51,7 @@ namespace Assets._Game.Scripts.UI.Views
                 _titleText.text = quest.Title;
 
             RenderDescription(quest);
-            RenderRequirements(quest);
+            RenderMetaData(quest);
             RenderObjectives(quest);
             RenderRewards(quest);
         }
@@ -76,22 +76,21 @@ namespace Assets._Game.Scripts.UI.Views
                 _objectivesText.text = quest.ObjectivesText;
         }
 
-        private void RenderRequirements(QuestStateDisplayData quest)
+        private void RenderMetaData(QuestStateDisplayData quest)
         {
-            var hasRequirements = _requirementsText != null && !string.IsNullOrWhiteSpace(quest.RequirementsText);
+            var hasLevelRequirement = _levelRequirementText != null && !string.IsNullOrWhiteSpace(quest.LevelRequirementText);
+            _levelRequirementText.gameObject.SetActive(hasLevelRequirement);
+            _levelRequirementText.text = hasLevelRequirement ? quest.LevelRequirementText : string.Empty;
 
-            if (_requirementsInfo != null)
-                _requirementsInfo.gameObject.SetActive(hasRequirements);
-
-            if (_requirementsText != null)
-                _requirementsText.text = hasRequirements ? quest.RequirementsText : string.Empty;
+            _completionText.text = quest.CompletionText;
         }
 
         private void RenderRewards(QuestStateDisplayData quest)
         {
             var hasExperienceRewards = _experienceRewardText != null && !string.IsNullOrWhiteSpace(quest.ExperienceRewardText);
+            var hasItemRewards = quest.ItemRewards != null && quest.ItemRewards.Length > 0;
 
-            _rewardsInfo.gameObject.SetActive(hasExperienceRewards);
+            _rewardsInfo.gameObject.SetActive(hasExperienceRewards || hasItemRewards);
 
             if (hasExperienceRewards)
                 _experienceRewardText.text = quest.ExperienceRewardText;
@@ -110,7 +109,7 @@ namespace Assets._Game.Scripts.UI.Views
         private void Clear()
         {
             _descriptionText.text = string.Empty;
-            _requirementsText.text = string.Empty;
+            _levelRequirementText.text = string.Empty;
             _objectivesText.text = string.Empty;
             _experienceRewardText.text = string.Empty;
             _instantiatedObjects.Clear();

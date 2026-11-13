@@ -28,13 +28,14 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             }
             var objectivesText = stringBuilder.ToString();
 
-            var experienceRewardText = data.Definition.Reward != null ? $"{data.Definition.Reward.Experience} Exp" : "";
+            var experienceRewardText = data.Definition.Reward != null && data.Definition.Reward.Experience > 0 ? $"{data.Definition.Reward.Experience} Exp" : "";
             var itemRewards = data.Definition.Reward.ItemRewards.Select(item => _itemStackFactory.Create(item.Id, 1).Snapshot).ToArray();
 
             return new QuestStateDisplayData(
                 data.Definition.Title,
                 data.Definition.Description,
-                $"Level: {data.Definition.RequiredLevel}+",
+                $"Lv: {data.Definition.RequiredLevel}+",
+                "Completion: " + (data.Definition.IsAutoCompletable ? "Auto" : "Manual"),
                 objectivesText,
                 experienceRewardText,
                 itemRewards);
@@ -47,7 +48,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
         public readonly string Title;
         public readonly string Description;
-        public readonly string RequirementsText;
+        public readonly string LevelRequirementText;
+        public readonly string CompletionText;
         public readonly string ObjectivesText;
         public readonly string ExperienceRewardText;
         public readonly ItemStackSnapshot[] ItemRewards;
@@ -55,7 +57,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public QuestStateDisplayData(
             string title,
             string description,
-            string requirementsText,
+            string levelRequirementText,
+            string completionText,
             string objectivesText,
             string experienceRewardText,
             ItemStackSnapshot[] itemRewards)
@@ -64,7 +67,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             Title = title;
             Description = description;
-            RequirementsText = requirementsText;
+            LevelRequirementText = levelRequirementText;
+            CompletionText = completionText;
             ObjectivesText = objectivesText;
             ExperienceRewardText = experienceRewardText;
             ItemRewards = itemRewards;
