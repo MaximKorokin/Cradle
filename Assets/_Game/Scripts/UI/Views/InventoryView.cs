@@ -20,6 +20,8 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _goldText;
         [SerializeField]
+        private TMP_Text _psychaText;
+        [SerializeField]
         private TMP_Text _pneumaText;
         [SerializeField]
         private TMP_Text _slotsAmountText;
@@ -113,6 +115,7 @@ namespace Assets._Game.Scripts.UI.Views
 
             // Update text fields and drop areas visibility
             _pneumaText.text = inventoryViewData.ViewPneuma ? $"Pneuma: {inventoryViewData.Pneuma}" : "";
+            _psychaText.text = inventoryViewData.ViewPsycha ? $"Psycha: {inventoryViewData.Psycha}" : "";
             _goldText.text = inventoryViewData.ViewGold ? $"Gold: {inventoryViewData.Gold}" : "";
             _slotsAmountText.text = inventoryViewData.ViewSlotsAmount ? $"Slots: {inventoryViewData.SlotsUsed} / {inventoryViewData.SlotsMax}" : "";
             _weightText.text = inventoryViewData.ViewWeight ? $"Weight: {inventoryViewData.WeightCurrent} / {inventoryViewData.WeightMax}" : "";

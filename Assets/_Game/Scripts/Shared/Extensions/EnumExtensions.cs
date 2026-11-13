@@ -27,5 +27,14 @@ namespace Assets._Game.Scripts.Shared.Extensions
             var descriptionAttribute = enumValue.GetAttributes<Attributes.EnumDescriptionAttribute>().FirstOrDefault();
             return descriptionAttribute != null ? descriptionAttribute.Description : enumValue.ToString();
         }
+
+        public static T[] GetFlags<T>(this T e) where T : Enum
+        {
+            var flags = Enum.GetValues(typeof(T))
+                .Cast<T>()
+                .Where(x => e.HasFlag(x))
+                .ToArray();
+            return flags;
+        }
     }
 }

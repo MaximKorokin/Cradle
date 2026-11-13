@@ -17,6 +17,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         bool ViewPneuma { get; }
         int Pneuma { get; }
 
+        bool ViewPsycha { get; }
+        int Psycha { get; }
+
         bool ViewGold { get; }
         int Gold { get; }
 
@@ -54,6 +57,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public abstract bool ViewPneuma { get; }
         public int Pneuma { get; private set; }
 
+        public abstract bool ViewPsycha { get; }
+        public int Psycha { get; private set; }
+
         public abstract bool ViewGold { get; }
         public int Gold { get; private set; }
 
@@ -70,8 +76,9 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
         protected override void OnContainerChanged()
         {
-            Pneuma = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculatePneuma(_itemsConfig, InventoryModel);
-            Gold = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateGold(_itemsConfig, InventoryModel);
+            Pneuma = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateItemAmount(_itemsConfig.GetSpecialItemDefinition(SpecialItemId.Pneuma), InventoryModel);
+            Psycha = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateItemAmount(_itemsConfig.GetSpecialItemDefinition(SpecialItemId.Psycha), InventoryModel);
+            Gold = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateItemAmount(_itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold), InventoryModel);
             SlotsUsed = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateSlotsUsed(InventoryModel);
             SlotsMax = InventoryModel == null ? 0 : InventoryViewDataUtils.CalculateSlotsMax(InventoryModel);
 
@@ -148,7 +155,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Inventory(entityId);
 
         public override bool ViewPneuma => true;
-
+        public override bool ViewPsycha => true;
         public override bool ViewGold => true;
 
         public override bool ViewWeight => true;
@@ -182,7 +189,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Storage(entityId);
 
         public override bool ViewPneuma => false;
-
+        public override bool ViewPsycha => false;
         public override bool ViewGold => false;
 
         public override bool ViewWeight => false;
@@ -198,46 +205,20 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
     public static class InventoryViewDataUtils
     {
-        public static int CalculatePneuma(ItemsConfig itemsConfig, InventoryModel inventoryModel)
+        public static int CalculateItemAmount(ItemDefinition itemDefinition, InventoryModel inventoryModel)
         {
-            var pneuma = 0;
-
-            var pneumaDefinition = itemsConfig.GetSpecialItemDefinition(SpecialItemId.Pneuma);
-            if (pneumaDefinition == null) return 0;
-
+            var amount = 0;
+            if (itemDefinition == null) return 0;
             foreach (var (_, snapshot) in inventoryModel.Enumerate())
             {
                 if (snapshot == null) continue;
-
                 var itemSnapshot = snapshot.Value;
-                if (itemSnapshot.Definition.Id == pneumaDefinition.Id)
+                if (itemSnapshot.Definition.Id == itemDefinition.Id)
                 {
-                    pneuma += itemSnapshot.Amount;
+                    amount += itemSnapshot.Amount;
                 }
             }
-
-            return pneuma;
-        }
-
-        public static int CalculateGold(ItemsConfig itemsConfig, InventoryModel inventoryModel)
-        {
-            var gold = 0;
-
-            var goldDefinition = itemsConfig.GetSpecialItemDefinition(SpecialItemId.Gold);
-            if (goldDefinition == null) return 0;
-
-            foreach (var (_, snapshot) in inventoryModel.Enumerate())
-            {
-                if (snapshot == null) continue;
-
-                var itemSnapshot = snapshot.Value;
-                if (itemSnapshot.Definition.Id == goldDefinition.Id)
-                {
-                    gold += itemSnapshot.Amount;
-                }
-            }
-
-            return gold;
+            return amount;
         }
 
         public static int CalculateSlotsUsed(InventoryModel inventoryModel)

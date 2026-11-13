@@ -107,6 +107,7 @@ namespace Assets._Game.Scripts.Items.Commands
                 var to = _itemContainerResolver.ResolveContainer(c.ToContainer);
 
                 var item = from.Get(c.FromSlot);
+                if (item == null) return false;
                 if (from is InventoryModel inventoryModel && to is EquipmentModel equipmentModel)
                 {
                     var fromSlot = ContainerSlotConverter.ToInventorySlot(c.FromSlot);
@@ -115,6 +116,8 @@ namespace Assets._Game.Scripts.Items.Commands
                     if (equipped > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemEquip, c.FromContainer, c.ToContainer, item?.Definition, equipped);
                     return equipped > 0;
                 }
+
+                if (item.Value.HasRestriction(ItemRestrictions.Unstorable)) return false;
 
                 bool success;
                 int movedAmount = c.Amount;
@@ -186,6 +189,10 @@ namespace Assets._Game.Scripts.Items.Commands
         {
             var container = _itemContainerResolver.ResolveContainer(c.FromContainer);
             var item = container.Get(c.FromSlot);
+
+            if (item == null) return false;
+            if (item.Value.HasRestriction(ItemRestrictions.Undestructible)) return false;
+
             var removed = ItemContainerUtils.RemoveAmount(container, c.FromSlot, c.Amount);
             if (removed > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDestroy, c.FromContainer, default, item?.Definition, removed);
             return removed > 0;
@@ -199,8 +206,9 @@ namespace Assets._Game.Scripts.Items.Commands
             var from = _itemContainerResolver.ResolveContainer(c.FromContainer);
             var item = from.Get(c.FromSlot);
             if (item == null) return false;
-            var removedAmount = ItemContainerUtils.RemoveAmount(from, c.FromSlot, c.Amount);
+            if (item.Value.HasRestriction(ItemRestrictions.Undroppable)) return false;
 
+            var removedAmount = ItemContainerUtils.RemoveAmount(from, c.FromSlot, c.Amount);
             if (removedAmount > 0)
             {
                 _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
@@ -324,8 +332,9 @@ namespace Assets._Game.Scripts.Items.Commands
             var goldInventoryModel = _itemContainerResolver.ResolveContainer<InventoryModel>(c.GoldInventoryModelPath);
             var shopModel = _itemContainerResolver.ResolveContainer<ShopModel>(c.ShopModelPath);
 
-            var itemSnapshot = itemContainerModel.Get(c.InventorySlot);
-            if (!itemSnapshot.HasValue) return false;
+            var item = itemContainerModel.Get(c.InventorySlot);
+            if (item == null) return false;
+            if (item.Value.HasRestriction(ItemRestrictions.Unsellable)) return false;
 
             // Remove item from inventory
             var removed = itemContainerModel.RemoveFromSlot(c.InventorySlot, c.Amount);
@@ -338,11 +347,11 @@ namespace Assets._Game.Scripts.Items.Commands
 
             // Add item back to shop (buyback feature)
             shopModel.Add(new ItemStackSnapshot(
-                itemSnapshot.Value.Definition,
-                itemSnapshot.Value.InstanceData,
+                item.Value.Definition,
+                item.Value.InstanceData,
                 removed));
 
-            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemSell, c.ItemContainerModelPath, c.ShopModelPath, itemSnapshot?.Definition, removed);
+            PublishGameAnalyticsEvent(AnalyticsEntryType.ItemSell, c.ItemContainerModelPath, c.ShopModelPath, item?.Definition, removed);
             return true;
         }
 

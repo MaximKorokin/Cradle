@@ -20,9 +20,14 @@ MonoBehaviour:
   <Weight>k__BackingField: 80
   <Traits>k__BackingField:
   - rid: 3564180343019798643
+  - rid: 1328309215537397978
   references:
     version: 2
     RefIds:
+    - rid: 1328309215537397978
+      type: {class: RestrictionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
+      data:
+        <Restrictions>k__BackingField: -1
     - rid: 3564180343019798643
       type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:

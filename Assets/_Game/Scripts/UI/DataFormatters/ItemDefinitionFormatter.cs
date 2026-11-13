@@ -74,6 +74,12 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 description = descriptionTrait.Description;
             }
 
+            var restrictionsText = string.Empty;
+            if (definition.TryGetTrait<RestrictionTrait>(out var restrictionTrait))
+            {
+                restrictionsText = string.Join(" / ", restrictionTrait.Restrictions.GetFlags().Where(f => f != ItemRestrictions.None).Select(f => f.GetDescription()));
+            }
+
             var itemSetDisplayData = _itemSetFormatter.FormatData((definition, null));
             var enchantableDisplayData = _enchantableTraitFormatter.FormatData((definition, null));
 
@@ -95,7 +101,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 usableEffectsText,
                 enchantableDisplayData,
                 itemSetDisplayData,
-                description);
+                description,
+                restrictionsText);
         }
 
         private string GetFunctionalTraitsText(ItemDefinition definition, ItemTrigger itemTrigger)

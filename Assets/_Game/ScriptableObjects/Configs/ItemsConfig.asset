@@ -17,3 +17,5 @@ MonoBehaviour:
     ItemDefinition: {fileID: 11400000, guid: 8def6da0c958e1c41ba548b4b206f9ba, type: 2}
   - SpecialItemId: 20
     ItemDefinition: {fileID: 11400000, guid: 9d11b5ca4dd65b244bac0d3f06e40810, type: 2}
+  - SpecialItemId: 30
+    ItemDefinition: {fileID: 11400000, guid: 65aa77f90dc1acd45930b2e7106abf1a, type: 2}

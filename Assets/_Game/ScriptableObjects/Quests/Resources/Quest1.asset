@@ -16,6 +16,7 @@ MonoBehaviour:
   <Title>k__BackingField: Wolves
   <Description>k__BackingField: 
   <RequiredLevel>k__BackingField: 1
+  <IsAutoCompletable>k__BackingField: 1
   <Objectives>k__BackingField:
   - rid: 3564180410443759731
   - rid: 3564180427547345043

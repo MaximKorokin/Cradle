@@ -87,6 +87,11 @@ namespace Assets._Game.Scripts.UI.Views
         private RectTransform _descriptionInfo;
         [SerializeField]
         private TMP_Text _descriptionText;
+        [Space]
+        [SerializeField]
+        private RectTransform _restrictionsInfo;
+        [SerializeField]
+        private TMP_Text _restrictionsTextTemplate;
 
         private readonly GameObjectCollection _instantiatedObjects = new();
 
@@ -108,6 +113,8 @@ namespace Assets._Game.Scripts.UI.Views
 
             _eligibleEnchantItemNameTextTemplate.gameObject.SetActive(false);
             _enchantEffectTextTemplate.gameObject.SetActive(false);
+
+            _restrictionsTextTemplate.gameObject.SetActive(false);
         }
 
         protected override void Render(ItemStackPreviewViewData data)
@@ -128,6 +135,7 @@ namespace Assets._Game.Scripts.UI.Views
             RenderEnchantInfo(displayData);
             RenderCommonInfo(displayData);
             RenderDescription(displayData);
+            RenderRestrictions(displayData);
 
             gameObject.SetActive(true);
         }
@@ -179,7 +187,7 @@ namespace Assets._Game.Scripts.UI.Views
             if (!itemStack.ItemSetDisplayData.HasData) return;
 
             _setNameText.text = itemStack.ItemSetDisplayData.Name;
-            
+
             foreach (var item in itemStack.ItemSetDisplayData.Items)
             {
                 var textTemplate = item.IsEquipped ? _setItemNameTextTemplate : _setDisabledItemNameTextTemplate;
@@ -239,6 +247,16 @@ namespace Assets._Game.Scripts.UI.Views
             _commonInfo.gameObject.SetActive(true);
         }
 
+        private void RenderRestrictions(ItemStackDisplayData itemStack)
+        {
+            if (_restrictionsTextTemplate == null) return;
+
+            var hasRestrictions = !string.IsNullOrEmpty(itemStack.RestrictionsText);
+            TryVisualizeFormattedText(_restrictionsTextTemplate, _restrictionsInfo, "Cannot be", itemStack.RestrictionsText);
+
+            _restrictionsInfo.gameObject.SetActive(hasRestrictions);
+        }
+
         private bool TryVisualizeFormattedText(TMP_Text template, RectTransform container, params string[] arguments)
         {
             var obj = template.TryCreateFromFormattedTemplate(container, arguments);
@@ -276,6 +294,8 @@ namespace Assets._Game.Scripts.UI.Views
             _commonInfo.gameObject.SetActive(false);
 
             _descriptionInfo.gameObject.SetActive(false);
+
+            _restrictionsInfo.gameObject.SetActive(false);
         }
     }
 }

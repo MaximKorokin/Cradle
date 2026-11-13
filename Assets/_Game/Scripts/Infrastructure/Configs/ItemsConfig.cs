@@ -34,5 +34,6 @@ namespace Assets._Game.Scripts.Infrastructure.Configs
     {
         Gold = 10,
         Pneuma = 20,
+        Psycha = 30,
     }
 }

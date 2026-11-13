@@ -78,6 +78,18 @@ namespace Assets._Game.Scripts.Shared.Extensions
             }
             return ItemStackPurpose.None;
         }
+
+        public static ItemRestrictions GetRestrictions(this ItemStackSnapshot itemStack)
+        {
+            var restrictionTrait = itemStack.GetTrait<RestrictionTrait>();
+            return restrictionTrait != null ? restrictionTrait.Restrictions : ItemRestrictions.None;
+        }
+
+        public static bool HasRestriction(this ItemStackSnapshot itemStack, ItemRestrictions restriction)
+        {
+            var restrictions = itemStack.GetRestrictions();
+            return restrictions.HasFlag(restriction);
+        }
     }
 
     public enum ItemStackPurpose

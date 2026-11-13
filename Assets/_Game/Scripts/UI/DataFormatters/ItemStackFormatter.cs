@@ -26,7 +26,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             var definitionData = _itemDefinitionFormatter.FormatData(itemStackSnapshot.Definition);
 
-            var amount = itemStackSnapshot.Definition.MaxAmount > 1 ? $"Amount: {itemStackSnapshot.Amount}" : string.Empty;
+            var amount = itemStackSnapshot.Definition.MaxAmount > 1 ? $"Amount: {itemStackSnapshot.Amount:N0}" : string.Empty;
 
             var weight = GetWeightText(itemStackSnapshot);
 
@@ -53,7 +53,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 provideFullData ? definitionData.UsableEffectsText : default,
                 provideFullData ? enchantableDisplayData : default,
                 provideFullData ? itemSetDisplayData : default,
-                provideFullData ? definitionData.Description : default);
+                provideFullData ? definitionData.Description : default,
+                provideFullData ? definitionData.RestrictionsText : default);
         }
 
         private string GetPrefixText(ItemStackSnapshot itemStackSnapshot, EnchantDisplayData enchantDisplayData)
@@ -107,6 +108,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
         public string Description { get; }
 
+        public string RestrictionsText { get; }
+
         public ItemStackDisplayData(
             string prefixText,
             string name,
@@ -125,7 +128,8 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             string usableEffectsText,
             EnchantDisplayData enchantableDisplayData,
             ItemSetDisplayData itemSetDisplayData,
-            string description)
+            string description,
+            string restrictionsText)
         {
             HasData = true;
 
@@ -147,6 +151,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             EnchantableDisplayData = enchantableDisplayData;
             ItemSetDisplayData = itemSetDisplayData;
             Description = description;
+            RestrictionsText = restrictionsText;
         }
     }
 }
