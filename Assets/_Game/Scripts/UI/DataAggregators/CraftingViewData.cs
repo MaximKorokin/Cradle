@@ -14,6 +14,7 @@ namespace Assets._Game.Scripts.UI.DataAggregators
     {
         private readonly CraftingService _craftingService;
         private readonly InventoryViewData _inventoryViewData;
+        private readonly ItemStackFactory _itemStackFactory;
 
         private CraftingModule _crafterCraftingModule;
 
@@ -23,10 +24,13 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         public CraftingViewData(
             EntityRepository entityRepository,
             CraftingService craftingService,
+            ItemStackFactory itemStackFactory,
             InventoryViewData inventoryViewData) : base(entityRepository)
         {
             _craftingService = craftingService;
             _inventoryViewData = inventoryViewData;
+            _itemStackFactory = itemStackFactory;
+
             _inventoryViewData.Changed += OnInventoryChanged;
             _inventoryViewData.Invalidated += OnInventoryInvalidated;
         }
@@ -80,6 +84,11 @@ namespace Assets._Game.Scripts.UI.DataAggregators
 
                 return _crafterCraftingModule.Recipes.Where(recipe => !_craftingService.CanCraftAny(recipe, _inventoryViewData.InventoryModel));
             }
+        }
+
+        public ItemStackSnapshot GetItemForRecipe(CraftingRecipeDefinition recipe)
+        {
+            return _itemStackFactory.Create(recipe.Result.ItemDefinition.Id, recipe.Result.Amount).Snapshot;
         }
     }
 }

@@ -1,6 +1,7 @@
 using Assets._Game.Scripts.Items.Crafting;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
+using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,6 @@ namespace Assets._Game.Scripts.UI.Views
 
         private Dictionary<string, CraftingRecipeDefinition> _recipeDefinitions;
 
-        public event Action<CraftingRecipeDefinition> RecipeInfoClicked;
         public event Action<CraftingRecipeDefinition> RecipeActionClicked;
 
         protected override void Awake()
@@ -45,16 +45,22 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 Identifier = r.Id,
                 Sprite = r.Result.ItemDefinition.Icon,
-                Text = FormatRecipeWithIngredients(r, true)
-            }), OnRecipeInfoClicked, OnRecipeActionClicked);
+                Text = FormatRecipeWithIngredients(r, true),
+                ItemCreationCallback = v => OnCraftingListItemCreated(v, data, r)
+            }),
+            null,
+            OnRecipeActionClicked);
 
             // Unavailable Recipes
             _tabbedListViews.AddTab("Unavailable", "Unavailable", unavailableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
                 Sprite = r.Result.ItemDefinition.Icon,
-                Text = FormatRecipeWithIngredients(r, false)
-            }), OnRecipeInfoClicked, OnRecipeActionClicked);
+                Text = FormatRecipeWithIngredients(r, false),
+                ItemCreationCallback = v => OnCraftingListItemCreated(v, data, r)
+            }),
+            null,
+            OnRecipeActionClicked);
 
             _craftingTabsController.SelectTab(currentTabIndex);
         }
@@ -86,15 +92,15 @@ namespace Assets._Game.Scripts.UI.Views
             return sb.ToString();
         }
 
+        private void OnCraftingListItemCreated(SimpleListItemView view, CraftingViewData viewData, CraftingRecipeDefinition recipe)
+        {
+            var itemWidget = view.GetComponentInChildren<ItemStackWidget>();
+            itemWidget.Render(viewData.GetItemForRecipe(recipe));
+        }
+
         private void Clear()
         {
             _tabbedListViews.Clear();
-        }
-
-        private void OnRecipeInfoClicked(string recipeId)
-        {
-            if (_recipeDefinitions.TryGetValue(recipeId, out var recipe))
-                RecipeInfoClicked?.Invoke(recipe);
         }
 
         private void OnRecipeActionClicked(string recipeId)

@@ -39,6 +39,8 @@ namespace Assets._Game.Scripts.UI.Common
 
             if (_actionButton != null)
                 _actionButton.onClick.AddListener(OnActionButtonClicked);
+
+            definition.ItemCreationCallback?.Invoke(this);
         }
 
         public void Clear()
@@ -68,5 +70,6 @@ namespace Assets._Game.Scripts.UI.Common
         public string Identifier;
         public Sprite Sprite;
         public string Text;
+        public Action<SimpleListItemView> ItemCreationCallback;
     }
 }

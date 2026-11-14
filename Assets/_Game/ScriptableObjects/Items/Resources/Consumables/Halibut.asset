@@ -45,7 +45,7 @@ MonoBehaviour:
     - rid: 6179849661407035471
       type: {class: DescriptionTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <Description>k__BackingField: Kinbeas recommends
+        <Description>k__BackingField: Kinbeas recommends.
     - rid: 7990781616137175118
       type: {class: UsableTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
