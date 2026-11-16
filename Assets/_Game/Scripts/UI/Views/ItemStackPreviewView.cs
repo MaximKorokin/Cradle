@@ -15,6 +15,8 @@ namespace Assets._Game.Scripts.UI.Views
         [SerializeField]
         private TMP_Text _titleText;
         [SerializeField]
+        private TMP_Text _postfixAmountText;
+        [SerializeField]
         private TMP_Text _slotText;
         [SerializeField]
         private Image _iconView;
@@ -146,6 +148,7 @@ namespace Assets._Game.Scripts.UI.Views
             _prefixText.gameObject.SetActive(!string.IsNullOrWhiteSpace(itemStack.PrefixText));
 
             _titleText.text = itemStack.Name;
+            _postfixAmountText.text = itemStack.PostfixAmountText;
             _iconView.sprite = itemStack.Icon;
 
             _slotText.text = itemStack.EquipmentSlotName;

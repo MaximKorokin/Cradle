@@ -18,6 +18,9 @@ namespace Assets._Game.Scripts.UI.Common
 
         private string _identifier;
 
+        private string _initialText;
+        private string InitialText => _initialText ??= _text.text;
+
         public event Action<string> InfoButtonClicked;
         public event Action<string> ActionButtonClicked;
 
@@ -32,7 +35,12 @@ namespace Assets._Game.Scripts.UI.Common
             }
 
             if (_text != null)
-                _text.text = definition.Text;
+            {
+                if (definition.TextFactory != null)
+                    _text.text = definition.TextFactory(InitialText);
+                else
+                    _text.text = definition.Text;
+            }
 
             if (_infoButton != null)
                 _infoButton.onClick.AddListener(OnInfoButtonClicked);
@@ -70,6 +78,8 @@ namespace Assets._Game.Scripts.UI.Common
         public string Identifier;
         public Sprite Sprite;
         public string Text;
+        /// <summary> A factory function to generate the text dynamically based on the template text.Will be used instead of the Text field if provided. </summary>
+        public Func<string, string> TextFactory;
         public Action<SimpleListItemView> ItemCreationCallback;
     }
 }

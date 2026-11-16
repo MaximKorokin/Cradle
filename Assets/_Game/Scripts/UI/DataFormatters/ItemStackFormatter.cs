@@ -26,6 +26,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
 
             var definitionData = _itemDefinitionFormatter.FormatData(itemStackSnapshot.Definition);
 
+            var postfixAmount = itemStackSnapshot.Definition.MaxAmount > 1 ? $" ({itemStackSnapshot.Amount:N0})" : string.Empty;
             var amount = itemStackSnapshot.Definition.MaxAmount > 1 ? $"Amount: {itemStackSnapshot.Amount:N0}" : string.Empty;
 
             var weight = GetWeightText(itemStackSnapshot);
@@ -39,6 +40,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 prefix,
                 definitionData.Name,
                 definitionData.Icon,
+                postfixAmount,
                 amount,
                 weight,
                 definitionData.PriceText,
@@ -87,6 +89,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
         public string Name { get; }
         public Sprite Icon { get; }
         public string PrefixText { get; }
+        public string PostfixAmountText { get; }
         public string AmountText { get; }
         public string WeightText { get; }
         public string PriceText { get; }
@@ -114,6 +117,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             string prefixText,
             string name,
             Sprite icon,
+            string postfixAmountText,
             string amount,
             string weight,
             string price,
@@ -136,6 +140,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
             PrefixText = prefixText;
             Name = name;
             Icon = icon;
+            PostfixAmountText = postfixAmountText;
             AmountText = amount;
             WeightText = weight;
             PriceText = price;

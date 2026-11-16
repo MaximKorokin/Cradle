@@ -87,6 +87,7 @@ namespace Assets._Game.Scripts.UI.DataFormatters
                 string.Empty,
                 name,
                 icon,
+                string.Empty,
                 amount,
                 weight,
                 price,

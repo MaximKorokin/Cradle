@@ -1,4 +1,5 @@
 using Assets._Game.Scripts.Items.Crafting;
+using Assets._Game.Scripts.Shared.Extensions;
 using Assets._Game.Scripts.UI.Common;
 using Assets._Game.Scripts.UI.DataAggregators;
 using Assets._Game.Scripts.UI.Views.Widgets;
@@ -16,6 +17,10 @@ namespace Assets._Game.Scripts.UI.Views
         private SelectableTabsController _craftingTabsController;
         [SerializeField]
         private SimpleListView _craftingTabContentTemplate;
+        [SerializeField]
+        private SimpleListItemView _availableTemplate;
+        [SerializeField]
+        private SimpleListItemView _unavailableTemplate;
 
         private TabbedListViewCollection _tabbedListViews;
 
@@ -26,6 +31,8 @@ namespace Assets._Game.Scripts.UI.Views
         protected override void Awake()
         {
             base.Awake();
+            _availableTemplate.gameObject.SetActive(false);
+            _unavailableTemplate.gameObject.SetActive(false);
             _craftingTabContentTemplate.gameObject.SetActive(false);
             _tabbedListViews = new TabbedListViewCollection(_craftingTabsController, _craftingTabContentTemplate);
         }
@@ -45,51 +52,35 @@ namespace Assets._Game.Scripts.UI.Views
             {
                 Identifier = r.Id,
                 Sprite = r.Result.ItemDefinition.Icon,
-                Text = FormatRecipeWithIngredients(r, true),
+                TextFactory = templateText => FormatRecipe(r, templateText),
                 ItemCreationCallback = v => OnCraftingListItemCreated(v, data, r)
             }),
             null,
-            OnRecipeActionClicked);
+            OnRecipeActionClicked,
+            _ => _availableTemplate);
 
             // Unavailable Recipes
             _tabbedListViews.AddTab("Unavailable", "Unavailable", unavailableRecipes.Select(r => new SimpleListItemData()
             {
                 Identifier = r.Id,
                 Sprite = r.Result.ItemDefinition.Icon,
-                Text = FormatRecipeWithIngredients(r, false),
+                TextFactory = templateText => FormatRecipe(r, templateText),
                 ItemCreationCallback = v => OnCraftingListItemCreated(v, data, r)
             }),
             null,
-            OnRecipeActionClicked);
+            OnRecipeActionClicked,
+            _ => _unavailableTemplate);
 
             _craftingTabsController.SelectTab(currentTabIndex);
         }
 
-        private string FormatRecipeWithIngredients(CraftingRecipeDefinition recipe, bool isAvailable)
+        private string FormatRecipe(CraftingRecipeDefinition recipe, string templateText)
         {
-            var sb = new StringBuilder();
+            var itemName = recipe.Result.ItemDefinition.Name;
+            var itemAmount = recipe.Result.Amount;
+            var ingredients = string.Join(", ", recipe.Ingredients.Select(i => $"{i.Item.Name} x{i.Amount}"));
 
-            sb.Append($"<b>{recipe.Result.ItemDefinition.Name}</b> <size=80%>x{recipe.Result.Amount}</size>");
-            if (!isAvailable)
-            {
-                sb.Append($" <color=#888888><size=80%>(Unavailable)</color>");
-            }
-
-            if (recipe.Ingredients.Length > 0)
-            {
-                sb.Append("\n<size=80%><color=#333333>");
-                for (int i = 0; i < recipe.Ingredients.Length; i++)
-                {
-                    var ingredient = recipe.Ingredients[i];
-                    if (i > 0)
-                        sb.Append(", ");
-
-                    sb.Append($"{ingredient.Item.Name} x{ingredient.Amount}");
-                }
-                sb.Append("</color></size>");
-            }
-
-            return sb.ToString();
+            return templateText.FormatSafe(new string[] { itemName, itemAmount.ToString(), ingredients });
         }
 
         private void OnCraftingListItemCreated(SimpleListItemView view, CraftingViewData viewData, CraftingRecipeDefinition recipe)
