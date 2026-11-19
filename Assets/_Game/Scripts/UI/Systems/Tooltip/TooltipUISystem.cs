@@ -1,6 +1,7 @@
 ﻿using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems;
 using Assets._Game.Scripts.Shared.Extensions;
+using Assets._Game.Scripts.Shared.Utils;
 using Assets._Game.Scripts.UI.Views.Widgets;
 using System;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
                 sourceComponent.transform as RectTransform,
                 _tooltipWidget.transform as RectTransform,
                 false);
-            _tooltipWidget.SetPosition(tooltipPosition + new Vector2(0, 5));
+            _tooltipWidget.SetPosition(tooltipPosition + ScreenUtils.TooltipOffset);
         }
 
         private void OnPointerMove(PointerMoveEvent e)
@@ -80,7 +81,7 @@ namespace Assets._Game.Scripts.UI.Systems.Tooltip
             var sourceRect = sourceTransform.rect;
             var sourceTopLeft = sourceTransform.TransformPoint(new Vector3(sourceRect.xMin, sourceRect.yMax));
             var sourceTopRight = sourceTransform.TransformPoint(new Vector3(sourceRect.xMax, sourceRect.yMax));
-            var halfTooltipSize = tooltipSize / 2;
+            var halfTooltipSize = tooltipSize / 2 + ScreenUtils.TooltipOffset;
 
             // Try to position the tooltip above the source element
             var sourceTopCenter = ((Vector2)sourceTopLeft + (Vector2)sourceTopRight) / 2;

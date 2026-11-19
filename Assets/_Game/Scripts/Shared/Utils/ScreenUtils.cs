@@ -7,5 +7,7 @@ namespace Assets._Game.Scripts.Shared.Utils
         public static Vector2 ScreenCenter => new(Screen.width / 2f, Screen.height / 2f);
 
         public static Vector2 DefaultWindowPosition => new(Screen.width / 2, Screen.height - 100);
+
+        public static Vector2 TooltipOffset => new(0, 1);
     }
 }
