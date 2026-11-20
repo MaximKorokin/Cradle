@@ -338,7 +338,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.45
+  m_fontSize: 34
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -645,10 +645,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 200
-  m_MinHeight: 70
-  m_PreferredWidth: 200
-  m_PreferredHeight: 70
+  m_MinWidth: 120
+  m_MinHeight: 60
+  m_PreferredWidth: 120
+  m_PreferredHeight: 60
   m_FlexibleWidth: 1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1

@@ -32,4 +32,4 @@ MonoBehaviour:
     - rid: 3564180343019798672
       type: {class: PriceTrait, ns: Assets._Game.Scripts.Items.Traits, asm: Assembly-CSharp}
       data:
-        <BasePrice>k__BackingField: 0
+        <BasePrice>k__BackingField: 123456

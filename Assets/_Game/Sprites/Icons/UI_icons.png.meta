@@ -304,6 +304,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: WindowBorder_Full
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 960
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 2, y: 2, z: 2, w: 2}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdd4d9f963688524c98111edb895df3e
+      internalID: 2067754494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -323,6 +345,7 @@ TextureImporter:
       UI_icons_2: -605428620
       UI_icons_4: -354840427
       WindowBorder_Bottom: -1075062949
+      WindowBorder_Full: 2067754494
       WindowBorder_Left: -1318508568
       WindowBorder_Right: -1602086122
       WindowBorder_Top: -1078552900

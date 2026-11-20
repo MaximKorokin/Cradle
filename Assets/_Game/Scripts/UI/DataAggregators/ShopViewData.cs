@@ -39,11 +39,20 @@ namespace Assets._Game.Scripts.UI.DataAggregators
         {
             foreach (var (slot, snapshot) in ShopModel.Enumerate())
             {
-                var priceText = snapshot.HasValue && ShopModel.TryGetBuyPrice(slot, BuyCoefficient, SellCoefficient, out var buyPrice)
-                    ? buyPrice.ToString()
-                    : string.Empty;
-                yield return (slot, snapshot, ShopModel.IsInfinite(slot), priceText);
+                var price = snapshot.HasValue && ShopModel.TryGetBuyPrice(slot, BuyCoefficient, SellCoefficient, out var buyPrice)
+                    ? buyPrice
+                    : 0;
+                yield return (slot, snapshot, ShopModel.IsInfinite(slot), FormatPriceText(price));
             }
+        }
+
+        private string FormatPriceText(int price)
+        {
+            if (price == 0) return string.Empty;
+            if (price > 1_000) return $"{price / 1_000.0:F1}k";
+            if (price > 1_000_000) return $"{price / 1_000_000.0:F1}M";
+            if (price > 1_000_000_000) return $"{price / 1_000_000_000.0:F1}B";
+            return price.ToString();
         }
 
         protected override ItemContainerPath GetContainerPath(string entityId) => ItemContainerPath.Shop(entityId);
