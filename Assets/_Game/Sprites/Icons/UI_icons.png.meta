@@ -326,6 +326,94 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: UI_icons_3
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 912
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c304905987e74fb42aeee613c922c36d
+      internalID: -932146670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_icons_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 912
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 250705a591a76294293353e13f3e0e5b
+      internalID: 1727243954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_icons_6
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 917
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 2, z: 4, w: 2}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa9af607cfa62a5419a8f9bcc9b4d9ca
+      internalID: 1821707383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_icons_7
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 913
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efe2715a9b9fc8e439ae4b4f3981d2ff
+      internalID: -1185677229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -343,7 +431,11 @@ TextureImporter:
       UI_icons_0: 127798155406108777
       UI_icons_1: 5150583523307718820
       UI_icons_2: -605428620
+      UI_icons_3: -932146670
       UI_icons_4: -354840427
+      UI_icons_5: 1727243954
+      UI_icons_6: 1821707383
+      UI_icons_7: -1185677229
       WindowBorder_Bottom: -1075062949
       WindowBorder_Full: 2067754494
       WindowBorder_Left: -1318508568

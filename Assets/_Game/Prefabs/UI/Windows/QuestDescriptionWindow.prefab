@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 488.55, y: 717.287}
+  m_SizeDelta: {x: 104, y: 1907.227}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2043012421350710110
 MonoBehaviour:
@@ -66,7 +66,8 @@ MonoBehaviour:
   _source: {fileID: 1822846100819349398}
   _target: {fileID: 7708325079765345592}
   _offset: {x: 0, y: 0}
-  _sizeLimit: {x: -1, y: -1}
+  _minSizeLimit: {x: -1, y: -1}
+  _maxSizeLimit: {x: -1, y: -1}
 --- !u!1001 &6129828881809044297
 PrefabInstance:
   m_ObjectHideFlags: 0

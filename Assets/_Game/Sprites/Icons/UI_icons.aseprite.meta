@@ -163,9 +163,9 @@ ScriptedImporter:
       additiveSortOrder: 0
       cellRect:
         x: 7
-        y: 960
+        y: 912
         width: 633
-        height: 64
+        height: 112
       spriteId: 8aa5a74a95b7a794db193ba21b7a2d79
     linkedCells: []
     parentIndex: -1

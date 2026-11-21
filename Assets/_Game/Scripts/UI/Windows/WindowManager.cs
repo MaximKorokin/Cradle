@@ -22,7 +22,7 @@ namespace Assets._Game.Scripts.UI.Windows
         private readonly ModalWrapper _modalWrapperPrefab;
         private readonly IObjectResolver _resolver;
 
-        private readonly WindowSettings _defaultWindowSettings = new(true, true, true, null, true);
+        private readonly WindowSettings _defaultWindowSettings = new(true, true, false, null, true);
 
         public IReadOnlyCollection<WindowWrapperBase> ActiveWindows => _windowStack.Select(entry => entry.WrapperRoot).ToList();
 
