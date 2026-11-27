@@ -18,12 +18,13 @@ namespace Assets._Game.Scripts.UI.Views.Widgets
 
         private Action _callback;
 
-        public void Show(string promptText, string buttonText, Action callback)
+        public void Show(string promptText, string buttonText, bool showButton, Action callback)
         {
             _callback = callback;
 
             _promptText.text = promptText;
             _buttonText.text = buttonText;
+            _button.gameObject.SetActive(showButton);
             _viewGameObject.SetActive(true);
 
             _button.onClick.RemoveListener(OnButtonClicked);

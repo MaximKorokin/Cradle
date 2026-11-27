@@ -204,18 +204,6 @@ namespace Assets._Game.Scripts.Shared.Utils
             return false;
         }
 
-        /// <summary>
-        /// Returns actually removed amount.
-        /// </summary>
-        public static int RemoveAmount(
-            IItemContainer container,
-            long fromSlot,
-            int amount)
-        {
-            if (container.Get(fromSlot) == null) return 0;
-            return container.RemoveFromSlot(fromSlot, amount);
-        }
-
         public static bool Has(this IItemContainer container, ItemKey key, int amount)
         {
             if (amount <= 0) return true;

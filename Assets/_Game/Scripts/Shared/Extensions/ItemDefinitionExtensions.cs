@@ -28,5 +28,17 @@ namespace Assets._Game.Scripts.Shared.Extensions
             sellPrice = Math.Max(price, 1);
             return true;
         }
+
+        public static ItemRestrictions GetRestrictions(this ItemDefinition definition)
+        {
+            var restrictionTrait = definition.GetTrait<RestrictionTrait>();
+            return restrictionTrait != null ? restrictionTrait.Restrictions : ItemRestrictions.None;
+        }
+
+        public static bool HasRestriction(this ItemDefinition definition, ItemRestrictions restriction)
+        {
+            var restrictions = definition.GetRestrictions();
+            return restrictions.HasFlag(restriction);
+        }
     }
 }

@@ -10,10 +10,14 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
     public sealed class LocationTransitionListViewController : ViewControllerBase<LocationTransitionListView, ILocationTransitionListViewData>
     {
         private readonly IGlobalEventBus _globalEventBus;
+        private readonly IPlayerProvider _playerProvider;
 
-        public LocationTransitionListViewController(IGlobalEventBus globalEventBus)
+        public LocationTransitionListViewController(
+            IGlobalEventBus globalEventBus,
+            IPlayerProvider playerProvider)
         {
             _globalEventBus = globalEventBus;
+            _playerProvider = playerProvider;
         }
 
         public override void Initialize(LocationTransitionListView view)
@@ -31,7 +35,7 @@ namespace Assets._Game.Scripts.UI.Views.Controllers
         private void OnTransitionButtonClicked(LocationTransitionData transitionData)
         {
             _globalEventBus.Publish(new WindowCloseRequest(View.GetComponentInParent<UIWindowBase>()));
-            _globalEventBus.Publish(new LocationTransitionRequest(transitionData.LocationDefinition.Id, transitionData.EntranceDefinition.Id));
+            _globalEventBus.Publish(new LocationTransitionRequest(_playerProvider.ObservablePlayerId.Value.Id, transitionData));
         }
     }
 }

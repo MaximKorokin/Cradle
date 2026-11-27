@@ -15,6 +15,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         private readonly SaveService _saveService;
         private readonly NewGameConfig _newGameDefinition;
         private readonly PlayerContext _playerContext;
+        private readonly LocationCatalog _locationCatalog;
         private readonly ILocationContext _locationContext;
 
         protected override EntityQuery EntityQuery { get; } =
@@ -28,11 +29,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
             SaveService saveService,
             NewGameConfig newGameDefinition,
             PlayerContext playerContext,
+            LocationCatalog locationCatalog,
             ILocationContext locationContext) : base(globalEventBus, repository)
         {
             _saveService = saveService;
             _newGameDefinition = newGameDefinition;
             _playerContext = playerContext;
+            _locationCatalog = locationCatalog;
             _locationContext = locationContext;
 
             TrackGlobalEvent<SaveGameRequest>(OnSaveGameRequested);
@@ -129,12 +132,13 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
         {
             if (playerSave?.LocationSave == null || string.IsNullOrWhiteSpace(playerSave?.LocationSave.LocationId))
             {
-                GlobalEventBus.Publish(new LocationTransitionRequest(_newGameDefinition.LocationTransitionData.LocationDefinition.Id, _newGameDefinition.LocationTransitionData.EntranceDefinition.Id));
+                GlobalEventBus.Publish(new LocationTransitionRequest(entity.Id, _newGameDefinition.LocationTransitionData));
             }
             else
             {
                 // null entrance id means that player will be placed in the location based on coordinates, not on specific entrance
-                GlobalEventBus.Publish(new LocationTransitionRequest(playerSave?.LocationSave.LocationId, null));
+                var location = _locationCatalog.Get(playerSave?.LocationSave.LocationId);
+                GlobalEventBus.Publish(new LocationTransitionRequest(entity.Id, new LocationTransitionData(location)));
 
                 entity.SubscribeOnce<EntityViewBoundEvent>(_ =>
                 {

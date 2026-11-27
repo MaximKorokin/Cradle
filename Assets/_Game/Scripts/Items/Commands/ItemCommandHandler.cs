@@ -19,17 +19,20 @@ namespace Assets._Game.Scripts.Items.Commands
     {
         private readonly IGlobalEventBus _globalEventBus;
         private readonly EntityRepository _entityRepository;
+        private readonly ItemDefinitionCatalog _itemDefinitions;
         private readonly ItemContainerResolver _itemContainerResolver;
         private readonly ItemsConfig _itemsConfig;
 
         public ItemCommandHandler(
             IGlobalEventBus globalEventBus,
             EntityRepository entityRepository,
+            ItemDefinitionCatalog itemDefinitions,
             ItemContainerResolver itemContainerResolver,
             ItemsConfig itemsConfig)
         {
             _globalEventBus = globalEventBus;
             _entityRepository = entityRepository;
+            _itemDefinitions = itemDefinitions;
             _itemContainerResolver = itemContainerResolver;
             _itemsConfig = itemsConfig;
         }
@@ -188,13 +191,15 @@ namespace Assets._Game.Scripts.Items.Commands
         private bool HandleDestroy(DestroyItemCommand c)
         {
             var container = _itemContainerResolver.ResolveContainer(c.FromContainer);
-            var item = container.Get(c.FromSlot);
+            var itemDefinition = c.ItemId != null ? _itemDefinitions.Get(c.ItemId) : container.Get(c.FromSlot)?.Definition;
 
-            if (item == null) return false;
-            if (item.Value.HasRestriction(ItemRestrictions.Undestructible)) return false;
+            if (itemDefinition == null) return false;
+            if (itemDefinition.HasRestriction(ItemRestrictions.Undestructible)) return false;
 
-            var removed = ItemContainerUtils.RemoveAmount(container, c.FromSlot, c.Amount);
-            if (removed > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDestroy, c.FromContainer, default, item?.Definition, removed);
+            var removed = c.HasSlot
+                ? container.RemoveFromSlot(c.FromSlot, c.Amount)
+                : container.Remove(ItemKey.From(itemDefinition, null), c.Amount);
+            if (removed > 0) PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDestroy, c.FromContainer, default, itemDefinition, removed);
             return removed > 0;
         }
 
@@ -208,11 +213,11 @@ namespace Assets._Game.Scripts.Items.Commands
             if (item == null) return false;
             if (item.Value.HasRestriction(ItemRestrictions.Undroppable)) return false;
 
-            var removedAmount = ItemContainerUtils.RemoveAmount(from, c.FromSlot, c.Amount);
+            var removedAmount = from.RemoveFromSlot(c.FromSlot, c.Amount);
             if (removedAmount > 0)
             {
                 _globalEventBus.Publish(new LootItemDropRequestedEvent(spatialModule.Position, item.Value.Definition, removedAmount));
-                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDrop, c.FromContainer, default, item?.Definition, removedAmount);
+                PublishGameAnalyticsEvent(AnalyticsEntryType.ItemDrop, c.FromContainer, default, item.Value.Definition, removedAmount);
                 return true;
             }
             return false;

@@ -75,9 +75,9 @@ namespace Assets._Game.Scripts.UI.Systems
 
         private void OnPlayerPromptRequested(PlayerPromptRequest request)
         {
-            if (request.Show)
+            if (request.ShowPrompt)
             {
-                _playerPromptWidget.Show(request.PromptText, request.ButtonText, request.Callback);
+                _playerPromptWidget.Show(request.PromptText, request.ButtonText, request.ShowButton, request.Callback);
             }
             else
             {
@@ -136,25 +136,32 @@ namespace Assets._Game.Scripts.UI.Systems
     {
         public string PromptText { get; }
         public string ButtonText { get; }
-        public bool Show { get; }
+        public bool ShowPrompt { get; }
+        public bool ShowButton { get; }
         public Action Callback { get; }
 
-        private PlayerPromptRequest(string promptText, string buttonText, bool show, Action callback = null)
+        private PlayerPromptRequest(string promptText, string buttonText, bool showPrompt, bool showButton, Action callback = null)
         {
             PromptText = promptText;
             ButtonText = buttonText;
-            Show = show;
+            ShowPrompt = showPrompt;
+            ShowButton = showButton;
             Callback = callback;
+        }
+
+        public static PlayerPromptRequest GetShowWithoutButtonRequest(string promptText)
+        {
+            return new PlayerPromptRequest(promptText, string.Empty, true, false, null);
         }
 
         public static PlayerPromptRequest GetShowRequest(string promptText, string buttonText, Action callback = null)
         {
-            return new PlayerPromptRequest(promptText, buttonText, true, callback);
+            return new PlayerPromptRequest(promptText, buttonText, true, true, callback);
         }
 
         public static PlayerPromptRequest GetHideRequest()
         {
-            return new PlayerPromptRequest(string.Empty, string.Empty, false, null);
+            return new PlayerPromptRequest(string.Empty, string.Empty, false, false, null);
         }
     }
 }

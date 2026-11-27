@@ -5854,9 +5854,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _transitionTrigger: {fileID: 2067831400}
-  _locationTransitionData:
-    <LocationDefinition>k__BackingField: {fileID: 11400000, guid: 121a29130d1cc5548b781e84a3e38098, type: 2}
-    <EntranceDefinition>k__BackingField: {fileID: 11400000, guid: ec568c09d05a0294bac28e190c234996, type: 2}
+  _locationTransitionDefinition: {fileID: 11400000, guid: 11f17676a12cdd44182a4de99a24bfd3, type: 2}
 --- !u!61 &2067831399
 BoxCollider2D:
   m_ObjectHideFlags: 0

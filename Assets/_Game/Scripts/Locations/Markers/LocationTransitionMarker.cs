@@ -2,8 +2,6 @@
 using Assets._Game.Scripts.Infrastructure.Game;
 using Assets._Game.Scripts.Infrastructure.Systems.Location;
 using Assets._Game.Scripts.Shared.Unity;
-using Assets._Game.Scripts.UI.Systems;
-using System;
 using UnityEngine;
 using VContainer;
 
@@ -18,7 +16,7 @@ namespace Assets._Game.Scripts.Locations.Markers
         private Trigger2D _transitionTrigger;
 
         [SerializeField]
-        private LocationTransitionData _locationTransitionData;
+        private LocationTransitionDefinition _locationTransitionDefinition;
 
         [Inject]
         private void Construct(IGlobalEventBus globalEventBus, IPlayerProvider playerProvider)
@@ -38,9 +36,7 @@ namespace Assets._Game.Scripts.Locations.Markers
             if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
                 return;
 
-            // todo: add entity level requirement
-            _globalEventBus.Publish(PlayerPromptRequest.GetShowRequest(
-                "<size=80%><color=#888888>Entrance to</color></size>" + Environment.NewLine + _locationTransitionData.LocationDefinition.DisplayName, "Enter", OnEnterPressed));
+            _globalEventBus.Publish(new LocationTransitionPromptShowRequest(_playerProvider.ObservablePlayerId.Value.Id, _locationTransitionDefinition.TransitionData));
         }
 
         private void OnTriggerExited(Collider2D collider)
@@ -48,12 +44,7 @@ namespace Assets._Game.Scripts.Locations.Markers
             if (!collider.TryGetComponent<EntityView>(out var entityView) || entityView.Entity != _playerProvider.Player)
                 return;
 
-            _globalEventBus.Publish(PlayerPromptRequest.GetHideRequest());
-        }
-
-        private void OnEnterPressed()
-        {
-            _globalEventBus.Publish(new LocationTransitionRequest(_locationTransitionData.LocationDefinition.Id, _locationTransitionData.EntranceDefinition.Id));
+            _globalEventBus.Publish(new LocationTransitionPromptHideRequest(_playerProvider.ObservablePlayerId.Value.Id, _locationTransitionDefinition.TransitionData));
         }
     }
 }

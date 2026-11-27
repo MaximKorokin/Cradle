@@ -32,7 +32,7 @@ namespace Assets._Game.Scripts.Infrastructure.Systems
 
             if (!reviveRequest.InPlace)
             {
-                GlobalEventBus.Publish(new LocationTransitionRequest(_reviveConfig.ReviveLocation.LocationDefinition.Id, _reviveConfig.ReviveLocation.EntranceDefinition.Id));
+                GlobalEventBus.Publish(new LocationTransitionRequest(entity.Id, _reviveConfig.ReviveLocation));
             }
 
             GlobalEventBus.Publish(new EntityRevivedEvent(entity, entity));

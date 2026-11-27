@@ -85,6 +85,7 @@ namespace Assets._Game.Scripts.Items
         public readonly string DefinitionId;
         public readonly string StackingKey;
 
+        public ItemKey(string definitionId) : this(definitionId, null) { }
         public ItemKey(string definitionId, string stackingKey)
         {
             DefinitionId = definitionId;
